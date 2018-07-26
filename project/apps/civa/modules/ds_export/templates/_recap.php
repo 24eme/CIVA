@@ -6,7 +6,7 @@ table {
 }
 </style>
 <br /><br />
-<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM<small><br />(tous lieux de stockage confondus)</small></span>
+<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM PAPIER<small><br />(tous lieux de stockage confondus)</small></span>
 <br /><br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <tr>

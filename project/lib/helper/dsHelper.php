@@ -123,7 +123,7 @@ function getHeader($ds, $validee)
     }
     $result .= sprintf("\n%s", $ds->declarant->nom);
     if ($ds->isTypeDsPropriete()) {
-        $result .= sprintf("\nCommune de déclaration : %s", $ds->declarant->commune);
+        $result .= "\n";
     }
     return $result . sprintf("\n%s", $validee);
 }

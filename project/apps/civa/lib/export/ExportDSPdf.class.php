@@ -300,7 +300,7 @@ class ExportDSPdf extends ExportDocument {
     protected function getRecapAutres() {
 
         return array("Rebêches" => $this->ds_principale->rebeches,
-                     "Usages industriels" => $this->ds_principale->getUsagesIndustriels());
+                     "Usages industriels" => $this->ds_principale->getUsagesIndustriels() + DSCivaClient::getInstance()->getTotauxVCIRecapVolume($this->ds_principale));
     }
 
     protected function getRecapVinsSansIG() {

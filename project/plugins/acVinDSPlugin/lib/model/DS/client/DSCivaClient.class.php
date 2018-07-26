@@ -502,6 +502,16 @@ class DSCivaClient extends DSClient {
         return $recap;
     }
 
+    public function getTotauxVCIRecapVolume($ds) {
+        $dss = $this->findDssByDS($ds);
+        $volume = 0;
+        foreach ($dss as $ds_key => $ds) {
+            $volume += $ds->getTotalVCIVolume();
+        }
+
+        return $volume;
+    }
+
     public function getTotalSansIG($ds) {
         $dss = $this->findDssByDS($ds);
         $totalSansIG = 0;

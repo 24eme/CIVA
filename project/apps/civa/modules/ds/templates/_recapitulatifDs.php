@@ -95,7 +95,7 @@ if (isset($validation_dss)) {
             <table class="table_donnees pyjama_auto">
                 <thead>
                     <tr>
-                        <th class="appellation">VCI&nbsp;<a title="Message aide" rel="help_popup_validation_vins_sans_ig" class="msg_aide_ds" href=""></a></th>
+                        <th class="appellation">VCI&nbsp;<a title="Message aide" rel="help_popup_validation_vci" class="msg_aide_ds" href=""></a></th>
                         <th class="total">Total <span class="unites">(hl)</span></th>
                     </tr>
                 </thead>
