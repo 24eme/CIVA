@@ -52,6 +52,11 @@ class DSSendBrouillonTask extends sfBaseTask
             return;
         }
 
+        if(!preg_match("/^C?(67|68)/", $etablissement->identifiant)) {
+
+            return;
+        }
+
         $etablissement = CompteClient::getInstance()->find($arguments["id_etablissement"]);
 
         if($etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
