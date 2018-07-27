@@ -140,15 +140,19 @@ class DSSendBrouillonTask extends sfBaseTask
             $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-A compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
+Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique.
 
-Comme les années précédentes, vous pourrez accéder à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro> à compter du 24 juillet.
+Comme les années précédentes, vous pourrez accéder à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro> à compter du 30 juillet.
 
-Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre minuit.
+Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre MIDI.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS ".$campagne.", qui reprend les produits théoriquement détenus en stocks.
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2018, qui reprend les produits théoriquement détenus en stocks.
 
-Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
+Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à etourner au CIVA.
+
+NOUVEAUTES 2018 :
+    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2017, vous devez le déclarer dans l'Appellation correspondante.
+    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
 
 Cordialement,
@@ -163,13 +167,17 @@ Le CIVA");
             $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-A compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le télé-service \"Alsace Stocks\" sera accessible du 24 juillet au 10 septembre inclus.
+Le télé-service \"Alsace Stocks\" sera accessible du 30 juillet au 10 septembre inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
-ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre minuit.
+ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre MIDI.
+
+NOUVEAUTES 2018 :
+    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2017, vous devez le déclarer dans l'appellation correspondante.
+    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet exempte les opérateurs vitivinicoles de souscrire une Déclaration de Stock au Commerce.
 
 
 Cordialement,
