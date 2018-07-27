@@ -202,6 +202,9 @@ class DSCiva extends DS implements IUtilisateursDocument {
                 }
                 $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
             }
+            if($dr->recolte->getTotalDontVciVendusByCvi('negoces', $cvi_acheteur) || $dr->recolte->getTotalDontVciVendusByCvi('cooperatives', $cvi_acheteur)) {
+                $this->addAppellation("declaration/certification/genreVCI");
+            }
         }
     }
 
