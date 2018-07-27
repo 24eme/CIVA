@@ -130,7 +130,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         $campagne = preg_replace("/[0-9]{2}$/", "", $this->periode);
 
-        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $teledeclarant) {
+        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
 
             $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
@@ -153,35 +153,7 @@ Le CIVA");
             return $message;
         }
 
-        if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && !$teledeclarant) {
-
-            $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_data_dir')."/pdf/votre_declaration_de_stocks_pas_a_pas_propriete.pdf"), "votre_declaration_de_stocks_pas_a_pas_propriete.pdf", 'application/pdf');
-            $message->attach($attachment);
-
-            $message->setSubject("Déclaration de Stocks \"Propriété\" au 31 juillet ".$campagne)
-                    ->setBody("Bonjour,
-
-ATTENTION: à compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
-
-En ".($campagne - 1).", vous aviez encore déposé une Déclaration de Stocks \"papier\" en Mairie.
-
-Cette année il vous faudra télé-déclarer votre Stock au 31 juillet ".$campagne." sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible à compter du 24 juillet.
-
-Attention la date limite de télé-déclaration est fixée par les Douanes au 10 septembre minuit.
-
-Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à pas\", ainsi qu'un brouillon personnalisé de votre DS ".$campagne.", qui reprend les produits théoriquement détenus en stocks.
-
-Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
-
-
-Cordialement,
-
-Le CIVA");
-
-            return $message;
-        }
-
-        if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && $teledeclarant) {
+        if($type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
 
             $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
@@ -191,32 +163,6 @@ A compter de cette année la souscription de votre Déclaration de Stocks devra 
 Le télé-service \"Alsace Stocks\" sera accessible du 24 juillet au 10 septembre inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
-
-ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre minuit.
-
-
-Cordialement,
-
-Le CIVA");
-
-            return $message;
-        }
-
-        if($type_ds == DSCivaClient::TYPE_DS_NEGOCE && !$teledeclarant) {
-
-            $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_data_dir')."/pdf/votre_declaration_de_stocks_pas_a_pas_negoce.pdf"), "votre_declaration_de_stocks_pas_a_pas_negoce.pdf", 'application/pdf');
-            $message->attach($attachment);
-
-            $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
-                    ->setBody("Bonjour,
-
-ATTENTION: à compter de cette année la souscription de votre Déclaration de Stocks devra obligatoirement se faire par voie électronique.
-
-En ".($campagne - 1).", vous aviez encore envoyé une Déclaration de Stocks \"papier\" au CIVA.
-
-Cette année il vous faudra télé-déclarer votre Stock au 31 juillet 2017 sur le Portail CIVA <https://declaration.vinsalsace.pro>, le télé-service \"Alsace Stocks\" sera accessible du 24 juillet au 10 septembre inclus.
-
-Pour vous aider dans votre démarche vous trouverez ci-joint, un document explicatif \"Pas à pas\", vous pourrez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
 ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre minuit.
 
