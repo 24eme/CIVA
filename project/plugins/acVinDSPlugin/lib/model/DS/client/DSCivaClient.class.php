@@ -693,6 +693,9 @@ class DSCivaClient extends DSClient {
             if(!in_array($appellationConfig->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
                 continue;
             }
+            if($appellation->getAttribut('no_ds')) {
+                continue;
+            }
             if($appellationConfig->getGenre()->getKey() == "VCI") {
                 $appellationConfig = $appellationConfig->getGenre();
             }

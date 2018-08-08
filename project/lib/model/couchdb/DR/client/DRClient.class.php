@@ -392,6 +392,10 @@ class DRClient extends acCouchdbClient {
                 continue;
             }
 
+            if($appellation->getAttribut('no_dr')) {
+                continue;
+            }
+
             if($appellation->getGenre()->getKey() == "VCI") {
                 continue;
             }
