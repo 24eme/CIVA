@@ -1,3 +1,5 @@
+<?php use_helper('Date') ?>
+<?php use_helper('Orthographe') ?>
 <?php include_partial('tiers/title') ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
@@ -46,11 +48,17 @@
             <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DRM) && isset($blocs[Roles::TELEDECLARATION_DRM])): ?>
+            <?php
+            $date = date('Y-m-d');
+            if(date('d') < 11){
+                $date =  date('Y-m-d',strtotime($date." -1 month"));
+            }
+            $msg_drm = elision("Saisissez votre DRM de",format_date($date,'MMMM yyyy','fr_FR'));?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?>">
                 <div class="bloc_acceuil_icon icon-vrac"></div>
                 <div class="bloc_acceuil_header">DRM</div>
                 <div class="bloc_acceuil_content">
-                    <p class="mineure">Aucune information à signaler</p>
+                    <p class="mineure"><?php echo $msg_drm; ?></p>
                 </div>
                 <div class="bloc_acceuil_footer">
                     <a href="<?php echo $blocs[Roles::TELEDECLARATION_DRM] ?>">Accéder</a>
