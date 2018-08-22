@@ -239,6 +239,7 @@ class DRMGenerateCSV {
           $libelle = "";
         }else{
           $libelle = $produitDetail->getLibelle("%format_libelle%");
+          $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
         }
         $type_drm = ($produitDetail->getParent()->getKey() == 'details')? 'suspendu' : 'acquitte';
         if($force_type_drm){
