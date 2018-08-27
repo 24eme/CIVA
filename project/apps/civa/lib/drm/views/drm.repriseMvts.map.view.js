@@ -27,6 +27,7 @@ function(doc) {
 						                                      var r = produit.retiraisons[retiraison];
                                                   var periode = r.date.replace('-','').substring(0,6);
                                                   emit([doc.vendeur_identifiant, periode, "VRAC", doc._id ],[produitHash, "sorties", "vrac", r.volume]);
+                                                  emit([doc.acheteur_identifiant, periode, "VRAC", doc._id ],[produitHash, "entrees", "achatnoncrd", r.volume]);
                                                 }
                                               }
     	    	    	    	    	    					}

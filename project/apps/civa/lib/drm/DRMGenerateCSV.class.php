@@ -236,7 +236,8 @@ class DRMGenerateCSV {
 
         $complement = "";
         if($produitDetail instanceof DSDetail){
-          $libelle = "";
+          $libelle = $produitDetail->getCepage()->getConfig()->getLibelleFormat();
+          $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
         }else{
           $libelle = $produitDetail->getLibelle("%format_libelle%");
         }
