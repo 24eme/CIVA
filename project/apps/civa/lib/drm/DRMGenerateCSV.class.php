@@ -235,12 +235,11 @@ class DRMGenerateCSV {
         $cepage = $cepageConfig->getCepage()->getLibelle();
 
         $complement = "";
+        $libelle = $produitDetail->getConfig()->getLibelleFormat();
         if($produitDetail instanceof DSDetail){
-          $libelle = $produitDetail->getCepage()->getConfig()->getLibelleFormat();
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
-        }else{
-          $libelle = $produitDetail->getLibelle("%format_libelle%");
         }
+
         $type_drm = ($produitDetail->getParent()->getKey() == 'details')? 'suspendu' : 'acquitte';
         if($force_type_drm){
           $type_drm = $force_type_drm;
