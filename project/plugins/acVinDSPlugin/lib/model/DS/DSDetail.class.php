@@ -11,6 +11,11 @@ class DSDetail extends BaseDSDetail {
         return $this->getParent()->getParent();
     }
 
+    public function getConfig() {
+
+        return $this->getCepage()->getConfig();
+    }
+
     public function getProduitHash() {
 
         return $this->getParent()->getParent()->getHash();
