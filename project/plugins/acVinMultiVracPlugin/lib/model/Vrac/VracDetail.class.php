@@ -11,6 +11,11 @@ class VracDetail extends BaseVracDetail {
         return $this->getParent()->getParent();
     }
 
+	public function getConfig() {
+		
+		return $this->getCepage()->getConfig();
+	}
+
     public function getAppellation() {
     	return $this->getCepage()->getAppellation();
     }
