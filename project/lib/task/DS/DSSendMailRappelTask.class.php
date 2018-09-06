@@ -55,8 +55,11 @@ EOF;
             return;
         }
 
+        if(!$etablissement->isActif()) {
+            return;
+        }
+
         if(!$etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds'])) {
-            //echo "L'établissement ne fait pas de ds ".$arguments['type_ds']." : ".$arguments['identifiant']."\n";
             return;
         }
         $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
