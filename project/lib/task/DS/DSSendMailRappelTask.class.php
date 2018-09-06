@@ -72,7 +72,7 @@ EOF;
         }
 
         if($ds->isValideeTiers()) {
-            echo "La DS est déjà validée : ".$ds->_id."\n";
+            //echo "La DS est déjà validée : ".$ds->_id."\n";
             return;
         }
 
