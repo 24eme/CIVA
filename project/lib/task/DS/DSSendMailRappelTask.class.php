@@ -132,7 +132,8 @@ A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 Juil
 
 Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock AVANT le 10 septembre minuit.
 
-ATTENTION: Si votre Stock est NEANT, un arrêté du 18 Juillet dernier vous exempte de déposer une Déclaration de Stocks. Dans ce cas-là, pour éviter qu'on ne vous relance, merci de me le signaler en réponse à ce mail.
+ATTENTION: Si votre Stock est NEANT, un arrêté du 18 Juillet dernier vous exempte de déposer une Déclaration de Stocks.
+Dans ce cas-là, pour éviter qu'on ne vous relance, merci de me le signaler en réponse à ce mail.
 
 Sinon, vous pouvez effectuer la saisie en cliquant sur le lien suivant <https://declaration.vinsalsace.pro>
 
