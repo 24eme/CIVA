@@ -55,6 +55,10 @@ EOF;
             return;
         }
 
+        if(!preg_match('/[C]?(67|68)/', $etablissement->_id)) {
+            return;
+        }
+
         if(!$etablissement->isActif()) {
             return;
         }
@@ -85,7 +89,8 @@ EOF;
     public function sendMailValidation($etablissement, $ds, $dryrun) {
         $email = $ds->declarant->get('email');
         $message = Swift_Message::newInstance()
-            ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
+            ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+            ->setReplyTo(array('dominique@civa.fr'))
             ->setTo($email)
             ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
             ->setBody("Bonjour,
