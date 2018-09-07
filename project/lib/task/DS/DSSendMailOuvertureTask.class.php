@@ -52,7 +52,7 @@ class DSSendBrouillonTask extends sfBaseTask
             return;
         }
 
-        if(!preg_match("/^C?(67|68)/", $etablissement->identifiant)) {
+        if(!preg_match("/^C*(67|68)/", $etablissement->identifiant)) {
 
             return;
         }
