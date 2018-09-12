@@ -113,7 +113,7 @@ EOF;
             foreach($c_appellation->getProduits() as $c_cepage) {
             	$confCepageKey = (preg_match('/cepage_/', $c_cepage->getKey()))? $c_cepage->getKey() : 'cepage_'.$c_cepage->getKey();
                 if($c_cepage->getKey() == "DEFAUT") {
-                    $cepageKey = "appellation_".$c_cepage->getAppellation()->getKey();
+                    $confCepageKey = "appellation_".$c_cepage->getAppellation()->getKey();
                 }
                 if(!array_key_exists($confCepageKey, $appellation['cepages'])) {
                     continue;
