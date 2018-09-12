@@ -110,10 +110,13 @@ EOF;
             }
             $appellation = $stats['appellations'][$confAppellationKey];
 
-            foreach($c_appellation->getProduits() as $c_cepage) {
+            foreach($c_appellation->getProduits() as $cepageKey => $c_cepage) {
             	$confCepageKey = (preg_match('/cepage_/', $c_cepage->getKey()))? $c_cepage->getKey() : 'cepage_'.$c_cepage->getKey();
                 if($c_cepage->getKey() == "DEFAUT") {
                     $confCepageKey = "appellation_".$c_cepage->getAppellation()->getKey();
+                }
+                if($confAppellationKey == "appellation_VINTABLE") {
+                    $confCepageKey = $cepageKey;
                 }
                 if(!array_key_exists($confCepageKey, $appellation['cepages'])) {
                     continue;
