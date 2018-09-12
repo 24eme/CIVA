@@ -73,6 +73,9 @@ EOF;
 
                 foreach($appellation->getProduitsSorted() as $cepage) {
             		$cepageKey = $cepage->getKey();
+                    if($cepageKey == "cepage_DEFAUT") {
+                        $cepageKey = $cepage->getAppellation()->getKey();
+                    }
                     if(!array_key_exists($cepageKey, $stats['appellations'][$appellationKey]['cepages'])) {
                         $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_total'] = 0;
                         $stats['appellations'][$appellationKey]['cepages'][$cepageKey]['volume_normal'] = 0;
@@ -93,8 +96,15 @@ EOF;
         $ligne = "%s;%s;%01.02f;%01.02f;%01.02f;%01.02f\n";
         $configuration = ConfigurationClient::getConfiguration($campagne - 1);
 
-        foreach($configuration->declaration->getArrayAppellations() as $c_appellation) {
-            $confAppellationKey = (preg_match('/appellation_/', $c_appellation->getKey()))? $c_appellation->getKey() : 'appellation_'.$c_appellation->getKey();
+        foreach(DSCivaClient::getInstance()->getConfigAppellations($configuration) as $c_appellation) {
+            $confAppellationKey = $c_appellation->getKey();
+            if(!preg_match('/appellation_/', $c_appellation->getKey()) && $c_appellation instanceof ConfigurationAppellation) {
+                $confAppellationKey = 'appellation_'.$confAppellationKey;
+            }
+            if(!preg_match('/genre/', $c_appellation->getKey()) && $c_appellation instanceof ConfigurationGenre) {
+                $confAppellationKey = 'genre'.$confAppellationKey;
+            }
+
             if(!array_key_exists($confAppellationKey, $stats['appellations'])) {
                 continue;
             }
