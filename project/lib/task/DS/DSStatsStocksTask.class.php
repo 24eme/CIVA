@@ -115,8 +115,11 @@ EOF;
                 if($c_cepage->getKey() == "DEFAUT") {
                     $confCepageKey = "appellation_".$c_cepage->getAppellation()->getKey();
                 }
-                if($confAppellationKey == "appellation_VINTABLE") {
-                    $confCepageKey = $cepageKey;
+                if($confAppellationKey == "appellation_VINTABLE" && $c_cepage->getGenre()->getKey() == "TRANQ") {
+                    $confCepageKey = "cepage_VINTABLE";
+                }
+                if($confAppellationKey == "appellation_VINTABLE" && $c_cepage->getGenre()->getKey() == "EFF") {
+                    $confCepageKey = "cepage_MS";
                 }
                 if(!array_key_exists($confCepageKey, $appellation['cepages'])) {
                     continue;
