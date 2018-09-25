@@ -68,7 +68,7 @@ cat $PATH_SORTIES_SUSPENDU | awk -F ',' '
 {
     printLinesDRM(6, "suspendu", "sorties", "vracsanscontratsuspendu", "B - Hors région Alsace (UE - pays tiers ou autre EA en France)");
     printLinesDRM(10, "suspendu", "sorties", "vrac", "C - Vrac");
-    printLinesDRM(14, "suspendu", "sorties", "vracsanscontratsuspendu", "D - Expeditions en Alsace en bouteilles");
+    printLinesDRM(14, "suspendu", "sorties", "bouteillenue", "D - Expeditions en Alsace en bouteilles");
 }'
 
 cat $PATH_SORTIES_EXONERES | awk -F ',' '
