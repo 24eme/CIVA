@@ -133,9 +133,9 @@ Dominique WOLFF");
 
 La Déclaration de Stocks \"Papier\" a définitivement disparue depuis 2017 et vous devez donc désormais télé-déclarer votre Stock sur le Portail du CIVA.
 
-A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 Juillet ".date('Y')." MIDI.
+A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 Juillet ".date('Y').".
 
-Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock AVANT le 10 septembre minuit.
+Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock AVANT le 10 septembre MIDI.
 
 ATTENTION: Si votre Stock est NEANT, un arrêté du 18 Juillet dernier vous exempte de déposer une Déclaration de Stocks.
 Dans ce cas-là, pour éviter qu'on ne vous relance, merci de me le signaler en réponse à ce mail.
