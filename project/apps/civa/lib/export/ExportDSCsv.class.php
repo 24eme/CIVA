@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class ExportDSCsv {
     protected $dss = null;
@@ -25,7 +25,7 @@ class ExportDSCsv {
 
     protected function outputDS($ds) {
         $output = null;
-        $validee = (isset($this->ds_principale->validee) && $this->ds_principale->validee) ? $this->ds_principale->validee : null; 
+        $validee = (isset($this->ds_principale->validee) && $this->ds_principale->validee) ? $this->ds_principale->validee : null;
         $modifiee = (isset($this->ds_principale->modifiee) && $this->ds_principale->modifiee) ? $this->ds_principale->modifiee : null;
         $date_depot_mairie = isset($this->ds_principale->date_depot_mairie) ? $this->ds_principale->date_depot_mairie : null;
         $principale = ($this->ds_principale->_id == $ds->_id) ? "PRINCIPALE" : "SECONDAIRE";
@@ -36,63 +36,54 @@ class ExportDSCsv {
 
         $ligneStart = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ds->periode, $ds->_id, $ds->declarant->nom, $ds->identifiant, $ds->stockage->numero, $principale, $statut, $validee, $modifiee, $date_depot_mairie, $userEditeur, $userValideur);
 
-        if(isset($ds->declaration->certification->genre)) {
-            foreach($ds->declaration->certification->genre as $appellation_key => $appellation) {
-                if(!preg_match("/appellation_/", $appellation_key)) {
-                    
-                    continue;
-                }
+        foreach($ds->declaration as $certification_key => $certification) {
+            if(!preg_match("/certification/", $certification_key)) {
 
-                foreach($appellation->mention as $lieu_key => $lieu) {
-                    if(!preg_match("/lieu/", $lieu_key)) {
-                        
+                continue;
+            }
+            foreach($certification as $genre_key => $genre) {
+            if(!preg_match("/genre/", $genre_key)) {
+
+                continue;
+            }
+            foreach($genre as $appellation_key => $appellation) {
+                    if(!preg_match("/appellation_/", $appellation_key)) {
+
                         continue;
                     }
 
-                    foreach($lieu as $couleur_key => $couleur) {
-                        if(!preg_match("/couleur/", $couleur_key)) {
-                        
+                    foreach($appellation->mention as $lieu_key => $lieu) {
+                        if(!preg_match("/lieu/", $lieu_key)) {
+
                             continue;
                         }
 
-                        foreach($couleur as $cepage_key => $cepage) {
-                            if(!preg_match("/cepage/", $cepage_key)) {
-                        
+                        foreach($lieu as $couleur_key => $couleur) {
+                            if(!preg_match("/couleur/", $couleur_key)) {
+
                                 continue;
                             }
 
-                            $hasLieuDit = false;
-                            foreach($cepage->detail as $detail) {
-                                $total = $detail->volume_normal + $detail->volume_vt + $detail->volume_sgn;
-                                $hasLieuDit = !$lieu->libelle && $detail->lieu;
-                                if($hasLieuDit) {
-                                    $output .= sprintf("%s;%s;%s;%s;%s;\"%s\";%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle,$cepage->libelle,$detail->lieu, $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0);
+                            foreach($couleur as $cepage_key => $cepage) {
+                                if(!preg_match("/cepage/", $cepage_key)) {
+
+                                    continue;
                                 }
+
+                                $hasLieuDit = false;
+                                foreach($cepage->detail as $detail) {
+                                    $total = $detail->volume_normal + $detail->volume_vt + $detail->volume_sgn;
+                                    $hasLieuDit = !$lieu->libelle && $detail->lieu;
+                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", $ligneStart, trim($genre->libelle." ".$appellation->libelle), $lieu->libelle, $couleur->libelle,$cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null, $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0);
+                                }
+
+                                //$output .= sprintf("%s;%s;%s;%s;%s;TOTAL;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $cepage->libelle, $cepage->total_stock, $cepage->total_normal, $cepage->total_vt, $cepage->total_sgn);
                             }
-
-                            $output .= sprintf("%s;%s;%s;%s;%s;TOTAL;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $cepage->libelle, $cepage->total_stock, $cepage->total_normal, $cepage->total_vt, $cepage->total_sgn);
                         }
-
-                        if($couleur_key == "couleur") {
-                            
-                            continue;
-                        }
-                        
-                        $output .= sprintf("%s;%s;%s;%s;TOTAL;;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $couleur->total_stock, $couleur->total_normal, $couleur->total_vt, $couleur->total_sgn);
                     }
-
-                    if($lieu_key == "lieu") {
-                        
-                        continue;
-                    }
-
-                    $output .= sprintf("%s;%s;%s;TOTAL;;;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $lieu->total_stock, $lieu->total_normal, $lieu->total_vt, $lieu->total_sgn);
                 }
-
-                $output .= sprintf("%s;%s;TOTAL;;;;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $appellation->total_stock, $appellation->total_normal, $appellation->total_vt, $appellation->total_sgn);
             }
         }
-
         if($ds->mouts) {
             $output .= sprintf("%s;mouts;;;;;%s;;;\n", $ligneStart, $ds->mouts);
         }
