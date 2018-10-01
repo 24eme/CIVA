@@ -3,7 +3,7 @@
 . bin/task.inc
 
 EXPORT_DIR=ds
-EXPORT_FILE=export_bi_$DS_PERIODE.csv
+EXPORT_FILE=export_bi_ds_$DS_PERIODE.csv
 LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
 
 DESCRIPTION="Export BI pour les DS propriétés et négoces de la période $DS_PERIODE\n
