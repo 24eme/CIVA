@@ -341,6 +341,14 @@ class ExportDSCiva {
                     continue;
             }
 
+            if($code_douane == "1B001S99") {
+                continue;
+            }
+
+            if($code_douane == "1B001M90") {
+                continue;
+            }
+
             switch ($appellation_key) {
 //                case 'PINOTNOIR':
 //                    $row.= $id_csv . ",";
