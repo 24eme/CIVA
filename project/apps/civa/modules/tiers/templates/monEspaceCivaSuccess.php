@@ -19,7 +19,9 @@
                 <div class="bloc_acceuil_header">Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if($drNeedToDeclare): ?>
-                    <p><strong>A valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?> midi</p>
+                    <p><strong>À valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?> midi</p>
+                    <?php elseif(date('Y-m-d') < DRClient::getInstance()->getDateOuverture()->format('Y-m-d')): ?>
+                        <p class="mineure">Ouverture le <?php echo format_date(DRClient::getInstance()->getDateOuverture()->format('Y-m-d'), "dd MMMM", "fr_FR"); ?></p>
                     <?php else: ?>
                     <p class="mineure">Aucune information à signaler</p>
                     <?php endif; ?>
@@ -58,7 +60,7 @@
                 <div class="bloc_acceuil_icon icon-vrac"></div>
                 <div class="bloc_acceuil_header">DRM</div>
                 <div class="bloc_acceuil_content">
-                    <p class="mineure"><?php echo $msg_drm; ?></p>
+                    <p <?php if(date('d') >= 11 ): ?>class="mineure"<?php endif; ?>><?php echo $msg_drm; ?></p>
                 </div>
                 <div class="bloc_acceuil_footer">
                     <a href="<?php echo $blocs[Roles::TELEDECLARATION_DRM] ?>">Accéder</a>
@@ -121,7 +123,7 @@
                         <p class="mineure">Aucune information à signaler</p>
                         <!--<p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>-->
                         <?php else: ?>
-                        <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
+                        <p><strong>À valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
                         <?php endif; ?>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
@@ -143,7 +145,7 @@
                             <p class="mineure">Aucune information à signaler</p>
                             <!--<p><strong>A valider</strong> avant le 15/01/<?php echo CurrentClient::getCurrent()->getAnneeDS() + 1 ?></p>-->
                         <?php else: ?>
-                        <p><strong>A valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
+                        <p><strong>À valider</strong> avant le 10/09/<?php echo date('Y') ?></p>
                         <?php endif; ?>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
