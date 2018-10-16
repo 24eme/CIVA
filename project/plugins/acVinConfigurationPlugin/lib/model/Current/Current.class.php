@@ -49,7 +49,7 @@ class Current extends BaseCurrent {
             return CurrentClient::getInstance()->getCurrentFromTheFuture();
         }
 
-        return "2017";
+        return "2018";
     }
 
     public function isDSDecembre() {
