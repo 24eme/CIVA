@@ -603,6 +603,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             }
         }
 
+        if($this->exist('jus_raisin_superficie') && $this->exist('jus_raisin_volume') && $this->jus_raisin_superficie > 0 && !$this->jus_raisin_volume) {
+            array_push($validLogErreur, array('url' => $this->generateUrl("dr_autres", array("id" => $this->_id)), 'log' => "Jus de raisin", 'info' => "Vous n'avez pas saisi le volume"));
+        }
+
+        if($this->exist('jus_raisin_superficie') && $this->exist('jus_raisin_volume') && $this->jus_raisin_volume > 0 && !$this->jus_raisin_superficie) {
+            array_push($validLogErreur, array('url' => $this->generateUrl("dr_autres", array("id" => $this->_id)), 'log' => "Jus de raisin", 'info' => "Vous n'avez pas saisi la superficie"));
+        }
+
         return array('erreur' => $validLogErreur, 'vigilance' => $validLogVigilance);
     }
 

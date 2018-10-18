@@ -52,6 +52,8 @@ class DRClient extends acCouchdbClient {
       $doc->addEtape('repartition');
     }
     $doc->add('lies_saisis_cepage', 1);
+    $doc->add('jus_raisin_volume');
+    $doc->add('jus_raisin_superficie');
   }
 
   public function hasImport($cvi, $campagne) {

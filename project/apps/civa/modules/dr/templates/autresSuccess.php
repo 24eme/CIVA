@@ -19,7 +19,7 @@
                         <div id="jeunes_vignes">
                                 <h2 class="titre_section">Jeunes Vignes sans production <a href="" class="msg_aide" rel="help_popup_autres_jv" title="Message aide"></a></h2>
                                 <div class="contenu_section">
-                                        <div class="bloc_vert" action="" method="post">
+                                        <div class="bloc_vert">
                                                 <div class="ligne_form <?php echo ($form['jeunes_vignes']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
                                                         <?php echo $form['jeunes_vignes']->render(array('class' => 'num num_light num_float', 'style' => 'padding: 0 5px;')) ?>
                                                         <?php echo $form['jeunes_vignes']->renderLabel() ?>
@@ -27,6 +27,28 @@
                                         </div>
                                 </div>
                         </div>
+
+                        <?php if(isset($form['jus_raisin_volume']) && isset($form['jus_raisin_superficie'])): ?>
+                            <div style="margin-top: 10px;" id="jeunes_vignes">
+                                    <h2 class="titre_section">Jus de raisin</h2>
+                                    <div class="contenu_section">
+                                        <?php echo $form['jus_raisin_superficie']->renderLabel(null, array('style' => 'float: none;')) ?>
+                                        <div class="bloc_vert"  style="margin-bottom: 10px;">
+                                                <div class="ligne_form <?php echo ($form['jus_raisin_superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
+                                                        <?php echo $form['jus_raisin_superficie']->render(array('class' => 'num num_light num_float', 'style' => 'padding: 0 5px; margin-left: ')) ?>
+                                                        ares
+                                                </div>
+                                        </div>
+                                        <?php echo $form['jus_raisin_volume']->renderLabel(null, array('style' => 'float: none;')) ?>
+                                        <div class="bloc_vert">
+                                                <div class="ligne_form <?php echo ($form['jus_raisin_volume']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>">
+                                                        <?php echo $form['jus_raisin_volume']->render(array('class' => 'num num_light num_float', 'style' => 'padding: 0 5px; margin-left: ')) ?>
+                                                        hl
+                                                </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        <?php endif; ?>
                 </div>
                 <!-- fin #exploitation_autres -->
 

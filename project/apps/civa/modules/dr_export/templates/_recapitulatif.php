@@ -214,3 +214,19 @@ table {
     </tr>
 </table>
 <?php endif; ?>
+
+<?php if($dr->exist('jus_raisin_volume') && $dr->exist('jus_raisin_superficie')): ?>
+	<br />
+	<br />
+	<span style="background-color: black; color: white; font-weight: bold;">Jus de raisin</span><br/>
+	<table border=1 cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
+	    <tr>
+	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Superficie</td>
+	        <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($dr->jus_raisin_superficie); ?></td>
+	    </tr>
+	    <tr>
+	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume</td>
+	        <td style="border: 1px solid black; width: 120px;"><?php echoVolume($dr->jus_raisin_volume); ?></td>
+	    </tr>
+	</table>
+<?php endif; ?>

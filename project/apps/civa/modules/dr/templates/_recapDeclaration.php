@@ -187,6 +187,11 @@
 				<tr>
                     <td class="premiere_colonne">Jeunes Vignes : </td><td class="volume"><?php echoFloat($jeunes_vignes); ?>&nbsp;<small>ares</small></td>
 				</tr>
+                <?php if ($dr->exist('jus_raisin_superficie') && $dr->exist('jus_raisin_volume')) : ?>
+                    <tr>
+                        <td class="premiere_colonne">Jus de raisin : </td><td class="volume"><?php echoFloat($dr->jus_raisin_superficie); ?>&nbsp;<small>ares</small> / <?php echoFloat($dr->jus_raisin_volume); ?>&nbsp;<small>hl</small></td>
+                    </tr>
+                <?php endif; ?>
 			    <?php if (isset($vintable['superficie'])) : ?>
 				<tr>
 				   <td class="premiere_colonne">Vins sans IG : </td><td class="volume"><?php echoFloat($vintable['superficie']); ?>&nbsp;<small>ares</small> / <?php echoFloat($vintable['volume']); ?> hl</td>

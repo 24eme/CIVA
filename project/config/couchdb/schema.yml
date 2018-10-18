@@ -102,6 +102,8 @@ DR:
       cvi: {  }
       lies: {type: float}
       jeunes_vignes: {type: float}
+      jus_raisin_volume: {type: float, required: false}
+      jus_raisin_superficie: {type: float, required: false}
       declaration_commune: {}
       declaration_insee: {}
       lies_saisis_cepage: {type: float, required: false}
