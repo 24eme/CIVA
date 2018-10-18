@@ -117,7 +117,7 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
     public function changeSociete($new_id) {
         if($this->isNew()) {
-            continue;
+            return;
         }
         if($this->_id == $new_id) {
             return;

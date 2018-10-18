@@ -232,7 +232,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public function changeSociete($new_id) {
         if($this->isNew()) {
-            continue;
+            return;
         }
         if($this->_id == $new_id) {
             return;
