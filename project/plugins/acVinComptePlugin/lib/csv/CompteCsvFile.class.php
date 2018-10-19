@@ -92,7 +92,7 @@ class CompteCsvFile extends CsvFile
                 $c->statut = ($line[self::CSV_STATUT]) ? $line[self::CSV_STATUT] : $s->statut;
 
                 if($c->statut == CompteClient::STATUT_ACTIF && !$c->mot_de_passe) {
-                    $c->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(0, 9999));
+                    $c->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(1000, 9999));
                 }
 
                 $c->civilite = $e->getIntitule();
