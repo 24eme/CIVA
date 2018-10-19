@@ -442,10 +442,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$this->valide->date_validation_vendeur = $date;
 		$this->valide->date_validation_acheteur = $date;
 		$this->valide->date_validation_mandataire = $date;
-		$this->valide->date_validation = $date;
 		$this->declaration->cleanAllNodes();
 		$this->updateValideStatut();
 		$this->forceClotureContrat(false);
+		$this->valide->date_validation = $date;
 		$this->valide->date_cloture = $date;
 		$this->valide->email_cloture = true;
 	}
