@@ -7,9 +7,7 @@
 		<p style="font-size: 14px; margin-top: 5px;">Il n'existe pas de rendement maximum pour ce produit, la préconisation serait de respecter un rendement agronomique réaliste.</p>
 		<br />
 		<h2>Reconduction de la constitution de VCI pour la Récolte 2018</h2>
-
-		<p style="font-size: 14px; margin-top: 15px;"><strong>Le décret étant paru, cette disposition est applicable pour le millésime 2017</strong></p>
-		<p style="font-size: 14px; margin-top: 10px;">Appellations concernées :<br />
+		<p style="font-size: 14px; margin-top: 15px;">Appellations concernées :<br />
 			<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 			    <li style="padding-top: 5px;">
 			       AOC « Crémant d’Alsace »
