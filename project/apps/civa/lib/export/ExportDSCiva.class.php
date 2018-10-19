@@ -222,6 +222,12 @@ class ExportDSCiva {
             $vin_table_volume = $vin_table->total_normal;
         }
 
+        $vci_volume = 0;
+        if ($ds->exist('declaration/certification/genreVCI')) {
+            $vci_volume = $ds->get('declaration/certification/genreVCI')->total_normal;
+            echo $vci_volume."\n";
+        }
+
 // Alsace Blanc + PinotNOIR + PinotNOIRROUGE
         $stock_aoc_normal = 0;
         $stock_aoc_vt = 0;
@@ -286,7 +292,7 @@ class ExportDSCiva {
 
         if ($ds->exist('declaration') && $ds->declaration->exist('certification')) {
             $certif = $ds->declaration->certification;
-            $row .= $this->convertToFloat($certif->total_normal - $vin_table_volume) . "," . $this->convertToFloat($certif->total_vt) . "," . $this->convertToFloat($certif->total_sgn) . ",";
+            $row .= $this->convertToFloat($certif->total_normal - $vin_table_volume - $vci_volume) . "," . $this->convertToFloat($certif->total_vt) . "," . $this->convertToFloat($certif->total_sgn) . ",";
         } else {
             $row .= ".00,.00,.00,";
         }
