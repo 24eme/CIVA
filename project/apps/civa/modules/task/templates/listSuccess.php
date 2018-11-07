@@ -3,7 +3,7 @@
 <div class="contenu">
         <div id="application_dr" class="clearfix">
             <?php foreach($tasks_container->getTasks() as $namespace => $tasks): ?>
-            <div id="precedentes_declarations" style="width: 226px; margin-right: 13px;">
+            <div id="precedentes_declarations" style="width: 226px; margin: 5px;">
                 <h3 class="titre_section"><?php echo preg_replace("/^[0-9]+-/", "", $namespace) ?></h3>
                 <div class="contenu_section">
                     <ul>
