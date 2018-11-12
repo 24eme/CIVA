@@ -148,6 +148,9 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $this->setVolume(null);
         $this->cave_particuliere = null;
         $this->lies = null;
+        if($this->exist('vci')) {
+            $this->vci = null;
+        }
         $this->remove('cooperatives');
         $this->remove('mouts');
         $this->remove('negoces');

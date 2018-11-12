@@ -409,6 +409,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         $this->dplc = null;
         $this->usages_industriels = null;
         $this->lies = null;
+        if($this->exist('vci')) {
+            $this->vci = null;
+        }
 
         if($this->exist('usages_industriels_saisi')) {
             $this->remove('usages_industriels_saisi');
