@@ -867,11 +867,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        $volumeRecolte = 0;
-        foreach ($produit->getDetail() as $detail) {
-          $volumeRecolte += $detail->getVolume();
+        if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
+            continue;
         }
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit,"entrees","recolte",$volumeRecolte);
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
       }
       return $lignesEdi;
     }
