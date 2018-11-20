@@ -254,6 +254,10 @@ class uploadActions extends sfActions {
             return false;
         }
 
+        if (strtolower($line[CsvFileAcheteur::CSV_APPELLATION]) == 'jus de raisin') {
+            return false;
+        }
+
         if (!preg_match('/[a-z]/i', $line[CsvFileAcheteur::CSV_CEPAGE])) {
             return "cepage vide";
         }
