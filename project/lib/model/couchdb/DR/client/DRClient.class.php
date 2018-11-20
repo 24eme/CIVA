@@ -129,6 +129,15 @@ class DRClient extends acCouchdbClient {
           continue;
         }
 
+        if (preg_match('/JUS DE RAISIN/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
+          if($doc->jus_raisin_volume == $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) && $doc->jus_raisin_superficie == $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
+            continue;
+          }
+          $doc->jus_raisin_volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+          $doc->jus_raisin_superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+          continue;
+        }
+
         $produit = $this->identifyProductCSV($line);
         $prod = array();
 
