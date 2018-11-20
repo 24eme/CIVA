@@ -51,7 +51,7 @@ td.maintitre{border-top: 1px solid black;}
     <p style="float:right; margin: 15px;"><?php echo link_to("Retour à votre espace CIVA", "mon_espace_civa_dr_acheteur", $etablissement); ?></p>
 </div>
 <table class="csv">
-<tr class="titre"><td>&nbsp;</td><td>CVI acheteur</td><td>Nom acheteur</td><td>CVI récoltant</td><td>Nom récoltant</td><td>Appellation</td><td>Lieu</td><td>Cepage</td><td>VT/SGN</td><td>Denomination</td><td>Superficie acheté</td><td>Volume acheté</td></tr>
+<tr class="titre"><td>&nbsp;</td><td>CVI acheteur</td><td>Nom acheteur</td><td>CVI récoltant</td><td>Nom récoltant</td><td>Appellation</td><td>Lieu</td><td>Cepage</td><td>VT/SGN</td><td>Denomination</td><td>Superficie acheté</td><td>Volume acheté</td><td>VCI</td></tr>
 <?php   $cpt = 0;
 foreach ($csv->getRawValue()->getCsv() as $line)
 {
@@ -68,6 +68,11 @@ foreach ($csv->getRawValue()->getCsv() as $line)
     echo $line[10];
   else
     printf('%.02f', $line[10]);
+  echo '</td><td class="csv_num">';
+  if (isset($line[15]) && $line[15] && preg_match('/[^0-9,\.]/', $line[15]))
+      echo $line[15];
+    elseif(isset($line[15]) && $line[15])
+      printf('%.02f', $line[15]);
   echo '</td><tr>';
   if (count($errors[$cpt])) {
     foreach($errors[$cpt]->getRawValue() as $error) {
