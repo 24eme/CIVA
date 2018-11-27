@@ -457,9 +457,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 $this->checkNoeudRecapitulatif($lieu, $validLogErreur, $validLogVigilance);
                 $this->checkNoeudRecapitulatifVentes($lieu, $validLogErreur, $validLogVigilance);
 
-                //check les cepages
                 foreach ($lieu->getCouleurs() as $couleur) {
-                    $this->checkNoeudVci($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatif($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatifVentes($couleur, $validLogErreur, $validLogVigilance);
 
@@ -615,10 +613,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
-        if(!$noeud->getRendementVciMax()) {
+        if(!$noeud->canHaveVci()) {
             return;
         }
-
         if($noeud->getTotalVci() > $noeud->getVolumeVciMax()) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour cette appellation ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
             return;
