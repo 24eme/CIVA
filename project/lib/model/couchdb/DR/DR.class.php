@@ -616,7 +616,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if(!$noeud->canHaveVci()) {
             return;
         }
-        if($noeud->getTotalVci() > $noeud->getVolumeVciMax()) {
+        if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour cette appellation ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
             return;
         }
