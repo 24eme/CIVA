@@ -53,6 +53,10 @@ EOF;
             }
 		$cvi = $item->key[1];
 
+        if(!preg_match("/^6(7|8)/", $cvi)) {
+                continue;
+        }
+
 	    	$this->logSection('cvi', $cvi);
 
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$cvi);
