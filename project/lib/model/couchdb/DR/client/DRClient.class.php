@@ -375,6 +375,7 @@ class DRClient extends acCouchdbClient {
     public function isTeledeclarationOuverte() {
         $dateOuverture = $this->getDateOuverture();
         $dateFermeture = $this->getDateFermeture();
+        $dateFermeture->modify("1 day");
 
         return date('Y-m-d') >= $dateOuverture->format('Y-m-d') && date('Y-m-d') <= $dateFermeture->format('Y-m-d');
     }
