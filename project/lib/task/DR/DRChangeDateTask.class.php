@@ -53,11 +53,11 @@ EOF;
       }
 
       $dr->validee = $date;
-      
+      $dr->modifiee = $date;
+
       echo "INFO;".$dr->_id.";Date de validation passé au ".$date."\n";
 
       $dr->save();
     }
-    
-}
 
+}
