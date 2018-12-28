@@ -221,8 +221,12 @@ class DRMGenerateCSV {
 
 
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
-        $cepageConfig = $produitDetail->getCepage()->getConfig();
 
+        if(is_string($produitDetail)) {
+            $cepageConfig = ConfigurationClient::getCurrent()->identifyProductByLibelle($produitDetail);
+        } else {
+            $cepageConfig = $produitDetail->getCepage()->getConfig();
+        }
         $certification = $cepageConfig->getCertification()->getLibelle();
         $genre = $cepageConfig->getGenre()->getLibelle();
         $appellation = $cepageConfig->getAppellation()->getLibelle();
@@ -235,12 +239,13 @@ class DRMGenerateCSV {
         $cepage = $cepageConfig->getCepage()->getLibelle();
 
         $complement = "";
-        $libelle = $produitDetail->getConfig()->getLibelleFormat();
+        $libelle = $cepageConfig->getLibelleFormat();
+
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
         }
 
-        $type_drm = ($produitDetail->getParent()->getKey() == 'details')? 'suspendu' : 'acquitte';
+        $type_drm = 'suspendu';
         if($force_type_drm){
           $type_drm = $force_type_drm;
         }

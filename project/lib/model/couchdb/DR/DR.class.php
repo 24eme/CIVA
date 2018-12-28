@@ -852,6 +852,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
+        if($produit->getCepage()->getKey() == 'cepage_RB') {
+            continue;
+        }
         if(!$produit->getTotalCaveParticuliere()) {
             continue;
         }
@@ -869,6 +872,34 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
       }
+
+      $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
+
+       if($this->recolte->getTotalLiesMouts()) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("Lies et Bourbes", "entrees", "recolte", $this->recolte->getTotalLiesMouts());
+       }
+
+       if($this->recolte->getSurPlaceRebeches()) {
+           $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("Rebêches ", "entrees", "recolte", $this->recolte->getSurPlaceRebeches());
+       }
+
+      $dplcRouge = $recap["ALSACEROUGEROSE"]->dplc_sur_place;
+      $dplcBlanc = $recap["ALSACEBLANC"]->dplc_sur_place + $recap["GRDCRU"]->dplc_sur_place + $recap["CREMANT"]->dplc_sur_place;
+
+      if($dplcRouge) {
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $recap["ALSACEROUGEROSE"]->dplc_sur_place);
+      }
+      if($dplcBlanc) {
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Blanc", "entrees", "recolte", $dplcBlanc);
+      }
+      if($this->exist('recolte/certification/genre/appellation_ALSACEBLANC') && $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere()) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("VCI Alsace blanc", "entrees", "recolte", $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere());
+      }
+
+      if($this->exist('recolte/certification/genre/appellation_CREMANT') && $this->get('recolte/certification/genre/appellation_CREMANT')->getVciCaveParticuliere()) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("VCI Crémant d'Alsace", "entrees", "recolte", $this->get('recolte/certification/genre/appellation_CREMANT')->getVciCaveParticuliere());
+      }
+
       return $lignesEdi;
     }
 
