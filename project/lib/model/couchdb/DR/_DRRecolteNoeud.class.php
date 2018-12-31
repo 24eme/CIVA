@@ -149,11 +149,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->_get('lies') ? $this->_get('lies') : 0;
     }
 
-    public function getTotalLiesMouts() {
-
-        return $this->getLiesTotal() + $this->getTotalVolumeAcheteurs('mouts');
-    }
-
     public function getLiesMouts() {
         if(!$this->canHaveUsagesLiesSaisi()) {
 
