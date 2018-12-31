@@ -875,8 +875,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
 
-       if($this->recolte->getTotalLiesMouts()) {
-          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("Lies et Bourbes", "entrees", "recolte", $this->recolte->getTotalLiesMouts());
+       if($this->recolte->getLiesTotal()) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("Lies et Bourbes", "entrees", "recolte", $this->recolte->getLiesTotal());
        }
 
        if($this->recolte->getSurPlaceRebeches()) {
