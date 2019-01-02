@@ -870,7 +870,10 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
             continue;
         }
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere() + $produit->getTotalVolumeAcheteurs('mouts'));
+        if($produit->getTotalVolumeAcheteurs('mouts')) {
+            $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $produit->getTotalVolumeAcheteurs('mouts'));
+        }
       }
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
