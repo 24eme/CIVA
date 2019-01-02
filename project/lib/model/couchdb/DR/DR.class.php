@@ -867,14 +867,19 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
-            continue;
-        }
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
-        if($produit->getTotalVolumeAcheteurs('mouts')) {
-            $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getTotalVolumeAcheteurs('mouts'));
-            $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $produit->getTotalVolumeAcheteurs('mouts'));
-        }
+            if($produit->getCepage()->getKey() == 'cepage_RB') {
+                continue;
+            }
+            if(!$produit->getVolumeRevendiqueCaveParticuliere() && !($produit->getTotalVolumeAcheteurs('mouts'))) {
+                continue;
+            }
+            if($produit->getVolumeRevendiqueCaveParticuliere()) {
+                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
+            }
+            if($produit->getTotalVolumeAcheteurs('mouts')) {
+                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getTotalVolumeAcheteurs('mouts'));
+                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $produit->getTotalVolumeAcheteurs('mouts'));
+            }
       }
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
