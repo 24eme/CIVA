@@ -177,7 +177,7 @@ L\'application de télédéclaration de récoltes du CIVA';
 
             return 'Bonjour,
 
-Votre déclaration de récolte pour l\'année ' . date("Y") . ' a été validée par ' . $dr->validee_par . '.
+Votre déclaration de récolte pour l\'année ' . $dr->campagne . ' a été validée par ' . $dr->validee_par . '.
 
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
@@ -190,7 +190,7 @@ L\'application de télédéclaration de récoltes du CIVA';
 
         return 'Bonjour,
 
-Vous venez de valider votre déclaration de récolte pour l\'année ' . date("Y") . '.
+Vous venez de valider votre déclaration de récolte pour l\'année ' . $dr->campagne . '.
 
 Vous trouverez ci-joint votre déclaration de récolte au format PDF et au format Tableur.
 
