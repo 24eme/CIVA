@@ -42,7 +42,9 @@ EOF;
     if($options['remove']) {
         $doc->remove($arguments['hash']);
     } else {
-        $doc->add($arguments['hash'], settype($arguments['value'], $arguments['type']));
+        $value = $arguments['value'];
+        settype($value, $arguments['type']);
+        $doc->add($arguments['hash'], $value);
     }
     $doc->save();
 
