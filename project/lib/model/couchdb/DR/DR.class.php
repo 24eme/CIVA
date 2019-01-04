@@ -865,22 +865,26 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
-      $lignesEdi = "";
-      foreach ($this->getProduits() as $hashProduit => $produit) {
-            if($produit->getCepage()->getKey() == 'cepage_RB') {
-                continue;
-            }
-            if(!$produit->getVolumeRevendiqueCaveParticuliere() && !($produit->getTotalVolumeAcheteurs('mouts'))) {
-                continue;
-            }
-            if($produit->getVolumeRevendiqueCaveParticuliere()) {
-                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getVolumeRevendiqueCaveParticuliere());
-            }
-            if($produit->getTotalVolumeAcheteurs('mouts')) {
-                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $produit->getTotalVolumeAcheteurs('mouts'));
-                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $produit->getTotalVolumeAcheteurs('mouts'));
-            }
-      }
+     $lignesEdi = "";
+     foreach ($this->getProduits() as $hashProduit => $produit) {
+           $noeud = $produit;
+           if($produit->getCepage()->getKey() == 'cepage_RB') {
+               continue;
+           }
+           if(in_array($produit->getCepage()->getConfig()->getAppellation()->getKey(), array('PINOTNOIR', 'PINOTNOIRROUGE'))) {
+               $noeud = $produit->getLieu();
+           }
+           if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
+               continue;
+           }
+           if($noeud->getVolumeRevendiqueCaveParticuliere()) {
+               $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getVolumeRevendiqueCaveParticuliere());
+           }
+           if($noeud->getTotalVolumeAcheteurs('mouts')) {
+               $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getTotalVolumeAcheteurs('mouts'));
+               $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $noeud->getTotalVolumeAcheteurs('mouts'));
+           }
+     }
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
 
