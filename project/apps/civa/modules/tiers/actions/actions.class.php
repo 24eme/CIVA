@@ -30,7 +30,8 @@ class tiersActions extends sfActions {
                 }
                 $etablissements[$e->famille] = $e;
             }
-
+        }
+        
         $this->getUser()->signInTiers(array_values($etablissements));
 
         $referer = $this->getUser()->getFlash('referer');
