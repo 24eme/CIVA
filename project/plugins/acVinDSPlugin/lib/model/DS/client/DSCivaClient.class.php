@@ -146,6 +146,15 @@ class DSCivaClient extends DSClient {
             }
         }
 
+        $familles = array();
+        foreach($etablissements as $etablissement) {
+            if(array_key_exists($etablissement->famille, $familles)) {
+                unset($etablissements[$etablissement->_id]);
+                continue;
+            }
+            $familles[$etablissement->famille] = $etablissement->id;
+        }
+
         return $etablissements;
     }
     public function getEtablissement($societe, $type_ds = null) {

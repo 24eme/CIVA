@@ -31,18 +31,15 @@ class tiersActions extends sfActions {
                 $etablissements[$e->famille] = $e;
             }
 
-    	    if (!$not_uniq) {
-                $this->getUser()->signInTiers(array_values($etablissements));
+        $this->getUser()->signInTiers(array_values($etablissements));
 
-                $referer = $this->getUser()->getFlash('referer');
-                if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
-                    return $this->redirect($referer);
-                }
-
-                return $this->redirect("mon_espace_civa", array('identifiant' => $this->compte->getIdentifiant()));
-    	    }
+        $referer = $this->getUser()->getFlash('referer');
+        if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
+            return $this->redirect($referer);
         }
 
+        return $this->redirect("mon_espace_civa", array('identifiant' => $this->compte->getIdentifiant()));
+        
         $this->form = new TiersLoginForm($this->compte);
 
         if ($request->isMethod(sfWebRequest::POST)) {
