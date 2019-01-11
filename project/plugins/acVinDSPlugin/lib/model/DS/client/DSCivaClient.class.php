@@ -152,7 +152,7 @@ class DSCivaClient extends DSClient {
                 unset($etablissements[$etablissement->_id]);
                 continue;
             }
-            $familles[$etablissement->famille] = $etablissement->id;
+            $familles[$etablissement->famille] = $etablissement->_id;
         }
 
         return $etablissements;
