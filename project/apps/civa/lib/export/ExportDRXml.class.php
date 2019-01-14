@@ -34,7 +34,7 @@ class ExportDRXml {
                 $item = $xml[$key];
             }
 
-            $item['volume'] += $volume;
+            $item['volume'] += $volume - $obj->getTotalDontVciVendusByCvi($type, $cvi);
 
             $xml[$key] = $item;
         }
@@ -130,11 +130,11 @@ class ExportDRXml {
                         if(!array_key_exists('L9', $total['exploitant'])) {
                             $total['exploitant']['L9'] = 0;
                         }
-                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere();
+                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendus();
                         if(!array_key_exists('L10', $total['exploitant'])) {
                             $total['exploitant']['L10'] = 0;
                         }
-                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendus(); //Volume revendique non negoces
                         $total['exploitant']['L11'] = 0; //HS
                         $total['exploitant']['L12'] = 0; //HS
                         $total['exploitant']['L13'] = 0; //HS
@@ -479,13 +479,6 @@ class ExportDRXml {
             return "1B001MST";
         }
 
-        $codeDouane = $noeud->getCodeDouane();
-
-        if(!$noeud instanceof DRRecolteCouleur && $codeDouane == "1R070S") {
-
-            return "1R070S 1";
-        }
-
-        return $codeDouane;
+        return $noeud->getCodeDouane();
     }
 }
