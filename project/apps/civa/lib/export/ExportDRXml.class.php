@@ -479,6 +479,13 @@ class ExportDRXml {
             return "1B001MST";
         }
 
-        return $noeud->getCodeDouane();
+        $codeDouane = $noeud->getCodeDouane();
+
+        if(!$noeud instanceof DRRecolteCouleur && $codeDouane == "1R070S") {
+
+            return "1R070S 1";
+        }
+
+        return $codeDouane;
     }
 }
