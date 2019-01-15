@@ -134,7 +134,7 @@ class ExportDRXml {
                         if(!array_key_exists('L10', $total['exploitant'])) {
                             $total['exploitant']['L10'] = 0;
                         }
-                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendus(); //Volume revendique non negoces
+                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendusByType('negoces'); //Volume revendique non negoces
                         $total['exploitant']['L11'] = 0; //HS
                         $total['exploitant']['L12'] = 0; //HS
                         $total['exploitant']['L13'] = 0; //HS
