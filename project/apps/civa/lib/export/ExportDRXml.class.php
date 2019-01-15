@@ -244,8 +244,32 @@ class ExportDRXml {
                                     $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
                                     $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
 
-                                    $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
-                                    $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                                    $vci_vendus = null;
+                                    $vci_cave_negoce = null;
+
+                                    if(!$detail->getTotalVci()) {
+                                        $vci_vendus = 0;
+                                        $vci_cave_negoce = 0;
+                                    }
+
+                                    if($detail->getTotalVci() && $detail->getTotalVolumeAcheteurs('negoces') == $detail->volume) {
+                                        $vci_vendus = $detail->getTotalVci();
+                                        $vci_cave_negoce = $detail->getTotalVci();
+                                    }
+
+                                    if($detail->getTotalVci() && $detail->getTotalVolumeAcheteurs('cooperatives') == $detail->volume) {
+                                        $vci_vendus = $detail->getTotalVci();
+                                        $vci_cave_negoce = 0;
+                                    }
+
+                                    if($detail->getTotalVci() && !$detail->getTotalVolumeAcheteurs('negoces') && !$detail->getTotalVolumeAcheteurs('cooperatives')) {
+                                        $vci_vendus = 0;
+                                        $vci_cave_negoce = 0;
+                                    }
+
+                                    $col['exploitant']['L9'] = (!is_null($vci_vendus)) ? $detail->cave_particuliere + $vci_vendus : 0; //Volume revendique sur place
+
+                                    $col['exploitant']['L10'] = (!is_null($vci_vendus)) ? $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives') + $vci_cave_negoce : 0; //Volume revendique non negoces
                                     $col['exploitant']['L11'] = 0; //HS
                                     $col['exploitant']['L12'] = 0; //HS
                                     $col['exploitant']['L13'] = 0; //HS
