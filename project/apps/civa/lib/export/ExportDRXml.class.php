@@ -132,7 +132,7 @@ class ExportDRXml {
                         if(!array_key_exists('L9', $total['exploitant'])) {
                             $total['exploitant']['L9'] = 0;
                         }
-                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendus();
+                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendusByType('negoces');
                         if(!array_key_exists('L10', $total['exploitant'])) {
                             $total['exploitant']['L10'] = 0;
                         }
