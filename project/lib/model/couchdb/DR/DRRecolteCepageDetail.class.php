@@ -71,6 +71,44 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return null;
     }
 
+    public function getTotalDontVciVendusByCvi($type, $cvi) {
+        if(!$this->getTotalVci()) {
+
+            return 0;
+        }
+        if($this->getVolumeVenduByCvi($type, $cvi) == $this->volume) {
+
+            return $this->getTotalVci();
+        }
+
+        $recap = $this->getCepage()->getNoeudRecapitulatif();
+
+        if($recap->getTotalDontVciVendusByCvi($type, $cvi) == $recap->getTotalVci()) {
+
+            return $this->getTotalVci();
+        }
+
+        if(!$recap->getTotalDontVciVendusByCvi($type, $cvi)) {
+
+            return 0;
+        }
+
+        return null;
+    }
+
+    public function getVolumeVenduByCvi($type, $cvi) {
+        $volume = 0;
+        foreach($this->get($type) as $achat) {
+            if($achat->cvi != $cvi) {
+                continue;
+            }
+
+            $volume += $achat->quantite_vendue;
+        }
+
+        return $volume;
+    }
+
     public function getVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
@@ -107,6 +145,22 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
            }
        }
        return 0;
+    }
+
+    public function getTotalVciAcheteur($type) {
+        $vci = 0;
+        if(!$this->getTotalVci()) {
+            return 0;
+        }
+        foreach($this->get($type) as $achat) {
+            $volume = $this->getTotalDontVciVendusByCvi($type, $achat->cvi);
+            if(is_null($volume)) {
+                return null;
+            }
+            $vci += $volume;
+        }
+
+        return $vci;
     }
 
     protected function deleteAcheteurUnused($type) {

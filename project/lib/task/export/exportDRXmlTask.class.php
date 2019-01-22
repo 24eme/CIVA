@@ -12,11 +12,11 @@ class exportDRXmlTask extends sfBaseTask
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
       new sfCommandOption('docid', null, sfCommandOption::PARAMETER_REQUIRED, 'one document id', ''),
       // add your own options here
-      
+      new sfCommandOption('id', null, sfCommandOption::PARAMETER_OPTIONAL, 'Limite la génération à une DR'),
     ));
 
     $this->namespace        = 'export';
@@ -32,17 +32,25 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
-    ini_set('memory_limit', '2500M');
-    
+
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-    sfContext::createInstance($this->configuration);
+    @sfContext::createInstance($this->configuration);
 
     if (!in_array($arguments['destinataire'], array("Civa", "Douane"))) {
         throw new sfCommandException("Le destinataire est invalide !");
     }
+
+    if($options['id']) {
+        $dr = acCouchdbManager::getClient("DR")->find($options['id']);
+        $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+        echo $xml->getContent();
+        return;
+    }
+
+    ini_set('memory_limit', '2500M');
 
     $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'.xml';
     if (file_exists($filename)) {

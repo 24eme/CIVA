@@ -33,8 +33,10 @@ class ExportDRXml {
             } else {
                 $item = $xml[$key];
             }
-
             $item['volume'] += $volume;
+            if($type == 'negoces') {
+                $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCvi($type, $cvi);
+            }
 
             $xml[$key] = $item;
         }
@@ -130,11 +132,11 @@ class ExportDRXml {
                         if(!array_key_exists('L9', $total['exploitant'])) {
                             $total['exploitant']['L9'] = 0;
                         }
-                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere();
+                        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendusByType('negoces');
                         if(!array_key_exists('L10', $total['exploitant'])) {
                             $total['exploitant']['L10'] = 0;
                         }
-                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendusByType('negoces'); //Volume revendique non negoces
                         $total['exploitant']['L11'] = 0; //HS
                         $total['exploitant']['L12'] = 0; //HS
                         $total['exploitant']['L13'] = 0; //HS
@@ -244,8 +246,11 @@ class ExportDRXml {
                                     $this->setAcheteursForXml($col['exploitant'], $detail, 'mouts');
                                     $this->setAcheteursForXml($col['exploitant'], $detail, 'cooperatives');
 
-                                    $col['exploitant']['L9'] = $detail->cave_particuliere; //Volume revendique sur place
-                                    $col['exploitant']['L10'] = $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives'); //Volume revendique non negoces
+                                    $vci_negoce = $detail->getTotalVciAcheteur('negoces');
+
+                                    $col['exploitant']['L9'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + $vci_negoce : 0; //Volume revendique sur place
+
+                                    $col['exploitant']['L10'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + $vci_negoce + $detail->getTotalVolumeAcheteurs('cooperatives') : 0;
                                     $col['exploitant']['L11'] = 0; //HS
                                     $col['exploitant']['L12'] = 0; //HS
                                     $col['exploitant']['L13'] = 0; //HS

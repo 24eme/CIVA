@@ -544,6 +544,24 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getTotalDontVciRecapitulatifVente(), 2);
     }
 
+    public function getTotalDontVciVendusByType($type) {
+        if(!$this->hasRecapitulatifVente()) {
+            $sum = 0;
+            foreach ($this->getChildrenNode() as $noeud) {
+                if($noeud->getConfig()->excludeTotal()) {
+
+                    continue;
+                }
+
+                $sum += $noeud->getTotalDontVciVendusByType($type);
+            }
+
+            return $sum;
+        }
+
+        return round($this->getTotalDontVciRecapitulatifVente($type), 2);
+    }
+
     public function getTotalSuperficieVendus() {
         if($this->getTotalCaveParticuliere() == 0) {
 
@@ -739,7 +757,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $total_dontdplc;
     }
 
-    public function getTotalDontVciRecapitulatifVente() {
+    public function getTotalDontVciRecapitulatifVente($typeFilter = null) {
         if(!$this->hasRecapitulatifVente()) {
 
             throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
@@ -747,6 +765,10 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         $total_dontvci = 0;
         foreach ($this->acheteurs as $type => $type_acheteurs) {
+            if($typeFilter && $typeFilter != $type) {
+
+                continue;
+            }
             foreach ($type_acheteurs as $cvi => $acheteur) {
                 if ($acheteur->dontvci) {
                     $total_dontvci += $acheteur->dontvci;
