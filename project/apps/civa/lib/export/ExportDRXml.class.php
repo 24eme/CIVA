@@ -478,6 +478,27 @@ class ExportDRXml {
 
             return "1B001MST";
         }
+        if($noeud instanceof DRRecolteCepageDetail && $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE") {
+            $codeDouane = $noeud->getCodeDouane();
+            if (strlen($codeDouane) > 6) {
+              return $codeDouane;
+            }
+            $codeCepage = $noeud->getParent()->getParent()->getConfig()->code;
+            if ($codeCepage == "GW"){
+              return $codeDouane."01";
+            }elseif ($codeCepage == "RI") {
+              return $codeDouane."04";
+            }elseif ($codeCepage == "SY") {
+              return $codeDouane."08";
+            }elseif ($codeCepage == "PR") {
+              return $codeDouane."01";
+            }elseif ($codeCepage == "KL") {
+              return $code."";
+            }elseif ($codeCepage == "PG") {
+              return $codeDouane."03";
+            }
+            return $codeDouane."XX";
+        }
 
         return $noeud->getCodeDouane();
     }

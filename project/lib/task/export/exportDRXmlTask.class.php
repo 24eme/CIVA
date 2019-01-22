@@ -14,6 +14,7 @@ class exportDRXmlTask extends sfBaseTask
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+      new sfCommandOption('docid', null, sfCommandOption::PARAMETER_REQUIRED, 'one document id', ''),
       // add your own options here
       
     ));
@@ -52,8 +53,12 @@ EOF;
 
     file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>\n", FILE_APPEND);
 
-    $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
-    
+    if ($options['docid']) {
+        $dr_ids = array($options['docid']);
+    }else{
+        $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+    }
+
     foreach ($dr_ids as $id) {
 
             if (!preg_match("/^DR-(67|68)/", $id)) {
