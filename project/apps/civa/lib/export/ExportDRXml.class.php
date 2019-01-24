@@ -483,24 +483,30 @@ class ExportDRXml {
 
             return "1B001MST";
         }
-        if($noeud instanceof DRRecolteCepageDetail && $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE") {
+        if($noeud instanceof DRRecolteCepageDetail && ($noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE" || $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_LIEUDIT")) {
             $codeDouane = $noeud->getCodeDouane();
             if (strlen($codeDouane) > 6) {
               return $codeDouane;
             }
             $codeCepage = $noeud->getParent()->getParent()->getConfig()->code;
-            if ($codeCepage == "GW"){
+            if ($codeCepage == "GW" && $codeDouane == "1B065S"){
               return $codeDouane."01";
+            }elseif ($codeCepage == "GW"){
+                return $codeDouane." 1";
             }elseif ($codeCepage == "RI") {
-              return $codeDouane."04";
+              return $codeDouane." 4";
+            }elseif ($codeCepage == "SY" && ($codeDouane == "1B056S" || $codeDouane == "1B055S")) {
+              return $codeDouane." 1";
             }elseif ($codeCepage == "SY") {
-              return $codeDouane."08";
+              return $codeDouane." 8";
             }elseif ($codeCepage == "PR") {
-              return $codeDouane."01";
+              return $codeDouane." 1";
             }elseif ($codeCepage == "KL") {
-              return $code."";
+              return $codeDouane." 1";
             }elseif ($codeCepage == "PG") {
-              return $codeDouane."03";
+              return $codeDouane." 3";
+            }elseif ($codeCepage == "ED") {
+              return $codeDouane."09";
             }
             return $codeDouane."XX";
         }
