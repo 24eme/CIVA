@@ -483,6 +483,11 @@ class ExportDRXml {
 
             return "1B001MST";
         }
+
+        if ($this->destinataire == self::DEST_DOUANE) {
+          return $noeud->getCodeDouane();
+        }
+        
         if($noeud instanceof DRRecolteCepageDetail && ($noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE" || $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_LIEUDIT")) {
             $codeDouane = $noeud->getCodeDouane();
             if (strlen($codeDouane) > 6) {
