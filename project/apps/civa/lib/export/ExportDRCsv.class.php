@@ -241,6 +241,8 @@ class ExportDRCsv extends ExportCsv {
     }
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
+        $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
+
         $this->add(array(
             "cvi_acheteur" => $acheteur->cvi,
             "nom_acheteur" => $acheteur->getNom(),
@@ -249,7 +251,7 @@ class ExportDRCsv extends ExportCsv {
             "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
             "cepage" => "TOTAL",
-            "vtsgn" => null,
+            "vtsgn" => $vtsgn,
             "denomination" => null,
             "superficie_livree" => $acheteur->superficie,
             "volume_livre/sur place" => $acheteur->getVolume(),
