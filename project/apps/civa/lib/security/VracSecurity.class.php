@@ -30,13 +30,22 @@ class VracSecurity implements SecurityInterface {
         $this->compte = $compte;
         if(!$this->compte) {
 
-            throw new sfException("Le compt est nul");
+            throw new sfException("Le compte est nul");
         }
         $this->vrac = $vrac;
         $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
     }
 
     public function isAuthorized($droits) {
+        if(!is_array($droits)) {
+            $droits = array($droits);
+        }
+
+        if(in_array(self::CONSULTATION, $droits) && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+
+            return true;
+        }
+
         foreach($this->etablissements as $etablissement) {
             if($this->isAuthorizedTiers($etablissement, $droits)) {
                 return true;
