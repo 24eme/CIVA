@@ -41,12 +41,6 @@ class DSRouting {
                         array('model' => 'DS',
                             'type' => 'object')));
 
-        $r->prependRoute('ds_tiers', new TiersRoute('/ds/:cvi', array('module' => 'ds',
-                    'action' => 'monEspace'),
-                        array('sf_method' => array('get', 'post')),
-                        array('model' => 'Tiers',
-                            'type' => 'object')));
-
         $r->prependRoute('ds_ajout_lieu', new DSNoeudRouteCiva('/ds/:id/ajout-lieu/:hash', array('module' => 'ds',
                         'action' => 'ajoutLieu'),
                         array('sf_method' => array('get', 'post')),

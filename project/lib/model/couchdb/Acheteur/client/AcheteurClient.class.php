@@ -9,10 +9,6 @@ class AcheteurClient extends acCouchdbClient {
         return acCouchdbManager::getClient('Acheteur');
     }
 
-    public function getAll($hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        return $this->startkey('ACHAT-0000000000')->endkey('ACHAT-9999999999')->execute($hydrate);
-    }
-
     public function loadAcheteurs() {
         $cooperatives = $this->startkey(array('Cooperative'))
                 ->endkey(array('Cooperative', array()))
@@ -75,15 +71,6 @@ class AcheteurClient extends acCouchdbClient {
         return $acheteurs;
     }
 
-    public function retrieveByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-
-        return parent::find('ACHAT-' . $cvi, $hydrate);
-    }
-
-    public function findByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-
-        return $this->retrieveByCvi($cvi, $hydrate);
-    }
     public static function sortByNom($a, $b) {
         return strcmp($a['nom'], $b['nom']);
     }

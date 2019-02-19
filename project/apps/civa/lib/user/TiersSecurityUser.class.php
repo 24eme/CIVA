@@ -36,10 +36,6 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         }
     }
 
-    /**
-     *
-     * @param _Tiers $tiers
-     */
     public function signInTiers($tiers) {
 
         $this->requireCompte();
@@ -85,9 +81,6 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         $this->clearCredentialsTiers();
     }
 
-    /**
-     * @return _Tiers
-     */
     public function getTiers($type = null) {
 
         if (is_null($this->_tiers)) {

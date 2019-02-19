@@ -104,19 +104,7 @@ Vous trouverez ce document en pièce jointe aux formats PDF et CSV.
 --
 L\'application de télédéclaration de récoltes du CIVA';
 
-        $email = null;
-        try {
-            $oldAcheteur = _TiersClient::getInstance()->find("ACHAT-".$acheteur->cvi);
-            if($oldAcheteur) {
-                $email = $oldAcheteur->getEmailByDroit(_CompteClient::DROIT_DR_ACHETEUR);
-            }
-        } catch (Exception $e) {
-
-        }
-
-        if(!$email) {
-            $email = $acheteur->getEmailTeledeclaration();
-        }
+        $email = $acheteur->getEmailTeledeclaration();
 
         $message = Swift_Message::newInstance()
                 ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
