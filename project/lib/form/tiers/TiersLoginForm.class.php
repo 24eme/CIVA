@@ -34,10 +34,6 @@ class TiersLoginForm extends BaseForm {
         $this->widgetSchema->setNameFormat('tiers[%s]');
     }
 
-    /**
-     *
-     * @return _Tiers;
-     */
     public function process() {
         if ($this->isValid()) {
             return acCouchdbManager::getClient()->find($this->getValue('tiers'));
