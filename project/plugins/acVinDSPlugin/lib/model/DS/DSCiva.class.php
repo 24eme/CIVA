@@ -834,6 +834,19 @@ class DSCiva extends DS implements IUtilisateursDocument {
       foreach ($this->getProduits() as $hashProduit => $produit) {
         $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($produit,$isFirstDRMCampagne);
       }
+
+      if($this->exist('lies') && $this->getLies()) {
+         $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("Lies et Bourbes", $this->getLies());
+      }
+
+      if($this->exist('rebeches') && $this->getRebeches()) {
+          $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("Rebêches ", $this->getRebeches());
+      }
+
+     if($this->exist('dplc') && $this->getDplc()) {
+       $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("DRA/DPLC Blanc", $this->getDplc());
+     }
+
       return $lignesEdi;
     }
 
