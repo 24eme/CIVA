@@ -1,4 +1,4 @@
-set terminal svg size 1200,800 enhanced background rgb 'white'
+set terminal svg size 1195,695 enhanced background rgb 'white'
 set output "<?php echo $file ?>"
 set datafile separator ';'
 

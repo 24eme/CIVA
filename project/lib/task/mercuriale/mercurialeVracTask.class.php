@@ -61,7 +61,11 @@ EOF;
         $vracMercuriale->setContext($contextInstance);
         
         $vracMercuriale->generateMercurialePlotFiles(array('GW','RI','SY'));
-        $vracMercuriale->generateMercurialePlotFiles(array('PR','PG','PB'));
+        $vracMercuriale->generateMercurialePlotFiles(array('PN','PG','PB'));
+        
+        unlink('/tmp/mercuriales/20180501_20180515_mercuriales.pdf');
+        $pdf = new ExportVracMercurialePdf($vracMercuriale);
+        $pdf->generatePDF();
         
         echo sprintf("Les mercuriales des transactions vrac Alsace AOC ont été générées dans %s\n", $folderPath);
     }
