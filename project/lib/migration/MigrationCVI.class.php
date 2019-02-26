@@ -34,7 +34,7 @@ class MigrationCVI {
     public function createLienSymbolique(){
        $drs = DRClient::getInstance()->getAllByCvi($this->ancien_cvi);
        foreach($drs as $dr){
-            $nouvelleId = str_replace($this->ancien_cvi, $this->nouveau_cvi, $dr->_id);
+            $nouvelleId = str_replace($dr->cvi, $this->nouveau_cvi, $dr->_id);
             if(DRClient::getInstance()->find($nouvelleId)) {
                 echo "Déjà migré ".$dr->_id." => ".$nouvelleId."\n";
                 continue;
@@ -49,7 +49,8 @@ class MigrationCVI {
         $dssIds = DSCivaClient::getInstance()->findAllByCvi($this->ancien_cvi)->getIds();
 
         foreach($dssIds as $id) {
-            $nouvelleId = str_replace($this->ancien_cvi, $this->nouveau_cvi, $id);
+            $ds = DSCivaClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
+            $nouvelleId = str_replace($ds->identifiant, $this->nouveau_cvi, $id);
             if(DSCivaClient::getInstance()->find($nouvelleId)) {
                 echo "Déjà migré ".$id." => ".$nouvelleId."\n";
                 continue;

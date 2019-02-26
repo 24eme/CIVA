@@ -22,45 +22,4 @@ class tiersActions extends DataManipulationActions
      return $this->renderData($this->buildTiersData(array($this->tiers)));
   }
 
-  /*public function executeFindAll(sfWebRequest $request) {
-     ini_set('memory_limit', '256M');
-     $this->tiers = acCouchdbManager::getClient("_Tiers")->getAll(acCouchdbClient::HYDRATE_ARRAY);
-     return $this->renderData($this->buildTiersData($this->tiers));
-  }
-
-  public function executeFindAllMetteurMarche(sfWebRequest $request) {
-     ini_set('memory_limit', '256M');
-     $this->tiers = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_ARRAY);
-     return $this->renderData($this->buildTiersData($this->tiers));
-  }
-  
-  public function executeFindAllRecoltant(sfWebRequest $request) {
-     ini_set('memory_limit', '256M');
-     $this->tiers = acCouchdbManager::getClient("Recoltant")->getAll(acCouchdbClient::HYDRATE_ARRAY);
-     return $this->renderData($this->buildTiersData($this->tiers));
-  }
-  
-  public function executeFindAllAcheteur(sfWebRequest $request) {
-     ini_set('memory_limit', '256M');
-     $this->tiers = acCouchdbManager::getClient("Acheteur")->getAll(acCouchdbClient::HYDRATE_ARRAY);
-     return $this->renderData($this->buildTiersData($this->tiers));
-  }*/
-
-  /*public function executeFindAllDeclarations(sfWebRequest $request) {
-    $this->tiers = $this->getTiers();
-    $this->declarations = acCouchdbManager::getClient("DR")->getAllByCvi($this->tiers['cvi'], acCouchdbClient::HYDRATE_ARRAY);
-
-    return $this->renderData($this->buildDeclarationsData($this->declarations));
-  }*/
-
-  /*public function executeFindOneAndAllDeclarations(sfWebRequest $request) {
-    $this->tiers = $this->getTiers();
-    $this->declarations = acCouchdbManager::getClient("DR")->getAllByCvi($this->tiers['cvi'], acCouchdbClient::HYDRATE_ARRAY);
-
-    return $this->renderData(array_merge(
-                                $this->buildTiersData(array($this->tiers)),
-                                $this->buildDeclarationsData($this->declarations)
-                            ));
-  }*/
-
 }

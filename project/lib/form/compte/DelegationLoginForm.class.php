@@ -37,10 +37,6 @@ class DelegationLoginForm extends BaseForm {
         $this->widgetSchema->setNameFormat('delegation[%s]');
     }
 
-    /**
-     *
-     * @return _Tiers;
-     */
     public function process() {
         if ($this->isValid()) {
             return CompteClient::getInstance()->find('COMPTE-'.$this->getValue('compte'));

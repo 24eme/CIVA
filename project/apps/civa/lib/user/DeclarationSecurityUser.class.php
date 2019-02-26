@@ -286,17 +286,9 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
         $this->signOutDeclaration();
     }
 
-
-    /**
-     *
-     * @param _Tiers $tiers
-     */
     public function signInTiers($tiers)
     {
         parent::signInTiers($tiers);
-        if ($this->hasCredential(myUser::CREDENTIAL_DECLARATION)) {
-            //$this->initCredentialsDeclaration();
-        }
     }
 
     /**

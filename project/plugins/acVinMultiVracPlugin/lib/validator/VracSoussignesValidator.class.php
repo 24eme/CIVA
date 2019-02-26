@@ -96,6 +96,6 @@ class VracSoussignesValidator extends sfValidatorBase
 
     protected function getTiers($id)
     {
-    	return _TiersClient::getInstance()->find($id);
+    	return EtablissementClient::getInstance()->find($id);
     }
 }

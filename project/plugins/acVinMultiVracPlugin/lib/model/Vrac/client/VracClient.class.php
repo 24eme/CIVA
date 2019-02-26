@@ -106,6 +106,11 @@ class VracClient extends acCouchdbClient {
 	}
 
 	public function getEtablissements($societe) {
+		if(!$societe) {
+
+			return array();
+		}
+
 		$etablissements = array();
 
 		foreach($societe->getEtablissementsObject(false) as $etablissement) {
