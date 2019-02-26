@@ -861,6 +861,33 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $cepageNode = $produit->getParent()->getParent();
         $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
       }
+        $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
+
+       if($this->recolte->getLiesTotal()) {
+          $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Lies et Bourbes");
+       }
+
+       if($this->recolte->getSurPlaceRebeches()) {
+           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches ");
+       }
+
+      $dplcRouge = $recap["ALSACEROUGEROSE"]->dplc_sur_place;
+      $dplcBlanc = $recap["ALSACEBLANC"]->dplc_sur_place + $recap["GRDCRU"]->dplc_sur_place + $recap["CREMANT"]->dplc_sur_place;
+
+      if($dplcRouge) {
+        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("DRA/DPLC Rouge");
+      }
+      if($dplcBlanc) {
+        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("DRA/DPLC Blanc");
+      }
+      if($this->exist('recolte/certification/genre/appellation_ALSACEBLANC') && $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere()) {
+          $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("VCI Alsace blanc");
+      }
+
+      if($this->exist('recolte/certification/genre/appellation_CREMANT') && $this->get('recolte/certification/genre/appellation_CREMANT')->getVciCaveParticuliere()) {
+          $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("VCI Crémant d'Alsace");
+      }
+
       return $lignesEdi;
     }
 
