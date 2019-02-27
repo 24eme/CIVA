@@ -219,6 +219,14 @@ class DRMGenerateCSV {
 
     }
 
+    public function createRowStockProduitAutreFromDS($produitDetail,$volume){
+      $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
+      $lignes = "";
+      $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$volume.";\n";
+      $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;".$volume.";\n";
+      return $lignes;
+    }
+
 
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
 
