@@ -2,18 +2,17 @@
 
 . bin/task.inc
 
-DESCRIPTION="Export des DRM pour DB2"
+TASK_DIR=$(pwd)/$TASK_DIR
+EXPORT_DIR=drm/export_drm_db2
+LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
+DESCRIPTION="Export des DRM pour DB2 [Voir tous les exports]($LINK)"
 
 . bin/task_start.inc
 
-EXPORT_DIR=contrat/export_drm_db2
-LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
-EXPORT_DIR=$(pwd)/contrat/export_drm_db2
-
-mkdir -m 777 $EXPORT_DIR > /dev/null
+mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
 cd $GIILDA_DIR
 
-php symfony drm:export-db2 $EXPORT_DIR --application=civa
-
-echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE)"
+mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
+php symfony drm:export-db2 $TASK_DIR/$EXPORT_DIR --application=civa
+echo "[Voir les fichiers]($LINK)"
