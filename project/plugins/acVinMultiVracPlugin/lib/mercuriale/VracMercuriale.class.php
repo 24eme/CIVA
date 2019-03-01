@@ -274,15 +274,15 @@ class VracMercuriale
 		return (substr($date, -2) > 15)? (substr($date, 0, 6).'2')*1 : (substr($date, 0, 6).'1')*1;
 	}
 	
-	public function getCumul()
+	public function getCumul($withCR = false)
 	{
 	    if (!$this->start && !$this->end) {
 	        throw new sfException('period must be setted');
 	    }
 	    $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
 
-	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01');
-	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2]);
+	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01', $this->end, $withCR);
+	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], $withCR);
 
 	    $result = array();
 	    foreach ($currentPeriode as $cep => $datas) {
@@ -347,7 +347,7 @@ class VracMercuriale
 	    return $result;
 	}
 	
-	public function getStats($start = null, $end = null)
+	public function getStats($start = null, $end = null, $withCR = false)
 	{
 	    if (!$start) {
 	        $start = $this->start;
@@ -367,6 +367,9 @@ class VracMercuriale
 			foreach ($this->datas as $datas) {
 				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
 					continue;
+				}
+				if (!$withCR && $datas[self::IN_CP_CODE] == 'CR') {
+				    continue;
 				}
 				if ($datas[self::IN_DATE] >= $start && $datas[self::IN_DATE] <= $end) {
 					if (!isset($result[$datas[self::IN_CP_CODE]])) {

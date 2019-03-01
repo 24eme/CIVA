@@ -9,7 +9,7 @@
 	<tr>
 		<td style="width: 20%;"></td>
 		<td style="width: 40%; text-align: left;">
-			<p>CAMPAGNE <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> DU : <strong><?php echo '01/12/'.($mercuriale->getEnd('Y')-2) ?></strong> AU <strong><?php echo $mercuriale->getEnd('m/d').'/'.($mercuriale->getEnd('Y')-1) ?></strong>
+			<p>CAMPAGNE <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> DU : <strong><?php echo '01/12/'.($mercuriale->getEnd('Y')-2) ?></strong> AU <strong><?php echo $mercuriale->getEnd('d/m').'/'.($mercuriale->getEnd('Y')-1) ?></strong>
 			<br />
 			CAMPAGNE <strong><?php echo $mercuriale->getEnd('Y')-1 ?>/<?php echo $mercuriale->getEnd('Y') ?></strong> DU : <strong><?php echo '01/12/'.($mercuriale->getEnd('Y')-1) ?></strong> AU <strong><?php echo $mercuriale->getEnd() ?></strong></p>
 		</td>

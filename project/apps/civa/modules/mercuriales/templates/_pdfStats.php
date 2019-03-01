@@ -4,6 +4,17 @@ $nbContrats = 0;
 foreach ($stats as $stat) {
 $nbContrats += $stat[VracMercuriale::OUT_CONTRAT];
 }
+
+$start = $mercuriale->getStart('Y-m').'-01';
+$statsCR = null;
+if ($start != $mercuriale->getStart('Y-m-d')) {
+    $statsCR = $mercuriale->getStats($start, $mercuriale->getEnd('Y-m-d'), true);
+    if (isset($statsCR['CR'])) {
+        $statsCR = $statsCR['CR'];
+    } else {
+        $statsCR = null;
+    }
+}
 ?>
 <table>
 	<tr>
@@ -71,6 +82,11 @@ $nbContrats += $stat[VracMercuriale::OUT_CONTRAT];
         	</table>
         	<p>&nbsp;</p>
         	<p>* nombre minimum de lots non-atteint pour publication</p>
+        	<?php if($statsCR): ?>
+        	<p>&nbsp;</p>
+        	<h2><span style="text-decoration: underline;">Vins de base Crémant d'Alsace</span> <span style="font-size: 80%">Période du <?php echo  '01/'.$mercuriale->getStart('m/Y') ?> au <?php echo $mercuriale->getEnd() ?></span></h2>
+        	<p>Nombre de lots : <strong><?php echo $statsCR[VracMercuriale::OUT_NB] ?></strong> &nbsp;&nbsp; Volume : <strong><?php echo number_format(str_replace(',', '.', $statsCR[VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></strong>&nbsp;hl &nbsp;&nbsp; Prix moyen : <strong><?php echo ($statsCR[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCR[VracMercuriale::OUT_PRIX] : '*' ?></strong></p>
+        	<?php endif; ?>
 		</td>
 		<td style="width: 10%;"></td>
 	</tr>
