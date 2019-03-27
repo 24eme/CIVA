@@ -16,5 +16,7 @@ cd $GIILDA_DIR
 PERIODEMAX=$(date --date='1 month ago 15 day ago' +%Y%m)
 
 mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
-php symfony drm:export-db2 $TASK_DIR/$EXPORT_DIR --periode_max="$PERIODEMAX" --application=civa
+
+LOGFILE="$TASK_DIR/$EXPORT_DIR/$(date +%Y%m%d%H%M%S).log"
+php symfony drm:export-db2 $TASK_DIR/$EXPORT_DIR --periode_max="$PERIODEMAX" --application=civa > $LOGFILE 2>&1
 echo "[Voir les fichiers]($LINK)"
