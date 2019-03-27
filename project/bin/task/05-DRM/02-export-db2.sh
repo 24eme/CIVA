@@ -13,6 +13,8 @@ mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
 cd $GIILDA_DIR
 
+PERIODEMAX=$(date --date='1 month ago 15 day ago' +%Y%m)
+
 mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
-php symfony drm:export-db2 $TASK_DIR/$EXPORT_DIR --application=civa
+php symfony drm:export-db2 $TASK_DIR/$EXPORT_DIR --periode_max="$PERIODEMAX" --application=civa
 echo "[Voir les fichiers]($LINK)"
