@@ -107,7 +107,7 @@ L\'application de télédéclaration de récoltes du CIVA';
         $email = $acheteur->getEmailTeledeclaration();
 
         $message = Swift_Message::newInstance()
-                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
                 ->setTo($email)
                 ->setSubject($subject)
                 ->setBody($mess);

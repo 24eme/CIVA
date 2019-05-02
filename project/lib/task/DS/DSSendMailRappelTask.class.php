@@ -89,8 +89,8 @@ EOF;
     public function sendMailValidation($etablissement, $ds, $dryrun) {
         $email = $ds->declarant->get('email');
         $message = Swift_Message::newInstance()
-            ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
-            ->setReplyTo(array('dominique@civa.fr'))
+            ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
+            ->setReplyTo(array(sfConfig::get('app_email_reply_to')))
             ->setTo($email)
             ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
             ->setBody("Bonjour,
@@ -126,7 +126,8 @@ Dominique WOLFF");
     public function sendMailOubli($etablissement, $dryrun) {
         $email = $etablissement->getEmailTeledeclaration();
         $message = Swift_Message::newInstance()
-        ->setFrom(array('dominique@civa.fr' => "Dominique Wolff"))
+        ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
+        ->setReplyTo(array(sfConfig::get('app_email_reply_to')))
         ->setTo($email)
         ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
         ->setBody("Bonjour,

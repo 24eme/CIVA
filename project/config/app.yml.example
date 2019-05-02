@@ -33,6 +33,9 @@ all:
       to: ["email@email.email"]
       subject: "500 | Internal Server Error | Exception"
   email:
+    from_name: ""
+    from: ""
+    reply_to: ""
     feed_back: ["email@email.email"]
   declarant_class: "Etablissement"
   ava:

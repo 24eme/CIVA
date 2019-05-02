@@ -109,7 +109,7 @@ class DSSendBrouillonTask extends sfBaseTask
         }
 
         $message = Swift_Message::newInstance()
-                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
                 ->setTo($email);
 
         $this->configureMessage($message, $type_ds, $teledeclarant);

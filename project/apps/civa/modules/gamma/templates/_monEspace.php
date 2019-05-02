@@ -43,13 +43,13 @@
                 <label for="gamma_inscription_choix_non">Non</label>
             </div>
             <div style="display: none;" id="gamma_inscription_choix_oui_bloc" class="ligne_form bloc_instruction">
-                <p>Téléchargez le formulaire d'adhésion ci-dessous, complétez le puis retournez le au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
+                <p>Téléchargez le formulaire d'adhésion ci-dessous, complétez le puis retournez le au CIVA à <a href="mailto:<?php echo sfConfig::get('app_email_reply_to') ?>"><?php echo sfConfig::get('app_email_reply_to') ?></a>.</p>
                 <a href="<?php echo url_for('@gamma_telecharger_l_adhesion'); ?>" class="telecharger-documentation-gamma" title="Document d'adhésion alsace gamm@"></a>
             </div>
             <div style="display: none;" id="gamma_inscription_choix_non_bloc" class="ligne_form bloc_instruction">
                 <p>Vous devez <u>impérativement</u> vous inscrire auprès de la Direction Régionale des Douanes de votre département à l'aide du document ci-dessous.</p>
 
-                <p>Vous devez <u>également</u> renvoyer le document complété au CIVA à <a href="mailto:dominique@civa.fr">dominique@civa.fr</a>.</p>
+                <p>Vous devez <u>également</u> renvoyer le document complété au CIVA à <a href="mailto:<?php echo sfConfig::get('app_email_reply_to') ?>"><?php echo sfConfig::get('app_email_reply_to') ?></a>.</p>
                 <a href="<?php echo url_for('@gamma_telecharger_l_adhesion'); ?>" class="telecharger-documentation-gamma" title="Document d'adhésion alsace gamm@"></a>
             </div>
 

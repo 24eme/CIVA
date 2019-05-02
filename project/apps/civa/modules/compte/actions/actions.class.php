@@ -147,7 +147,7 @@ class compteActions extends sfActions {
                 $this->compte = $this->form->save();
                 CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($this->compte);
                 try {
-                    $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\nVotre compte a bien été créé sur le site du CIVA. \n\nCordialement,\n\nLe CIVA");
+                    $message = $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\nVotre compte a bien été créé sur le site du CIVA. \n\nCordialement,\n\nLe CIVA");
                     $this->getUser()->setFlash('confirmation', "Votre compte a bien été créé.");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
@@ -177,7 +177,7 @@ class compteActions extends sfActions {
             if ($this->form->isValid()) {
                 $this->compte = $this->form->save();
                 try {
-                    $message = $this->getMailer()->composeAndSend(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"), $this->compte->email, "CIVA - Changement de votre mot de passe", "Bonjour " . $this->compte->nom . ",\n\nVotre mot de passe sur le site du CIVA vient d'etre modifié.\n\nCordialement,\n\nLe CIVA");
+                    $message = $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $this->compte->email, "CIVA - Changement de votre mot de passe", "Bonjour " . $this->compte->nom . ",\n\nVotre mot de passe sur le site du CIVA vient d'etre modifié.\n\nCordialement,\n\nLe CIVA");
                     $this->getUser()->setFlash('confirmation', "Votre mot de passe a bien été modifié.");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
@@ -242,7 +242,7 @@ class compteActions extends sfActions {
                 }
 
                 try {
-                    $this->getMailer()->composeAndSend(array("ne_pas_repondre@civa.fr" => "Webmaster Vinsalsace.pro"), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
+                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }

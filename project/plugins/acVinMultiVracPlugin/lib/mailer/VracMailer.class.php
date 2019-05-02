@@ -110,7 +110,7 @@ class VracMailer {
 
     protected static function getFrom()
     {
-    	return array("ne_pas_repondre_contrat@civa.fr" => "Contrats CIVA");
+    	return array("ne_pas_repondre_contrat@vinsalsace.pro" => "Contrats CIVA");
     }
 
     protected static function getMailer()

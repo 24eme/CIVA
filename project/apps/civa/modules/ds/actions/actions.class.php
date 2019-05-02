@@ -451,7 +451,7 @@ Le CIVA';
 
                 //send email
 
-                $message = $this->getMailer()->compose(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"),
+                $message = $this->getMailer()->compose(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')),
                                                        $this->getUser()->getCompte()->email,
                                                        'CIVA - Validation de votre déclaration de Stocks', $mess);
                 if (!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR)) {
@@ -554,7 +554,7 @@ Le CIVA';
 
         //send email
         $message = Swift_Message::newInstance()
-                ->setFrom(array('ne_pas_repondre@civa.fr' => "Webmaster Vinsalsace.pro"))
+                ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
                 ->setTo($this->getUser()->getCompte()->email)
                 ->setSubject('CIVA - Votre déclaration de Stocks')
                 ->setBody($mess);
