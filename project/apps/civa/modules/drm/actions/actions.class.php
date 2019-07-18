@@ -27,9 +27,19 @@ class drmActions extends sfActions {
       $drmGenerateCSV = new DRMGenerateCSV($identifiant, $numero_accise, $periode);
       $documentRepriseInfos = $drmGenerateCSV->getDocumentsForRepriseCatalogue();
       foreach ($documentRepriseInfos as $documentRepriseInfo) {
-      $ediFileContent.= $this->createReprise($documentRepriseInfo,$drmGenerateCSV);
+        $ediFileContent.= $this->createReprise($documentRepriseInfo,$drmGenerateCSV);
       }
-
+      if(count($documentRepriseInfos) > 1){
+        $doubleDs = true;
+        foreach ($documentRepriseInfos as $documentRepriseInfo) {
+          if($documentRepriseInfo->docType != "DS"){
+            $doubleDs = false;
+          }
+        }
+        if($doubleDs){
+          $ediFileContent = $this->fusionStocks($ediFileContent);
+        }
+      }
        /**
         * Dans tout les cas de figure, après la DRM crée, on récupère des mouvements/stock :
         *  - Si la DRM est juste après la DR, on récupère les mouvements d'entrées récolte
@@ -82,6 +92,30 @@ class drmActions extends sfActions {
         }
       }
       return $ediFileUpdate;
+    }
+
+    private function fusionStocks($fileCsvStocks){
+        $csvRows = explode("\n", $fileCsvStocks);
+        $stocksUniq = array();
+        foreach ($csvRows as $line) {
+          $csvFields = str_getcsv($line,';');
+          if(count($csvFields) <= 1){ continue; }
+          $key = "";
+          for ($i=0; $i < 15; $i++) {
+            $key.= $csvFields[$i].";";
+          }
+          if(array_key_exists($key,$stocksUniq)){
+            $csvOldFields = str_getcsv($stocksUniq[$key],';');
+            $stocksUniq[$key] = str_replace($csvOldFields[16],$csvOldFields[16]+$csvFields[16],$stocksUniq[$key]);
+          }else{
+            $stocksUniq[$key] = $line;
+          }
+        }
+        $newFileCsvStocks = "";
+        foreach ($stocksUniq as $key => $line) {
+           $newFileCsvStocks.=$line."\n";
+        }
+        return $newFileCsvStocks;
     }
 
 }
