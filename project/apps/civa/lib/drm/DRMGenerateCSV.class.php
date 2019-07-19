@@ -85,13 +85,32 @@ class DRMGenerateCSV {
 
         $prev_dr = $this->getPreviousDr($this->identifiant, $this->periode);
         $prev_ds = $this->getPreviousDs($this->identifiant, $annee, $mois);
-        if($prev_dr && ($prev_ds && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
+
+        $reprise_dr = false;
+        if($prev_dr && (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
           $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE,$prev_dr->_id);
           $documents[] = $drReprise;
-        }elseif($prev_ds){
-          $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,self::REPRISE_TYPE_CATALOGUE,$prev_ds->_id);
-          $documents[] = $dsReprise;
+          $reprise_dr = true;
+        }elseif($prev_dr && is_array($prev_ds)){
+          foreach ($prev_ds as $ds) {
+            if($prev_dr->getCampagne()."10" > $ds->getPeriode()){
+              $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE, $prev_dr->_id);
+              $documents[] = $dsReprise;
+              $reprise_dr = true;
+            }
           }
+        }
+        if(!$reprise_dr && $prev_ds){
+          if(is_array($prev_ds)){
+            foreach ($prev_ds as $ds) {
+              $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,self::REPRISE_TYPE_CATALOGUE, $ds->_id);
+              $documents[] = $dsReprise;
+            }
+          }else{
+            $dsReprise = $this->createRepriseInfo(self::REPRISE_DOC_DS,self::REPRISE_TYPE_CATALOGUE,$prev_ds->_id);
+            $documents[] = $dsReprise;
+          }
+        }
         return $documents;
     }
 
@@ -144,12 +163,16 @@ class DRMGenerateCSV {
       if(!$all_prev_ds){
         return null;
       }
+      $allDs = array();
       foreach ($all_prev_ds as $prev_ds) {
         $matches = array();
         preg_match("/([0-9]{4})([0-9]{2})/",$prev_ds->getPeriode(),$matches);
-        if((($matches[1] == $annee) && ($matches[2] >= $mois)) || ($matches[1] > $annee)){
-          return $prev_ds;
+        if((($matches[1] == $annee) && ($matches[2] < $mois)) || ($matches[1] > $annee)){
+          $allDs[] = $prev_ds;
         }
+      }
+      if(count($allDs)){
+        return $allDs;
       }
       $arrayDs = $all_prev_ds->getDatas();
       return end($arrayDs);
