@@ -20,6 +20,7 @@
  * @property string $ds_principale
  * @property float $rebeches
  * @property float $dplc
+ * @property float $dplc_rouge
  * @property float $lies
  * @property float $mouts
  * @property string $num_etape
@@ -67,6 +68,8 @@
  * @method float setRebeches()
  * @method float getDplc()
  * @method float setDplc()
+ * @method float getDplcRouge()
+ * @method float setDplcRouge()
  * @method float getLies()
  * @method float setLies()
  * @method float getMouts()

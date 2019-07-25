@@ -254,7 +254,8 @@ class ExportDSPdf extends ExportDocument {
                 "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(),
                 "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(),
                 "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null,
-                "Dépassements de rendements" => $ds->isDSPrincipale() ? $ds->dplc : null,
+                "Dépassements de rendements Blanc" => $ds->isDSPrincipale() ? $ds->dplc : null,
+                "Dépassements de rendements Rouge" => $ds->isDSPrincipale() ? $ds->dplc_rouge : null,
                 "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null,
             );
             $tableauDroite = $ds->getTotalVCI();

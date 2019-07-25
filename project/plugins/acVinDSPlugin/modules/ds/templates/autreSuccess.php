@@ -94,9 +94,14 @@
 							<label>Rébêches</label>
 							<input type="text" class="num" />
 						</li>
-						
+
 						<li>
-							<label>DPLC</label>
+							<label>DPLC Blanc</label>
+							<input type="text" class="num" />
+						</li>
+
+						<li>
+							<label>DPLC Rouge</label>
 							<input type="text" class="num" />
 						</li>
 						

@@ -613,6 +613,7 @@ class DSCivaClient extends DSClient {
         $num_etape = $last_ds_principale->get('num_etape');
         $rebeches = $last_ds_principale->get('rebeches');
         $dplc = $last_ds_principale->get('dplc');
+        $dplc_rouge = $last_ds_principale->get('dplc_rouge');
         $lies = $last_ds_principale->get('lies');
         $mouts = $last_ds_principale->get('mouts');
         $date_depot_mairie = ($last_ds_principale->exist('date_depot_mairie')) ? $last_ds_principale->get('date_depot_mairie') : null;
@@ -625,6 +626,7 @@ class DSCivaClient extends DSClient {
                 $current_ds->add('num_etape', $num_etape);
                 $current_ds->add('rebeches', $rebeches);
                 $current_ds->add('dplc', $dplc);
+                $current_ds->add('dplc_rouge', $dplc_rouge);
                 $current_ds->add('lies', $lies);
                 $current_ds->add('mouts', $mouts);
                 if ($date_depot_mairie) {
@@ -641,6 +643,7 @@ class DSCivaClient extends DSClient {
                 $current_ds->remove('courant_stock');
                 $current_ds->add('rebeches', null);
                 $current_ds->add('dplc', null);
+                $current_ds->add('dplc_rouge', null);
                 $current_ds->add('lies', null);
                 $current_ds->add('mouts', null);
                 $new_dss[$key] = $current_ds;

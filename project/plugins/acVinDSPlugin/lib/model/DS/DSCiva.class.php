@@ -525,17 +525,21 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return !$this->isDsPrincipale() && $this->hasNoAppellation();
     }
 
-    public function updateAutre($rebeches = 0,$dplc = 0,$lies = 0,$mouts = 0){
+    public function updateAutre($rebeches = 0,$dplc = 0,$dplc_rouge = 0,$lies = 0,$mouts = 0){
         if($this->isDsPrincipale()){
             $this->rebeches += $rebeches;
             $this->dplc += $dplc;
             $this->lies += $lies;
             $this->mouts += $mouts;
+            if (!$this->exist('dplc_rouge')) {
+                $this->add('dplc_rouge');
+            }
+            $this->dplc_rouge += $dplc_rouge;
         }
     }
 
     public function getUsagesIndustriels() {
-        return $this->lies + $this->dplc;
+        return $this->lies + $this->dplc + $this->dplc_rouge;
     }
 
     public function getNumEtapeAbsolu() {
@@ -845,6 +849,10 @@ class DSCiva extends DS implements IUtilisateursDocument {
 
      if($this->exist('dplc') && $this->getDplc()) {
        $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("DRA/DPLC Blanc", $this->getDplc());
+     }
+
+     if($this->exist('dplc_rouge') && $this->getDplcRouge()) {
+       $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("DRA/DPLC Rouge", $this->getDplcRouge());
      }
 
       return $lignesEdi;

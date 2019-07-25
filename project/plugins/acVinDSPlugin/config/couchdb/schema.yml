@@ -20,6 +20,7 @@ DS:
       ds_principale: {required: false}
       rebeches: {type: float}
       dplc: {type: float}
+      dplc_rouge: {type: float, required: false}
       lies: {type: float}
       mouts: {type: float}
       num_etape: {required: false}

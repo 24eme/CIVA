@@ -328,7 +328,7 @@ span.label_type_ds{
 	font-size: 14px;
 	float: left;
 	margin: 36px 40px 10px 0;
-	width: 210px;
+	width: 230px;
 }
 
 #application_ds #liste_cepages li
@@ -338,7 +338,7 @@ span.label_type_ds{
 	line-height: 20px;
 	margin: 3px 0;
 	padding: 0 5px;
-	width: 200px;
+	width: 220px;
 
 	overflow: hidden;
 	-o-text-overflow: ellipsis;

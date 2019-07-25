@@ -122,7 +122,12 @@
 							</li>
 							
 							<li>
-								<label>DPLC</label>
+								<label>DPLC Blanc</label>
+								<input type="text" readonly="readonly" value="25" />
+							</li>
+
+							<li>
+								<label>DPLC Rouge</label>
 								<input type="text" readonly="readonly" value="25" />
 							</li>
 							
