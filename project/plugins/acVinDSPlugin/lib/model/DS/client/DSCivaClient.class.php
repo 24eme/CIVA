@@ -400,23 +400,25 @@ class DSCivaClient extends DSClient {
         $totauxByAppellationsRecap = array();
 
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', null, "Rouge ou Rosé");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace communale");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'LIEUDIT', null, "AOC Alsace Lieu-dit");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIR', null, "AOC Alsace Pinot noir");
 
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation) {
                 switch ($appellation_key = preg_replace('/^appellation_/', '', $appellation->getKey())) {
                     case 'GRDCRU':
                     case 'CREMANT':
-                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $appellation_key, $appellation, $appellation->getLibelle());
-                        break;
                     case 'ALSACEBLANC':
                     case 'COMMUNALE':
                     case 'LIEUDIT':
                     case 'PINOTNOIRROUGE':
                     case 'PINOTNOIR':
-                        $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap, $appellation_key, $appellation);
+                        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $appellation_key, $appellation, $appellation->getLibelle());
+//                        $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap, $appellation_key, $appellation);
                         break;
                 }
             }
