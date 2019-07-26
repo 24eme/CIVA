@@ -158,7 +158,7 @@ class ExportDSPdf extends ExportDocument {
                                                    "produits" => array(),
                                                    "limit" => -1,
                                                    "nb_ligne" => -1),
-                       "AOC Alsace Grands Crus" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"),
+                       "AOC Alsace Grand Cru" => array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"),
                                                         "produits" => array(),
                                                         "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                         "limit" => 14,
