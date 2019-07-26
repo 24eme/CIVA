@@ -26,7 +26,7 @@ if (isset($validation_dss)) {
         <?php endif; ?>
     <?php endif; ?>
     <div id="recap_total_ds" class="page_recap">
-        <p class="intro_declaration">Récapitulatif DRM <small>(tous lieux de stockage confondus)</small>
+        <p class="intro_declaration">Récapitulatif <small>(tous lieux de stockage confondus)</small>
             <a href="" class="msg_aide_ds" rel="help_popup_ds_validation" title="Message aide"></a>
             <?php if ($ds_principale->type_ds != DSCivaClient::TYPE_DS_NEGOCE && $ds_principale->isDateDepotMairie()) : ?>
                 <span style="float: right;">Date de dépot en mairie : <?php echo $ds_principale->getDateDepotMairieFr(); ?> </span>

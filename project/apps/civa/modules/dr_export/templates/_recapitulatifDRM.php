@@ -6,7 +6,7 @@ table {
 }
 </style>
 <br /><br />
-<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM PAPIER</span>
+<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF</span>
 <br /><br />
 
 <?php if($dr->recolte->canCalculVolumeRevendiqueSurPlace()): ?>
@@ -51,7 +51,7 @@ table {
 </tr>
 </table>
 <?php else: ?>
-<span>Le tableau du récapitulatif DRM des AOC ne peut pas être affiché : les informations sur les volumes en dépassement des acheteurs sont inconnus</span>
+<span>Le tableau du récapitulatif des AOC ne peut pas être affiché : les informations sur les volumes en dépassement des acheteurs sont inconnus</span>
 <br />
 <?php endif; ?>
 <br />
