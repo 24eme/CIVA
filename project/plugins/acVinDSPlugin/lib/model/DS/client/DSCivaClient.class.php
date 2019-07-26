@@ -697,4 +697,17 @@ class DSCivaClient extends DSClient {
         return $result;
     }
 
+    public function getRecapAutres($ds_principale) {
+        $autres = array("Rebêches" => $ds_principale->rebeches);
+        if ($ds_principale->exist('dplc_rouge')) {
+            $autres["DRA/DPLC Blanc"] = $ds_principale->dplc;
+            $autres["DRA/DPLC Rouge"] = $ds_principale->dplc_rouge;
+            $autres['Lies/mouts'] = $ds_principale->lies + $ds_principale->mouts;
+        }else{
+            $autres["Usages industriels"] = $ds_principale->getUsagesIndustriels() + $this->getTotauxVCIRecapVolume($ds_principale);
+        }
+
+        return $autres;
+    }
+
 }

@@ -77,14 +77,12 @@ if (isset($validation_dss)) {
                     </tr>
                 </thead>
                 <tbody>
+                <?php foreach ($ds_client->getRecapAutres($ds_principale) as $nom => $valeur)  : ?>
                     <tr>
-                        <td class="appellation">Rebêches</td>
-                        <td><?php echoFloat($ds_principale->getRebeches()); ?></td>
+                        <td class="appellation"><?php echo $nom ; ?></td>
+                        <td><?php echoFloat($valeur); ?></td>
                     </tr>
-                    <tr>
-                        <td class="appellation">Usages industriels</td>
-                        <td><?php echoFloat($ds_principale->getUsagesIndustriels()); ?></td>
-                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
