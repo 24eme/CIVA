@@ -539,7 +539,11 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function getUsagesIndustriels() {
-        return $this->lies + $this->dplc + $this->dplc_rouge;
+        $ui = $this->lies + $this->dplc;
+        if ($this->exist("dplc_rouge")) {
+            $ui += $this->dplc_rouge;
+        }
+        return $ui;
     }
 
     public function getNumEtapeAbsolu() {
