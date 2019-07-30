@@ -119,6 +119,10 @@ class DSSendBrouillonTask extends sfBaseTask
             $message->attach($attachment);
         }
 
+        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."/helpPdf/dai.pdf"), "DAI_2019.pdf",
+'application/pdf');
+        $message->attach($attachment);
+
         try {
             $this->getMailer()->send($message);
         } catch (Exception $e) {
@@ -132,11 +136,6 @@ class DSSendBrouillonTask extends sfBaseTask
     }
 
     protected function configureMessage($message, $type_ds, $teledeclarant, $campagne) {
-
-        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."helpPdf/dai.pdf"), "DAI_2019.pdf",
-'application/pdf');
-        $message->attach($attachment);
-
         $campagne = preg_replace("/[0-9]{2}$/", "", $this->periode);
 
         if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
