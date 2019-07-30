@@ -133,6 +133,10 @@ class DSSendBrouillonTask extends sfBaseTask
 
     protected function configureMessage($message, $type_ds, $teledeclarant, $campagne) {
 
+        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."helpPdf/dai.pdf"), "DAI_2019.pdf",
+'application/pdf');
+        $message->attach($attachment);
+
         $campagne = preg_replace("/[0-9]{2}$/", "", $this->periode);
 
         if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE) {
@@ -142,18 +146,23 @@ class DSSendBrouillonTask extends sfBaseTask
 
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique.
 
-Comme les années précédentes, vous pourrez accéder à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro> à compter du 30 juillet.
+Comme les années précédentes, vous pouvez accéder dès maintenant à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre MIDI.
+Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre MINUIT.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2018, qui reprend les produits théoriquement détenus en stocks.
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2019, qui reprend les produits théoriquement détenus en stocks.
 
-Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à etourner au CIVA.
+Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
-NOUVEAUTES 2018 :
-    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2017, vous devez le déclarer dans l'Appellation correspondante.
-    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
+NOUVEAUTES 2019 :
+Dépassement : à compter de cette année, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
 
+RAPPELS :
+    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2018, vous devez le déclarer dans l'Appellation correspondante.
+    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
+
+ATTENTION : Déclaration Annuelle d'Inventaire (DAI)
+Vous trouverez en pièce jointe à ce mail la Circulaire explicative de la DGDDI ainsi que le tableau à compléter pour la détermination de vos manquants.
 
 Cordialement,
 
@@ -167,18 +176,26 @@ Le CIVA");
             $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique
+sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le télé-service \"Alsace Stocks\" sera accessible du 30 juillet au 10 septembre inclus.
+Le téléservice \"Alsace Stocks\" est accessible dès maintenant et jusqu'au 10 septembre inclus.
 
-Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF
+ou consulter l'aide en ligne.
 
-ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail PRODOUANE avant le 10 septembre MIDI.
+ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail
+PRODOUANE avant le 10 septembre MINUIT.
 
-NOUVEAUTES 2018 :
-    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2017, vous devez le déclarer dans l'appellation correspondante.
-    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet exempte les opérateurs vitivinicoles de souscrire une Déclaration de Stock au Commerce.
+NOUVEAUTES 2019 :
+Dépassement : à compter de cette année, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
 
+RAPPELS :
+    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2018, vous devez le déclarer dans l'Appellation correspondante.
+    - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
+
+ATTENTION : Déclaration Annuelle d'Inventaire (DAI)
+Vous trouverez en pièce jointe à ce mail  la Circulaire explicative de la DGDDI ainsi que le tableau à compléter pour la détermination de vos manquants.
 
 Cordialement,
 
