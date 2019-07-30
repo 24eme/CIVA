@@ -90,7 +90,7 @@ class ExportDSPdfEmpty extends ExportDSPdf {
                                                 "limit" => -1,
                                                 "nb_ligne" => -1);
         
-        $recap["AOC Alsace Grands Crus"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
+        $recap["AOC Alsace Grand Cru"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"),
                                                  "produits" => array(),
                                                  "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                  "limit" => -1,
@@ -125,7 +125,7 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         $this->getRecap($ds, "ALSACEBLANC", $recap["AOC Alsace Blanc"],false,false,true);
         $this->getRecap($ds, "LIEUDIT", $recap["AOC Alsace Lieu-dit"], true,false,true);
         $this->getRecap($ds, "COMMUNALE", $recap["AOC Alsace Communale"], true,false,true);
-        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true,false,true);        
+        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true,false,true);
         $this->getRecap($ds, "PINOTNOIR", $recap["AOC Alsace Pinot noir"]);
         $this->getRecap($ds, "PINOTNOIRROUGE", $recap["AOC Alsace PN rouge"]);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
