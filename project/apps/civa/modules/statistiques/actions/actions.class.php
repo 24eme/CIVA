@@ -32,13 +32,13 @@ class statistiquesActions extends sfActions {
         $this->nbInscrit = 0;
         $this->nbInscritGamma = 0;
 
-        $metteur = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
+        // $metteur = acCouchdbManager::getClient("MetteurEnMarche")->getAll(acCouchdbClient::HYDRATE_JSON);
 
-        foreach ($metteur as $item) {
-            if (isset($item->gamma) && $item->gamma->statut == 'INSCRIT') {
-                $this->nbInscritGamma++;
-            }
-        }
+        // foreach ($metteur as $item) {
+        //     if (isset($item->gamma) && $item->gamma->statut == 'INSCRIT') {
+        //         $this->nbInscritGamma++;
+        //     }
+        // }
 
         $compte_inscrit = acCouchdbManager::getClient()->group(true)
                                               ->group_level(1)
