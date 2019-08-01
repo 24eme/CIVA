@@ -25,8 +25,14 @@ class DSEditionFormCiva extends acCouchdbForm {
     }
 
     public function configure() {
+        $isVci = preg_match("/\/genreVCI$/",$this->noeud->getHash());
+
         foreach ($this->getProduitsDetails() as $hash => $detail) {
           $key = $detail->getHashForKey();
+          if($isVci){
+            $noeudprotect = str_replace("/", "\/", $this->noeud->getHash());
+            if(!preg_match("/$noeudprotect/",$detail->getHash())){ continue; }
+          }
           if(!$detail->getCepage()->no_vtsgn){
             $this->setWidget(DSCivaClient::VOLUME_VT . $key, new sfWidgetFormInputFloat(array(), array('size' => '6')));
             $this->setValidator(DSCivaClient::VOLUME_VT . $key, new sfValidatorNumber(array('required' => false)));
@@ -40,6 +46,7 @@ class DSEditionFormCiva extends acCouchdbForm {
 	  $this->setValidator(DSCivaClient::VOLUME_NORMAL . $key, new sfValidatorNumber(array('required' => false)));
 	  $this->widgetSchema->setLabel(DSCivaClient::VOLUME_NORMAL . $key, DSCivaClient::VOLUME_NORMAL);
         }
+
         $this->widgetSchema->setNameFormat('ds[%s]');
     }
 
