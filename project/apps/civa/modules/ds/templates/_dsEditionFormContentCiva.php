@@ -1,8 +1,15 @@
 <?php use_helper('Text') ?>
 <?php $produits = $form->getProduitsDetails(); ?>
+<?php
+$isVci = preg_match("/genreVCI$/",$lieu->getKey());
+$vciNode = $lieu->getKey();
+ ?>
     <ul id="liste_cepages">
         <?php
         foreach ($produits as $key => $detail) :
+          if($isVci){
+            if(!preg_match("/$vciNode/",$detail->getHash())){ continue; }
+          }
             ?>
     	<li>
     		<?php echo $detail->getLibelle() ?>&nbsp;<small style="font-size:10px"><?php echo truncate_text($detail->lieu, 21, "...", false); ?></small>
@@ -31,6 +38,10 @@
                         <?php $tabindex = 1; ?>
 						<?php foreach ($produits as $key => $detail) :
 							$key = $detail->getHashForKey();
+              if($isVci){
+                  if(!preg_match("/$vciNode/",$detail->getHash())){ continue; }
+
+                }
 							?>
 						<li>
                             <?php if(($produit_key && $key == $produit_key) || (!$produit_key && $tabindex == 1)): ?>
@@ -54,7 +65,11 @@
                         <?php $tabindex = 2; ?>
 						<?php foreach ($produits as $key => $detail) :
 							$key = $detail->getHashForKey();
-							?>
+              if($isVci){
+                if(!preg_match("/$vciNode/",$detail->getHash())){ continue; }
+
+              }
+              ?>
 						<li>
 							<?php
 							if(!$detail->getCepage()->no_vtsgn){
@@ -77,6 +92,10 @@
                         <?php $tabindex = 3; ?>
                         <?php foreach ($produits as $key => $detail) :
                              $key = $detail->getHashForKey();
+                             if($isVci){
+                               if(!preg_match("/$vciNode/",$detail->getHash())){ continue; }
+
+                             }
                             ?>
                         <li>
                             <?php

@@ -181,7 +181,7 @@ class ExportDSPdf extends ExportDocument {
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace"]);
         }
 
-        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
+        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
         $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES, $page);
