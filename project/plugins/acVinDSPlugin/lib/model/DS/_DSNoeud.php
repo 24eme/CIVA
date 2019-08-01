@@ -162,11 +162,15 @@ abstract class _DSNoeud extends acCouchdbDocumentTree {
     }
 
     public function cleanAllNodes() {
-        foreach($this->getChildrenNodeSorted() as $item) {
+        $to_be_removed = array();
+        foreach($this->getChildrenNodeSorted() as $k => $item) {
             $item->cleanAllNodes();
             if(!count($item->getProduitsDetails())){
-                $this->remove($item->getKey());
+                $to_be_removed[] = $k;
             }
+        }
+        foreach($to_be_removed as $key) {
+            $this->getDocument()->remove($key);
         }
     }
 
