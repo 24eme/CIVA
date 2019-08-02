@@ -11,6 +11,9 @@ class DSGenre extends BaseDSGenre {
         return $this->getParent();
     }
     public function getChildrenNodeSorted() {
+        if(preg_match('/VCI/', $this->getKey())) {
+            return parent::getChildrenNodeSorted();
+        }
         $items = $this->getChildrenNode();
         $itemsconfigParent = $this->getConfig()->getParent();
         $items_sorted = array();
