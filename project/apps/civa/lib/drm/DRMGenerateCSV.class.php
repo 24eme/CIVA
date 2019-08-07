@@ -85,9 +85,9 @@ class DRMGenerateCSV {
 
         $prev_dr = $this->getPreviousDr($this->identifiant, $this->periode);
         $prev_ds = $this->getPreviousDs($this->identifiant, $annee, $mois);
-
+	
         $reprise_dr = false;
-        if($prev_dr && (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
+        if($prev_dr && (!$prev_ds || (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode())))){
           $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE,$prev_dr->_id);
           $documents[] = $drReprise;
           $reprise_dr = true;
