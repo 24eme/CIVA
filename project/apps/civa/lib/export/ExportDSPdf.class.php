@@ -244,6 +244,7 @@ class ExportDSPdf extends ExportDocument {
         $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale,
                                                                             'recap_total' => $this->getRecapTotal(),
                                                                             'recap_autres' => $this->getRecapAutres(),
+                                                                            'recap_vci' => $this->getRecapVCI(),
                                                                             'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
     }
 
@@ -307,6 +308,11 @@ class ExportDSPdf extends ExportDocument {
     protected function getRecapAutres() {
 
         return DSCivaClient::getInstance()->getRecapAutres($this->ds_principale);
+    }
+
+    protected function getRecapVCI() {
+
+        return DSCivaClient::getInstance()->getTotauxVCIRecap($this->ds_principale);
     }
 
     protected function getRecapVinsSansIG() {

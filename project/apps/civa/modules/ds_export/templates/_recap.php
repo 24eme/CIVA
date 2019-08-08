@@ -53,7 +53,17 @@ table {
 </tr>
 <?php endforeach; ?>
 </table>
-
+<?php if(count($recap_vci)): ?>
+<small><br /></small>
+<table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
+<?php foreach($recap_vci as $libelle => $volume): ?>
+<tr>
+  <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo $libelle ?></td>
+  <td style="width: 106px; border: 1px solid black;"><?php echoVolume($volume, true) ?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+<?php endif; ?>
 <small><br /></small>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <?php foreach($recap_vins_sans_ig as $libelle => $volume): ?>
