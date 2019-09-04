@@ -151,7 +151,7 @@ class ExportDSPdf extends ExportDocument {
 
     protected function createMainByDS($ds) {
         $this->buildOrder($ds);
-        $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
+        $alsace_blanc = array("ALSACEBLANC",  "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
 
         $recap = array("AOC Alsace" => array("colonnes" => array("cepage" => "Cépages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
