@@ -307,6 +307,7 @@ class DRMGenerateCSV {
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
+          $libelle = preg_replace("/^Vins sans IG Mousseux$/","Vins sans IG Mousseux Blanc",$libelle);
         }
 
         $type_drm = 'suspendu';
