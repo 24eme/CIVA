@@ -55,7 +55,7 @@ EOF;
             return;
         }
 
-        if(!preg_match("/[C]*(67|68)/", $etablissement->_id)) {
+        if(!preg_match("/^[C]*(67|68)/", $etablissement->identifiant)) {
             return;
         }
 
