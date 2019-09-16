@@ -6,9 +6,9 @@ PERIODE=$1
 KEYUNICITE=$(date +%Y%m%d%H%M%S)
 TMPDIR=/tmp
 
-cat data/import/Tiers/Tiers-last | awk -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '{ print $1 ";" $4 ";" $58; }' | sed 's/"//g' | grep -v ";$" > $TMPDIR/tiers_db2_$KEYUNICITE.csv
+cat data/import/Tiers/Tiers-last | awk -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '{ print $1 ";" $4 ";" $58 ";" $18; }' | sed 's/"//g' | grep -v ";$" > $TMPDIR/tiers_db2_$KEYUNICITE.csv
 
-cat data/import/Tiers/Tiers-last | awk -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '{ print $1 ";" $4 ";C" $2; }' | sed 's/"//g' | grep -v ";C0$" >> $TMPDIR/tiers_db2_$KEYUNICITE.csv
+cat data/import/Tiers/Tiers-last | awk -vFPAT='([^,]*)|("[^"]+")' -vOFS=, '{ print $1 ";" $4 ";C" $2 ";" $18; }' | sed 's/"//g' | grep -v ";C0$" >> $TMPDIR/tiers_db2_$KEYUNICITE.csv
 
 cat $TMPDIR/tiers_db2_$KEYUNICITE.csv | sort -t ";" -k 3,3 > $TMPDIR/tiers_db2_$KEYUNICITE.sorted.csv
 
