@@ -11,4 +11,4 @@ DESCRIPTION="Export des DS en XML [Voir tous les exports]($LINK)"
 
 mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
-php symfony export:ds-xml-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "$(date +%Y%m%d%H%M%S)"
+php -d "memory_limit=512M" symfony export:ds-xml-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "$(date +%Y%m%d%H%M%S)"

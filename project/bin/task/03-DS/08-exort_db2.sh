@@ -11,5 +11,5 @@ DESCRIPTION="Export des DS pour DB2 [Voir tous les exports]($LINK)"
 
 mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
-php symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "propriete"
-php symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "negoce"
+php -d "memory_limit=512M" symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "propriete"
+php -d "memory_limit=512M" symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "negoce"
