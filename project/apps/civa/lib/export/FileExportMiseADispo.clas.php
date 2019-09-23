@@ -22,7 +22,10 @@ abstract class FileExportMiseADispo
         $this->_file_dir = $this->getFileDir();
 
         if (!is_dir($this->_file_dir)) {
+            mkdir($this->_file_dir);
+        }
 
+        if (!is_dir($this->_file_dir)) {
             throw new sfException("path does not exist");
         }
 
