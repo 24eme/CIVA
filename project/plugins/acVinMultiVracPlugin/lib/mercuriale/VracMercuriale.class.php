@@ -51,6 +51,7 @@ class VracMercuriale
 	protected $end;
 	protected $mercuriale;
 	protected $context;
+	protected $allContrats;
 
 	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null)
 	{
@@ -63,6 +64,12 @@ class VracMercuriale
 		$this->mercuriale = $mercuriale;
 		$this->pdfFilename = $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->context = null;
+		$this->allContrats = 0;
+	}
+	
+	public function getAllContrats()
+	{
+	    return $this->allContrats;
 	}
 	
 	public function getFolderPath()
@@ -123,7 +130,7 @@ class VracMercuriale
 		$to = ($to)? $to :  date('Y-m-d', time() - 3600 * 24);
 		$contrats = VracContratsView::getInstance()->findForDb2Export(array($from, $to));
 		foreach($contrats as $contrat) {
-			if ($date = $contrat->value[VracContratsView::VALUE_DATE_MODIF]) {
+			if ($date = $contrat->value[VracContratsView::VALUE_DATE_TRAITEMENT]) {
 				$mercuriale = $contrat->value[VracContratsView::VALUE_MERCURIALES];
 				$produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 				foreach ($produits as $produit) {
@@ -386,6 +393,7 @@ class VracMercuriale
 	private function aggStats($datas)
 	{
 		$result = array();
+		$c = array();
 		foreach ($datas as $cep => $values) {
 			$nb = count($values);
 			$volume = 0;
@@ -397,6 +405,7 @@ class VracMercuriale
 				$volume += str_replace(',', '.', $val[self::OUT_VOL]) * 1;
 				$prix += str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
 				$contrats[$val[self::OUT_VISA]] = 1;
+				$c[$val[self::OUT_VISA]] = 1;
 				if (!$min ||  str_replace(',', '.', $val[self::OUT_PRIX]) * 1 < $min) {
 					$min = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
 				}
@@ -406,6 +415,7 @@ class VracMercuriale
 			}
 			$result[$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$nb, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
 		}
+		$this->allContrats = $c;
 		return $result;
 	}
 }

@@ -1,9 +1,6 @@
 <?php 
 $stats = $mercuriale->getStats();
-$nbContrats = 0;
-foreach ($stats as $stat) {
-$nbContrats += $stat[VracMercuriale::OUT_CONTRAT];
-}
+$nbContrats = count($mercuriale->getAllContrats());
 
 $start = $mercuriale->getStart('Y-m').'-01';
 $statsCR = null;
