@@ -225,7 +225,6 @@ class ExportDSCiva {
         $vci_volume = 0;
         if ($ds->exist('declaration/certification/genreVCI')) {
             $vci_volume = $ds->get('declaration/certification/genreVCI')->total_normal;
-            echo $vci_volume."\n";
         }
 
 // Alsace Blanc + PinotNOIR + PinotNOIRROUGE
