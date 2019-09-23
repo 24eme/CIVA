@@ -13,3 +13,5 @@ mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
 php -d "memory_limit=512M" symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "propriete"
 php -d "memory_limit=512M" symfony export:ds-civa "$DS_PERIODE" $TASK_DIR/$EXPORT_DIR "negoce"
+
+echo "[Voir les fichiers]($LINK)"
