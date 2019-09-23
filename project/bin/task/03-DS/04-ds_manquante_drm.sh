@@ -12,6 +12,6 @@ mkdir -m 777 $TASK_DIR/tmp 2> /dev/null
 
 EXPORT_FILE=tmp/export_cvi_ds_manquantes_drm.csv
 
-curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/drm/_view/all?reduce=false" | grep "\-$DRM_PERIODE" | cut -d "," -f 1 | cut -d "-" -f 2 | while read id; do echo -n "$id;"; curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/DS-$id-$DS_PERIODE-001"; done | grep "missing" | cut -d ";" -f 1 > $TASK_DIR/$EXPORT_FILE
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/drm/_view/all?reduce=false" | grep -E "\-($DS_PERIODE|$DRM_PERIODE)" | cut -d "," -f 1 | cut -d "-" -f 2 | sort | uniq | while read id; do echo -n "$id;"; curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/DS-$id-$DS_PERIODE-001"; done | grep "missing" | cut -d ";" -f 1 > $TASK_DIR/$EXPORT_FILE
 
 echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE)"
