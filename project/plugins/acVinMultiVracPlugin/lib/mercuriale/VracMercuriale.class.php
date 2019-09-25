@@ -42,6 +42,17 @@ class VracMercuriale
 			'SY' => 'Sylvaner / CH',
 			'CR' => 'Cremant',
 	);
+	public static $ordres = array(
+			'ED' => 2,
+			'GW' => 7,
+			'MU' => 6,
+			'PB' => 3,
+			'PG' => 5,
+			'PN' => 8,
+			'RI' => 4,
+			'SY' => 1,
+			'CR' => 9,
+	);
 	
 	protected $datas;
 	
@@ -134,6 +145,9 @@ class VracMercuriale
 				$mercuriale = $contrat->value[VracContratsView::VALUE_MERCURIALES];
 				$produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 				foreach ($produits as $produit) {
+				    if ($produit->value[VracProduitsView::VALUE_CODE_APPELLATION] == 'GRDCRU') {
+				        continue;
+				    }
 					if ($cepage = $this->getCepage($produit->value[VracProduitsView::VALUE_CEPAGE])) {
 						$volume = ($produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE])? $produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE] : $produit->value[VracProduitsView::VALUE_VOLUME_PROPOSE];
 						$prix = $produit->value[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
@@ -281,6 +295,11 @@ class VracMercuriale
 		return (substr($date, -2) > 15)? (substr($date, 0, 6).'2')*1 : (substr($date, 0, 6).'1')*1;
 	}
 	
+	public function getOrdre($cep)
+	{
+	    return (isset(self::$ordres[$this->getCepage($cep)]))? self::$ordres[$this->getCepage($cep)] : 9;
+	}
+	
 	public function getCumul($withCR = false)
 	{
 	    if (!$this->start && !$this->end) {
@@ -293,7 +312,8 @@ class VracMercuriale
 
 	    $result = array();
 	    foreach ($currentPeriode as $cep => $datas) {
-	       $result[$cep] = array(
+	       $ordre = $this->getOrdre($cep);
+	       $result[$ordre.$cep] = array(
 	           self::OUT_CP_CODE => $datas[self::OUT_CP_CODE], 
 	           self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE], 
 	           self::OUT_CURRENT => array(
@@ -313,8 +333,9 @@ class VracMercuriale
 	       );
 	    }
 	    foreach ($previousPeriode as $cep => $datas) {
-	        if (!isset($result[$cep])) {
-	           $result[$cep] = array(
+	       $ordre = $this->getOrdre($cep);
+	        if (!isset($result[$ordre.$cep])) {
+	           $result[$ordre.$cep] = array(
 	                self::OUT_CP_CODE => $datas[self::OUT_CP_CODE],
 	                self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE],
 	                self::OUT_PREVIOUS => array(
@@ -333,24 +354,25 @@ class VracMercuriale
 	                    self::OUT_PRIX => number_format(0, 2, ',', ''))
 	            );
 	        } else {
-	            $result[$cep][self::OUT_PREVIOUS][self::OUT_NB] = $datas[self::OUT_NB];
-	            $result[$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT] = $datas[self::OUT_CONTRAT];
-	            $result[$cep][self::OUT_PREVIOUS][self::OUT_VOL] = $datas[self::OUT_VOL];
-	            $result[$cep][self::OUT_PREVIOUS][self::OUT_PRIX] = $datas[self::OUT_PRIX];
+	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB] = $datas[self::OUT_NB];
+	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT] = $datas[self::OUT_CONTRAT];
+	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL] = $datas[self::OUT_VOL];
+	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX] = $datas[self::OUT_PRIX];
 	        }
 	        
-	        $varVol = (str_replace(',', '.', $result[$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1) - (str_replace(',', '.', $result[$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1);
-	        $varPrix = (str_replace(',', '.', $result[$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1) - (str_replace(',', '.', $result[$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1);
+	        $varVol = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1);
+	        $varPrix = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1);
 	        
-	        $result[$cep][self::OUT_VARIATION] = array(
-	            self::OUT_NB => ($result[$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$cep][self::OUT_PREVIOUS][self::OUT_NB]),
-	            self::OUT_CONTRAT => ($result[$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]),
+	        $result[$ordre.$cep][self::OUT_VARIATION] = array(
+	            self::OUT_NB => ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB]),
+	            self::OUT_CONTRAT => ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]),
 	            self::OUT_VOL => number_format($varVol, 2, ',', ''),
 	            self::OUT_PRIX => number_format($varPrix, 2, ',', ''),
-	            self::OUT_VOL_PERC => round(($varVol * 100) / (str_replace(',', '.', $result[$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1)),
-	            self::OUT_PRIX_PERC => round(($varPrix * 100) / (str_replace(',', '.', $result[$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1)),
+	            self::OUT_VOL_PERC => round(($varVol * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1)),
+	            self::OUT_PRIX_PERC => round(($varPrix * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1)),
 	        );
 	    }
+	    ksort($result);
 	    return $result;
 	}
 	
@@ -395,6 +417,7 @@ class VracMercuriale
 		$result = array();
 		$c = array();
 		foreach ($datas as $cep => $values) {
+		    $ordre = $this->getOrdre($cep);
 			$nb = count($values);
 			$volume = 0;
 			$prix = 0;
@@ -403,7 +426,7 @@ class VracMercuriale
 			$contrats = array();
 			foreach ($values as $val) {
 				$volume += str_replace(',', '.', $val[self::OUT_VOL]) * 1;
-				$prix += str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
+				$prix += (str_replace(',', '.', $val[self::OUT_PRIX]) * 1) * (str_replace(',', '.', $val[self::OUT_VOL]) * 1);
 				$contrats[$val[self::OUT_VISA]] = 1;
 				$c[$val[self::OUT_VISA]] = 1;
 				if (!$min ||  str_replace(',', '.', $val[self::OUT_PRIX]) * 1 < $min) {
@@ -413,9 +436,10 @@ class VracMercuriale
 					$max = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
 				}
 			}
-			$result[$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$nb, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
+			$result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
 		}
 		$this->allContrats = $c;
+		ksort($result);
 		return $result;
 	}
 }

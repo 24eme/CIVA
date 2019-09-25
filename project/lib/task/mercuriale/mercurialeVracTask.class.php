@@ -63,7 +63,7 @@ EOF;
         $vracMercuriale->generateMercurialePlotFiles(array('GW','RI','SY'));
         $vracMercuriale->generateMercurialePlotFiles(array('PN','PG','PB'));
         
-        unlink('/tmp/mercuriales/20180501_20180515_mercuriales.pdf');
+        unlink('/tmp/mercuriales/20190201_20190215_mercuriales.pdf');
         $pdf = new ExportVracMercurialePdf($vracMercuriale);
         $pdf->generatePDF();
         
