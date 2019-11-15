@@ -32,23 +32,29 @@ table {
 	<thead>
 		<tr>
 			<th style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Appellations</th>
-			<?php foreach ($appellations as $a): ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
 			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;"><?php echo preg_replace('|(<span>AOC</span> Alsace)|', '\1<br />', preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a])); ?></th>
-			<?php endforeach; ?>
+			<?php endif;endforeach; ?>
 			<?php if ($has_total): ?>
-			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;">Total général</th>
+			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;">Total général AOC</th>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+			<th style="border: 1px solid black;font-weight: bold; text-align: center; width: 120px;"><?php echo preg_replace('|(<span>AOC</span> Alsace)|', '\1<br />', preg_replace('/(AOC|Vin de table)/', '<span>\1</span>', $libelle[$a])); ?></th>
+			<?php endif;endforeach; ?>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Superficie</td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoSuperficie($superficie[$a]); ?></td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoSuperficie($superficie[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
 			<td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($infos['total_superficie'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoSuperficie($superficie[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Total</td>
