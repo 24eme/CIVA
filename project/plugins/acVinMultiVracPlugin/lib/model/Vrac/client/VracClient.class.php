@@ -12,6 +12,7 @@ class VracClient extends acCouchdbClient {
 	const TYPE_BOUTEILLE = 'BOUTEILLE';
 	const TYPE_VRAC_LIBELLE = 'Vrac';
 	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
+	const LABEL_BIO = 'BIO';
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
@@ -36,6 +37,8 @@ class VracClient extends acCouchdbClient {
 									'300' => '300 cl',
 									'600' => '600 cl'
                                  );
+
+	public static $label_libelles = array(self::LABEL_BIO => "Agriculture biologique");
 
     public static function getInstance()
     {

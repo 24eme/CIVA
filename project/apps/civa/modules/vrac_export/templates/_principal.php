@@ -42,6 +42,7 @@
                                             $nb_ligne--;
 							$backgroundColor = getColorRowDetail($detailLine);
 			$libelle_produit = $detailLine->getCepage()->getLibelle()." ".$detailLine->getLieuLibelle()." ".$detailLine->getLieuDit()." ".$detailLine->getVtsgn()." ".$detailLine->getDenomination();
+			$libelle_produit.= ($detailLine->exist('label') && $detailLine->get("label"))? " ".VracClient::$label_libelles[$detailLine->get("label")] : "";
                         $isOnlyOneRetiraison = $vrac->isCloture() && (count($detailLine->retiraisons) === 1);
                         $dateRetiraison = "";
                         $lastDetail = ((count($vrac->declaration->getProduitsDetailsSorted()) - 1) == $cptDetail);
@@ -52,7 +53,7 @@
                         ?>
 	<tr>
 			<td width="65px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><span style="font-size: 6pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
-			<td width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left; font-size: 8pt;">&nbsp;<?php echo truncate_text($libelle_produit,49);  ?></td>
+			<td width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left; font-size: 8pt;">&nbsp;<?php echo truncate_text($libelle_produit,70);  ?></td>
 			<td width="42px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>
 			<?php if (!$odg): ?>
 			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
