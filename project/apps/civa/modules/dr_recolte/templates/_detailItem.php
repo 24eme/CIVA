@@ -1,18 +1,16 @@
 <?php use_helper('Float') ?>
 <div class="col_recolte col_validee">
     <h2><?php echo $produit->getConfig()->libelle ?></h2>
-
     <div class="col_cont">
-
         <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
             <p class="lieu">
-                <input type="text" readonly="readonly" class="readonly" value="<?php echo $detail->lieu; ?>" title="<?php echo $detail->lieu; ?>" />
+                <input data-form-input-id="detail_lieu" type="text" readonly="readonly" class="readonly" value="<?php echo $detail->lieu; ?>" title="<?php echo $detail->lieu; ?>" />
             </p>
         <?php endif; ?>
 
         <p class="denomination">
             <?php if ($produit->getConfig()->hasDenomination()) : ?>
-                <input type="text" readonly="readonly" class="readonly" value="<?php echo $detail->denomination ?>" title="<?php echo $detail->denomination ?>" />
+                <input data-form-input-id="detail_denomination" type="text" readonly="readonly" class="readonly" value="<?php echo $detail->denomination ?>" title="<?php echo $detail->denomination ?>" />
             <?php endif; ?>
         </p>
 
@@ -28,7 +26,7 @@
 
         <p class="superficie">
             <?php if ($produit->getConfig()->hasSuperficie()) : ?>
-                <input type="text" class="num superficie readonly" value="<?php echoFloat($detail->superficie); ?>" />
+                <input data-form-input-id="detail_superficie" type="text" class="num superficie readonly" value="<?php echoFloat($detail->superficie); ?>" />
             <?php endif; ?>
         </p>
 
@@ -60,9 +58,9 @@
             </div>
         <?php endif; ?>
 
-        <p class="vol_place"><input type="text" class="num cave readonly" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
+        <p class="vol_place"><input data-form-input-id="detail_cave_particuliere" type="text" class="num cave readonly" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
         <p class="vol_total_recolte">
-            <input type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
+            <input data-form-input-id="detail_vol_total_recolte" type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
             <?php if (!$produit->getConfig()->hasNoMotifNonRecolte() && $detail->hasMotifNonRecolteLibelle()) : ?>
                 <a href="<?php echo url_for("dr_recolte_motif_non_recolte", array("id" => $produit->getDocument()->_id, "hash" => $produit->getHash(), 'detail_key' => $detail->getKey())) ?>" class="ajout ajout_motif <?php if ($detail->getMotifNonRecolteLibelle() != 'Déclaration en cours')
                 echo 'ajout_lien'; ?>"><?php echo str_replace(" ", "&nbsp;", $detail->getMotifNonRecolteLibelle()); ?></a>
@@ -71,16 +69,16 @@
             <ul class="vol_revendique_dplc">
                 <?php if ($detail->getConfig()->existRendement()): ?>
                 <li>
-                    <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
+                    <input data-form-input-id="detail_volume_revendique" type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num revendique readonly" readonly="readonly" value="<?php echoFloat($detail->volume_revendique); ?>" />
                 </li>
                 <li>
                     <input type="hidden" class="num usages_industriels readonly" readonly="readonly" value="<?php echoFloat($detail->usages_industriels); ?>" />
-                    <input type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num lies readonly" readonly="readonly" value="<?php echoFloat($detail->lies); ?>" />
+                    <input data-form-input-id="detail_lies" type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num lies readonly" readonly="readonly" value="<?php echoFloat($detail->lies); ?>" />
                 </li>
                 <?php endif; ?>
                 <?php if($produit->getLieu()->canHaveVci()): ?>
                 <li>
-                    <input type="<?php echo (!$detail->canHaveVci()) ? 'hidden' : 'text' ?>" class="num vci readonly" readonly="readonly" value="<?php echoFloat($detail->vci); ?>" />
+                    <input data-form-input-id="detail_vci" type="<?php echo (!$detail->canHaveVci()) ? 'hidden' : 'text' ?>" class="num vci readonly" readonly="readonly" value="<?php echoFloat($detail->vci); ?>" />
                 </li>
                 <?php endif; ?>
             </ul>
