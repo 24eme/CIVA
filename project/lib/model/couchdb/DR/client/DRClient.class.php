@@ -297,41 +297,51 @@ class DRClient extends acCouchdbClient {
         $totauxByAppellationsRecap = array();
 
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', null, "Rouge ou Rosé");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace Communale");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'LIEUDIT', null, "AOC Alsace Lieu-dit");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIR', null, "AOC Alsace Pinot noir");
+
 
           foreach ($dr->recolte->getAppellations() as $app_key => $appellation) {
               switch ($appellation_key = preg_replace('/^appellation_/', '', $app_key)) {
                   case 'GRDCRU':
                   case 'CREMANT':
-                      $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $appellation_key, $appellation, $appellation->getLibelle());
-                      break;
                   case 'ALSACEBLANC':
                   case 'COMMUNALE':
                   case 'LIEUDIT':
                   case 'PINOTNOIRROUGE':
                   case 'PINOTNOIR':
-                      $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap, $appellation_key, $appellation);
+                      $totauxByAppellationsRecap = $this->getTotauxAgregeByCouleur($totauxByAppellationsRecap, $appellation_key, $appellation, $appellation->getLibelle());
+                      break;
+                  case 'DISABLE':
                       break;
               }
           }
         return $totauxByAppellationsRecap;
     }
 
-    public function getTotauxAgregeByCouleur($totauxByAppellationsRecap, $app_key, $appellation) {
-        foreach ($appellation->getLieux() as $lieu) {
+    public function getTotauxAgregeByCouleur($totauxByAppellationsRecap, $app_key, $node, $nom) {
+        if (!$node) {
+            return $totauxByAppellationsRecap;
+        }
+        foreach ($node->getLieux() as $lieu) {
             if (preg_match('/^PINOTNOIR/', $app_key)) {
-                $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $lieu, 'Rouge ou Rosé');
-            } else if(!$appellation->getConfig()->existRendementCouleur()) {
-
-                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $lieu, 'AOC Alsace Blanc');
+                $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $lieu, $nom);
+                $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $node->getDplcCaveParticuliere();
+            } else if(!$node->getConfig()->existRendementCouleur()) {
+                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $lieu, $nom);
+                 $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $node->getDplcCaveParticuliere();
             } else {
                   foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
                       if (preg_match('/Rouge$/', $couleur_key)) {
-                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEROUGEROSE', $couleur, 'Rouge ou Rosé');
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $couleur, $nom);
+                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $node->getDplcCaveParticuliere();
                       } else {
-                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', $couleur, 'AOC Alsace Blanc');
+                          $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $couleur, $nom);
+                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $node->getDplcCaveParticuliere();
                       }
                   }
            }
@@ -346,20 +356,18 @@ class DRClient extends acCouchdbClient {
             $totauxByAppellationsRecap[$key]->revendique_sur_place = null;
             $totauxByAppellationsRecap[$key]->usages_industriels_sur_place = null;
             $totauxByAppellationsRecap[$key]->vci_sur_place = null;
-            $totauxByAppellationsRecap[$key]->dplc_sur_place = null;
+            $totauxByAppellationsRecap[$key]->dplc_sur_place_rouge = null;
+            $totauxByAppellationsRecap[$key]->dplc_sur_place_blanc = null;
         }
 
         if (!$node) {
-
             return $totauxByAppellationsRecap;
         }
 
         $totauxByAppellationsRecap[$key]->revendique_sur_place += ($node->getVolumeRevendiqueCaveParticuliere()) ? $node->getVolumeRevendiqueCaveParticuliere() : 0;
         $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getUsagesIndustrielsSurPlace()) ? $node->getUsagesIndustrielsSurPlace() : 0;
-
         $totauxByAppellationsRecap[$key]->revendique_sur_place += $node->getTotalVolumeAcheteurs("mouts");
         $totauxByAppellationsRecap[$key]->vci_sur_place += $node->getVciCaveParticuliere();
-        $totauxByAppellationsRecap[$key]->dplc_sur_place += $node->getDplcCaveParticuliere();
 
         return $totauxByAppellationsRecap;
     }
