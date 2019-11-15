@@ -439,7 +439,7 @@ class uploadActions extends sfActions {
         try {
             if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) {
 
-                return ($this->etablissement->acheteur_raisin != Acheteur::ACHETEUR_NEGOCIANT);
+                return ($this->etablissement->acheteur_raisin != "Negociant");
             }
         } catch (Exception $e) {
             return false;
@@ -472,7 +472,7 @@ class uploadActions extends sfActions {
         try {
             if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) {
 
-                return ($this->etablissement->acheteur_raisin == Acheteur::ACHETEUR_NEGOCIANT);
+                return ($this->etablissement->acheteur_raisin == 'Negociant');
             }
         } catch (Exception $e) {
             return false;
