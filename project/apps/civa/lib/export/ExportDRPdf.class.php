@@ -211,10 +211,14 @@ class ExportDRPdf extends ExportDocument {
         $recap = $this->getRecapTotal($dr);
         $total = array("revendique_sur_place" => null,
                        "usages_industriels_sur_place" => null,
+                       "dplc_sur_place_rouge" => null,
+                       "dplc_sur_place_blanc" => null,
                        "vci_sur_place" => null);
         foreach($recap as $key => $item) {
             $total["revendique_sur_place"] += $item->revendique_sur_place;
             $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
+            $total["dplc_sur_place_rouge"] += $item->dplc_sur_place_rouge;
+            $total["dplc_sur_place_blanc"] += $item->dplc_sur_place_blanc;
             $total["vci_sur_place"] += $item->vci_sur_place;
         }
         if($dr->hasVolumeSurPlace() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()){
