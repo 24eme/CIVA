@@ -28,7 +28,7 @@
 
         <p class="superficie">
             <?php if ($produit->getConfig()->hasSuperficie()) : ?>
-                <input type="text" class="num superficie readonly" disabled="disabled" value="<?php echoFloat($detail->superficie); ?>" />
+                <input type="text" class="num superficie readonly" value="<?php echoFloat($detail->superficie); ?>" />
             <?php endif; ?>
         </p>
 
@@ -60,7 +60,7 @@
             </div>
         <?php endif; ?>
 
-        <p class="vol_place"><input type="text" class="num cave readonly" disabled="disabled" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
+        <p class="vol_place"><input type="text" class="num cave readonly" value="<?php echoFloat($detail->cave_particuliere); ?>" /></p>
         <p class="vol_total_recolte">
             <input type="text" class="num total readonly" readonly="readonly" value="<?php echoFloat($detail->volume); ?>" />
             <?php if (!$produit->getConfig()->hasNoMotifNonRecolte() && $detail->hasMotifNonRecolteLibelle()) : ?>
