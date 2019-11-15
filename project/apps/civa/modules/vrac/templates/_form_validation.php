@@ -23,7 +23,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td>
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille"><?php echo $detail->nb_bouteille ?></td>

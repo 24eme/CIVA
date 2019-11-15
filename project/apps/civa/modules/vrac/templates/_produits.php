@@ -27,7 +27,7 @@
 	</thead>
 	<tbody>
 	<?php if ($form): ?>
-		<?php 
+		<?php
 			$counter = 0;
 			foreach ($form['produits'] as $key => $formProduit):
 				$detail = $vrac->get($key);
@@ -35,7 +35,8 @@
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong>
+					<?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 				<?php if(isset($produits_hash_in_error) && in_array($detail->getHash(), $produits_hash_in_error->getRawValue())): ?>
 					<img src="/images/pictos/pi_alerte.png" alt="" />
 				<?php endif; ?>
@@ -73,19 +74,19 @@
 				<?php endif; ?>
 			</td>
 		</tr>
-			<?php 
-				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement): 
+			<?php
+				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement):
 					if ($vrac->get($key)->retiraisons->exist($keySub)) {
 					$enlevement = $vrac->get($key)->retiraisons->get($keySub);
 			?>
 				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement, 'alt' => $alt)) ?>
 			<?php 	}
 				endforeach; ?>
-		<?php 
+		<?php
 			$counter++; endforeach;
 		?>
 	<?php elseif($vrac->isCloture()): ?>
-		<?php 
+		<?php
 			$counter = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
@@ -93,7 +94,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
@@ -124,13 +125,13 @@
 			<td class="volume"><?php echoFloat($retiraison->volume) ?>&nbsp;hl</td>
 		</tr>
 		<?php endforeach; ?>
-		<?php 
+		<?php
 			$counter++; endforeach;
 			endforeach;
 		?>
-	
+
 	<?php else: ?>
-		<?php 
+		<?php
 			$counter = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
@@ -138,7 +139,7 @@
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?> <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong>
+				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?> <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
@@ -160,7 +161,7 @@
 			</td>
 			<?php endif; ?>
 		</tr>
-		<?php 
+		<?php
 			$counter++; endforeach;
 			endforeach;
 		?>

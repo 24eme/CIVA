@@ -323,26 +323,48 @@ var sumContrat = function(brothers, cible)
 
 				champs.each(function()
 				{
+					$(this).removeClass("champ_rouge");
+
 					var champ_volume = ligne_courante.find('.volume input'),
 						champ_prix = ligne_courante.find('.prix input'),
 						champ_centilisation = ligne_courante.find('.centilisation select'),
 						champ_bouteille = ligne_courante.find('.bouteille input');
-
-					if
-					(
-						(champ_volume.length > 0 && $.trim(champ_volume.val()))
-						&& (champ_prix.length > 0 && $.trim(champ_prix.val()))
-						|| (champ_centilisation.length > 0 && champ_centilisation.val())
-						&& (champ_bouteille.length > 0 && $.trim(champ_bouteille.val()) && champ_prix.length > 0 && $.trim(champ_prix.val()))
-					)
+						champ_bio = ligne_courante.find('.bio select');
+					var class_red = [];
+				  var empty = true;
+					champs.each(function(){
+						if($.trim($(this).val())){ empty = false; }
+					});
+					if($.trim(champ_bio.val()) == ""){
+						class_red.push(champ_bio);
+					}
+					if(champ_volume.length > 0 && !$.trim(champ_volume.val())){
+						class_red.push(champ_volume);
+					}
+					if(champ_prix.length > 0 && !$.trim(champ_prix.val())){
+						class_red.push(champ_prix);
+					}
+					if(champ_centilisation.length > 0 && !champ_centilisation.val()){
+						class_red.push(champ_centilisation);
+					}
+					if(champ_bouteille.length > 0 && !$.trim(champ_bouteille.val())){
+						class_red.push(champ_bouteille);
+					}
+					if(!class_red.length)
 					{
 						ligne_courante.addClass('coche');
 						ligne_courante.removeClass('croix');
 						ligne_valide = true;
-					}else
+					}
+					else
 					{
 						ligne_courante.removeClass('coche');
 						ligne_courante.addClass('croix');
+						if(!empty){
+							for (var i = 0; i < class_red.length; i++) {
+								class_red[i].addClass("champ_rouge");
+							}
+						}
 					}
 
 					if($.trim($(this).val()))
