@@ -3,7 +3,8 @@
 	<thead>
 		<tr>
 			<th class="produit">Produits</th>
-			<th class="denomination"><span>Dénomination</span></th>
+			<th class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>"><span>Dénomination</span></th>
+			<th class="bio"><span>Bio</span></th>
 			<th class="millesime"><span>Millésime</span></th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<th class="bouteille"><span>Nb bouteilles</span></th>
@@ -22,13 +23,21 @@
 			$alt = ($counter%2);
 	?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong></td>
-			<td class="denomination">
+			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?></td>
+			<td class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>">
 				<span><?php echo $embedForm['denomination']->renderError() ?></span>
 				<?php if ($counter == 0): ?>
 				<?php echo $embedForm['denomination']->render(array("autofocus" => "autofocus")) ?>
 				<?php else: ?>
 				<?php echo $embedForm['denomination']->render() ?>
+				<?php endif; ?>
+			</td>
+			<td class="bio">
+				<span><?php echo $embedForm['label']->renderError() ?></span>
+				<?php if ($counter == 0): ?>
+				<?php echo $embedForm['label']->render(array("autofocus" => "autofocus")) ?>
+				<?php else: ?>
+				<?php echo $embedForm['label']->render() ?>
 				<?php endif; ?>
 			</td>
 			<td class="millesime">
