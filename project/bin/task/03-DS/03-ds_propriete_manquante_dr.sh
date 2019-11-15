@@ -6,7 +6,7 @@ DESCRIPTION="Export CSV des CVI de récoltant ayant du volume sur place dans la 
 
 . bin/task_start.inc
 
-mkdir -m 777 $TASK_DIR/tmp > /dev/null
+mkdir -m 777 $TASK_DIR/tmp 2> /dev/null
 
 EXPORT_FILE=tmp/export_cvi_ds_proprietes_manquantes.csv
 

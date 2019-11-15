@@ -66,12 +66,14 @@ class DRMGenerateCSV {
     protected $identifiant;
     protected $numero_accise;
     protected $periode;
+    protected $aggregate = false;
 
 
-    public function __construct($identifiant, $numero_accise, $periode){
+    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false){
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
+      $this->aggregate = $aggregate;
     }
 
     public function getPeriode(){
@@ -85,9 +87,9 @@ class DRMGenerateCSV {
 
         $prev_dr = $this->getPreviousDr($this->identifiant, $this->periode);
         $prev_ds = $this->getPreviousDs($this->identifiant, $annee, $mois);
-
+	
         $reprise_dr = false;
-        if($prev_dr && (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode()))){
+        if($prev_dr && (!$prev_ds || (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode())))){
           $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE,$prev_dr->_id);
           $documents[] = $drReprise;
           $reprise_dr = true;
@@ -129,6 +131,9 @@ class DRMGenerateCSV {
     }
 
     public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume, $num_contrat = null){
+        if($this->aggregate && $this->isProduitDetailAggregate($produit)) {
+            return null;
+        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";";
       $lignes .= ($num_contrat)? ";".str_replace("VRAC-","",$num_contrat).";" : "";
@@ -190,7 +195,29 @@ class DRMGenerateCSV {
       return $infos;
     }
 
+    public function isProduitDetailAggregate($produitDetail) {
+        if(is_string($produitDetail)) {
+
+            return false;
+        }
+
+        if(preg_match('|/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/LIEUDIT/mentions/DEFAUT|', HashMapper::convert($produitDetail->getHash()))) {
+
+            return true;
+        }
+
+        if(preg_match('|/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT|', HashMapper::convert($produitDetail->getHash()))) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function createRowStockNullProduit($produitDetail){
+        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+            return null;
+        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;;\n";
       $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;;\n";
@@ -198,6 +225,9 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
+        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+            return null;
+        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
@@ -243,6 +273,9 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockProduitAutreFromDS($produitDetail,$volume){
+        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+            return null;
+        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = "";
       $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$volume.";\n";
@@ -274,6 +307,7 @@ class DRMGenerateCSV {
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
+          $libelle = preg_replace("/^Vins sans IG Mousseux$/","Vins sans IG Mousseux Blanc",$libelle);
         }
 
         $type_drm = 'suspendu';

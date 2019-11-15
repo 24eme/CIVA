@@ -867,6 +867,10 @@ var initGestionRecolteDonnees = function()
     });
 
     $('.col_recolte.col_active form input[type!="hidden"], col_recolte.col_active form select').first().focus();
+
+    $('.col_recolte.col_validee input[type="text"]').click(function() {
+        $(this).parents('.col_recolte').find('.col_btn a.modifier_tmp')[0].click();
+    });
 };
 
 /**

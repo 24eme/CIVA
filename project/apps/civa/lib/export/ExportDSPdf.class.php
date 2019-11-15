@@ -151,7 +151,7 @@ class ExportDSPdf extends ExportDocument {
 
     protected function createMainByDS($ds) {
         $this->buildOrder($ds);
-        $alsace_blanc = array("ALSACEBLANC", "COMMUNALE", "LIEUDIT", "PINOTNOIR", "PINOTNOIRROUGE");
+        $alsace_blanc = array("ALSACEBLANC",  "LIEUDIT", "COMMUNALE", "PINOTNOIR", "PINOTNOIRROUGE");
 
         $recap = array("AOC Alsace" => array("colonnes" => array("cepage" => "Cépages"),
                                                    "total" => array("normal" => null, "vt" => null, "sgn" => null),
@@ -181,7 +181,7 @@ class ExportDSPdf extends ExportDocument {
             $this->getRecap($ds, $appellation_key, $recap["AOC Alsace"]);
         }
 
-        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grands Crus"], true);
+        $this->getRecap($ds, "GRDCRU", $recap["AOC Alsace Grand Cru"], true);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
 
         $paginate = $this->paginate($recap, self::NB_LIGNES_PAR_PAGES, $page);
@@ -244,6 +244,7 @@ class ExportDSPdf extends ExportDocument {
         $this->document->addPage($this->getPartial('ds_export/recap', array('ds' => $this->ds_principale,
                                                                             'recap_total' => $this->getRecapTotal(),
                                                                             'recap_autres' => $this->getRecapAutres(),
+                                                                            'recap_vci' => $this->getRecapVCI(),
                                                                             'recap_vins_sans_ig' => $this->getRecapVinsSansIG())));
     }
 
@@ -307,6 +308,11 @@ class ExportDSPdf extends ExportDocument {
     protected function getRecapAutres() {
 
         return DSCivaClient::getInstance()->getRecapAutres($this->ds_principale);
+    }
+
+    protected function getRecapVCI() {
+
+        return DSCivaClient::getInstance()->getTotauxVCIRecap($this->ds_principale);
     }
 
     protected function getRecapVinsSansIG() {

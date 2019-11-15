@@ -55,7 +55,7 @@ EOF;
             return;
         }
 
-        if(!preg_match("/[C]*(67|68)/", $etablissement->_id)) {
+        if(!preg_match("/^[C]*(67|68)/", $etablissement->identifiant)) {
             return;
         }
 
@@ -97,7 +97,7 @@ EOF;
 
 Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".date('Y')." sur le site VinsAlsace.pro, mais ne l'avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre MIDI.
+Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre MINUIT.
 
 Pour terminer la saisie, cliquez sur le lien suivant : <https://declaration.vinsalsace.pro>
 
@@ -134,9 +134,9 @@ Dominique WOLFF");
 
 La Déclaration de Stocks \"Papier\" a définitivement disparue depuis 2017 et vous devez donc désormais télé-déclarer votre Stock sur le Portail du CIVA.
 
-A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 Juillet ".date('Y').".
+A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 juillet ".date('Y').".
 
-Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock AVANT le 10 septembre MIDI.
+Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock AVANT le 10 septembre MINUIT.
 
 ATTENTION: Si votre Stock est NEANT, un arrêté du 18 Juillet dernier vous exempte de déposer une Déclaration de Stocks.
 Dans ce cas-là, pour éviter qu'on ne vous relance, merci de me le signaler en réponse à ce mail.
