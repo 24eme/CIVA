@@ -58,143 +58,196 @@ table {
 		</tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Total</td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoVolume( $volume[$a]); ?></td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php if($infos['total_volume_vendus'] !== null): ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Vendu</td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoVolume( $volume_vendus[$a]); ?></td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume_vendus[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vendus'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_vendus'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume_vendus[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php endif; ?>
         <tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume sur place</td>
-            <?php foreach ($appellations as $a): ?>
-            <td style="width: 120px;"><?php echoVolume( $volume_sur_place[$a]); ?></td>
-            <?php endforeach; ?>
-            <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_sur_place'], true);?></td>
-            <?php endif; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
+			<?php if ($has_total): ?>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_sur_place'], true);?></td>
+			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($volume_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
         </tr>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume Revendiqué</td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoVolume( $revendique[$a]); ?></td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($revendique[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_revendique'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_revendique'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($revendique[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php if($infos['total_revendique_sur_place'] !== null): ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;">
-				<?php echoVolume( $revendique_sur_place[$a]); ?>
-			</td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($revendique_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_revendique_sur_place'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_revendique_sur_place'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($revendique_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php endif; ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;"><?php if($has_no_usages_industriels): ?>&nbsp;DPLC<?php elseif($dr->campagne < "2015"): ?>&nbsp;Usages industriels<?php else: ?>&nbsp;Volume à détruire<?php endif; ?></td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;"><?php echoVolume( $usages_industriels[$a]); ?></td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($usages_industriels[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_usages_industriels'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_usages_industriels'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($usages_industriels[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php if($infos['total_usages_industriels_sur_place'] !== null): ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;">
-				<?php echoVolume( $usages_industriels_sur_place[$a]); ?>
-			</td>
-			<?php endforeach; ?>
+			<?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($usages_industriels_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_usages_industriels_sur_place'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_usages_industriels_sur_place'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;"><?php echoVolume($usages_industriels_sur_place[$a]); ?></td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php endif; ?>
 		<?php if($infos['total_volume_rebeches'] !== null): ?>
         <tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Rebêches</td>
-            <?php foreach ($appellations as $a): ?>
-            <td style="width: 120px;">
-            	<?php if(!is_null($volume_rebeches[$a])): ?>
+            <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_rebeches[$a])): ?>
         			<?php echoVolume($volume_rebeches[$a]); ?>
         		<?php else: ?>
         			&nbsp;
             	<?php endif; ?>
-            </td>
-            <?php endforeach; ?>
-            <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches'], true);?></td>
-            <?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
+			<?php if ($has_total): ?>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_rebeches'], true);?></td>
+			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_rebeches[$a])): ?>
+        			<?php echoVolume($volume_rebeches[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
         </tr>
         <?php endif; ?>
         <?php if($infos['total_volume_rebeches_sur_place'] !== null): ?>
                 <tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
-            <?php foreach ($appellations as $a): ?>
-            <td style="width: 120px;">
-            	<?php if(!is_null($volume_rebeches_sur_place[$a])): ?>
+            <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_rebeches_sur_place[$a])): ?>
         			<?php echoVolume($volume_rebeches_sur_place[$a]); ?>
         		<?php else: ?>
         			&nbsp;
             	<?php endif; ?>
-            </td>
-            <?php endforeach; ?>
-            <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_rebeches_sur_place'], true);?></td>
-            <?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
+			<?php if ($has_total): ?>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_rebeches_sur_place'], true);?></td>
+			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_rebeches_sur_place[$a])): ?>
+        			<?php echoVolume($volume_rebeches_sur_place[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
         </tr>
     	<?php endif; ?>
 		<?php if($infos['total_volume_vci'] !== null): ?>
 		<tr>
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;VCI</td>
-            <?php foreach ($appellations as $a): ?>
+            <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
 				<td style="width: 120px;">
-					<?php if($volume_vci[$a]): ?>
-						<?php echoVolume($volume_vci[$a]); ?>
-					<?php else: ?>
-						&nbsp;
-					<?php endif; ?>
-				</td>
-            <?php endforeach; ?>
-            <?php if ($has_total): ?>
-            <td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci'], true);?></td>
-            <?php endif; ?>
+				<?php if(!is_null($volume_vci[$a])): ?>
+        			<?php echoVolume($volume_vci[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
+			<?php if ($has_total): ?>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_vci'], true);?></td>
+			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_vci[$a])): ?>
+        			<?php echoVolume($volume_vci[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
         </tr>
 		<?php endif; ?>
 		<?php if($infos['total_volume_vci_sur_place'] !== null): ?>
 		<tr>
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
-			<?php foreach ($appellations as $a): ?>
-			<td style="width: 120px;">
-				<?php if($volume_vci_sur_place[$a]): ?>
-					<?php echoVolume($volume_vci_sur_place[$a]); ?>
-				<?php else: ?>
-					&nbsp;
-				<?php endif; ?>
-			</td>
-			<?php endforeach; ?>
+            <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_vci_sur_place[$a])): ?>
+        			<?php echoVolume($volume_vci_sur_place[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
 			<?php if ($has_total): ?>
-			<td style="border: 1px solid black; width: 120px;"><?php echoVolume( $infos['total_volume_vci_sur_place'], true);?></td>
+			<td style="border: 1px solid black; width: 120px;"><?php echoVolume($infos['total_volume_vci_sur_place'], true);?></td>
 			<?php endif; ?>
+			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
+				<td style="width: 120px;">
+				<?php if(!is_null($volume_vci_sur_place[$a])): ?>
+        			<?php echoVolume($volume_vci_sur_place[$a]); ?>
+        		<?php else: ?>
+        			&nbsp;
+            	<?php endif; ?>
+            	</td>
+			<?php endif; endforeach; ?>
 		</tr>
 		<?php endif; ?>
 	</tbody>

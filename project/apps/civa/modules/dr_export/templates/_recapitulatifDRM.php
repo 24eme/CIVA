@@ -74,7 +74,7 @@ table {
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Vins Sans IG</td>
   <?php if($dr->recolte->exist('certification/genre/appellation_VINTABLE')): ?>
-  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->certification->genre->appellation_VINTABLE->getTotalCaveParticuliere(), true) ?></td>
+  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["vin_sans_ig"], true) ?></td>
   <?php else: ?>
   <td style="width: 200px; border: 1px solid black; text-align:center;"><i>Néant</i></td>
   <?php endif; ?>
