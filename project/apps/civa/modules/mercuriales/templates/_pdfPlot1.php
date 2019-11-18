@@ -2,7 +2,7 @@
 	<tr>
 		<td style="width: 8%;"><img src="<?php echo sfConfig::get('sf_web_dir')."/images/pdf/civa.png" ?>" alt="CIVA-Logo" /></td>
 		<td style="width: 92%; text-align: center;">
-			<h1><span style="font-weight: normal;">AOC Alsace</span>  SYLVANER - RIESLING - GEWURZTRAMINER</h1>
+			<h1 style="color: #b1920c;"><span style="font-weight: normal; color: #000;">AOC Alsace</span>  SYLVANER - RIESLING - GEWURZTRAMINER</h1>
 			<span>relevés bi-mensuels des cours des transactions en vrac entre opérateurs du vignoble d'Alsace AOC (relevés définitifs)</span>
 		</td>
 	</tr>
