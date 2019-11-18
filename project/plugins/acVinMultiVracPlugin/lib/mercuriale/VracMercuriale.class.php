@@ -380,8 +380,6 @@ class VracMercuriale
 	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL] = $datas[self::OUT_VOL];
 	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX] = $datas[self::OUT_PRIX];
 	        }
-	        
-	        
 	        $varNb = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB]);
 	        $varContrat = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]);
 	        $varVol = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1);

@@ -172,11 +172,12 @@ Vrac:
                                                                   volume_enleve: { type: float }
                                                                   centilisation: { type: float, required: false }
                                                                   nb_bouteille: { type: integer, required: false }
+                                                                  label: { required: false }
                                                                   retiraisons:
                                                                     type: array_collection
                                                                     definition:
                                                                       fields:
-                                                                        '*': 
+                                                                        '*':
                                                                           type: collection
                                                                           definition:
                                                                             fields:

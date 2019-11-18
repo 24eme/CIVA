@@ -14,20 +14,12 @@ table {
 <tr>
   <th style="width: 214px; border: 1px solid black; background-color: black; color: white; font-weight: bold; border: 1px solid black; text-align: left;">&nbsp;Appellations</th>
   <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;">Volume revendiqué <br /><small>sur place</small></th>
-  <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;"><?php if($dr->campagne < "2015"): ?>Usages industriels<?php else: ?>Volume à détruire<?php endif; ?><br /><small>sur place</small></th>
-  <?php if($dr->recolte->canHaveVci()): ?>
-  <th style="width: 200px; font-weight: bold; border: 1px solid black; background-color: black; color: white; text-align: center;">VCI sur place<br /><small>à ajouter dans Volume à détruire</small></th>
-  <?php endif; ?>
 </tr>
 <?php foreach($recap_total as $item): ?>
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;<?php echo str_replace("TOTAL ", "", $item->nom) ?></td>
   <?php if(!is_null($item->revendique_sur_place)): ?>
   <td style="width: 200px; border: 1px solid black;"><?php echoVolume($item->revendique_sur_place, true) ?></td>
-  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($item->usages_industriels_sur_place, true) ?></td>
-  <?php if($dr->recolte->canHaveVci()): ?>
-  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($item->vci_sur_place, true) ?></td>
-  <?php endif; ?>
   <?php else: ?>
   <td style="border: 1px solid black; text-align: center;" colspan="<?php if($dr->recolte->canHaveVci()): ?>3<?php else: ?>2<?php endif; ?>"><i>Néant</i></td>
   <?php endif; ?>
@@ -41,10 +33,6 @@ table {
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold; background-color: black; color: white;">&nbsp;Total Général AOC</td>
   <?php if($total["revendique_sur_place"] > 0 || $total["usages_industriels_sur_place"] > 0): ?>
     <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["revendique_sur_place"], true) ?></td>
-    <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["usages_industriels_sur_place"], true) ?></td>
-    <?php if($dr->recolte->canHaveVci()): ?>
-    <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["vci_sur_place"], true) ?></td>
-    <?php endif; ?>
   <?php else: ?>
     <td style="width: 400px; border: 1px solid black; text-align:center;"><i>Néant</i></td>
   <?php endif; ?>
@@ -57,11 +45,32 @@ table {
 <br />
 <br />
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
-<tr>
-  <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Rebêches
-</td>
-  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->getSurPlaceRebeches(), true) ?></td>
-</tr>
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Rebêches</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->getSurPlaceRebeches(), true) ?></td>
+    </tr>
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;DRA/DPLC Blanc</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["dplc_sur_place_blanc"], true) ?></td>
+    </tr>
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;DRA/DPLC Rouge</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["dplc_sur_place_rouge"], true) ?></td>
+    </tr>
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Lies/mouts</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["usages_industriels_sur_place"], true) ?></td>
+    </tr>
+</table>
+<br/>
+<table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;VCI Crémant d'Alsace</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["vci_sur_place"], true) ?></td>
+    </tr>
+</table>
+<br/>
+<table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Vins Sans IG</td>
   <?php if($dr->recolte->exist('certification/genre/appellation_VINTABLE')): ?>
@@ -71,3 +80,19 @@ table {
   <?php endif; ?>
 </tr>
 </table>
+
+<?php if($dr->exist('jus_raisin_volume') && $dr->exist('jus_raisin_superficie')): ?>
+	<br />
+	<br />
+	<span style="background-color: black; color: white; font-weight: bold;">Jus de raisin</span><br/>
+	<table border=1 cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
+	    <tr>
+	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Superficie</td>
+	        <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($dr->jus_raisin_superficie); ?></td>
+	    </tr>
+	    <tr>
+	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume</td>
+	        <td style="border: 1px solid black; width: 120px;"><?php echoVolume($dr->jus_raisin_volume); ?></td>
+	    </tr>
+	</table>
+<?php endif; ?>

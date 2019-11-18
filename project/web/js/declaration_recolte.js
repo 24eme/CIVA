@@ -161,6 +161,9 @@ $(document).ready( function()
   }
     if($('.col_active')){
         var element_premier_focus = $('.col_active').find('.premier_focus').eq(0);
+        if(document.location.hash && $(document.location.hash).length > 0) {
+            element_premier_focus = $(document.location.hash);
+        }
         element_premier_focus.focus();
         element_premier_focus.select();
     }
@@ -867,6 +870,18 @@ var initGestionRecolteDonnees = function()
     });
 
     $('.col_recolte.col_active form input[type!="hidden"], col_recolte.col_active form select').first().focus();
+
+    $('.col_recolte.col_validee input[type="text"]').click(function() {
+        var lien_modifier = $(this).parents('.col_recolte').find('.col_btn a.modifier_tmp')[0];
+
+        if($(lien_modifier).attr('disabled')) {
+            return;
+        }
+
+        lien_modifier.href += '#' + $(this).attr('data-form-input-id');
+
+        lien_modifier.click();
+    });
 };
 
 /**
@@ -886,6 +901,7 @@ var etatBtnRecolteCanBeInactif = function (actif) {
         $('a.btn_recolte_can_be_inactif').addClass('btn_inactif');
         $('.col_recolte.col_active .col_btn a.annuler_tmp').removeClass('btn_inactif');
     }
+    etatBtnAjoutCol();
 }
 
 var updateElementRows = function (inputObj, totalObj) {
@@ -966,11 +982,6 @@ var updateRevendiqueDPLC = function (totalRecolteCssId, elementCssId) {
     if(!lies) {
         lies = 0;
     }
-
-    console.log("dplc" + dplc);
-    console.log("dplc_with_lie" + dplc_with_vci);
-    console.log("usages_insutriels" + usages_industriels);
-    console.log("lies" + lies);
 
     if(dplc_with_vci > lies) {
         usages_industriels = dplc_with_vci;
@@ -1141,7 +1152,7 @@ var etatBtnAjoutCol = function()
     var col_recolte = $('#col_scroller .col_recolte');
     var btn = $('a#ajout_col');
 
-    if(col_recolte.filter('.col_active').size() > 0) btn.addClass('btn_inactif');
+    if(col_recolte.filter('.col_active').size() > 0 && !$('.col_recolte.col_active .col_btn a.annuler_tmp').hasClass('btn_inactif')) btn.addClass('btn_inactif');
     else btn.removeClass('btn_inactif');
 };
 
