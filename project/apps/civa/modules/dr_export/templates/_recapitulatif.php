@@ -203,7 +203,7 @@ table {
             <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;VCI</td>
             <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
 				<td style="width: 120px;">
-				<?php if(!is_null($volume_vci[$a])): ?>
+				<?php if($volume_vci[$a]): ?>
         			<?php echoVolume($volume_vci[$a]); ?>
         		<?php else: ?>
         			&nbsp;
@@ -215,7 +215,7 @@ table {
 			<?php endif; ?>
 			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
 				<td style="width: 120px;">
-				<?php if(!is_null($volume_vci[$a])): ?>
+				<?php if($volume_vci[$a]): ?>
         			<?php echoVolume($volume_vci[$a]); ?>
         		<?php else: ?>
         			&nbsp;
@@ -229,7 +229,7 @@ table {
 			<td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;<small>&nbsp;dont sur place</small></td>
             <?php foreach ($appellations as $a): if (preg_match('/AOC/', $libelle[$a])): ?>
 				<td style="width: 120px;">
-				<?php if(!is_null($volume_vci_sur_place[$a])): ?>
+				<?php if($volume_vci_sur_place[$a]): ?>
         			<?php echoVolume($volume_vci_sur_place[$a]); ?>
         		<?php else: ?>
         			&nbsp;
@@ -241,7 +241,7 @@ table {
 			<?php endif; ?>
 			<?php foreach ($appellations as $a): if (!preg_match('/AOC/', $libelle[$a])): ?>
 				<td style="width: 120px;">
-				<?php if(!is_null($volume_vci_sur_place[$a])): ?>
+				<?php if($volume_vci_sur_place[$a]): ?>
         			<?php echoVolume($volume_vci_sur_place[$a]); ?>
         		<?php else: ?>
         			&nbsp;

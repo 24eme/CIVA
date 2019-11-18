@@ -222,7 +222,7 @@ class ExportDRPdf extends ExportDocument {
                        "dplc_sur_place_rouge" => null,
                        "dplc_sur_place_blanc" => null,
                        "vci_sur_place" => null,
-                       "vin_sans_ig" => null);
+                       "vin_sans_ig" => $vsig);
         foreach($recap as $key => $item) {
             $total["revendique_sur_place"] += $item->revendique_sur_place;
             $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
@@ -263,10 +263,11 @@ class ExportDRPdf extends ExportDocument {
         $volume_cooperatives = array();
         $cvi = array();
         $has_cepage_rb = false;
+        $unset_vssig = array();
 
         foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
             if (!preg_match('/AOC/', $appellation['libelle'])) {
-                continue;
+                $unset_vssig[$appellation["hash"]] = $appellation["hash"];
             }
             $appellations[] = $appellation["hash"];
             $libelle[$appellation["hash"]] = $appellation['libelle'];
@@ -323,6 +324,21 @@ class ExportDRPdf extends ExportDocument {
         $infos['revendique_sur_place'] = $revendique_sur_place;
         $infos['usages_industriels'] = $usages_industriels;
         $infos['usages_industriels_sur_place'] = $usages_industriels_sur_place;
+        
+        foreach ($unset_vssig as $unset) {
+            unset($superficie[$unset]);
+            unset($volume[$unset]);
+            unset($volume_vendus[$unset]);
+            unset($volume_sur_place[$unset]);
+            unset($volume_rebeches[$unset]);
+            unset($volume_rebeches_sur_place[$unset]);
+            unset($usages_industriels_sur_place[$unset]);
+            unset($usages_industriels[$unset]);
+            unset($revendique[$unset]);
+            unset($revendique_sur_place[$unset]);
+            unset($volume_vci[$unset]);
+            unset($volume_vci_sur_place[$unset]);
+        }
         $infos['total_superficie'] = array_sum(array_values($superficie));
         $infos['total_volume'] = array_sum(array_values($volume));
 
