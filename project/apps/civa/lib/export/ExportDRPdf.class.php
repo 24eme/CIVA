@@ -203,17 +203,26 @@ class ExportDRPdf extends ExportDocument {
           	$this->document->addPage($this->getPartial('dr_export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
           if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()) {
-            $this->createRecap($dr);
+              
+              $vsig = 0;
+              foreach ($infos['appellations'] as $a) {
+                  if (!preg_match('/AOC/', $libelle[$a])) {
+                      $vsig = $infos['volume'][$a];
+                  }
+              }
+
+            $this->createRecap($dr, $vsig);
           }
     }
 
-      protected function createRecap($dr) {
+      protected function createRecap($dr, $vsig = 0) {
         $recap = $this->getRecapTotal($dr);
         $total = array("revendique_sur_place" => null,
                        "usages_industriels_sur_place" => null,
                        "dplc_sur_place_rouge" => null,
                        "dplc_sur_place_blanc" => null,
-                       "vci_sur_place" => null);
+                       "vci_sur_place" => null,
+                       "vin_sans_ig" => null);
         foreach($recap as $key => $item) {
             $total["revendique_sur_place"] += $item->revendique_sur_place;
             $total["usages_industriels_sur_place"] += $item->usages_industriels_sur_place;
@@ -256,6 +265,9 @@ class ExportDRPdf extends ExportDocument {
         $has_cepage_rb = false;
 
         foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
+            if (!preg_match('/AOC/', $appellation['libelle'])) {
+                continue;
+            }
             $appellations[] = $appellation["hash"];
             $libelle[$appellation["hash"]] = $appellation['libelle'];
             $superficie[$appellation["hash"]] = 0;

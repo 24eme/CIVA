@@ -8,7 +8,7 @@ set border 2+1;
 set key outside;
 set key right top;
 
-set style arrow 1 nohead lw 1 lc rgb "red" lt 0
+set style arrow 1 nohead lw 1 lc rgb "#b1920c" lt 0
 <?php 
 	$xtics = '';
 	$nb = count($datas);
@@ -73,7 +73,7 @@ set yrange [<?php echo $min ?>:<?php echo $max ?>]
 set ytics nomirror <?php echo $min ?>,.1,<?php echo $max ?> font ", 10"
 set ylabel "Euros / litre" offset 4,0,0
 
-set style arrow 1 nohead lw 1 lc rgb "red" lt 0
+set style arrow 1 nohead lw 1 lc rgb "#b1920c" lt 0
 
 <?php 
 foreach ($datas[count($datas) - 1] as $k => $v):
