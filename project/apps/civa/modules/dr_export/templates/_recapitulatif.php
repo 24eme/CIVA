@@ -272,7 +272,6 @@ table {
         <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($infos['jeunes_vignes']); ?></td>
     </tr>
 </table>
-<?php endif; ?>
 
 <?php if($dr->exist('jus_raisin_volume') && $dr->exist('jus_raisin_superficie')): ?>
 	<br />
@@ -288,4 +287,7 @@ table {
 	        <td style="border: 1px solid black; width: 120px;"><?php echoVolume($dr->jus_raisin_volume); ?></td>
 	    </tr>
 	</table>
+<?php endif; ?>
+
+
 <?php endif; ?>
