@@ -206,7 +206,7 @@ class ExportDRPdf extends ExportDocument {
               
               $vsig = 0;
               foreach ($infos['appellations'] as $a) {
-                  if (!preg_match('/AOC/', $libelle[$a])) {
+                  if (!preg_match('/(AOC|VT|SGN)/', $infos['libelle'][$a])) {
                       $vsig = $infos['volume'][$a];
                   }
               }
@@ -266,7 +266,7 @@ class ExportDRPdf extends ExportDocument {
         $unset_vssig = array();
 
         foreach ($dr->getAppellationsAvecVtsgn() as $appellation) {
-            if (!preg_match('/AOC/', $appellation['libelle'])) {
+            if (!preg_match('/(AOC|VT|SGN)/', $appellation['libelle'])) {
                 $unset_vssig[$appellation["hash"]] = $appellation["hash"];
             }
             $appellations[] = $appellation["hash"];
