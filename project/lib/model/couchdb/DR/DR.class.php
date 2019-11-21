@@ -870,9 +870,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
        if($this->recolte->getSurPlaceRebeches()) {
            $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches ");
        }
+       
+       $dplcRouge = 0;
+       $dplcBlanc = 0;
 
-      $dplcRouge = $recap["ALSACEROUGEROSE"]->dplc_sur_place;
-      $dplcBlanc = $recap["ALSACEBLANC"]->dplc_sur_place + $recap["GRDCRU"]->dplc_sur_place + $recap["CREMANT"]->dplc_sur_place;
+       foreach($recap as $key => $item) {
+           $dplcRouge = $item->dplc_sur_place_rouge;
+           $dplcBlanc = $item->dplc_sur_place_blanc;
+        }
 
       if($dplcRouge) {
         $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("DRA/DPLC Rouge");

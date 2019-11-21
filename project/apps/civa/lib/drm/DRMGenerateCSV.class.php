@@ -97,7 +97,7 @@ class DRMGenerateCSV {
           foreach ($prev_ds as $ds) {
             if($prev_dr->getCampagne()."10" > $ds->getPeriode()){
               $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE, $prev_dr->_id);
-              $documents[] = $dsReprise;
+              $documents[] = $drReprise;
               $reprise_dr = true;
             }
           }
