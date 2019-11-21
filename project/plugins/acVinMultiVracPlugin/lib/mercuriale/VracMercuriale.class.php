@@ -11,6 +11,7 @@ class VracMercuriale
 	CONST IN_PRIX = 6;
 	
 	CONST OUT_MERCURIALE = "MERCURIALE";
+	CONST OUT_STATS = "STATISTIQUES";
 	CONST OUT_CP_CODE = "CEPAGE_CODE";
 	CONST OUT_CP_LIBELLE = "CEPAGE_LIBELLE";
 	CONST OUT_VOL = "VOLUME";
@@ -63,6 +64,7 @@ class VracMercuriale
 	protected $mercuriale;
 	protected $context;
 	protected $allContrats;
+	protected $allLots;
 
 	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null)
 	{
@@ -76,11 +78,17 @@ class VracMercuriale
 		$this->pdfFilename = $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->context = null;
 		$this->allContrats = 0;
+		$this->allLots = 0;
 	}
 	
 	public function getAllContrats()
 	{
 	    return $this->allContrats;
+	}
+	
+	public function getAllLots()
+	{
+	    return $this->allLots;
 	}
 	
 	public function getFolderPath()
@@ -146,6 +154,9 @@ class VracMercuriale
 				$produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 				foreach ($produits as $produit) {
 				    if ($produit->value[VracProduitsView::VALUE_CODE_APPELLATION] == 'GRDCRU') {
+				        continue;
+				    }
+				    if ($produit->value[VracProduitsView::VALUE_VTSGN]) {
 				        continue;
 				    }
 					if ($cepage = $this->getCepage($produit->value[VracProduitsView::VALUE_CEPAGE])) {
@@ -308,9 +319,19 @@ class VracMercuriale
 	    $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
 
 	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01', $this->end, $withCR);
+	    $nbContratsCurrent = count($this->getAllContrats());
+	    $nbLotsCurrent = count($this->getAllLots());
+	    
 	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], $withCR);
-
-	    $result = array();
+	    $nbContratsPrevious = count($this->getAllContrats());
+	    $nbLotsPrevious = count($this->getAllLots());
+	    
+	    $result[self::OUT_STATS] = array(
+	        self::OUT_PREVIOUS => array(self::OUT_NB => $nbLotsPrevious, self::OUT_CONTRAT => $nbContratsPrevious),
+	        self::OUT_CURRENT => array(self::OUT_NB => $nbLotsCurrent, self::OUT_CONTRAT => $nbContratsCurrent),
+	        self::OUT_VARIATION => array(self::OUT_NB => ($nbLotsCurrent - $nbLotsPrevious), self::OUT_CONTRAT => ($nbContratsCurrent - $nbContratsPrevious))
+	    );
+	    
 	    foreach ($currentPeriode as $cep => $datas) {
 	       $ordre = $this->getOrdre($cep);
 	       $result[$ordre.$cep] = array(
@@ -359,17 +380,20 @@ class VracMercuriale
 	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL] = $datas[self::OUT_VOL];
 	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX] = $datas[self::OUT_PRIX];
 	        }
-	        
+	        $varNb = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB]);
+	        $varContrat = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]);
 	        $varVol = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1);
 	        $varPrix = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1);
+	        $varVolPerc = round(($varVol * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1));
+	        $varPrixPerc = round(($varPrix * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1));
 	        
 	        $result[$ordre.$cep][self::OUT_VARIATION] = array(
-	            self::OUT_NB => ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB]),
-	            self::OUT_CONTRAT => ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]),
+	            self::OUT_NB => $varNb,
+	            self::OUT_CONTRAT => $varContrat,
 	            self::OUT_VOL => number_format($varVol, 2, ',', ''),
 	            self::OUT_PRIX => number_format($varPrix, 2, ',', ''),
-	            self::OUT_VOL_PERC => round(($varVol * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1)),
-	            self::OUT_PRIX_PERC => round(($varPrix * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1)),
+	            self::OUT_VOL_PERC => ($varVolPerc)? $varVolPerc : 0,
+	            self::OUT_PRIX_PERC => ($varPrixPerc)? $varPrixPerc : 0,
 	        );
 	    }
 	    ksort($result);
@@ -416,6 +440,7 @@ class VracMercuriale
 	{
 		$result = array();
 		$c = array();
+		$l = array();
 		foreach ($datas as $cep => $values) {
 		    $ordre = $this->getOrdre($cep);
 			$nb = count($values);
@@ -424,11 +449,14 @@ class VracMercuriale
 			$min = 0;
 			$max = 0;
 			$contrats = array();
+			$i = 0;
 			foreach ($values as $val) {
+			    $i++;
 				$volume += str_replace(',', '.', $val[self::OUT_VOL]) * 1;
 				$prix += (str_replace(',', '.', $val[self::OUT_PRIX]) * 1) * (str_replace(',', '.', $val[self::OUT_VOL]) * 1);
 				$contrats[$val[self::OUT_VISA]] = 1;
 				$c[$val[self::OUT_VISA]] = 1;
+				$l[$cep.'_'.$i.'_'.$val[self::OUT_VISA]] = 1;
 				if (!$min ||  str_replace(',', '.', $val[self::OUT_PRIX]) * 1 < $min) {
 					$min = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
 				}
@@ -439,6 +467,7 @@ class VracMercuriale
 			$result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
 		}
 		$this->allContrats = $c;
+		$this->allLots = $l;
 		ksort($result);
 		return $result;
 	}

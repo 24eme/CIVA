@@ -24,6 +24,7 @@ class VracSoussignesValidator extends sfValidatorBase
     	$hasErrors = false;
     	$vendeur = null;
     	$acheteur = null;
+    	$courtier = null;
     	$vendeur_type = (isset($values['vendeur_type']) && !empty($values['vendeur_type']))? str_replace('s', '', $values['vendeur_type']) : null;
     	$acheteur_type = (isset($values['acheteur_type']) && !empty($values['acheteur_type']))? str_replace('s', '', $values['acheteur_type']) : null;
     	if (isset($values['vendeur_recoltant_identifiant']) && !empty($values['vendeur_recoltant_identifiant'])) {

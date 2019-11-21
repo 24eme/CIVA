@@ -6,7 +6,7 @@ table {
 }
 </style>
 <br /><br />
-<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF</span>
+<span style="text-align: center; font-size: 12pt; font-weight:bold;">RÉCAPITULATIF DRM</span>
 <br /><br />
 
 <?php if($dr->recolte->canCalculVolumeRevendiqueSurPlace()): ?>
@@ -58,7 +58,7 @@ table {
       <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["dplc_sur_place_rouge"], true) ?></td>
     </tr>
     <tr>
-      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Lies/mouts</td>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Lies/bourbes</td>
       <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["usages_industriels_sur_place"], true) ?></td>
     </tr>
 </table>
@@ -74,25 +74,9 @@ table {
 <tr>
   <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Vins Sans IG</td>
   <?php if($dr->recolte->exist('certification/genre/appellation_VINTABLE')): ?>
-  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($dr->recolte->certification->genre->appellation_VINTABLE->getTotalCaveParticuliere(), true) ?></td>
+  <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["vin_sans_ig"], true) ?></td>
   <?php else: ?>
   <td style="width: 200px; border: 1px solid black; text-align:center;"><i>Néant</i></td>
   <?php endif; ?>
 </tr>
 </table>
-
-<?php if($dr->exist('jus_raisin_volume') && $dr->exist('jus_raisin_superficie')): ?>
-	<br />
-	<br />
-	<span style="background-color: black; color: white; font-weight: bold;">Jus de raisin</span><br/>
-	<table border=1 cellspacing=0 cellpaggind=0 style="text-align: right; border: 1px solid black;">
-	    <tr>
-	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Superficie</td>
-	        <td style="border: 1px solid black; width: 120px;"><?php echoSuperficie($dr->jus_raisin_superficie); ?></td>
-	    </tr>
-	    <tr>
-	        <td style="border: 1px solid black;font-weight: bold; text-align: left; width: 250px;">&nbsp;Volume</td>
-	        <td style="border: 1px solid black; width: 120px;"><?php echoVolume($dr->jus_raisin_volume); ?></td>
-	    </tr>
-	</table>
-<?php endif; ?>

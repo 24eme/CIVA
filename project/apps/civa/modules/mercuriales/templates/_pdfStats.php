@@ -1,6 +1,7 @@
 <?php 
 $stats = $mercuriale->getStats();
 $nbContrats = count($mercuriale->getAllContrats());
+$nbLots = count($mercuriale->getAllLots());
 
 $start = $mercuriale->getStart('Y-m').'-01';
 $statsCR = null;
@@ -52,12 +53,10 @@ if ($start != $mercuriale->getStart('Y-m-d')) {
         			<th style="font-weight: bold; text-align: center; width: 25%; border: 1px solid black;">PRIX MOYEN<br />EUROS/L</th>
         		</tr>
         		<?php 
-        		  $nb = 0;
         		  $vol = 0;
         		  $i = 0;
         		  $total = count($stats);
         		  foreach ($stats as $stat):
-        		  $nb += $stat[VracMercuriale::OUT_NB];
         		  $i++;
         		  $vol += str_replace(',', '.', $stat[VracMercuriale::OUT_VOL]) * 1;
         		?>
@@ -73,7 +72,7 @@ if ($start != $mercuriale->getStart('Y-m-d')) {
         	<table border="1" cellspacing=0 cellpadding="12" style="width: 100%;">
         		<tr>
         			<td style="text-align: right; width: 30%;"><strong>TOTAL</strong></td>
-        			<td style="text-align: right; width: 20%;"><strong><?php echo $nb ?></strong></td>
+        			<td style="text-align: right; width: 20%;"><strong><?php echo $nbLots ?></strong></td>
         			<td style="text-align: right; width: 25%;"><strong><?php echo number_format($vol, 2, ',', '.') ?></strong></td>
         		</tr>
         	</table>

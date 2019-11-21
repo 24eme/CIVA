@@ -120,9 +120,19 @@ if ($hasVci) {
 <tr>
 <td style="width: 820px">
 <?php if ($enable_identification && count($acheteurs)) : ?>
+<?php 
+$dontvci = 0;
+foreach($acheteurs as $acheteursLieu) {
+    foreach ($acheteursLieu["acheteurs"] as $type_key => $acheteurs_type) {
+        foreach($acheteurs_type as $cvi => $a) {
+            $dontvci += $a->dontvci;
+        }
+    }
+}
+?>
 <span style="background-color: black; color: white; font-weight: bold;">Identification des acheteurs et caves coopératives</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
-    <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><th style="border: 1px solid black;width: 130px;">Dont dépassement</th><?php if($hasVci): ?><th style="border: 1px solid black;width: 100px;">Dont VCI</th><?php endif; ?><?php if($hasLigneAppellation): ?><th style="border: 1px solid black;width: 250px;">Appellation / Lieu</th><?php endif; ?></tr>
+    <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><th style="border: 1px solid black;width: 130px;">Dont dépassement</th><?php if($hasVci && $dontvci > 0): ?><th style="border: 1px solid black;width: 100px;">Dont VCI</th><?php endif; ?><?php if($hasLigneAppellation): ?><th style="border: 1px solid black;width: 250px;">Appellation / Lieu</th><?php endif; ?></tr>
     <?php foreach($acheteurs as $acheteursLieu): ?>
         <?php foreach ($acheteursLieu["acheteurs"] as $type_key => $acheteurs_type) : ?>
             <?php foreach($acheteurs_type as $cvi => $a) : ?>
@@ -137,7 +147,7 @@ if ($hasVci) {
                 <td style="border: 1px solid black;width: 100px; text-align: right;"><?php echoSuperficie($a->superficie); ?></td>
                 <td  style="border: 1px solid black;width: 100px; text-align: right;"><?php echoVolume($a->volume); ?></td>
                 <td style="border: 1px solid black;width: 130px; text-align: right;"><?php echoVolume($a->dontdplc); ?></td>
-                <?php if($hasVci): ?>
+                <?php if($hasVci && $dontvci > 0): ?>
                     <td style="border: 1px solid black;width: 100px; text-align: right;"><?php echoVolume($a->dontvci); ?></td>
                 <?php endif; ?>
                 <?php if($hasLigneAppellation): ?>

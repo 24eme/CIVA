@@ -297,7 +297,7 @@ class DRClient extends acCouchdbClient {
         $totauxByAppellationsRecap = array();
 
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grands Crus");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grand Cru");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace Communale");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'LIEUDIT', null, "AOC Alsace Lieu-dit");
@@ -330,18 +330,18 @@ class DRClient extends acCouchdbClient {
         foreach ($node->getLieux() as $lieu) {
             if (preg_match('/^PINOTNOIR/', $app_key)) {
                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $lieu, $nom);
-                $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $node->getDplcCaveParticuliere();
+                $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $lieu->getDplcCaveParticuliere();
             } else if(!$node->getConfig()->existRendementCouleur()) {
                  $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $lieu, $nom);
-                 $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $node->getDplcCaveParticuliere();
+                 $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $lieu->getDplcCaveParticuliere();
             } else {
                   foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
                       if (preg_match('/Rouge$/', $couleur_key)) {
                           $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $couleur, $nom);
-                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $node->getDplcCaveParticuliere();
+                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $couleur->getDplcCaveParticuliere();
                       } else {
                           $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $couleur, $nom);
-                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $node->getDplcCaveParticuliere();
+                          $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $couleur->getDplcCaveParticuliere();
                       }
                   }
            }
@@ -354,10 +354,11 @@ class DRClient extends acCouchdbClient {
             $totauxByAppellationsRecap[$key] = new stdClass();
             $totauxByAppellationsRecap[$key]->nom = 'TOTAL ' . $nom;
             $totauxByAppellationsRecap[$key]->revendique_sur_place = null;
-            $totauxByAppellationsRecap[$key]->usages_industriels_sur_place = null;
+            $totauxByAppellationsRecap[$key]->_ = null;
             $totauxByAppellationsRecap[$key]->vci_sur_place = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_rouge = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_blanc = null;
+            $totauxByAppellationsRecap[$key]->usages_industriels_sur_place = null;
         }
 
         if (!$node) {
@@ -365,7 +366,7 @@ class DRClient extends acCouchdbClient {
         }
 
         $totauxByAppellationsRecap[$key]->revendique_sur_place += ($node->getVolumeRevendiqueCaveParticuliere()) ? $node->getVolumeRevendiqueCaveParticuliere() : 0;
-        $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getUsagesIndustrielsSurPlace()) ? $node->getUsagesIndustrielsSurPlace() : 0;
+        $totauxByAppellationsRecap[$key]->usages_industriels_sur_place += ($node->getLies()) ? $node->getLies() : 0;
         $totauxByAppellationsRecap[$key]->revendique_sur_place += $node->getTotalVolumeAcheteurs("mouts");
         $totauxByAppellationsRecap[$key]->vci_sur_place += $node->getVciCaveParticuliere();
 
