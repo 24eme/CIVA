@@ -97,7 +97,7 @@ class DRMGenerateCSV {
           foreach ($prev_ds as $ds) {
             if($prev_dr->getCampagne()."10" > $ds->getPeriode()){
               $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE, $prev_dr->_id);
-              $documents[] = $dsReprise;
+              $documents[] = $drReprise;
               $reprise_dr = true;
             }
           }
@@ -131,9 +131,6 @@ class DRMGenerateCSV {
     }
 
     public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume, $num_contrat = null){
-        if($this->aggregate && $this->isProduitDetailAggregate($produit)) {
-            return null;
-        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";";
       $lignes .= ($num_contrat)? ";".str_replace("VRAC-","",$num_contrat).";" : "";
@@ -225,9 +222,6 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
-        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
-            return null;
-        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
@@ -273,9 +267,6 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockProduitAutreFromDS($produitDetail,$volume){
-        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
-            return null;
-        }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = "";
       $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$volume.";\n";
@@ -285,10 +276,18 @@ class DRMGenerateCSV {
 
 
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
+        $cepageConfig = null;
 
-        if(is_string($produitDetail)) {
+        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+
+            $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
+        }
+
+        if(is_string($produitDetail) && !$cepageConfig) {
             $cepageConfig = ConfigurationClient::getCurrent()->identifyProductByLibelle($produitDetail);
-        } else {
+        }
+
+        if(!$cepageConfig) {
             $cepageConfig = $produitDetail->getCepage()->getConfig();
         }
         $certification = $cepageConfig->getCertification()->getLibelle();
