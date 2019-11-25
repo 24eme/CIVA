@@ -38,7 +38,7 @@ class VracClient extends acCouchdbClient {
 									'600' => '600 cl'
                                  );
 
-	public static $label_libelles = array(self::LABEL_BIO => "Agriculture biologique");
+	public static $label_libelles = array(self::LABEL_BIO => "BIO");
 
     public static function getInstance()
     {
