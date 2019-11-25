@@ -1,4 +1,4 @@
-<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun la mention obligatoire "BIO" (oui/non), le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, la mention obligatoire "BIO" (oui/non), le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
