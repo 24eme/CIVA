@@ -26,6 +26,42 @@ class statistiquesActions extends sfActions {
         $this->processStatsDS(DSCivaClient::TYPE_DS_PROPRIETE);
         $this->processStatsDS(DSCivaClient::TYPE_DS_NEGOCE);
     }
+    
+    public function executeMercuriales(sfWebRequest $request) {
+        $this->form = new AdminStatistiquesMercurialesForm();
+        $this->pdfs = array();
+        foreach (scandir(sfConfig::get('sf_web_dir').'/mercuriales/', SCANDIR_SORT_DESCENDING) as $v) {
+            if (preg_match('/\.pdf$/', $v)) {
+                $this->pdfs[] = $v;
+            }
+        }
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $values = $this->form->getValues();
+                $pdfName = ($values['mercuriale'])? $values['start_date'].'_'.$values['end_date'].'_'.$values['mercuriale'].'_mercuriales.pdf' : $values['start_date'].'_'.$values['end_date'].'_mercuriales.pdf';
+                $pdfFile = sfConfig::get('sf_web_dir').'/mercuriales/'.$pdfName;
+                if (!file_exists($pdfFile)) {
+                    $vracMercuriale = new VracMercuriale(sfConfig::get('sf_data_dir').'/mercuriales/', $values['start_date'], $values['end_date'], $values['mercuriale']);
+                    $vracMercuriale->setContext($this->getContext());
+                    $vracMercuriale->generateMercurialePlotFiles(array('GW','RI','SY'));
+                    $vracMercuriale->generateMercurialePlotFiles(array('PN','PG','PB'));
+                    $pdf = new ExportVracMercurialePdf($vracMercuriale);
+                    $pdf->generatePDF();
+                }
+                return $this->redirect('mercuriales', array('dl' => str_replace(array('_mercuriales.pdf', '-'), '', $pdfName)));
+            }
+        }
+    }
+    
+    public function executeDeleteMercuriale(sfWebRequest $request) {
+        $pdfName = $request->getParameter('mercuriale').'_mercuriales.pdf';
+        $pdfFile = sfConfig::get('sf_web_dir').'/mercuriales/'.$pdfName;
+        if (file_exists($pdfFile)) {
+            unlink($pdfFile);
+        }
+        return $this->redirect('@mercuriales');
+    }
 
 
     protected function processStatsCompte() {

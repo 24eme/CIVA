@@ -8,5 +8,5 @@
 	</tr>
 </table>
 <br /><br />
-<img src="<?php echo $mercuriale->getFolderPath().date("Ymd", mktime(1, 1, 1, date('m'), date('d') - 1, date('Y'))).'_plot_PN_PG_PB.svg' ?>" alt="Plot2" />
+<img src="<?php echo $mercuriale->getFolderPath().'plot_PN_PG_PB.svg' ?>" alt="Plot2" />
 <p style="text-align: center; size:80%;">nota : à partir du 01/12/12 le constat intègre les transactions de Négoce à Négoce (conformément à l'accord interprofessionnel &nbsp;&nbsp; * <?php echo $mercuriale->getEnd('Y')-1 ?>/<?php echo $mercuriale->getEnd('y') ?> = constats provisoires</p>
