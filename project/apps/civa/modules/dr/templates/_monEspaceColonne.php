@@ -18,7 +18,6 @@
 <div id="documents_aide">
 	<h3 class="titre_section">Documents d'aide</h3>
 	<div class="contenu_section">
-	    <p class="intro">En cas de besoin n'hésitez pas à consulter les notices d'aides completes au format pdf.</p>
 	    <ul>
 	        <li><a href="<?php echo url_for('dr_telecharger_la_notice') ?>" class="pdf">Télécharger&nbsp;la&nbsp;notice&nbsp;Récolte</a></li>
             <li><a href="/drm/doc/docs/Fonctionnement_VCI_2018_2019.pdf" class="pdf" download="download">Fonctionnement VCI 2018-2019</a></li>
