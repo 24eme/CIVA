@@ -733,6 +733,14 @@ export_dr_validee_csv:
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}
+  
+mercuriales:
+  url: /mercuriales
+  param: {module: statistiques, action: mercuriales}
+  
+mercuriales_delete:
+  url: /mercuriales/:mercuriale/delete
+  param: { module: statistiques, action: deleteMercuriale }
 
 message:
   url: /message

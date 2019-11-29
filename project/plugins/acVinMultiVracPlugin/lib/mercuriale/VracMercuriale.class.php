@@ -58,6 +58,7 @@ class VracMercuriale
 	protected $datas;
 	
 	protected $folderPath;
+	protected $publicPdfPath;
 	protected $pdfFilename;
 	protected $start;
 	protected $end;
@@ -66,16 +67,29 @@ class VracMercuriale
 	protected $allContrats;
 	protected $allLots;
 
-	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null)
+	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null, $publicPdfPath = null)
 	{
 		$this->folderPath = $folderPath;
-		$csvFile = $this->folderPath.date('Ymd', time() - 3600 * 24).'_mercuriale.csv';
+		if (!is_dir($this->folderPath)) {
+		    mkdir($this->folderPath, 0770);
+		}
+		if (!is_dir($this->folderPath)) {
+		    throw new sfException($this->folderPath." n'a pas pu être créé");
+		}
+		$this->publicPdfPath = ($publicPdfPath)? $publicPdfPath : sfConfig::get('sf_web_dir').'/mercuriales/';
+		if (!is_dir($this->publicPdfPath)) {
+		    mkdir($this->publicPdfPath, 0770);
+		}
+		if (!is_dir($this->publicPdfPath)) {
+		    throw new sfException($this->publicPdfPath." n'a pas pu être créé");
+		}
+		$csvFile = $this->folderPath.'datas_mercuriale.csv';
 		$this->generateMercurialeDatasFile($csvFile);
 		$this->datas = $this->getDatasFromCsvFile($csvFile); 
 		$this->start = $this->getDate($start);
 		$this->end = $this->getDate($end);
 		$this->mercuriale = $mercuriale;
-		$this->pdfFilename = $this->start.'_'.$this->end.'_mercuriales.pdf';
+		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->context = null;
 		$this->allContrats = 0;
 		$this->allLots = 0;
@@ -94,6 +108,11 @@ class VracMercuriale
 	public function getFolderPath()
 	{
 	    return $this->folderPath;
+	}
+	
+	public function getPublicPdfPath()
+	{
+	    return $this->publicPdfPath;
 	}
 	
 	public function getPdfFilname()
@@ -219,26 +238,24 @@ class VracMercuriale
 	public function generateMercurialePlotFiles($cepages = array())
 	{
 		if (!count($cepages)) { return; }
-		$csvFile = $this->folderPath.date('Ymd', time() - 3600 * 24).'_plotdatas_'.implode('_', $cepages).'.csv';
-		$confFile = $this->folderPath.date('Ymd', time() - 3600 * 24).'_plot_'.implode('_', $cepages).'.conf';
+		$csvFile = $this->folderPath.'plotdatas_'.implode('_', $cepages).'.csv';
+		$confFile = $this->folderPath.'plot_'.implode('_', $cepages).'.conf';
 		
-		if (!file_exists($csvFile)) { 
-			$items = $this->getMercurialePlotDatas($cepages);
-			$csv = new ExportCsv(array_merge(array('#PERIODE', 'XTICS'), $cepages), "\r\n");
-			$xtic = 0;
-			$currentPeriode = null;
-			foreach ($items as $periode => $values) {
-				if ($currentPeriode != $periode) {
-					if ($currentPeriode) {
-						$xtic += 5;
-					}
-					$currentPeriode = $periode;
+		$items = $this->getMercurialePlotDatas($cepages);
+		$csv = new ExportCsv(array_merge(array('#PERIODE', 'XTICS'), $cepages), "\r\n");
+		$xtic = 0;
+		$currentPeriode = null;
+		foreach ($items as $periode => $values) {
+			if ($currentPeriode != $periode) {
+				if ($currentPeriode) {
+					$xtic += 5;
 				}
-				$csv->add(array_merge(array($periode, $xtic),$values));
-				
+				$currentPeriode = $periode;
 			}
-			file_put_contents($csvFile, $csv->output());
+			$csv->add(array_merge(array($periode, $xtic),$values));
+			
 		}
+		file_put_contents($csvFile, $csv->output());
 		
 		file_put_contents($confFile, $this->getPlotConfig(array('csvFile' => $csvFile, 'datas' => $this->getDatasFromCsvFile($csvFile), 'cols' => $cepages, 'file' => str_replace('.conf', '.svg', $confFile))));
 	    exec("gnuplot $confFile");
@@ -422,6 +439,9 @@ class VracMercuriale
 					continue;
 				}
 				if (!$withCR && $datas[self::IN_CP_CODE] == 'CR') {
+				    continue;
+				}
+				if ($this->mercuriale && $datas[self::IN_MERCURIAL] != $this->mercuriale) {
 				    continue;
 				}
 				if ($datas[self::IN_DATE] >= $start && $datas[self::IN_DATE] <= $end) {

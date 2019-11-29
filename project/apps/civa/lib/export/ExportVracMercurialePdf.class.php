@@ -27,7 +27,7 @@ class ExportVracMercurialePdf
     {
         $title = "";
         $header = "";
-        $this->document = new PageablePDFMercuriales($title, $header, $this->mercuriale->getPdfFilname(), $this->mercuriale->getFolderPath(), ' de ', 'P', self::getConfig());
+        $this->document = new PageablePDFMercuriales($title, $header, $this->mercuriale->getPdfFilname(), $this->mercuriale->getPublicPdfPath(), ' de ', 'P', self::getConfig());
     }
 
     protected function create() 
