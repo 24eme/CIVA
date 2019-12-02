@@ -147,6 +147,9 @@ class DRMGenerateCSV {
       $drArray = $all_prev_dr->getDatas();
       $drArrayReverse = array_reverse($drArray);
       foreach ($drArrayReverse as $prev_dr) {
+       if(preg_replace('/([0-9]+)-([0-9]+)-([0-9]+)/', '\1\2', $prev_dr->validee) > $periode) {
+               continue;
+       }
         $a = substr(strrchr($prev_dr->_id, "-"), 1);
         $annee = substr($periode,0,4);
         $mois = intval(substr($periode,4,2));
