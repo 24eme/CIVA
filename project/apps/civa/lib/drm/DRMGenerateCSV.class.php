@@ -196,17 +196,18 @@ class DRMGenerateCSV {
     }
 
     public function isProduitDetailAggregate($produitDetail) {
+        if(!$this->aggregate) {
+
+            return false;
+        }
+
         if(is_string($produitDetail)) {
 
             return false;
         }
 
-        if(preg_match('|/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/LIEUDIT/mentions/DEFAUT|', HashMapper::convert($produitDetail->getHash()))) {
-
-            return true;
-        }
-
-        if(preg_match('|/declaration/certifications/AOC_ALSACE/genres/TRANQ/appellations/ALSACEBLANC/mentions/DEFAUT|', HashMapper::convert($produitDetail->getHash()))) {
+        $hashProduit = HashMapper::convert($produitDetail->getHash());
+        if(preg_match('#('.$this->aggregate.')#', $hashProduit)) {
 
             return true;
         }
@@ -215,7 +216,7 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockNullProduit($produitDetail){
-        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+        if($this->isProduitDetailAggregate($produitDetail)) {
             return null;
         }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
@@ -281,11 +282,12 @@ class DRMGenerateCSV {
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
         $cepageConfig = null;
 
-        if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
+        if($this->isProduitDetailAggregate($produitDetail)) {
            try {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
             } catch(Exception $e) {
                $config = ConfigurationClient::getInstance()->getCurrent();
+               exit;
                $cepageConfig = $config->get(HashMapper::convert($produitDetail->getCepage()->getHash()))->getParent()->get('DEFAUT');
            }
        }

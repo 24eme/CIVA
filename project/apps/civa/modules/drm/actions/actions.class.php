@@ -24,7 +24,7 @@ class drmActions extends sfActions {
       /**
       * Cas d'initialisation : on récupère les informations CATALOGUE produit depuis le doc le plus récent entre DS et DR
       */
-      $drmGenerateCSV = new DRMGenerateCSV($identifiant, $numero_accise, $periode, (bool) $request->getParameter('aggregate', false));
+      $drmGenerateCSV = new DRMGenerateCSV($identifiant, $numero_accise, $periode, $request->getParameter('aggregate', false));
       $documentRepriseInfos = $drmGenerateCSV->getDocumentsForRepriseCatalogue();
       foreach ($documentRepriseInfos as $documentRepriseInfo) {
         $ediFileContent.= $this->createReprise($documentRepriseInfo,$drmGenerateCSV);
