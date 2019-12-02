@@ -404,9 +404,9 @@ class uploadActions extends sfActions {
     }
 
     protected function hasWrongUnit($line) {
-      if ($line[CsvFileAcheteur::CSV_VOLUME] > 1000)
+      if ($line[CsvFileAcheteur::CSV_VOLUME] > 1500)
 	return true;
-      if ($line[CsvFileAcheteur::CSV_SUPERFICIE] > 1000)
+      if ($line[CsvFileAcheteur::CSV_SUPERFICIE] > 1500)
 	return true;
       return false;
     }
