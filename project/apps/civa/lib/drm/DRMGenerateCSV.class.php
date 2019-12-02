@@ -279,9 +279,13 @@ class DRMGenerateCSV {
         $cepageConfig = null;
 
         if($this->aggregate && $this->isProduitDetailAggregate($produitDetail)) {
-
-            $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
-        }
+           try {
+               $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
+            } catch(Exception $e) {
+               $config = ConfigurationClient::getInstance()->getCurrent();
+               $cepageConfig = $config->get(HashMapper::convert($produitDetail->getCepage()->getHash()))->getParent()->get('DEFAUT');
+           }
+       }
 
         if(is_string($produitDetail) && !$cepageConfig) {
             $cepageConfig = ConfigurationClient::getCurrent()->identifyProductByLibelle($produitDetail);
