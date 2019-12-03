@@ -147,7 +147,7 @@ class DRMGenerateCSV {
       $drArray = $all_prev_dr->getDatas();
       $drArrayReverse = array_reverse($drArray);
       foreach ($drArrayReverse as $prev_dr) {
-       if(preg_replace('/([0-9]+)-([0-9]+)-([0-9]+)/', '\1\2', $prev_dr->validee) > $periode) {
+       if(!$prev_dr->exist('validee') || preg_replace('/([0-9]+)-([0-9]+)-([0-9]+)/', '\1\2', $prev_dr->validee) > $periode) {
                continue;
        }
         $a = substr(strrchr($prev_dr->_id, "-"), 1);
@@ -287,7 +287,6 @@ class DRMGenerateCSV {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
             } catch(Exception $e) {
                $config = ConfigurationClient::getInstance()->getCurrent();
-               exit;
                $cepageConfig = $config->get(HashMapper::convert($produitDetail->getCepage()->getHash()))->getParent()->get('DEFAUT');
            }
        }
