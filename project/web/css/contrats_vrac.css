@@ -507,7 +507,6 @@
 	width: 150px;
 }
 #contrats_vrac .centilisation select { width: 70px; text-align: center; }
-#contrats_vrac .denominationBouteille input { width: 125px !important; }
 
 #contrats_vrac .conditions input { width: 473px; }
 

@@ -1,10 +1,12 @@
-<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun la mention obligatoire "BIO" (oui/non), le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, la mention obligatoire "BIO" (oui/non), le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, la mention obligatoire "BIO" (oui/non), le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
 			<th class="produit">Produits</th>
 			<th class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>"><span>Dénomination</span></th>
+			<?php if ($form->hasBio()): ?>
 			<th class="bio"><span>Bio</span></th>
+			<?php endif; ?>
 			<th class="millesime"><span>Millésime</span></th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<th class="bouteille"><span>Nb bouteilles</span></th>
@@ -32,6 +34,7 @@
 				<?php echo $embedForm['denomination']->render() ?>
 				<?php endif; ?>
 			</td>
+			<?php if(isset($embedForm['label'])): ?>
 			<td class="bio">
 				<span><?php echo $embedForm['label']->renderError() ?></span>
 				<?php if ($counter == 0): ?>
@@ -40,6 +43,7 @@
 				<?php echo $embedForm['label']->render() ?>
 				<?php endif; ?>
 			</td>
+			<?php endif; ?>
 			<td class="millesime">
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
 				<?php echo $embedForm['millesime']->render(array("maxlength" => 4)) ?>

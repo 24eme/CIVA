@@ -335,7 +335,7 @@ var sumContrat = function(brothers, cible)
 					champs.each(function(){
 						if($.trim($(this).val())){ empty = false; }
 					});
-					if($.trim(champ_bio.val()) == ""){
+					if(champ_bio.length > 0 && $.trim(champ_bio.val()) == ""){
 						class_red.push(champ_bio);
 					}
 					if(champ_volume.length > 0 && !$.trim(champ_volume.val())){

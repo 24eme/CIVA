@@ -15,4 +15,14 @@ class VracProduitsForm extends acCouchdbObjectForm
         }
         $this->getObject()->updateTotaux();
     }
+
+	public function hasBio() {
+		foreach($this['produits'] as $item) {
+			if(isset($item['bio'])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
