@@ -6,21 +6,21 @@ class VracProduitForm extends acCouchdbObjectForm
   		$this->setWidgets(array(
         	'millesime' => new sfWidgetFormInputText(),
   		    'denomination' => new sfWidgetFormInputText(),
-  		    'label' => new sfWidgetFormChoice(array('choices' => $this->getBioChoices())),
+ 		    'label' => new sfWidgetFormChoice(array('choices' => $this->getBioChoices())),
         	'prix_unitaire' => new sfWidgetFormInputFloat(),
         	'volume_propose' => new sfWidgetFormInputFloat()
     	));
         $this->widgetSchema->setLabels(array(
         	'millesime' => 'Millésime:',
         	'denomination' => 'Dénomination:',
-          'label' => 'Agriculture biologique:',
+            'label' => 'Agriculture biologique:',
         	'prix_unitaire' => 'Prix unitaire:',
         	'volume_propose' => 'Volume estimé:'
         ));
         $this->setValidators(array(
         	'millesime' => new sfValidatorString(array('required' => false, 'max_length' => 4, 'min_length' => 4), array('max_length' =>  '4 caractères max.', 'min_length' =>  '4 caractères min.')),
         	'denomination' => new sfValidatorString(array('required' => false)),
-          'label' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getBioChoices()))),
+            'label' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getBioChoices()))),
         	'prix_unitaire' => new sfValidatorNumber(array('required' => false)),
         	'volume_propose' => new sfValidatorNumber(array('required' => false))
         ));
@@ -33,7 +33,10 @@ class VracProduitForm extends acCouchdbObjectForm
         	$this->widgetSchema->setLabel('nb_bouteille', 'Nombre de bouteille');
         	$this->setValidator('centilisation', new sfValidatorChoice(array('choices' => array_keys($centilisations), 'required' => false)));
         	$this->setValidator('nb_bouteille', new sfValidatorInteger(array('required' => false)));
+            unset($this->widgetSchema['label']);
+            unset($this->validatorSchema['label']);
         }
+
   		$this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 
