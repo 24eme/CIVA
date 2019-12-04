@@ -18,7 +18,7 @@ class VracProduitsForm extends acCouchdbObjectForm
 
 	public function hasBio() {
 		foreach($this['produits'] as $item) {
-			if(isset($item['bio'])) {
+			if(isset($item['label'])) {
 				return true;
 			}
 		}
