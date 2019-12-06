@@ -47,7 +47,15 @@ class VracProduitForm extends acCouchdbObjectForm
 
     public function getBioChoices()
     {
-      return array('' => '', VracClient::LABEL_BIO => 'Oui', '0' =>'Non');
+      return array('' => '', VracClient::LABEL_BIO => 'Oui', 'AUCUN' =>'Non');
+    }
+    
+    protected function updateDefaultsFromObject() {
+        parent::updateDefaultsFromObject();
+	
+        if($this->getObject()->exist('label') && ($this->getObject()->label === false || $this->getObject()->label === "0")) {
+            $this->setDefault('label', 'AUCUN');
+        }
     }
 
     public function doUpdateObject($values) {
@@ -55,15 +63,16 @@ class VracProduitForm extends acCouchdbObjectForm
         if (isset($values['centilisation'])) {
         	$this->getObject()->centilisation = floatval($values['centilisation']);
         }
-        if (isset($values['label']) && $values['label']) {
-        	$this->getObject()->add('label', $values['label']);
-        } elseif($this->getObject()->exist('label')) {
-            $this->getObject()->label = null;
-        }
+        if (array_key_exists('label', $values) && $values['label'] === "AUCUN") {
+        	$this->getObject()->add('label', false);
+        } elseif(array_key_exists('label', $values) && empty($values['label'])) {
+		$this->getObject()->remove('label');
+	}
         $this->getObject()->defineActive();
         $this->getObject()->updateProduit();
         if (!$this->getObject()->actif) {
         	$this->getObject()->clear();
         }
     }
+
 }
