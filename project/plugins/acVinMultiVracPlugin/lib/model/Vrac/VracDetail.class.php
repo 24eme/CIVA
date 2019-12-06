@@ -175,7 +175,9 @@ class VracDetail extends BaseVracDetail {
     	$this->cloture = null;
     	$this->volume_propose = null;
     	$this->volume_enleve = null;
+		if($this->exist('label')) {
 			$this->add("label", null);
+		}
     	if ($this->exist('nb_bouteille')) {
 	    	$this->nb_bouteille = null;
 	    	$this->centilisation = null;
