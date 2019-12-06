@@ -57,6 +57,8 @@ class VracProduitForm extends acCouchdbObjectForm
         }
         if (isset($values['label']) && $values['label']) {
         	$this->getObject()->add('label', $values['label']);
+        } elseif($this->getObject()->exist('label')) {
+            $this->getObject()->label = null;
         }
         $this->getObject()->defineActive();
         $this->getObject()->updateProduit();
