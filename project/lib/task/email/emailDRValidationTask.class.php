@@ -82,7 +82,7 @@ EOF;
 
             if ($sended) {
                 $nb_email_send++;
-                sleep(4);
+                sleep(2);
                 $this->logSection('sended', $cvi . ' : ' . $etablissement->getEmailTeledeclaration());
             } else {
                 $this->logSection('send error', $cvi . ' : ' . $etablissement->getEmailTeledeclaration(), null, 'ERROR');
@@ -99,7 +99,7 @@ EOF;
 
 Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro, mais ne l'avez pas encore validée.
 
-Nous vous rappelons que vous devez impérativement la valider AVANT le lundi 10 décembre minuit.
+Nous vous rappelons que vous devez impérativement la valider AVANT le mardi 10 décembre minuit.
 
 Pour terminer la saisie, cliquez sur le lien suivant : <https://declaration.vinsalsace.pro>
 
