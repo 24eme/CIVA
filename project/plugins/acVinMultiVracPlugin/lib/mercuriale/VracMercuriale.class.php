@@ -88,7 +88,7 @@ class VracMercuriale
 		$this->datas = $this->getDatasFromCsvFile($csvFile); 
 		$this->start = $this->getDate($start);
 		$this->end = $this->getDate($end);
-		$this->mercuriale = $mercuriale;
+		$this->mercuriale = implode('_', $mercuriale);
 		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->context = null;
 		$this->allContrats = 0;
@@ -441,7 +441,7 @@ class VracMercuriale
 				if (!$withCR && $datas[self::IN_CP_CODE] == 'CR') {
 				    continue;
 				}
-				if ($this->mercuriale && $datas[self::IN_MERCURIAL] != $this->mercuriale) {
+				if ($this->mercuriale && !in_array($datas[self::IN_MERCURIAL], explode('_', $this->mercuriale))) {
 				    continue;
 				}
 				if ($datas[self::IN_DATE] >= $start && $datas[self::IN_DATE] <= $end) {

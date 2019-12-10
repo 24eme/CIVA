@@ -39,7 +39,9 @@ class statistiquesActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $values = $this->form->getValues();
-                $pdfName = ($values['mercuriale'])? $values['start_date'].'_'.$values['end_date'].'_'.$values['mercuriale'].'_mercuriales.pdf' : $values['start_date'].'_'.$values['end_date'].'_mercuriales.pdf';
+                $pdfName = ($values['mercuriale'])
+                    ? $values['start_date'].'_'.$values['end_date'].'_'.implode('_', $values['mercuriale']).'_mercuriales.pdf'
+                    : $values['start_date'].'_'.$values['end_date'].'_mercuriales.pdf';
                 $pdfFile = sfConfig::get('sf_web_dir').'/mercuriales/'.$pdfName;
                 if (!file_exists($pdfFile)) {
                     $vracMercuriale = new VracMercuriale(sfConfig::get('sf_data_dir').'/mercuriales/', $values['start_date'], $values['end_date'], $values['mercuriale']);
