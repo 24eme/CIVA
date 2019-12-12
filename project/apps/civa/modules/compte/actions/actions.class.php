@@ -261,6 +261,7 @@ class compteActions extends sfActions {
 
     public function executeDroits(sfWebRequest $request) {
         $this->compte = $this->getUser()->getCompte();
+        $this->etablissements = $this->compte->getSociete()->getEtablissementsObject();
 
         $this->form = new CompteDroitsForm($this->compte->getSociete());
 
