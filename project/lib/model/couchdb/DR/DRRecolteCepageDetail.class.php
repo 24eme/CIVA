@@ -115,6 +115,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             $this->_storage[$key] = array();
             foreach ($this->filter($type) as $acheteurs) {
                 foreach($acheteurs as $acheteur) {
+                    if(!array_key_exists($acheteur->cvi, $this->_storage[$key])) {
+                        $this->_storage[$key][$acheteur->cvi] = 0;
+                    }
+
                     $this->_storage[$key][$acheteur->cvi] += $acheteur->quantite_vendue;
                 }
             }
