@@ -19,7 +19,7 @@
                     <?php echo $form['end_date']->renderLabel() ?>
                     <?php echo $form['end_date']->render(array('class' => 'datepicker', 'style' => 'width: 172px;')) ?>
                 </div>
-                <div class="ligne_form ligne_form_label">
+                <div style="display: block">
                     <?php echo $form['mercuriale']->renderError() ?>
                     <?php echo $form['mercuriale']->renderLabel() ?>
                     <?php echo $form['mercuriale']->render() ?>
