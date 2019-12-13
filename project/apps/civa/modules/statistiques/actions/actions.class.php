@@ -30,7 +30,7 @@ class statistiquesActions extends sfActions {
     public function executeMercuriales(sfWebRequest $request) {
         $this->form = new AdminStatistiquesMercurialesForm();
         $this->pdfs = array();
-        foreach (scandir(sfConfig::get('sf_web_dir').'/mercuriales/', SCANDIR_SORT_DESCENDING) as $v) {
+        foreach (scandir(sfConfig::get('sf_data_dir').'/mercuriales/pdf/', SCANDIR_SORT_DESCENDING) as $v) {
             if (preg_match('/\.pdf$/', $v)) {
                 $this->pdfs[] = $v;
             }
@@ -42,7 +42,7 @@ class statistiquesActions extends sfActions {
                 $pdfName = ($values['mercuriale'])
                     ? $values['start_date'].'_'.$values['end_date'].'_'.implode('_', $values['mercuriale']).'_mercuriales.pdf'
                     : $values['start_date'].'_'.$values['end_date'].'_mercuriales.pdf';
-                $pdfFile = sfConfig::get('sf_web_dir').'/mercuriales/'.$pdfName;
+                $pdfFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$pdfName;
                 if (!file_exists($pdfFile)) {
                     $vracMercuriale = new VracMercuriale(sfConfig::get('sf_data_dir').'/mercuriales/', $values['start_date'], $values['end_date'], $values['mercuriale']);
                     $vracMercuriale->setContext($this->getContext());
@@ -58,13 +58,29 @@ class statistiquesActions extends sfActions {
     
     public function executeDeleteMercuriale(sfWebRequest $request) {
         $pdfName = $request->getParameter('mercuriale').'_mercuriales.pdf';
-        $pdfFile = sfConfig::get('sf_web_dir').'/mercuriales/'.$pdfName;
+        $pdfFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$pdfName;
         if (file_exists($pdfFile)) {
             unlink($pdfFile);
         }
         return $this->redirect('@mercuriales');
     }
-
+    
+    public function executePdfMercuriale(sfWebRequest $request) {
+        $pdfName = $request->getParameter('mercuriale').'_mercuriales.pdf';
+        $pdfFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$pdfName;
+        return $this->renderPdf($pdfFile, $pdfName);
+    }
+    
+    protected function renderPdf($path, $filename) {
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path));
+    }
 
     protected function processStatsCompte() {
         $this->nbInscrit = 0;

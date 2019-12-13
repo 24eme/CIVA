@@ -42,7 +42,7 @@
             <div class="contenu_section">
                 <ul>
                 	<?php foreach ($pdfs as $pdf): ?>
-                    <li><span style="margin-right: 5px;">[<a href="<?php echo url_for('mercuriales_delete', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" style="background: none;padding:0;">x</a>]</span><a id="<?php echo str_replace('_mercuriales.pdf', '', $pdf) ?>" href="/mercuriales/<?php echo $pdf ?>" download="<?php echo $pdf ?>"><?php echo $pdf ?></a></li>
+                    <li><span style="margin-right: 5px;">[<a href="<?php echo url_for('mercuriales_delete', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" style="background: none;padding:0;">x</a>]</span><a id="<?php echo str_replace('_mercuriales.pdf', '', $pdf) ?>" href="<?php echo url_for('mercuriales_pdf', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" download="<?php echo $pdf ?>"><?php echo $pdf ?></a></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
