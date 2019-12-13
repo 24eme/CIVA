@@ -60,6 +60,7 @@ class VracMercuriale
 	protected $folderPath;
 	protected $publicPdfPath;
 	protected $pdfFilename;
+	protected $csvFilename;
 	protected $start;
 	protected $end;
 	protected $mercuriale;
@@ -90,6 +91,7 @@ class VracMercuriale
 		$this->end = $this->getDate($end);
 		$this->mercuriale = ($mercuriale)? implode('_', $mercuriale) : null;
 		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
+		$this->csvFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
 		$this->context = null;
 		$this->allContrats = 0;
 		$this->allLots = 0;
@@ -434,6 +436,7 @@ class VracMercuriale
 		}
 		if (count($this->datas) > 0) {
 			$result = array();
+			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX), "\r\n");
 			foreach ($this->datas as $datas) {
 				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
 					continue;
@@ -449,7 +452,11 @@ class VracMercuriale
 						$result[$datas[self::IN_CP_CODE]] = array();
 					}
 					$result[$datas[self::IN_CP_CODE]][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX]);
+					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], number_format($datas[self::IN_VOL]*1, 2, ',', ''), number_format($datas[self::IN_PRIX]*1, 2, ',', '')));
 				}
+			}
+			if (!file_exists($this->publicPdfPath.$this->csvFilename)) {
+			    file_put_contents($this->publicPdfPath.$this->csvFilename, $csv->output());
 			}
 			return $this->aggStats($result);
 		}

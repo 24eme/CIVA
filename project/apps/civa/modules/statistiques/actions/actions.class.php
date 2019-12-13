@@ -71,8 +71,25 @@ class statistiquesActions extends sfActions {
         return $this->renderPdf($pdfFile, $pdfName);
     }
     
+    public function executeCsvMercuriale(sfWebRequest $request) {
+        $csvName = $request->getParameter('mercuriale').'_mercuriales.csv';
+        $csvFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$csvName;
+        return $this->renderCsv($csvFile, $csvName);
+    }
+    
     protected function renderPdf($path, $filename) {
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', filesize($path));
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path));
+    }
+    
+    protected function renderCsv($path, $filename) {
+        $this->getResponse()->setHttpHeader('Content-Type', 'text/csv');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
         $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
         $this->getResponse()->setHttpHeader('Content-Length', filesize($path));

@@ -42,7 +42,7 @@
             <div class="contenu_section">
                 <ul>
                 	<?php foreach ($pdfs as $pdf): ?>
-                    <li><span style="margin-right: 5px;">[<a href="<?php echo url_for('mercuriales_delete', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" style="background: none;padding:0;">x</a>]</span><a id="<?php echo str_replace('_mercuriales.pdf', '', $pdf) ?>" href="<?php echo url_for('mercuriales_pdf', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" download="<?php echo $pdf ?>"><?php echo $pdf ?></a></li>
+                    <li><span style="margin-right: 5px;">[<a href="<?php echo url_for('mercuriales_delete', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" style="background: none;padding:0;">x</a>]</span><a id="<?php echo str_replace('_mercuriales.pdf', '', $pdf) ?>" href="<?php echo url_for('mercuriales_pdf', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>" download="<?php echo $pdf ?>"><?php echo $pdf ?></a><?php if(file_exists(sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.str_replace('.pdf', '.csv', $pdf))): ?> - <a style="background: none;padding:0;font-size:80%;color:#666;" href="<?php echo url_for('mercuriales_csv', array('mercuriale' => str_replace('_mercuriales.pdf', '', $pdf)))?>">données CSV</a><?php endif; ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>

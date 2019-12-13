@@ -745,6 +745,10 @@ mercuriales_delete:
 mercuriales_pdf:
   url: /mercuriales/:mercuriale/pdf
   param: { module: statistiques, action: pdfMercuriale }
+  
+mercuriales_csv:
+  url: /mercuriales/:mercuriale/csv
+  param: { module: statistiques, action: csvMercuriale }
 
 message:
   url: /message
