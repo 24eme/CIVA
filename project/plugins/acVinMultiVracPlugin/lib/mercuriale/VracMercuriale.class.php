@@ -1,7 +1,7 @@
 <?php
 class VracMercuriale
 {
-
+    CONST CSV_FILE_NAME = 'datas_mercuriale.csv';
 	CONST IN_DATE = 0;
 	CONST IN_VISA = 1;
 	CONST IN_MERCURIAL = 2;
@@ -76,19 +76,19 @@ class VracMercuriale
 		if (!is_dir($this->folderPath)) {
 		    throw new sfException($this->folderPath." n'a pas pu être créé");
 		}
-		$this->publicPdfPath = ($publicPdfPath)? $publicPdfPath : sfConfig::get('sf_web_dir').'/mercuriales/';
+		$this->publicPdfPath = ($publicPdfPath)? $publicPdfPath : sfConfig::get('sf_data_dir').'/mercuriales/pdf/';
 		if (!is_dir($this->publicPdfPath)) {
 		    mkdir($this->publicPdfPath, 0770);
 		}
 		if (!is_dir($this->publicPdfPath)) {
 		    throw new sfException($this->publicPdfPath." n'a pas pu être créé");
 		}
-		$csvFile = $this->folderPath.'datas_mercuriale.csv';
+		$csvFile = $this->folderPath.self::CSV_FILE_NAME;
 		$this->generateMercurialeDatasFile($csvFile);
 		$this->datas = $this->getDatasFromCsvFile($csvFile); 
 		$this->start = $this->getDate($start);
 		$this->end = $this->getDate($end);
-		$this->mercuriale = implode('_', $mercuriale);
+		$this->mercuriale = ($mercuriale)? implode('_', $mercuriale) : null;
 		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->context = null;
 		$this->allContrats = 0;
