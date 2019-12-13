@@ -3,7 +3,7 @@ class AdminStatistiquesMercurialesForm extends BaseForm {
     protected $typesMercuriales = [
         'C' => "Coopérative vers Négoce",
         'M' => "Viticulteur vers Négoce",
-        'V' => "Vigneron vers Négoce",
+        'V' => "Vigneron vers Vigneron",
         'X' => "Négoce vers Négoce",
         'I' => "Contrat interne",
     ];
@@ -12,7 +12,7 @@ class AdminStatistiquesMercurialesForm extends BaseForm {
         $this->setWidgets(array(
             'start_date' => new sfWidgetFormInputText(),
             'end_date' => new sfWidgetFormInputText(),
-            'mercuriale'   => new sfWidgetFormChoice(array('choices' => $this->typesMercuriales, 'expanded' => true, 'multiple' => true)),
+            'mercuriale'   => new sfWidgetFormChoice(array('choices' => $this->typesMercuriales, 'expanded' => true, 'multiple' => true, 'renderer_options' => array('formatter' => array($this, 'formatter')))),
         ));
         $this->widgetSchema->setLabels(array(
 	       'start_date' => 'Date début :',
@@ -26,6 +26,14 @@ class AdminStatistiquesMercurialesForm extends BaseForm {
         ));
 
         $this->widgetSchema->setNameFormat('statistiquesMercuriales[%s]');
-        $this->validatorSchema->setPostValidator(new ValidatorAdminStatistiquesMercuriales());
+    }
+
+    public function formatter($widget, $inputs) {
+        $rows = array();
+        foreach ($inputs as $input) {
+            $rows[] = $widget->renderContentTag('li', $input['input'] . $this->getOption('label_separator') . $input['label']);
+        }
+    
+        return!$rows ? '' : implode($widget->getOption('separator'), $rows);
     }
 }

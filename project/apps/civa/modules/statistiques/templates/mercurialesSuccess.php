@@ -19,10 +19,12 @@
                     <?php echo $form['end_date']->renderLabel() ?>
                     <?php echo $form['end_date']->render(array('class' => 'datepicker', 'style' => 'width: 172px;')) ?>
                 </div>
-                <div style="display: block">
+                <div class="ligne_form ligne_form_label">
                     <?php echo $form['mercuriale']->renderError() ?>
                     <?php echo $form['mercuriale']->renderLabel() ?>
+                    <ul class="checkbox_list" style="width: 190px; display: inline-block;">
                     <?php echo $form['mercuriale']->render() ?>
+                    </ul>
                 </div>
                 <style>
                 #statistiquesMercuriales_mercuriale {
@@ -48,6 +50,19 @@
 		<?php endif; ?>
     </div>
 </form>
+<style>
+#nouvelle_declaration .ligne_form_label .checkbox_list label {
+width: 165px;
+}
+#nouvelle_declaration .ligne_form_label .checkbox_list input {
+float: left;
+margin-right: 5px;
+}
+#nouvelle_declaration .ligne_form_label .checkbox_list li {
+margin-bottom: 2px;
+display: inline-block;
+}
+</style>
 <script type="text/javascript">
 var params = new URLSearchParams(location.search);
 if (params.has('dl')) {
