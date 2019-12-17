@@ -181,7 +181,7 @@ class VracMercuriale
 				        continue;
 				    }
 					if ($cepage = $this->getCepage($produit->value[VracProduitsView::VALUE_CEPAGE])) {
-						$volume = ($produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE])? $produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE] : $produit->value[VracProduitsView::VALUE_VOLUME_PROPOSE];
+						$volume = ($produit->value[VracProduitsView::VALUE_DATE_CIRCULATION])? $produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE] : $produit->value[VracProduitsView::VALUE_VOLUME_PROPOSE];
 						$prix = $produit->value[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
 						if (!isset($items[$date])) {
 							$items[$date] = array();
@@ -452,10 +452,10 @@ class VracMercuriale
 						$result[$datas[self::IN_CP_CODE]] = array();
 					}
 					$result[$datas[self::IN_CP_CODE]][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX]);
-					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], number_format($datas[self::IN_VOL]*1, 2, ',', ''), number_format($datas[self::IN_PRIX]*1, 2, ',', '')));
+					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX]));
 				}
 			}
-			if (!file_exists($this->publicPdfPath.$this->csvFilename)) {
+			if (!file_exists($this->publicPdfPath.$this->csvFilename) ||  (file_exists($this->publicPdfPath.$this->csvFilename) && $withCR)) {
 			    file_put_contents($this->publicPdfPath.$this->csvFilename, $csv->output());
 			}
 			return $this->aggStats($result);

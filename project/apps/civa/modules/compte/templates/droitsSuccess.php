@@ -50,6 +50,22 @@
                 </div>
         </div>
     </div>
+    <h2 class="titre_principal" style="margin-bottom: 10px">Régime CRD</h2>
+    <div class="clearfix" style="padding: 0 20px; margin-bottom: 10px">
+        <table class="table_donnees pyjama_auto">
+            <thead><tr><th>Établissement</th><th>Identifiant</th><th>Régime</th><th>Action</th></tr></thead>
+            <tbody>
+                <?php foreach ($etablissements as $etablissement): ?>
+                <tr>
+                    <td><?= $etablissement->raison_sociale ?></td>
+                    <td><?= $etablissement->identifiant ?></td>
+                    <td><?= $etablissement->crd_regime ?></td>
+                    <td><a href="<?= url_for('etablissement_resetcrd', ['identifiant' => $etablissement->identifiant]) ?>">Réinitialiser le régime CRD</a></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
         <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $compte->identifiant)) ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" /></a></li>
     </ul>
