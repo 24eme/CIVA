@@ -9,6 +9,7 @@ class VracMercuriale
 	CONST IN_CP_LIBELLE = 4;
 	CONST IN_VOL = 5;
 	CONST IN_PRIX = 6;
+	CONST IN_BIO = 7;
 	
 	CONST OUT_MERCURIALE = "MERCURIALE";
 	CONST OUT_STATS = "STATISTIQUES";
@@ -29,8 +30,9 @@ class VracMercuriale
 	CONST OUT_PREVIOUS = "DONNEES_PRECEDENTE";
 	CONST OUT_VARIATION = "VARIATION";
 	CONST OUT_VISA = "VISA";
+	CONST OUT_BIO = "BIO";
 	
-	CONST NB_MIN_TO_AGG = 6;
+	CONST NB_MIN_TO_AGG = 3;
 	
 	public static $cepages = array(
 			'ED' => 'Edelzwicker',
@@ -67,6 +69,8 @@ class VracMercuriale
 	protected $context;
 	protected $allContrats;
 	protected $allLots;
+	protected $allContratsBio;
+	protected $allLotsBio;
 
 	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null, $publicPdfPath = null)
 	{
@@ -95,6 +99,8 @@ class VracMercuriale
 		$this->context = null;
 		$this->allContrats = 0;
 		$this->allLots = 0;
+		$this->allContratsBio = 0;
+		$this->allLotsBio = 0;
 	}
 	
 	public function getAllContrats()
@@ -105,6 +111,16 @@ class VracMercuriale
 	public function getAllLots()
 	{
 	    return $this->allLots;
+	}
+	
+	public function getAllContratsBio()
+	{
+	    return $this->allContratsBio;
+	}
+	
+	public function getAllLotsBio()
+	{
+	    return $this->allLotsBio;
 	}
 	
 	public function getFolderPath()
@@ -156,10 +172,10 @@ class VracMercuriale
 			return;
 		}
 		$items = $this->getMercurialeDatas();
-		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX), "\r\n");
+		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO), "\r\n");
 		foreach ($items as $date => $values) {
 			foreach ($values as $result) {
-				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', '')));
+				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO]));
 			}
 		}
 		file_put_contents($csvFile, $csv->output());
@@ -183,10 +199,11 @@ class VracMercuriale
 					if ($cepage = $this->getCepage($produit->value[VracProduitsView::VALUE_CEPAGE])) {
 						$volume = ($produit->value[VracProduitsView::VALUE_DATE_CIRCULATION])? $produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE] : $produit->value[VracProduitsView::VALUE_VOLUME_PROPOSE];
 						$prix = $produit->value[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
+						$bio = ($produit->value[VracProduitsView::VALUE_DEGRE] == 99)? 1 : 0; 
 						if (!isset($items[$date])) {
 							$items[$date] = array();
 						}
-						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix);
+						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio);
 					}
 				}
 			}
@@ -237,13 +254,13 @@ class VracMercuriale
 		return  $context->getController()->getAction('mercuriales', 'vracPlotConfig')->getPartial('mercuriales/vracPlotConfig', $vars);
 	}
 	
-	public function generateMercurialePlotFiles($cepages = array())
+	public function generateMercurialePlotFiles($cepages = array(), $bio = 0)
 	{
 		if (!count($cepages)) { return; }
 		$csvFile = $this->folderPath.'plotdatas_'.implode('_', $cepages).'.csv';
 		$confFile = $this->folderPath.'plot_'.implode('_', $cepages).'.conf';
 		
-		$items = $this->getMercurialePlotDatas($cepages);
+		$items = $this->getMercurialePlotDatas($cepages, $bio);
 		$csv = new ExportCsv(array_merge(array('#PERIODE', 'XTICS'), $cepages), "\r\n");
 		$xtic = 0;
 		$currentPeriode = null;
@@ -263,12 +280,18 @@ class VracMercuriale
 	    exec("gnuplot $confFile");
 	}
 	
-	protected function getMercurialePlotDatas($cepages = array())
+	public function getMercurialePlotDatas($cepages = array(), $bio = 0)
 	{
 		if (!count($this->datas)) { return array(); }
 		if (!count($cepages)) { return array(); }
 		$result = array();
 		foreach ($this->datas as $datas) {
+		    if (!$datas[self::IN_BIO] && $bio == 1) {
+		        continue;
+		    }
+		    if ($datas[self::IN_BIO] && $bio == 0) {
+		        continue;
+		    }
 			if (!in_array($datas[self::IN_CP_CODE], $cepages)) {
 				continue;
 			}
@@ -330,20 +353,20 @@ class VracMercuriale
 	    return (isset(self::$ordres[$this->getCepage($cep)]))? self::$ordres[$this->getCepage($cep)] : 9;
 	}
 	
-	public function getCumul($withCR = false)
+	public function getCumul($withCR = false, $bio = 0)
 	{
 	    if (!$this->start && !$this->end) {
 	        throw new sfException('period must be setted');
 	    }
 	    $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
 
-	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01', $this->end, $withCR);
-	    $nbContratsCurrent = count($this->getAllContrats());
-	    $nbLotsCurrent = count($this->getAllLots());
+	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01', $this->end, $withCR, $bio);
+	    $nbContratsCurrent = ($bio)? count($this->getAllContratsBio()) : count($this->getAllContrats());
+	    $nbLotsCurrent = ($bio)? count($this->getAllLotsBio()) : count($this->getAllLots());
 	    
-	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], $withCR);
-	    $nbContratsPrevious = count($this->getAllContrats());
-	    $nbLotsPrevious = count($this->getAllLots());
+	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], $withCR, $bio);
+	    $nbContratsPrevious = ($bio)? count($this->getAllContratsBio()) : count($this->getAllContrats());
+	    $nbLotsPrevious = ($bio)? count($this->getAllLotsBio()) : count($this->getAllLots());
 	    
 	    $result[self::OUT_STATS] = array(
 	        self::OUT_PREVIOUS => array(self::OUT_NB => $nbLotsPrevious, self::OUT_CONTRAT => $nbContratsPrevious),
@@ -351,8 +374,9 @@ class VracMercuriale
 	        self::OUT_VARIATION => array(self::OUT_NB => ($nbLotsCurrent - $nbLotsPrevious), self::OUT_CONTRAT => ($nbContratsCurrent - $nbContratsPrevious))
 	    );
 	    
-	    foreach ($currentPeriode as $cep => $datas) {
-	       $ordre = $this->getOrdre($cep);
+	    foreach ($currentPeriode as $k => $datas) {
+	       $cep = str_replace('_BIO', '', $k);
+	       $ordre = '';
 	       $result[$ordre.$cep] = array(
 	           self::OUT_CP_CODE => $datas[self::OUT_CP_CODE], 
 	           self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE], 
@@ -371,9 +395,18 @@ class VracMercuriale
 	               self::OUT_VOL => number_format(0, 2, ',', ''), 
 	               self::OUT_PRIX => number_format(0, 2, ',', ''))
 	       );
+	       $result[$ordre.$cep][self::OUT_VARIATION] = array(
+	           self::OUT_NB => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB],
+	           self::OUT_CONTRAT => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT],
+	           self::OUT_VOL => (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1),
+	           self::OUT_PRIX => (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1),
+	           self::OUT_VOL_PERC => 100,
+	           self::OUT_PRIX_PERC => 100,
+	       );
 	    }
-	    foreach ($previousPeriode as $cep => $datas) {
-	       $ordre = $this->getOrdre($cep);
+	    foreach ($previousPeriode as $k => $datas) {
+	       $cep = str_replace('_BIO', '', $k);
+	       $ordre = '';
 	        if (!isset($result[$ordre.$cep])) {
 	           $result[$ordre.$cep] = array(
 	                self::OUT_CP_CODE => $datas[self::OUT_CP_CODE],
@@ -419,7 +452,7 @@ class VracMercuriale
 	    return $result;
 	}
 	
-	public function getStats($start = null, $end = null, $withCR = false)
+	public function getStats($start = null, $end = null, $withCR = false, $bio = 0)
 	{
 	    if (!$start) {
 	        $start = $this->start;
@@ -436,7 +469,7 @@ class VracMercuriale
 		}
 		if (count($this->datas) > 0) {
 			$result = array();
-			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX), "\r\n");
+			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO), "\r\n");
 			foreach ($this->datas as $datas) {
 				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
 					continue;
@@ -448,27 +481,35 @@ class VracMercuriale
 				    continue;
 				}
 				if ($datas[self::IN_DATE] >= $start && $datas[self::IN_DATE] <= $end) {
-					if (!isset($result[$datas[self::IN_CP_CODE]])) {
-						$result[$datas[self::IN_CP_CODE]] = array();
+				    $key = ($datas[self::IN_BIO])? $datas[self::IN_CP_CODE].'_BIO' : $datas[self::IN_CP_CODE];
+					if (!isset($result[$key])) {
+						$result[$key] = array();
 					}
-					$result[$datas[self::IN_CP_CODE]][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX]);
-					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX]));
+					$result[$key][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX], self::OUT_BIO => $datas[self::IN_BIO]);
+					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX], $datas[self::IN_BIO]));
 				}
 			}
 			if (!file_exists($this->publicPdfPath.$this->csvFilename) ||  (file_exists($this->publicPdfPath.$this->csvFilename) && $withCR)) {
 			    file_put_contents($this->publicPdfPath.$this->csvFilename, $csv->output());
 			}
-			return $this->aggStats($result);
+			return $this->aggStats($result, $bio);
 		}
 		return array();
 	}
 	
-	private function aggStats($datas)
+	private function aggStats($datas, $bio = 0)
 	{
 		$result = array();
 		$c = array();
 		$l = array();
-		foreach ($datas as $cep => $values) {
+		foreach ($datas as $k => $values) {
+		    if (strpos($k, "_BIO") === false && $bio == 1) {
+		        continue;
+		    }
+		    if (strpos($k, "_BIO") && $bio == 0) {
+		        continue;
+		    }
+		    $cep = str_replace('_BIO', '', $k);
 		    $ordre = $this->getOrdre($cep);
 			$nb = count($values);
 			$volume = 0;
@@ -493,8 +534,13 @@ class VracMercuriale
 			}
 			$result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
 		}
-		$this->allContrats = $c;
-		$this->allLots = $l;
+		if ($bio) {
+		  $this->allContratsBio = $c;
+		  $this->allLotsBio = $l;
+		} else {
+		  $this->allContrats = $c;
+		  $this->allLots = $l;
+		}
 		ksort($result);
 		return $result;
 	}

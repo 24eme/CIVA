@@ -66,15 +66,20 @@ function(doc) {
     	    	    	    	    	    						volume_enleve = (volume_enleve)? volume_enleve : 0;
     	    	    	    	    	    						var prix_unitaire = (produit.prix_unitaire)? produit.prix_unitaire : 0;
     	    	    	    	    	    						var degre = 0;
+																	if (typeof produit.label != "undefined") {
+																		if (produit.label == "BIO") {
+																			degre = 99;
+																		}
+																	}
     	    	    	    	    	    						var top_mercuriale = null;
     	    	    	    	    	    						var millesime = (produit.millesime && (produit.millesime).length > 1)? (produit.millesime).substr((produit.millesime).length - 2, 2) : null;
     	    	    	    	    	    						var vtsgn = null;
     	    	    	    	    	    						if (produit.vtsgn == "VT" || produit.vtsgn == "vt") {
     	    	    	    	    	    							vtsgn = 1;
-    	    	    	    	    	    						}
+    	    	    	    	    	    						} 
     	    	    	    	    	    						if (produit.vtsgn == "SGN" || produit.vtsgn == "sgn") {
     	    	    	    	    	    							vtsgn = 2;
-    	    	    	    	    	    						}
+    	    	    	    	    	    						} 
     	    	    	    	    	    						var date_circulation = fctGetDateCirculation(produit.retiraisons);
     	    	    	    	    	    						if (!date_circulation) {
     	    	    	    	    	    							date_circulation = doc.valide.date_validation;
@@ -86,7 +91,7 @@ function(doc) {
     	    	    	    	    	    			}
     	    	    	    	    	    		}
     	    	    	    	    			}
-    	    	    	    	    		}
+    	    	    	    	    		}    	    	    	    				
     	    	    	    			}
     	    	    	    		}
     	    	    			}
