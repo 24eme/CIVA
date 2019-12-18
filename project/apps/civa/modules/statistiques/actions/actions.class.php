@@ -58,9 +58,14 @@ class statistiquesActions extends sfActions {
     
     public function executeDeleteMercuriale(sfWebRequest $request) {
         $pdfName = $request->getParameter('mercuriale').'_mercuriales.pdf';
+        $csvName = $request->getParameter('mercuriale').'_mercuriales.csv';
         $pdfFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$pdfName;
+        $csvFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$csvName;
         if (file_exists($pdfFile)) {
             unlink($pdfFile);
+        }
+        if (file_exists($csvFile)) {
+            unlink($csvFile);
         }
         return $this->redirect('@mercuriales');
     }
