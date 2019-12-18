@@ -34,6 +34,9 @@ class ExportVracMercurialePdf
     {
         $this->document->addPage(self::getPartial('pdfStats', array('mercuriale' => $this->mercuriale)));
         $this->document->addPage(self::getPartial('pdfCumul', array('mercuriale' => $this->mercuriale)), 'L');
+        if (count($this->mercuriale->getAllLotsBio()) > 0) {
+            $this->document->addPage(self::getPartial('pdfCumulBio', array('mercuriale' => $this->mercuriale)), 'L');
+        }
         $this->document->addPage(self::getPartial('pdfPlot1', array('mercuriale' => $this->mercuriale)), 'L');
         $this->document->addPage(self::getPartial('pdfPlot2', array('mercuriale' => $this->mercuriale)), 'L');
     }
