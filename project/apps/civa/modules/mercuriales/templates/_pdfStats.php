@@ -63,7 +63,7 @@ if ($start != $mercuriale->getStart('Y-m-d')) {
         		<tr>
         			<td style="width: 30%; border-left: 1px solid black;<?php if($i == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo strtoupper($stat[VracMercuriale::OUT_CP_LIBELLE]) ?></td>
         			<td style="text-align: right; width: 20%; border-left: 1px solid black;<?php if($i == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo $stat[VracMercuriale::OUT_NB] ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($i == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($i == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
         			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;<?php if($i == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo ($stat[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stat[VracMercuriale::OUT_PRIX] : '*' ?></td>
         		</tr>
         		<?php endforeach; ?>
@@ -73,7 +73,7 @@ if ($start != $mercuriale->getStart('Y-m-d')) {
         		<tr>
         			<td style="text-align: right; width: 30%;"><strong>TOTAL</strong></td>
         			<td style="text-align: right; width: 20%;"><strong><?php echo $nbLots ?></strong></td>
-        			<td style="text-align: right; width: 25%;"><strong><?php echo number_format($vol, 2, ',', '.') ?></strong></td>
+        			<td style="text-align: right; width: 25%;"><strong><?php echo number_format($vol, 2, ',', ' ') ?></strong></td>
         		</tr>
         	</table>
         	<p>&nbsp;</p>
@@ -81,7 +81,7 @@ if ($start != $mercuriale->getStart('Y-m-d')) {
         	<?php if($statsCR): ?>
         	<p>&nbsp;</p>
         	<h2><span style="text-decoration: underline;">Vins de base Crémant d'Alsace</span> <span style="font-size: 80%">Période du <?php echo  '01/'.$mercuriale->getStart('m/Y') ?> au <?php echo $mercuriale->getEnd() ?></span></h2>
-        	<p>Nombre de lots : <strong><?php echo $statsCR[VracMercuriale::OUT_NB] ?></strong> &nbsp;&nbsp; Volume : <strong><?php echo number_format(str_replace(',', '.', $statsCR[VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></strong>&nbsp;hl &nbsp;&nbsp; Prix moyen : <strong><?php echo ($statsCR[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCR[VracMercuriale::OUT_PRIX] : '*' ?></strong></p>
+        	<p>Nombre de lots : <strong><?php echo $statsCR[VracMercuriale::OUT_NB] ?></strong> &nbsp;&nbsp; Volume : <strong><?php echo number_format(str_replace(',', '.', $statsCR[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; Prix moyen : <strong><?php echo ($statsCR[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCR[VracMercuriale::OUT_PRIX] : '*' ?></strong></p>
         	<?php endif; ?>
 		</td>
 		<td style="width: 10%;"></td>

@@ -61,11 +61,11 @@
 		?>
 		<tr>
 			<td style="text-align: left; border-left: 1px solid black; border-bottom: 1px solid black; width: 16%"><?php echo strtoupper($stat[VracMercuriale::OUT_CP_LIBELLE]) ?></td>
-			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_PREVIOUS][VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></td>
+			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_PREVIOUS][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
 			<td style="text-align: right; border-bottom: 1px solid black; width: 12%"><?php echo ($stat[VracMercuriale::OUT_PREVIOUS][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stat[VracMercuriale::OUT_PREVIOUS][VracMercuriale::OUT_PRIX] : '*' ?></td>
-			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></td>
+			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
 			<td style="text-align: right; border-bottom: 1px solid black; width: 12%"><?php echo ($stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_PRIX] : '*' ?></td>
-			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL]) * 1, 2, ',', '.') ?></td>
+			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
 			<td style="text-align: right; border-bottom: 1px solid black; width: 12%"><?php echo ($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC] > 0)? "+".$stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC] : $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC]; ?></td>
 			<td style="text-align: right; border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; width: 12%"><?php echo ($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC] > 0)? "+".$stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC] : $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC]; ?></td>
 		</tr>
@@ -75,11 +75,11 @@
 	<table border="0" cellspacing=0 cellpadding="10">
 		<tr>
 			<td style=" width: 16%; text-align: left; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong>TOTAL</strong></td>
-			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format($volPrev, 2, ',', '.') ?></strong></td>
+			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format($volPrev, 2, ',', ' ') ?></strong></td>
 			<td style=" width: 12%; text-align: right; border-bottom: 1px solid black; border-top: 1px solid black;"></td>
-			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format($volCur, 2, ',', '.') ?></strong></td>
+			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format($volCur, 2, ',', ' ') ?></strong></td>
 			<td style=" width: 12%; text-align: right; border-bottom: 1px solid black; border-top: 1px solid black;"></td>
-			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format(($volCur - $volPrev), 2, ',', '.') ?></strong></td>
+			<td style=" width: 12%; text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo number_format(($volCur - $volPrev), 2, ',', ' ') ?></strong></td>
 			<td style=" width: 12%; text-align: right; border-bottom: 1px solid black; border-top: 1px solid black;"><strong><?php echo (round(($volCur - $volPrev) / $volPrev * 100) > 0)? "+".round(($volCur - $volPrev) / $volPrev * 100) : round(($volCur - $volPrev) / $volPrev * 100) ?></strong></td>
 			<td style=" width: 12%; text-align: right; border-right: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black;"></td>
 		</tr>
@@ -111,4 +111,4 @@
     $vol += str_replace(',', '.', $stat[VracMercuriale::OUT_VOL]) * 1;
     endforeach;
 ?>
-<p>NOTA : &nbsp;&nbsp; TOTAL DEFINITIF EN FIN DE CAMPAGNE : <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> &nbsp;&nbsp; VOLUME : <strong><?php echo number_format($vol, 2, ',', '.') ?></strong>&nbsp;hl &nbsp;&nbsp; NOMBRE DE CONTRATS : <strong><?php echo $nbContrats ?></strong></p>
+<p>NOTA : &nbsp;&nbsp; TOTAL DEFINITIF EN FIN DE CAMPAGNE : <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> &nbsp;&nbsp; VOLUME : <strong><?php echo number_format($vol, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; NOMBRE DE CONTRATS : <strong><?php echo $nbContrats ?></strong></p>
