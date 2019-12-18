@@ -4,11 +4,15 @@ $nbContrats = count($mercuriale->getAllContrats());
 $nbLots = count($mercuriale->getAllLots());
 
 $start = $mercuriale->getStart('Y-m').'-01';
+$end = new DateTime($mercuriale->getEnd('Y-m-d'));
+$end->modify('+1 day');
 $statsCR = null;
-if ($start != $mercuriale->getStart('Y-m-d')) {
+if ($end->format('m') != $mercuriale->getEnd('m')) {
     $statsCR = $mercuriale->getStats($start, $mercuriale->getEnd('Y-m-d'), true);
-    if (isset($statsCR['CR'])) {
-        $statsCR = $statsCR['CR'];
+    $ordre = VracMercuriale::$ordres;
+    $key = $ordre['CR'].'CR';
+    if (isset($statsCR[$key])) {
+        $statsCR = $statsCR[$key];
     } else {
         $statsCR = null;
     }
