@@ -1,8 +1,10 @@
 <?php 
 $stats = $mercuriale->getStats()->getRawValue();
 $statsBio = $mercuriale->getStats(null, null, false, 1)->getRawValue();
-$keys = array_unique(array_merge(array_keys($stats), array_keys($statsBio)));
-sort($keys);
+$keys = VracMercuriale::$ordres;
+unset($keys['CR']);
+asort($keys);
+$cepages = VracMercuriale::$cepages;
 $nbContrats = count(array_merge($mercuriale->getAllContrats()->getRawValue(), $mercuriale->getAllContratsBio()->getRawValue()));
 $nbLots = count($mercuriale->getAllLots());
 $nbLotsBio = count($mercuriale->getAllLotsBio());
@@ -60,34 +62,28 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		<?php 
         		  $vol = 0;
         		  $volBio = 0;
-        		  $i = 0;
-        		  $j = 0;
-        		  $total = count($stats);
-        		  $totalBio = count($statsBio);
-        		  foreach ($keys as $k):
-        		?>
-        		<?php 
-        		  if (isset($stats[$k])): 
-        		  $i++;
-        		  $vol += str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1;
+        		  $total = count($keys);
+        		  foreach ($keys as $key => $v):
+        		      $k = $v.$key;
+            		  if (isset($stats[$k])) {
+            		      $vol += str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1;
+            		  }
+            		  if (isset($statsBio[$k])) {
+            		      $volBio += str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1;
+            		  }
         		?>
         		<tr>
-        			<td style="width: 35%; border-left: 1px solid black;<?php if($i == $total && !isset($statsBio[$k])): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo strtoupper($stats[$k][VracMercuriale::OUT_CP_LIBELLE]) ?>  Conventionnel</td>
-        			<td style="text-align: right; width: 15%; border-left: 1px solid black;<?php if($i == $total && !isset($statsBio[$k])): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo $stats[$k][VracMercuriale::OUT_NB] ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($i == $total && !isset($statsBio[$k])): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo number_format(str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;<?php if($i == $total && !isset($statsBio[$k])): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo ($stats[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stats[$k][VracMercuriale::OUT_PRIX] : '*' ?></td>
+        			<td style="width: 35%; border-left: 1px solid black;<?php if($v == $total && !$nbLotsBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo strtoupper($cepages[$key]) ?>  Conventionnel</td>
+        			<td style="text-align: right; width: 15%; border-left: 1px solid black;<?php if($v == $total && !$nbLotsBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($stats[$k]))? $stats[$k][VracMercuriale::OUT_NB] : 0; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($v == $total && !$nbLotsBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($stats[$k]))? number_format(str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "0,00"; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;<?php if($v == $total && !$nbLotsBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($stats[$k]))? ($stats[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stats[$k][VracMercuriale::OUT_PRIX] : '*' : '*'; ?></td>
         		</tr>
-        		<?php endif; ?>
-        		<?php 
-        		  if (isset($statsBio[$k])): 
-        		  $j++;
-        		  $volBio += str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1;
-        		?>
+        		<?php if ($nbLotsBio): ?>
         		<tr>
-        			<td style="width: 35%; border-left: 1px solid black;<?php if($j == $totalBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo strtoupper($statsBio[$k][VracMercuriale::OUT_CP_LIBELLE]) ?> Biologique</td>
-        			<td style="text-align: right; width: 15%; border-left: 1px solid black;<?php if($j == $totalBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo $statsBio[$k][VracMercuriale::OUT_NB] ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($j == $totalBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo number_format(str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;<?php if($j == $totalBio): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo ($statsBio[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsBio[$k][VracMercuriale::OUT_PRIX] : '*' ?></td>
+        			<td style="width: 35%; border-left: 1px solid black;<?php if($v == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo strtoupper($cepages[$key]) ?> Biologique</td>
+        			<td style="text-align: right; width: 15%; border-left: 1px solid black;<?php if($v == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($statsBio[$k]))? $statsBio[$k][VracMercuriale::OUT_NB] : 0; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black;<?php if($v == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($statsBio[$k]))? number_format(str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "0,00"; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;<?php if($v == $total): ?> border-bottom: 1px solid black;<?php endif;?>"><?php echo (isset($statsBio[$k]))? ($statsBio[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsBio[$k][VracMercuriale::OUT_PRIX] : '*' : '*'; ?></td>
         		</tr>
         		<?php endif; ?>
         		<?php endforeach; ?>

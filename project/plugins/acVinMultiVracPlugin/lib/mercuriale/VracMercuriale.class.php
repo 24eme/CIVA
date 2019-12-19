@@ -97,10 +97,10 @@ class VracMercuriale
 		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->csvFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
 		$this->context = null;
-		$this->allContrats = 0;
-		$this->allLots = 0;
-		$this->allContratsBio = 0;
-		$this->allLotsBio = 0;
+		$this->allContrats = array();
+		$this->allLots = array();
+		$this->allContratsBio = array();
+		$this->allLotsBio = array();
 	}
 	
 	public function getAllContrats()
@@ -500,16 +500,16 @@ class VracMercuriale
 		return array();
 	}
 	
-	private function aggStats($datas, $bio = 0)
+	private function aggStats($datas, $bio = 0)	
 	{
 		$result = array();
 		$c = array();
 		$l = array();
 		foreach ($datas as $k => $values) {
-		    if (strpos($k, "_BIO") === false && $bio == 1) {
+		    if ($bio === 1 && strpos($k, "_BIO") === false) {
 		        continue;
 		    }
-		    if (strpos($k, "_BIO") && $bio == 0) {
+		    if ($bio === 0 && strpos($k, "_BIO") !== false) {
 		        continue;
 		    }
 		    $cep = str_replace('_BIO', '', $k);
@@ -535,9 +535,18 @@ class VracMercuriale
 					$max = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
 				}
 			}
-			$result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));			
+			if ($bio !== 1 && $bio !== 0 && isset($result[$ordre.$cep])) {
+			     $result[$ordre.$cep][self::OUT_NB] += $nb;
+			     $result[$ordre.$cep][self::OUT_CONTRAT] += count($contrats);
+			     $result[$ordre.$cep][self::OUT_VOL] = number_format($volume + str_replace(',', '.', $result[$ordre.$cep][self::OUT_VOL]), 2, ',', '');
+			     $result[$ordre.$cep][self::OUT_PRIX] = number_format((($prix/$volume) + str_replace(',', '.', $result[$ordre.$cep][self::OUT_PRIX]))/2, 2, ',', '');
+			     $result[$ordre.$cep][self::OUT_MIN] = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_MIN]) < $min)? $result[$ordre.$cep][self::OUT_MIN] : number_format($min, 2, ',', '');
+			     $result[$ordre.$cep][self::OUT_MAX] = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_MAX]) > $max)? $result[$ordre.$cep][self::OUT_MAX] : number_format($max, 2, ',', '');
+			} else {
+			    $result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));
+			}
 		}
-		if ($bio) {
+		if ($bio === 1) {
 		  $this->allContratsBio = $c;
 		  $this->allLotsBio = $l;
 		} else {
