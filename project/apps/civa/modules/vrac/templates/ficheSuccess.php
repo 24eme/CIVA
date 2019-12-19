@@ -96,7 +96,7 @@ td.echeance {display: inline;}
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
 		<tr>
 			<td>
-				<label>Clause de réserve de propriété :</label>
+				<label>Clause de réserve de propriété</label>
 			</td>
 			<td>
 				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
@@ -104,6 +104,16 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php if($vrac->isInterne()): ?>
+                <tr class="alt">
+                        <td>
+                                <label>Interne</label>
+                        </td>
+                        <td>
+                                <strong>Oui</strong>
+                        </td>
+                </tr>
+                <?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>
