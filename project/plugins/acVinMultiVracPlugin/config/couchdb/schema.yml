@@ -221,3 +221,4 @@ Vrac:
       motif_suppression: {  }
       clause_reserve_propriete: { required: false }
       papier: { required: false }
+      interne: { required: false }
