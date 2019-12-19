@@ -1,4 +1,4 @@
-set terminal svg size 1195,695 enhanced background rgb 'white'
+set terminal svg size 1195,670 enhanced background rgb 'white'
 set output "<?php echo $file ?>"
 set datafile separator ';'
 
@@ -78,18 +78,9 @@ set style arrow 1 nohead lw 1 lc rgb "#b1920c" lt 0
 <?php 
 foreach ($datas[count($datas) - 1] as $k => $v):
 if ($k < 2) { continue; }
-if (!$v):
-$lastValue = 0;
-for ($i=0, $nb = count($datas); $i<$nb; $i++) {
-	if ($val = $datas[$i][$k]) {
-		$lastValue = $val;
-	}
-}
-if ($lastValue):
+if ($v):
 ?>
-set label "Pas de cours\nconstaté <?php echo $cols[$k - 2] ?>\n(nb transaction\ninsuffisant)" at <?php echo $datas[count($datas) - 1][1] + 37 ?>,<?php echo $lastValue + 0.13 ?> front center font ", 08"
-<?php endif; else: ?>
-set label "<?php echo $v ?>" at <?php echo $datas[count($datas) - 1][1] + 15 ?>,<?php echo $v ?> right font ", 10"
+set label "<?php echo $v ?>" at <?php echo $datas[count($datas) - 1][1] + 20 ?>,<?php echo $v ?> right font ", 10"
 <?php endif; endforeach; ?>
 
 		
