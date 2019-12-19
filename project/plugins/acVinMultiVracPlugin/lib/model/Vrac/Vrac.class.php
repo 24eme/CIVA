@@ -744,6 +744,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		return $this->exist('papier') && $this->papier;
 	}
 
+	public function isInterne() {
+
+		return $this->exist('interne') && $this->interne;
+	}
+
 	public function getRepartitionCVOCoef($vendeurIdentifiant,$date){
 		/**
 		 * Pas de repartition CVO dans les mvts
