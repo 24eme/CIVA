@@ -1,5 +1,5 @@
 function(doc) {
-
+	
 	if (doc.type != "Vrac") {
 		return;
 	}
@@ -13,7 +13,7 @@ function(doc) {
 	date = (date)? date : doc.valide.date_saisie;
 	var statut = doc.valide.statut;
 	var type = doc.type_contrat;
-
+	
 	var numero_archive = doc.numero_archive;
 	var type_contrat = "P";
 	var mercuriales = "M";
@@ -25,6 +25,9 @@ function(doc) {
 	}
 	if (doc.acheteur_type == 'recoltants') {
 		mercuriales = "V";
+	}
+	if (doc.interne) {
+		mercuriales = "I";
 	}
 	var montant_cotisation = 0;
 	var montant_cotisation_paye = 0;
@@ -55,6 +58,6 @@ function(doc) {
 	}
 	var date_modif = (date)? (date).replace(regexpDate,"") : 0;
 	var creation = (doc.date_export_creation)? 0 : 1;
-
+	
 	emit([type, statut, date], [numero_archive, type_contrat, mercuriales, montant_cotisation, montant_cotisation_paye, mode_de_paiement, cvi_acheteur, type_acheteur, tca, cvi_vendeur, type_vendeur, numero_contrat, daa, date_arrivee, date_traitement, date_saisie, date_circulation, identifiant_courtier, reccod, total_volume_propose, total_volume_enleve, quantite_transferee, top_suppression, top_instance, nombre_contrats, heure_traitement, utilisateur, date_modif, creation]);
 }

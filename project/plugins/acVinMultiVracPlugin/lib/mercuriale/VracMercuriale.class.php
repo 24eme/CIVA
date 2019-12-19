@@ -193,6 +193,9 @@ class VracMercuriale
 				    if ($produit->value[VracProduitsView::VALUE_CODE_APPELLATION] == 'GRDCRU') {
 				        continue;
 				    }
+				    if ($produit->value[VracProduitsView::VALUE_CODE_APPELLATION] == 'VINTABLE') {
+				        continue;
+				    }
 				    if ($produit->value[VracProduitsView::VALUE_VTSGN]) {
 				        continue;
 				    }
