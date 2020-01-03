@@ -34,7 +34,7 @@ class ExportDRXml {
                 $item = $xml[$key];
             }
             $item['volume'] += $volume;
-            if($type == 'negoces') {
+            if($type == 'negoces' && $this->destinataire != self::DEST_CIVA) {
                 $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCvi($type, $cvi);
             }
 
@@ -111,6 +111,7 @@ class ExportDRXml {
                         }
 
                         $total['L1'] = $this->getCodeDouane($object);
+
                         $total['L3'] = 'B';
                         if(!array_key_exists('L4', $total)) {
                             $total['L4'] = 0;
@@ -129,14 +130,23 @@ class ExportDRXml {
                         $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
                         $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
                         $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
+
                         if(!array_key_exists('L9', $total['exploitant'])) {
                             $total['exploitant']['L9'] = 0;
                         }
                         $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendusByType('negoces');
+                        if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+                          $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
+                        }
+
                         if(!array_key_exists('L10', $total['exploitant'])) {
                             $total['exploitant']['L10'] = 0;
                         }
                         $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendusByType('negoces'); //Volume revendique non negoces
+                        if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+                          $total['exploitant']['L10'] = $object->getTotalCaveParticuliere();
+                        }
+
                         $total['exploitant']['L11'] = 0; //HS
                         $total['exploitant']['L12'] = 0; //HS
                         $total['exploitant']['L13'] = 0; //HS
@@ -249,8 +259,15 @@ class ExportDRXml {
                                     $vci_negoce = $detail->getTotalVciAcheteur('negoces');
 
                                     $col['exploitant']['L9'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + $vci_negoce : 0; //Volume revendique sur place
+                                    if(($cepage->getTotalVolumeAcheteurs('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+                                      $col['exploitant']['L9'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + 0 : 0;
+                                    }
 
                                     $col['exploitant']['L10'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + $vci_negoce + $detail->getTotalVolumeAcheteurs('cooperatives') : 0;
+                                    if(($cepage->getTotalVolumeAcheteurs('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+                                      $col['exploitant']['L10'] = (!is_null($vci_negoce)) ? $detail->cave_particuliere + $detail->getTotalVolumeAcheteurs('cooperatives') : 0;
+                                    }
+
                                     $col['exploitant']['L11'] = 0; //HS
                                     $col['exploitant']['L12'] = 0; //HS
                                     $col['exploitant']['L13'] = 0; //HS
@@ -260,7 +277,11 @@ class ExportDRXml {
                                         if ($col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
-                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels() + $cepage->getTotalVci(); //DPLC
+                                        $col['exploitant']['L16'] = $cepage->getUsagesIndustriels();
+
+                                        if($cepage->getTotalVolumeAcheteurs('negoces') == 0){
+                                          $col['exploitant']['L16'] += $cepage->getTotalVci();
+                                        }
                                         $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } elseif(count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_DOUANE && $mention->getKey() != 'mention') {
                                         $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
@@ -487,7 +508,7 @@ class ExportDRXml {
         if ($this->destinataire == self::DEST_DOUANE) {
           return $noeud->getCodeDouane();
         }
-        
+
         if($noeud instanceof DRRecolteCepageDetail && ($noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE" || $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_LIEUDIT")) {
             $codeDouane = $noeud->getCodeDouane();
             if (strlen($codeDouane) > 6) {
