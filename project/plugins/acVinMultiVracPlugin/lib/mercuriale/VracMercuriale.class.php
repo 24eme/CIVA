@@ -72,7 +72,7 @@ class VracMercuriale
 	protected $allContratsBio;
 	protected $allLotsBio;
 
-	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null, $publicPdfPath = null)
+	public function __construct($folderPath, $start = null, $end = null, $filtres = null, $publicPdfPath = null)
 	{
 		$this->folderPath = $folderPath;
 		if (!is_dir($this->folderPath)) {
@@ -90,70 +90,101 @@ class VracMercuriale
 		}
 		$csvFile = $this->folderPath.self::CSV_FILE_NAME;
 		$this->generateMercurialeDatasFile($csvFile);
-		$this->datas = $this->getDatasFromCsvFile($csvFile); 
+		$this->datas = $this->getDatasFromCsvFile($csvFile);
 		$this->start = $this->getDate($start);
 		$this->end = $this->getDate($end);
-		$this->mercuriale = ($mercuriale)? implode('_', $mercuriale) : null;
-		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
-		$this->csvFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
+        if ($filtres) {
+            if (is_string($filtres)) {
+                $filtres = array($filtres);
+            }
+            $this->mercuriales = array_diff($filtres, array('CR'));
+            $this->mercuriales = ($this->mercuriales) ? implode('_', $this->mercuriales) : null;
+            $this->filtres = implode('_', $filtres);
+        }else{
+            $this->filtres = null;
+            $this->mercuriales = null;
+        }
+		$this->pdfFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
+		$this->csvFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
 		$this->context = null;
 		$this->allContrats = array();
 		$this->allLots = array();
 		$this->allContratsBio = array();
 		$this->allLotsBio = array();
 	}
-	
-	public function getAllContrats()
+
+	public function getAllContrats($isbio = 0)
 	{
-	    return $this->allContrats;
+        if ($isbio) {
+            return $this->getAllContratsBio();
+        }
+        return $this->allContrats;
 	}
-	
-	public function getAllLots()
+
+	public function getAllLots($isbio = 0)
 	{
+        if ($isbio) {
+            return $this->getAllLotsBio();
+        }
 	    return $this->allLots;
 	}
-	
+
 	public function getAllContratsBio()
 	{
 	    return $this->allContratsBio;
 	}
-	
+
 	public function getAllLotsBio()
 	{
 	    return $this->allLotsBio;
 	}
-	
+
 	public function getFolderPath()
 	{
 	    return $this->folderPath;
 	}
-	
+
 	public function getPublicPdfPath()
 	{
 	    return $this->publicPdfPath;
 	}
-	
+
 	public function getPdfFilname()
 	{
 	    return $this->pdfFilename;
 	}
-	
+
 	public function getStart($f = 'd/m/Y')
 	{
 	    $dt = new DateTime(substr($this->start, 0, 4).'-'.substr($this->start, 4, 2).'-'.substr($this->start, -2));
 	    return $dt->format($f);
 	}
-	
+
 	public function getEnd($f = 'd/m/Y')
 	{
-	    $dt = new DateTime(substr($this->end, 0, 4).'-'.substr($this->end, 4, 2).'-'.substr($this->end, -2));
+	    $dt = new DateTime($this->getCumulPeriodesRange('currentPeriodeEnd'));
 	    return $dt->format($f);
 	}
-	
+    public function getBegin($f = 'd/m/Y')
+	{
+	    $dt = new DateTime($this->getCumulPeriodesRange('currentPeriodeBegin'));
+	    return $dt->format($f);
+	}
+    public function getEndPrevious($f = 'd/m/Y')
+	{
+	    $dt = new DateTime($this->getCumulPeriodesRange('previousPeriodeEnd'));
+	    return $dt->format($f);
+	}
+    public function getBeginPrevious($f = 'd/m/Y')
+	{
+	    $dt = new DateTime($this->getCumulPeriodesRange('previousPeriodeBegin'));
+	    return $dt->format($f);
+	}
+
 	public function setContext($context) {
 		$this->context = $context;
 	}
-	
+
 	protected function getDate($date)
 	{
 		if (!$date)
@@ -345,57 +376,75 @@ class VracMercuriale
 		}
 		return $datas;
 	}
-	
+
 	protected function getPlotPeriode($date)
 	{
 		return (substr($date, -2) > 15)? (substr($date, 0, 6).'2')*1 : (substr($date, 0, 6).'1')*1;
 	}
-	
+
 	public function getOrdre($cep)
 	{
 	    return (isset(self::$ordres[$this->getCepage($cep)]))? self::$ordres[$this->getCepage($cep)] : 9;
 	}
-	
+
+    public function getCumulPeriodesRanges() {
+        $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
+        $diff_annee_deb_campagne = ($tabDate[1] == '12') ? 0 : 1;
+        $periode = array();
+        $periode['currentPeriodeBegin'] = ($tabDate[0] - $diff_annee_deb_campagne).'-12-01';
+        $periode['currentPeriodeEnd'] = $tabDate[0].'-'.$tabDate[1].'-'.$tabDate[2];
+        $periode['previousPeriodeBegin'] = ($tabDate[0] - 1 - $diff_annee_deb_campagne).'-12-01';
+        $periode['previousPeriodeEnd'] = ($tabDate[0] - 1).'-'.$tabDate[1].'-'.$tabDate[2];
+        return $periode;
+    }
+    public function getCumulPeriodesRange($str) {
+        $a = $this->getCumulPeriodesRanges();
+        return $a[$str];
+    }
+
+
+
 	public function getCumul($withCR = false, $bio = 0)
 	{
 	    if (!$this->start && !$this->end) {
 	        throw new sfException('period must be setted');
 	    }
-	    $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
 
-	    $currentPeriode = $this->getStats(($tabDate[0]-1).'-12-01', $this->end, $withCR, $bio);
+        $periodesRange = $this->getCumulPeriodesRanges($this->end);
+
+	    $currentPeriode = $this->getStats($periodesRange['currentPeriodeBegin'], $periodesRange['currentPeriodeEnd'], $withCR, $bio);
 	    $nbContratsCurrent = ($bio)? count($this->getAllContratsBio()) : count($this->getAllContrats());
 	    $nbLotsCurrent = ($bio)? count($this->getAllLotsBio()) : count($this->getAllLots());
-	    
-	    $previousPeriode = $this->getStats(($tabDate[0]-2).'-12-01', ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], $withCR, $bio);
+
+	    $previousPeriode = $this->getStats($periodesRange['previousPeriodeBegin'], $periodesRange['previousPeriodeEnd'], $withCR, $bio);
 	    $nbContratsPrevious = ($bio)? count($this->getAllContratsBio()) : count($this->getAllContrats());
 	    $nbLotsPrevious = ($bio)? count($this->getAllLotsBio()) : count($this->getAllLots());
-	    
+
 	    $result[self::OUT_STATS] = array(
 	        self::OUT_PREVIOUS => array(self::OUT_NB => $nbLotsPrevious, self::OUT_CONTRAT => $nbContratsPrevious),
 	        self::OUT_CURRENT => array(self::OUT_NB => $nbLotsCurrent, self::OUT_CONTRAT => $nbContratsCurrent),
 	        self::OUT_VARIATION => array(self::OUT_NB => ($nbLotsCurrent - $nbLotsPrevious), self::OUT_CONTRAT => ($nbContratsCurrent - $nbContratsPrevious))
 	    );
-	    
+
 	    foreach ($currentPeriode as $k => $datas) {
 	       $cep = str_replace('_BIO', '', $k);
 	       $ordre = '';
 	       $result[$ordre.$cep] = array(
-	           self::OUT_CP_CODE => $datas[self::OUT_CP_CODE], 
-	           self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE], 
+	           self::OUT_CP_CODE => $datas[self::OUT_CP_CODE],
+	           self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE],
 	           self::OUT_CURRENT => array(
-	               self::OUT_START => ($tabDate[0]-1).'-12-01', 
-	               self::OUT_END => $tabDate[0].'-'.$tabDate[1].'-'.$tabDate[2], 
-	               self::OUT_NB => $datas[self::OUT_NB], 
-	               self::OUT_CONTRAT => $datas[self::OUT_CONTRAT], 
-	               self::OUT_VOL => $datas[self::OUT_VOL], 
-	               self::OUT_PRIX => $datas[self::OUT_PRIX]), 
+	               self::OUT_START => $periodesRange['currentPeriodeBegin'],
+	               self::OUT_END => $periodesRange['currentPeriodeEnd'],
+	               self::OUT_NB => $datas[self::OUT_NB],
+	               self::OUT_CONTRAT => $datas[self::OUT_CONTRAT],
+	               self::OUT_VOL => $datas[self::OUT_VOL],
+	               self::OUT_PRIX => $datas[self::OUT_PRIX]),
 	           self::OUT_PREVIOUS => array(
-	               self::OUT_START => ($tabDate[0]-2).'-12-01', 
-	               self::OUT_END => ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2], 
-	               self::OUT_NB => 0, 
-	               self::OUT_CONTRAT => 0, 
-	               self::OUT_VOL => number_format(0, 2, ',', ''), 
+	               self::OUT_START => $periodesRange['previousPeriodeBegin'],
+	               self::OUT_END => $periodesRange['previousPeriodeEnd'],
+	               self::OUT_NB => 0,
+	               self::OUT_CONTRAT => 0,
+	               self::OUT_VOL => number_format(0, 2, ',', ''),
 	               self::OUT_PRIX => number_format(0, 2, ',', ''))
 	       );
 	       $result[$ordre.$cep][self::OUT_VARIATION] = array(
@@ -415,17 +464,17 @@ class VracMercuriale
 	                self::OUT_CP_CODE => $datas[self::OUT_CP_CODE],
 	                self::OUT_CP_LIBELLE => $datas[self::OUT_CP_LIBELLE],
 	                self::OUT_PREVIOUS => array(
-	                    self::OUT_START => ($tabDate[0]-2).'-12-01',
-	                    self::OUT_END => ($tabDate[0]-1).'-'.$tabDate[1].'-'.$tabDate[2],
+	                    self::OUT_START => $periodesRange['previousPeriodeBegin'],
+	                    self::OUT_END => $periodesRange['previousPeriodeEnd'],
 	                    self::OUT_NB => $datas[self::OUT_NB],
 	                    self::OUT_CONTRAT => $datas[self::OUT_CONTRAT],
 	                    self::OUT_VOL => $datas[self::OUT_VOL],
 	                    self::OUT_PRIX => $datas[self::OUT_PRIX]),
 	                self::OUT_CURRENT => array(
-	                    self::OUT_START => ($tabDate[0]-1).'-12-01', 
-	                    self::OUT_END => $tabDate[0].'-'.$tabDate[1].'-'.$tabDate[2], 
+	                    self::OUT_START => $periodesRange['currentPeriodeBegin'],
+	                    self::OUT_END => $periodesRange['currentPeriodeEnd'],
 	                    self::OUT_NB => 0,
-	                    self::OUT_CONTRAT => 0, 
+	                    self::OUT_CONTRAT => 0,
 	                    self::OUT_VOL => number_format(0, 2, ',', ''),
 	                    self::OUT_PRIX => number_format(0, 2, ',', ''))
 	            );
@@ -454,7 +503,11 @@ class VracMercuriale
 	    ksort($result);
 	    return $result;
 	}
-	
+
+    public function hasWithCremant() {
+        return preg_match('/CR/', $this->filtres);
+    }
+
 	public function getStats($start = null, $end = null, $withCR = false, $bio = 0)
 	{
 	    if (!$start) {

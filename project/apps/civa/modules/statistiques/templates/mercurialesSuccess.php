@@ -20,10 +20,10 @@
                     <?php echo $form['end_date']->render(array('class' => 'datepicker', 'style' => 'width: 172px;')) ?>
                 </div>
                 <div class="ligne_form ligne_form_label">
-                    <?php echo $form['mercuriale']->renderError() ?>
-                    <?php echo $form['mercuriale']->renderLabel() ?>
+                    <?php echo $form['filtres']->renderError() ?>
+                    <?php echo $form['filtres']->renderLabel() ?>
                     <ul class="checkbox_list" style="width: 190px; display: inline-block;">
-                    <?php echo $form['mercuriale']->render() ?>
+                    <?php echo $form['filtres']->render() ?>
                     </ul>
                 </div>
                 <style>
