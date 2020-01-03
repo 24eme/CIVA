@@ -103,13 +103,19 @@ class VracMercuriale
 		$this->allLotsBio = array();
 	}
 
-	public function getAllContrats()
+	public function getAllContrats($isbio = 0)
 	{
-	    return $this->allContrats;
+        if ($isbio) {
+            return $this->getAllContratsBio();
+        }
+        return $this->allContrats;
 	}
 
-	public function getAllLots()
+	public function getAllLots($isbio = 0)
 	{
+        if ($isbio) {
+            return $this->getAllLotsBio();
+        }
 	    return $this->allLots;
 	}
 
