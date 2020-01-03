@@ -9,9 +9,9 @@
 	<tr>
 		<td style="width: 20%;"></td>
 		<td style="width: 40%; text-align: left;">
-			<p>CAMPAGNE <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> DU : <strong><?php echo '01/12/'.($mercuriale->getEnd('Y')-2) ?></strong> AU <strong><?php echo $mercuriale->getEnd('d/m').'/'.($mercuriale->getEnd('Y')-1) ?></strong>
+			<p>CAMPAGNE <strong><?php echo $mercuriale->getBeginPrevious('Y') ?>/<?php echo $mercuriale->getBeginPrevious('Y')+1 ?></strong> DU : <strong><?php echo $mercuriale->getBeginPrevious('d/m/Y'); ?></strong> AU <strong><?php echo $mercuriale->getEndPrevious('d/m/Y'); ?></strong>
 			<br />
-			CAMPAGNE <strong><?php echo $mercuriale->getEnd('Y')-1 ?>/<?php echo $mercuriale->getEnd('Y') ?></strong> DU : <strong><?php echo '01/12/'.($mercuriale->getEnd('Y')-1) ?></strong> AU <strong><?php echo $mercuriale->getEnd() ?></strong></p>
+			CAMPAGNE <strong><?php echo $mercuriale->getBegin('Y') ?>/<?php echo $mercuriale->getBegin('Y')+1 ?></strong> DU : <strong><?php echo $mercuriale->getBegin('d/m/Y'); ?></strong> AU <strong><?php echo $mercuriale->getEnd('d/m/Y'); ?></strong></p>
 		</td>
 		<td style="width: 40%; text-align: right;">
 			<p>ARRETE PROVISOIRE AU : <strong><?php echo date('d/m/Y') ?></strong></p>
@@ -22,8 +22,8 @@
 <table border="0" cellspacing=0 cellpadding="0">
 		<tr>
 			<th style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; width: 23%"><strong>CEPAGES</strong></th>
-			<th colspan="2" style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; width: 22%"><strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong></th>
-			<th colspan="2" style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; width: 22%"><strong><?php echo $mercuriale->getEnd('Y')-1 ?>/<?php echo $mercuriale->getEnd('Y') ?></strong></th>
+			<th colspan="2" style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; width: 22%"><strong><?php echo $mercuriale->getBeginPrevious('Y') ?>/<?php echo $mercuriale->getBeginPrevious('Y') + 1 ?></strong></th>
+			<th colspan="2" style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; width: 22%"><strong><?php echo $mercuriale->getBegin('Y') ?>/<?php echo $mercuriale->getBegin('Y') + 1 ?></strong></th>
 			<th colspan="3" style="text-align: center; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; width: 33%"><strong>VARIATION</strong></th>
 		</tr>
 		<tr>
@@ -103,12 +103,12 @@
 			<td style=" width: 11%; text-align: right; border-right: 1px solid black; border-bottom: 1px solid black;"></td>
 		</tr>
 	</table>
-<?php 
-    $stats = $mercuriale->getStats(($mercuriale->getEnd('Y')-2).'1201', ($mercuriale->getEnd('Y')-1).'1130', false, 0);
+<?php
+    $stats = $mercuriale->getStats($mercuriale->getBeginPrevious('Y').'1201', ($mercuriale->getBeginPrevious('Y') + 1).'1130', false, 0);
     $vol = 0;
     $nbContrats = count($mercuriale->getAllContrats());
     foreach ($stats as $stat):
     $vol += str_replace(',', '.', $stat[VracMercuriale::OUT_VOL]) * 1;
     endforeach;
 ?>
-<p>NOTA : &nbsp;&nbsp; TOTAL DEFINITIF EN FIN DE CAMPAGNE : <strong><?php echo $mercuriale->getEnd('Y')-2 ?>/<?php echo $mercuriale->getEnd('Y')-1 ?></strong> &nbsp;&nbsp; VOLUME : <strong><?php echo number_format($vol, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; NOMBRE DE CONTRATS : <strong><?php echo $nbContrats ?></strong></p>
+<p>NOTA : &nbsp;&nbsp; TOTAL DEFINITIF EN FIN DE CAMPAGNE : <strong><?php echo $mercuriale->getBeginPrevious('Y') ?>/<?php echo $mercuriale->getBeginPrevious('Y') + 1 ?></strong> &nbsp;&nbsp; VOLUME : <strong><?php echo number_format($vol, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; NOMBRE DE CONTRATS : <strong><?php echo $nbContrats ?></strong></p>
