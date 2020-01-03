@@ -59,17 +59,13 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         			<th style="font-weight: bold; text-align: center; width: 25%; border: 1px solid black;">VOLUME VENDU<br />EN HL</th>
         			<th style="font-weight: bold; text-align: center; width: 25%; border: 1px solid black;">PRIX MOYEN<br />EUROS/L</th>
         		</tr>
-        		<?php 
+        		<?php
         		  $vol = 0;
         		  $volBio = 0;
-        		  $total = count($keys);
         		  foreach ($keys as $key => $v):
         		      $k = $v.$key;
             		  if (isset($stats[$k])) {
             		      $vol += str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1;
-            		  }
-            		  if (isset($statsBio[$k])) {
-            		      $volBio += str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1;
             		  }
         		?>
                 <?php if (isset($stats[$k]) && $stats[$k][VracMercuriale::OUT_NB]): ?>
@@ -80,6 +76,20 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;"><?php echo (isset($stats[$k]))? ($stats[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stats[$k][VracMercuriale::OUT_PRIX] : '*' : '*'; ?></td>
         		</tr>
                 <?php endif; ?>
+                <?php endforeach; ?>
+                <tr>
+        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong>TOTAL Conventionnel</strong></td>
+        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong><?php echo $nbLots ?></strong></td>
+        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong><?php echo number_format($vol, 2, ',', ' ') ?></strong></td>
+                    <td style="text-align: right; width: 25%; border-top: 1px solid black; <?php if ($nbLotsBio) echo 'border-bottom: 1px solid black;'; ?>">&nbsp;</td>
+        		</tr>
+                <?php if($nbLotsBio > 0):
+                foreach ($keys as $key => $v):
+                    $k = $v.$key;
+                    if (isset($statsBio[$k])) {
+                        $volBio += str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1;
+                    }
+                ?>
         		<?php if (isset($statsBio[$k]) && $statsBio[$k][VracMercuriale::OUT_NB]): ?>
         		<tr>
         			<td style="width: 35%; border-left: 1px solid black;"><?php echo strtoupper($cepages[$key]) ?> Biologique</td>
@@ -89,24 +99,11 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		</tr>
         		<?php endif; ?>
         		<?php endforeach; ?>
-                <tr style="width: 5px;">
-                    <td style="width: 5px; font-size: 1px; text-align: right; width: 35%; border-top: 1px solid black;">&nbsp;</td>
-        			<td style="width: 5px; font-size: 1px; text-align: right; width: 15%; border-top: 1px solid black;">&nbsp;</td>
-        			<td style="width: 5px; font-size: 1px; text-align: right; width: 25%; border-top: 1px solid black;">&nbsp;</td>
-                    <td style="width: 5px; font-size: 1px; text-align: right; width: 25%; border-top: 1px solid black;">&nbsp;</td>
-                </tr>
-        		<tr>
-        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong>TOTAL Conventionnel</strong></td>
-        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong><?php echo $nbLots ?></strong></td>
-        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong><?php echo number_format($vol, 2, ',', ' ') ?></strong></td>
-                    <td style="text-align: right; width: 25%;">&nbsp;</td>
-        		</tr>
-        		<?php if($nbLotsBio > 0): ?>
         		<tr>
         			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong>TOTAL Biologique</strong></td>
         			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong><?php echo $nbLotsBio ?></strong></td>
         			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong><?php echo number_format($volBio, 2, ',', ' ') ?></strong></td>
-                    <td style="text-align: right; width: 25%;">&nbsp;</td>
+                    <td style="text-align: right; width: 25%; border-top: 1px solid black;">&nbsp;</td>
         		</tr>
         		<?php endif; ?>
         	</table>
