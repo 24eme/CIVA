@@ -72,7 +72,7 @@ class VracMercuriale
 	protected $allContratsBio;
 	protected $allLotsBio;
 
-	public function __construct($folderPath, $start = null, $end = null, $mercuriale = null, $publicPdfPath = null)
+	public function __construct($folderPath, $start = null, $end = null, $filtres = null, $publicPdfPath = null)
 	{
 		$this->folderPath = $folderPath;
 		if (!is_dir($this->folderPath)) {
@@ -90,12 +90,22 @@ class VracMercuriale
 		}
 		$csvFile = $this->folderPath.self::CSV_FILE_NAME;
 		$this->generateMercurialeDatasFile($csvFile);
-		$this->datas = $this->getDatasFromCsvFile($csvFile); 
+		$this->datas = $this->getDatasFromCsvFile($csvFile);
 		$this->start = $this->getDate($start);
 		$this->end = $this->getDate($end);
-		$this->mercuriale = ($mercuriale)? implode('_', $mercuriale) : null;
-		$this->pdfFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
-		$this->csvFilename = ($this->mercuriale)? $this->start.'_'.$this->end.'_'.$this->mercuriale.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
+        if ($filtres) {
+            if (is_string($filtres)) {
+                $filtres = array($filtres);
+            }
+            $this->mercuriales = array_diff($filtres, array('CR'));
+            $this->mercuriales = ($this->mercuriales) ? implode('_', $this->mercuriales) : null;
+            $this->filtres = implode('_', $filtres);
+        }else{
+            $this->filtres = null;
+            $this->mercuriales = null;
+        }
+		$this->pdfFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
+		$this->csvFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
 		$this->context = null;
 		$this->allContrats = array();
 		$this->allLots = array();
@@ -493,7 +503,11 @@ class VracMercuriale
 	    ksort($result);
 	    return $result;
 	}
-	
+
+    public function hasWithCremant() {
+        return preg_match('/CR/', $this->filtres);
+    }
+
 	public function getStats($start = null, $end = null, $withCR = false, $bio = 0)
 	{
 	    if (!$start) {

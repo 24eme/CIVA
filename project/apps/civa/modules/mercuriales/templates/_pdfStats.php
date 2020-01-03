@@ -107,7 +107,7 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		<?php endif; ?>
         	</table>
         	<p>* Secret statistique : nombre minimum de lots non-atteint pour publication</p>
-            <?php if($statsCRConv || $statsCRBio): ?>
+            <?php if($mercuriale->hasWithCremant()): ?>
         	<h2><span style="text-decoration: underline;">Vins de base Crémant d'Alsace</span> <span style="font-size: 80%">Période du <?php echo  '01/'.$mercuriale->getStart('m/Y') ?> au <?php echo $mercuriale->getEnd() ?></span></h2>
             <table>
                 <?php if($statsCRConv): ?>

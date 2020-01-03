@@ -39,12 +39,12 @@ class statistiquesActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $values = $this->form->getValues();
-                $pdfName = ($values['mercuriale'])
-                    ? $values['start_date'].'_'.$values['end_date'].'_'.implode('_', $values['mercuriale']).'_mercuriales.pdf'
+                $pdfName = ($values['filtres'])
+                    ? $values['start_date'].'_'.$values['end_date'].'_'.implode('_', $values['filtres']).'_mercuriales.pdf'
                     : $values['start_date'].'_'.$values['end_date'].'_mercuriales.pdf';
                 $pdfFile = sfConfig::get('sf_data_dir').'/mercuriales/pdf/'.$pdfName;
                 if (!file_exists($pdfFile)) {
-                    $vracMercuriale = new VracMercuriale(sfConfig::get('sf_data_dir').'/mercuriales/', $values['start_date'], $values['end_date'], $values['mercuriale']);
+                    $vracMercuriale = new VracMercuriale(sfConfig::get('sf_data_dir').'/mercuriales/', $values['start_date'], $values['end_date'], $values['filtres']);
                     $vracMercuriale->setContext($this->getContext());
                     $vracMercuriale->generateMercurialePlotFiles(array('GW','RI','SY'));
                     $vracMercuriale->generateMercurialePlotFiles(array('PN','PG','PB'));
