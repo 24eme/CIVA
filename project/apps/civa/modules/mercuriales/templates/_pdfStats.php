@@ -12,7 +12,8 @@ $nbLotsBio = count($mercuriale->getAllLotsBio());
 $start = $mercuriale->getStart('Y-m').'-01';
 $end = new DateTime($mercuriale->getEnd('Y-m-d'));
 $end->modify('+1 day');
-$statsCR = null;
+$statsCRConv = null;
+$statsCRBio = null;
 if ($end->format('m') != $mercuriale->getEnd('m')) {
     $ordre = VracMercuriale::$ordres;
     $key = $ordre['CR'].'CR';
@@ -106,20 +107,29 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		<?php endif; ?>
         	</table>
         	<p>* Secret statistique : nombre minimum de lots non-atteint pour publication</p>
-            <?php if($statsCRConv || $statsCRBio): ?>
+            <?php if($mercuriale->hasWithCremant()): ?>
         	<h2><span style="text-decoration: underline;">Vins de base Crémant d'Alsace</span> <span style="font-size: 80%">Période du <?php echo  '01/'.$mercuriale->getStart('m/Y') ?> au <?php echo $mercuriale->getEnd() ?></span></h2>
-            <p>
-            <?php if($statsCRConv): ?>
-            Nombre de lots Conventionnels : <strong><?php echo $statsCRConv[VracMercuriale::OUT_NB] ?></strong> &nbsp;&nbsp; Volume Conventionnel : <strong><?php echo number_format(str_replace(',', '.', $statsCRConv[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; Prix moyen : <strong><?php echo ($statsCRConv[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRConv[VracMercuriale::OUT_PRIX] : '*' ?></strong><br/>
-            <?php else: ?>
-            Nombre de lots Conventionnels : <strong>0</strong>
+            <table>
+                <?php if($statsCRConv): ?>
+                <tr>
+                    <td>Nombre de lots Conventionnels : <strong><?php echo $statsCRConv[VracMercuriale::OUT_NB] ?></strong></td>
+                    <td>Volume Conventionnel : <strong><?php echo number_format(str_replace(',', '.', $statsCRConv[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl</td>
+                    <td>Prix moyen : <strong><?php echo ($statsCRConv[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRConv[VracMercuriale::OUT_PRIX] : '*' ?></strong></td>
+                </tr>
+                <?php else: ?>
+                <tr><td>Nombre de lots Conventionnels : <strong>0</strong></tr>
+                <?php endif; ?>
+                <?php if($statsCRBio): ?>
+                <tr>
+                    <td>Nombre de lots Biologiques : <strong><?php echo $statsCRBio[VracMercuriale::OUT_NB] ?></strong></td>
+                    <td>Volume Biologique : <strong><?php echo number_format(str_replace(',', '.', $statsCRBio[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl</td>
+                    <td>Prix moyen : <strong><?php echo ($statsCRBio[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRBio[VracMercuriale::OUT_PRIX] : '*' ?></strong></td>
+                </tr>
+                <?php else: ?>
+                <tr><td>Nombre de lots Biologique : <strong>0</strong></td></tr>
+                <?php endif; ?>
+                </table>
             <?php endif; ?>
-            <?php if($statsCRBio): ?>
-            Nombre de lots Biologiques : <strong><?php echo $statsCRBio[VracMercuriale::OUT_NB] ?></strong> &nbsp;&nbsp; Volume Biologique : <strong><?php echo number_format(str_replace(',', '.', $statsCRBio[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl &nbsp;&nbsp; Prix moyen : <strong><?php echo ($statsCRBio[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRBio[VracMercuriale::OUT_PRIX] : '*' ?></strong>
-            <?php else: ?>
-            Nombre de lots Biologiques : <strong>0</strong>
-            <?php endif; ?>
-            </p><?php endif; ?>
 		</td>
 	</tr>
 </table>

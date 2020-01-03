@@ -3,13 +3,17 @@
 $isbio = (isset($bio) && $bio) * 1;
 $bio_ou_conv = ($isbio) ? 'Biologique' : 'Conventionnel';
 
+if(!function_exists('printplus')){
+	function printplus($value) {
+		echo ($value > 0) ? "+".$value : $value;
+	}
+}
 if(!function_exists('printdiffratio')){
-	function printdiffratio ($diff, $total) {
+	function printdiffratio($diff, $total) {
 		if (!$total) {
-			echo "+100";
+			printplus(100);
 		} else {
-			$diff = round($diff / $total * 100);
-			echo ($diff > 0)? "+".$diff : $diff;
+			printplus(round($diff / $total * 100));
 		}
 	}
 }
@@ -82,8 +86,11 @@ if(!function_exists('printdiffratio')){
 			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 11%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
 			<td style="text-align: right; border-bottom: 1px solid black; width: 11%"><?php echo ($stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_PRIX] : '*' ?></td>
 			<td style="text-align: right; border-left: 1px solid black; border-bottom: 1px solid black; width: 11%"><?php echo number_format(str_replace(',', '.', $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></td>
-			<td style="text-align: right; border-bottom: 1px solid black; width: 11%"><?php echo ($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC] > 0)? "+".$stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC] : $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC]; ?></td>
-			<td style="text-align: right; border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; width: 11%"><?php echo ($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC] > 0)? "+".$stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC] : $stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC]; ?></td>
+			<td style="text-align: right; border-bottom: 1px solid black; width: 11%"><?php echo printplus($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_VOL_PERC]); ?></td>
+			<td style="text-align: right; border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; width: 11%"><?php
+				echo ($stat[VracMercuriale::OUT_PREVIOUS][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG) && ($stat[VracMercuriale::OUT_CURRENT][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG) ?
+						printplus($stat[VracMercuriale::OUT_VARIATION][VracMercuriale::OUT_PRIX_PERC]) : '*' ;
+			?></td>
 		</tr>
 		<?php endforeach; ?>
 	</table>
