@@ -238,6 +238,15 @@ class ExportDRXml {
                                     if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
                                         $col['L1'] = $this->getCodeDouane($detail);
                                     }
+                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_BL'){
+                                        $col['L1'] = "4B999";
+                                    }
+                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_RG'){
+                                        $col['L1'] = "4R999";
+                                    }
+                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_RS'){
+                                        $col['L1'] = "4S999";
+                                    }
 
                                     $col['L3'] = 'B';
                                     if ($appellationConfig->hasLieuEditable()) {
