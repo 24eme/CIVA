@@ -90,7 +90,6 @@ class ExportDRXml {
                             $object = $couleur;
                         }
 
-
                         if($this->destinataire == self::DEST_DOUANE) {
                             if($appellation->getKey() == 'appellation_CREMANT') {
                                 $col_total_cremant_blanc = null;
@@ -187,8 +186,18 @@ class ExportDRXml {
 
                         $colass = null;
 
+                        $cepagesConfig = array();
+
+                        foreach($couleurConfig->getCepages() as $cepConfig) {
+                            if ($cepConfig->exist('attributs') && $cepConfig->attributs->exist('no_dr') && $cepConfig->attributs->no_dr) {
+                              continue;
+                            }
+
+                            $cepagesConfig[$cepConfig->getHash()] = $cepConfig;
+                        }
+
                         if ($this->destinataire == self::DEST_DOUANE &&
-                            count($couleurConfig->getCepages()) == 1 &&
+                            count($cepagesConfig) == 1 &&
                             count($couleur->getCepages()) == 1 /*&&
                         !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
                             $cepage = $couleur->getCepages()->getFirst();
