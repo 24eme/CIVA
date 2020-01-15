@@ -243,20 +243,6 @@ class ExportDRXml {
 
                                     $col['L1'] = $this->getCodeDouane($detail);
 
-                                    // SI PAS D'AUTRE AOC
-                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
-                                        $col['L1'] = $this->getCodeDouane($detail);
-                                    }
-                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_BL'){
-                                        $col['L1'] = "4B999";
-                                    }
-                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_RG'){
-                                        $col['L1'] = "4R999";
-                                    }
-                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $this->destinataire == self::DEST_DOUANE && $cepage->getKey() == 'cepage_RS'){
-                                        $col['L1'] = "4S999";
-                                    }
-
                                     $col['L3'] = 'B';
                                     if ($appellationConfig->hasLieuEditable()) {
                                         $col['mentionVal'] = $detail->lieu;
@@ -517,6 +503,19 @@ class ExportDRXml {
     }
 
     public function getCodeDouane($noeud) {
+
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_BL') {
+
+            return "4B999";
+        }
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_RG') {
+
+            return "4R999";
+        }
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_RS') {
+
+            return "4S999";
+        }
 
         if($noeud instanceof DRRecolteLieu && $noeud->getAppellation()->getKey() == "appellation_CREMANT") {
 
