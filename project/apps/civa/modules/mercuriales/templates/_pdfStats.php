@@ -30,7 +30,7 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
 			<h1 style="text-decoration: underline;">MERCURIALE DES VINS D'ALSACE</h1>
 			<span>Transactions en vrac entre Opérateurs du Vignoble Alsace AOC</span><br />
     		<span style="font-size: 80%;">(hors Grands-crus et hors vins de base Crémant d'Alsace)</span><br />
-    		<span style="font-size: 80%;">(depuis le 01/12/2012, la mercuriale intègre les transactions de Négoce à Négoce,<br />conformément à l'article 5 de l'Accord Interprofessionnel)</span>	
+    		<span style="font-size: 80%;">(depuis le 01/12/2019, la mercuriale distingue de manière systématique,<br />les transactions en bio et en conventionnel)</span>	
 		</td>
 	</tr>
 </table>
@@ -71,15 +71,15 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		<tr>
         			<td style="width: 35%; border-left: 1px solid black;"><?php echo strtoupper($cepages[$key]) ?>  Conventionnel</td>
         			<td style="text-align: right; width: 15%; border-left: 1px solid black;"><?php echo (isset($stats[$k]))? $stats[$k][VracMercuriale::OUT_NB] : 0; ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black;"><?php echo (isset($stats[$k]))? number_format(str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "0,00"; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black;"><?php echo (isset($stats[$k]))? ($stats[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? number_format(str_replace(',', '.', $stats[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "*" : '*'; ?></td>
         			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;"><?php echo (isset($stats[$k]))? ($stats[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $stats[$k][VracMercuriale::OUT_PRIX] : '*' : '*'; ?></td>
         		</tr>
                 <?php endif; ?>
                 <?php endforeach; ?>
                 <tr>
-        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong>TOTAL Conventionnel</strong></td>
-        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong><?php echo $nbLots ?></strong></td>
-        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong><?php echo number_format($vol, 2, ',', ' ') ?></strong></td>
+        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong style="color: #b1920c;">TOTAL Conventionnel</strong></td>
+        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong style="color: #b1920c;"><?php echo $nbLots ?></strong></td>
+        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong style="color: #b1920c;"><?php echo number_format($vol, 2, ',', ' ') ?></strong></td>
                     <td style="text-align: right; width: 25%; border-top: 1px solid black; <?php if ($nbLotsBio) echo 'border-bottom: 1px solid black;'; ?>">&nbsp;</td>
         		</tr>
                 <?php if($nbLotsBio > 0):
@@ -93,27 +93,27 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
         		<tr>
         			<td style="width: 35%; border-left: 1px solid black;"><?php echo strtoupper($cepages[$key]) ?> Biologique</td>
         			<td style="text-align: right; width: 15%; border-left: 1px solid black;"><?php echo (isset($statsBio[$k]))? $statsBio[$k][VracMercuriale::OUT_NB] : 0; ?></td>
-        			<td style="text-align: right; width: 25%; border-left: 1px solid black;"><?php echo (isset($statsBio[$k]))? number_format(str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "0,00"; ?></td>
+        			<td style="text-align: right; width: 25%; border-left: 1px solid black;"><?php echo (isset($statsBio[$k]))? ($statsBio[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? number_format(str_replace(',', '.', $statsBio[$k][VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') : "*" : '*'; ?></td>
         			<td style="text-align: right; width: 25%; border-left: 1px solid black; border-right: 1px solid black;"><?php echo (isset($statsBio[$k]))? ($statsBio[$k][VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsBio[$k][VracMercuriale::OUT_PRIX] : '*' : '*'; ?></td>
         		</tr>
         		<?php endif; ?>
         		<?php endforeach; ?>
         		<tr>
-        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong>TOTAL Biologique</strong></td>
-        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong><?php echo $nbLotsBio ?></strong></td>
-        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong><?php echo number_format($volBio, 2, ',', ' ') ?></strong></td>
+        			<td style="text-align: right; width: 35%; border: 1px solid black;"><strong style="color: #b1920c;">TOTAL Biologique</strong></td>
+        			<td style="text-align: right; width: 15%; border: 1px solid black;"><strong style="color: #b1920c;"><?php echo $nbLotsBio ?></strong></td>
+        			<td style="text-align: right; width: 25%; border: 1px solid black;"><strong style="color: #b1920c;"><?php echo number_format($volBio, 2, ',', ' ') ?></strong></td>
                     <td style="text-align: right; width: 25%; border-top: 1px solid black;">&nbsp;</td>
         		</tr>
         		<?php endif; ?>
         	</table>
-        	<p>* Secret statistique : nombre minimum de lots non-atteint pour publication</p>
+        	<p>* non significatif : nombre minimum de lots non-atteint pour publication (secret statistique)</p>
             <?php if($mercuriale->hasWithCremant()): ?>
         	<h2><span style="text-decoration: underline;">Vins de base Crémant d'Alsace</span> <span style="font-size: 80%">Période du <?php echo  '01/'.$mercuriale->getStart('m/Y') ?> au <?php echo $mercuriale->getEnd() ?></span></h2>
             <table>
                 <?php if($statsCRConv): ?>
                 <tr>
                     <td>Nombre de lots Conventionnels : <strong><?php echo $statsCRConv[VracMercuriale::OUT_NB] ?></strong></td>
-                    <td>Volume Conventionnel : <strong><?php echo number_format(str_replace(',', '.', $statsCRConv[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl</td>
+                    <td>Volume Conventionnel : <strong><?php echo ($statsCRConv[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? number_format(str_replace(',', '.', $statsCRConv[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ')."&nbsp;hl" : '*' ?></strong></td>
                     <td>Prix moyen : <strong><?php echo ($statsCRConv[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRConv[VracMercuriale::OUT_PRIX] : '*' ?></strong></td>
                 </tr>
                 <?php else: ?>
@@ -122,7 +122,7 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
                 <?php if($statsCRBio): ?>
                 <tr>
                     <td>Nombre de lots Biologiques : <strong><?php echo $statsCRBio[VracMercuriale::OUT_NB] ?></strong></td>
-                    <td>Volume Biologique : <strong><?php echo number_format(str_replace(',', '.', $statsCRBio[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ') ?></strong>&nbsp;hl</td>
+                    <td>Volume Biologique : <strong><?php echo ($statsCRBio[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? number_format(str_replace(',', '.', $statsCRBio[VracMercuriale::OUT_VOL]) * 1, 2, ',', ' ')."&nbsp;hl" : '*' ?></strong></td>
                     <td>Prix moyen : <strong><?php echo ($statsCRBio[VracMercuriale::OUT_NB] >= VracMercuriale::NB_MIN_TO_AGG)? $statsCRBio[VracMercuriale::OUT_PRIX] : '*' ?></strong></td>
                 </tr>
                 <?php else: ?>
