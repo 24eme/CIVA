@@ -29,8 +29,8 @@ if ($end->format('m') != $mercuriale->getEnd('m')) {
 		<td style="width: 88%; text-align: center;">
 			<h1 style="text-decoration: underline;">MERCURIALE DES VINS D'ALSACE</h1>
 			<span>Transactions en vrac entre Opérateurs du Vignoble Alsace AOC</span><br />
-    		<span style="font-size: 80%;">(hors Grands-crus et hors vins de base Crémant d'Alsace</span><br />
-    		<span style="font-size: 80%;">depuis le 01/12/2019, la mercuriale distingue de manière systématique,<br />les transactions en bio et en conventionnel)</span>	
+    		<span style="font-size: 80%;">hors Grands-crus et hors vins de base Crémant d'Alsace</span><br />
+    		<span style="font-size: 80%;">(depuis le 01/12/2019, la mercuriale distingue de manière systématique,<br />les transactions en bio et en conventionnel)</span>	
 		</td>
 	</tr>
 </table>
