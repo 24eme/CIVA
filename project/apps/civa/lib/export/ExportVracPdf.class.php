@@ -5,12 +5,12 @@ class ExportVracPdf extends ExportDocument {
     const NB_LIGNES_PAR_PAGES = 50;
 
     protected $type;
-    protected $document; 
+    protected $document;
     protected $nb_pages;
     protected $partial_function;
     protected $file_dir;
     protected $no_cache;
-    
+
     protected $vrac;
     protected $odg;
 
@@ -23,10 +23,10 @@ class ExportVracPdf extends ExportDocument {
 
         $this->vrac = $vrac;
         $this->odg = $odg;
-        
+
         $this->init($filename);
     }
-    
+
     public function generatePDF() {
         if($this->no_cache || !$this->isCached()) {
             $this->create();
@@ -68,31 +68,31 @@ class ExportVracPdf extends ExportDocument {
     }
 
     public static function buildFileName($vrac, $with_name = true, $with_rev = false) {
-        $filename = sprintf("%s_Contrat-%s_%s", $vrac->type_archive, str_replace('-', '', $vrac->valide->date_validation), $vrac->numero_visa);        
-        
-        if($with_name) {            
+        $filename = sprintf("%s_Contrat-%s_%s", $vrac->type_archive, str_replace('-', '', $vrac->valide->date_validation), $vrac->numero_visa);
+
+        if($with_name) {
             $libelle = '';
 		    if($vrac->vendeur->intitule) {
-		    	$libelle .= $vrac->vendeur->intitule.'-';	
+		    	$libelle .= $vrac->vendeur->intitule.'-';
 		    }
 		    $libelle .= $vrac->vendeur->raison_sociale.'_';
 		    if($vrac->acheteur->intitule) {
-		    	$libelle .= $vrac->acheteur->intitule.'-';	
+		    	$libelle .= $vrac->acheteur->intitule.'-';
 		    }
 		    $libelle .= $vrac->acheteur->raison_sociale;
 		    if ($vrac->hasCourtier()) {
 		    	$libelle .= '_';
 		    	if($vrac->mandataire->intitule) {
-		    		$libelle .= $vrac->mandataire->intitule.'-';	
+		    		$libelle .= $vrac->mandataire->intitule.'-';
 		    	}
 		    	$libelle .= $vrac->mandataire->raison_sociale;
 		    }
-		    
+
             $libelle = strtoupper(KeyInflector::slugify($libelle));
             $filename .= '_'.$libelle;
         }
 
-        if($with_rev) {            
+        if($with_rev) {
             $rev = VracClient::getInstance()->find($vrac->_id, acCouchdbClient::HYDRATE_JSON)->_rev;;
             $rev = md5($rev);
             $filename .= '_'.$rev;
@@ -103,11 +103,36 @@ class ExportVracPdf extends ExportDocument {
 
     protected function create() {
         $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
-        $this->document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $this->vrac->type_contrat, 'clause_reserve_propriete' => $this->vrac->exist('clause_reserve_propriete'))));
+        if($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE){
+          $this->document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $this->vrac->type_contrat, 'clause_reserve_propriete' => $this->vrac->exist('clause_reserve_propriete'))));
+        }
     }
 
     protected function getPartial($templateName, $vars = null) {
         return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
+
+    public function getPdfFilePath(){
+      return $this->document->getPdfFilePath();
+    }
+
+    public function output() {
+      if($this->vrac->type_contrat == VracClient::TYPE_VRAC && $this->type == 'pdf'){
+
+        $content = $this->document->output();
+        $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
+        file_put_contents($tmpPdfPath,$content);
+
+        $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_vrac_verso.pdf';
+
+        $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
+        shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);
+        unlink($tmpPdfPath);
+
+        return file_get_contents($ouputPdf);
+      }
+      return $this->document->output();
+    }
+
 
 }

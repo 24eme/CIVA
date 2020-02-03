@@ -13,8 +13,8 @@ class PageablePDF extends PageableOutput {
     protected $pdf_file;
 
     protected function init() {
-        
-        
+
+
         $header_logo_width = (isset($this->config['PDF_HEADER_LOGO_WIDTH'])) ? $this->config['PDF_HEADER_LOGO_WIDTH'] : PDF_HEADER_LOGO_WIDTH;
         $pdf_font_size_main = (isset($this->config['PDF_FONT_SIZE_MAIN'])) ? $this->config['PDF_FONT_SIZE_MAIN'] : PDF_FONT_SIZE_MAIN;
         $margin_top = (isset($this->config['PDF_MARGIN_TOP'])) ? $this->config['PDF_MARGIN_TOP'] : PDF_MARGIN_TOP;
@@ -40,7 +40,7 @@ class PageablePDF extends PageableOutput {
         $this->pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         //set margins
-       
+
         $this->pdf->SetMargins(PDF_MARGIN_LEFT, $margin_top, PDF_MARGIN_RIGHT);
         $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -82,11 +82,15 @@ class PageablePDF extends PageableOutput {
         return true;
     }
 
+    public function getPdfFilePath(){
+      return $this->pdf_file;
+    }
+
     public function addHeaders($response) {
         $response->setHttpHeader('Content-Type', 'application/pdf');
         $response->setHttpHeader('Content-disposition', 'attachment; filename="' . basename($this->filename) . '"');
         $response->setHttpHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHttpHeader('Content-Length', filesize($this->pdf_file));
+    //    $response->setHttpHeader('Content-Length', filesize($this->pdf_file));
         $response->setHttpHeader('Pragma', '');
         $response->setHttpHeader('Cache-Control', 'public');
         $response->setHttpHeader('Expires', '0');
@@ -115,4 +119,3 @@ class PageablePDF extends PageableOutput {
     }
 
 }
-
