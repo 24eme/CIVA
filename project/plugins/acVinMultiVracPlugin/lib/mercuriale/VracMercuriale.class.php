@@ -97,12 +97,12 @@ class VracMercuriale
             if (is_string($filtres)) {
                 $filtres = array($filtres);
             }
-            $this->mercuriales = array_diff($filtres, array('CR'));
-            $this->mercuriales = ($this->mercuriales) ? implode('_', $this->mercuriales) : null;
+            $this->mercuriale = array_diff($filtres, array('CR'));
+            $this->mercuriale = ($this->mercuriale) ? implode('_', $this->mercuriale) : null;
             $this->filtres = implode('_', $filtres);
         }else{
             $this->filtres = null;
-            $this->mercuriales = null;
+            $this->mercuriale = null;
         }
 		$this->pdfFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.pdf' : $this->start.'_'.$this->end.'_mercuriales.pdf';
 		$this->csvFilename = ($this->filtres)? $this->start.'_'.$this->end.'_'.$this->filtres.'_mercuriales.csv' : $this->start.'_'.$this->end.'_mercuriales.csv';
@@ -329,6 +329,9 @@ class VracMercuriale
 			if (!in_array($datas[self::IN_CP_CODE], $cepages)) {
 				continue;
 			}
+            if ($this->mercuriale !== null && strpos($this->mercuriale, $datas[self::IN_MERCURIAL]) === false) {
+                continue;
+            }
 			$periode = $this->getPlotPeriode($datas[self::IN_DATE]);
 			if (!isset($result[$periode])) {
 				$result[$periode] = array();
