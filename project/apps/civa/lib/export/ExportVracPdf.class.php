@@ -103,9 +103,7 @@ class ExportVracPdf extends ExportDocument {
 
     protected function create() {
         $this->document->addPage($this->getPartial('vrac_export/principal', array('vrac' => $this->vrac, 'odg' => $this->odg)));
-        if($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE){
-          $this->document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $this->vrac->type_contrat, 'clause_reserve_propriete' => $this->vrac->exist('clause_reserve_propriete'))));
-        }
+
     }
 
     protected function getPartial($templateName, $vars = null) {
@@ -117,13 +115,19 @@ class ExportVracPdf extends ExportDocument {
     }
 
     public function output() {
-      if($this->vrac->type_contrat == VracClient::TYPE_VRAC && $this->type == 'pdf'){
+      if($this->type == 'pdf'){
 
         $content = $this->document->output();
         $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         file_put_contents($tmpPdfPath,$content);
 
-        $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_vrac_verso.pdf';
+        if($this->vrac->type_contrat == VracClient::TYPE_VRAC){
+          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_vrac_verso.pdf';
+        }
+
+        if($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE){
+          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_bouteille_verso.pdf';
+        }
 
         $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);
