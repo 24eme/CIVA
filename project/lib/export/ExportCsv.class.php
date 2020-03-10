@@ -87,7 +87,7 @@ class ExportCsv {
         
         $type = $options['type'];
         if ($type == "string") {
-            $value = '"' . str_replace('"', '\"', $value) . '"';
+            $value = '"' . str_replace('"', '', $value) . '"';
         }
         if ($type == "float" && ($value !== null || (array_key_exists("default", $options) && $options['default']))) {
             $value = sprintf($options['format'], $value);
@@ -96,7 +96,7 @@ class ExportCsv {
     }
     
     protected function filterDefault($value) {
-        return '"' . str_replace('"', '\"', $value) . '"';
+        return '"' . str_replace('"', '', $value) . '"';
     }
 
     /**
