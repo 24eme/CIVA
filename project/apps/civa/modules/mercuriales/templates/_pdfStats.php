@@ -14,7 +14,7 @@ $end = new DateTime($mercuriale->getEnd('Y-m-d'));
 $end->modify('+1 day');
 $statsCRConv = null;
 $statsCRBio = null;
-if ($end->format('m') != $mercuriale->getEnd('m')) {
+if ($mercuriale->hasWithCremant()) {
     $ordre = VracMercuriale::$ordres;
     $key = $ordre['CR'].'CR';
     $statsCRConv = $mercuriale->getStats($start, $mercuriale->getEnd('Y-m-d'), true, 0);
