@@ -165,6 +165,15 @@ class VracDetail extends BaseVracDetail {
     	}
     }
 
+	public function getLabel() {
+		if(!$this->exist('label')) {
+
+			return null;
+		}
+
+		return $this->_get('label');
+	}
+
     public function clear()
     {
     	$this->vtsgn = null;
