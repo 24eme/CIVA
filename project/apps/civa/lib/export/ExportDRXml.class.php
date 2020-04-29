@@ -90,7 +90,6 @@ class ExportDRXml {
                             $object = $couleur;
                         }
 
-
                         if($this->destinataire == self::DEST_DOUANE) {
                             if($appellation->getKey() == 'appellation_CREMANT') {
                                 $col_total_cremant_blanc = null;
@@ -187,8 +186,18 @@ class ExportDRXml {
 
                         $colass = null;
 
+                        $cepagesConfig = array();
+
+                        foreach($couleurConfig->getCepages() as $cepConfig) {
+                            if ($cepConfig->exist('attributs') && $cepConfig->attributs->exist('no_dr') && $cepConfig->attributs->no_dr) {
+                              continue;
+                            }
+
+                            $cepagesConfig[$cepConfig->getHash()] = $cepConfig;
+                        }
+
                         if ($this->destinataire == self::DEST_DOUANE &&
-                            count($couleurConfig->getCepages()) == 1 &&
+                            count($cepagesConfig) == 1 &&
                             count($couleur->getCepages()) == 1 /*&&
                         !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
                             $cepage = $couleur->getCepages()->getFirst();
@@ -233,11 +242,6 @@ class ExportDRXml {
                                     $col = array();
 
                                     $col['L1'] = $this->getCodeDouane($detail);
-
-                                    // SI PAS D'AUTRE AOC
-                                    if ($appellation->getKey() == 'appellation_VINTABLE' && $dr->recolte->getNoeudAppellations()->getAppellations()->count() > 1) {
-                                        $col['L1'] = $this->getCodeDouane($detail);
-                                    }
 
                                     $col['L3'] = 'B';
                                     if ($appellationConfig->hasLieuEditable()) {
@@ -499,6 +503,19 @@ class ExportDRXml {
     }
 
     public function getCodeDouane($noeud) {
+
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_BL') {
+
+            return "4B999";
+        }
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_RG') {
+
+            return "4R999";
+        }
+        if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_RS') {
+
+            return "4S999";
+        }
 
         if($noeud instanceof DRRecolteLieu && $noeud->getAppellation()->getKey() == "appellation_CREMANT") {
 
