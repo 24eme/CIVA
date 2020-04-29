@@ -338,7 +338,10 @@ class VracMercuriale
 					$result[$periode][$cepage] = array();
 				}
 			}
-			$result[$periode][$datas[self::IN_CP_CODE]][] = str_replace(',', '.', $datas[self::IN_PRIX]) * 1;
+            $result[$periode][$datas[self::IN_CP_CODE]][] = array(
+                'prix' => (float) str_replace(',', '.', $datas[self::IN_PRIX]) * str_replace(',', '.', $datas[self::IN_VOL]),
+                'volume' => (float) str_replace(',', '.', $datas[self::IN_VOL])
+            );
 		}
 		$toMerge = array();
 		foreach ($result as $periode => $values) {
@@ -369,9 +372,16 @@ class VracMercuriale
 		ksort($result);
 		$datas = array();
 		foreach ($result as $periode => $values) {
-			foreach ($values as $cepage => $prix) {
-				$nb = count($prix);
-				$datas[$periode][$cepage] = ($nb >= self::NB_MIN_TO_AGG)? round(array_sum($prix)/$nb, 2) : null;
+			foreach ($values as $nom_cepage => $cepage) {
+				$nb = count($cepage);
+                if ($nb >= self::NB_MIN_TO_AGG) {
+                    $total_volume = round(array_sum(array_column($cepage, 'volume')),2);
+                    $total_prix = round(array_sum(array_column($cepage, 'prix')),2);
+                    $somme_ponderee = $total_prix / $total_volume;
+                    $datas[$periode][$nom_cepage] = round($somme_ponderee, 2);
+                } else {
+                    $datas[$periode][$nom_cepage] = null;
+                }
 			}
 		}
 		return $datas;
