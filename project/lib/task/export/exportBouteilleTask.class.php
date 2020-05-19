@@ -84,7 +84,7 @@ EOF;
             	$valuesProduit = $produit->value;
                 unset($valuesProduit[VracBouteillesProduitsView::VALUE_DENOMINATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
-            	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE]);
+            	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE], $valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_NUMERO_ORDRE] = $i;
             	$csvBoudet->add($valuesProduit);
             }
@@ -141,11 +141,11 @@ EOF;
 
         return $code;
     }
-    
-    protected function getCepage($cepage)
+
+    protected function getCepage($cepage, $appellation)
     {
-    	if ($cepage == "BL" || $cepage == "RS") {
-    		$cepage = "CR";
+    	if ($appellation == 'CREMANT') {
+    		return "CR";
     	}
     	return $cepage;
     }

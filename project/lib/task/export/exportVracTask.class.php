@@ -100,7 +100,7 @@ EOF;
 	            	$valuesProduit = $produit->value;
                     unset($valuesProduit[VracProduitsView::VALUE_DENOMINATION]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
-	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE]);
+	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
 	            	$valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] = $valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
@@ -240,10 +240,11 @@ EOF;
         return $code;
     }
 
-    protected function getCepage($cepage)
+    protected function getCepage($cepage, $appellation)
     {
-    	if ($cepage == "BL" || $cepage == "RS") {
-    		$cepage = "CR";
+    	if ($appellation == 'CREMANT') {
+
+            return "CR";
     	}
 
         if ($cepage == "AU" || $cepage == "PI") {
