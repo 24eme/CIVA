@@ -212,49 +212,12 @@ EOF;
     	}
     	return $top_mercuriale;
     }
-    
-    protected function getCodeAppellation($appellation)
-    {
-        if($appellation == "VINTABLE") {
-            
-            return -1;
-        }
 
-    	$code = 1;
-
-    	switch ($appellation) {
-                case 'CREMANT':
-                    $code = 2;
-                    break;
-                case 'GRDCRU':
-                    $code = 3;
-                    break;
-             	case "COMMUNALE":
-                    $code = 7;
-                    break;
-             	case "LIEUDIT":
-                    $code = 8;
-                default:
-                    $code = 1;
-        }
-        return $code;
+    protected function getCepage($cepage, $appellation) {
+        return VarcMercuriale::getCepage($cepage, $appellation);
     }
 
-    protected function getCepage($cepage, $appellation)
-    {
-    	if ($appellation == 'CREMANT') {
-
-            return "CR";
-    	}
-
-        if ($cepage == "AU" || $cepage == "PI") {
-            $cepage = "PB";
-        }
-
-        if ($cepage == "MO") {
-            $cepage = "MU";
-        }
-        
-    	return $cepage;
+    protected function getCodeAppellation($appellation) {
+        return VarcMercuriale::getCodeAppellation($appellation);
     }
 }
