@@ -10,7 +10,8 @@ class VracMercuriale
 	CONST IN_VOL = 5;
 	CONST IN_PRIX = 6;
 	CONST IN_BIO = 7;
-	
+    CONST IN_ORDRE = 8;
+
 	CONST OUT_MERCURIALE = "MERCURIALE";
 	CONST OUT_STATS = "STATISTIQUES";
 	CONST OUT_CP_CODE = "CEPAGE_CODE";
@@ -31,9 +32,10 @@ class VracMercuriale
 	CONST OUT_VARIATION = "VARIATION";
 	CONST OUT_VISA = "VISA";
 	CONST OUT_BIO = "BIO";
-	
+    CONST OUT_ORDRE = "ORDRE";
+
 	CONST NB_MIN_TO_AGG = 3;
-	
+
 	public static $cepages = array(
 			'ED' => 'Edelzwicker',
 			'GW' => 'Gewurztraminer',
@@ -195,23 +197,23 @@ class VracMercuriale
 			}
 			return $date;
 	}
-	
+
 	// *** BEGIN GENERATE DATAS FCTS ***
-	
+
 	public function generateMercurialeDatasFile($csvFile) {
 		if (file_exists($csvFile)) {
 			return;
 		}
 		$items = $this->getMercurialeDatas();
-		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO), "\r\n");
+		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_ORDRE), "\r\n");
 		foreach ($items as $date => $values) {
 			foreach ($values as $result) {
-				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO]));
+				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO], $result[self::OUT_ORDRE]));
 			}
 		}
 		file_put_contents($csvFile, $csv->output());
 	}
-	
+
 	protected function getMercurialeDatas($from = '1990-01-01', $to = null) {
 		$items = array();
 		$to = ($to)? $to :  date('Y-m-d', time() - 3600 * 24);
@@ -230,14 +232,15 @@ class VracMercuriale
 				    if ($produit->value[VracProduitsView::VALUE_VTSGN]) {
 				        continue;
 				    }
-					if ($cepage = $this->getCepage($produit->value[VracProduitsView::VALUE_CEPAGE])) {
+					if ($cepage = self::getCepage($produit->value[VracProduitsView::VALUE_CEPAGE], $produit->value[VracProduitsView::VALUE_CODE_APPELLATION])) {
 						$volume = ($produit->value[VracProduitsView::VALUE_DATE_CIRCULATION])? $produit->value[VracProduitsView::VALUE_VOLUME_ENLEVE] : $produit->value[VracProduitsView::VALUE_VOLUME_PROPOSE];
 						$prix = $produit->value[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
-						$bio = ($produit->value[VracProduitsView::VALUE_DEGRE] == 99)? 1 : 0; 
+						$bio = ($produit->value[VracProduitsView::VALUE_DEGRE] == 99)? 1 : 0;
+                        $appellation = $produit->value[VracProduitsView::VALUE_CODE_APPELLATION];
 						if (!isset($items[$date])) {
 							$items[$date] = array();
 						}
-						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio);
+						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio, self::OUT_ORDRE => $this->getOrdre($cepage, $appellation));
 					}
 				}
 			}
@@ -245,16 +248,49 @@ class VracMercuriale
 		ksort($items);
 		return $items;
 	}
-	
-	protected function getCepage($cepage)
-	{
-		if ($cepage == "BL" || $cepage == "RS") {
-			$cepage = "CR";
-		}
-		if ($cepage == "AU" || $cepage == "PI") {
-			$cepage = "PB";
-		}
-		if ($cepage == "PR") {
+
+    public static function getCodeAppellation($appellation)
+    {
+        if($appellation == "VINTABLE") {
+
+            return -1;
+        }
+
+    	$code = 1;
+
+    	switch ($appellation) {
+                case 'CREMANT':
+                    $code = 2;
+                    break;
+                case 'GRDCRU':
+                    $code = 3;
+                    break;
+             	case "COMMUNALE":
+                    $code = 7;
+                    break;
+             	case "LIEUDIT":
+                    $code = 8;
+                default:
+                    $code = 1;
+        }
+        return $code;
+    }
+
+    public static function getCepage($cepage, $appellation)
+    {
+    	if ($appellation == 'CREMANT') {
+            return "CR";
+    	}
+
+        if ($cepage == "AU" || $cepage == "PI") {
+            $cepage = "PB";
+        }
+
+        if ($cepage == "MO") {
+            $cepage = "MU";
+        }
+
+        if ($cepage == "PR") {
 			$cepage = "PN";
 		}
 		if ($cepage == "MO") {
@@ -395,9 +431,9 @@ class VracMercuriale
 		return (substr($date, -2) > 15)? (substr($date, 0, 6).'2')*1 : (substr($date, 0, 6).'1')*1;
 	}
 
-	public function getOrdre($cep)
+	public function getOrdre($cep, $appellation)
 	{
-	    return (isset(self::$ordres[$this->getCepage($cep)]))? self::$ordres[$this->getCepage($cep)] : 9;
+	    return (isset(self::$ordres[self::getCepage($cep, $appellation)]))? self::$ordres[self::getCepage($cep, $appellation)] : 9;
 	}
 
     public function getCumulPeriodesRanges() {
@@ -538,7 +574,7 @@ class VracMercuriale
 		}
 		if (count($this->datas) > 0) {
 			$result = array();
-			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO), "\r\n");
+			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_ORDRE), "\r\n");
 			foreach ($this->datas as $datas) {
 				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
 					continue;
@@ -554,8 +590,8 @@ class VracMercuriale
 					if (!isset($result[$key])) {
 						$result[$key] = array();
 					}
-					$result[$key][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX], self::OUT_BIO => $datas[self::IN_BIO]);
-					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX], $datas[self::IN_BIO]));
+					$result[$key][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX], self::OUT_BIO => $datas[self::IN_BIO], self::OUT_ORDRE => $datas[self::IN_ORDRE]);
+					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX], $datas[self::IN_BIO] , $datas[self::IN_ORDRE]));
 				}
 			}
 			if (!file_exists($this->publicPdfPath.$this->csvFilename) ||  (file_exists($this->publicPdfPath.$this->csvFilename) && $withCR)) {
@@ -579,7 +615,6 @@ class VracMercuriale
 		        continue;
 		    }
 		    $cep = str_replace('_BIO', '', $k);
-		    $ordre = $this->getOrdre($cep);
 			$nb = count($values);
 			$volume = 0;
 			$prix = 0;
@@ -588,6 +623,7 @@ class VracMercuriale
 			$contrats = array();
 			$i = 0;
 			foreach ($values as $val) {
+                $ordre = $val[self::OUT_ORDRE];
 			    $i++;
 				$volume += str_replace(',', '.', $val[self::OUT_VOL]) * 1;
 				$prix += (str_replace(',', '.', $val[self::OUT_PRIX]) * 1) * (str_replace(',', '.', $val[self::OUT_VOL]) * 1);
