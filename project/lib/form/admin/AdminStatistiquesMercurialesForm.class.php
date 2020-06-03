@@ -1,12 +1,12 @@
 <?php
 class AdminStatistiquesMercurialesForm extends BaseForm {
     protected $typesFiltres = [
-        'C' => "Coopérative vers Négoce",
-        'M' => "Viticulteur vers Négoce",
-        'V' => "Vigneron vers Vigneron",
-        'X' => "Négoce vers Négoce",
-        'I' => "Contrat interne",
-        'CR' => "Avec crémant"
+        'C' => "Coopérative vers Négoce (C)",
+        'M' => "Viticulteur vers Négoce (M)",
+        'V' => "Vigneron vers Vigneron (V)",
+        'X' => "Négoce vers Négoce (X)",
+        'I' => "Contrat interne (I)",
+        'CR' => "Avec crémant (CR)"
     ];
 
     public function configure() {
