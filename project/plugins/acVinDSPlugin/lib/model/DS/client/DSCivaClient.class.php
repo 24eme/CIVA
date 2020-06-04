@@ -296,14 +296,17 @@ class DSCivaClient extends DSClient {
         }
 
         $dss = $this->findDssByDS($ds);
-
+        $find = false;
         foreach ($dss as $d) {
+            if($find) {
+                return $d;
+            }
             if ($d->_id == $ds->_id) {
-                break;
+                $find = true;
             }
         }
 
-        return current($dss);
+        return null;
     }
 
     public function findDssByDS($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
