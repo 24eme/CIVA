@@ -214,10 +214,10 @@ EOF;
     }
 
     protected function getCepage($cepage, $appellation) {
-        return VarcMercuriale::getCepage($cepage, $appellation);
+        return VracMercuriale::getCepage($cepage, $appellation);
     }
 
     protected function getCodeAppellation($appellation) {
-        return VarcMercuriale::getCodeAppellation($appellation);
+        return VracMercuriale::getCodeAppellation($appellation);
     }
 }
