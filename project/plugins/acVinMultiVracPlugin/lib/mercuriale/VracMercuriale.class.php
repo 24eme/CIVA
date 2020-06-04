@@ -10,7 +10,8 @@ class VracMercuriale
 	CONST IN_VOL = 5;
 	CONST IN_PRIX = 6;
 	CONST IN_BIO = 7;
-    CONST IN_ORDRE = 8;
+    CONST IN_VRAC_ID = 8;
+    CONST IN_ORDRE = 9;
 
 	CONST OUT_MERCURIALE = "MERCURIALE";
 	CONST OUT_STATS = "STATISTIQUES";
@@ -32,6 +33,7 @@ class VracMercuriale
 	CONST OUT_VARIATION = "VARIATION";
 	CONST OUT_VISA = "VISA";
 	CONST OUT_BIO = "BIO";
+    CONST OUT_VRAC_ID = "VRAC_ID";
     CONST OUT_ORDRE = "ORDRE";
 
 	CONST NB_MIN_TO_AGG = 3;
@@ -205,10 +207,10 @@ class VracMercuriale
 			return;
 		}
 		$items = $this->getMercurialeDatas();
-		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_ORDRE), "\r\n");
+		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_VRAC_ID, self::OUT_ORDRE), "\r\n");
 		foreach ($items as $date => $values) {
 			foreach ($values as $result) {
-				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO], $result[self::OUT_ORDRE]));
+				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO], $result[self::OUT_VRAC_ID], $result[self::OUT_ORDRE]));
 			}
 		}
 		file_put_contents($csvFile, $csv->output());
@@ -240,7 +242,7 @@ class VracMercuriale
 						if (!isset($items[$date])) {
 							$items[$date] = array();
 						}
-						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio, self::OUT_ORDRE => $this->getOrdre($cepage, $appellation));
+						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio, self::OUT_VRAC_ID => $contrat->id, self::OUT_ORDRE => $this->getOrdre($cepage, $appellation));
 					}
 				}
 			}
@@ -574,7 +576,7 @@ class VracMercuriale
 		}
 		if (count($this->datas) > 0) {
 			$result = array();
-			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_ORDRE), "\r\n");
+			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_VRAC_ID, self::OUT_ORDRE), "\r\n");
 			foreach ($this->datas as $datas) {
 				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
 					continue;
@@ -590,8 +592,8 @@ class VracMercuriale
 					if (!isset($result[$key])) {
 						$result[$key] = array();
 					}
-					$result[$key][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX], self::OUT_BIO => $datas[self::IN_BIO], self::OUT_ORDRE => $datas[self::IN_ORDRE]);
-					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX], $datas[self::IN_BIO] , $datas[self::IN_ORDRE]));
+					$result[$key][] = array(self::OUT_VISA => $datas[self::IN_VISA], self::OUT_VOL => $datas[self::IN_VOL], self::OUT_PRIX => $datas[self::IN_PRIX], self::OUT_BIO => $datas[self::IN_BIO], self::OUT_VRAC_ID => $datas[self::IN_VRAC_ID], self::OUT_ORDRE => $datas[self::IN_ORDRE]);
+					$csv->add(array($datas[self::IN_DATE], $datas[self::IN_VISA], $datas[self::IN_MERCURIAL], $datas[self::IN_CP_CODE], $datas[self::IN_CP_LIBELLE], $datas[self::IN_VOL], $datas[self::IN_PRIX], $datas[self::IN_BIO] , $datas[self::IN_VRAC_ID], $datas[self::IN_ORDRE]));
 				}
 			}
 			if (!file_exists($this->publicPdfPath.$this->csvFilename) ||  (file_exists($this->publicPdfPath.$this->csvFilename) && $withCR)) {
