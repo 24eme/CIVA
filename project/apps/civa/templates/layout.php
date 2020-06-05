@@ -27,7 +27,10 @@
 	   <?php include_partial('global/header', array('compte' => ($sf_user->isAuthenticated() && $sf_user->getCompte()) ? $sf_user->getCompte() : null, 'compteOrigine' => ($sf_user->isInDelegateMode()) ? $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED) : null,'isAdmin' => $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR))); ?>
       <?php include_partial('global/errorFlash') ?>
        <div id="contenu">
-            <?php echo $sf_content ?>
+           <?php if(sfConfig::get('app_instance') == 'preprod' ): ?>
+             <div style="margin-top: -15px; margin-bottom: 5px;"><p style="color:red; text-align:center; font-weight: bold;">Preproduction (la base est succeptible d'être supprimée à tout moment)</p></div>
+           <?php endif; ?>
+           <?php echo $sf_content ?>
         </div>
         <div id="ajax-modal" class="modal"></div>
         <?php include_partial('global/footer') ?>
