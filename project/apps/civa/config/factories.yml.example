@@ -36,6 +36,7 @@ test:
 
 all:
   mailer:
+    class: AppMailer
     param:
       transport:
         class:  Swift_MailTransport
