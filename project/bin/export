@@ -1,5 +1,5 @@
-#!/bin/bash 
+#!/bin/bash
 
-php symfony generate:export-mairies --trace 2014 2014
-php symfony generate:export-douanes --trace 2014 2014
-php symfony generate:export-inao --trace 2014 2014
+php symfony generate:export-mairies --trace 2019 2019
+php symfony generate:export-douanes --trace 2019 2019
+php symfony generate:export-inao --trace 2019 2019
