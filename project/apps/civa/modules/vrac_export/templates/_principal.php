@@ -1,9 +1,12 @@
+<?php use_helper('TemplatingPDF') ?>
 <?php use_helper('Float') ?>
 <?php use_helper('Date') ?>
-<?php  use_helper('vracExport'); ?>
+<?php use_helper('vracExport'); ?>
 <html class="no-js">
 	<head>
-
+		<style>
+			<?php echo pdfStyle(); ?>
+		</style>
 	</head>
 	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
@@ -52,20 +55,20 @@
                         }
                         ?>
 	<tr>
-			<td width="65px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><span style="font-size: 6pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
-			<td width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left; font-size: 8pt;">&nbsp;<?php echo truncate_text($libelle_produit,70);  ?></td>
-			<td width="42px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>
+			<td class="td-large" width="65px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><small style="font-size: 1.2pt;"><br /></small><span style="font-size: 6pt;"><?php echo $detailLine->getCepage()->getAppellation()->getCodeCiva(); ?></span></td>
+			<td class="td-large" width="<?php echo $widthProduit ?>px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: left; font-size: 8pt;"><small style="font-size: 2.4pt;"><br /></small>&nbsp;<?php echo truncate_text($libelle_produit,70);  ?></td>
+			<td class="td-large" width="42px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;"><?php echo pdfTdLargeStart() ?><?php echo $detailLine->getMillesime(); ?>&nbsp;</td>
 			<?php if (!$odg): ?>
-			<td width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
+			<td class="td-large" width="58px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoPrix($detailLine->getPrixUnitaire()); ?></td>
 			<?php endif; ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoCentilisation(VracClient::getLibelleCentilisation($detailLine->centilisation)) ?></td>
-			<td width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?>&nbsp;&nbsp;</td>
-            <td width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
+			<td class="td-large" width="85px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoCentilisation(VracClient::getLibelleCentilisation($detailLine->centilisation)) ?></td>
+			<td class="td-large" width="70px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echo $detailLine->nb_bouteille; ?><?php endif; ?>&nbsp;&nbsp;</td>
+            <td class="td-large" width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echo echoVolume($detailLine->volume_enleve);; ?></td>
 			<?php else: ?>
-			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echoVolume($detailLine->volume_propose); ?></td>
-			<td width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-            <td width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo $dateRetiraison; ?></td>
+			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoVolume($detailLine->volume_propose); ?></td>
+			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
+            <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?></td>
 			<?php endif; ?>
         </tr>
         <?php
@@ -77,9 +80,9 @@
             $nb_ligne--;
             ?>
                 <tr>
-                    <td colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?> "></td>
-                    <td width="75px" style="border: 1px solid black; text-align: right;"><?php echoVolume($retiraison->volume); ?></td>
-                    <td width="62px" style="border: 1px solid black;  text-align: center;"><?php echoDateFr($retiraison->date); ?></td>
+                    <td class="td-large" colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?> "><?php echo pdfTdLargeStart() ?></td>
+                    <td class="td-large" width="75px" style="border: 1px solid black; text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoVolume($retiraison->volume); ?></td>
+                    <td class="td-large" width="62px" style="border: 1px solid black;  text-align: center;"><?php echo pdfTdLargeStart() ?><?php echoDateFr($retiraison->date); ?></td>
                 </tr>
         <?php
         $cpt++;
@@ -90,14 +93,14 @@
 	?>
 	<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 	<tr>
-			<td style="text-align: left;" colspan="<?php if (!$odg): ?>6<?php else: ?>5<?php endif; ?>" >&nbsp;</td>
-            <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+			<td class="td-large" style="text-align: left;" colspan="<?php if (!$odg): ?>6<?php else: ?>5<?php endif; ?>" >&nbsp;</td>
+            <td class="td-large" style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
 	<?php else: ?>
 	<tr>
-			<td style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
-			<td style="border: 1px solid black;"><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
-                        <td style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+			<td class="td-large" style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
+			<td class="td-large" style="border: 1px solid black;"><?php echo pdfTdLargeStart() ?><?php echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
+                        <td class="td-large" style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
 	<?php endif; ?>
 	<?php if (!$odg): ?>
