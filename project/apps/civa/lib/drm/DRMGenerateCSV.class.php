@@ -207,6 +207,11 @@ class DRMGenerateCSV {
         }
 
         $hashProduit = HashMapper::convert($produitDetail->getHash());
+
+        if($produitDetail instanceof ConfigurationCepage) {
+            $hashProduit = $produitDetail->getHash();
+        }
+
         if(preg_match('#('.$this->aggregate.')#', $hashProduit)) {
 
             return true;
@@ -282,16 +287,21 @@ class DRMGenerateCSV {
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
         $cepageConfig = null;
 
+        if(!is_string($produitDetail)) {
+            $hashProduit = HashMapper::convert($produitDetail->getCepage()->getHash());
+        }
+
         if(is_string($produitDetail) && ConfigurationClient::getInstance()->getCurrent()->exist($produitDetail)) {
             $cepageConfig = ConfigurationClient::getInstance()->getCurrent()->get($produitDetail);
+            $produitDetail = $cepageConfig;
+            $hashProduit = $cepageConfig->getHash();
         }
 
         if($this->isProduitDetailAggregate($produitDetail)) {
            try {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
             } catch(Exception $e) {
-               $config = ConfigurationClient::getInstance()->getCurrent();
-               $cepageConfig = $config->get(HashMapper::convert($produitDetail->getCepage()->getHash()))->getParent()->get('DEFAUT');
+               $cepageConfig = ConfigurationClient::getInstance()->getCurrent()->get($hashProduit)->getParent()->get('DEFAUT');
            }
        }
 
