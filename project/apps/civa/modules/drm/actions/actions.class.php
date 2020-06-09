@@ -85,7 +85,7 @@ class drmActions extends sfActions {
         foreach ($cepageNode->getProduitsDetails()  as $key => $produitsDetail) {
           foreach ($produitsDetail->getRetiraisons() as $retiraison) {
             if(substr(str_replace("-",'',$retiraison->getDate()),0,6) == $drmGenerateCSV->getPeriode()){
-              $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitsDetail, $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
+              $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitsDetail->getConfig()->getHash(), $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
             }
           }
         }
