@@ -282,6 +282,10 @@ class DRMGenerateCSV {
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
         $cepageConfig = null;
 
+        if(is_string($produitDetail) && ConfigurationClient::getInstance()->getCurrent()->exist($produitDetail)) {
+            $cepageConfig = ConfigurationClient::getInstance()->getCurrent()->get($produitDetail);
+        }
+
         if($this->isProduitDetailAggregate($produitDetail)) {
            try {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
