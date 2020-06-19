@@ -69,7 +69,7 @@ EOF;
             $filename_zip = $matches['code_postal'] . '_' . $matches['annee'] . '_DR.zip';
             if (!array_key_exists($filename_zip, $zips)) {
                 $zips[$filename_zip] = new ZipArchive();
-                $zips[$filename_zip]->open($dr_publish_dir . $filename_zip, ZIPARCHIVE::OVERWRITE);
+                $zips[$filename_zip]->open($dr_publish_dir . $filename_zip, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
             }
 
             // Clean Directory
