@@ -57,7 +57,7 @@ EOF;
         }
 
         $zip = new ZipArchive();
-        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZipArchive::OVERWRITE);
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
 
     	$csvBouent = new ExportCsv(null, "\r\n");
         $csvBoudet = new ExportCsv(null, "\r\n");

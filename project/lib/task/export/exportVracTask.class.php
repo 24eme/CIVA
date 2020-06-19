@@ -58,7 +58,7 @@ EOF;
         }
 
         $zip = new ZipArchive();
-        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZipArchive::OVERWRITE);
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
 
         /*
          * CREATION

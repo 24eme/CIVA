@@ -143,7 +143,7 @@ abstract class ExportMiseADispo
                 unlink($zip_path);
             }
             $zip = new ZipArchive();
-            $zip->open($zip_path, ZIPARCHIVE::OVERWRITE);
+            $zip->open($zip_path, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
             foreach($files as $file) {
                 $zip->addFile($file, basename($file));
             }
