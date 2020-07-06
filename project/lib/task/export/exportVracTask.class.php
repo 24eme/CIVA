@@ -214,7 +214,6 @@ EOF;
     }
 
     protected function getCepage($appellation) {
-    {
         if ($appellation == 'CREMANT') {
 
             return "CR";
