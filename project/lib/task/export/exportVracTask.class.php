@@ -213,11 +213,28 @@ EOF;
     	return $top_mercuriale;
     }
 
-    protected function getCepage($cepage, $appellation) {
-        return VracMercuriale::getCepage($cepage, $appellation);
+    protected function getCepage($appellation) {
+    {
+        if ($appellation == 'CREMANT') {
+
+            return "CR";
+        }
+
+        if ($cepage == "AU" || $cepage == "PI") {
+            $cepage = "PB";
+        }
+
+        if ($cepage == "MO") {
+            $cepage = "MU";
+        }
+
+        return $cepage;
     }
 
     protected function getCodeAppellation($appellation) {
         return VracMercuriale::getCodeAppellation($appellation);
     }
+
+
+
 }
