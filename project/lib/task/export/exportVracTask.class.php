@@ -90,7 +90,7 @@ EOF;
 	            $dateRetiraisonTmp = null;
 	            $totalVolEnleve = 0;
 	            foreach ($produits as $produit) {
-                    if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION]) < 0) {
+                    if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]) < 0) {
                         continue;
                     }
 	            	$i++;
@@ -99,8 +99,8 @@ EOF;
 	            	}
 	            	$valuesProduit = $produit->value;
                     unset($valuesProduit[VracProduitsView::VALUE_DENOMINATION]);
-	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
-	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+                    $valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
 	            	$valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] = $valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
@@ -213,11 +213,34 @@ EOF;
     	return $top_mercuriale;
     }
 
-    protected function getCepage($cepage, $appellation) {
-        return VracMercuriale::getCepage($cepage, $appellation);
+    protected function getCepage($appellation) {
+    {
+        if ($appellation == 'CREMANT') {
+
+            return "CR";
+        }
+
+        if ($cepage == "AU" || $cepage == "PI") {
+            $cepage = "PB";
+        }
+
+        if ($cepage == "MO") {
+            $cepage = "MU";
+        }
+
+        return $cepage;
     }
 
-    protected function getCodeAppellation($appellation) {
+    protected function getCodeAppellation($appellation, $cepage == null) {
+        if($cepage == "KL") {
+
+            return 1;
+        }
+
+
         return VracMercuriale::getCodeAppellation($appellation);
     }
+
+
+
 }
