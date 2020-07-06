@@ -231,7 +231,7 @@ EOF;
         return $cepage;
     }
 
-    protected function getCodeAppellation($appellation, $cepage == null) {
+    protected function getCodeAppellation($appellation, $cepage = null) {
         if($cepage == "KL") {
 
             return 1;
