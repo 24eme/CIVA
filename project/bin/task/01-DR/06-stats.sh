@@ -12,5 +12,4 @@ EXPORT_FILE=tmp/dr_statistiques_"$DR_CAMPAGNE"_$(date +%Y%m%d%H%M%S).csv
 
 php symfony dr:stats-recolte $DR_CAMPAGNE | sed 's/\./,/g' > $TASK_DIR/$EXPORT_FILE
 
-echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE)"
-
+echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE?$(date +%Y%m%d%H%M%S))"

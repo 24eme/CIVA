@@ -12,4 +12,4 @@ EXPORT_FILE=tmp/export_drs_ventes_raisins.csv
 
 bash bin/export_drs_ventes_raisins.sh $DR_CAMPAGNE > $TASK_DIR/$EXPORT_FILE
 
-echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE)"
+echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE?$(date +%Y%m%d%H%M%S))"
