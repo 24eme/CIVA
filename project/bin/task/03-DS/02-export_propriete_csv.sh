@@ -13,4 +13,4 @@ echo "$DS_PERIODE"
 echo "$TASK_DIR/$EXPORT_FILE"
 bash bin/export_ds_csv.sh "propriete" "$DS_PERIODE" > $TASK_DIR/$EXPORT_FILE
 
-echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE)"
+echo "[Télécharger le fichier]($TASK_URL/$EXPORT_FILE?$(date +%Y%m%d%H%M%S))"
