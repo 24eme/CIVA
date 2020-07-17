@@ -213,7 +213,7 @@ EOF;
     	return $top_mercuriale;
     }
 
-    protected function getCepage($appellation) {
+    protected function getCepage($cepage, $appellation) {
         if ($appellation == 'CREMANT') {
 
             return "CR";
