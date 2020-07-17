@@ -90,6 +90,7 @@ EOF;
 	            $dateRetiraisonTmp = null;
 	            $totalVolEnleve = 0;
 	            foreach ($produits as $produit) {
+                    $valuesProduit = $produit->value;
                     if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]) < 0) {
                         continue;
                     }
@@ -97,7 +98,6 @@ EOF;
 	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
 	            		continue;
 	            	}
-	            	$valuesProduit = $produit->value;
                     unset($valuesProduit[VracProduitsView::VALUE_DENOMINATION]);
                     $valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
