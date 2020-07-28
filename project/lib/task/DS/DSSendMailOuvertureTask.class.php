@@ -119,9 +119,9 @@ class DSSendBrouillonTask extends sfBaseTask
             $message->attach($attachment);
         }
 
-        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."/helpPdf/dai.pdf"), "DAI_2019.pdf",
+        //$attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."/helpPdf/dai.pdf"), "DAI_2019.pdf",
 'application/pdf');
-        $message->attach($attachment);
+        //$message->attach($attachment);
 
         try {
             $this->getMailer()->send($message);
@@ -147,21 +147,24 @@ Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement
 
 Comme les années précédentes, vous pouvez accéder dès maintenant à ce télé-service sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Attention la date limite de la télé-déclaration est fixée par les Douanes au 10 septembre MINUIT.
+Attention la date limite de la télé-déclaration est fixée par la Douane au 10 septembre 2020 MINUIT.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2019, qui reprend les produits théoriquement détenus en stocks.
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2020, qui reprend les produits théoriquement détenus en stocks.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
-NOUVEAUTES 2019 :
-Dépassement : à compter de cette année, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
-
 RAPPELS :
-    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2018, vous devez le déclarer dans l'Appellation correspondante.
+    - DEPASSEMENT : depuis la dernière campagne, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
+    - VCI : si vous détenez encore du VCI , vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
-ATTENTION : Déclaration Annuelle d'Inventaire (DAI)
-Vous trouverez en pièce jointe à ce mail la Circulaire explicative de la DGDDI ainsi que le tableau à compléter pour la détermination de vos manquants.
+IMPORTANT : Clôture de Campagne
+    - La DRM de Juillet (à déposer entre le 1er et le 10 Août) sera à établir de façon habituelle et donc à clôturer avec un STOCK THEORIQUE.
+    - Les modalités concernant la DRM d'Août, les Pertes et Manquants, ainsi que la DAI (Déclaration Annuelle d'Inventaire) vous seront précisées par mail courant Août.
+
+RAPPEL DRM :
+Le protocole qui avait été établi en 2017 entre la DGDDI et le CIVA, et qui concernait le regroupement de certains produits dans des colonnes TOTAL, prend fin au 31 Juillet 2020.
+Par conséquent la DRM d'Août 2020 devra donc OBLIGATOIREMENT être détaillée par cépage dans les différentes Appellations, hormis le Crémant d'Alsace qui est décliné par couleur.
 
 Cordialement,
 
@@ -172,29 +175,29 @@ Le CIVA");
 
         if($type_ds == DSCivaClient::TYPE_DS_NEGOCE) {
 
-            $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
+                $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique
 sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le téléservice \"Alsace Stocks\" est accessible dès maintenant et jusqu'au 10 septembre inclus.
+Le téléservice \"Alsace Stocks\" est accessible dès maintenant et jusqu'au 10 septembre 2020 inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF
 ou consulter l'aide en ligne.
 
-ATTENTION : pensez également à souscrire votre \"Déclaration de Stock au Commerce\" sur le Portail
-PRODOUANE avant le 10 septembre MINUIT.
-
-NOUVEAUTES 2019 :
-Dépassement : à compter de cette année, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
-
 RAPPELS :
-    - VCI : si vous avez récolté et vinifié du VCI sur la Récolte 2018, vous devez le déclarer dans l'Appellation correspondante.
+    - DEPASSEMENT : depuis la dernière campagne, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
+    - VCI : si vous détenez encore du VCI, vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
-ATTENTION : Déclaration Annuelle d'Inventaire (DAI)
-Vous trouverez en pièce jointe à ce mail  la Circulaire explicative de la DGDDI ainsi que le tableau à compléter pour la détermination de vos manquants.
+IMPORTANT : Clôture de Campagne
+    - La DRM de Juillet (à déposer entre le 1er et le 10 Août) sera à établir de façon habituelle et donc à clôturer avec un STOCK THEORIQUE
+    - Les modalités concernant la DRM d'Août, les Pertes et Manquants, ainsi que la DAI (Déclaration Annuelle d'Inventaire) vous seront précisées par mail courant Août
+
+RAPPEL DRM :
+Le protocole qui avait été établi en 2017 entre la DGDDI et le CIVA, et qui concernait le regroupement de certains produits dans des colonnes TOTAL, prend fin au 31 Juillet 2020.
+Par conséquent la DRM d'Août 2020 devra donc OBLIGATOIREMENT être détaillée par cépage dans les différentes Appellations, hormis le Crémant d'Alsace qui est décliné par couleur.
 
 Cordialement,
 
