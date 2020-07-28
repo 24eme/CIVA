@@ -119,9 +119,9 @@ class DSSendBrouillonTask extends sfBaseTask
             $message->attach($attachment);
         }
 
-        $attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."/helpPdf/dai.pdf"), "DAI_2019.pdf",
+        //$attachment = new Swift_Attachment(file_get_contents(sfConfig::get('sf_web_dir')."/helpPdf/dai.pdf"), "DAI_2019.pdf",
 'application/pdf');
-        $message->attach($attachment);
+        //$message->attach($attachment);
 
         try {
             $this->getMailer()->send($message);
