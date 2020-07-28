@@ -129,19 +129,27 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         $this->getRecap($ds, "PINOTNOIR", $recap["AOC Alsace Pinot noir"]);
         $this->getRecap($ds, "PINOTNOIRROUGE", $recap["AOC Alsace PN rouge"]);
         $this->getRecap($ds, "CREMANT", $recap["AOC Crémant d'Alsace"]);
-        
-        $paginate = $this->paginate($recap, 35, null);
+
+        $recap["Autres Produits"] = array("colonnes" => array("type"),
+                                          "produits" => array(),
+                                          "limit" => -1,
+                                          "no_header" => true,
+                                          "nb_ligne" => -1,
+                                          "fixed" => true);
+        foreach($this->getAutres($ds, false) as $libelle => $volume)  {
+            $recap["Autres Produits"]["produits"][$libelle]["colonnes"] = array("type" => array("rowspan" => 1, "libelle" => $libelle));
+            $recap["Autres Produits"]["produits"][$libelle]["normal"] = !is_null($volume) ? null : false;
+        }
+
+        $paginate = $this->paginate($recap, ExportDSPdf::NB_LIGNES_PAR_PAGES, null, true);
 
         $this->rowspanPaginate($paginate);
-        $this->autoFill($paginate, $recap);        
-        
+        $this->autoFill($paginate, $recap);
+
         foreach($paginate["pages"] as $num_page => $page) {
-            $is_last = ($num_page == count($paginate["pages"]) - 1);
             $this->document->addPage($this->getPartial('ds_export/principalEmpty', array('ds' => $ds,
-                                                                                         'recap' => $page,
-                                                                                         'autres' => $this->getAutres($ds, false),
-                'is_last_page' => $is_last)));
+                                                                                         'recap' => $page)));
         }
     }
-    
+
 }
