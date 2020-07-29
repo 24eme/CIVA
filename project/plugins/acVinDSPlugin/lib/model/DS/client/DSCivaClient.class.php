@@ -73,6 +73,10 @@ class DSCivaClient extends DSClient {
             $identifiant = $etablissement->getCvi();
         }
 
+        if(!$identifiant) {
+            throw new sfException("no cvi ".$etablissement->_id);
+        }
+
         $dss_principales = array();
         $docs = $this->startkey('DS-' . $identifiant . '-000000-000')->endkey('DS-' . $identifiant . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
@@ -122,6 +126,10 @@ class DSCivaClient extends DSClient {
 
         if($typeDS == self::TYPE_DS_PROPRIETE) {
             $identifiant = $etablissement->getCvi();
+        }
+
+        if(!$identifiant) {
+                throw new sfException("no cvi ".$etablissement->_id);
         }
 
         return $this->findPrincipaleByIdentifiantAndPeriode($identifiant, $periode);
