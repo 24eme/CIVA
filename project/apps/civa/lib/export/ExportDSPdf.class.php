@@ -529,8 +529,8 @@ class ExportDSPdf extends ExportDocument {
         foreach($recap as $libelle => $tableau) {
             $num_page = floor($i / $limit);
             $j = 0;
-            if($empty && !isset($tableau['fixed']))  {
-                $i += 1;
+            if($empty && (!isset($tableau['fixed']) || !$tableau['fixed']))  {
+                $i += 2;
                 $j = 2;
             }
             foreach($tableau["produits"] as $hash => $produit) {

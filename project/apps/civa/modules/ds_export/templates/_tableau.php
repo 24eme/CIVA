@@ -74,8 +74,7 @@
 
         <?php endfor; ?>
     <?php endif ?>
-
-    <?php if (!$empty): ?>
+    <?php if (!$empty && array_key_exists("total", $tableau)): ?>
         <tr>
             <td style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp;<b>Total</b><?php if ($tableau['total_suivante']): ?>&nbsp;&nbsp;<small>(page suivante)</small>&nbsp;<?php endif; ?>
             </td>    
@@ -93,7 +92,7 @@
         </tr>
     <?php elseif($tableau['total_suivante']): ?>
         <tr>
-            <td colspan="2" style="text-align: left; border: 1px solid black;" colspan="<?php echo count($tableau['colonnes']) ?>">&nbsp; <small>(page suivante)</small>&nbsp;
+            <td style="text-align: left; border: 1px solid black; background-color: #bbb;" colspan="<?php echo count($tableau['colonnes']) + 1 ?>">&nbsp; <small>(page suivante)</small>&nbsp;
             </td>
         </tr>
     <?php endif; ?>

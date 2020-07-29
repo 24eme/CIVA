@@ -74,46 +74,39 @@ class ExportDSPdfEmpty extends ExportDSPdf {
         
         $recap["AOC Alsace Blanc"] = array("colonnes" => array("cepage" => "Cépages"), 
                                                 "produits" => array(),
-                                                "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                 "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Lieu-dit"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                 "produits" => array(),
-                                                "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                 "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Communale"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"), 
                                                 "produits" => array(),
-                                                "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                 "limit" => -1,
                                                 "nb_ligne" => -1);
         
         $recap["AOC Alsace Grand Cru"] = array("colonnes" => array("lieu" => "Lieu-dit", "cepage" => "Cépages"),
                                                  "produits" => array(),
-                                                 "total" => array("normal" => null, "vt" => null, "sgn" => null),
                                                  "limit" => -1,
                                                  "nb_ligne" => -1);
-        
-        $recap["AOC Alsace Pinot noir"] = array("colonnes" => array("cepage" => "Cépages"), 
-                                                "total" => array("normal" => null, "vt" => null, "sgn" => null),
+
+        $recap["AOC Alsace Pinot noir"] = array("colonnes" => array("cepage" => "Cépages"),
                                                 "produits" => array(),
                                                 "no_header" => true,
                                                 "limit" => -1,
                                                 "nb_ligne" => -1,
                                                 "fixed" => true);
-        
-        $recap["AOC Alsace PN rouge"] = array("colonnes" => array("cepage" => "Cépages"), 
-                                              "total" => array("normal" => null, "vt" => null, "sgn" => null),
+
+        $recap["AOC Alsace PN rouge"] = array("colonnes" => array("cepage" => "Cépages"),
                                               "produits" => array(),
                                               "no_header" => true,
                                               "limit" => -1,
                                               "nb_ligne" => -1,
-                                              "fixed" => true);        
-        
-        $recap["AOC Crémant d'Alsace"] = array("colonnes" => array("couleur" => "Couleurs"), 
-                                               "total" => array("normal" => null, "vt" => null, "sgn" => null),
+                                              "fixed" => true);
+
+        $recap["AOC Crémant d'Alsace"] = array("colonnes" => array("couleur" => "Couleurs"),
                                                "produits" => array(),
                                                "no_header" => true,
                                                "limit" => -1,
