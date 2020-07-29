@@ -403,12 +403,12 @@ class DSCivaClient extends DSClient {
         $totauxByAppellationsRecap = array();
 
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grand Cru");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace communale");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'LIEUDIT', null, "AOC Alsace Lieu-dit");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace Communale");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grand Cru");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIR', null, "AOC Alsace Pinot noir");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
 
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation) {
