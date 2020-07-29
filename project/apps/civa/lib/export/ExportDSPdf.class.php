@@ -137,10 +137,15 @@ class ExportDSPdf extends ExportDocument {
                     continue;
                 }
             }
-            $this->createMainByDS($ds);
 
-            if($this->annexe) {
-                $this->createAnnexeByDS($ds);
+            if($ds->periode < "202007") {
+                $this->createMainAggregeByDS($ds);
+
+                if($this->annexe) {
+                    $this->createAnnexeByDS($ds);
+                }
+            } else {
+                $this->createMainByDS($ds);
             }
         }
 
@@ -191,7 +196,7 @@ class ExportDSPdf extends ExportDocument {
 
         foreach($paginate["pages"] as $num_page => $page) {
             $is_last = ($num_page == count($paginate["pages"]) - 1);
-            $this->document->addPage($this->getPartial('ds_export/principal', array('ds' => $ds,
+            $this->document->addPage($this->getPartial('ds_export/principalAggrege', array('ds' => $ds,
                                                                                  'recap' => $page,
                                                                                  'autres' => $this->getAutres($ds, true),
                                                                                  'is_last_page' => $is_last)));

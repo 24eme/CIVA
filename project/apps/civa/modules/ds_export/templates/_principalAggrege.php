@@ -10,7 +10,7 @@ table {
 <small><br /></small>
 <?php foreach($recap as $libelle => $tableau): ?>
   <span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle ?></span><br />
-  <?php include_partial('ds_export/tableau', array('tableau' => $tableau)) ?>
+  <?php include_partial('ds_export/tableau', array('tableau' => $tableau, 'aggrega' => true)) ?>
 <?php endforeach; ?>
 
 <?php $totals = array('total_stock' => $ds->getTotalAOCByType('total_stock'),
