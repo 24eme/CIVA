@@ -236,10 +236,10 @@ class ExportDSPdf extends ExportDocument {
                                           "totalAOC" => true,
                                           "nb_ligne" => -1);
 
-        $recap["Total AOC"]["produits"][$libelle]["colonnes"] = array("Total AOC" => array("rowspan" => 1, "libelle" => $ds->getTotalAOCByType('total_stock')));
-        $recap["Total AOC"]["produits"][$libelle]["normal"] = $ds->getTotalAOCByType('total_normal');
-        $recap["Total AOC"]["produits"][$libelle]["vt"] =  $ds->getTotalAOCByType('total_vt');
-        $recap["Total AOC"]["produits"][$libelle]["sgn"] = $ds->getTotalAOCByType('total_sgn');
+        $recap["Total AOC"]["produits"]["Total AOC"]["colonnes"] = array("Total AOC" => array("rowspan" => 1, "libelle" => $ds->getTotalAOCByType('total_stock')));
+        $recap["Total AOC"]["produits"]["Total AOC"]["normal"] = $ds->getTotalAOCByType('total_normal');
+        $recap["Total AOC"]["produits"]["Total AOC"]["vt"] =  $ds->getTotalAOCByType('total_vt');
+        $recap["Total AOC"]["produits"]["Total AOC"]["sgn"] = $ds->getTotalAOCByType('total_sgn');
 
         $recap["Autres Produits"] = array("colonnes" => array("type"),
                                           "produits" => array(),

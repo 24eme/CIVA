@@ -11,7 +11,7 @@ table {
 <br />
 <br />
 <?php foreach($recap as $libelle => $tableau): ?>
-    <?php if(!$tableau["totalAOC"]): ?>
+    <?php if(!isset($tableau["totalAOC"]) || !$tableau["totalAOC"]): ?>
         <span style="background-color: black; color: white; font-weight: bold;"><?php echo $libelle ?></span><?php if(preg_match('/Alsace blanc/i', $libelle)): ?><span>&nbsp;(hors Lieux-dits et Communales)</span><?php endif; ?><br />
     <?php endif; ?>
   <?php include_partial('ds_export/tableau', array('tableau' => $tableau)) ?>

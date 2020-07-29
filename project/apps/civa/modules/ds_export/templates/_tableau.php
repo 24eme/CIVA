@@ -4,7 +4,7 @@
 <?php $is_first_page = isset($is_first_page) && $is_first_page; ?>
 <?php $colWidth = round(318 / count($tableau['colonnes'])); ?>
 <?php $tableau = $tableau->getRawValue(); ?>
-<?php $isTotalAOC = (isset($tableau['totalAOC']) && $tableau['totalAOC']); ?>
+<?php $isTotalAOC = isset($tableau['totalAOC']) && $tableau['totalAOC']; ?>
 
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
     <?php if (!array_key_exists('no_header', $tableau) || !$tableau['no_header']): ?>
