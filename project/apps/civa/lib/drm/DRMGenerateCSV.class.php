@@ -66,6 +66,7 @@ class DRMGenerateCSV {
     protected $identifiant;
     protected $numero_accise;
     protected $periode;
+    protected $periode_date;
     protected $aggregate = false;
 
 
@@ -73,6 +74,7 @@ class DRMGenerateCSV {
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
+      $this->periode_date = (preg_match('/^[0-9]{6}$/', $periode))? substr($periode, 0, 4)."-".substr($periode, -2)."-01" : date('Y-m-d');
       $this->aggregate = $aggregate;
     }
 
@@ -291,8 +293,8 @@ class DRMGenerateCSV {
             $hashProduit = HashMapper::convert($produitDetail->getCepage()->getHash());
         }
 
-        if(is_string($produitDetail) && ConfigurationClient::getInstance()->getCurrent()->exist($produitDetail)) {
-            $cepageConfig = ConfigurationClient::getInstance()->getCurrent()->get($produitDetail);
+        if(is_string($produitDetail) && ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->exist($produitDetail)) {
+            $cepageConfig = ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->get($produitDetail);
             $produitDetail = $cepageConfig;
             $hashProduit = $cepageConfig->getHash();
         }
@@ -301,12 +303,12 @@ class DRMGenerateCSV {
            try {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
             } catch(Exception $e) {
-               $cepageConfig = ConfigurationClient::getInstance()->getCurrent()->get($hashProduit)->getParent()->get('DEFAUT');
+               $cepageConfig = ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->get($hashProduit)->getParent()->get('DEFAUT');
            }
        }
 
         if(is_string($produitDetail) && !$cepageConfig) {
-            $cepageConfig = ConfigurationClient::getCurrent()->identifyProductByLibelle($produitDetail);
+            $cepageConfig = ConfigurationClient::getConfiguration($this->periode_date)->identifyProductByLibelle($produitDetail);
         }
 
         if(!$cepageConfig) {
