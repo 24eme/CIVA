@@ -35,7 +35,7 @@ class acVinEtablissementRouting {
             'type' => 'object')));
 
         $r->prependRoute('etablissement_resetcrd', new EtablissementRoute('/etablissement/:identifiant/resetcrd', array('module' => 'etablissement',
-            'action' => 'resetCrd'), array('sf_method' => array('post')), array('model' => 'Etablissement',
+            'action' => 'resetCrd'), array('sf_method' => array('get')), array('model' => 'Etablissement',
             'type' => 'object')));
     }
 
