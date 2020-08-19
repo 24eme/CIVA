@@ -431,11 +431,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function getCrdRegime() {
-
-        return (property_exists($this, 'crd_regime'))
-            ? $this->crd_regime
-            : 'Non défini';
-        //EtablissementClient::REGIME_CRD_COLLECTIF_SUSPENDU;
+        return $this->_get('crd_regime');
     }
 
     public function addCommentaire($s) {
