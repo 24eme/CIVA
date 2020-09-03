@@ -232,43 +232,44 @@ class DRMGenerateCSV {
       return $lignes;
     }
 
-    public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
+
+        public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
-      if($produitCepage->total_normal){
+      if($produitDetail->volume_normal){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_normal;
+          $lignes.=$produitDetail->volume_normal;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_normal;
+          $lignes.=$produitDetail->volume_normal;
         }
         $lignes.=";\n";
       }
-      if($produitCepage->total_sgn){
+      if($produitDetail->volume_sgn){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_sgn;
+          $lignes.=$produitDetail->volume_sgn;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_sgn;
+          $lignes.=$produitDetail->volume_sgn;
         }
         $lignes.=";\n";
       }
-      if($produitCepage->total_vt){
+      if($produitDetail->volume_vt){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_vt;
+          $lignes.=$produitDetail->volume_vt;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_vt;
+          $lignes.=$produitDetail->volume_vt;
         }
         $lignes.=";\n";
 
@@ -327,6 +328,12 @@ class DRMGenerateCSV {
 
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
+
+	        if($cepageConfig->hasLieuEditable() && $produitDetail->lieu) {
+	            $complement = $produitDetail->lieu;
+        }
+
+
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
