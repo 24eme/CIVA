@@ -48,7 +48,7 @@ $hasCourtier = $vrac->hasCourtier();
 			<span style="background-color: grey; color: white; font-weight: bold;">&nbsp;Acheteur&nbsp;</span><br/>
 			<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #000;">
                                 <tr>
-                                        <td>&nbsp;<i><?php if($vrac->acheteur->intitule): ?><?php echo $vrac->acheteur->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->acheteur->raison_sociale, 35); ?></i></td>
+                                        <td>&nbsp;<i><?php if($vrac->acheteur->intitule): ?><?php echo $vrac->acheteur->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->acheteur->raison_sociale, 35, '...'); ?></i></td>
                                 </tr>
                                 <tr>
                                         <td>&nbsp;<i><?php echo truncate_text($vrac->acheteur->adresse, 50, "...", false) ?></i><br/>
