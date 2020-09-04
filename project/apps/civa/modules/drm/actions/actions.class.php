@@ -10,8 +10,7 @@ class drmActions extends sfActions {
 
       set_time_limit(0);
       ini_set('memory_limit', '512M');
-      $allowIps = array("127.0.0.1", "localhost", "::1");
-      if(!in_array($this->getRequest()->getHttpHeader('addr','remote'), $allowIps) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+      if(!strpos("::1,127.0.0.1,".sfConfig::get('app_ip_restriction'), $this->getRequest()->getHttpHeader('addr','remote')) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
         throw new sfException("Accès interdit");
       }
 
@@ -86,7 +85,7 @@ class drmActions extends sfActions {
         foreach ($cepageNode->getProduitsDetails()  as $key => $produitsDetail) {
           foreach ($produitsDetail->getRetiraisons() as $retiraison) {
             if(substr(str_replace("-",'',$retiraison->getDate()),0,6) == $drmGenerateCSV->getPeriode()){
-              $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitsDetail, $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
+              $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitsDetail->getConfig()->getHash(), $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
             }
           }
         }

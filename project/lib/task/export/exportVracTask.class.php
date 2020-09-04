@@ -58,7 +58,7 @@ EOF;
         }
 
         $zip = new ZipArchive();
-        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZipArchive::OVERWRITE);
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_VRAC.zip', ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
 
         /*
          * CREATION
@@ -90,17 +90,17 @@ EOF;
 	            $dateRetiraisonTmp = null;
 	            $totalVolEnleve = 0;
 	            foreach ($produits as $produit) {
-                    if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION]) < 0) {
+                    $valuesProduit = $produit->value;
+                    if($this->getCodeAppellation($produit->value[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]) < 0) {
                         continue;
                     }
 	            	$i++;
 	            	if ($type == 'M' && !$produit->value[VracProduitsView::VALUE_DATE_CIRCULATION]) {
 	            		continue;
 	            	}
-	            	$valuesProduit = $produit->value;
                     unset($valuesProduit[VracProduitsView::VALUE_DENOMINATION]);
-	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
-	            	$valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+                    $valuesProduit[VracProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracProduitsView::VALUE_CEPAGE], $valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION]);
+	            	$valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_CODE_CEPAGE] = $configCepappctr->getOrdreMercurialeByPair($valuesProduit[VracProduitsView::VALUE_CODE_APPELLATION], $valuesProduit[VracProduitsView::VALUE_CEPAGE]);
 	            	$valuesProduit[VracProduitsView::VALUE_NUMERO_ORDRE] = $i;
 	            	$valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] = $valuesProduit[VracProduitsView::VALUE_PRIX_UNITAIRE] / 100;
@@ -214,10 +214,32 @@ EOF;
     }
 
     protected function getCepage($cepage, $appellation) {
-        return VracMercuriale::getCepage($cepage, $appellation);
+        if ($appellation == 'CREMANT') {
+
+            return "CR";
+        }
+
+        if ($cepage == "AU" || $cepage == "PI") {
+            $cepage = "PB";
+        }
+
+        if ($cepage == "MO") {
+            $cepage = "MU";
+        }
+
+        return $cepage;
     }
 
-    protected function getCodeAppellation($appellation) {
+    protected function getCodeAppellation($appellation, $cepage = null) {
+        if($cepage == "KL") {
+
+            return 1;
+        }
+
+
         return VracMercuriale::getCodeAppellation($appellation);
     }
+
+
+
 }

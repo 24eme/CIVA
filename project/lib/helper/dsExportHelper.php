@@ -1,6 +1,12 @@
-<?php 
+<?php
 
 function echoVolume($volume, $bold = false) {
+
+    if($volume === false) {
+        echo "&nbsp;";
+        return;
+    }
+
     if(!is_null($volume)) {
         if($bold) {
             echo "<b>";

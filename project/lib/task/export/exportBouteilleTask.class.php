@@ -57,7 +57,7 @@ EOF;
         }
 
         $zip = new ZipArchive();
-        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZipArchive::OVERWRITE);
+        $zip->open($folderPath.'/'.$filenameHeader.'CONTRATS_BOUTEILLE.zip', ZIPARCHIVE::CREATE | ZipArchive::OVERWRITE);
 
     	$csvBouent = new ExportCsv(null, "\r\n");
         $csvBoudet = new ExportCsv(null, "\r\n");
@@ -83,8 +83,8 @@ EOF;
             	$i++;
             	$valuesProduit = $produit->value;
                 unset($valuesProduit[VracBouteillesProduitsView::VALUE_DENOMINATION]);
+                $valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE], $valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION] = $this->getCodeAppellation($valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
-            	$valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE] = $this->getCepage($valuesProduit[VracBouteillesProduitsView::VALUE_CEPAGE], $valuesProduit[VracBouteillesProduitsView::VALUE_CODE_APPELLATION]);
             	$valuesProduit[VracBouteillesProduitsView::VALUE_NUMERO_ORDRE] = $i;
             	$csvBoudet->add($valuesProduit);
             }

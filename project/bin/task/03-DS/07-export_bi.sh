@@ -21,4 +21,4 @@ bash bin/export_ds_csv_bi.sh "$DS_PERIODE" > $TASK_DIR/$EXPORT_DIR/$EXPORT_FILE.
 mv $TASK_DIR/$EXPORT_DIR/$EXPORT_FILE.tmp $TASK_DIR/$EXPORT_DIR/$EXPORT_FILE
 
 echo "[Voir tous les fichiers générés]($LINK)"
-echo "[Télécharger le fichier]($TASK_URL/$EXPORT_DIR/$EXPORT_FILE)"
+echo "[Télécharger le fichier]($TASK_URL/$EXPORT_DIR/$EXPORT_FILE?$(date +%Y%m%d%H%M%S))"

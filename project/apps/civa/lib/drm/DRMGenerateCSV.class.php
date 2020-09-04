@@ -66,6 +66,7 @@ class DRMGenerateCSV {
     protected $identifiant;
     protected $numero_accise;
     protected $periode;
+    protected $periode_date;
     protected $aggregate = false;
 
 
@@ -73,6 +74,7 @@ class DRMGenerateCSV {
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
+      $this->periode_date = (preg_match('/^[0-9]{6}$/', $periode))? substr($periode, 0, 4)."-".substr($periode, -2)."-01" : date('Y-m-d');
       $this->aggregate = $aggregate;
     }
 
@@ -207,6 +209,11 @@ class DRMGenerateCSV {
         }
 
         $hashProduit = HashMapper::convert($produitDetail->getHash());
+
+        if($produitDetail instanceof ConfigurationCepage) {
+            $hashProduit = $produitDetail->getHash();
+        }
+
         if(preg_match('#('.$this->aggregate.')#', $hashProduit)) {
 
             return true;
@@ -225,43 +232,44 @@ class DRMGenerateCSV {
       return $lignes;
     }
 
-    public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
+
+        public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
-      if($produitCepage->total_normal){
+      if($produitDetail->volume_normal){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_normal;
+          $lignes.=$produitDetail->volume_normal;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_normal;
+          $lignes.=$produitDetail->volume_normal;
         }
         $lignes.=";\n";
       }
-      if($produitCepage->total_sgn){
+      if($produitDetail->volume_sgn){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_sgn;
+          $lignes.=$produitDetail->volume_sgn;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_sgn;
+          $lignes.=$produitDetail->volume_sgn;
         }
         $lignes.=";\n";
       }
-      if($produitCepage->total_vt){
+      if($produitDetail->volume_vt){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;";
         if($withVolume){
-          $lignes.=$produitCepage->total_vt;
+          $lignes.=$produitDetail->volume_vt;
         }
         $lignes.=";\n";
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitCepage->total_vt;
+          $lignes.=$produitDetail->volume_vt;
         }
         $lignes.=";\n";
 
@@ -282,17 +290,26 @@ class DRMGenerateCSV {
     public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
         $cepageConfig = null;
 
+        if(!is_string($produitDetail)) {
+            $hashProduit = HashMapper::convert($produitDetail->getCepage()->getHash());
+        }
+
+        if(is_string($produitDetail) && ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->exist($produitDetail)) {
+            $cepageConfig = ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->get($produitDetail);
+            $produitDetail = $cepageConfig;
+            $hashProduit = $cepageConfig->getHash();
+        }
+
         if($this->isProduitDetailAggregate($produitDetail)) {
            try {
                $cepageConfig = $produitDetail->getCepage()->getConfig()->getParent()->get('DEFAUT');
             } catch(Exception $e) {
-               $config = ConfigurationClient::getInstance()->getCurrent();
-               $cepageConfig = $config->get(HashMapper::convert($produitDetail->getCepage()->getHash()))->getParent()->get('DEFAUT');
+               $cepageConfig = ConfigurationClient::getInstance()->getConfiguration($this->periode_date)->get($hashProduit)->getParent()->get('DEFAUT');
            }
        }
 
         if(is_string($produitDetail) && !$cepageConfig) {
-            $cepageConfig = ConfigurationClient::getCurrent()->identifyProductByLibelle($produitDetail);
+            $cepageConfig = ConfigurationClient::getConfiguration($this->periode_date)->identifyProductByLibelle($produitDetail);
         }
 
         if(!$cepageConfig) {
@@ -311,6 +328,12 @@ class DRMGenerateCSV {
 
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
+
+	        if($cepageConfig->hasLieuEditable() && $produitDetail->lieu) {
+	            $complement = $produitDetail->lieu;
+        }
+
+
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);

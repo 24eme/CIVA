@@ -73,6 +73,10 @@ class DSCivaClient extends DSClient {
             $identifiant = $etablissement->getCvi();
         }
 
+        if(!$identifiant) {
+            throw new sfException("no cvi ".$etablissement->_id);
+        }
+
         $dss_principales = array();
         $docs = $this->startkey('DS-' . $identifiant . '-000000-000')->endkey('DS-' . $identifiant . '-' . $periode . '-999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($docs->getIds() as $doc_id) {
@@ -122,6 +126,10 @@ class DSCivaClient extends DSClient {
 
         if($typeDS == self::TYPE_DS_PROPRIETE) {
             $identifiant = $etablissement->getCvi();
+        }
+
+        if(!$identifiant) {
+                throw new sfException("no cvi ".$etablissement->_id);
         }
 
         return $this->findPrincipaleByIdentifiantAndPeriode($identifiant, $periode);
@@ -296,14 +304,17 @@ class DSCivaClient extends DSClient {
         }
 
         $dss = $this->findDssByDS($ds);
-
+        $find = false;
         foreach ($dss as $d) {
+            if($find) {
+                return $d;
+            }
             if ($d->_id == $ds->_id) {
-                break;
+                $find = true;
             }
         }
 
-        return current($dss);
+        return null;
     }
 
     public function findDssByDS($ds, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
@@ -400,12 +411,12 @@ class DSCivaClient extends DSClient {
         $totauxByAppellationsRecap = array();
 
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'ALSACEBLANC', null, "AOC Alsace Blanc");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grand Cru");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace communale");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'LIEUDIT', null, "AOC Alsace Lieu-dit");
-        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'COMMUNALE', null, "AOC Alsace Communale");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'GRDCRU', null, "AOC Alsace Grand Cru");
         $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIR', null, "AOC Alsace Pinot noir");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'PINOTNOIRROUGE', null, "AOC Alsace Pinot noir rouge");
+        $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, 'CREMANT', null, "AOC Crémant d'Alsace");
 
         foreach ($dss as $ds_key => $ds) {
             foreach ($ds->declaration->getAppellationsSorted() as $app_key => $appellation) {
