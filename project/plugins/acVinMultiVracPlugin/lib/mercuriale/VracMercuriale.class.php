@@ -12,6 +12,31 @@ class VracMercuriale
 	CONST IN_BIO = 7;
     CONST IN_VRAC_ID = 8;
     CONST IN_ORDRE = 9;
+    CONST IN_TYPE_CONTRAT = 10;
+    CONST IN_MONTANT_COTISATION = 11;
+    CONST IN_MONTANT_COTISATION_PAYE = 12;
+    CONST IN_MODE_DE_PAIEMENT = 13;
+    CONST IN_CVI_ACHETEUR = 14;
+    CONST IN_TYPE_ACHETEUR = 15;
+    CONST IN_TCA = 16;
+    CONST IN_CVI_VENDEUR = 17;
+    CONST IN_TYPE_VENDEUR = 18;
+    CONST IN_NUMERO_CONTRAT = 19;
+    CONST IN_DAA = 20;
+    CONST IN_DATE_ARRIVEE = 21;
+    CONST IN_DATE_SAISIE = 22;
+    CONST IN_IDENTIFIANT_COURTIER = 23;
+    CONST IN_RECCOD = 24;
+    CONST IN_TOTAL_VOLUME_PROPOSE = 25;
+    CONST IN_TOTAL_VOLUME_ENLEVE = 26;
+    CONST IN_QUANTITE_TRANSFEREE = 27;
+    CONST IN_TOP_SUPPRESSION = 28;
+    CONST IN_TOP_INSTANCE = 29;
+    CONST IN_NOMBRE_CONTRATS = 30;
+    CONST IN_HEURE_TRAITEMENT = 31;
+    CONST IN_UTILISATEUR = 32;
+    CONST IN_DATE_MODIF = 33;
+    CONST IN_CREATION = 34;
 
 	CONST OUT_MERCURIALE = "MERCURIALE";
 	CONST OUT_STATS = "STATISTIQUES";
@@ -35,6 +60,31 @@ class VracMercuriale
 	CONST OUT_BIO = "BIO";
     CONST OUT_VRAC_ID = "VRAC_ID";
     CONST OUT_ORDRE = "ORDRE";
+    CONST OUT_TYPE_CONTRAT = "TYPE_CONTRAT";
+    CONST OUT_MONTANT_COTISATION = "MONTANT_COTISATION";
+    CONST OUT_MONTANT_COTISATION_PAYE = "MONTANT_COTISATION_PAYE";
+    CONST OUT_MODE_DE_PAIEMENT = "MODE_DE_PAIEMENT";
+    CONST OUT_CVI_ACHETEUR = "CVI_ACHETEUR";
+    CONST OUT_TYPE_ACHETEUR = "TYPE_ACHETEUR";
+    CONST OUT_TCA = "TCA";
+    CONST OUT_CVI_VENDEUR = "CVI_VENDEUR";
+    CONST OUT_TYPE_VENDEUR = "TYPE_VENDEUR";
+    CONST OUT_NUMERO_CONTRAT = "NUMERO_CONTRAT";
+    CONST OUT_DAA = "DAA";
+    CONST OUT_DATE_ARRIVEE = "DATE_ARRIVEE";
+    CONST OUT_DATE_SAISIE = "DATE_SAISIE";
+    CONST OUT_IDENTIFIANT_COURTIER = "IDENTIFIANT_COURTIER";
+    CONST OUT_RECCOD = "RECCOD";
+    CONST OUT_TOTAL_VOLUME_PROPOSE = "TOTAL_VOLUME_PROPOSE";
+    CONST OUT_TOTAL_VOLUME_ENLEVE = "TOTAL_VOLUME_ENLEVE";
+    CONST OUT_QUANTITE_TRANSFEREE = "QUANTITE_TRANSFEREE";
+    CONST OUT_TOP_SUPPRESSION = "TOP_SUPPRESSION";
+    CONST OUT_TOP_INSTANCE = "TOP_INSTANCE";
+    CONST OUT_NOMBRE_CONTRATS = "NOMBRE_CONTRATS";
+    CONST OUT_HEURE_TRAITEMENT = "HEURE_TRAITEMENT";
+    CONST OUT_UTILISATEUR = "UTILISATEUR";
+    CONST OUT_DATE_MODIF = "DATE_MODIF";
+    CONST OUT_CREATION = "CREATION";
 
 	CONST NB_MIN_TO_AGG = 3;
 
@@ -160,7 +210,7 @@ class VracMercuriale
 
 	public function getStart($f = 'd/m/Y')
 	{
-	    $dt = new DateTime(substr($this->start, 0, 4).'-'.substr($this->start, 4, 2).'-'.substr($this->start, -2));
+	    $dt = new DateTime(substr($this->start, 0, 4).'-'.substr($this->start, 5, 2).'-'.substr($this->start, -2));
 	    return $dt->format($f);
 	}
 
@@ -191,13 +241,13 @@ class VracMercuriale
 
 	protected function getDate($date)
 	{
-		if (!$date)
+		if (!$date) {
 			return null;
-			$date = str_replace('-', '', $date);
-			if (!preg_match('/^[0-9]{8}$/', $date)) {
-				throw new sfException($date.' format not valid');
-			}
-			return $date;
+        }
+		if (!preg_match('/^[0-9\-]{10}$/', $date)) {
+			throw new sfException($date.' format not valid');
+		}
+		return $date;
 	}
 
 	// *** BEGIN GENERATE DATAS FCTS ***
@@ -207,10 +257,81 @@ class VracMercuriale
 			return;
 		}
 		$items = $this->getMercurialeDatas();
-		$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_VRAC_ID, self::OUT_ORDRE), "\r\n");
+		$csv = new ExportCsv(array('#DATE',
+                        self::OUT_VISA,
+                        self::OUT_MERCURIALE,
+                        self::OUT_CP_CODE,
+                        self::OUT_CP_LIBELLE,
+                        self::OUT_VOL,
+                        self::OUT_PRIX,
+                        self::OUT_BIO,
+                        self::OUT_VRAC_ID,
+                        self::OUT_ORDRE,
+                        self::OUT_TYPE_CONTRAT,
+                        self::OUT_MONTANT_COTISATION,
+                        self::OUT_MONTANT_COTISATION_PAYE,
+                        self::OUT_MODE_DE_PAIEMENT,
+                        self::OUT_CVI_ACHETEUR,
+                        self::OUT_TYPE_ACHETEUR,
+                        self::OUT_TCA,
+                        self::OUT_CVI_VENDEUR,
+                        self::OUT_TYPE_VENDEUR,
+                        self::OUT_NUMERO_CONTRAT,
+                        self::OUT_DAA,
+                        self::OUT_DATE_ARRIVEE,
+                        self::OUT_DATE_SAISIE,
+                        self::OUT_IDENTIFIANT_COURTIER,
+                        self::OUT_RECCOD,
+                        self::OUT_TOTAL_VOLUME_PROPOSE,
+                        self::OUT_TOTAL_VOLUME_ENLEVE,
+                        self::OUT_QUANTITE_TRANSFEREE,
+                        self::OUT_TOP_SUPPRESSION,
+                        self::OUT_TOP_INSTANCE,
+                        self::OUT_NOMBRE_CONTRATS,
+                        self::OUT_HEURE_TRAITEMENT,
+                        self::OUT_UTILISATEUR,
+                        self::OUT_DATE_MODIF,
+                        self::OUT_CREATION
+                    ), "\r\n");
 		foreach ($items as $date => $values) {
 			foreach ($values as $result) {
-				$csv->add(array($date, $result[self::OUT_VISA], $result[self::OUT_MERCURIALE], $result[self::OUT_CP_CODE], $result[self::OUT_CP_LIBELLE], number_format($result[self::OUT_VOL]*1, 2, ',', ''), number_format($result[self::OUT_PRIX]*1, 2, ',', ''), $result[self::OUT_BIO], $result[self::OUT_VRAC_ID], $result[self::OUT_ORDRE]));
+				$csv->add(array(
+                    self::convertDate($date),
+                    $result[self::OUT_VISA],
+                    $result[self::OUT_MERCURIALE],
+                    $result[self::OUT_CP_CODE],
+                    $result[self::OUT_CP_LIBELLE],
+                    number_format($result[self::OUT_VOL]*1, 2, '.', ''),
+                    number_format($result[self::OUT_PRIX]*1, 2, '.', ''),
+                    $result[self::OUT_BIO],
+                    $result[self::OUT_VRAC_ID],
+                    $result[self::OUT_ORDRE],
+                    $result[self::OUT_TYPE_CONTRAT],
+                    $result[self::OUT_MONTANT_COTISATION],
+                    $result[self::OUT_MONTANT_COTISATION_PAYE],
+                    $result[self::OUT_MODE_DE_PAIEMENT],
+                    $result[self::OUT_CVI_ACHETEUR],
+                    $result[self::OUT_TYPE_ACHETEUR],
+                    $result[self::OUT_TCA],
+                    $result[self::OUT_CVI_VENDEUR],
+                    $result[self::OUT_TYPE_VENDEUR],
+                    $result[self::OUT_NUMERO_CONTRAT],
+                    $result[self::OUT_DAA],
+                    $result[self::OUT_DATE_ARRIVEE],
+                    $result[self::OUT_DATE_SAISIE],
+                    $result[self::OUT_IDENTIFIANT_COURTIER],
+                    $result[self::OUT_RECCOD],
+                    number_format($result[self::OUT_TOTAL_VOLUME_PROPOSE]*1, 2, '.', ''),
+                    number_format($result[self::OUT_TOTAL_VOLUME_ENLEVE]*1, 2, '.', ''),
+                    $result[self::OUT_QUANTITE_TRANSFEREE],
+                    $result[self::OUT_TOP_SUPPRESSION],
+                    $result[self::OUT_TOP_INSTANCE],
+                    $result[self::OUT_NOMBRE_CONTRATS],
+                    $result[self::OUT_HEURE_TRAITEMENT],
+                    $result[self::OUT_UTILISATEUR],
+                    $result[self::OUT_DATE_MODIF],
+                    $result[self::OUT_CREATION]
+                ));
 			}
 		}
 		file_put_contents($csvFile, $csv->output());
@@ -221,7 +342,7 @@ class VracMercuriale
 		$to = ($to)? $to :  date('Y-m-d', time() - 3600 * 24);
 		$contrats = VracContratsView::getInstance()->findForDb2Export(array($from, $to));
 		foreach($contrats as $contrat) {
-			if ($date = $contrat->value[VracContratsView::VALUE_DATE_TRAITEMENT]) {
+			if ($date = self::convertDate($contrat->value[VracContratsView::VALUE_DATE_TRAITEMENT])) {
 				$mercuriale = $contrat->value[VracContratsView::VALUE_MERCURIALES];
 				$produits = VracProduitsView::getInstance()->findForDb2Export($contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE]);
 				foreach ($produits as $produit) {
@@ -242,7 +363,42 @@ class VracMercuriale
 						if (!isset($items[$date])) {
 							$items[$date] = array();
 						}
-						$items[$date][] = array(self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE], self::OUT_MERCURIALE => $mercuriale, self::OUT_CP_CODE => strtoupper($cepage), self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)), self::OUT_VOL => $volume, self::OUT_PRIX => $prix, self::OUT_BIO => $bio, self::OUT_VRAC_ID => $contrat->id, self::OUT_ORDRE => $this->getOrdre($cepage, $appellation));
+						$items[$date][] = array(
+                            self::OUT_VISA => $contrat->value[VracContratsView::VALUE_NUMERO_ARCHIVE],
+                            self::OUT_MERCURIALE => $mercuriale,
+                            self::OUT_CP_CODE => strtoupper($cepage),
+                            self::OUT_CP_LIBELLE => strtoupper($this->getCepageLibelle($cepage)),
+                            self::OUT_VOL => $volume,
+                            self::OUT_PRIX => $prix,
+                            self::OUT_BIO => $bio,
+                            self::OUT_VRAC_ID => $contrat->id,
+                            self::OUT_ORDRE => $this->getOrdre($cepage, $appellation),
+                            self::OUT_TYPE_CONTRAT => $contrat->value[VracContratsView::VALUE_TYPE_CONTRAT],
+                            self::OUT_MONTANT_COTISATION => $contrat->value[VracContratsView::VALUE_MONTANT_COTISATION],
+                            self::OUT_MONTANT_COTISATION_PAYE => $contrat->value[VracContratsView::VALUE_MONTANT_COTISATION_PAYE],
+                            self::OUT_MODE_DE_PAIEMENT => $contrat->value[VracContratsView::VALUE_MODE_DE_PAIEMENT],
+                            self::OUT_CVI_ACHETEUR => $contrat->value[VracContratsView::VALUE_CVI_ACHETEUR],
+                            self::OUT_TYPE_ACHETEUR => $contrat->value[VracContratsView::VALUE_TYPE_ACHETEUR],
+                            self::OUT_TCA => $contrat->value[VracContratsView::VALUE_TCA],
+                            self::OUT_CVI_VENDEUR => $contrat->value[VracContratsView::VALUE_CVI_VENDEUR],
+                            self::OUT_TYPE_VENDEUR => $contrat->value[VracContratsView::VALUE_TYPE_VENDEUR],
+                            self::OUT_NUMERO_CONTRAT => $contrat->value[VracContratsView::VALUE_NUMERO_CONTRAT],
+                            self::OUT_DAA => $contrat->value[VracContratsView::VALUE_DAA],
+                            self::OUT_DATE_ARRIVEE => self::convertDate($contrat->value[VracContratsView::VALUE_DATE_ARRIVEE]),
+                            self::OUT_DATE_SAISIE => self::convertDate($contrat->value[VracContratsView::VALUE_DATE_SAISIE]),
+                            self::OUT_IDENTIFIANT_COURTIER => $contrat->value[VracContratsView::VALUE_IDENTIFIANT_COURTIER],
+                            self::OUT_RECCOD => $contrat->value[VracContratsView::VALUE_RECCOD],
+                            self::OUT_TOTAL_VOLUME_PROPOSE => $contrat->value[VracContratsView::VALUE_TOTAL_VOLUME_PROPOSE],
+                            self::OUT_TOTAL_VOLUME_ENLEVE => $contrat->value[VracContratsView::VALUE_TOTAL_VOLUME_ENLEVE],
+                            self::OUT_QUANTITE_TRANSFEREE => $contrat->value[VracContratsView::VALUE_QUANTITE_TRANSFEREE],
+                            self::OUT_TOP_SUPPRESSION => $contrat->value[VracContratsView::VALUE_TOP_SUPPRESSION],
+                            self::OUT_TOP_INSTANCE => $contrat->value[VracContratsView::VALUE_TOP_INSTANCE],
+                            self::OUT_NOMBRE_CONTRATS => $contrat->value[VracContratsView::VALUE_NOMBRE_CONTRATS],
+                            self::OUT_HEURE_TRAITEMENT => $contrat->value[VracContratsView::VALUE_HEURE_TRAITEMENT],
+                            self::OUT_UTILISATEUR => $contrat->value[VracContratsView::VALUE_UTILISATEUR],
+                            self::OUT_DATE_MODIF => self::convertDate($contrat->value[VracContratsView::VALUE_DATE_MODIF]),
+                            self::OUT_CREATION => $contrat->value[VracContratsView::VALUE_CREATION]
+                        );
 					}
 				}
 			}
@@ -250,6 +406,11 @@ class VracMercuriale
 		ksort($items);
 		return $items;
 	}
+
+    public static function convertDate($s){
+        $s = str_replace('-', '', $s);
+        return substr($s, 0, 4).'-'.substr($s, 4, 2).'-'.substr($s, 6, 2);
+    }
 
     public static function getCodeAppellation($appellation)
     {
@@ -380,8 +541,8 @@ class VracMercuriale
 				}
 			}
             $result[$periode][$datas[self::IN_CP_CODE]][] = array(
-                'prix' => (float) str_replace(',', '.', $datas[self::IN_PRIX]) * str_replace(',', '.', $datas[self::IN_VOL]),
-                'volume' => (float) str_replace(',', '.', $datas[self::IN_VOL])
+                'prix' => (float) $datas[self::IN_PRIX] * (float) $datas[self::IN_VOL],
+                'volume' => (float) $datas[self::IN_VOL]
             );
 		}
 		$toMerge = array();
@@ -430,6 +591,7 @@ class VracMercuriale
 
 	protected function getPlotPeriode($date)
 	{
+        $date = str_replace('-', '', $date);
 		return (substr($date, -2) > 15)? (substr($date, 0, 6).'2')*1 : (substr($date, 0, 6).'1')*1;
 	}
 
@@ -439,7 +601,7 @@ class VracMercuriale
 	}
 
     public function getCumulPeriodesRanges() {
-        $tabDate = array(substr($this->end, 0, 4), substr($this->end, 4, 2), substr($this->end, -2));
+        $tabDate = array(substr($this->end, 0, 4), substr($this->end, 5, 2), substr($this->end, -2));
         $diff_annee_deb_campagne = ($tabDate[1] == '12') ? 0 : 1;
         $periode = array();
         $periode['currentPeriodeBegin'] = ($tabDate[0] - $diff_annee_deb_campagne).'-12-01';
@@ -495,14 +657,14 @@ class VracMercuriale
 	               self::OUT_END => $periodesRange['previousPeriodeEnd'],
 	               self::OUT_NB => 0,
 	               self::OUT_CONTRAT => 0,
-	               self::OUT_VOL => number_format(0, 2, ',', ''),
-	               self::OUT_PRIX => number_format(0, 2, ',', ''))
+	               self::OUT_VOL => number_format(0, 2, '.', ''),
+	               self::OUT_PRIX => number_format(0, 2, '.', ''))
 	       );
 	       $result[$ordre.$cep][self::OUT_VARIATION] = array(
 	           self::OUT_NB => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB],
 	           self::OUT_CONTRAT => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT],
-	           self::OUT_VOL => (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1),
-	           self::OUT_PRIX => (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1),
+	           self::OUT_VOL => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL] * 1,
+	           self::OUT_PRIX => $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX] * 1,
 	           self::OUT_VOL_PERC => 100,
 	           self::OUT_PRIX_PERC => 100,
 	       );
@@ -526,8 +688,8 @@ class VracMercuriale
 	                    self::OUT_END => $periodesRange['currentPeriodeEnd'],
 	                    self::OUT_NB => 0,
 	                    self::OUT_CONTRAT => 0,
-	                    self::OUT_VOL => number_format(0, 2, ',', ''),
-	                    self::OUT_PRIX => number_format(0, 2, ',', ''))
+	                    self::OUT_VOL => number_format(0, 2, '.', ''),
+	                    self::OUT_PRIX => number_format(0, 2, '.', ''))
 	            );
 	        } else {
 	            $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB] = $datas[self::OUT_NB];
@@ -537,16 +699,16 @@ class VracMercuriale
 	        }
 	        $varNb = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_NB]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_NB]);
 	        $varContrat = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_CONTRAT]) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_CONTRAT]);
-	        $varVol = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1);
-	        $varPrix = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX]) * 1) - (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1);
-	        $varVolPerc = round(($varVol * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL]) * 1));
-	        $varPrixPerc = round(($varPrix * 100) / (str_replace(',', '.', $result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX]) * 1));
-	        
+	        $varVol = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_VOL] * 1) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL] * 1);
+	        $varPrix = ($result[$ordre.$cep][self::OUT_CURRENT][self::OUT_PRIX] * 1) - ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX] * 1);
+	        $varVolPerc = round(($varVol * 100) / ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_VOL] * 1));
+	        $varPrixPerc = round(($varPrix * 100) / ($result[$ordre.$cep][self::OUT_PREVIOUS][self::OUT_PRIX] * 1));
+
 	        $result[$ordre.$cep][self::OUT_VARIATION] = array(
 	            self::OUT_NB => $varNb,
 	            self::OUT_CONTRAT => $varContrat,
-	            self::OUT_VOL => number_format($varVol, 2, ',', ''),
-	            self::OUT_PRIX => number_format($varPrix, 2, ',', ''),
+	            self::OUT_VOL => number_format($varVol, 2, '.', ''),
+	            self::OUT_PRIX => number_format($varPrix, 2, '.', ''),
 	            self::OUT_VOL_PERC => ($varVolPerc)? $varVolPerc : 0,
 	            self::OUT_PRIX_PERC => ($varPrixPerc)? $varPrixPerc : 0,
 	        );
@@ -578,7 +740,7 @@ class VracMercuriale
 			$result = array();
 			$csv = new ExportCsv(array('#DATE', self::OUT_VISA, self::OUT_MERCURIALE, self::OUT_CP_CODE, self::OUT_CP_LIBELLE, self::OUT_VOL, self::OUT_PRIX, self::OUT_BIO, self::OUT_VRAC_ID, self::OUT_ORDRE), "\r\n");
 			foreach ($this->datas as $datas) {
-				if (!preg_match('/^[0-9]{8}$/', $datas[self::IN_DATE])) {
+				if (!preg_match('/^[0-9\-]{10}$/', $datas[self::IN_DATE])) {
 					continue;
 				}
 				if (!$withCR && $datas[self::IN_CP_CODE] == 'CR') {
@@ -627,27 +789,27 @@ class VracMercuriale
 			foreach ($values as $val) {
                 $ordre = $val[self::OUT_ORDRE];
 			    $i++;
-				$volume += str_replace(',', '.', $val[self::OUT_VOL]) * 1;
-				$prix += (str_replace(',', '.', $val[self::OUT_PRIX]) * 1) * (str_replace(',', '.', $val[self::OUT_VOL]) * 1);
+				$volume += $val[self::OUT_VOL] * 1;
+				$prix += ($val[self::OUT_PRIX] * 1) * ($val[self::OUT_VOL] * 1);
 				$contrats[$val[self::OUT_VISA]] = 1;
 				$c[$val[self::OUT_VISA]] = 1;
 				$l[$cep.'_'.$i.'_'.$val[self::OUT_VISA]] = 1;
-				if (!$min ||  str_replace(',', '.', $val[self::OUT_PRIX]) * 1 < $min) {
-					$min = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
+				if (!$min ||  $val[self::OUT_PRIX] * 1 < $min) {
+					$min = $val[self::OUT_PRIX] * 1;
 				}
-				if (str_replace(',', '.', $val[self::OUT_PRIX]) * 1 > $max) {
-					$max = str_replace(',', '.', $val[self::OUT_PRIX]) * 1;
+				if ($val[self::OUT_PRIX] * 1 > $max) {
+					$max = $val[self::OUT_PRIX] * 1;
 				}
 			}
 			if ($bio !== 1 && $bio !== 0 && isset($result[$ordre.$cep])) {
 			     $result[$ordre.$cep][self::OUT_NB] += $nb;
 			     $result[$ordre.$cep][self::OUT_CONTRAT] += count($contrats);
-			     $result[$ordre.$cep][self::OUT_VOL] = number_format($volume + str_replace(',', '.', $result[$ordre.$cep][self::OUT_VOL]), 2, ',', '');
-			     $result[$ordre.$cep][self::OUT_PRIX] = number_format((($prix/$volume) + str_replace(',', '.', $result[$ordre.$cep][self::OUT_PRIX]))/2, 2, ',', '');
-			     $result[$ordre.$cep][self::OUT_MIN] = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_MIN]) < $min)? $result[$ordre.$cep][self::OUT_MIN] : number_format($min, 2, ',', '');
-			     $result[$ordre.$cep][self::OUT_MAX] = (str_replace(',', '.', $result[$ordre.$cep][self::OUT_MAX]) > $max)? $result[$ordre.$cep][self::OUT_MAX] : number_format($max, 2, ',', '');
+			     $result[$ordre.$cep][self::OUT_VOL] = number_format($volume + $result[$ordre.$cep][self::OUT_VOL], 2, '.', '');
+			     $result[$ordre.$cep][self::OUT_PRIX] = number_format((($prix/$volume) + $result[$ordre.$cep][self::OUT_PRIX])/2, 2, '.', '');
+			     $result[$ordre.$cep][self::OUT_MIN] = ($result[$ordre.$cep][self::OUT_MIN] < $min)? $result[$ordre.$cep][self::OUT_MIN] : number_format($min, 2, '.', '');
+			     $result[$ordre.$cep][self::OUT_MAX] = ($result[$ordre.$cep][self::OUT_MAX] > $max)? $result[$ordre.$cep][self::OUT_MAX] : number_format($max, 2, '.', '');
 			} else {
-			    $result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, ',', ''), self::OUT_PRIX => number_format($prix/$volume, 2, ',', ''), self::OUT_MIN => number_format($min, 2, ',', ''), self::OUT_MAX => number_format($max, 2, ',', ''));
+			    $result[$ordre.$cep] = array(self::OUT_CP_CODE => $cep, self::OUT_CP_LIBELLE => $this->getCepageLibelle($cep), self::OUT_NB => $nb, self::OUT_CONTRAT => count($contrats), self::OUT_VOL => number_format($volume, 2, '.', ''), self::OUT_PRIX => number_format($prix/$volume, 2, '.', ''), self::OUT_MIN => number_format($min, 2, '.', ''), self::OUT_MAX => number_format($max, 2, '.', ''));
 			}
 		}
 		if ($bio === 1) {
