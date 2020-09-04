@@ -758,6 +758,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	public function getMercurialeValue() {
 		//La vraie valeur est mise dans la vue couchdb : _design/VRAC/_view/contrats
+		if ($this->isInterne()) {
+			return "I";
+		}
 		if ($this->vendeur_type == 'caves_cooperatives') {
 			return "C";
 		}
@@ -766,9 +769,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		}
 		if ($this->acheteur_type == 'recoltants') {
 			return "V";
-		}
-		if ($thi->isInterne()) {
-			return "I";
 		}
 		return "M";
 	}
