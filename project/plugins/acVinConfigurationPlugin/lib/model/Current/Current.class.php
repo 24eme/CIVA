@@ -48,8 +48,18 @@ class Current extends BaseCurrent {
 
             return CurrentClient::getInstance()->getCurrentFromTheFuture();
         }
-
-        return "2019";
+        return $this->getCurrentCampagne();
+    }
+    
+    public function getCurrentCampagne() {
+        $current = date('Y');
+        foreach ($this->configurations as $k => $v) {
+            if (preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/', $k, $m)) {
+                $current = $m[1];
+                break;
+            }
+        }
+        return $current;
     }
 
     public function isDSDecembre() {
