@@ -8,7 +8,7 @@ DESCRIPTION="Export CSV des CVI de récoltant ayant du volume sur place dans la 
 
 mkdir -m 777 $TASK_DIR/tmp 2> /dev/null
 
-EXPORT_FILE=tmp/export_cvi_ds_proprietes_manquantes.csv
+EXPORT_FILE=tmp/export_cvi_ds_proprietes_manquantes_$(date +%Y%m%d%H%M%S).csv
 
 bash bin/export_declarant_dr_sur_place_sans_ds.sh "$DR_CAMPAGNE" "$DS_PERIODE" > $TASK_DIR/$EXPORT_FILE
 
