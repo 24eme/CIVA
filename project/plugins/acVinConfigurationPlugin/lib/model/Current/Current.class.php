@@ -48,13 +48,10 @@ class Current extends BaseCurrent {
 
             return CurrentClient::getInstance()->getCurrentFromTheFuture();
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> 48de417b731590b964fa53876caea4b4bd09804e
         return $this->getCurrentCampagne();
     }
-    
+
     public function getCurrentCampagne() {
         $current = date('Y');
         foreach ($this->configurations as $k => $v) {
