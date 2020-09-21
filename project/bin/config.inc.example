@@ -17,3 +17,4 @@ REDMINE_USER=utilisateur
 REDMINE_PASS=***********
 
 PATH_MISEADISPO_CIVA="web/export/XXXXXXXXXXXXXXXXXXXX"
+METABASE_SQLITE=/home/test/data/database.sqlite
