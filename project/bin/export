@@ -1,5 +1,9 @@
 #!/bin/bash
 
-php symfony generate:export-mairies --trace 2019 2019
-php symfony generate:export-douanes --trace 2019 2019
-php symfony generate:export-inao --trace 2019 2019
+. bin/config.inc
+
+DS_CAMPAGNE=(echo $DS_PERIODE | sed 's/....$//')
+
+php symfony generate:export-mairies --trace $DR_CAMPAGNE $DS_CAMPAGNE
+php symfony generate:export-douanes --trace $DR_CAMPAGNE $DS_CAMPAGNE
+php symfony generate:export-inao    --trace $DR_CAMPAGNE $DS_CAMPAGNE
