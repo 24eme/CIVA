@@ -2,7 +2,7 @@
 
 . bin/config.inc
 
-DS_CAMPAGNE=(echo $DS_PERIODE | sed 's/....$//')
+DS_CAMPAGNE=$(echo $DS_PERIODE | sed 's/..$//')
 
 php symfony generate:export-mairies --trace $DR_CAMPAGNE $DS_CAMPAGNE
 php symfony generate:export-douanes --trace $DR_CAMPAGNE $DS_CAMPAGNE
