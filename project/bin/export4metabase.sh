@@ -14,3 +14,11 @@ done | while read file ; do
     ANNEE=$(echo $file | sed 's/.*export_drs_//' | sed 's/_.*//')
     tail -n +2 $file  | sed 's/^/DR;'$ANNEE';/';
 done >> data/dr.csv
+
+if test -f $METABASE_SQLITE ; then
+    if test "$METABASE_SQLITE"; then
+        cp $METABASE_SQLITE $METABASE_SQLITE".tmp"
+        python $BASEDIR"/bin/csv2sql.py" $METABASE_SQLITE".tmp"
+        mv -f $METABASE_SQLITE".tmp" $METABASE_SQLITE
+    fi
+fi
