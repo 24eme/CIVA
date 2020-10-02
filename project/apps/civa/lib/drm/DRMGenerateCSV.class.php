@@ -68,14 +68,16 @@ class DRMGenerateCSV {
     protected $periode;
     protected $periode_date;
     protected $aggregate = false;
+    protected $firstDrm = false;
 
 
-    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false){
+    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false, $firstDrm = false){
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
       $this->periode_date = (preg_match('/^[0-9]{6}$/', $periode))? substr($periode, 0, 4)."-".substr($periode, -2)."-01" : date('Y-m-d');
       $this->aggregate = $aggregate;
+      $this->firstDrm = $firstDrm;
     }
 
     public function getPeriode(){
@@ -234,6 +236,11 @@ class DRMGenerateCSV {
 
 
         public function createRowStockProduitFromDS($produitDetail,$withVolume = false){
+
+            if(!$withVolume && !$this->firstDrm) {
+                return;
+            }
+
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $produitCepage = $produitDetail->getParent()->getParent();
       $lignes = "";
