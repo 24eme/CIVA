@@ -195,7 +195,13 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       }
     }
 
+    public function hasRecapitulatif() {
+
+        return !$this->getConfig()->existRendementAppellation() && !$this->getConfig()->existRendementCouleur() && $this->getConfig()->getRendementCepage() && !$this->getLieu()->getConfig()->getRendementCepage();
+    }
+
     protected function update($params = array()) {
+        $this->preUpdateAcheteurs();
       parent::update($params);
 
       if ($this->getCouchdbDocument()->canUpdate()) {
@@ -207,6 +213,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->volume_revendique = $this->getVolumeRevendique(true);
           $this->vci = $this->getTotalVci(true);
       }
+
+      $this->updateAcheteurs();
     }
 
 }

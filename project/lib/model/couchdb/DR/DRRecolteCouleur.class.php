@@ -35,8 +35,14 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
     }
 
     public function hasRecapitulatif() {
+        foreach($this->getCepages() as $cepage) {
+            if($cepage->hasRecapitulatif()) {
 
-        return $this->getConfig()->existRendementCouleur();
+                return false;
+            }
+        }
+
+        return $this->getConfig()->existRendement();
     }
 
     public function canHaveUsagesLiesSaisi() {
