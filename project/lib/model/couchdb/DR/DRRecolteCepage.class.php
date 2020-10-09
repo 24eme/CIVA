@@ -209,8 +209,4 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       }
     }
 
-    public function canHaveVci() {
-
-        return parent::canHaveVci() && $this->getConfig()->getRendementAppellation() && ($this->getConfig()->getRendementCepage() > $this->getConfig()->getRendementAppellation() || !$this->getConfig()->hasRendementCepage());
-    }
 }

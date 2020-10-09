@@ -213,7 +213,22 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
     public function canHaveVci() {
 
-        return parent::canHaveVci() && $this->getRendementAppellation() && ($this->getRendementCepage() > $this->getRendementAppellation() || !$this->hasRendementCepage());
+        if(!parent::canHaveVci()) {
+
+            return false;
+        }
+
+        if($this->getRendementAppellation() && ($this->getRendementCepage() > $this->getRendementAppellation() || !$this->hasRendementCepage())) {
+
+            return true;
+        }
+
+        if(!$this->hasRendementAppellation() && $this->getRendementCepage()) {
+
+            return true;
+        }
+
+        return false;
     }
     /* FIN DR */
 
