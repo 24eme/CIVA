@@ -60,7 +60,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo (count($form->getEmbeddedForms()) > 5) ? $form_item->getObject()->getConfig()->getKey() : $form_item->getObject()->getLibelle() ?></td>
+                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo $form_item->getObject()->getConfig()->getKey() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
@@ -171,7 +171,7 @@
 									<?php endif; ?>
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
 										<?php if(!isset($tableauOpen)): ?>
-										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
+										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<thead>
 												<tr>
 													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
@@ -189,8 +189,8 @@
 													<th><span>Dont dépas.</span></th>
 												</tr>
 											</thead>
-											<tbody>
 										<?php endif; ?>
+											<tbody id="table_ventes_<?php echo $key ?>">
 										<?php if($form_item->getObject() instanceof DRRecolteCepage): $tableauOpen = true; endif; ?>
                                             <?php foreach($form_item->getObject()->acheteurs as $type => $acheteurs_type) : ?>
                                                 <?php foreach($acheteurs_type as $cvi => $info): ?>
@@ -225,8 +225,8 @@
                                                     </tr>
                                                 <?php endforeach; ?>
                                             <?php endforeach; ?>
+										</tbody>
 										<?php if(!isset($tableauOpen)): ?>
-											</tbody>
 										</table>
 										<?php endif; ?>
                                         <?php else: ?>
@@ -241,7 +241,7 @@
 									</div>
 									<?php endif; ?>
 
-									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && $form->getObject()->getConfig()->existRendement()) : ?>
+									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && $form_item->getObject()->getConfig()->existRendement()) : ?>
 									<div class="btn">
 										<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 									</div>
@@ -301,21 +301,21 @@
                                     var sum_superficie = 0;
                                     var sum_dont_dplc = 0;
                                     var sum_dont_vci = 0;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_superficie += parseFloat($(this).val());
                                         }
                                     });
                                     sum_superficie = trunc(sum_superficie, 2);
 
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_dont_dplc += parseFloat($(this).val());
                                         }
                                     });
                                     sum_dont_dplc = trunc(sum_dont_dplc, 2);
 
-									$('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+									$('#recap_ventes #table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_dont_vci += parseFloat($(this).val());
                                         }
@@ -324,7 +324,7 @@
 
 
                                     var dplc_sup_volume = false;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
                                         if (!$(this).val()) {
                                             return;
                                         }
@@ -338,7 +338,7 @@
                                     });
 
 									var vci_sup_volume = false;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
                                         if (!$(this).val()) {
                                             return;
                                         }
