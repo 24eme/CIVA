@@ -11,11 +11,22 @@ class RecapitulatifContainerForm extends acCouchdbForm {
     }
 
     public function configure() {
-        if(!$this->lieu->getConfig()->existRendementCouleur()) {
+
+        if($this->lieu->hasRecapitulatif()) {
             $this->embedForm($this->lieu->getKey(), new RecapitulatifForm($this->lieu));
-        } else {
-            foreach($this->lieu->getCouleurs() as $couleur) {
+            return;
+        }
+
+        foreach($this->lieu->getCouleurs() as $couleur) {
+            if($couleur->hasRecapitulatif()) {
                 $this->embedForm($couleur->getKey(), new RecapitulatifForm($couleur));
+                continue;
+            }
+            foreach($couleur->getCepages() as $cepage) {
+                if($cepage->hasRecapitulatif()) {
+                    $this->embedForm($cepage->getKey(), new RecapitulatifForm($cepage));
+                    continue;
+                }
             }
         }
 
