@@ -60,7 +60,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo $form_item->getObject()->getConfig()->getKey() ?></td>
+                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo (count($form->getEmbeddedForms()) > 5) ? $form_item->getObject()->getConfig()->getKey() : $form_item->getObject()->getLibelle() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
