@@ -29,8 +29,21 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
     }
 
     public function hasRecapitulatif() {
+        foreach($this->getCouleurs() as $couleur) {
+            if($couleur->hasRecapitulatif()) {
 
-        return !$this->getConfig()->existRendementCouleur() && $this->getConfig()->existRendement();
+                return false;
+            }
+            foreach($couleur->getCepages() as $cepage) {
+                if($cepage->hasRecapitulatif()) {
+
+                    return false;
+                }
+            }
+        }
+
+
+        return $this->getConfig()->existRendement();
     }
 
     public function getCouleurs() {

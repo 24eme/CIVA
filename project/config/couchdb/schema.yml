@@ -305,6 +305,55 @@ DR:
                                                       usages_industriels: { type:float }
                                                       lies: { type: float }
                                                       vci: { type: float }
+                                                      acheteurs:
+                                                        type: collection
+                                                        definition:
+                                                         fields:
+                                                           negoces:
+                                                             type: collection
+                                                             definition:
+                                                               fields:
+                                                                 '*':
+                                                                   type: collection
+                                                                   class: DRRecolteLieuAcheteur
+                                                                   definition:
+                                                                     fields:
+                                                                       type_acheteur: {}
+                                                                       nom: {}
+                                                                       commune: {}
+                                                                       superficie: {type:float}
+                                                                       dontdplc: {type:float}
+                                                                       dontvci: { type: float }
+                                                           cooperatives:
+                                                             type: collection
+                                                             definition:
+                                                               fields:
+                                                                 '*':
+                                                                   type: collection
+                                                                   class: DRRecolteLieuAcheteur
+                                                                   definition:
+                                                                     fields:
+                                                                       type_acheteur: {}
+                                                                       nom: {}
+                                                                       commune: {}
+                                                                       superficie: {type:float}
+                                                                       dontdplc: {type:float}
+                                                                       dontvci: { type: float }
+                                                           mouts:
+                                                             type: collection
+                                                             definition:
+                                                               fields:
+                                                                 '*':
+                                                                   type: collection
+                                                                   class: DRRecolteLieuAcheteur
+                                                                   definition:
+                                                                     fields:
+                                                                       type_acheteur: {}
+                                                                       nom: {}
+                                                                       commune: {}
+                                                                       superficie: {type:float}
+                                                                       dontdplc: {type:float}
+                                                                       dontvci: { type: float }
                                                       detail:
                                                         type: array_collection
                                                         definition:

@@ -163,7 +163,7 @@
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                    <?php if (count($form->getEmbeddedForms()) > 1): ?>
+                                    <?php if (!$form_item->getObject() instanceof DRRecolteLieu): ?>
                                     <h3 class="titre_section"><?php echo $form_item->getObject()->getLibelle(); ?></h3>
                                     <?php endif; ?>
 									<div class="bloc_gris">
