@@ -157,13 +157,19 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function canCalculSuperficieSurPlace() {
+        if($this->hasRecapitulatif()) {
+            return parent::canCalculSuperficieSurPlace();
+        }
 
-      return true;
+        return true;
     }
 
     public function canCalculVolumeRevendiqueSurPlace() {
+        if($this->hasRecapitulatif()) {
+            return parent::canCalculVolumeRevendiqueSurPlace();
+        }
 
-      return true;
+        return true;
     }
 
     protected function getSumNoeudFields($field, $exclude = true) {
@@ -201,8 +207,14 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     protected function update($params = array()) {
-        $this->preUpdateAcheteurs();
-      parent::update($params);
+        if($this->hasRecapitulatif()) {
+            $this->add('acheteurs');
+        }
+
+        if($this->exist('acheteurs')) {
+            $this->preUpdateAcheteurs();
+        }
+        parent::update($params);
 
       if ($this->getCouchdbDocument()->canUpdate()) {
           $this->total_volume = $this->getTotalVolume(true);
@@ -213,8 +225,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->volume_revendique = $this->getVolumeRevendique(true);
           $this->vci = $this->getTotalVci(true);
       }
-
+      if($this->exist('acheteurs')) {
       $this->updateAcheteurs();
+      }
     }
 
 }

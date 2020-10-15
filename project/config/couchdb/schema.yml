@@ -307,6 +307,7 @@ DR:
                                                       vci: { type: float }
                                                       acheteurs:
                                                         type: collection
+                                                        required: false
                                                         definition:
                                                          fields:
                                                            negoces:
