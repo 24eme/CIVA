@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 
-$t = new lime_test(15);
+$t = new lime_test(24);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration('civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -58,12 +58,28 @@ $t->is($produit->getDplc(), 5, "DPLC");
 $t->is($produit->getLies(), 3, "Lies");
 $t->is($produit->getTotalVci(), 2, "VCI");
 $t->is($produit->getUsagesIndustriels(), 3, "Usages industriels");
-
-$t->ok($produit->hasRecapitulatif(), "Le cépage nécessite un recap de vente");
-$t->ok($produit->hasRecapitulatifVente(), "Le cépage nécessite un recap de vente et le noeud acheteur est présent");
 $t->ok(!$produit->canCalculVolumeRevendiqueSurPlace(), "Le volume revendiqué sur place n'est pas calculable");
 $t->ok(!$produit->canCalculSuperficieSurPlace(), "La superficie sur place n'est pas calculable");
 $t->is($produit->getDplcCaveParticuliere(), 0, "Le DPLC en cave particulière est de 0 car on ne connait pas la répartion");
 $t->is($produit->getTotalDontDplcVendus(), 0, "Le DPLC vendu est de 0 car on ne connait pas la répartion");
+$t->is($produit->getTotalSuperficieVendus(), 0, "La superficie vendu est de 0 car on ne connait pas la répartion");
+$t->is($produit->getTotalDontVciVendus(), 0, "Le vci vendu est de 0 car on ne connait pas la répartion");
 
+$dr->save();
+
+$t->comment("Récapitulatif des ventes");
+
+$t->ok($produit->hasRecapitulatif(), "Le cépage nécessite un recap de vente");
+$t->ok($produit->hasRecapitulatifVente(), "Le cépage nécessite un recap de vente et le noeud acheteur est présent");
+
+$achat = $produit->acheteurs->negoces->get($negoce["cvi"]);
+$achat->dontvci = 1;
+$achat->dontdplc = 1;
+$achat->superficie = 10;
+
+$t->ok($produit->canCalculVolumeRevendiqueSurPlace(), "Le volume revendiqué sur place est calculable");
+$t->ok($produit->canCalculSuperficieSurPlace(), "La superficie sur place est calculable");
+$t->is($produit->getVolumeRevendiqueCaveParticuliere(), 46, "Volume revendique sur place");
+
+$dr->update();
 $dr->save();

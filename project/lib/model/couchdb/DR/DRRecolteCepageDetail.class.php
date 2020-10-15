@@ -323,4 +323,12 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     public function cleanLies() {
         $this->lies = null;
     }
+
+    public function canCalculVolumeRevendiqueSurPlace() {
+        return true;
+    }
+
+    public function canCalculSuperficieSurPlace() {
+        return true;
+    }
 }
