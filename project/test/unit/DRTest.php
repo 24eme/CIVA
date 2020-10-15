@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 
-$t = new lime_test(24);
+$t = new lime_test(32);
 
 $configuration = ProjectConfiguration::getApplicationConfiguration('civa', 'test', true);
 $databaseManager = new sfDatabaseManager($configuration);
@@ -83,3 +83,17 @@ $t->is($produit->getVolumeRevendiqueCaveParticuliere(), 46, "Volume revendique s
 
 $dr->update();
 $dr->save();
+
+$t->comment("PDF");
+
+$achatCouleur = $produit->getCouleur()->acheteurs->negoces->get($negoce["cvi"]);
+$t->is($achatCouleur->superficie, 10, "Superficie acheteur au niveau couleur");
+$t->is($achatCouleur->volume, 20, "Volume acheteur au niveau couleur");
+$t->is($achatCouleur->dontvci, 2, "Dont vci au niveau couleur");
+$t->is($achatCouleur->dontdplc, 1, "Dont dplc au niveau couleur");
+
+$achatLieu = $produit->getLieu()->acheteurs->negoces->get($negoce["cvi"]);
+$t->is($achatLieu->superficie, 10, "Superficie acheteur au niveau lieu");
+$t->is($achatLieu->volume, 20, "Volume acheteur au niveau lieu");
+$t->is($achatLieu->dontvci, 2, "Dont vci au niveau lieu");
+$t->is($achatLieu->dontdplc, 1, "Dont dplc au niveau lieu");
