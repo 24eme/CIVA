@@ -38,33 +38,51 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getTotalSuperficieVendus() {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalSuperficieVendus();
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontVciVendus() {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendus();
+        }
 
         return null;
     }
 
     public function getTotalDontVciVendusByType($type) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendusByType($type);
+        }
 
         return null;
     }
 
     public function getTotalSuperficieVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalSuperficieVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontDplcVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontDplcVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontVciVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getProduitsDetails() {

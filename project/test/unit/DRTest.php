@@ -89,11 +89,11 @@ $t->comment("PDF");
 $achatCouleur = $produit->getCouleur()->acheteurs->negoces->get($negoce["cvi"]);
 $t->is($achatCouleur->superficie, 10, "Superficie acheteur au niveau couleur");
 $t->is($achatCouleur->volume, 20, "Volume acheteur au niveau couleur");
-$t->is($achatCouleur->dontvci, 2, "Dont vci au niveau couleur");
+$t->is($achatCouleur->dontvci, 1, "Dont vci au niveau couleur");
 $t->is($achatCouleur->dontdplc, 1, "Dont dplc au niveau couleur");
 
 $achatLieu = $produit->getLieu()->acheteurs->negoces->get($negoce["cvi"]);
 $t->is($achatLieu->superficie, 10, "Superficie acheteur au niveau lieu");
 $t->is($achatLieu->volume, 20, "Volume acheteur au niveau lieu");
-$t->is($achatLieu->dontvci, 2, "Dont vci au niveau lieu");
+$t->is($achatLieu->dontvci, 1, "Dont vci au niveau lieu");
 $t->is($achatLieu->dontdplc, 1, "Dont dplc au niveau lieu");
