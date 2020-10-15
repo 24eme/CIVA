@@ -56,7 +56,7 @@
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<tbody>
-                                                <?php if (count($form->getEmbeddedForms()) > 1): ?>
+                                                <?php if (count($form->getEmbeddedForms()) > 1 || (!$appellationlieu->getConfig()->hasRendementCepage() && !$appellationlieu->getConfig()->hasRendementNoeud())): ?>
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
@@ -106,7 +106,7 @@
                                     <div class="bloc_gris">
                                         <table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
                                             <tbody>
-                                                <?php if (count($form->getEmbeddedForms()) > 1): ?>
+                                                <?php if (count($form->getEmbeddedForms()) > 1 || (!$appellationlieu->getConfig()->hasRendementCepage() && !$appellationlieu->getConfig()->hasRendementNoeud())): ?>
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
