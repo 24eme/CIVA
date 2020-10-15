@@ -75,7 +75,7 @@
                         <input id="detail_usages_industriels" type="hidden" class="usages_industriels num readonly" readonly="readonly" value="<?php echo $detail->usages_industriels ?>" />
                     </li>
                     <?php endif; ?>
-                    <?php if($produit->getLieu()->canHaveVci()): ?>
+                    <?php if($produit->canHaveVci()): ?>
                     <li>
                         <?php if (isset($form['vci'])) : ?>
                             <?php echo $form['vci']->render(array('class' => 'vci num')) ?>
