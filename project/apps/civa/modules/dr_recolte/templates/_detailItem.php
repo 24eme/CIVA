@@ -76,7 +76,7 @@
                     <input data-form-input-id="detail_lies" type="<?php echo (!$detail->canHaveUsagesLiesSaisi()) ? 'hidden' : 'text' ?>" class="num lies readonly" readonly="readonly" value="<?php echoFloat($detail->lies); ?>" />
                 </li>
                 <?php endif; ?>
-                <?php if($produit->canHaveVci()): ?>
+                <?php if($produit->getLieu()->canHaveVci()): ?>
                 <li>
                     <input data-form-input-id="detail_vci" type="<?php echo (!$detail->canHaveVci()) ? 'hidden' : 'text' ?>" class="num vci readonly" readonly="readonly" value="<?php echoFloat($detail->vci); ?>" />
                 </li>
