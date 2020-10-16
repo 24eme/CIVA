@@ -581,6 +581,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->acheteurs->get($type)->get($cvi)->superficie;
         }
 
+        if($this->hasRecapitulatifVente()) {
+
+            return 0;
+        }
+
         $superficie = null;
 
         foreach($this->getChildrenNode() as $children) {
@@ -596,6 +601,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->acheteurs->get($type)->get($cvi)->dontdplc;
         }
 
+        if($this->hasRecapitulatifVente()) {
+
+            return 0;
+        }
+
         $dontdplc = null;
 
         foreach($this->getChildrenNode() as $children) {
@@ -609,6 +619,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if($this->hasRecapitulatifVente() && $this->acheteurs->exist($type."/".$cvi)) {
 
             return $this->acheteurs->get($type)->get($cvi)->dontvci;
+        }
+
+        if($this->hasRecapitulatifVente()) {
+
+            return 0;
         }
 
         $dontvci = null;
@@ -857,7 +872,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
         $this->acheteurs->update();
 
-        if ($this->getCouchdbDocument()->canUpdate() && $this->hasSellToUniqueAcheteur()) {
+        if ($this->getCouchdbDocument()->canUpdate() && $this->hasRecapitulatifVente() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
             $unique_acheteur->dontdplc = $this->getDplc();
             $unique_acheteur->dontvci = $this->getTotalVci();

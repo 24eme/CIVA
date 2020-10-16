@@ -474,6 +474,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         $cepage = $this->get($hashCepage);
+                        $this->checkNoeudRecapitulatifVentes($cepage, $validLogErreur, $validLogVigilance);
                         $totalVolRevendique = $cepage->getTotalVolume(true);
 
                         if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
@@ -547,7 +548,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         // vérifie le trop plein de DPLC
-                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round(($cepage->getDplc() - $cepage->getLies()),2) > 0) {
+                        if (preg_match("|appellation_ALSACEBLANC/mention$|", $mention->getHash()) && $cepage->getConfig()->hasRendementCepage() && round(($cepage->getDplc() - $cepage->getLies()),2) > 0 && !$couleur->getConfig()->get('cepages/ED')->isSuperficieRequired()) {
                             array_push($validLogVigilance, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_dplc')));
                         }
 
@@ -613,7 +614,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
-        if(!$noeud->canHaveVci()) {
+        if(!$noeud->getConfig()->getRendementVci()) {
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {

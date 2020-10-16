@@ -56,11 +56,11 @@
 									<div class="bloc_gris">
 										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 											<tbody>
-                                                <?php if (count($form->getEmbeddedForms()) > 1): ?>
+                                                <?php if (count($form->getEmbeddedForms()) > 1 || (!$appellationlieu->getConfig()->hasRendementCepage() && !$appellationlieu->getConfig()->hasRendementNoeud())): ?>
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="entete"><?php echo $form_item->getObject()->getLibelle() ?></td>
+                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo (count($form->getEmbeddedForms()) > 5) ? $form_item->getObject()->getConfig()->getKey() : $form_item->getObject()->getLibelle() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
@@ -106,11 +106,11 @@
                                     <div class="bloc_gris">
                                         <table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
                                             <tbody>
-                                                <?php if (count($form->getEmbeddedForms()) > 1): ?>
+                                                <?php if (count($form->getEmbeddedForms()) > 1 || (!$appellationlieu->getConfig()->hasRendementCepage() && !$appellationlieu->getConfig()->hasRendementNoeud())): ?>
                                                 <tr>
                                                     <td></td>
                                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                                        <td class="entete"><?php echo $form_item->getObject()->getLibelle() ?></td>
+                                                        <td class="entete" title="<?php echo $form_item->getObject()->getLibelle() ?>"><?php echo (count($form->getEmbeddedForms()) > 5) ? $form_item->getObject()->getConfig()->getKey() : $form_item->getObject()->getLibelle() ?></td>
                                                     <?php endforeach; ?>
                                                 </tr>
                                                 <?php endif; ?>
@@ -163,26 +163,35 @@
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
-                                    <?php if (!$form_item->getObject() instanceof DRRecolteLieu): ?>
+                                    <?php if ($form_item->getObject() instanceof DRRecolteCouleur): ?>
                                     <h3 class="titre_section"><?php echo $form_item->getObject()->getLibelle(); ?></h3>
                                     <?php endif; ?>
+									<?php if(!isset($tableauOpen)): ?>
 									<div class="bloc_gris">
+									<?php endif; ?>
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
-										<table id="table_ventes_<?php echo $key ?>" cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
-											<thead>
-												<tr>
-													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
-													<th class="cvi">n°CVI</th>
-													<th class="commune"><span>Commune</span></th>
-													<th><span>Superficie</span></th>
-													<th><span>Volume total</span></th>
-													<?php if($form_item->getObject()->canHaveVci()): ?>
-													<th><span>Dont VCI</span></th>
-													<?php endif; ?>
-													<th><span>Dont dépas.</span></th>
-												</tr>
-											</thead>
-											<tbody>
+											<?php if(!isset($tableauOpen)): ?>
+											<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
+												<thead>
+													<tr>
+														<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
+														<th class="cvi">n°CVI</th>
+														<?php if($form_item->getObject() instanceof DRRecolteCepage): ?>
+														<th style="width: 60px; background: #ffb52c; "><span>Cépage</span></th>
+														<?php else: ?>
+														<th class="commune"><span>Commune</span></th>
+														<?php endif; ?>
+														<th><span>Superficie</span></th>
+														<th><span>Volume total</span></th>
+														<?php if($form_item->getObject()->canHaveVci()): ?>
+														<th><span>Dont VCI</span></th>
+														<?php endif; ?>
+														<th><span>Dont dépas.</span></th>
+													</tr>
+												</thead>
+											<?php endif; ?>
+											<tbody id="table_ventes_<?php echo $key ?>">
+											<?php if($form_item->getObject() instanceof DRRecolteCepage): $tableauOpen = true; endif; ?>
                                             <?php foreach($form_item->getObject()->acheteurs as $type => $acheteurs_type) : ?>
                                                 <?php foreach($acheteurs_type as $cvi => $info): ?>
                                                     <tr>
@@ -194,36 +203,49 @@
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td class="cvi alt"><?php echo $cvi; ?></td>
-                                                            <td class="commune"><?php echo $info->getCommune(); ?></td>
+															<?php if($form_item->getObject() instanceof DRRecolteCepage): ?>
+																<td><?php echo $form_item->getObject()->getLibelle() ?></td>
+															<?php else: ?>
+                                                            	<td class="commune"><?php echo $info->getCommune(); ?></td>
+															<?php endif; ?>
                                                             <?php if($form_item->getObject()->getConfig()->existRendement()): ?>
-                                                                <td class="superficie alt <?php echo ($form[$key]['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?> ares</td>
+                                                                <td class="superficie alt <?php echo ($form[$key]['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?>&nbsp;ares</td>
                                                             <?php else: ?>
                                                                 <td class="superficie alt"></td>
                                                             <?php endif; ?>
                                                             <td class="volume"><?php echoFloat($info->getVolume()); ?> hl</td>
 															<?php if(isset($form[$key]['acheteurs'][$type][$cvi]['dontvci'])) : ?>
-                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?> hl</td>
+                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?>&nbsp;hl</td>
                                                             <?php endif; ?>
                                                             <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
-                                                                <td class="dplc <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?> hl</td>
+                                                                <td class="dplc <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?>&nbsp;hl</td>
                                                             <?php else: ?>
                                                                 <td class="dplc"></td>
                                                             <?php endif; ?>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             <?php endforeach; ?>
-											</tbody>
+										</tbody>
+										<?php if(!isset($tableauOpen)): ?>
 										</table>
-                                        <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
-										<div class="btn">
-											<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
-										</div>
-                                        <?php endif; ?>
-                                        <?php else: ?>
+										<?php endif; ?>
+									<?php elseif(!isset($tableauOpen)): ?>
                                         <p> Aucune vente </p>
                                         <?php endif; ?>
+									<?php if(!isset($tableauOpen)): ?>
 									</div>
+									<?php endif; ?>
                                     <?php endforeach; ?>
+									<?php if(isset($tableauOpen)): ?>
+									</table>
+									</div>
+									<?php endif; ?>
+
+									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && $form_item->getObject()->getConfig()->existRendement()) : ?>
+									<div class="btn">
+										<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
+									</div>
+									<?php endif; ?>
                                 </div>
 							</div>
 						</div>
@@ -279,21 +301,21 @@
                                     var sum_superficie = 0;
                                     var sum_dont_dplc = 0;
                                     var sum_dont_vci = 0;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.superficie input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_superficie += parseFloat($(this).val());
                                         }
                                     });
                                     sum_superficie = trunc(sum_superficie, 2);
 
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_dont_dplc += parseFloat($(this).val());
                                         }
                                     });
                                     sum_dont_dplc = trunc(sum_dont_dplc, 2);
 
-									$('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+									$('#recap_ventes #table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
                                         if ($(this).val()) {
                                             sum_dont_vci += parseFloat($(this).val());
                                         }
@@ -302,7 +324,7 @@
 
 
                                     var dplc_sup_volume = false;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.dplc input.num').each(function() {
                                         if (!$(this).val()) {
                                             return;
                                         }
@@ -316,7 +338,7 @@
                                     });
 
 									var vci_sup_volume = false;
-                                    $('#recap_ventes table#table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
+                                    $('#recap_ventes #table_ventes_<?php echo $key ?> tr td.vci input.num').each(function() {
                                         if (!$(this).val()) {
                                             return;
                                         }

@@ -213,9 +213,32 @@ class ExportDRPdf extends ExportDocument {
 
             $this->createRecap($dr, $vsig);
           }
+
+        $acheteursCepage = array();
+        foreach($dr->getProduits() as $cepage) {
+            if(!$cepage->hasRecapitulatif() || !$cepage->hasAcheteurs()) {
+              continue;
+            }
+
+            $acheteursCepage[$cepage->getHash()] = array("libelle" => $cepage->getLibelle(), "acheteurs" => $cepage->acheteurs);
+            foreach($cepage->acheteurs as $type_key => $acheteursType) {
+                foreach($acheteursType as $cvi => $acheteur) {
+                    $type = 'Vente à ';
+                    if ($acheteur->type_acheteur == 'cooperatives') {
+                        $type = 'Apport à ';
+                    } else if ($acheteur->type_acheteur == 'mouts') {
+                        $type = 'Vente de mouts à ';
+                    }
+                }
+            }
+        }
+
+        if(count($acheteursCepage)) {
+            $this->document->addPage($this->getPartial('dr_export/annexeRepartitionCepage', array('dr' => $this->dr, 'acheteursCepage' => $acheteursCepage)));
+        }
     }
 
-      protected function createRecap($dr, $vsig = 0) {
+    protected function createRecap($dr, $vsig = 0) {
         $recap = $this->getRecapTotal($dr);
         $total = array("revendique_sur_place" => null,
                        "usages_industriels_sur_place" => null,
