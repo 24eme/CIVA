@@ -474,6 +474,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         $cepage = $this->get($hashCepage);
+                        $this->checkNoeudRecapitulatifVentes($cepage, $validLogErreur, $validLogVigilance);
                         $totalVolRevendique = $cepage->getTotalVolume(true);
 
                         if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {

@@ -27,6 +27,13 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this;
     }
 
+    public function getLibelleWithAppellation() {
+        if ($this->getLibelle())
+	        return $this->getCouleur()->getLibelleWithAppellation().' - '.$this->getLibelle();
+
+        return $this->getAppellation()->getLibelleWithAppellation();
+    }
+
     public function getChildrenNode() {
 
         return $this->detail;
