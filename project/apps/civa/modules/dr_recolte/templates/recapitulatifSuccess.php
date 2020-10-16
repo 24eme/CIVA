@@ -170,28 +170,28 @@
 									<div class="bloc_gris">
 									<?php endif; ?>
                                         <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
-										<?php if(!isset($tableauOpen)): ?>
-										<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
-											<thead>
-												<tr>
-													<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
-													<th class="cvi">n°CVI</th>
-													<?php if($form_item->getObject() instanceof DRRecolteCepage): ?>
-													<th style="width: 60px; background: #ffb52c; "><span>Cépage</span></th>
-													<?php else: ?>
-													<th class="commune"><span>Commune</span></th>
-													<?php endif; ?>
-													<th><span>Superficie</span></th>
-													<th><span>Volume total</span></th>
-													<?php if($form_item->getObject()->canHaveVci()): ?>
-													<th><span>Dont VCI</span></th>
-													<?php endif; ?>
-													<th><span>Dont dépas.</span></th>
-												</tr>
-											</thead>
-										<?php endif; ?>
+											<?php if(!isset($tableauOpen)): ?>
+											<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
+												<thead>
+													<tr>
+														<th><img alt="Acheteurs et caves" src="/images/textes/acheteurs_caves.png"></th>
+														<th class="cvi">n°CVI</th>
+														<?php if($form_item->getObject() instanceof DRRecolteCepage): ?>
+														<th style="width: 60px; background: #ffb52c; "><span>Cépage</span></th>
+														<?php else: ?>
+														<th class="commune"><span>Commune</span></th>
+														<?php endif; ?>
+														<th><span>Superficie</span></th>
+														<th><span>Volume total</span></th>
+														<?php if($form_item->getObject()->canHaveVci()): ?>
+														<th><span>Dont VCI</span></th>
+														<?php endif; ?>
+														<th><span>Dont dépas.</span></th>
+													</tr>
+												</thead>
+											<?php endif; ?>
 											<tbody id="table_ventes_<?php echo $key ?>">
-										<?php if($form_item->getObject() instanceof DRRecolteCepage): $tableauOpen = true; endif; ?>
+											<?php if($form_item->getObject() instanceof DRRecolteCepage): $tableauOpen = true; endif; ?>
                                             <?php foreach($form_item->getObject()->acheteurs as $type => $acheteurs_type) : ?>
                                                 <?php foreach($acheteurs_type as $cvi => $info): ?>
                                                     <tr>
@@ -229,7 +229,7 @@
 										<?php if(!isset($tableauOpen)): ?>
 										</table>
 										<?php endif; ?>
-                                        <?php else: ?>
+										<?php elseif(!$tableauOpen): ?>
                                         <p> Aucune vente </p>
                                         <?php endif; ?>
 									<?php if(!isset($tableauOpen)): ?>

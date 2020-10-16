@@ -224,6 +224,40 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return !$this->getConfig()->existRendementAppellation() && !$this->getConfig()->existRendementCouleur() && $this->getConfig()->getRendementCepage() && !$this->getLieu()->getConfig()->getRendementCepage();
     }
 
+    public function updateAcheteurs() {
+        parent::updateAcheteurs();
+
+        if(!$this->getCouchdbDocument()->canUpdate() || !$this->hasRecapitulatifVente()) {
+            return;
+        }
+
+        $superficies = array();
+        $dplc = array();
+        $vci = array();
+
+        foreach($this->getProduitsDetails() as $detail) {
+            if(!$detail->canCalculInfosVente() || $this->getDplc()) {
+                return;
+            }
+        }
+
+        foreach($this->acheteurs as $type => $achats) {
+            foreach($achats as $cvi => $achat) {
+                $achat->superficie = 0;
+                $achat->dontdplc = 0;
+                $achat->dontvci = 0;
+                foreach($this->getProduitsDetails() as $detail) {
+                    if(!$detail->getVolumeVenduByCvi($type, $cvi)) {
+                        continue;
+                    }
+                    $achat->superficie += $detail->superficie;
+                    $achat->dontdplc += $detail->dplc;
+                    $achat->dontvci += $detail->vci;
+                }
+            }
+        }
+    }
+
     protected function update($params = array()) {
         if($this->hasRecapitulatif()) {
             $this->add('acheteurs');

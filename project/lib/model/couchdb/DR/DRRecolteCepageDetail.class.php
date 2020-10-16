@@ -331,4 +331,19 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     public function canCalculSuperficieSurPlace() {
         return true;
     }
+
+    public function canCalculInfosVente() {
+        $nbDestinataire = 0;
+        if($this->cave_particuliere > 0) {
+            $nbDestinataire++;
+        }
+
+        foreach($this->getVolumeAcheteurs() as $cvi => $volumeVendu) {
+            if($volumeVendu > 0) {
+                $nbDestinataire++;
+            }
+        }
+
+        return $nbDestinataire == 1;
+    }
 }
