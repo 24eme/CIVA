@@ -613,7 +613,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
-        if(!$noeud->canHaveVci()) {
+        if(!$noeud->getConfig()->getRendementVci()) {
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {

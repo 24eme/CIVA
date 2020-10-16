@@ -79,7 +79,7 @@ $achat->superficie = 10;
 
 $t->ok($produit->canCalculVolumeRevendiqueSurPlace(), "Le volume revendiqué sur place est calculable");
 $t->ok($produit->canCalculSuperficieSurPlace(), "La superficie sur place est calculable");
-$t->is($produit->getVolumeRevendiqueCaveParticuliere(), 46, "Volume revendique sur place");
+$t->is($produit->getVolumeRevendiqueCaveParticuliere(), 47, "Volume revendique sur place");
 
 $dr->update();
 $dr->save();

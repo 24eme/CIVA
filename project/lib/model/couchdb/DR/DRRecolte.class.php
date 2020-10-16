@@ -140,9 +140,4 @@ class DRRecolte extends BaseDRRecolte {
         return $appellations;
     }
 
-    public function canHaveVci() {
-
-        return $this->getConfig()->existRendementVci();
-    }
-
 }
