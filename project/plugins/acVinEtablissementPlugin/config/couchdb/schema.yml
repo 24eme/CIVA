@@ -15,6 +15,7 @@ Etablissement:
        relance_ds: { required: false  }
        teledeclaration_email: {  }
        nature_inao: {  }
+       mois_stock_debut: { required: false }
        siret: {  }
        acheteur_raisin: { required: false }
        ds_decembre: { required: false }
