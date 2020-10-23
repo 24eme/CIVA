@@ -36,7 +36,7 @@
 			</p>
 			<br />
 
-			<p>Depuis la récolte 2012, le volume à inscrire en entrée est le <u>volume total récolté</u>, c’est-à-dire <u>lies et bourbes comprises</u> (même si des soutirages ont déjà été effectués, voire livrés en distillerie).</p>
+			<p>Depuis la récolte 2012, le volume à inscrire en entrée est le <u><strong>volume total récolté</strong></u>, c’est-à-dire <u>lies et bourbes comprises</u> (même si des soutirages ont déjà été effectués, voire livrés en distillerie).</p>
 
 			<p>La rubrique "Volume à détruire" comprend à la fois les lies et les volumes éventuels en dépassement de rendement (sans distinction).</p>
 
