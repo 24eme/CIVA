@@ -73,7 +73,7 @@
             </li>
             <?php if($cepage->getLieu()->canHaveVci()): ?>
             <li>
-                <input type="text" id="cepage_vci" readonly="readonly" class="num" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
+                <input type="text" id="cepage_vci" readonly="readonly" class="num <?php if ($cepage->getTotalVci() > $cepage->getVolumeVciMax()) echo 'rouge'; ?>" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
                 <input type="hidden" id="cepage_vci_orig" value="<?php echoFloat($cepage->getTotalVci()); ?>" />
                 <input type="hidden" id="cepage_rendement_vci" readonly="readonly" value="<?php echoFloat($cepage->getConfigRendementVci()); ?>" />
             </li>
