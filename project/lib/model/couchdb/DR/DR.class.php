@@ -474,6 +474,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         }
 
                         $cepage = $this->get($hashCepage);
+                        $this->checkNoeudVci($cepage, $validLogErreur, $validLogVigilance);
+                        $this->checkNoeudRecapitulatif($cepage, $validLogErreur, $validLogVigilance);
                         $this->checkNoeudRecapitulatifVentes($cepage, $validLogErreur, $validLogVigilance);
                         $totalVolRevendique = $cepage->getTotalVolume(true);
 
@@ -614,7 +616,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     protected function checkNoeudVci($noeud, &$validLogErreur, &$validLogVigilance) {
-        if(!$noeud->getConfig()->getRendementVci()) {
+        if(!$noeud->getConfig()->getRendementVci() || !$noeud->hasRecapitulatif()) {
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {
