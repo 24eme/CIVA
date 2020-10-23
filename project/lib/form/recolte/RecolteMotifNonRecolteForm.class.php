@@ -22,6 +22,12 @@ class RecolteMotifNonRecolteForm extends acCouchdbObjectForm {
 
     public function getMotifNonRecolteChoices() {
 
-        return array_merge(array('' => ''), sfConfig::get('app_configuration_dr_motifs_non_recolte'));
+        $motifs = array_merge(array('' => ''), sfConfig::get('app_configuration_dr_motifs_non_recolte'));
+
+        if($this->getObject()->getDocument()->campagne >= 2020) {
+            unset($motifs["AE"]);
+        }
+
+        return $motifs;
     }
 }
