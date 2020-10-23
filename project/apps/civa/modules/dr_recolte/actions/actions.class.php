@@ -394,7 +394,9 @@ class dr_recolteActions extends _DRActions {
                         if($mentionConfig->getRendementCepage() <= 0) {
                             continue;
                         }
-                        $this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] = 1;
+			$libelleSupplementaire = "";
+			$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()." (".$mentionConfig->getAppellation()->getLibelle().")"] += 1;
+
                     }
                     continue;
                 }
@@ -430,6 +432,16 @@ class dr_recolteActions extends _DRActions {
                 }
 			}
     	}
+	foreach($this->rendement["Mentions"]['cepage'] as $rendement => $libelles) {
+		if(count($libelles) == 1) {
+			continue;
+		}
+
+		foreach($libelles as $libelle => $mentionConfig) {
+			unset($this->rendement["Mentions"]['cepage'][$rendement][$libelle]);
+		}
+		$this->rendement["Mentions"]['cepage'][$rendement][preg_replace('/ \(.+\)$/', "", $libelle)] = 1;
+	}
     	return $this->renderPartial('dr_recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite,
                                                                         'max_quantite'=> $this->max_quantite));
