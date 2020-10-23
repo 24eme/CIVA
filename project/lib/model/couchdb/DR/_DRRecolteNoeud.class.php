@@ -70,7 +70,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getRendementMax() {
 
-        return round($this->getConfig()->getRendementNoeud() + $this->getRendementVciMax(), 2);
+        return round($this->getConfig()->getRendementNoeud(), 2);
     }
 
     public function getTotalSuperficie($force_calcul = false) {
