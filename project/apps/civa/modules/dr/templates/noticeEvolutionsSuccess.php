@@ -44,7 +44,8 @@
 
 			<p>Vous inscrivez vos lies connues dans la ligne "Volume à détruire" et le système vous calculera automatiquement le volume revendiqué par cépage.</p>
 			<br />
-			<a href="<?php echo url_for("dr_telecharger_la_notice"); ?>" style="height: 20px; margin-top: 10px;" class="telecharger-btn"></a>
+			<br />
+			<a href="<?php echo url_for("dr_telecharger_la_notice"); ?>" style="height: 20px;" class="telecharger-btn"></a>
 		</div>
 	</div>
 	<?php include_partial('dr/boutons', array('display' => array('precedent','suivant'), 'dr' => $dr)) ?>
