@@ -1083,7 +1083,7 @@ var volumeOnChange = function(input) {
     } else if(rendement_config_vci && rendement_excedent > 0) {
         rendement_vci_max = rendement_excedent;
     }
-    var rendement_appellation_max = rendement_appellation + rendement_vci_max;
+    var rendement_appellation_max = rendement_appellation;
     $('#appellation_max_rendement').val(rendement_appellation_max);
 
     var rendement_cepage = parseFloat($('#cepage_rendement').val());
@@ -1096,7 +1096,7 @@ var volumeOnChange = function(input) {
     } else if(rendement_config_vci && rendement_excedent > 0) {
         rendement_vci_max = rendement_excedent;
     }
-    var rendement_cepage_max = rendement_cepage + rendement_vci_max;
+    var rendement_cepage_max = rendement_cepage;
     $('#cepage_max_rendement').val(rendement_cepage_max);
 
     if($('#appellation_vci').length > 0) {
