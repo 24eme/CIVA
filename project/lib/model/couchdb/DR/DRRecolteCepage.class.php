@@ -285,7 +285,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->vci = $this->getTotalVci(true);
       }
       if($this->exist('acheteurs')) {
-      $this->updateAcheteurs();
+          $this->updateAcheteurs(false);
       }
     }
 
