@@ -44,6 +44,18 @@ class dr_recolteActions extends _DRActions {
         }
 
         $this->produit = $this->declaration->get($request->getParameter('hash'));
+
+        $allColonneHasDenom = true;
+        foreach($this->produit->detail as $detail) {
+            if(!$detail->denomination) {
+                $allColonneHasDenom = false;
+            }
+        }
+
+        if($allColonneHasDenom) {
+            return $this->executeProduitAjout($request);
+        }
+
         $this->etablissement = $this->declaration->getEtablissement();
         $this->initDetails();
         $this->initAcheteurs();
