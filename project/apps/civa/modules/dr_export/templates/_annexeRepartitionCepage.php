@@ -18,7 +18,7 @@ foreach($acheteursCepage as $acheteurCepage) {
     }
 }
 ?>
-<span style="background-color: black; color: white; font-weight: bold;">AOC Alsace Blanc - Répartition des achats par cépage</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">AOC Alsace Blanc - Répartition des achats et apports par cépage</span><br/>
 <table border=1 cellspacing=0 cellpaggind=0 style="text-align: center; border: 1px solid black;">
     <tr style="font-weight: bold;"><th style="border: 1px solid black;width: 110px; text-align: left;">&nbsp;Produit</th><th style="border: 1px solid black;width: 95px;">N° CVI</th><th style="border: 1px solid black;width: 295px;">Raison sociale</th><th style="width: 100px;border: 1px solid black;">Superficie</th><th style="border: 1px solid black;width: 100px;">Volume</th><th style="border: 1px solid black;width: 120px;">Dont dépassement</th><?php if($dr->recolte->canHaveVci() && $dontvci > 0): ?><th style="border: 1px solid black;width: 100px;">Dont VCI</th><?php endif; ?></tr>
     <?php foreach($acheteursCepage as $acheteurCepage): ?>
