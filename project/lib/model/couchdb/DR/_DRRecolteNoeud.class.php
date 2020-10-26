@@ -828,7 +828,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
     }
 
-    public function updateAcheteurs($resetIfModified = true) {
+    public function updateAcheteurs() {
         if(!$this->exist('acheteurs')) {
 
             throw new sfException("Ce ne noeud ne permet pas de stocker des acheteurs");
@@ -844,15 +844,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                 $acheteur = $this->acheteurs->add($type)->add($cvi);
                 $acheteur->type_acheteur = $type;
                 $unique_acheteur = $acheteur;
-                if ($this->getCouchdbDocument()->canUpdate() && $resetIfModified && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2) || round($this->getTotalVolume(), 2) != round($this->total_volume_before, 2))) {
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2) || round($this->getTotalVolume(), 2) != round($this->total_volume_before, 2))) {
                     $acheteur->dontdplc = null;
                 }
 
-                if ($this->getCouchdbDocument()->canUpdate() && $resetIfModified && (round($this->getTotalVci(), 2) != round($this->total_vci_before, 2))) {
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalVci(), 2) != round($this->total_vci_before, 2))) {
                     $acheteur->dontvci = null;
                 }
 
-                if ($this->getCouchdbDocument()->canUpdate() && $resetIfModified && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2))) {
+                if ($this->getCouchdbDocument()->canUpdate() && (round($this->getTotalSuperficie(), 2) != round($this->total_superficie_before, 2))) {
                     $acheteur->superficie = null;
                 }
 
