@@ -70,7 +70,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getRendementMax() {
 
-        return round($this->getConfig()->getRendementNoeud(), 2);
+        return round($this->getConfig()->getRendementNoeud() + $this->getRendementVciMax(), 2);
     }
 
     public function getTotalSuperficie($force_calcul = false) {
@@ -368,6 +368,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getVolumeVciMax() {
+        if(!$this->hasRecapitulatif()) {
+            return -1;
+        }
 
         return round($this->getRendementVciMax() * $this->getTotalSuperficie() / 100, 2);
     }
