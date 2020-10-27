@@ -172,7 +172,7 @@ class DRClient extends acCouchdbClient {
         if($denom) {
             $denom .= " ";
         }
-        $denom = $denom.$line[CsvFileAcheteur::CSV_ACHETEUR_LIBELLE];
+        $denom = $denom.$acheteur_obj->nom;
 
         $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $denomlieu);
         $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
