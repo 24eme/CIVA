@@ -19,7 +19,7 @@
                 <div class="bloc_acceuil_header">Récolte</div>
                 <div class="bloc_acceuil_content">
                     <?php if($drNeedToDeclare): ?>
-                    <p><strong>À valider</strong> avant le <?php echo DRClient::getInstance()->getDateFermeture()->format('d/m/Y') ?> minuit</p>
+                    <p><strong>À valider</strong> avant le 10 décembre minuit</p>
                     <?php elseif(date('Y-m-d') < DRClient::getInstance()->getDateOuverture()->format('Y-m-d')): ?>
                         <p class="mineure">Ouverture le <?php echo format_date(DRClient::getInstance()->getDateOuverture()->format('Y-m-d'), "dd MMMM", "fr_FR"); ?></p>
                     <?php else: ?>
