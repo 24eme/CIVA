@@ -102,7 +102,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return 0;
         }
 
-        return round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
+        $volume = round($this->getUsagesIndustriels() - $this->getTotalDontDplcVendus(), 2);
+
+        if($volume < 0) {
+
+            return 0;
+        }
+
+        return $volume;
     }
 
     public function getVciCaveParticuliere() {
