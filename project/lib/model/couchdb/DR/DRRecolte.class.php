@@ -140,5 +140,4 @@ class DRRecolte extends BaseDRRecolte {
         return $appellations;
     }
 
-
 }

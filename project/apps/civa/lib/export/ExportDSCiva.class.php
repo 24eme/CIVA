@@ -11,7 +11,7 @@ class ExportDSCiva {
 
     const CSV_DS_TRAITEE = 22; // "O" ou "N"
     const CSV_DS_DATE_SAISIE = 23; // JJMMAAAA
-    const CODE_DOUANE_ED = "1B001S";
+    const CODE_DOUANE_ED = "1B001S 9";
 
     public function __construct($periode, $types_ds = array(DSCivaClient::TYPE_DS_PROPRIETE, DSCivaClient::TYPE_DS_NEGOCE)) {
         if (!preg_match('/^[0-9]{6}$/', $periode)) {
@@ -24,6 +24,9 @@ class ExportDSCiva {
         $this->ds_liste = array();
         foreach ($this->ds_ids as $ds_id) {
             $ds = $this->client_ds->find($ds_id);
+            if (!$ds) {
+              continue;
+            }
             $ds_principale = $this->client_ds->getDSPrincipaleByDs($ds);
             if (preg_match('/^C?(67|68)/', $ds->identifiant) && $ds_principale->isValidee()) {
                 $this->ds_liste[$ds_principale->_id] = $ds_principale;
@@ -80,13 +83,13 @@ class ExportDSCiva {
 
     protected function makeXMLDS($ds) {
         $lignes = "";
+        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
+
         if ($ds->isDsPrincipale()) {
-            $lignes.="\t\t<volLie>" . $this->convertToFloat($ds->lies, false) . "</volLie>\r\n";
-            $lignes.="\t\t<volDplc>" . $this->convertToFloat($ds->dplc, false) . "</volDplc>\r\n";
-          //  $lignes.="\t\t<volVinNc>" . $this->convertToFloat(DSCivaClient::getInstance()->getTotalSansIG($ds), false) . "</volVinNc>\r\n";
+            $lignes.= $this->makeXMLDSLigne($lieu_stockage, "LIES", $this->convertToFloat($ds->lies, false));
+            $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VDRA", $this->convertToFloat($ds->dplc, false));
         }
 
-        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
 
         foreach ($produitsAgreges as $code_douane => $obj) {
@@ -161,7 +164,7 @@ class ExportDSCiva {
             return '';
         }
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        return $this->makeXMLDSLigne($lieu_stockage, "MC", $ds->getMouts());
+        return $this->makeXMLDSLigne($lieu_stockage, "MCR", $ds->getMouts());
     }
 
     protected function addXMLDSRebeches($ds) {
@@ -169,7 +172,7 @@ class ExportDSCiva {
             return '';
         }
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        return $this->makeXMLDSLigne($lieu_stockage, "4B999B", $ds->getRebeches());
+        return $this->makeXMLDSLigne($lieu_stockage, "REBECHE", $ds->getRebeches());
     }
 
     public function exportEntete() {

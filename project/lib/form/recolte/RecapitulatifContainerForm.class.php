@@ -7,16 +7,24 @@ class RecapitulatifContainerForm extends acCouchdbForm {
     public function __construct(DRRecolteLieu $lieu, $defaults = array(), $options = array(), $CSRFSecret = null) {
         $this->lieu = $lieu;
         parent::__construct($lieu->getDocument(), $defaults, $options, $CSRFSecret);
-
     }
 
     public function configure() {
-        if(!$this->lieu->getConfig()->existRendementCouleur()) {
-            $this->embedForm($this->lieu->getKey(), new RecapitulatifForm($this->lieu));
-        } else {
-            foreach($this->lieu->getCouleurs() as $couleur) {
+        foreach($this->lieu->getCouleurs() as $couleur) {
+            if($couleur->hasRecapitulatif()) {
                 $this->embedForm($couleur->getKey(), new RecapitulatifForm($couleur));
+                continue;
             }
+            foreach($couleur->getCepages() as $cepage) {
+                if($cepage->hasRecapitulatif()) {
+                    $this->embedForm($cepage->getKey(), new RecapitulatifForm($cepage));
+                    continue;
+                }
+            }
+        }
+
+        if(!count($this->getEmbeddedForms())) {
+            $this->embedForm($this->lieu->getKey(), new RecapitulatifForm($this->lieu));
         }
 
         $this->widgetSchema->setNameFormat('recapitulatif[%s]');

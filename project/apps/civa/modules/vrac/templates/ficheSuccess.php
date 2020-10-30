@@ -25,7 +25,7 @@ td.echeance {display: inline;}
 			Validation de votre contrat
 		<?php endif; ?>
 		</a>
-		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?></span>
+		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?><span style="color: #BBB;"> - Merc. <?php echo $vrac->getMercurialeValue(); ?></span></span>
 	</li>
 </ul>
 </div>

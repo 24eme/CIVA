@@ -8,7 +8,7 @@ DESCRIPTION="Export CSV des déclarations de Stocks propriété pour la période
 
 mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
-EXPORT_FILE=tmp/export_propriete_ds.csv
+EXPORT_FILE=tmp/export_propriete_ds_$(date +%Y%m%d%H%M%S).csv
 echo "$DS_PERIODE"
 echo "$TASK_DIR/$EXPORT_FILE"
 bash bin/export_ds_csv.sh "propriete" "$DS_PERIODE" > $TASK_DIR/$EXPORT_FILE

@@ -4,12 +4,12 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
 {
   private $acheteur = null;
 
-  public function getLieu() {
+  public function getNoeud() {
       return $this->getParent()->getParent()->getParent();
   }
 
   public function getVolume() {
-    return $this->getLieu()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
+    return $this->getNoeud()->getVolumeAcheteur($this->getKey(), $this->type_acheteur);
   }
   public function getNom() {
     if ($v = $this->_get('nom'))
@@ -46,11 +46,11 @@ class DRRecolteLieuAcheteur extends BaseDRRecolteLieuAcheteur
   }
 
   protected function synchronizeRecolteAcheteur() {
-        if($this->getLieu()->getMention()->getKey() != "mention") {
-            $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getMention()->getKey(), $this->type_acheteur, $this->getCVI());
+        if($this->getNoeud()->getMention()->getKey() != "mention") {
+            $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getNoeud()->getMention()->getKey(), $this->type_acheteur, $this->getCVI());
         }
 
-        $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getLieu()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
+        $this->getDocument()->add('acheteurs')->addAppellationTypeCVI($this->getNoeud()->getAppellation()->getKey(), $this->type_acheteur, $this->getCVI());
 
   }
 }
