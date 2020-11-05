@@ -33,8 +33,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         $items_sorted = array();
 
         foreach($items_config as $hash => $item_config) {
-            if($this->exist($item_config->getKey())) {
-                $items_sorted[$hash] = $this->get($item_config->getKey());
+            if($this->getDocument()->exist(HashMapper::inverse($item_config->getHash()))) {
+                $items_sorted[$hash] = $this->getDocument()->get(HashMapper::inverse($item_config->getHash()));
             }
         }
 

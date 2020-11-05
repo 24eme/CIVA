@@ -215,7 +215,11 @@ class ExportDRPdf extends ExportDocument {
           }
 
         $acheteursCepage = array();
-        foreach($dr->getProduits() as $cepage) {
+        $cepages = array();
+        if($dr->exist('/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur')) {
+            $cepages = $dr->get('/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur')->getChildrenNodeSorted();
+        }
+        foreach($cepages as $cepage) {
             if(!$cepage->hasRecapitulatif() || !$cepage->hasAcheteurs()) {
               continue;
             }
