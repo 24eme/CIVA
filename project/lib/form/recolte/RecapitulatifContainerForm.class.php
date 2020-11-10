@@ -15,7 +15,7 @@ class RecapitulatifContainerForm extends acCouchdbForm {
                 $this->embedForm($couleur->getKey(), new RecapitulatifForm($couleur));
                 continue;
             }
-            foreach($couleur->getCepages() as $cepage) {
+            foreach($couleur->getChildrenNodeSorted() as $cepage) {
                 if($cepage->hasRecapitulatif()) {
                     $this->embedForm($cepage->getKey(), new RecapitulatifForm($cepage));
                     continue;
