@@ -208,11 +208,7 @@
 															<?php else: ?>
                                                             	<td class="commune"><?php echo $info->getCommune(); ?></td>
 															<?php endif; ?>
-                                                            <?php if($form_item->getObject()->getConfig()->existRendement()): ?>
-                                                                <td class="superficie alt <?php echo ($form[$key]['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?>&nbsp;ares</td>
-                                                            <?php else: ?>
-                                                                <td class="superficie alt"></td>
-                                                            <?php endif; ?>
+                                                            <td class="superficie alt <?php echo ($form[$key]['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?>&nbsp;ares</td>
                                                             <td class="volume"><?php echoFloat($info->getVolume()); ?> hl</td>
 															<?php if(isset($form[$key]['acheteurs'][$type][$cvi]['dontvci'])) : ?>
                                                                 <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?>&nbsp;hl</td>
