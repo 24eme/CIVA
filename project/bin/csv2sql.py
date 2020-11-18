@@ -15,14 +15,6 @@ sys.stderr.write(sys.argv[2]+"/export_bi_ds.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_ds.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={})
 csv.to_sql('ds', con=engine, if_exists='replace')
 
-sys.stderr.write(sys.argv[2]+"/export_bi_contrats.csv\n")
-csv = pd.read_csv(sys.argv[2]+"/export_bi_contrats.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={
-       "#CONTRA": "type document", 'type de vente (VIN_VRAC, VIN_BOUTEILLE, RAISIN, MOUT)': 'type de vente', 'volume propose (en hl)': 'volume propose', 'volume enleve (en hl)': "volume enleve", 'prix unitaire (en hl)' : 'prix unitaire',
-       'prix unitaire definitif (en hl)': 'prix unitaire definitif', 'prix variable (OUI, NON)': 'prix variable',
-       'contrat interne (OUI, NON)': 'contrat interne', 'original (OUI, NON)' : 'original',
-       'type de contrat(SPOT, PLURIANNUEL)' : "type de contrat",'type de produit (GENERIQUE, DOMAINE)': 'type de produit', 'nature de la cvo (MARCHE_DEFINITIF, COMPENSATION, NON_FINANCIERE, VINAIGRERIE)': 'nature de la cvo'})
-csv.to_sql('contrat', con=engine, if_exists='replace')
-
 sys.stderr.write(sys.argv[2]+"/export_bi_drm.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_drm.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={"#DRM ID": "DRM ID", 'numéro archivage': 'numero archivage'})
 csv.to_sql('drm', con=engine, if_exists='replace')
@@ -38,10 +30,6 @@ csv.to_sql('etablissement', con=engine, if_exists='replace')
 sys.stderr.write(sys.argv[2]+"/export_bi_societes.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_societes.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={ 'statut (ACTIF, SUSPENDU)': 'statut', "#SOCIETE": "type de document"})
 csv.to_sql('societe', con=engine, if_exists='replace')
-
-sys.stderr.write(sys.argv[2]+"/export_bi_dss.csv\n")
-csv = pd.read_csv(sys.argv[2]+"/export_bi_dss.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={ 'statut (ACTIF, SUSPENDU)': 'statut', "#DS": "type de document"})
-csv.to_sql('ds', con=engine, if_exists='replace')
 
 sys.stderr.write(sys.argv[2]+"/export_bi_drm_stock.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_drm_stock.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={"#ID": "id stock"})
