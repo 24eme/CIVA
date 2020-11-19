@@ -881,8 +881,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                 if ($this->getCouchdbDocument()->canUpdate() && (round($nowAcheteur['superficie'], 2) != round($beforeAcheteur['superficie'], 2))) {
                     $acheteur->superficie = null;
                 }
-
-                if($this->getCouchdbDocument()->canUpdate() && !$this->hasRecapitulatifVente()) {
+                if($this->getCouchdbDocument()->canUpdate() && !($this->hasRecapitulatifVente() || $this->getAppellation()->getKey() == 'appellation_VINTABLE')) {
                     $acheteur->superficie = $this->getTotalSuperficieVendusByCvi($type, $cvi);
                     $acheteur->dontdplc = $this->getTotalDontDplcVendusByCvi($type, $cvi);
                     $acheteur->dontvci = $this->getTotalDontVciVendusByCvi($type, $cvi);

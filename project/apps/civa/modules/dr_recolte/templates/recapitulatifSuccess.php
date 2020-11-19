@@ -236,8 +236,7 @@
 									</table>
 									</div>
 									<?php endif; ?>
-
-									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && $form_item->getObject()->getConfig()->existRendement()) : ?>
+									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && ($form_item->getObject()->getConfig()->existRendement() || $form_item->getObject()->getAppellation()->getKey() == 'appellation_VINTABLE')) : ?>
 									<div class="btn">
 										<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
 									</div>
