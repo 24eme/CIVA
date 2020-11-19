@@ -13,7 +13,7 @@ for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
     tail -n +2 $csv
 done >> data/ds.utf8.csv
 
-iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
+iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
 cp data/ds.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 
 echo -n "TYPE;ANNEE;" > data/dr.csv
