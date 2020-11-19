@@ -8,16 +8,16 @@ cd -
 rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.csv
 rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.utf8.csv
 
-cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.csv
+cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.utf8.csv
 for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
     tail -n +2 $csv
 done >> data/ds.utf8.csv
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
-cp data/ds.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
+cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 
-echo -n "TYPE;ANNEE;" > data/dr.csv
-cat $PATH_MISEADISPO_CIVA/tmp/export_drs_2019* | head -n 1 >> data/dr.csv
+echo -n "TYPE;ANNEE;" > data/dr.utf8.csv
+cat $PATH_MISEADISPO_CIVA/tmp/export_drs_2019* | head -n 1 >> data/dr.utf8.csv
 ls $PATH_MISEADISPO_CIVA/tmp/ | grep export_drs_2 | grep -vE '2014|2015|2016' | awk -F '_' '{print $1"_"$2"_"$3}'  | sort -u | while read file ; do
     ls -rt  $PATH_MISEADISPO_CIVA"/tmp/"$file* | tail -n 1 ;
 done | while read file ; do
