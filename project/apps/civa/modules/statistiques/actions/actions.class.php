@@ -51,7 +51,7 @@ class statistiquesActions extends sfActions {
                     $pdf = new ExportVracMercurialePdf($vracMercuriale);
                     $pdf->generatePDF();
                 }
-                return $this->redirect('mercuriales', array('dl' => str_replace(array('_mercuriales.pdf', '-'), '', $pdfName)));
+                return $this->redirect('mercuriales', array('dl' => str_replace(array('_mercuriales.pdf'), '', $pdfName)));
             }
         }
     }

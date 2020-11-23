@@ -423,6 +423,8 @@ var initTablesAcheteurs = function()
 
     var tables_acheteurs = $('#exploitation_acheteurs table.tables_acheteurs');
 
+    $('.ui-autocomplete .ui-menu-item a').live('mousedown', function() { return false; });
+
     tables_acheteurs.each(function()
     {
         var table_achet = $(this);
@@ -1083,11 +1085,32 @@ var volumeOnChange = function(input) {
     } else if(rendement_config_vci && rendement_excedent > 0) {
         rendement_vci_max = rendement_excedent;
     }
-    var rendement_appellation_max = rendement_appellation + rendement_vci_max;
+    var rendement_appellation_max = rendement_appellation;
     $('#appellation_max_rendement').val(rendement_appellation_max);
+
+    var rendement_cepage = parseFloat($('#cepage_rendement').val());
+    var rendement_vci_max = 0;
+    var rendement_recoltant = parseFloat($('#cepage_current_rendement').html());
+    var rendement_config_vci = parseFloat($('#cepage_rendement_vci').val());
+    var rendement_excedent = rendement_recoltant - rendement_cepage;
+    if(rendement_config_vci && rendement_excedent > rendement_config_vci) {
+        rendement_vci_max = rendement_config_vci;
+    } else if(rendement_config_vci && rendement_excedent > 0) {
+        rendement_vci_max = rendement_excedent;
+    }
+    var rendement_cepage_max = rendement_cepage;
+    $('#cepage_max_rendement').val(rendement_cepage_max);
 
     if($('#appellation_vci').length > 0) {
         addClassAlerteIfNeeded($('#appellation_vci'), $('#appellation_vci').val() > Math.round((parseFloat($('#appellation_max_rendement').val()) - parseFloat($('#appellation_rendement').val())) * parseFloat($('#appellation_total_superficie').val() / 100) * 100) / 100, 'rouge');
+    }
+
+    if($('#cepage_vci').length > 0) {
+        console.log(Math.round((parseFloat($('#cepage_max_rendement').val()) - parseFloat($('#cepage_rendement').val())) * parseFloat($('#cepage_total_superficie').val() / 100) * 100) / 100);
+        console.log($('#cepage_max_rendement').val());
+        console.log($('#cepage_rendement').val());
+        console.log($('#cepage_total_superficie').val());
+        addClassAlerteIfNeeded($('#cepage_vci'), $('#cepage_vci').val() > Math.round((parseFloat($('#cepage_max_rendement').val()) - parseFloat($('#cepage_rendement').val())) * parseFloat($('#cepage_total_superficie').val() / 100) * 100) / 100, 'rouge');
     }
 
     addClassAlerteIfNeeded($('#donnees_recolte_sepage .rendement'), parseFloat($('#cepage_current_rendement').html()) > parseFloat($('#cepage_max_rendement').val()), 'rouge');

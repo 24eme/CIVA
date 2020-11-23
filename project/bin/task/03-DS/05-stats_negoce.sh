@@ -8,7 +8,7 @@ DESCRIPTION="Statistiques des déclarations de Stocks négoce pour la période $
 
 mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
-EXPORT_FILE=tmp/stats_negoce_ds.csv
+EXPORT_FILE=tmp/stats_negoce_ds_$(date +%Y%m%d%H%M%S).csv
 echo "$DS_PERIODE"
 echo "$TASK_DIR/$EXPORT_FILE"
 php -d memory_limit=1024M symfony ds:stats-stocks "$DS_PERIODE" "negoce"  > $TASK_DIR/$EXPORT_FILE

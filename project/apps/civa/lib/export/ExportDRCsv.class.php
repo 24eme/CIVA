@@ -146,6 +146,8 @@ class ExportDRCsv extends ExportCsv {
             }
         }
         $this->addJeunesVignes($dr);
+        $this->addLies($dr);
+        $this->addJusRaisin($dr);
 
         if ($this->_debug) {
             echo "------------ \n" . count($this->_ids_dr) . " DRs \n ------------\n";
@@ -338,6 +340,74 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jeunes_vignes",
+                ), $this->_validation_ligne);
+    }
+
+    protected function addLies(DR $dr) {
+        if($dr->exist('lies_saisis_cepage') && $dr->lies_saisis_cepage && (!$dr->exist('recolte') || !$dr->recolte->getLiesTotal())) {
+            return;
+        }
+
+        if(!$dr->exist('lies_saisis_cepage') && !$dr->lies) {
+            return;
+        }
+        $this->add(array(
+
+            "cvi_acheteur" => $dr->cvi,
+            "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $dr->cvi,
+            "nom_recoltant" => $dr->declarant->nom,
+            "appellation" => "Lies",
+            "lieu" => null,
+            "cepage" => null,
+            "vtsgn" => null,
+            "denomination" => null,
+            "superficie_livree" => null,
+            "volume_livre/sur place" => null,
+            "dont_dplc" => null,
+            "superficie_totale" => null,
+            "volume_total" => null,
+            "volume_a_detruire_total" => ($dr->exist('lies_saisis_cepage') && $dr->lies_saisis_cepage) ? $dr->recolte->getLiesTotal() : $dr->lies,
+            "dont_vci" => null,
+            "vci_total" => null,
+            "validation_date" => $this->getValidationDate($dr),
+            "modification_date" => $this->getModificationDate($dr),
+            "validation_user" => $this->getValidationUser($dr),
+            "hash" => "/lies",
+                ), $this->_validation_ligne);
+    }
+
+    protected function addJusRaisin(DR $dr) {
+        if(!$dr->exist('jus_raisin_superficie') || !$dr->exist('jus_raisin_volume')) {
+            return;
+        }
+
+        if($dr->jus_raisin_superficie === null && $dr->jus_raisin_volume === null) {
+            return;
+        }
+
+        $this->add(array(
+            "cvi_acheteur" => $dr->cvi,
+            "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $dr->cvi,
+            "nom_recoltant" => $dr->declarant->nom,
+            "appellation" => "Jus de raisin",
+            "lieu" => null,
+            "cepage" => null,
+            "vtsgn" => null,
+            "denomination" => null,
+            "superficie_livree" => $dr->jus_raisin_superficie,
+            "volume_livre/sur place" => $dr->jus_raisin_volume,
+            "dont_dplc" => null,
+            "superficie_totale" => $dr->jus_raisin_superficie,
+            "volume_total" => $dr->jus_raisin_volume,
+            "volume_a_detruire_total" => null,
+            "dont_vci" => null,
+            "vci_total" => null,
+            "validation_date" => $this->getValidationDate($dr),
+            "modification_date" => $this->getModificationDate($dr),
+            "validation_user" => $this->getValidationUser($dr),
+            "hash" => "/jus_raisin",
                 ), $this->_validation_ligne);
     }
 

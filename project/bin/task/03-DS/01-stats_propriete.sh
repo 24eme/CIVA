@@ -8,7 +8,7 @@ DESCRIPTION="Statistiques des déclarations de Stocks propriété pour la pério
 
 mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
-EXPORT_FILE=tmp/stats_propriete_ds.csv
+EXPORT_FILE=tmp/stats_propriete_ds_$(date +%Y%m%d%H%M%S).csv
 echo "$DS_PERIODE"
 echo "$TASK_DIR/$EXPORT_FILE"
 php -d memory_limit=1024M symfony ds:stats-stocks "$DS_PERIODE" "propriete"  > $TASK_DIR/$EXPORT_FILE

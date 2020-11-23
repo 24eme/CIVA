@@ -127,7 +127,7 @@ if(!function_exists('printdiffratio')){
 		</tr>
 	</table>
 <?php
-    $stats = $mercuriale->getStats($mercuriale->getBeginPrevious('Y').'1201', ($mercuriale->getBeginPrevious('Y') + 1).'1130', false, $isbio);
+    $stats = $mercuriale->getStats($mercuriale->getBeginPrevious('Y').'-12-01', ($mercuriale->getBeginPrevious('Y') + 1).'-11-30', false, $isbio);
     $vol = 0;
     $nbContrats = count($mercuriale->getAllContrats($isbio));
     foreach ($stats as $stat):

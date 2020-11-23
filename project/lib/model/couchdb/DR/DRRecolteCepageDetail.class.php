@@ -2,6 +2,9 @@
 
 class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
+    protected $total_superficie = false;
+    protected $total_vci = false;
+
     public function getConfig() {
         return $this->getCepage()->getConfig();
     }
@@ -37,8 +40,17 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getTotalSuperficie() {
+        if($this->total_superficie === false) {
+            $this->total_superficie = $this->superficie;
+        }
 
-        return $this->superficie;
+        return $this->total_superficie;
+    }
+
+    public function setSuperficie($superficie) {
+        $this->getTotalSuperficie();
+
+        return $this->_set('superficie', $superficie);
     }
 
     public function getDplc() {
@@ -57,8 +69,17 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getTotalVci() {
+        if($this->total_vci === false) {
+            $this->total_vci = $this->vci;
+        }
 
-        return $this->vci;
+        return $this->total_vci;
+    }
+
+    public function setVci($vci) {
+        $this->getTotalVci();
+
+        return $this->_set('vci', $vci);
     }
 
     public function getLiesMax() {
@@ -260,6 +281,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $v += $this->getSumAcheteur('cooperatives');
         $v += $this->getSumAcheteur('mouts');
 
+        $this->total_superficie = $this->superficie;
+        if($this->exist('vci')) {
+            $this->total_vci = $this->vci;
+        }
         $this->volume = $v;
         $this->volume_dplc = null;
         $this->lies = $this->getLies(true);
@@ -322,5 +347,28 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function cleanLies() {
         $this->lies = null;
+    }
+
+    public function canCalculVolumeRevendiqueSurPlace() {
+        return true;
+    }
+
+    public function canCalculSuperficieSurPlace() {
+        return true;
+    }
+
+    public function canCalculInfosVente() {
+        $nbDestinataire = 0;
+        if($this->cave_particuliere > 0) {
+            $nbDestinataire++;
+        }
+
+        foreach($this->getVolumeAcheteurs() as $cvi => $volumeVendu) {
+            if($volumeVendu > 0) {
+                $nbDestinataire++;
+            }
+        }
+
+        return $nbDestinataire == 1;
     }
 }
