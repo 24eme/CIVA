@@ -160,6 +160,7 @@
                             <?php endif; ?>
                             </div>
 							<div id="recap_ventes">
+								<a name="form" />
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
@@ -264,6 +265,11 @@
                                                          'form_appellation' => $form_ajout_appellation,
                                                          'form_lieu' => $form_ajout_lieu,
                                                          'url_lieu' => $url_ajout_lieu))*/ ?>
+
+
+			<?php if ($sf_user->hasFlash('flash_message')): ?>
+			    <?php include_partial('popupRappelLog', array('flash_message' => $sf_user->getFlash('flash_message'))) ?>
+			<?php endif; ?>
 
                         <script type="text/javascript">
                             $('input[name="validation_interne"]').click(function() {
