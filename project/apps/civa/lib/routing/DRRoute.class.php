@@ -13,6 +13,9 @@ class DRRoute extends sfObjectRoute implements InterfaceTiersRoute {
         if (!$this->dr) {
             throw new sfError404Exception(sprintf("La DR %s n'a pas été trouvée",  $parameters['id']));
         }
+		if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+			CompteRoute::autoSignin($this->getEtablissement()->getSociete()->getMasterCompte());
+		}
         return $this->dr;
     }
 
