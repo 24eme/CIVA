@@ -238,12 +238,8 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
             return;
         }
 
-        $superficies = array();
-        $dplc = array();
-        $vci = array();
-
         foreach($this->getProduitsDetails() as $detail) {
-            if(!$detail->canCalculInfosVente() || $this->getDplc()) {
+            if(!$detail->canCalculInfosVente()) {
                 return;
             }
         }
@@ -251,14 +247,18 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         foreach($this->acheteurs as $type => $achats) {
             foreach($achats as $cvi => $achat) {
                 $achat->superficie = 0;
-                $achat->dontdplc = 0;
+                if(!$this->getDplc()) {
+                    $achat->dontdplc = 0;
+                }
                 $achat->dontvci = 0;
                 foreach($this->getProduitsDetails() as $detail) {
                     if(!$detail->getVolumeVenduByCvi($type, $cvi)) {
                         continue;
                     }
                     $achat->superficie += $detail->superficie;
-                    $achat->dontdplc += $detail->dplc;
+                    if(!$this->getDplc()) {
+                        $achat->dontdplc += $detail->dplc;
+                    }
                     $achat->dontvci += $detail->vci;
                 }
             }
