@@ -17,41 +17,15 @@ class tiersActions extends sfActions {
      */
     public function executeLogin(sfWebRequest $request) {
         $this->getUser()->signOutTiers();
-        $this->compte = $this->getUser()->getCompte();
-        $this->societe = $this->compte->getSociete();
-    	$not_uniq = 0;
-    	$etablissements = array();
-        $etablissementsObject = $this->societe->getEtablissementsObject();
-        if (count($etablissementsObject) >= 1) {
-    	    foreach ($etablissementsObject as $e) {
-                if (isset($etablissements[$e->getFamille()])) {
-                  $not_uniq = 1;
-                  continue;
-                }
-                $etablissements[$e->famille] = $e;
-            }
-        }
-        
-        $this->getUser()->signInTiers(array_values($etablissements));
+        $compte = $this->getUser()->getCompte();
+        $this->getUser()->signInTiers($compte->getSociete());
 
         $referer = $this->getUser()->getFlash('referer');
         if($referer && $referer != $request->getUri() && preg_replace("/\/$/", "", $referer) != $request->getUriPrefix()) {
             return $this->redirect($referer);
         }
 
-        return $this->redirect("mon_espace_civa", array('identifiant' => $this->compte->getIdentifiant()));
-        
-        $this->form = new TiersLoginForm($this->compte);
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $t = $this->form->process();
-                $tiers[$t->type] = $t;
-                $this->getUser()->signInTiers(array_values($tiers));
-
-            }
-        }
+        return $this->redirect("mon_espace_civa", array('identifiant' => $compte->getIdentifiant()));
     }
 
     public function executeMonEspaceCiva(sfWebRequest $request) {
