@@ -65,8 +65,12 @@ table {
 <br/>
 <table border="1" cellspacing=0 cellpadding=0 style="text-align: right; border: 1px solid black;">
     <tr>
-      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;Total VCI</td>
-      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($total["vci_sur_place"], true) ?></td>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;VCI Alsace Blanc</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($recap_total["ALSACEBLANC"]->vci_sur_place, true) ?></td>
+    </tr>
+    <tr>
+      <td style="text-align: left; width: 214px; border: 1px solid black; font-weight: bold;">&nbsp;VCI Crémant d'Alsace</td>
+      <td style="width: 200px; border: 1px solid black;"><?php echoVolume($recap_total["CREMANT"]->vci_sur_place, true) ?></td>
     </tr>
 </table>
 <br/>
