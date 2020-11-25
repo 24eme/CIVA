@@ -11,6 +11,10 @@ sys.stderr.write(sys.argv[2]+"/export_bi_dr.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_dr.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={})
 csv.to_sql('dr', con=engine, if_exists='replace')
 
+sys.stderr.write(sys.argv[2]+"/export_bi_dr_mouvements.csv\n")
+csv = pd.read_csv(sys.argv[2]+"/export_bi_dr_mouvements.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={})
+csv.to_sql('dr_mouvements', con=engine, if_exists='replace')
+
 sys.stderr.write(sys.argv[2]+"/export_bi_ds.csv\n")
 csv = pd.read_csv(sys.argv[2]+"/export_bi_ds.csv", encoding='iso-8859-1', delimiter=";", index_col=False).rename(columns={})
 csv.to_sql('ds', con=engine, if_exists='replace')
