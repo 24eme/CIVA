@@ -203,8 +203,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplcCaveParticuliere() {
-
-        return $this->getDplcReel() - $this->getTotalDontDplcVendus();
+        if(!$this->getConfig()->hasRendementNoeud()) {
+            $dplc = $this->getSumNoeudFields("dplcCaveParticuliere");
+        } else {
+            $dplc = $this->getDplcReel() - $this->getTotalDontDplcVendus();
+        }
+        return $dplc;
     }
 
     public function getDplcWithVci($force_calcul = false) {
