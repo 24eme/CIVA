@@ -16,14 +16,23 @@ done >> data/ds.utf8.csv
 iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
 cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 
-echo "Type;Annee;CVI;Nom;Appellation;Lieu;Cepage;VTSGN;Denomination;Superficie;Volume;Lies;Volume Revendique;Usages industriels;VCI" > data/dr.utf8.csv
+echo 'type;annee;"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"dont vci";"vci total";"date de validation";"date de modification";"validateur";"hash_produit";"type_ligne"' > data/dr.utf8.csv
 for (( i=2017; i <= 2020; i++ ));
 do
-    bash bin/export_drs_csv.sh 2020 | grep -v "hash_produit" | awk -v campagne="$i" -F ";" '{ if($6 !~ "TOTAL" && $7 !~ "TOTAL") { print "DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";" $8 ";" $9 ";" $13 ";" $14 ";" $15 ";;;" $17 } if( $6 ~ "TOTAL" ) { print "DR;2020;" $3 ";" $4 ";" $5 ";;;;;;;;;" $13 - $15 - $17 ";" $15 ";" }}' | sort | uniq >> data/dr.utf8.csv
+    bash bin/export_drs_csv.sh $i | grep -v ";hash_produit" | awk -v campagne="$i" -F ";" '{ print "DR;" campagne ";" $0}' >> data/dr.utf8.csv
 done
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
 cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
+
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite" > data/dr_mouvements.utf8.csv
+for (( i=2017; i <= 2020; i++ ));
+do
+    bash bin/export_drs_mouvements_csv.sh $i | grep -v ";quantite" >> data/dr_mouvements.utf8.csv
+done
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/dr_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.csv
+cp data/dr_mouvements.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.utf8.csv
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv

@@ -34,6 +34,7 @@ class ExportDRCsv extends ExportCsv {
         "modification_date" => "date de modification",
         "validation_user" => "validateur",
         "hash" => "hash_produit",
+        "type" => "type_ligne",
     );
     protected $_validation_ligne = array(
         "cvi_acheteur" => array("type" => "string"),
@@ -57,6 +58,7 @@ class ExportDRCsv extends ExportCsv {
         "modification_date" => array("type" => "string"),
         "validation_user" => array("type" => "string"),
         "hash" => array("type" => "string"),
+        "type" => array("type" => "string"),
     );
 
     protected $_acheteur = null;
@@ -146,7 +148,6 @@ class ExportDRCsv extends ExportCsv {
             }
         }
         $this->addJeunesVignes($dr);
-        $this->addLies($dr);
         $this->addJusRaisin($dr);
 
         if ($this->_debug) {
@@ -181,6 +182,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "detail_vente_".$acheteur->getParent()->getKey(),
                 ), $this->_validation_ligne);
     }
 
@@ -210,6 +212,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "type" => "detail_motif"
                 ), $this->_validation_ligne);
     }
 
@@ -239,6 +242,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "type" => "detail_cave_particuliere"
                 ), $this->_validation_ligne);
     }
 
@@ -267,6 +271,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($acheteur->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
+            "type" => "total_vente_".$acheteur->getParent()->getKey(),
                 ), $this->_validation_ligne);
     }
 
@@ -314,6 +319,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($noeud->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
+            "type" => "total_cave_particuliere",
                 ), $this->_validation_ligne);
     }
 
@@ -340,40 +346,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jeunes_vignes",
-                ), $this->_validation_ligne);
-    }
-
-    protected function addLies(DR $dr) {
-        if($dr->exist('lies_saisis_cepage') && $dr->lies_saisis_cepage && (!$dr->exist('recolte') || !$dr->recolte->getLiesTotal())) {
-            return;
-        }
-
-        if(!$dr->exist('lies_saisis_cepage') && !$dr->lies) {
-            return;
-        }
-        $this->add(array(
-
-            "cvi_acheteur" => $dr->cvi,
-            "nom_acheteur" => "SUR PLACE",
-            "cvi_recoltant" => $dr->cvi,
-            "nom_recoltant" => $dr->declarant->nom,
-            "appellation" => "Lies",
-            "lieu" => null,
-            "cepage" => null,
-            "vtsgn" => null,
-            "denomination" => null,
-            "superficie_livree" => null,
-            "volume_livre/sur place" => null,
-            "dont_dplc" => null,
-            "superficie_totale" => null,
-            "volume_total" => null,
-            "volume_a_detruire_total" => ($dr->exist('lies_saisis_cepage') && $dr->lies_saisis_cepage) ? $dr->recolte->getLiesTotal() : $dr->lies,
-            "dont_vci" => null,
-            "vci_total" => null,
-            "validation_date" => $this->getValidationDate($dr),
-            "modification_date" => $this->getModificationDate($dr),
-            "validation_user" => $this->getValidationUser($dr),
-            "hash" => "/lies",
+            "type" => "annexe",
                 ), $this->_validation_ligne);
     }
 
@@ -408,6 +381,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jus_raisin",
+            "type" => "annexe",
                 ), $this->_validation_ligne);
     }
 

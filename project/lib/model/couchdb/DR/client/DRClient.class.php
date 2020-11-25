@@ -358,7 +358,6 @@ class DRClient extends acCouchdbClient {
             $totauxByAppellationsRecap[$key] = new stdClass();
             $totauxByAppellationsRecap[$key]->nom = 'TOTAL ' . $nom;
             $totauxByAppellationsRecap[$key]->revendique_sur_place = null;
-            $totauxByAppellationsRecap[$key]->_ = null;
             $totauxByAppellationsRecap[$key]->vci_sur_place = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_rouge = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_blanc = null;
