@@ -9,7 +9,7 @@ if ! test "$ANNEE"; then
     exit;
 fi
 
-echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite"
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
 
 bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$ANNEE" -F ";" '{
 if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
