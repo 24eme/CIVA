@@ -16,14 +16,11 @@ done >> data/ds.utf8.csv
 iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
 cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 
-echo -n "TYPE;ANNEE;" > data/dr.utf8.csv
-cat $PATH_MISEADISPO_CIVA/tmp/export_drs_2019* | head -n 1 >> data/dr.utf8.csv
-ls $PATH_MISEADISPO_CIVA/tmp/ | grep export_drs_2 | grep -vE '2014|2015|2016' | awk -F '_' '{print $1"_"$2"_"$3}'  | sort -u | while read file ; do
-    ls -rt  $PATH_MISEADISPO_CIVA"/tmp/"$file* | tail -n 1 ;
-done | while read file ; do
-    ANNEE=$(echo $file | sed 's/.*export_drs_//' | sed 's/_.*//')
-    tail -n +2 $file  | sed 's/^/DR;'$ANNEE';/';
-done >> data/dr.utf8.csv
+echo "Type;Annee;CVI;Nom;Appellation;Lieu;Cepage;VTSGN;Denomination;Superficie;Volume;Lies;Volume Revendique;Usages industriels;VCI" > data/dr.utf8.csv
+for (( i=2017; i <= 2020; i++ ));
+do
+    bash bin/export_drs_csv.sh 2020 | grep -v "hash_produit" | awk -v campagne="$i" -F ";" '{ if($6 !~ "TOTAL" && $7 !~ "TOTAL") { print "DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";" $8 ";" $9 ";" $13 ";" $14 ";" $15 ";;;" $17 } if( $6 ~ "TOTAL" ) { print "DR;2020;" $3 ";" $4 ";" $5 ";;;;;;;;;" $13 - $15 - $17 ";" $15 ";" }}' | sort | uniq >> data/dr.utf8.csv
+done
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
 cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
