@@ -228,7 +228,8 @@
 										<?php endif; ?>
 									<?php elseif(!isset($tableauOpen)): ?>
                                         <p> Aucune vente </p>
-                                        <?php endif; ?>
+										<?php $tableauOpen = true; ?>
+									<?php endif; ?>
 									<?php if(!isset($tableauOpen)): ?>
 									</div>
 									<?php endif; ?>
