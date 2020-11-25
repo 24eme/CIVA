@@ -35,7 +35,7 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
         print base_ligne ";vci;" $17 ";;";
     }
 }
-if( $6 ~ "TOTAL" ) {
+if( $6 ~ "\"TOTAL\"" ) {
     base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";;;;"
     print base_ligne ";volume_revendique;" $13 - $15 - $17 ";;";
     print base_ligne ";usages_industriels;" $15 ";;";
