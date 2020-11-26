@@ -19,7 +19,7 @@ cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 echo 'type;annee;"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"dont vci";"vci total";"date de validation";"date de modification";"validateur";"hash_produit";"type_ligne"' > data/dr.utf8.csv
 for (( i=2017; i <= 2020; i++ ));
 do
-    bash bin/export_drs_csv.sh $i | grep -v ";hash_produit" | awk -v campagne="$i" -F ";" '{ print "DR;" campagne ";" $0}' >> data/dr.utf8.csv
+    bash bin/export_drs_csv.sh $i | grep -v "hash_produit" | awk -v campagne="$i" -F ";" '{ print "DR;" campagne ";" $0}' >> data/dr.utf8.csv
 done
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
