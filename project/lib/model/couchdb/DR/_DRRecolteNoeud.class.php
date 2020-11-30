@@ -295,7 +295,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getVolumeRevendiqueWithUI() {
 
-        return $this->getTotalVolume() - ($this->getUsagesIndustriels() - $this->getLiesMouts());
+        $vol = $this->getTotalVolume() - ($this->getUsagesIndustriels() - $this->getLiesMouts());
+        if($this->exist('vci') && $this->vci > 0) {
+          $vol -= $this->vci;
+        }
+        return $vol;
     }
 
     public function getUsagesIndustriels($force_calcul = false) {
