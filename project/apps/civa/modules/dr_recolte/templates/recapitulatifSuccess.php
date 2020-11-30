@@ -163,14 +163,13 @@
 								<a name="form" />
 								<h2 class="titre_section">Récapitulatif des ventes <a href="" class="msg_aide" rel="help_popup_DR_recap_vente" title="Message aide"></a></h2>
 								<div class="contenu_section">
+
+										<div class="bloc_gris">
                                     <?php foreach($form->getEmbeddedForms() as $key => $form_item): ?>
                                     <?php if ($form_item->getObject() instanceof DRRecolteCouleur): ?>
                                     <h3 class="titre_section"><?php echo $form_item->getObject()->getLibelle(); ?></h3>
                                     <?php endif; ?>
-									<?php if(!isset($tableauOpen)): ?>
-									<div class="bloc_gris">
-									<?php endif; ?>
-                                        <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
+                      <?php if($form_item->getObject()->hasAcheteurs() > 0): ?>
 											<?php if(!isset($tableauOpen)): ?>
 											<table cellspacing="0" cellpadding="0" class="table_donnees pyjama_auto">
 												<thead>
@@ -226,18 +225,16 @@
 										<?php if(!isset($tableauOpen)): ?>
 										</table>
 										<?php endif; ?>
-									<?php elseif(!isset($tableauOpen)): ?>
-                                        <p> Aucune vente </p>
-										<?php $tableauOpen = true; ?>
 									<?php endif; ?>
-									<?php if(!isset($tableauOpen)): ?>
-									</div>
-									<?php endif; ?>
-                                    <?php endforeach; ?>
+                  <?php endforeach; ?>
 									<?php if(isset($tableauOpen)): ?>
 									</table>
 									</div>
+									</div>
+									<?php else: ?>
+											<p> Aucune vente </p>
 									<?php endif; ?>
+
 									<?php if(isset($form) && $form->getObject()->hasAcheteurs() && ($form_item->getObject()->getConfig()->existRendement() || $form_item->getObject()->getAppellation()->getKey() == 'appellation_VINTABLE')) : ?>
 									<div class="btn">
 										<input name="validation_interne" type="image" alt="Valider" src="/images/boutons/btn_valider_2.png">
