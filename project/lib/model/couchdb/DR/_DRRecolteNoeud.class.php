@@ -528,7 +528,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getDontDplcVendusMax() {
 
-        return round($this->getDplc(), 2);
+        return round($this->getDplcWithVci(), 2);
     }
 
     public function getDontVciVendusMax() {
