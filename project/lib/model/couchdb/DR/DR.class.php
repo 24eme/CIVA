@@ -926,17 +926,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $dplcBlanc = 0;
 
         foreach($recap as $key => $item) {
-            $dplcRouge = $item->dplc_sur_place_rouge;
-            $dplcBlanc = $item->dplc_sur_place_blanc;
+            $dplcRouge += $item->dplc_sur_place_rouge;
+            $dplcBlanc += $item->dplc_sur_place_blanc;
         }
 
-
       if($dplcRouge) {
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $recap["ALSACEROUGEROSE"]->dplc_sur_place);
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $dplcRouge);
       }
       if($dplcBlanc) {
         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Blanc", "entrees", "recolte", $dplcBlanc);
       }
+
       if($this->exist('recolte/certification/genre/appellation_ALSACEBLANC') && $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere()) {
           $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("VCI Alsace blanc", "entrees", "recolte", $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere());
       }
