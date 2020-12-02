@@ -336,7 +336,7 @@ class DRMGenerateCSV {
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
 
-	        if($cepageConfig->hasLieuEditable() && $produitDetail->lieu) {
+	    if($cepageConfig->hasLieuEditable() && $produitDetail->lieu && !$produitDetail instanceof acCouchdbJson) {
 	            $complement = $produitDetail->lieu;
         }
 
