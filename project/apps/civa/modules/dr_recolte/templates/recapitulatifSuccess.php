@@ -319,7 +319,7 @@
                                             sum_dont_vci += parseFloat($(this).val());
                                         }
                                     });
-                                    sum_dont_dplc = trunc(sum_dont_dplc, 2);
+                                    sum_dont_vci = trunc(sum_dont_vci, 2);
 
 
                                     var dplc_sup_volume = false;
