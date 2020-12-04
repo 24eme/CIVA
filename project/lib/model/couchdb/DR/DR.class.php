@@ -852,7 +852,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if(!$produit->getTotalCaveParticuliere()) {
             continue;
         }
-        if($drmGenerateCSV->isWithLieuDit() && $produit->getConfig()->hasLieuEditable()) {
+        if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getConfig()->hasLieuEditable()) {
             foreach($produit->detail as $detail) {
                 $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($detail);
             }
@@ -908,7 +908,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
            if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
                continue;
            }
-           if($drmGenerateCSV->isWithLieuDit() && $produit->getCepage()->getConfig()->hasLieuEditable()) {
+           if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getCepage()->getConfig()->hasLieuEditable()) {
                foreach($produit->detail as $detail) {
                     if(!$detail->getVolumeRevendiqueCaveParticuliere()) {
                         continue;
