@@ -430,7 +430,7 @@ class ExportDRCsv extends ExportCsv {
                    return "Automatique";
                 }
 
-                if (preg_match('/^COMPTE-[0-9]+$/', $compte)) {
+                if (preg_match('/^COMPTE-C?[0-9]+$/', $compte)) {
                     $user = "Récoltant";
                     break;
                 } elseif(preg_match('/^COMPTE-.*civa.*$/', $compte)) {
