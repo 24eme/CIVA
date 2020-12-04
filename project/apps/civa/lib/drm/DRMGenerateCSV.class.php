@@ -86,11 +86,6 @@ class DRMGenerateCSV {
       return $this->periode;
     }
 
-    public function isWithLieuDit() {
-
-        return $this->withLieuDit;
-    }
-
     public function getDocumentsForRepriseCatalogue(){
         $documents = array();
         $annee = ConfigurationClient::getInstance()->getAnnee($this->periode);
@@ -231,6 +226,31 @@ class DRMGenerateCSV {
         return false;
     }
 
+    public function isProduitDetailWithLieuDit($produitDetail) {
+        if(!$this->withLieuDit) {
+
+            return false;
+        }
+
+        if(is_string($produitDetail)) {
+
+            return false;
+        }
+
+        $hashProduit = HashMapper::convert($produitDetail->getHash());
+
+        if($produitDetail instanceof ConfigurationCepage) {
+            $hashProduit = $produitDetail->getHash();
+        }
+
+        if(preg_match('#('.$this->withLieuDit.')#', $hashProduit)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function createRowStockNullProduit($produitDetail){
         if($this->isProduitDetailAggregate($produitDetail)) {
             return null;
@@ -343,7 +363,7 @@ class DRMGenerateCSV {
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
 
-	    if($cepageConfig->hasLieuEditable() && $this->isWithLieuDit() && $produitDetail->lieu) {
+	    if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && $produitDetail->lieu) {
 	        $complement = $produitDetail->lieu;
         }
 
