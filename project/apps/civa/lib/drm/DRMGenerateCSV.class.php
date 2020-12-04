@@ -69,19 +69,26 @@ class DRMGenerateCSV {
     protected $periode_date;
     protected $aggregate = false;
     protected $firstDrm = false;
+    protected $withLieuDit = false;
 
 
-    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false, $firstDrm = false){
+    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false, $firstDrm = false, $withLieuDit = false){
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
       $this->periode_date = (preg_match('/^[0-9]{6}$/', $periode))? substr($periode, 0, 4)."-".substr($periode, -2)."-01" : date('Y-m-d');
       $this->aggregate = $aggregate;
       $this->firstDrm = $firstDrm;
+      $this->withLieuDit = $withLieuDit;
     }
 
     public function getPeriode(){
       return $this->periode;
+    }
+
+    public function isWithLieuDit() {
+
+        return $this->withLieuDit;
     }
 
     public function getDocumentsForRepriseCatalogue(){
@@ -294,7 +301,7 @@ class DRMGenerateCSV {
     }
 
 
-    public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
+    public function getProduitCSV($produitDetail, $force_type_drm = null, $mentionVtsgn = null) {
         $cepageConfig = null;
 
         if(!is_string($produitDetail)) {
@@ -336,11 +343,9 @@ class DRMGenerateCSV {
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
 
-	    if($cepageConfig->hasLieuEditable() && $produitDetail->lieu && !$produitDetail instanceof acCouchdbJson) {
-	            $complement = $produitDetail->lieu;
+	    if($cepageConfig->hasLieuEditable() && $this->isWithLieuDit() && $produitDetail->lieu) {
+	        $complement = $produitDetail->lieu;
         }
-
-
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);
