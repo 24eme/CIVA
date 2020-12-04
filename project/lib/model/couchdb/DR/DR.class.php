@@ -845,15 +845,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
-      foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
-        if($produit->getCepage()->getKey() == 'cepage_RB') {
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        if($produit->getKey() == 'cepage_RB') {
             continue;
         }
         if(!$produit->getTotalCaveParticuliere()) {
             continue;
         }
-        $cepageNode = $produit->getParent()->getParent();
-        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
+        if($drmGenerateCSV->isWithLieuDit() && $produit->getConfig()->hasLieuEditable()) {
+            foreach($produit->detail as $detail) {
+                $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($detail);
+            }
+        } else {
+            $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($produit);
+        }
       }
         $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
 
@@ -862,9 +867,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
        }
 
        if($this->recolte->getSurPlaceRebeches()) {
-           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches ");
+           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches");
        }
-       
+
        $dplcRouge = 0;
        $dplcBlanc = 0;
 
@@ -892,7 +897,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
      $lignesEdi = "";
-     foreach ($this->getProduits() as $hashProduit => $produit) {
+     foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
            if($produit->getCepage()->getKey() == 'cepage_RB') {
                continue;
@@ -903,7 +908,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
            if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
                continue;
            }
-           if($noeud->getVolumeRevendiqueCaveParticuliere()) {
+           if($drmGenerateCSV->isWithLieuDit() && $produit->getCepage()->getConfig()->hasLieuEditable()) {
+               foreach($produit->detail as $detail) {
+                    if(!$detail->getVolumeRevendiqueCaveParticuliere()) {
+                        continue;
+                    }
+                   $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($detail, "entrees", "recolte", $detail->getVolumeRevendiqueCaveParticuliere());
+                }
+           } else {
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getVolumeRevendiqueCaveParticuliere());
            }
            if($noeud->getTotalVolumeAcheteurs('mouts')) {
