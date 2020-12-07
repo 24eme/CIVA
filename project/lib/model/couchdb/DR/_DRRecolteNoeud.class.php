@@ -33,8 +33,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         $items_sorted = array();
 
         foreach($items_config as $hash => $item_config) {
-            if($this->exist($item_config->getKey())) {
-                $items_sorted[$hash] = $this->get($item_config->getKey());
+            if($this->getDocument()->exist(HashMapper::inverse($item_config->getHash()))) {
+                $items_sorted[$hash] = $this->getDocument()->get(HashMapper::inverse($item_config->getHash()));
             }
         }
 
@@ -203,8 +203,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplcCaveParticuliere() {
-
-        return $this->getDplcReel() - $this->getTotalDontDplcVendus();
+        if(!$this->getConfig()->hasRendementNoeud()) {
+            $dplc = $this->getSumNoeudFields("dplcCaveParticuliere");
+        } else {
+            $dplc = $this->getDplcReel() - $this->getTotalDontDplcVendus();
+        }
+        return $dplc;
     }
 
     public function getDplcWithVci($force_calcul = false) {
@@ -269,6 +273,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         if($this->_get('volume_revendique') && !$force_calcul) {
 
             return $this->_get('volume_revendique');
+        }
+
+        if(!$this->getConfig()->hasRendementNoeud()) {
+
+            return $this->getVolumeRevendiqueTotal($force_calcul);
         }
 
         return $this->getDataByFieldAndMethod('volume_revendique', array($this, 'findVolumeRevendique'), $force_calcul);
@@ -515,7 +524,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
     public function getDontDplcVendusMax() {
 
-        return round($this->getDplc(), 2);
+        return round($this->getDplcWithVci(), 2);
     }
 
     public function getDontVciVendusMax() {
@@ -881,8 +890,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
                 if ($this->getCouchdbDocument()->canUpdate() && (round($nowAcheteur['superficie'], 2) != round($beforeAcheteur['superficie'], 2))) {
                     $acheteur->superficie = null;
                 }
-
-                if($this->getCouchdbDocument()->canUpdate() && !$this->hasRecapitulatifVente()) {
+                if($this->getCouchdbDocument()->canUpdate() && !($this->hasRecapitulatifVente() || $this->getAppellation()->getKey() == 'appellation_VINTABLE')) {
                     $acheteur->superficie = $this->getTotalSuperficieVendusByCvi($type, $cvi);
                     $acheteur->dontdplc = $this->getTotalDontDplcVendusByCvi($type, $cvi);
                     $acheteur->dontvci = $this->getTotalDontVciVendusByCvi($type, $cvi);
@@ -903,7 +911,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         if ($this->getCouchdbDocument()->canUpdate() && $this->hasRecapitulatifVente() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
-            $unique_acheteur->dontdplc = $this->getDplc();
+            $unique_acheteur->dontdplc = $this->getDplcWithVci();
             $unique_acheteur->dontvci = $this->getTotalVci();
         }
     }

@@ -1,24 +1,44 @@
 
 . bin/config.inc
 
-cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.csv
+cd $GIILDA_BASEDIR
+bash bin/export_bi_to_zip
+cd -
+
+rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.csv
+rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.utf8.csv
+
+cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.utf8.csv
 for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
     tail -n +2 $csv
-done >> data/ds.csv
+done >> data/ds.utf8.csv
 
-echo -n "TYPE;ANNEE;" > data/dr.csv
-cat $PATH_MISEADISPO_CIVA/tmp/export_drs_2019* | head -n 1 >> data/dr.csv
-ls $PATH_MISEADISPO_CIVA/tmp/ | grep export_drs_2 | grep -vE '2014|2015|2016' | awk -F '_' '{print $1"_"$2"_"$3}'  | sort -u | while read file ; do
-    ls -rt  $PATH_MISEADISPO_CIVA"/tmp/"$file* | tail -n 1 ;
-done | while read file ; do
-    ANNEE=$(echo $file | sed 's/.*export_drs_//' | sed 's/_.*//')
-    tail -n +2 $file  | sed 's/^/DR;'$ANNEE';/';
-done >> data/dr.csv
+iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
+cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
 
-if test -f $METABASE_SQLITE ; then
-    if test "$METABASE_SQLITE"; then
-        cp $METABASE_SQLITE $METABASE_SQLITE".tmp"
-        python $BASEDIR"/bin/csv2sql.py" $METABASE_SQLITE".tmp"
-        mv -f $METABASE_SQLITE".tmp" $METABASE_SQLITE
-    fi
+echo 'type;annee;"CVI acheteur";"nom acheteur";"CVI recoltant";"nom recoltant";"appellation";"lieu";"cepage";"vtsgn";"denomination";"superficie";"volume";"dont volume a detruire";"superficie totale";"volume total";"volume a detruire total";"dont vci";"vci total";"date de validation";"date de modification";"validateur";"hash_produit";"type_ligne"' > data/dr.utf8.csv
+for (( i=2017; i <= 2020; i++ ));
+do
+    bash bin/export_drs_csv.sh $i | grep -v "hash_produit" | awk -v campagne="$i" -F ";" '{ print "DR;" campagne ";" $0}' >> data/dr.utf8.csv
+done
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
+cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
+
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite;cvi acheteur;nom acheteur" > data/dr_mouvements.utf8.csv
+for (( i=2017; i <= 2020; i++ ));
+do
+    bash bin/export_drs_mouvements_csv.sh $i | grep -v ";quantite" >> data/dr_mouvements.utf8.csv
+done
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/dr_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.csv
+cp data/dr_mouvements.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.utf8.csv
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
+cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
+
+if test "$METABASE_SQLITE"; then
+    cp $METABASE_SQLITE $METABASE_SQLITE".tmp"
+    python $BASEDIR"/bin/csv2sql.py" $METABASE_SQLITE".tmp" $PATH_MISEADISPO_CIVA/export/bi
+    mv -f $METABASE_SQLITE".tmp" $METABASE_SQLITE
 fi

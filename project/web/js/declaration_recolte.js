@@ -423,6 +423,8 @@ var initTablesAcheteurs = function()
 
     var tables_acheteurs = $('#exploitation_acheteurs table.tables_acheteurs');
 
+    $('.ui-autocomplete .ui-menu-item a').live('mousedown', function() { return false; });
+
     tables_acheteurs.each(function()
     {
         var table_achet = $(this);

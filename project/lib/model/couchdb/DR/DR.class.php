@@ -637,25 +637,16 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         //Vérifie que le récap des ventes a commencé a être saisi
         if ($has_no_complete) {
-            if($noeud->canHaveVci() && $noeud->getTotalVci() > 0) {
-                array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
-            } else {
-                array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
-
-            }
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie')));
         }
 
         //Vérifie que tous les dont_dplc, dont_vci et superficie dans le recapitulatif des ventes est rempli
         if (!$has_no_complete && !$noeud->hasCompleteRecapitulatifVente()) {
-            if($noeud->canHaveVci() && $noeud->getTotalVci() > 0) {
-                array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement et/ou tous les volumes de vci"));
-            } else {
-                array_push($validLogVigilance, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_non_saisie_superficie_dplc')));
-            }
+                array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement et/ou tous les volumes de vci"));
         }
 
         if (!$noeud->isValidRecapitulatifVente()) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
             return;
         }
 
@@ -663,13 +654,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         if(round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
 
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
 
         if(round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
 
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
             return;
         }
 
@@ -680,13 +671,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 $libelle = $noeud->getLibelleWithAppellation() . ", " . $acheteur->nom . ' (' . $acheteur->type_acheteur. ')';
 
                 if($acheteur->dontdplc > $volume) {
-                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
+                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $libelle, 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_superieur_volume')));
                         $recap_is_ok = false;
                         continue;
                 }
 
                 if($acheteur->dontvci > $volume) {
-                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'log' => $libelle, 'info' => "Dans le récapitulatif des ventes, le volume en \"dont vci\" d'un acheteur doit être inférieur à son volume vendu"));
+                    array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $libelle, 'info' => "Dans le récapitulatif des ventes, le volume en \"dont vci\" d'un acheteur doit être inférieur à son volume vendu"));
                         $recap_is_ok = false;
                         continue;
                 }
@@ -703,7 +694,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         if($noeud->canCalculVolumeRevendiqueSurPlace() && $noeud->getVolumeRevendiqueCaveParticuliere() < 0) {
-            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $lieu->getHash())), 'url'=> $this->generateUrl('dr_recolte_recapitulatif', $this), 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_revendique_sur_place_negatif')));
+            array_push($validLogErreur, array('url'=> $this->generateUrl('dr_recolte_recapitulatif', $this)."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_revendique_sur_place_negatif')));
         }
     }
 
@@ -854,15 +845,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
-      foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
-        if($produit->getCepage()->getKey() == 'cepage_RB') {
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        if($produit->getKey() == 'cepage_RB') {
             continue;
         }
         if(!$produit->getTotalCaveParticuliere()) {
             continue;
         }
-        $cepageNode = $produit->getParent()->getParent();
-        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
+        if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getConfig()->hasLieuEditable()) {
+            foreach($produit->detail as $detail) {
+                $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($detail);
+            }
+        } else {
+            $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($produit);
+        }
       }
         $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
 
@@ -871,9 +867,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
        }
 
        if($this->recolte->getSurPlaceRebeches()) {
-           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches ");
+           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches");
        }
-       
+
        $dplcRouge = 0;
        $dplcBlanc = 0;
 
@@ -901,7 +897,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
      $lignesEdi = "";
-     foreach ($this->getProduits() as $hashProduit => $produit) {
+     foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
            if($produit->getCepage()->getKey() == 'cepage_RB') {
                continue;
@@ -912,7 +908,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
            if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
                continue;
            }
-           if($noeud->getVolumeRevendiqueCaveParticuliere()) {
+           if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getCepage()->getConfig()->hasLieuEditable()) {
+               foreach($produit->detail as $detail) {
+                    if(!$detail->getVolumeRevendiqueCaveParticuliere()) {
+                        continue;
+                    }
+                   $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($detail, "entrees", "recolte", $detail->getVolumeRevendiqueCaveParticuliere());
+                }
+           } else {
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getVolumeRevendiqueCaveParticuliere());
            }
            if($noeud->getTotalVolumeAcheteurs('mouts')) {
@@ -935,17 +938,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $dplcBlanc = 0;
 
         foreach($recap as $key => $item) {
-            $dplcRouge = $item->dplc_sur_place_rouge;
-            $dplcBlanc = $item->dplc_sur_place_blanc;
+            $dplcRouge += $item->dplc_sur_place_rouge;
+            $dplcBlanc += $item->dplc_sur_place_blanc;
         }
 
-
       if($dplcRouge) {
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $recap["ALSACEROUGEROSE"]->dplc_sur_place);
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $dplcRouge);
       }
       if($dplcBlanc) {
         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Blanc", "entrees", "recolte", $dplcBlanc);
       }
+
       if($this->exist('recolte/certification/genre/appellation_ALSACEBLANC') && $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere()) {
           $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("VCI Alsace blanc", "entrees", "recolte", $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere());
       }
