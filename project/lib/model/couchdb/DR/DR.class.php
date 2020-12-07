@@ -897,14 +897,32 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
      $lignesEdi = "";
+     $volumeRevendiqueAlsaceRose = 0;
+     $volumeRevendiqueAlsaceRoseMout = 0;
+     $volumeRevendiqueAlsaceBlanc = null;
+     $volumeRevendiqueAlsaceBlancMout = 0;
      foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
            if($produit->getCepage()->getKey() == 'cepage_RB') {
                continue;
            }
+           if(is_null($volumeRevendiqueAlsaceBlanc) && $produit->getAppellation()->getKey() == "appellation_CREMANT") {
+               $volumeRevendiqueAlsaceBlanc = $produit->getLieu()->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceBlancMout = $produit->getLieu()->getTotalVolumeAcheteurs('mouts');
+           }
+           if($produit->getAppellation()->getKey() == "appellation_CREMANT" && $produit->getCepage()->getKey() == "cepage_PN") {
+               $volumeRevendiqueAlsaceRose += $produit->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceBlanc -= $produit->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceRoseMout += $produit->getTotalVolumeAcheteurs('mouts');
+               $volumeRevendiqueAlsaceBlancMout -= $produit->getTotalVolumeAcheteurs('mouts');
+           }
+           if($produit->getAppellation()->getKey() == "appellation_CREMANT") {
+               continue;
+           }
            if(in_array($produit->getCepage()->getConfig()->getAppellation()->getKey(), array('PINOTNOIR', 'PINOTNOIRROUGE'))) {
                $noeud = $produit->getLieu();
            }
+
            if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
                continue;
            }
@@ -922,6 +940,21 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getTotalVolumeAcheteurs('mouts'));
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $noeud->getTotalVolumeAcheteurs('mouts'));
            }
+     }
+
+     if($volumeRevendiqueAlsaceBlanc > 0) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "entrees", "recolte", $volumeRevendiqueAlsaceBlanc);
+     }
+     if($volumeRevendiqueAlsaceBlancMout > 0) {
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "entrees", "recolte", $volumeRevendiqueAlsaceBlancMout);
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "sorties", "vrac", $volumeRevendiqueAlsaceBlancMout);
+     }
+     if($volumeRevendiqueAlsaceRose > 0) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "entrees", "recolte", $volumeRevendiqueAlsaceRose);
+     }
+     if($volumeRevendiqueAlsaceRoseMout > 0) {
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "entrees", "recolte", $volumeRevendiqueAlsaceRoseMout);
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "sorties", "vrac", $volumeRevendiqueAlsaceRoseMout);
      }
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
