@@ -6,17 +6,15 @@ class acCouchdbDocumentSetValueTask extends sfBaseTask
   {
     // // add your own arguments here
     $this->addArguments(array(
-       new sfCommandArgument('doc_id', sfCommandArgument::REQUIRED, 'ID du document'),
-       new sfCommandArgument('hash', sfCommandArgument::REQUIRED, 'Hash'),
-       new sfCommandArgument('value', sfCommandArgument::REQUIRED, 'Value'),
-       new sfCommandArgument('type', sfCommandArgument::OPTIONAL, 'Type', "string"),
+       new sfCommandArgument('doc_id', sfCommandArgument::REQUIRED, 'Document ID'),
+       new sfCommandArgument('hash_values', sfCommandArgument::IS_ARRAY, 'Hash or values'),
     ));
 
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
       new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
-      new sfCommandOption('remove', null, sfCommandOption::PARAMETER_REQUIRED, 'Supprime la hash', false),
+      new sfCommandOption('delete', null, sfCommandOption::PARAMETER_OPTIONAL, 'Option for deleting one field', false),
       // add your own options here
     ));
 
@@ -24,10 +22,10 @@ class acCouchdbDocumentSetValueTask extends sfBaseTask
     $this->name             = 'setvalue';
     $this->briefDescription = '';
     $this->detailedDescription = <<<EOF
-The [maintenanceCompteStatut|INFO] task does things.
+The [acCouchdbDocumentSetValue|INFO] task does things.
 Call it with:
 
-  [php symfony maintenanceCompteStatut|INFO]
+  [php symfony document:setvalue|INFO]
 EOF;
   }
 
@@ -37,21 +35,66 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
+    $output = array();
     $doc = acCouchdbManager::getClient()->find($arguments['doc_id']);
+    if(isset($options["delete"]) && $options["delete"]){
+      $hash = array_shift($arguments['hash_values']);
+      $doc->remove($hash);
+      $output[] = $hash.":supprimé";
+    }else{
 
-    if($options['remove']) {
-        $doc->remove($arguments['hash']);
-    } else {
-        $value = $arguments['value'];
-        settype($value, $arguments['type']);
-        $doc->add($arguments['hash'], $value);
-    }
-    $doc->save();
+      $values = array();
+      $hash = null;
+      $value = null;
+      foreach($arguments['hash_values'] as $i => $arg) {
+          if($i % 2 == 0) {
+              $hash = $arg;
+          } else {
+              $value = $arg;
+          }
 
-    if($options['remove']) {
-        echo "Document ".$doc->_id." removed ".$arguments['hash'] ."\n";
-    } else {
-        echo "Document ".$doc->_id." set ".$arguments['hash']. " = ".$arguments['value']."\n";
+
+          if($hash && $value) {
+              $values[$hash] = $value;
+              $hash = null;
+              $value = null;
+          }
+      }
+
+
+
+      if(!$doc) {
+
+          return;
+      }
+
+      foreach($values as $hash => $value) {
+          if(!$doc->exist($hash)) {
+
+              return;
+          }
+          if($doc->get($hash) instanceof acCouchdbJson) {
+
+              return;
+          }
+          if($doc->get($hash) === $value) {
+
+              continue;
+          }
+
+          $output[] = $hash.":\"".$value."\" (".$doc->get($hash).")";
+          $doc->set($hash, $value);
+      }
     }
+
+      $oldrev = $doc->_rev;
+
+      $doc->save();
+
+      if($oldrev == $doc->_rev) {
+          return;
+      }
+      echo "Le document ".$doc->_id."@".$oldrev." a été sauvé @".$doc->_rev.", les valeurs suivantes ont été changés : ".implode(",", $output)."\n";
+
   }
 }
