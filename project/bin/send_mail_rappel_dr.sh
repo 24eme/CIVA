@@ -22,7 +22,7 @@ fi
 
 echo "Envoi des mails pour les récoltants n'ayant pas démarré leur DR"
 
-bash bin/export_recoltant_sans_dr.sh $ANNEE | grep -v ";COP;" > $FILE_RECOLTANTSANSDR
+bash bin/export_recoltant_sans_dr.sh $ANNEE > $FILE_RECOLTANTSANSDR
 
 echo "Using file $FILE_RECOLTANTSANSDR"
 
