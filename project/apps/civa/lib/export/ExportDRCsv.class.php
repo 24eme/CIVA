@@ -128,19 +128,31 @@ class ExportDRCsv extends ExportCsv {
                                     $this->addDetailNonRecolte($detail);
                                 }
                             }
+
+                            if($cepage->hasRecapitulatif()) {
+                                $this->addNoeudTotal($cepage);
+                                foreach ($cepage->acheteurs as $acheteurs) {
+                                    foreach ($acheteurs as $cvi_a => $acheteur) {
+                                            $this->addNoeudAcheteur($cepage, $acheteur);
+                                    }
+                                }
+                            }
                         }
-                        if($couleur->getKey() != "couleur") {
+                        if($couleur->hasRecapitulatif()) {
                             $this->addNoeudTotal($couleur);
+                            foreach ($couleur->acheteurs as $acheteurs) {
+                                foreach ($acheteurs as $cvi_a => $acheteur) {
+                                        $this->addNoeudAcheteur($couleur, $acheteur);
+                                }
+                            }
                         }
                     }
-
-                    if($appellation->getConfig()->hasManyLieu()) {
+                    if($lieu->hasRecapitulatif()) {
                         $this->addNoeudTotal($lieu);
-                    }
-
-                    foreach ($lieu->acheteurs as $acheteurs) {
-                        foreach ($acheteurs as $cvi_a => $acheteur) {
+                        foreach ($lieu->acheteurs as $acheteurs) {
+                            foreach ($acheteurs as $cvi_a => $acheteur) {
                                 $this->addNoeudAcheteur($lieu, $acheteur);
+                            }
                         }
                     }
                 }
@@ -247,6 +259,11 @@ class ExportDRCsv extends ExportCsv {
     }
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
+        $cepage = "TOTAL";
+        if($noeud instanceof DRRecolteCepage) {
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
+        }
+
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
         $this->add(array(
@@ -256,7 +273,7 @@ class ExportDRCsv extends ExportCsv {
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
-            "cepage" => "TOTAL",
+            "cepage" => $cepage,
             "vtsgn" => $vtsgn,
             "denomination" => null,
             "superficie_livree" => $acheteur->superficie,
@@ -276,12 +293,12 @@ class ExportDRCsv extends ExportCsv {
     }
 
     protected function addNoeudTotal($noeud) {
-        if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
-            $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
-            $cepage = "";
+        if($noeud instanceof DRRecolteCepage) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
 
-        if($noeud instanceof DRRecolteCouleur && $noeud->getAppellation()->getConfig()->hasManyLieu()) {
+        if($noeud instanceof DRRecolteCouleur) {
             $lieu = $noeud->getLieu()->getConfig()->getLibelle();
             $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }

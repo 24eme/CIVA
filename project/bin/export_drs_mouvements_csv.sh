@@ -35,10 +35,17 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
         print base_ligne ";vci;" $17 ";;";
     }
 }
-if( $6 ~ "\"TOTAL\"") {
-    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";;;;"
-    print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;";
-    print base_ligne ";usages_industriels;" $15 ";;";
+if( $7 ~ "TOTAL" ) {
+    gsub("\"", "", $7);
+    gsub(/TOTAL ?/, "", $7);
+
+    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";;"
+
+    if($1 == $3) {
+        print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;";
+        print base_ligne ";usages_industriels;" $15 ";;";
+    }
+
     if($11 && $1 == $3) {
         if($10) {
             print base_ligne ";superficie_cave_particuliere;" $10 ";;";
@@ -55,9 +62,7 @@ if( $6 ~ "\"TOTAL\"") {
             print base_ligne ";vci_cave_particuliere;" $16 ";;";
         }
     }
-}
-if( $7 ~ "TOTAL" ) {
-    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";;;"
+
     if($11 && $1 != $3) {
         gsub("\"", "", $22);
         gsub("total_vente_", "", $22);
