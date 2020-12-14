@@ -57,38 +57,6 @@ Cette tache en executé toute les nuits grâce à un cron.
 
  > bash bin/export_recoltant_non_teledeclarant [annee_recolte]
 
-### Juste après la fermeture de la télédéclaration
-
-#### Changer la date de validation des DRs supérieur à celle voulu
-
-Sur toute une campagne :
-
- > bash bin/dr_change_date.sh YYYY yyyy-mm-dd
-
-Unitairement :
-
- > php symfony dr:changeDate id_doc yyyy-mm-dd
-
-#### Egaliser la date de modification sur la date de validation
-
-Sur toute une campagne :
-
- > bash bin/dr_egalise_date_modification.sh YYYY
-
-Unitairement :
-
- > php symfony dr:date-modification id_doc
-
-#### Remettre le compte CVI en utilisateurs (éditeur et validateur) pour les DRs en télédéclaration validé par COMPTE-admin-civa
-
-Sur toute une campagne :
-
- > bash bin/dr_change_utilisateur_compte.sh YYYY COMPTE-admin-civa
-
-Unitairement :
-
- > php symfony dr:changeUtilisateurCompte id_doc COMPTE-admin-civa
-
 ### Exports de fin de campagne
 
 #### Export XML
