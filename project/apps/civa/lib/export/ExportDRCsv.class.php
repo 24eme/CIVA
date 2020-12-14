@@ -128,6 +128,15 @@ class ExportDRCsv extends ExportCsv {
                                     $this->addDetailNonRecolte($detail);
                                 }
                             }
+
+                            if($cepage->hasRecapitulatif()) {
+                                $this->addNoeudTotal($cepage);
+                                foreach ($cepage->acheteurs as $acheteurs) {
+                                    foreach ($acheteurs as $cvi_a => $acheteur) {
+                                            $this->addNoeudAcheteur($cepage, $acheteur);
+                                    }
+                                }
+                            }
                         }
                         if($couleur->getKey() != "couleur") {
                             $this->addNoeudTotal($couleur);
@@ -247,6 +256,11 @@ class ExportDRCsv extends ExportCsv {
     }
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
+        $cepage = "TOTAL";
+        if($noeud instanceof DRRecolteCepage) {
+            $cepage = $noeud->getConfig()->getLibelle()." TOTAL";
+        }
+
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
         $this->add(array(
@@ -256,7 +270,7 @@ class ExportDRCsv extends ExportCsv {
             "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
             "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
             "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
-            "cepage" => "TOTAL",
+            "cepage" => $cepage,
             "vtsgn" => $vtsgn,
             "denomination" => null,
             "superficie_livree" => $acheteur->superficie,
@@ -276,6 +290,11 @@ class ExportDRCsv extends ExportCsv {
     }
 
     protected function addNoeudTotal($noeud) {
+        if($noeud instanceof DRRecolteCepage) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = $noeud->getConfig()->getLibelle()." TOTAL";
+        }
+
         if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
             $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
             $cepage = "";
