@@ -138,18 +138,21 @@ class ExportDRCsv extends ExportCsv {
                                 }
                             }
                         }
-                        if($couleur->getKey() != "couleur") {
+                        if($couleur->hasRecapitulatif()) {
                             $this->addNoeudTotal($couleur);
+                            foreach ($couleur->acheteurs as $acheteurs) {
+                                foreach ($acheteurs as $cvi_a => $acheteur) {
+                                        $this->addNoeudAcheteur($couleur, $acheteur);
+                                }
+                            }
                         }
                     }
-
-                    if($appellation->getConfig()->hasManyLieu()) {
+                    if($lieu->hasRecapitulatif()) {
                         $this->addNoeudTotal($lieu);
-                    }
-
-                    foreach ($lieu->acheteurs as $acheteurs) {
-                        foreach ($acheteurs as $cvi_a => $acheteur) {
+                        foreach ($lieu->acheteurs as $acheteurs) {
+                            foreach ($acheteurs as $cvi_a => $acheteur) {
                                 $this->addNoeudAcheteur($lieu, $acheteur);
+                            }
                         }
                     }
                 }
@@ -258,7 +261,7 @@ class ExportDRCsv extends ExportCsv {
     protected function addNoeudAcheteur($noeud, $acheteur) {
         $cepage = "TOTAL";
         if($noeud instanceof DRRecolteCepage) {
-            $cepage = $noeud->getConfig()->getLibelle()." TOTAL";
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
 
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
@@ -292,15 +295,10 @@ class ExportDRCsv extends ExportCsv {
     protected function addNoeudTotal($noeud) {
         if($noeud instanceof DRRecolteCepage) {
             $lieu = $noeud->getLieu()->getConfig()->getLibelle();
-            $cepage = $noeud->getConfig()->getLibelle()." TOTAL";
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
 
-        if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
-            $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
-            $cepage = "";
-        }
-
-        if($noeud instanceof DRRecolteCouleur && $noeud->getAppellation()->getConfig()->hasManyLieu()) {
+        if($noeud instanceof DRRecolteCouleur) {
             $lieu = $noeud->getLieu()->getConfig()->getLibelle();
             $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
