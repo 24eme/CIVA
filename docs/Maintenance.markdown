@@ -12,7 +12,7 @@ Tiers
 
 Concaténation et conversion en utf8 des fichiers db2 des actifs et cloturés  
 
- > bash bin/build_tiers_file_from_db2.sh /path/to/DB2_TIERS_ACTIF /path/to/DB2_TIERS_CLOTURE
+ > bash bin/import_tiers.sh /path/to/DB2_TIERS_ACTIF /path/to/DB2_TIERS_CLOTURE
 
 Transformation du fichier db2 en un csv contenant les sociétés, établissements et comptes
 
