@@ -68,6 +68,20 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->cave_particuliere;
     }
 
+    public function getVolumeRevendiqueCaveParticuliere() {
+
+        return round($this->getTotalCaveParticuliere() - $this->getLies() - $this->getVciCaveParticuliere(), 2);
+    }
+
+    public function getVciCaveParticuliere() {
+        if($this->getTotalVolumeAcheteurs() > 0) {
+
+            return 0;
+        }
+
+        return $this->vci;
+    }
+
     public function getTotalVci() {
         if($this->total_vci === false) {
             $this->total_vci = $this->vci;
@@ -369,6 +383,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             }
         }
 
-        return $nbDestinataire == 1;
+        return $nbDestinataire < 2;
     }
 }

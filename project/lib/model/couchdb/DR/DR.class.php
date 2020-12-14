@@ -845,15 +845,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
-      foreach ($this->getProduitsDetails() as $hashProduit => $produit) {
-        if($produit->getCepage()->getKey() == 'cepage_RB') {
+      foreach ($this->getProduits() as $hashProduit => $produit) {
+        if($produit->getKey() == 'cepage_RB') {
             continue;
         }
         if(!$produit->getTotalCaveParticuliere()) {
             continue;
         }
-        $cepageNode = $produit->getParent()->getParent();
-        $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($cepageNode);
+        if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getConfig()->hasLieuEditable()) {
+            foreach($produit->detail as $detail) {
+                $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($detail);
+            }
+        } else {
+            $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit($produit);
+        }
       }
         $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
 
@@ -862,9 +867,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
        }
 
        if($this->recolte->getSurPlaceRebeches()) {
-           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches ");
+           $lignesEdi.= $drmGenerateCSV->createRowStockNullProduit("Rebêches");
        }
-       
+
        $dplcRouge = 0;
        $dplcBlanc = 0;
 
@@ -892,24 +897,64 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
     public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV){
      $lignesEdi = "";
-     foreach ($this->getProduits() as $hashProduit => $produit) {
+     $volumeRevendiqueAlsaceRose = 0;
+     $volumeRevendiqueAlsaceRoseMout = 0;
+     $volumeRevendiqueAlsaceBlanc = null;
+     $volumeRevendiqueAlsaceBlancMout = 0;
+     foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
            if($produit->getCepage()->getKey() == 'cepage_RB') {
+               continue;
+           }
+           if(is_null($volumeRevendiqueAlsaceBlanc) && $produit->getAppellation()->getKey() == "appellation_CREMANT") {
+               $volumeRevendiqueAlsaceBlanc = $produit->getLieu()->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceBlancMout = $produit->getLieu()->getTotalVolumeAcheteurs('mouts');
+           }
+           if($produit->getAppellation()->getKey() == "appellation_CREMANT" && $produit->getCepage()->getKey() == "cepage_PN") {
+               $volumeRevendiqueAlsaceRose += $produit->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceBlanc -= $produit->getVolumeRevendiqueCaveParticuliere();
+               $volumeRevendiqueAlsaceRoseMout += $produit->getTotalVolumeAcheteurs('mouts');
+               $volumeRevendiqueAlsaceBlancMout -= $produit->getTotalVolumeAcheteurs('mouts');
+           }
+           if($produit->getAppellation()->getKey() == "appellation_CREMANT") {
                continue;
            }
            if(in_array($produit->getCepage()->getConfig()->getAppellation()->getKey(), array('PINOTNOIR', 'PINOTNOIRROUGE'))) {
                $noeud = $produit->getLieu();
            }
+
            if(!$noeud->getVolumeRevendiqueCaveParticuliere() && !($noeud->getTotalVolumeAcheteurs('mouts'))) {
                continue;
            }
-           if($noeud->getVolumeRevendiqueCaveParticuliere()) {
+           if($drmGenerateCSV->isProduitDetailWithLieuDit($produit) && $produit->getCepage()->getConfig()->hasLieuEditable()) {
+               foreach($produit->detail as $detail) {
+                    if(!$detail->getVolumeRevendiqueCaveParticuliere()) {
+                        continue;
+                    }
+                   $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($detail, "entrees", "recolte", $detail->getVolumeRevendiqueCaveParticuliere());
+                }
+           } else {
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getVolumeRevendiqueCaveParticuliere());
            }
            if($noeud->getTotalVolumeAcheteurs('mouts')) {
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "entrees", "recolte", $noeud->getTotalVolumeAcheteurs('mouts'));
                $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail($produit, "sorties", "vrac", $noeud->getTotalVolumeAcheteurs('mouts'));
            }
+     }
+
+     if($volumeRevendiqueAlsaceBlanc > 0) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "entrees", "recolte", $volumeRevendiqueAlsaceBlanc);
+     }
+     if($volumeRevendiqueAlsaceBlancMout > 0) {
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "entrees", "recolte", $volumeRevendiqueAlsaceBlancMout);
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Blanc", "sorties", "vrac", $volumeRevendiqueAlsaceBlancMout);
+     }
+     if($volumeRevendiqueAlsaceRose > 0) {
+          $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "entrees", "recolte", $volumeRevendiqueAlsaceRose);
+     }
+     if($volumeRevendiqueAlsaceRoseMout > 0) {
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "entrees", "recolte", $volumeRevendiqueAlsaceRoseMout);
+         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("AOC Crémant d'Alsace Rosé", "sorties", "vrac", $volumeRevendiqueAlsaceRoseMout);
      }
 
       $recap = DRClient::getInstance()->getTotauxByAppellationsRecap($this);
@@ -926,17 +971,17 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $dplcBlanc = 0;
 
         foreach($recap as $key => $item) {
-            $dplcRouge = $item->dplc_sur_place_rouge;
-            $dplcBlanc = $item->dplc_sur_place_blanc;
+            $dplcRouge += $item->dplc_sur_place_rouge;
+            $dplcBlanc += $item->dplc_sur_place_blanc;
         }
 
-
       if($dplcRouge) {
-        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $recap["ALSACEROUGEROSE"]->dplc_sur_place);
+        $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Rouge", "entrees", "recolte", $dplcRouge);
       }
       if($dplcBlanc) {
         $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("DRA/DPLC Blanc", "entrees", "recolte", $dplcBlanc);
       }
+
       if($this->exist('recolte/certification/genre/appellation_ALSACEBLANC') && $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere()) {
           $lignesEdi.= $drmGenerateCSV->createRowMouvementProduitDetail("VCI Alsace blanc", "entrees", "recolte", $this->get('recolte/certification/genre/appellation_ALSACEBLANC')->getVciCaveParticuliere());
       }
