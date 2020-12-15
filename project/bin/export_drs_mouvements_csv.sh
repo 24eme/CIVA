@@ -16,7 +16,7 @@ bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$A
     lieudit="";
     if($5 ~ "Lieu-dit") {
         lieu = "";
-        lieudit = $5:
+        lieudit = $6;
     }
 if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";" $9;
