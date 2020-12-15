@@ -9,11 +9,17 @@ if ! test "$ANNEE"; then
     exit;
 fi
 
-echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieu-dit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
 
 bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$ANNEE" -F ";" '{
+    lieu=$6;
+    lieudit="";
+    if($5 ~ "Lieu-dit") {
+        lieu = "";
+        lieudit = $5:
+    }
 if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
-    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";" $8 ";" $9;
+    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";" $9;
     if($13) {
         print base_ligne ";superficie;" $13 ";;";
     }
@@ -39,7 +45,7 @@ if( $7 ~ "TOTAL" ) {
     gsub("\"", "", $7);
     gsub(/TOTAL ?/, "", $7);
 
-    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";;" $9
+    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";"
 
     if($1 == $3) {
         print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;";
