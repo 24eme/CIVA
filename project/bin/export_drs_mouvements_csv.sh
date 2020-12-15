@@ -9,7 +9,7 @@ if ! test "$ANNEE"; then
     exit;
 fi
 
-echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieu-dit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
 
 bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$ANNEE" -F ";" '{
     lieu=$6;
@@ -26,7 +26,7 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     if($14) {
         print base_ligne ";volume;" $14 ";;";
     }
-    if($11 && $1 == $3) {
+    if($11 && $1 == $3 && $5 !~ "Jus de raisin") {
         print base_ligne ";volume_cave_particuliere;" $11 ";;";
     }
     if($11 && $1 != $3) {
