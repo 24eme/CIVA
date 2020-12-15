@@ -39,7 +39,7 @@ if( $7 ~ "TOTAL" ) {
     gsub("\"", "", $7);
     gsub(/TOTAL ?/, "", $7);
 
-    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";;"
+    base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";;" $9
 
     if($1 == $3) {
         print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;";
