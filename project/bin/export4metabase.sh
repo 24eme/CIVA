@@ -25,7 +25,7 @@ done
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
 cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
 
-echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;denomination;type mouvement;quantite;cvi acheteur;nom acheteur" > data/dr_mouvements.utf8.csv
+echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur" > data/dr_mouvements.utf8.csv
 for (( i=2017; i <= 2020; i++ ));
 do
     bash bin/export_drs_mouvements_csv.sh $i | grep -v ";quantite" >> data/dr_mouvements.utf8.csv
