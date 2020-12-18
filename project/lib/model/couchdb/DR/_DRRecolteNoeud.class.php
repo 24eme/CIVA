@@ -533,14 +533,15 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getTotalDontDplcVendus() {
-        if($this->getTotalCaveParticuliere() == 0) {
-
-            return $this->getUsagesIndustriels();
-        }
 
         if(!$this->hasRecapitulatifVente()) {
 
             return $this->getDataByFieldAndMethod('total_dont_dplc_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontDplcVendus'));
+        }
+
+        if(!$this->hasRecapitulatifVente() && $this->getTotalCaveParticuliere() == 0) {
+
+            return $this->getUsagesIndustriels();
         }
 
         return round($this->getTotalDontDplcRecapitulatifVente(), 2);
