@@ -63,11 +63,11 @@ if( $7 ~ "TOTAL" ) {
             print base_ligne ";superficie_cave_particuliere;" $10 ";;";
         }
 
-        if($11 && length($12) > 0) {
+        if($11 && (length($12) > 0 || !$15)) {
             print base_ligne ";volume_revendique_cave_particuliere;" $11 - $12 - $16 ";;";
         }
 
-        if(length($12) > 0) {
+        if(length($12) > 0 || !$15) {
             print base_ligne ";dplc_cave_particuliere;" $12 ";;";
         }
         if($16) {
@@ -81,10 +81,10 @@ if( $7 ~ "TOTAL" ) {
         if($10) {
             print base_ligne ";superficie_" $22 ";" $10 ";" $1 ";" $2;
         }
-        if($11 && length($12) > 0) {
+        if($11 && (length($12) > 0 || !$15)) {
             print base_ligne ";volume_revendique_" $22 ";" $11 - $12 - $16 ";" $1 ";" $2;
         }
-        if(length($12) > 0) {
+        if(length($12) > 0 || !$15) {
             print base_ligne ";dplc_" $22 ";" $12 ";" $1 ";" $2;
         }
         if($16) {
