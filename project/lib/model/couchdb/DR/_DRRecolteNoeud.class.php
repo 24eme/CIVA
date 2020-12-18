@@ -917,7 +917,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         if ($this->getCouchdbDocument()->canUpdate() && $this->hasRecapitulatifVente() && $this->hasSellToUniqueAcheteur()) {
             $unique_acheteur->superficie = $this->getTotalSuperficie();
-            $unique_acheteur->dontdplc = $this->getDplcWithVci();
+            $unique_acheteur->dontdplc = $this->getDplcReel();
             $unique_acheteur->dontvci = $this->getTotalVci();
         }
     }
