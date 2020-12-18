@@ -25,7 +25,8 @@ done
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
 cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
 
-echo "type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur" > data/dr_mouvements.utf8.csv
+CSVHEADER="type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
+echo $CSVHEADER > data/dr_mouvements.utf8.csv
 for (( i=2017; i <= 2020; i++ ));
 do
     bash bin/export_drs_mouvements_csv.sh $i | grep -v ";quantite" >> data/dr_mouvements.utf8.csv
@@ -33,6 +34,13 @@ done
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.csv
 cp data/dr_mouvements.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr_mouvements.utf8.csv
+
+cat data/dr_mouvements.utf8.csv | cut -d ";" -f 2 | sort | uniq | grep -E "[0-9]+" | while read annee; do
+    mkdir $PATH_MISEADISPO_CIVA/export/bi/$annee 2> /dev/null;
+    echo $CSVHEADER > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.utf8.csv;
+    cat data/dr_mouvements.utf8.csv | grep -E "^DR;$annee;" >> $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.utf8.csv;
+    iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.csv;
+done;
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
