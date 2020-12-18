@@ -23,22 +23,28 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     if($13) {
         print base_ligne ";superficie;" $13 ";;";
     }
+
+    suffixe = ""
+    if($7 ~ "Rebeche") {
+        suffixe = "_rebeche"
+    }
+
     if($14) {
-        print base_ligne ";volume;" $14 ";;";
+        print base_ligne ";volume" suffixe ";" $14 ";;";
     }
     if($11 && $1 == $3 && $5 !~ "Jus de raisin") {
-        print base_ligne ";volume_cave_particuliere;" $11 ";;";
+        print base_ligne ";volume" suffixe "_cave_particuliere;" $11 ";;";
     }
     if($11 && $1 != $3) {
         gsub("\"", "", $22);
         gsub("detail_vente_", "", $22);
-        print base_ligne ";volume_" $22 ";" $11 ";" $1 ";" $2;
+        print base_ligne ";volume" suffixe "_" $22 ";" $11 ";" $1 ";" $2;
     }
     if($15) {
-        print base_ligne ";lies;" $15 ";;";
+        print base_ligne ";lies" suffixe ";" $15 ";;";
     }
     if($17) {
-        print base_ligne ";vci;" $17 ";;";
+        print base_ligne ";vci" suffixe ";" $17 ";;";
     }
 }
 if( $7 ~ "TOTAL" ) {
