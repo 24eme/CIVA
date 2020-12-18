@@ -58,7 +58,7 @@ if( $7 ~ "TOTAL" ) {
         print base_ligne ";usages_industriels;" $15 ";;";
     }
 
-    if($11 && $1 == $3) {
+    if(($11 || $10) && $1 == $3) {
         if($10) {
             print base_ligne ";superficie_cave_particuliere;" $10 ";;";
         }
@@ -75,7 +75,7 @@ if( $7 ~ "TOTAL" ) {
         }
     }
 
-    if($11 && $1 != $3) {
+    if(($11 || $10) && $1 != $3) {
         gsub("\"", "", $22);
         gsub("total_vente_", "", $22);
         if($10) {
