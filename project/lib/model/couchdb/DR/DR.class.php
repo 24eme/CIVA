@@ -664,6 +664,27 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
 
+        $entierementReparti = true;
+
+        if($noeud->getTotalSuperficieRecapitulatifVente() < $noeud->getTotalSuperficieVendus()) {
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la superficie n'a pas été entièrement reparti chez les acheteurs"));
+            $entierementReparti = false;
+        }
+
+        if($noeud->getTotalDontVciRecapitulatifVente() < $noeud->getTotalDontVciVendus()) {
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le vci n'a pas été entièrement reparti chez les acheteurs"));
+            $entierementReparti = false;
+        }
+
+        if($noeud->getTotalDontDplcRecapitulatifVente() < $noeud->getTotalDontDplcVendus()) {
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dpl n'a pas été entièrement reparti chez les acheteurs"));
+            $entierementReparti = false;
+        }
+
+        if(!$entierementReparti) {
+            return;
+        }
+
         //Vérifie que chacun des dont dplc saisie dans le récaptitulatif des ventes est inférieur au volume déclaré
         foreach($noeud->acheteurs as $type => $acheteurs) {
             foreach($acheteurs as $cvi => $acheteur) {

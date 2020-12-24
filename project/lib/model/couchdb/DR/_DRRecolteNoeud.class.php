@@ -552,17 +552,17 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getTotalDontVciVendus() {
+        if($this->hasRecapitulatifVente()) {
+
+            return round($this->getTotalDontVciRecapitulatifVente(), 2);
+        }
+
         if($this->getTotalCaveParticuliere() == 0) {
 
             return $this->getTotalVci();
         }
 
-        if(!$this->hasRecapitulatifVente()) {
-
-            return $this->getDataByFieldAndMethod('total_dont_vci_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontVciVendus'));
-        }
-
-        return round($this->getTotalDontVciRecapitulatifVente(), 2);
+        return $this->getDataByFieldAndMethod('total_dont_vci_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalDontVciVendus'));
     }
 
     public function getTotalDontVciVendusByType($type) {
@@ -589,6 +589,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return 0;
         }
 
+        if($this->hasRecapitulatifVente()) {
+
+            return $this->getTotalSuperficieRecapitulatifVente();
+        }
+
         if($this->getTotalCaveParticuliere() == 0) {
 
             return $this->getTotalSuperficie();
@@ -598,8 +603,6 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
             return $this->getDataByFieldAndMethod('total_superficie_vendus', array($this, 'getSumNoeudWithMethod'), true, array('getTotalSuperficieVendus'));
         }
-
-        return $this->getTotalSuperficieRecapitulatifVente();
     }
 
      public function getTotalSuperficieVendusByCvi($type, $cvi) {
