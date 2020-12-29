@@ -671,12 +671,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             $entierementReparti = false;
         }
 
-        if($noeud->getTotalDontVciRecapitulatifVente() < $noeud->getTotalDontVciVendus()) {
+        if($noeud->getTotalDontVciRecapitulatifVente() < $noeud->getDontVciVendusMin()) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le vci n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }
-
-        if($noeud->getTotalDontDplcRecapitulatifVente() < $noeud->getTotalDontDplcVendus()) {
+        if($noeud->getTotalDontDplcRecapitulatifVente() < $noeud->getDontDplcVendusMin()) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dpl n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }

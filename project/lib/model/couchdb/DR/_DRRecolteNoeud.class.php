@@ -527,9 +527,33 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getDplcReel(), 2);
     }
 
+    public function getDontDplcVendusMin() {
+        if($this->getTotalCaveParticuliere() > 0) {
+
+            return 0;
+        }
+        if(!$this->getTotalVolumeVendus()) {
+
+            return 0;
+        }
+        return $this->getDontDplcVendusMax();
+    }
+
     public function getDontVciVendusMax() {
 
         return round($this->getTotalVci(), 2);
+    }
+
+    public function getDontVciVendusMin() {
+        if($this->getTotalCaveParticuliere() > 0) {
+
+            return 0;
+        }
+        if(!$this->getTotalVolumeVendus()) {
+
+            return 0;
+        }
+        return $this->getDontVciVendusMax();
     }
 
     public function getTotalDontDplcVendus() {
