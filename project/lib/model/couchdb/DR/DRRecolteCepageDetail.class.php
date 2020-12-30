@@ -383,6 +383,6 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             }
         }
 
-        return $nbDestinataire == 1;
+        return $nbDestinataire < 2;
     }
 }
