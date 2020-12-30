@@ -13,6 +13,8 @@ mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
 php symfony export:dr-xml $DR_CAMPAGNE Douane > /dev/null
 
+sed -i 's#<L1>1B001S 9,1B001S</L1>#<L1>1B001S 9</L1>#g' $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane.xml
+
 cp $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane.xml $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane.xml
 
 echo "[Voir les fichiers]($LINK)"
