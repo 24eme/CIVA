@@ -383,7 +383,7 @@ class ExportDRXml {
                                         if(!$vtsgn) {
                                             if($cepage->getDplc() > $cepage->getLies()) {
                                                 $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
-                                                $col_final['exploitant']['L16'] = $cepage->getDplc() + $cepage->getTotalVci();
+                                                $col_final['exploitant']['L16'] = $cepage->getDplc();
                                             }
 
                                             if($cepage->getDplc() > $cepage->getLies() && $cepage->getLies() && count($cepage->detail->toArray(true, false)) > 1) {
