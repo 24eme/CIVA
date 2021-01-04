@@ -466,6 +466,15 @@ class ExportDRXml {
                 }
             }
         }
+
+        // Goreterie™ on vire le total alsace blanc
+        $index = 0;
+        foreach($xml as $col) {
+            if ($col['L1'] === '1B001S ') { break; }
+            $index++;
+        }
+        unset($xml[$index]);
+
         $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
     }
 
