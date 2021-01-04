@@ -226,12 +226,6 @@ class ExportDRXml {
                                 }
                                 $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
 
-                                if($this->destinataire == self::DEST_DOUANE) {
-                                    if (in_array($appellation->getKey(), array('appellation_ALSACEBLANC', 'appellation_LIEUDIT')) && $cepage->getKey() == 'cepage_ED') {
-                                        continue;
-                                    }
-                                }
-
                                 $cols = array();
                                 foreach ($cepage->detail as $detail) {
 
