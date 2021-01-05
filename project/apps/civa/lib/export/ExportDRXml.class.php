@@ -557,6 +557,6 @@ class ExportDRXml {
             return $codeDouane."XX";
         }
 
-        return $noeud->getCodeDouane();
+        return strstr($noeud->getCodeDouane(), ',', true);
     }
 }
