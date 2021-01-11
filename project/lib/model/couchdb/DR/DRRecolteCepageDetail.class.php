@@ -53,6 +53,16 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->_set('superficie', $superficie);
     }
 
+    public function getDplcCaveParticuliere() {
+        if($this->getTotalVolumeAcheteurs() > 0) {
+
+            return 0;
+        }
+
+        return $this->dplc;
+    }
+
+
     public function getDplc() {
 
         return $this->volume_dplc;
