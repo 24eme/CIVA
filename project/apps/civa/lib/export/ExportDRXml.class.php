@@ -56,6 +56,72 @@ class ExportDRXml {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
+    protected function getColTotal($object, $total) {
+        $volume_revendique = $object->getVolumeRevendique();
+        $usages_industriels = $object->getUsagesIndustriels();
+        $vci = $object->getTotalVci();
+
+        $total['L1'] = $this->getCodeDouane($object);
+
+        $total['L3'] = 'B';
+        if(!array_key_exists('L4', $total)) {
+            $total['L4'] = 0;
+        }
+        $total['L4'] += $object->getTotalSuperficie();
+
+        if(!array_key_exists('exploitant', $total)) {
+            $total['exploitant'] = array();
+        }
+
+        if(!array_key_exists('L5', $total['exploitant'])) {
+            $total['exploitant']['L5'] = 0;
+        }
+        $total['exploitant']['L5'] += $object->getTotalVolume();
+
+        $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
+        $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
+        $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
+
+        if(!array_key_exists('L9', $total['exploitant'])) {
+            $total['exploitant']['L9'] = 0;
+        }
+        $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendusByType('negoces');
+        if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+          $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
+        }
+
+        if(!array_key_exists('L10', $total['exploitant'])) {
+            $total['exploitant']['L10'] = 0;
+        }
+        $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendusByType('negoces'); //Volume revendique non negoces
+        if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
+          $total['exploitant']['L10'] = $object->getTotalCaveParticuliere();
+        }
+
+        $total['exploitant']['L11'] = 0; //HS
+        $total['exploitant']['L12'] = 0; //HS
+        $total['exploitant']['L13'] = 0; //HS
+        $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
+        $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+        if ($l15 < 0) {
+            $l15 = 0;
+        }
+        if(!array_key_exists('L15', $total['exploitant'])) {
+            $total['exploitant']['L15'] = 0;
+        }
+        $total['exploitant']['L15'] += $l15; //Volume revendique
+        // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
+        if(!array_key_exists('L16', $total['exploitant'])) {
+            $total['exploitant']['L16'] = 0;
+        }
+        $total['exploitant']['L16'] += $usages_industriels + $vci; //DPLC
+        $total['exploitant']['L17'] = 0; //HS
+        $total['exploitant']['L18'] = 0; //HS
+        $total['exploitant']['L19'] = $vci; //HS
+
+        return $total;
+    }
+
     protected function create($dr) {
         $xml = array();
         $baliseachat = array();
@@ -78,6 +144,23 @@ class ExportDRXml {
                         continue;
                     }
                     $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
+
+                    if ($this->destinataire == self::DEST_DOUANE) {
+                      foreach ($couleurConfig->getCepages() as $cepageConfig) {
+                        if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
+                            continue;
+                        }
+                        $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
+                        foreach ($cepage->detail as $detail) {
+                          if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
+                            if (!isset($baliseachat[$m[0]])) {
+                              $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
+                            }
+                            $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
+                          }
+                        }
+                      }
+                    }
 
                     foreach($lieuConfig->getCouleurs() as $couleurConfig) {
                         if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
@@ -143,98 +226,18 @@ class ExportDRXml {
 
                                 // -------------- DEBUT ---------------
 
-                                if($appellation->getKey() == 'appellation_ALSACEBLANC') {
+                                if($appellation->getKey() == 'appellation_ALSACEBLANC' && $cepage->hasRecapitulatif()) {
                                     $object = $cepage;
                                     $objectChanged = true;
                                 }
 
                                 if($objectChanged) {
-                                    $volume_revendique = $object->getVolumeRevendique();
-                                    $usages_industriels = $object->getUsagesIndustriels();
-                                    $vci = $object->getTotalVci();
-
-                                    //Comme il y a plusieurs acheteurs par lignes, il faut passer par une structure intermédiaire
-                                    $acheteurs = array();
-                                    $keyTotal = $this->getCodeDouane($object);
                                     $total = array();
-                                    if(array_key_exists($keyTotal, $totals)) {
-                                        $total = $totals[$keyTotal];
+                                    if(array_key_exists($this->getCodeDouane($object), $totals)) {
+                                        $total = $totals[$this->getCodeDouane($object)];
                                     }
 
-                                    $total['L1'] = $this->getCodeDouane($object);
-
-                                    $total['L3'] = 'B';
-                                    if(!array_key_exists('L4', $total)) {
-                                        $total['L4'] = 0;
-                                    }
-                                    $total['L4'] += $object->getTotalSuperficie();
-
-                                    if(!array_key_exists('exploitant', $total)) {
-                                        $total['exploitant'] = array();
-                                    }
-
-                                    if(!array_key_exists('L5', $total['exploitant'])) {
-                                        $total['exploitant']['L5'] = 0;
-                                    }
-                                    $total['exploitant']['L5'] += $object->getTotalVolume();
-
-                                    $this->setAcheteursForXml($total['exploitant'], $object, 'negoces');
-                                    $this->setAcheteursForXml($total['exploitant'], $object, 'mouts');
-                                    $this->setAcheteursForXml($total['exploitant'], $object, 'cooperatives');
-
-                                    if(!array_key_exists('L9', $total['exploitant'])) {
-                                        $total['exploitant']['L9'] = 0;
-                                    }
-                                    $total['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $object->getTotalDontVciVendusByType('negoces');
-                                    if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
-                                      $total['exploitant']['L9'] = $object->getTotalCaveParticuliere();
-                                    }
-
-                                    if(!array_key_exists('L10', $total['exploitant'])) {
-                                        $total['exploitant']['L10'] = 0;
-                                    }
-                                    $total['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $object->getTotalDontVciVendusByType('negoces'); //Volume revendique non negoces
-                                    if(($object->getTotalDontVciVendusByType('negoces') != 0) && $this->destinataire == self::DEST_CIVA){
-                                      $total['exploitant']['L10'] = $object->getTotalCaveParticuliere();
-                                    }
-
-                                    $total['exploitant']['L11'] = 0; //HS
-                                    $total['exploitant']['L12'] = 0; //HS
-                                    $total['exploitant']['L13'] = 0; //HS
-                                    $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-                                    $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
-                                    if ($l15 < 0) {
-                                        $l15 = 0;
-                                    }
-                                    if(!array_key_exists('L15', $total['exploitant'])) {
-                                        $total['exploitant']['L15'] = 0;
-                                    }
-                                    $total['exploitant']['L15'] += $l15; //Volume revendique
-                                    // Modifications suite au retour des douanes le total dplc total et celui du rendement appellation et plus de la somme pour les alsace blanc
-                                    if(!array_key_exists('L16', $total['exploitant'])) {
-                                        $total['exploitant']['L16'] = 0;
-                                    }
-                                    $total['exploitant']['L16'] += $usages_industriels + $vci; //DPLC
-                                    $total['exploitant']['L17'] = 0; //HS
-                                    $total['exploitant']['L18'] = 0; //HS
-                                    $total['exploitant']['L19'] = $vci; //HS
-
-                                    if ($this->destinataire == self::DEST_DOUANE) {
-                                      foreach ($couleurConfig->getCepages() as $cepageConfig) {
-                                        if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
-                                            continue;
-                                        }
-                                        $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
-                                        foreach ($cepage->detail as $detail) {
-                                          if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
-                                            if (!isset($baliseachat[$m[0]])) {
-                                              $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
-                                            }
-                                            $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
-                                          }
-                                        }
-                                      }
-                                    }
+                                    $total = $this->getColTotal($object, $total);
                                 }
 
                                 // ----------- FIN -----------
@@ -382,7 +385,7 @@ class ExportDRXml {
                                 }
 
                                 } else {
-                                    $xml[] = $total;
+                                    $totals[$total['L1']] = $total;
                                 }
 
                                 if ($this->destinataire == self::DEST_DOUANE) {
@@ -473,14 +476,17 @@ class ExportDRXml {
                         }
 
                         if($this->destinataire == self::DEST_CIVA) {
-                            $totals[$keyTotal] = $total;
+                            $totals[$total['L1']] = $total;
                         }
                     }
 
+                    if($this->destinataire == self::DEST_CIVA && $appellation->getKey() == 'appellation_ALSACEBLANC' && !$lieu->hasRecapitulatif()) {
+                        $totals[$this->getCodeDouane($lieu)] = $this->getColTotal($lieu, array());
+                    }
                 }
 
             }
-            if(!in_array($appellation->getKey(), array('appellation_ALSACEBLANC', 'appellation_GRDCRU', 'appellation_VINTABLE')) && $this->destinataire == self::DEST_CIVA) {
+            if(!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && $this->destinataire == self::DEST_CIVA) {
                 foreach($totals as $total) {
                     $xml[] = $total;
                 }
