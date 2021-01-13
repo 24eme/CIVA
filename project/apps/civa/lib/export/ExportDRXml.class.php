@@ -63,6 +63,26 @@ class ExportDRXml {
 
         $total['L1'] = $this->getCodeDouane($object);
 
+        if($object instanceof DRRecolteCepage) {
+            $acheteursConfig = AcheteurClient::getInstance()->getAcheteurs();
+            $denominations = array();
+            foreach($object->detail as $detail) {
+                $denomination = $detail->denomination;
+                foreach($acheteursConfig as $cvi => $acheteur) {
+                    $denomination = str_replace($acheteur['nom'], "", $denomination);
+                }
+                $denomination = preg_replace("/^ /", "", $denomination);
+                $denomination = preg_replace("/ $/", "", $denomination);
+                $denominations[$denomination] = $denomination;
+            }
+
+            if(count($denominations) == 1) {
+                foreach($denominations as $denomination) {
+                    $total['mentionVal'] = $denomination;
+                }
+            }
+        }
+
         $total['L3'] = 'B';
         if(!array_key_exists('L4', $total)) {
             $total['L4'] = 0;
@@ -145,23 +165,6 @@ class ExportDRXml {
                     }
                     $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
 
-                    if ($this->destinataire == self::DEST_DOUANE) {
-                      foreach ($couleurConfig->getCepages() as $cepageConfig) {
-                        if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
-                            continue;
-                        }
-                        $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
-                        foreach ($cepage->detail as $detail) {
-                          if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
-                            if (!isset($baliseachat[$m[0]])) {
-                              $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
-                            }
-                            $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
-                          }
-                        }
-                      }
-                    }
-
                     foreach($lieuConfig->getCouleurs() as $couleurConfig) {
                         if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
                             continue;
@@ -173,6 +176,23 @@ class ExportDRXml {
                         if ($lieuConfig->hasManyCouleur()) {
                             $object = $couleur;
                             $objectChanged = true;
+                        }
+
+                        if ($this->destinataire == self::DEST_DOUANE) {
+                          foreach ($couleurConfig->getCepages() as $cepageConfig) {
+                            if (!$dr->exist(HashMapper::inverse($cepageConfig->getHash()))) {
+                                continue;
+                            }
+                            $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
+                            foreach ($cepage->detail as $detail) {
+                              if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
+                                if (!isset($baliseachat[$m[0]])) {
+                                  $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
+                                }
+                                $baliseachat[$m[0]]['achat']['volume'] += $detail->volume;
+                              }
+                            }
+                          }
                         }
 
                         if($this->destinataire == self::DEST_DOUANE) {
@@ -263,6 +283,17 @@ class ExportDRXml {
                                         $col['mentionVal'] = $detail->denomination;
                                     }
 
+                                    if($col['mentionVal']) {
+                                        $acheteursConfig = AcheteurClient::getInstance()->getAcheteurs();
+                                        $denomination = $col['mentionVal'];
+                                        foreach($acheteursConfig as $cvi => $acheteur) {
+                                            $denomination = str_replace($acheteur['nom'], "", $denomination);
+                                        }
+                                        $denomination = preg_replace("/^ /", "", $denomination);
+                                        $denomination = preg_replace("/ $/", "", $denomination);
+                                        $col['mentionVal'] = $denomination;
+                                    }
+
 
                                     $col['L4'] = $detail->superficie;
 
@@ -290,7 +321,7 @@ class ExportDRXml {
                                     $col['exploitant']['L13'] = 0; //HS
                                     $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
                                     if (count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_CIVA) {
-                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts') - $cepage->getTotalVci(); //Volume revendique
                                         if ($col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
@@ -301,14 +332,14 @@ class ExportDRXml {
                                         }
                                         $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } elseif(count($cepage->detail->toArray(true, false)) < 2 && $this->destinataire == self::DEST_DOUANE && $mention->getKey() != 'mention') {
-                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        $col['exploitant']['L15'] = $cepage->getVolumeRevendique() - $cepage->getTotalVolumeAcheteurs('negoces') - $cepage->getTotalVolumeAcheteurs('mouts') - $cepage->getTotalVci(); //Volume revendique
                                         if ($col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
                                         $col['exploitant']['L16'] = $cepage->getUsagesIndustriels() + $cepage->getTotalVci(); //DPLC
                                         $col['exploitant']['L19'] = $cepage->getTotalVci();
                                     } else {
-                                        $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts'); //Volume revendique
+                                        $col['exploitant']['L15'] = $detail->getVolumeRevendique() - $detail->getTotalVolumeAcheteurs('negoces') - $detail->getTotalVolumeAcheteurs('mouts') - $detail->getTotalVci(); //Volume revendique
                                         if ($this->destinataire != self::DEST_DOUANE && $col['exploitant']['L15'] < 0) {
                                             $col['exploitant']['L15'] = 0;
                                         }
@@ -384,8 +415,11 @@ class ExportDRXml {
                                     }
                                 }
 
-                                } else {
+                                } elseif($this->destinataire == self::DEST_CIVA) {
                                     $totals[$total['L1']] = $total;
+                                } elseif($this->destinataire == self::DEST_DOUANE) {
+                                    $xml[] = $total;
+                                    $total = null;
                                 }
 
                                 if ($this->destinataire == self::DEST_DOUANE) {
@@ -396,7 +430,9 @@ class ExportDRXml {
                                             unset($groupe_cols[0]);
                                         }
                                         foreach($groupe_cols as $col) {
-                                            unset($col_final['mentionVal']);
+                                            if($col['mentionVal'] != $col_final['mentionVal']) {
+                                                $col_final['mentionVal'] = null;
+                                            }
                                             if ($cepage->getTotalVolume() != 0) {
                                                 unset($col_final['motifSurfZero']);
                                             }
@@ -405,7 +441,7 @@ class ExportDRXml {
 
                                         if(!$vtsgn) {
                                             if($cepage->getDplc() > $cepage->getLies()) {
-                                                $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplc();
+                                                $col_final['exploitant']['L15'] = $col_final['exploitant']['L15'] + $cepage->getLies() - $cepage->getDplcWithVci();
                                                 $col_final['exploitant']['L16'] = $cepage->getDplcWithVci();
                                             }
 
@@ -524,6 +560,7 @@ class ExportDRXml {
     }
 
     public function getCodeDouane($noeud) {
+        $codeDouane = preg_replace("/,.*/", "", $noeud->getCodeDouane());
 
         if ($noeud instanceof DRRecolteCepageDetail && $noeud->getCepage()->getAppellation()->getKey() == 'appellation_VINTABLE' && $noeud->getCepage()->getKey() == 'cepage_BL') {
 
@@ -544,11 +581,10 @@ class ExportDRXml {
         }
 
         if ($this->destinataire == self::DEST_DOUANE) {
-          return $noeud->getCodeDouane();
+          return $codeDouane;
         }
 
         if($noeud instanceof DRRecolteCepageDetail && ($noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_COMMUNALE" || $noeud->getParent()->getParent()->getAppellation()->getKey() == "appellation_LIEUDIT")) {
-            $codeDouane = $noeud->getCodeDouane();
             if (strlen($codeDouane) > 6) {
               return $codeDouane;
             }
@@ -575,6 +611,6 @@ class ExportDRXml {
             return $codeDouane."XX";
         }
 
-        return preg_replace("/,.*/", "", $noeud->getCodeDouane());
+        return $codeDouane;
     }
 }
