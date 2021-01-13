@@ -81,10 +81,6 @@ class ExportDRXml {
                     $total['mentionVal'] = $denomination;
                 }
             }
-
-            if(!$total['mentionVal']) {
-                unset($total['mentionVal']);
-            }
         }
 
         $total['L3'] = 'B';
@@ -298,10 +294,6 @@ class ExportDRXml {
                                         $col['mentionVal'] = $denomination;
                                     }
 
-                                    if(!$col['mentionVal']) {
-                                        unset($col['mentionVal']);
-                                    }
-
                                     $col['L4'] = $detail->superficie;
 
                                     $col['exploitant'] = array();
@@ -425,6 +417,9 @@ class ExportDRXml {
                                 } elseif($this->destinataire == self::DEST_CIVA) {
                                     $totals[$total['L1']] = $total;
                                 } elseif($this->destinataire == self::DEST_DOUANE) {
+                                    if(!$total['mentionVal']) {
+                                        unset($total['mentionVal']);
+                                    }
                                     $xml[] = $total;
                                     $total = null;
                                 }
@@ -481,17 +476,18 @@ class ExportDRXml {
                                             }
                                         } else {
                                             uksort($col_final['exploitant'], 'exportDRXml::sortXML');
-                                            if(!isset($col_final['mentionVal'])) {
-                                                unset($col_final['mentionVal']);
+                                            if(!$col_final['mentionVal']) {
+                                                unset($col_final['mentionVal'])
                                             }
                                             $xml[] = $col_final;
                                         }
                                     }
-
-
                                 } elseif($this->destinataire == self::DEST_CIVA) {
                                     foreach($cols as $groupe_cols) {
                                         foreach($groupe_cols as $col) {
+                                            if(!$col['mentionVal']) {
+                                                unset($col['mentionVal'])
+                                            }
                                             $xml[] = $col;
                                         }
                                     }
@@ -520,6 +516,9 @@ class ExportDRXml {
                             }
                         }
                         if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE && $total) {
+                            if(!$total['mentionVal']) {
+                                unset($total['mentionVal'])
+                            }
                             $xml[] = $total;
                         }
 
@@ -536,6 +535,9 @@ class ExportDRXml {
             }
             if(!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && $this->destinataire == self::DEST_CIVA) {
                 foreach($totals as $total) {
+                    if(!$total['mentionVal']) {
+                        unset($total['mentionVal'])
+                    }
                     $xml[] = $total;
                 }
             }
