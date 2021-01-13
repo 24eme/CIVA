@@ -81,6 +81,10 @@ class ExportDRXml {
                     $total['mentionVal'] = $denomination;
                 }
             }
+
+            if(!$total['mentionVal']) {
+                unset($total['mentionVal']);
+            }
         }
 
         $total['L3'] = 'B';
@@ -294,6 +298,9 @@ class ExportDRXml {
                                         $col['mentionVal'] = $denomination;
                                     }
 
+                                    if(!$col['mentionVal']) {
+                                        unset($col['mentionVal']);
+                                    }
 
                                     $col['L4'] = $detail->superficie;
 
@@ -474,9 +481,14 @@ class ExportDRXml {
                                             }
                                         } else {
                                             uksort($col_final['exploitant'], 'exportDRXml::sortXML');
+                                            if(!isset($col_final['mentionVal'])) {
+                                                unset($col_final['mentionVal']);
+                                            }
                                             $xml[] = $col_final;
                                         }
                                     }
+
+
                                 } elseif($this->destinataire == self::DEST_CIVA) {
                                     foreach($cols as $groupe_cols) {
                                         foreach($groupe_cols as $col) {
