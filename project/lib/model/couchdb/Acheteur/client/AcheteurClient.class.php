@@ -83,6 +83,21 @@ class AcheteurClient extends acCouchdbClient {
         return $this->_acheteurs[$type];
     }
 
+    public function getAcheteurs() {
+        if (is_null($this->_acheteurs)) {
+            $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
+        }
+
+        $acheteurs = array();
+        foreach($this->_acheteurs as $type => $items) {
+            foreach($items as $cvi => $acheteur) {
+                $acheteurs[$cvi] = $acheteur;
+            }
+        }
+
+        return $acheteurs;
+    }
+
     public function getNegoces() {
         return $this->loadAcheteursList('negoces');
     }
