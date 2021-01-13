@@ -62,6 +62,7 @@ class ExportDRXml {
         $vci = $object->getTotalVci();
 
         $total['L1'] = $this->getCodeDouane($object);
+        $total['L3'] = 'B';
 
         if($object instanceof DRRecolteCepage) {
             $acheteursConfig = AcheteurClient::getInstance()->getAcheteurs();
@@ -83,7 +84,7 @@ class ExportDRXml {
             }
         }
 
-        $total['L3'] = 'B';
+
         if(!array_key_exists('L4', $total)) {
             $total['L4'] = 0;
         }
