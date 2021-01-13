@@ -486,10 +486,10 @@ class ExportDRXml {
                                 }
                             }
                         }
-
-                        uksort($total['exploitant'], 'exportDRXml::sortXML');
-
-                        if ($colass) {
+                        if($total) {
+                            uksort($total['exploitant'], 'exportDRXml::sortXML');
+                        }
+                        if ($colass && $total) {
                             $total['colonneAss'] = $colass;
                         }
 
@@ -507,7 +507,7 @@ class ExportDRXml {
                                 }
                             }
                         }
-                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE) {
+                        if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE && $total) {
                             $xml[] = $total;
                         }
 
