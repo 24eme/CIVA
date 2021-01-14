@@ -221,6 +221,7 @@ class ExportDRXml {
                         !$couleurConfig->getCepages()->getFirst()->hasVtsgn()*/) {
                             $cepage = $couleur->getCepages()->getFirst();
                             //$total['mentionVal'] = '';
+                            $total = $this->getColTotal($object, $total);
                             foreach ($cepage->detail as $detail) {
                                 if(count($cepage->detail) == 1) {
                                     $detail = $cepage->detail[0];
