@@ -140,6 +140,18 @@ class ExportDRXml {
         $total['exploitant']['L18'] = 0; //HS
         $total['exploitant']['L19'] = $vci; //HS
 
+        if (!($object->getTotalVolume() > 0) && $object->getTotalSuperficie() > 0) {
+            foreach($object->getProduitsDetails() as $detail) {
+                if ($detail->exist('motif_non_recolte') &&  $detail->motif_non_recolte) {
+                    $total['motifSurfZero'] = strtoupper($detail->motif_non_recolte);
+                    break;
+                }
+            }
+            if(!isset($total['motifSurfZero'])) {
+                $total['motifSurfZero'] = 'PC';
+            }
+        }
+
         return $total;
     }
 
