@@ -534,6 +534,7 @@ class ExportDRXml {
                                 unset($total['mentionVal']);
                             }
                             $xml[] = $total;
+                            $total = array();
                         }
 
                         if($this->destinataire == self::DEST_CIVA) {
