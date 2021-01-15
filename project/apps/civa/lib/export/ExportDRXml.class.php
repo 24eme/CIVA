@@ -123,7 +123,7 @@ class ExportDRXml {
         $total['exploitant']['L12'] = 0; //HS
         $total['exploitant']['L13'] = 0; //HS
         $total['exploitant']['L14'] = 0; //Vin de table + Rebeches
-        $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+        $l15 = $volume_revendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts') + $object->getTotalDontVciVendusByType('negoces') + $object->getTotalDontVciVendusByType('mouts');
         if ($l15 < 0) {
             $l15 = 0;
         }
