@@ -117,8 +117,6 @@ class ExportDRXml {
         $this->setAcheteursForXml($col['exploitant'], $object, 'mouts');
         $this->setAcheteursForXml($col['exploitant'], $object, 'cooperatives');
 
-        //$vciNegoce = $object->getTotalDontVciVendusByType('negoces');
-
         $vciNegoce = $this->getRatioRecap($object, "getTotalDontVciVendusByType", array('negoces'));
         $vciMouts = $this->getRatioRecap($object, "getTotalDontVciVendusByType", array('mouts'));
 
@@ -139,17 +137,27 @@ class ExportDRXml {
 
         $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array());
         $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
-        $vci = $object->getTotalVci();
+        $venteNegoce = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('negoces'));
+        $venteMouts = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('mouts'));
+        $vci = $this->getRatioRecap($object, "getTotalVci", array());
 
-        $l15 = $volumeRevendique - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts') + $vciNegoce + $vciMouts;
-        if ($l15 < 0) {
-            $l15 = 0;
-        }
+        $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
+
         $col['exploitant']['L15'] = $l15; //Volume revendique
+
+        $col['exploitant']['L16'] = $usagesIndustriels + $vci;
+        $col['exploitant']['L17'] = 0; //HS
+        $col['exploitant']['L18'] = 0; //HS
+        $col['exploitant']['L19'] = 0;
+        if($vci) {
+            $col['exploitant']['L19'] = $vci;
+        }
 
         if (preg_match("|cepage_RB|", $object->getHash())) {
             $col['exploitant']['L14'] = $object->getTotalVolume();
             $col['exploitant']['L15'] = 0;
+            $col['exploitant']['L16'] = 0;
+            $col['exploitant']['L19'] = 0;
         }
         if (preg_match("|appellation_VINTABLE|", $object->getHash())) {
             $l14 = $object->getTotalVolume();
@@ -167,13 +175,6 @@ class ExportDRXml {
             }
         }
 
-        $col['exploitant']['L16'] = $usagesIndustriels + $vci;
-        $col['exploitant']['L17'] = 0; //HS
-        $col['exploitant']['L18'] = 0; //HS
-        $col['exploitant']['L19'] = 0;
-        if($vci) {
-            $col['exploitant']['L19'] = $vci;
-        }
         uksort($col['exploitant'], 'exportDRXml::sortXML');
 
         if (!$object->getTotalVolume() && $object->getTotalSuperficie() > 0) {
@@ -199,6 +200,11 @@ class ExportDRXml {
     }
 
     public function getRatioRecap($object, $function, $args) {
+        if(preg_match("/cepage_RB/", $object->getHash())) {
+
+            return 0;
+        }
+
         $noeudRecap = $object->getNoeudRecapitulatif();
         if(!$noeudRecap) {
             $noeudRecap = $object;
@@ -211,7 +217,7 @@ class ExportDRXml {
             return 0;
         }
 
-        return round(call_user_func_array(array($objectTotal, $function), $args) / $ratio, 2);
+        return call_user_func_array(array($objectTotal, $function), $args) / $ratio;
     }
 
     protected function create($dr) {
