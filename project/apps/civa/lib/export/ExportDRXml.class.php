@@ -145,13 +145,11 @@ class ExportDRXml {
         $l16 = $usagesIndustriels + $vci;
         if($l15 < 0) {
             $l15 = 0;
-            $l16 = 0;
+            $l16 = $vci;
         }
 
         $col['exploitant']['L15'] = $l15; //Volume revendique
         $col['exploitant']['L16'] = $l16;
-
-
 
         $col['exploitant']['L17'] = 0; //HS
         $col['exploitant']['L18'] = 0; //HS
