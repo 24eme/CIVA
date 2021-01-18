@@ -142,10 +142,17 @@ class ExportDRXml {
         $vci = $this->getRatioRecap($object, "getTotalVci", array());
 
         $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
+        $l16 = $usagesIndustriels + $vci;
+        if($l15 < 0) {
+            $l15 = 0;
+            $l16 = 0;
+        }
 
         $col['exploitant']['L15'] = $l15; //Volume revendique
+        $col['exploitant']['L16'] = $l16;
 
-        $col['exploitant']['L16'] = $usagesIndustriels + $vci;
+
+
         $col['exploitant']['L17'] = 0; //HS
         $col['exploitant']['L18'] = 0; //HS
         $col['exploitant']['L19'] = 0;
