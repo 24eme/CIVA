@@ -12,6 +12,11 @@ class DRRecolte extends BaseDRRecolte {
         return $this->add('certification')->add('genre');
     }
 
+    public function getNoeudRecapitulatif() {
+
+        return null;
+    }
+
     public function getAppellations() {
 
         return $this->getNoeudAppellations()->getAppellations();

@@ -5,6 +5,16 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     protected $total_superficie = false;
     protected $total_vci = false;
 
+    public function getProduitsDetails() {
+
+        return array($this->getHash() => $this);
+    }
+
+    public function getNoeudRecapitulatif() {
+
+        return $this->getCepage()->getNoeudRecapitulatif();
+    }
+
     public function getConfig() {
         return $this->getCepage()->getConfig();
     }
