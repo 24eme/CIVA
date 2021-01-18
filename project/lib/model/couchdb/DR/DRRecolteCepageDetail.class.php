@@ -181,6 +181,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->_storage[$key];
     }
 
+    public function getTotalDontVciVendusByType($type) {
+
+        return 0;
+    }
+
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
         $key = "total_volume_acheteurs_".$type;
         if (!isset($this->_storage[$key])) {
