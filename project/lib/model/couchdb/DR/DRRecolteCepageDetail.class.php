@@ -121,6 +121,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return round($this->cave_particuliere + $this->getVolumeAcheteurs('mouts'), 2);
     }
 
+    public function getDepassementGlobal() {
+
+        return $this->lies;
+    }
+
     public function getTotalDontDplcVendus() {
 
         return null;
