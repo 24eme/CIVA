@@ -136,16 +136,16 @@ class ExportDRXml {
         $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
 
         $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array());
-        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
+        $usagesIndustriels = $this->getRatioRecap($object, 'getDepassementGlobal', array());
         $venteNegoce = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('negoces'));
         $venteMouts = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('mouts'));
         $vci = $this->getRatioRecap($object, "getTotalVci", array());
 
         $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
-        $l16 = $usagesIndustriels + $vci;
         if($l15 < 0) {
             $l15 = 0;
         }
+        $l16 = $usagesIndustriels;
 
         $col['exploitant']['L15'] = $l15; //Volume revendique
         $col['exploitant']['L16'] = $l16;
@@ -163,6 +163,7 @@ class ExportDRXml {
             $col['exploitant']['L16'] = 0;
             $col['exploitant']['L19'] = 0;
         }
+
         if (preg_match("|appellation_VINTABLE|", $object->getHash())) {
             $l14 = $object->getTotalVolume();
             if ($l14 < 0) {
