@@ -17,6 +17,7 @@ class exportDRXmlTask extends sfBaseTask
       new sfCommandOption('docid', null, sfCommandOption::PARAMETER_REQUIRED, 'one document id', ''),
       // add your own options here
       new sfCommandOption('id', null, sfCommandOption::PARAMETER_OPTIONAL, 'Limite la génération à une DR'),
+      new sfCommandOption('check', null, sfCommandOption::PARAMETER_OPTIONAL, 'Vérification de cohérence comme celles effectuées par les douanes'),
     ));
 
     $this->namespace        = 'export';
@@ -47,7 +48,7 @@ EOF;
         $dr = acCouchdbManager::getClient("DR")->find($options['id']);
         $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
         echo $xml->getContent();
-        if(count($xml->getErreurs()) > 0) {
+        if(count($xml->getErreurs()) > 0 && isset($options['check'])) {
             echo "--------------------------------------------------------------------\n";
             echo "Erreurs :\n";
             foreach($xml->getErreurs() as $erreur) {
@@ -97,19 +98,25 @@ EOF;
             }
 
             $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
+            if(isset($options['check'])) {
+                foreach($xml->getErreurs() as $erreur) {
+                    echo $dr->_id.";".$erreur['col']['L1'].";".$erreur['message']."\n";
+                }
+                continue;
+            }
             file_put_contents($filename, $xml->getContent(), FILE_APPEND);
             $this->logSection($dr->_id, 'xml generated');
             $nb_exported++;
-            unset($xml);
-            unset($dr);
     }
 
-
+    if(isset($options['check'])) {
+        return;
+    }
     $this->logSection("nb exported", $nb_exported);
-    
+
     file_put_contents($filename, '</listeDecRec>', FILE_APPEND);
     $this->logSection("done", $filename);
-    
+
   }
 
   protected function getFileDir() {
