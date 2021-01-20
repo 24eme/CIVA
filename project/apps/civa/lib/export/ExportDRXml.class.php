@@ -56,8 +56,11 @@ class ExportDRXml {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
-    public function getCol($object) {
-        $col = array();
+    public function getNoeudRecap($object) {
+        if(preg_match("/appellation_GRDCRU/", $object->getHash()) && preg_match("/cepage/", $object->getHash())) {
+            echo $object->getHash()."\n";
+            return $object->getCepage();
+        }
 
         $noeudRecap = $object->getNoeudRecapitulatif();
         if(!$noeudRecap && $object instanceof DRRecolteCepageDetail) {
@@ -67,6 +70,14 @@ class ExportDRXml {
             $noeudRecap = $object;
 
         }
+
+        return $noeudRecap;
+    }
+
+    public function getCol($object) {
+        $col = array();
+
+        $noeudRecap = $this->getNoeudRecap($object);
 
         $appellation = $noeudRecap->getAppellation();
 
@@ -210,11 +221,7 @@ class ExportDRXml {
             return 0;
         }
 
-        $noeudRecap = $object->getNoeudRecapitulatif();
-        if(!$noeudRecap) {
-            $noeudRecap = $object;
-        }
-        $objectTotal = $noeudRecap;
+        $objectTotal = $this->getNoeudRecap($object);
         $ratio = ($object->getTotalVolume()) ? $objectTotal->getTotalVolume() / $object->getTotalVolume() : 0;
 
         if(!$ratio) {
