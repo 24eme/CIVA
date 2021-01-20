@@ -1,11 +1,11 @@
 <?php
 
 class VracMailer {
-	
+
 	private static $_instance = null;
-	
+
 	public function __construct() { }
-	
+
 	public static function getInstance()
     {
        	if(is_null(self::$_instance)) {
@@ -13,8 +13,8 @@ class VracMailer {
 		}
 		return self::$_instance;
     }
-    
-    public function demandeSignature($vrac, $destinataire) 
+
+    public function demandeSignature($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -26,8 +26,8 @@ class VracMailer {
 
         return self::getMailer()->send($message);
     }
-    
-    public function confirmationSignature($vrac, $destinataire) 
+
+    public function confirmationSignature($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
