@@ -60,14 +60,14 @@ EOF;
 
     ini_set('memory_limit', '2500M');
 
-    $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'.xml';
-    if (file_exists($filename)) {
-        unlink($filename);
+    if(!isset($options['check'])) {
+        $filename = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'.xml';
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+        file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>\n", FILE_APPEND);
     }
-
     $nb_exported = 0;
-
-    file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>\n", FILE_APPEND);
 
     if ($options['docid']) {
         $dr_ids = array($options['docid']);
