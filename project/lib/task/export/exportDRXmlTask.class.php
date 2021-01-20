@@ -47,6 +47,13 @@ EOF;
         $dr = acCouchdbManager::getClient("DR")->find($options['id']);
         $xml = new ExportDRXml($dr, array($this, 'getPartial'), $arguments['destinataire']);
         echo $xml->getContent();
+        if(count($xml->getErreurs()) > 0) {
+            echo "--------------------------------------------------------------------\n";
+            echo "Erreurs :\n";
+            foreach($xml->getErreurs() as $erreur) {
+                echo "- ".$erreur['col']['L1'].":".$erreur['message']."\n";
+            }
+        }
         return;
     }
 

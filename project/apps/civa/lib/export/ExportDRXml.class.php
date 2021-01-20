@@ -8,6 +8,7 @@ class ExportDRXml {
     protected $content = null;
     protected $partial_function = null;
     protected $destinataire = null;
+    protected $erreurs = array();
 
     public static function sortXML($a, $b) {
         $a = preg_replace('/L/', '', $a);
@@ -218,6 +219,50 @@ class ExportDRXml {
         return $col;
     }
 
+    public function addCol($col, &$xml) {
+        $xml[] = $col;
+        $this->checkCol($col);
+    }
+
+    public function checkCol($col) {
+        $L6 = 0;
+        $L7 = 0;
+        $L8 = 0;
+        foreach($col['exploitant'] as $key => $item) {
+            if(preg_match('/^L6/', $key)) {
+                $L6 += $item['volume'];
+            }
+            if(preg_match('/^L7/', $key)) {
+                $L7 += $item['volume'];
+            }
+            if(preg_match('/^L8/', $key)) {
+                $L8 += $item['volume'];
+            }
+        }
+
+        if($col['exploitant']['L19'] > $col['exploitant']['L16']) {
+            $this->erreurs[] = array("message" => "[ER128E] Le volume déclaré en ligne 19 «VCI» (exploitant) ne peut être supérieur au volume déclaré en ligne 16 «Volumes à éliminer» (exploitant). Merci de modifier les volumes déclarés.", "col" => $col);
+        }
+
+        if(round($col['exploitant']['L14'] + $col['exploitant']['L15'] + $col['exploitant']['L16'] + $col['exploitant']['L17'], 2) < round($col['exploitant']['L10'], 2)) {
+            $this->erreurs[] = array("message" => "[ER131] Vous avez déclaré avoir produit moins de volume que vous n'en avez mis en vinification. Merci de vérifier les volumes déclarés en ligne 10, 14, 15, 16 et 17.", "col" => $col);
+        }
+
+        if(round($col['exploitant']['L5'], 2) != round($L6 + $L7 + $L8 + $col['exploitant']['L9'], 2)) {
+            $this->erreurs[] = array("message" => "[ER147] Le volume déclaré en ligne 5 (exploitant) doit être égal à la somme des volumes déclarés en lignes 6+7+8+9 (exploitant). Merci de modifier les volumes déclarés.", "col" => $col);
+        }
+
+        if(round($col['exploitant']['L5'], 2) == round($L6 + $L7, 2) && round($L8 + $col['exploitant']['L9'] + $col['exploitant']['L10'] + $col['exploitant']['L11'] + $col['exploitant']['L12'] + $col['exploitant']['L13'] + $col['exploitant']['L14'] + $col['exploitant']['L15'] + $col['exploitant']['L17'] + $col['exploitant']['L18'] + $col['exploitant']['L19'], 2) > 0) {
+            $this->erreurs[] = array("message" => "[ER44] Si toute la récolte  est vendue alors les rubriques L8,L9, L10,L11, L12, L13, L14, L15, L17, L18 et L19 ne doivent pas être servies ou doivent être à zéro.", "col" => $col);
+        }
+
+    }
+
+    public function getErreurs() {
+
+        return $this->erreurs;
+    }
+
     public function getRatioRecap($object, $function, $args) {
         if(preg_match("/cepage_RB/", $object->getHash())) {
 
@@ -362,7 +407,7 @@ class ExportDRXml {
                                     if(!$total['mentionVal']) {
                                         unset($total['mentionVal']);
                                     }
-                                    $xml[] = $total;
+                                    $this->addCol($total, $xml);
                                     $total = null;
                                 }
 
@@ -402,7 +447,7 @@ class ExportDRXml {
                                             if(!$col_final['mentionVal']) {
                                                 unset($col_final['mentionVal']);
                                             }
-                                            $xml[] = $col_final;
+                                            $this->addCol($col_final, $xml);
                                         }
                                     }
                                 } elseif($this->destinataire == self::DEST_CIVA) {
@@ -411,7 +456,7 @@ class ExportDRXml {
                                             if(!$col['mentionVal']) {
                                                 unset($col['mentionVal']);
                                             }
-                                            $xml[] = $col;
+                                            $this->addCol($col, $xml);
                                         }
                                     }
                                 }
@@ -429,12 +474,12 @@ class ExportDRXml {
                                 if ($col_total_cremant_blanc) {
                                     $col_total_cremant_blanc['L1'] = '1B001M';
                                     uksort($col_total_cremant_blanc['exploitant'], 'exportDRXml::sortXML');
-                                    $xml[] = $col_total_cremant_blanc;
+                                    $this->addCol($col_total_cremant_blanc, $xml);
                                 }
                                 if ($col_total_cremant_rose) {
                                     $col_total_cremant_rose['L1'] = '1S001M';
                                     uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
-                                    $xml[] = $col_total_cremant_rose;
+                                    $this->addCol($col_total_cremant_rose, $xml);
                                 }
                             }
                         }
@@ -442,7 +487,7 @@ class ExportDRXml {
                             if(!$total['mentionVal']) {
                                 unset($total['mentionVal']);
                             }
-                            $xml[] = $total;
+                            $this->addCol($total, $xml);
                             $total = array();
                         }
 
@@ -462,7 +507,7 @@ class ExportDRXml {
                     if(!$total['mentionVal']) {
                         unset($total['mentionVal']);
                     }
-                    $xml[] = $total;
+                    $this->addCol($total, $xml);
                 }
             }
         }
