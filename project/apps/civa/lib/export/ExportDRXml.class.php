@@ -58,7 +58,10 @@ class ExportDRXml {
 
     public function getNoeudRecap($object) {
         if(preg_match("/appellation_GRDCRU/", $object->getHash()) && preg_match("/cepage/", $object->getHash())) {
-            echo $object->getHash()."\n";
+            return $object->getCepage();
+        }
+
+        if(preg_match("/appellation_CREMANT/", $object->getHash()) && preg_match("/cepage/", $object->getHash())) {
             return $object->getCepage();
         }
 
