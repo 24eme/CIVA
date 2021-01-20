@@ -81,12 +81,17 @@ class VracMailer {
     {
         $from = self::getFrom();
         $to = array($destinataire);
+				$cc = array(sfConfig::get('app_email_reply_to') => sfConfig::get('app_email_from_name'));
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body);
-
+				$message = Swift_Message::newInstance()
+		  					->setFrom($from)
+		  					->setTo($to)
+		  					->setCc($cc)
+		  					->setSubject($subject)
+		  					->setBody($body);
         return self::getMailer()->send($message);
     }
 
