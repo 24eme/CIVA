@@ -470,7 +470,7 @@ class ExportDRXml {
                                 $col_total_cremant_rose = $this->getCol($lieu->get('couleur/cepage_PN'));
                                 unset($col_total_cremant_rose['mentionVal']);
                                 $col_total_cremant_rose['L1'] = '1S001M';
-                                $col_total_cremant_rose['exploitant']['L16'] = 0;
+                                $col_total_cremant_rose['exploitant']['L16'] = $lieu->get('couleur/cepage_PN')->getDepassementGlobal();
                                 $col_total_cremant_rose['exploitant']['L19'] = 0;
                                 uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
                                 $this->addCol($col_total_cremant_rose, $xml);
@@ -481,7 +481,7 @@ class ExportDRXml {
                             $col_total_cremant_blanc = $this->getCol($couleur);
                             unset($col_total_cremant_blanc['mentionVal']);
                             $col_total_cremant_blanc['L1'] = '1B001M';
-                            $col_total_cremant_blanc['exploitant']['L16'] = 0;
+                            $col_total_cremant_blanc['exploitant']['L16'] = $couleur->getDepassementGlobal();
                             $col_total_cremant_blanc['exploitant']['L19'] = 0;
                             if($col_total_cremant_rose) {
                                 $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_total_cremant_rose, "-");
