@@ -36,7 +36,7 @@ class ExportDRXml {
             }
             $item['volume'] += $volume;
             if($type == 'negoces' && $this->destinataire == self::DEST_DOUANE) {
-                $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCvi($type, $cvi);
+                $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCviRatio($type, $cvi);
             }
 
             $xml[$key] = $item;
@@ -136,8 +136,8 @@ class ExportDRXml {
         $this->setAcheteursForXml($col['exploitant'], $object, 'mouts');
         $this->setAcheteursForXml($col['exploitant'], $object, 'cooperatives');
 
-        $vciNegoce = $this->getRatioRecap($object, "getTotalDontVciVendusByType", array('negoces'));
-        $vciMouts = $this->getRatioRecap($object, "getTotalDontVciVendusByType", array('mouts'));
+        $vciNegoce = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('negoces'));
+        $vciMouts = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('mouts'));
 
         $col['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $vciNegoce;
         if($this->destinataire == self::DEST_CIVA) {
@@ -470,8 +470,6 @@ class ExportDRXml {
                                 $col_total_cremant_rose = $this->getCol($lieu->get('couleur/cepage_PN'));
                                 unset($col_total_cremant_rose['mentionVal']);
                                 $col_total_cremant_rose['L1'] = '1S001M';
-                                $col_total_cremant_rose['exploitant']['L16'] = $lieu->get('couleur/cepage_PN')->getDepassementGlobal();
-                                $col_total_cremant_rose['exploitant']['L19'] = 0;
                                 uksort($col_total_cremant_rose['exploitant'], 'exportDRXml::sortXML');
                                 $this->addCol($col_total_cremant_rose, $xml);
                             }
@@ -481,8 +479,6 @@ class ExportDRXml {
                             $col_total_cremant_blanc = $this->getCol($couleur);
                             unset($col_total_cremant_blanc['mentionVal']);
                             $col_total_cremant_blanc['L1'] = '1B001M';
-                            $col_total_cremant_blanc['exploitant']['L16'] = $couleur->getDepassementGlobal();
-                            $col_total_cremant_blanc['exploitant']['L19'] = 0;
                             if($col_total_cremant_rose) {
                                 $col_total_cremant_blanc = $this->sumColonnes($col_total_cremant_blanc, $col_total_cremant_rose, "-");
                             }
