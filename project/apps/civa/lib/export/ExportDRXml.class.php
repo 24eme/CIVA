@@ -155,7 +155,7 @@ class ExportDRXml {
         $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
 
         $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array());
-        $usagesIndustriels = $this->getRatioRecap($object, 'getDepassementGlobal', array());
+        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
         $venteNegoce = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('negoces'));
         $venteMouts = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('mouts'));
         $vci = $this->getRatioRecap($object, "getTotalVci", array());
@@ -164,10 +164,8 @@ class ExportDRXml {
         if($l15 < 0) {
             $l15 = 0;
         }
-        $l16 = $usagesIndustriels;
-        if($l16 < $vci) {
-            $l16 = $vci;
-        }
+
+        $l16 = $usagesIndustriels + $vci;
 
         $col['exploitant']['L15'] = $l15; //Volume revendique
         $col['exploitant']['L16'] = $l16;
@@ -476,7 +474,11 @@ class ExportDRXml {
                             if($col_total_cremant_rose && $col_total_cremant_rose['exploitant']['L5'] > 0) {
                                 unset($col_total_cremant_rose['motifSurfZero']);
                             }
-                            $col_total_cremant_blanc = $this->getCol($couleur);
+                            if($col_total_cremant_rose) {
+                                $col_total_cremant_blanc = $this->getCol($couleur);
+                            } else {
+                                $col_total_cremant_blanc = $this->getCol($lieu);
+                            }
                             unset($col_total_cremant_blanc['mentionVal']);
                             $col_total_cremant_blanc['L1'] = '1B001M';
                             if($col_total_cremant_rose) {
