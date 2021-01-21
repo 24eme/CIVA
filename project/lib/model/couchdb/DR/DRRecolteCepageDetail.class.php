@@ -156,6 +156,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return null;
     }
 
+    public function getTotalDontVciVendusByCviRatio($type, $cvi) {
+
+        return $this->getTotalDontVciVendusByCvi($type, $cvi);
+    }
+
     public function getVolumeVenduByCvi($type, $cvi) {
         $volume = 0;
         foreach($this->get($type) as $achat) {
