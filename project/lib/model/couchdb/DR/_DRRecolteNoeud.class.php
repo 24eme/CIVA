@@ -603,6 +603,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getTotalDontVciRecapitulatifVente($type), 2);
     }
 
+    public function getTotalDontVciVendusByTypeRatio($type) {
+        if($this->hasRecapitulatifVente() || !$this->getNoeudRecapitulatif()) {
+            return $this->getTotalDontVciVendusByType($type);
+        }
+
+        if(!$this->getTotalVolume()) {
+
+            return 0;
+        }
+
+        $ratio = $this->getTotalVolumeAcheteurs($type) / $this->getTotalVolume();
+
+        return round($this->getTotalVci() * $ratio, 2);
+    }
+
     public function getTotalSuperficieVendus() {
         if($this->getTotalVolume() == $this->getTotalCaveParticuliere()) {
 
@@ -663,6 +678,21 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         }
 
         return $dontdplc;
+    }
+
+    public function getTotalDontVciVendusByCviRatio($type, $cvi) {
+        if($this->hasRecapitulatifVente() || !$this->getNoeudRecapitulatif()) {
+            return $this->getTotalDontVciVendusByCvi($type, $cvi);
+        }
+
+        if(!$this->getTotalVolume()) {
+
+            return 0;
+        }
+
+        $ratio = $this->getVolumeAcheteur($cvi, $type) / $this->getTotalVolume();
+
+        return round($this->getTotalVci() * $ratio, 2);
     }
 
     public function getTotalDontVciVendusByCvi($type, $cvi) {
