@@ -161,11 +161,8 @@ class ExportDRXml {
         $vci = $object->getTotalVci();
 
         $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
-        $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
-        if(!$volumeRevendique) {
+        if($l15 < 0) {
             $l15 = 0;
-        } else {
-            $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
         }
 
         $l16 = $usagesIndustriels + $vci;

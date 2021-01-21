@@ -66,6 +66,8 @@ EOF;
             unlink($filename);
         }
         file_put_contents($filename, "<?xml version='1.0' encoding='utf-8' ?>\n<listeDecRec>\n", FILE_APPEND);
+    } else {
+        echo "ID;Code produit;Erreur Douane\n";
     }
     $nb_exported = 0;
 
