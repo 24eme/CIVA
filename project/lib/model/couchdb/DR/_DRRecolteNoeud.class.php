@@ -615,7 +615,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         $ratio = $this->getTotalVolume() / $this->getTotalVolumeAcheteurs($type);
 
-        return round($this->getTotalVci() * $ratio, 2);
+        if(!$ratio) {
+
+            return 0;
+        }
+
+        return round($this->getTotalVci() / $ratio, 2);
     }
 
     public function getTotalSuperficieVendus() {
@@ -692,7 +697,12 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
         $ratio = $this->getTotalVolume() / $this->getVolumeAcheteur($cvi, $type);
 
-        return round($this->getTotalVci() * $ratio, 2);
+        if(!$ratio) {
+
+            return 0;
+        }
+
+        return round($this->getTotalVci() / $ratio, 2);
     }
 
     public function getTotalDontVciVendusByCvi($type, $cvi) {
