@@ -279,20 +279,11 @@ class ExportDRXml {
         $objectTotal = $this->getNoeudRecap($object);
 
         $volumeTotal = $objectTotal->getTotalVolume();
-        $volume = $objectTotal->getTotalVolume();
+        $volume = $object->getTotalVolume();
 
-        if($withoutVente) {
-            $volumeTotal = $objectTotal->getTotalVolume() - $objectTotal->getTotalVolumeAcheteurs('negoces') - $objectTotal->getTotalVolumeAcheteurs('mouts');
-            $volume = $object->getTotalVolume() - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
-        }
-        $ratio = ($volumeTotal) ? ($volumeTotal / $volume) : 0;
+        $ratio = ($volumeTotal) ? ($volume / $volumeTotal) : 0;
 
-        if(!$ratio) {
-
-            return 0;
-        }
-
-        return call_user_func_array(array($objectTotal, $function), $args) / $ratio;
+        return call_user_func_array(array($objectTotal, $function), $args) * $ratio;
     }
 
     protected function create($dr) {

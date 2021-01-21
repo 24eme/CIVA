@@ -612,19 +612,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getTotalDontVciVendusByType($type);
         }
 
-        if($this->getTotalVolumeAcheteurs($type) == 0) {
+        if(!$this->getTotalVolume()) {
 
             return 0;
         }
 
-        $ratio = $this->getTotalVolume() / $this->getTotalVolumeAcheteurs($type);
+        $ratio = $this->getTotalVolumeAcheteurs($type) / $this->getTotalVolume();
 
-        if(!$ratio) {
-
-            return 0;
-        }
-
-        return round($this->getTotalVci() / $ratio, 2);
+        return round($this->getTotalVci() * $ratio, 2);
     }
 
     public function getTotalSuperficieVendus() {
@@ -694,19 +689,14 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
             return $this->getTotalDontVciVendusByCvi($type, $cvi);
         }
 
-        if($this->getVolumeAcheteur($cvi, $type) == 0) {
+        if(!$this->getTotalVolume()) {
 
             return 0;
         }
 
-        $ratio = $this->getTotalVolume() / $this->getVolumeAcheteur($cvi, $type);
+        $ratio = $this->getVolumeAcheteur($cvi, $type) / $this->getTotalVolume();
 
-        if(!$ratio) {
-
-            return 0;
-        }
-
-        return round($this->getTotalVci() / $ratio, 2);
+        return round($this->getTotalVci() * $ratio, 2);
     }
 
     public function getTotalDontVciVendusByCvi($type, $cvi) {
