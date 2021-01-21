@@ -236,12 +236,21 @@ class ExportDRXml {
         foreach($col['exploitant'] as $key => $item) {
             if(preg_match('/^L6/', $key)) {
                 $L6 += $item['volume'];
+                if(!$item['volume']) {
+                    $this->erreurs[] = array("message" => "[ER19] L6 : Merci d'indiquer le volume de vendanges fraiches acheté par l'opérateur désigné par le numéro de CVI inscrit en ligne 6.", "col" => $col);
+                }
             }
             if(preg_match('/^L7/', $key)) {
                 $L7 += $item['volume'];
+                if(!$item['volume']) {
+                    $this->erreurs[] = array("message" => "[ER26] L7 : Merci d'indiquer le volume de moût acheté par l'opérateur désigné par le numéro de CVI inscrit en ligne 7.", "col" => $col);
+                }
             }
             if(preg_match('/^L8/', $key)) {
                 $L8 += $item['volume'];
+                if(!$item['volume']) {
+                    $this->erreurs[] = array("message" => "[ER33] L8 : Merci d'indiquer le volume apporté à la cave désignée par le numéro de CVI inscrit en ligne 8.", "col" => $col);
+                }
             }
         }
 
@@ -543,8 +552,8 @@ class ExportDRXml {
                         $cols['exploitant'][$expl_key]['volume'] += $col['exploitant'][$expl_key]['volume'];
                     }
 
-                    if($cols['exploitant'][$expl_key]['volume'] < 0) {
-                        $cols['exploitant'][$expl_key]['volume'] = 0;
+                    if($cols['exploitant'][$expl_key]['volume'] <= 0) {
+                        unset($cols['exploitant'][$expl_key]);
                     }
                 }
             } else {
