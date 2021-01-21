@@ -154,15 +154,18 @@ class ExportDRXml {
         $col['exploitant']['L13'] = 0; //HS
         $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
 
-        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array());
+        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array(), true);
         $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
-        $venteNegoce = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('negoces'));
-        $venteMouts = $this->getRatioRecap($object, "getTotalVolumeAcheteurs", array('mouts'));
-        $vci = $this->getRatioRecap($object, "getTotalVci", array());
+        $venteNegoce = $object->getTotalVolumeAcheteurs('negoces');
+        $venteMouts = $object->getTotalVolumeAcheteurs('mouts');
+        $vci = $object->getTotalVci();
 
         $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
-        if($l15 < 0) {
+        $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
+        if(!$volumeRevendique) {
             $l15 = 0;
+        } else {
+            $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
         }
 
         $l16 = $usagesIndustriels + $vci;
@@ -268,14 +271,21 @@ class ExportDRXml {
         return $this->erreurs;
     }
 
-    public function getRatioRecap($object, $function, $args) {
+    public function getRatioRecap($object, $function, $args, $withoutVente = false) {
         if(preg_match("/cepage_RB/", $object->getHash())) {
 
             return 0;
         }
-
         $objectTotal = $this->getNoeudRecap($object);
-        $ratio = ($object->getTotalVolume()) ? $objectTotal->getTotalVolume() / $object->getTotalVolume() : 0;
+
+        $volumeTotal = $objectTotal->getTotalVolume();
+        $volume = $objectTotal->getTotalVolume();
+
+        if($withoutVente) {
+            $volumeTotal = $objectTotal->getTotalVolume() - $objectTotal->getTotalVolumeAcheteurs('negoces') - $objectTotal->getTotalVolumeAcheteurs('mouts');
+            $volume = $object->getTotalVolume() - $object->getTotalVolumeAcheteurs('negoces') - $object->getTotalVolumeAcheteurs('mouts');
+        }
+        $ratio = ($volumeTotal) ? ($volumeTotal / $volume) : 0;
 
         if(!$ratio) {
 
