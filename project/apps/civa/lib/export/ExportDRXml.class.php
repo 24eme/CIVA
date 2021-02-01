@@ -277,7 +277,7 @@ class ExportDRXml {
         return $this->erreurs;
     }
 
-    public function getRatioRecap($object, $function, $args, $withoutVente = false) {
+    public function getRatioRecap($object, $function, $args) {
         if(preg_match("/cepage_RB/", $object->getHash())) {
 
             return 0;

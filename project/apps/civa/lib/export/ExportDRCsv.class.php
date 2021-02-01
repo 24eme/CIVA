@@ -129,8 +129,8 @@ class ExportDRCsv extends ExportCsv {
                                 }
                             }
 
+                            $this->addNoeudTotal($cepage);
                             if($cepage->hasRecapitulatif()) {
-                                $this->addNoeudTotal($cepage);
                                 foreach ($cepage->acheteurs as $acheteurs) {
                                     foreach ($acheteurs as $cvi_a => $acheteur) {
                                             $this->addNoeudAcheteur($cepage, $acheteur);
@@ -314,6 +314,15 @@ class ExportDRCsv extends ExportCsv {
         }
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
+        $isRecapCalculable = $noeud->hasRecapitulatifVente();
+
+        $noeudRecap = $noeud->getNoeudRecapitulatif();
+
+        if(!$noeudRecap) {
+            $isRecapCalculable = true;
+            $noeudRecap = $noeud;
+        }
+
         $this->add(array(
             "cvi_acheteur" => $noeud->getCouchdbDocument()->cvi,
             "nom_acheteur" => "SUR PLACE",
@@ -324,13 +333,13 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => $cepage,
             "vtsgn" => $vtsgn,
             "denomination" => null,
-            "superficie_livree" => ($noeud->canCalculSuperficieSurPlace()) ? $noeud->getSuperficieCaveParticuliere() : null,
-            "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
-            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace()) ? $noeud->getUsagesIndustrielsSurPlace() : null,
+            "superficie_livree" => ($noeud->canCalculSuperficieSurPlace() && $noeud->hasRecapitulatif()) ? $noeud->getSuperficieCaveParticuliere() : null,
+            "volume_livre/sur place" => ($noeud->hasRecapitulatif()) ? $noeud->getTotalCaveParticuliere() : null,
+            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace() && $isRecapCalculable) ? $noeud->getUsagesIndustrielsSurPlace() : null,
             "superficie_totale" => $noeud->getTotalSuperficie(),
             "volume_total" => $noeud->getTotalVolume(),
-            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
-            "dont_vci" => ($noeud->getVciCaveParticuliere() > 0) ? $noeud->getVciCaveParticuliere() : null,
+            "volume_a_detruire_total" => round($noeud->getRatioFromRecap() * $noeudRecap->getUsagesIndustriels(), 2),
+            "dont_vci" => ($noeud->getVciCaveParticuliere() > 0 && $isRecapCalculable) ? $noeud->getVciCaveParticuliere() : null,
             "vci_total" => ($noeud->getTotalVci()) ? $noeud->getTotalVci() : null,
             "validation_date" => $this->getValidationDate($noeud->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($noeud->getCouchdbDocument()),

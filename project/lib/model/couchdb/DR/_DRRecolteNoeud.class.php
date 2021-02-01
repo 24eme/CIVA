@@ -479,6 +479,25 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->getParent()->getNoeudRecapitulatif();
     }
 
+    public function getRatioFromRecap() {
+        if($this->getConfig()->excludeTotal()) {
+
+            return 0;
+        }
+
+        $objectTotal = $this->getNoeudRecapitulatif();
+
+        if(!$objectTotal) {
+
+            return 1;
+        }
+
+        $volumeTotal = $objectTotal->getTotalVolume();
+        $volume = $this->getTotalVolume();
+
+        return ($volumeTotal) ? ($volume / $volumeTotal) : 0;
+    }
+
     public function canCalculVolumeRevendiqueSurPlace() {
         if($this->getTotalCaveParticuliere() == 0) {
 
