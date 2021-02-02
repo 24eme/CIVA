@@ -53,7 +53,7 @@ if( $7 ~ "TOTAL" ) {
 
     base_ligne="DR;" campagne ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";"
 
-    if($1 == $3 && $7 && $7 !~ "Rebeche") {
+    if($1 == $3 && $7 && $7 !~ "Rebeche" && $7 != "Blanc" && $7 != "Rouge") {
         print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;";
         print base_ligne ";usages_industriels;" $15 ";;";
     }
