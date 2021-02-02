@@ -264,6 +264,20 @@ class ExportDRCsv extends ExportCsv {
             $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
 
+        if($noeud instanceof DRRecolteCouleur) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
+        }
+
+        if($noeud instanceof DRRecolteLieu) {
+            $lieu = $noeud->getConfig()->getLibelle();
+            $cepage = "TOTAL";
+        }
+
+        if($noeud instanceof DRRecolteMention) {
+            $lieu = "TOTAL";
+            $cepage = "";
+        }
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
         $this->add(array(
