@@ -5,9 +5,6 @@ cd $GIILDA_BASEDIR
 bash bin/export_bi_to_zip
 cd -
 
-rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.csv
-rm $PATH_MISEADISPO_CIVA/export/bi/export_bi_contrats.utf8.csv
-
 cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.utf8.csv
 for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
     tail -n +2 $csv
