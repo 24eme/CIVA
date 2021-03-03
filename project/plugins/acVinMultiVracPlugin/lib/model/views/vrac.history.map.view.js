@@ -35,6 +35,20 @@ function(doc) {
     var acheteurNom = "";
     if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
     acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
+    
+    var mercuriales = "Viticulteur vers Négoce";
+	if (doc.vendeur_type == 'caves_cooperatives') {
+		mercuriales = "Coopérative vers Négoce";
+	}
+	if (doc.vendeur_type == 'negociants') {
+		mercuriales = "Négoce vers Négoce";
+	}
+	if (doc.acheteur_type == 'recoltants') {
+		mercuriales = "Vigneron vers Vigneron";
+	}
+	if (doc.interne) {
+		mercuriales = "Contrat interne";
+	}
 
     for(certification in doc.declaration) {
         if (certification.match(/^certification/g)) {
@@ -62,7 +76,7 @@ function(doc) {
                                                                         var produitHash = "/declaration/certifications/"+certification+"/genres/"+genre+"/appellations/"+appellation+"/mentions/"+mention+"/lieux/"+lieu+"/couleurs/"+couleur+"/cepages/"+cepage;
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
 
-                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, produit.prix_unitaire, produit.prix_unitaire, prix_variable, interne, original, doc.type_contrat, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, doc.type_contrat, produit.denomination, null, null, null, doc.cepage, libelle_cepage, produit.label]);
+                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, produit.prix_unitaire, produit.prix_unitaire, prix_variable, interne, original, doc.type_contrat, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, mercuriales, produit.denomination, null, null, null, doc.cepage, libelle_cepage, produit.label]);
                                                                     }
                                                                 }
                                                             }
