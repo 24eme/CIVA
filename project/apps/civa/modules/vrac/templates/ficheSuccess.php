@@ -25,7 +25,14 @@ td.echeance {display: inline;}
 			Validation de votre contrat
 		<?php endif; ?>
 		</a>
-		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?><span style="color: #BBB;"> - Merc. <?php echo $vrac->getMercurialeValue(); ?></span></span>
+		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
+			<span style="color: #BBB;"> - <abbr title=" - I : contrat interne (vrac->interne = true)
+- C : vendeur est une cave cooperative (vendeur_type == caves_cooperatives)
+- X : vendeur est négociant (vendeur_type == negociants)
+- V : l'acheteur est un récoltant (acheteur_type == recoltants)
+- M : contrat par défaut (acheteur pas récoltant et vendeur ni coopérative ni négociant)">Merc. <?php echo $vrac->getMercurialeValue(); ?></abbr>
+			</span>
+		</span>
 	</li>
 </ul>
 </div>
