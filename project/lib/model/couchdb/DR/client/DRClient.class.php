@@ -169,15 +169,19 @@ class DRClient extends acCouchdbClient {
         if($denom === "0") {
             $denom = "";
         }
+        if($denom) {
+            $denom .= " ";
+        }
+        $denom = $denom.$acheteur_obj->nom;
 
         $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $denomlieu);
         $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
         $detail->volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
         $detail->vci += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI]);
-        if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
-          $detail->denomination = 'repli';
-          $detail->add('motif_non_recolte', 'AE');
-        }
+        // if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
+        //   $detail->denomination = 'repli';
+        //   $detail->add('motif_non_recolte', 'AE');
+        // }
           if($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
               $acheteurDRType = "negoces";
@@ -354,7 +358,6 @@ class DRClient extends acCouchdbClient {
             $totauxByAppellationsRecap[$key] = new stdClass();
             $totauxByAppellationsRecap[$key]->nom = 'TOTAL ' . $nom;
             $totauxByAppellationsRecap[$key]->revendique_sur_place = null;
-            $totauxByAppellationsRecap[$key]->_ = null;
             $totauxByAppellationsRecap[$key]->vci_sur_place = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_rouge = null;
             $totauxByAppellationsRecap[$key]->dplc_sur_place_blanc = null;

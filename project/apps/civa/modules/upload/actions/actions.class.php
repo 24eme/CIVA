@@ -115,7 +115,7 @@ class uploadActions extends sfActions {
                 $this->errors[$cpt][] = 'Il nous est impossible de repérer le produit correspondant à «' . $produit . '», merci de vérifier les libellés.';
             else {
 	      if ($this->shouldHaveSuperficie($line))
-                $this->errors[$cpt][] = 'La superficie est erronée.';
+                $this->errors[$cpt][] = "La superficie n'est pas renseignée ou erroné.";
 	      if ($this->cannotHaveDenomLieu($line)) {
                 $this->errors[$cpt][] = 'Une dénomination géographique ou un lieu-dit ne peut être défini pour ce produit';
 	      }
@@ -283,7 +283,7 @@ class uploadActions extends sfActions {
 
 
             if (preg_match('/_ED$/', $hashDR)) {
-                $this->no_surface = true;
+                //$this->no_surface = true;
                 $this->has_edel = 1;
             }
 
@@ -439,12 +439,12 @@ class uploadActions extends sfActions {
         try {
             if (!isset($line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) {
 
-                return ($this->etablissement->acheteur_raisin != "Negociant");
+                return true;
             }
         } catch (Exception $e) {
-            return false;
+            return true;
         }
-        return!$this->isPositive($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+        return !$this->isPositive($line[CsvFileAcheteur::CSV_SUPERFICIE]);
     }
 
     protected function shouldHaveSuperficieTotal($line) {

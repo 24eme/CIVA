@@ -230,13 +230,26 @@ class vracActions extends sfActions
         return $user;
     }
 
+	protected function getTiersNoSigneOfVrac($vrac) {
+        $tiers = $this->getUser()->getDeclarantsVrac();
+        $user = null;
+
+        foreach($tiers as $t) {
+            if($vrac->isActeur($t->_id) && !$vrac->hasSigne($t->_id)) {
+                $user = $t;
+            }
+        }
+
+        return $user;
+    }
+
 	public function executeValidation(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::SIGNATURE, $this->vrac);
 
-		$this->user = $this->getTiersOfVrac($this->vrac);
+		$this->user = $this->getTiersNoSigneOfVrac($this->vrac);
 
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();

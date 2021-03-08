@@ -73,7 +73,7 @@
             <?php endif; ?>
             <?php if($lieu->canHaveVci()): ?>
             <li>
-                <input class="num <?php if ($lieu->getTotalVci() > $lieu->getVolumeVciMax()) echo 'rouge'; ?>" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
+                <input class="num <?php if ($lieu->getVolumeVciMax() != -1 && $lieu->getTotalVci() > $lieu->getVolumeVciMax()) echo 'rouge'; ?>" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
                 <input type="hidden" id="appellation_vci_orig" readonly="readonly" value="<?php echoFloat($lieu->getTotalVci()); ?>" />
                 <input type="hidden" id="appellation_rendement_vci" readonly="readonly" value="<?php echoFloat($lieu->getConfigRendementVci()); ?>" />
             </li>

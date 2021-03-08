@@ -2,6 +2,19 @@
 
 class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
+    protected $total_superficie = false;
+    protected $total_vci = false;
+
+    public function getProduitsDetails() {
+
+        return array($this->getHash() => $this);
+    }
+
+    public function getNoeudRecapitulatif() {
+
+        return $this->getCepage()->getNoeudRecapitulatif();
+    }
+
     public function getConfig() {
         return $this->getCepage()->getConfig();
     }
@@ -37,8 +50,17 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
     }
 
     public function getTotalSuperficie() {
+        if($this->total_superficie === false) {
+            $this->total_superficie = $this->superficie;
+        }
 
-        return $this->superficie;
+        return $this->total_superficie;
+    }
+
+    public function setSuperficie($superficie) {
+        $this->getTotalSuperficie();
+
+        return $this->_set('superficie', $superficie);
     }
 
     public function getDplc() {
@@ -56,14 +78,42 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->cave_particuliere;
     }
 
-    public function getTotalVci() {
+    public function getVolumeRevendiqueCaveParticuliere() {
+
+        return round($this->getTotalCaveParticuliere() - $this->getLies() - $this->getVciCaveParticuliere(), 2);
+    }
+
+    public function getVciCaveParticuliere() {
+        if($this->getTotalVolumeAcheteurs() > 0) {
+
+            return 0;
+        }
 
         return $this->vci;
+    }
+
+    public function getTotalVci() {
+        if($this->total_vci === false) {
+            $this->total_vci = $this->vci;
+        }
+
+        return $this->total_vci;
+    }
+
+    public function setVci($vci) {
+        $this->getTotalVci();
+
+        return $this->_set('vci', $vci);
     }
 
     public function getLiesMax() {
 
         return round($this->cave_particuliere + $this->getVolumeAcheteurs('mouts'), 2);
+    }
+
+    public function getDepassementGlobal() {
+
+        return $this->lies;
     }
 
     public function getTotalDontDplcVendus() {
@@ -96,6 +146,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return null;
     }
 
+    public function getTotalDontVciVendusByCviRatio($type, $cvi) {
+
+        return $this->getTotalDontVciVendusByCvi($type, $cvi);
+    }
+
     public function getVolumeVenduByCvi($type, $cvi) {
         $volume = 0;
         foreach($this->get($type) as $achat) {
@@ -124,6 +179,11 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
             }
         }
         return $this->_storage[$key];
+    }
+
+    public function getTotalDontVciVendusByType($type) {
+
+        return 0;
     }
 
     public function getTotalVolumeAcheteurs($type = 'negoces|cooperatives|mouts') {
@@ -260,6 +320,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         $v += $this->getSumAcheteur('cooperatives');
         $v += $this->getSumAcheteur('mouts');
 
+        $this->total_superficie = $this->superficie;
+        if($this->exist('vci')) {
+            $this->total_vci = $this->vci;
+        }
         $this->volume = $v;
         $this->volume_dplc = null;
         $this->lies = $this->getLies(true);
@@ -322,5 +386,28 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function cleanLies() {
         $this->lies = null;
+    }
+
+    public function canCalculVolumeRevendiqueSurPlace() {
+        return true;
+    }
+
+    public function canCalculSuperficieSurPlace() {
+        return true;
+    }
+
+    public function canCalculInfosVente() {
+        $nbDestinataire = 0;
+        if($this->cave_particuliere > 0) {
+            $nbDestinataire++;
+        }
+
+        foreach($this->getVolumeAcheteurs() as $cvi => $volumeVendu) {
+            if($volumeVendu > 0) {
+                $nbDestinataire++;
+            }
+        }
+
+        return $nbDestinataire < 2;
     }
 }

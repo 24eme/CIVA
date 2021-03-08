@@ -1,11 +1,11 @@
 <?php
 
 class VracMailer {
-	
+
 	private static $_instance = null;
-	
+
 	public function __construct() { }
-	
+
 	public static function getInstance()
     {
        	if(is_null(self::$_instance)) {
@@ -13,8 +13,8 @@ class VracMailer {
 		}
 		return self::$_instance;
     }
-    
-    public function demandeSignature($vrac, $destinataire) 
+
+    public function demandeSignature($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -26,8 +26,8 @@ class VracMailer {
 
         return self::getMailer()->send($message);
     }
-    
-    public function confirmationSignature($vrac, $destinataire) 
+
+    public function confirmationSignature($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -81,12 +81,21 @@ class VracMailer {
     {
         $from = self::getFrom();
         $to = array($destinataire);
+				$bcc = sfConfig::get('app_email_bcc');
+				$emails = $this->vrac->getEmails();
+				$withBcc = (isset($emails[0]) && $emails[0] == $destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body);
-
+				$message = Swift_Message::newInstance()
+		  					->setFrom($from)
+		  					->setTo($to)
+		  					->setSubject($subject)
+		  					->setBody($body);
+				if ($withBcc) {
+					$message->setBcc($bcc);
+				}
         return self::getMailer()->send($message);
     }
 

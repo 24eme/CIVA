@@ -20,7 +20,7 @@
                 'dontdplc' => new sfValidatorNumber(array('required' => false, 'max' => round($this->acheteur->volume, 2))),
             ));
 
-            if($this->acheteur->getLieu()->canHaveVci()) {
+            if($this->acheteur->getNoeud()->canHaveVci()) {
                 $this->setWidget('dontvci', new sfWidgetFormInputFloat());
                 $this->setValidator('dontvci', new sfValidatorNumber(array('required' => false)));
             }

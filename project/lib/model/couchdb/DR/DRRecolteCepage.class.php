@@ -27,6 +27,13 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       return $this;
     }
 
+    public function getLibelleWithAppellation() {
+        if ($this->getLibelle())
+	        return $this->getCouleur()->getLibelleWithAppellation().' - '.$this->getLibelle();
+
+        return $this->getAppellation()->getLibelleWithAppellation();
+    }
+
     public function getChildrenNode() {
 
         return $this->detail;
@@ -37,34 +44,52 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return array($this->getHash() => $this);
     }
 
-     public function getTotalSuperficieVendus() {
+    public function getTotalSuperficieVendus() {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalSuperficieVendus();
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontVciVendus() {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendus();
+        }
 
         return null;
     }
 
     public function getTotalDontVciVendusByType($type) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendusByType($type);
+        }
 
         return null;
     }
 
     public function getTotalSuperficieVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalSuperficieVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontDplcVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontDplcVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getTotalDontVciVendusByCvi($type, $cvi) {
+        if($this->hasRecapitulatif()) {
+            return parent::getTotalDontVciVendusByCvi($type, $cvi);
+        }
 
-      return null;
+        return null;
     }
 
     public function getProduitsDetails() {
@@ -157,13 +182,19 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function canCalculSuperficieSurPlace() {
+        if($this->hasRecapitulatif()) {
+            return parent::canCalculSuperficieSurPlace();
+        }
 
-      return true;
+        return true;
     }
 
     public function canCalculVolumeRevendiqueSurPlace() {
+        if($this->hasRecapitulatif()) {
+            return parent::canCalculVolumeRevendiqueSurPlace();
+        }
 
-      return true;
+        return true;
     }
 
     protected function getSumNoeudFields($field, $exclude = true) {
@@ -200,9 +231,49 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return !$this->getConfig()->existRendementAppellation() && !$this->getConfig()->existRendementCouleur() && $this->getConfig()->getRendementCepage() && !$this->getLieu()->getConfig()->getRendementCepage();
     }
 
+    public function updateAcheteurs() {
+        parent::updateAcheteurs();
+
+        if(!$this->getCouchdbDocument()->canUpdate() || !$this->hasRecapitulatifVente()) {
+            return;
+        }
+
+        foreach($this->getProduitsDetails() as $detail) {
+            if(!$detail->canCalculInfosVente()) {
+                return;
+            }
+        }
+
+        foreach($this->acheteurs as $type => $achats) {
+            foreach($achats as $cvi => $achat) {
+                $achat->superficie = 0;
+                if(!$this->getDplc()) {
+                    $achat->dontdplc = 0;
+                }
+                $achat->dontvci = 0;
+                foreach($this->getProduitsDetails() as $detail) {
+                    if(!$detail->getVolumeVenduByCvi($type, $cvi)) {
+                        continue;
+                    }
+                    $achat->superficie += $detail->superficie;
+                    if(!$this->getDplc()) {
+                        $achat->dontdplc += $detail->dplc;
+                    }
+                    $achat->dontvci += $detail->vci;
+                }
+            }
+        }
+    }
+
     protected function update($params = array()) {
-        $this->preUpdateAcheteurs();
-      parent::update($params);
+        if($this->hasRecapitulatif()) {
+            $this->add('acheteurs');
+        }
+
+        if($this->exist('acheteurs')) {
+            $this->preUpdateAcheteurs();
+        }
+        parent::update($params);
 
       if ($this->getCouchdbDocument()->canUpdate()) {
           $this->total_volume = $this->getTotalVolume(true);
@@ -213,8 +284,9 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
           $this->volume_revendique = $this->getVolumeRevendique(true);
           $this->vci = $this->getTotalVci(true);
       }
-
+      if($this->exist('acheteurs')) {
       $this->updateAcheteurs();
+      }
     }
 
 }

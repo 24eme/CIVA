@@ -69,15 +69,17 @@ class DRMGenerateCSV {
     protected $periode_date;
     protected $aggregate = false;
     protected $firstDrm = false;
+    protected $withLieuDit = false;
 
 
-    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false, $firstDrm = false){
+    public function __construct($identifiant, $numero_accise, $periode, $aggregate = false, $firstDrm = false, $withLieuDit = false){
       $this->identifiant = $identifiant;
       $this->numero_accise = $numero_accise;
       $this->periode =  $periode;
       $this->periode_date = (preg_match('/^[0-9]{6}$/', $periode))? substr($periode, 0, 4)."-".substr($periode, -2)."-01" : date('Y-m-d');
       $this->aggregate = $aggregate;
       $this->firstDrm = $firstDrm;
+      $this->withLieuDit = $withLieuDit;
     }
 
     public function getPeriode(){
@@ -224,6 +226,31 @@ class DRMGenerateCSV {
         return false;
     }
 
+    public function isProduitDetailWithLieuDit($produitDetail) {
+        if(!$this->withLieuDit) {
+
+            return false;
+        }
+
+        if(is_string($produitDetail)) {
+
+            return false;
+        }
+
+        $hashProduit = HashMapper::convert($produitDetail->getHash());
+
+        if($produitDetail instanceof ConfigurationCepage) {
+            $hashProduit = $produitDetail->getHash();
+        }
+
+        if(preg_match('#('.$this->withLieuDit.')#', $hashProduit)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function createRowStockNullProduit($produitDetail){
         if($this->isProduitDetailAggregate($produitDetail)) {
             return null;
@@ -294,7 +321,7 @@ class DRMGenerateCSV {
     }
 
 
-    public function getProduitCSV($produitDetail, $force_type_drm = null,$mentionVtsgn = null) {
+    public function getProduitCSV($produitDetail, $force_type_drm = null, $mentionVtsgn = null) {
         $cepageConfig = null;
 
         if(!is_string($produitDetail)) {
@@ -336,11 +363,9 @@ class DRMGenerateCSV {
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
 
-	        if($cepageConfig->hasLieuEditable() && $produitDetail->lieu) {
-	            $complement = $produitDetail->lieu;
+	    if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && $produitDetail->lieu) {
+	        $complement = $produitDetail->lieu;
         }
-
-
 
         if($produitDetail instanceof DSDetail){
           $libelle = str_ireplace("Vins sans IG Sans IG","Vins sans IG Blanc",$libelle);

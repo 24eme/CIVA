@@ -42,7 +42,7 @@ class DRRecolteCouleur extends BaseDRRecolteCouleur {
             }
         }
 
-        return $this->getConfig()->existRendement();
+        return $this->getConfig()->existRendementCouleur();
     }
 
     public function canHaveUsagesLiesSaisi() {

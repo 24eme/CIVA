@@ -34,6 +34,7 @@ class ExportDRCsv extends ExportCsv {
         "modification_date" => "date de modification",
         "validation_user" => "validateur",
         "hash" => "hash_produit",
+        "type" => "type_ligne",
     );
     protected $_validation_ligne = array(
         "cvi_acheteur" => array("type" => "string"),
@@ -57,6 +58,7 @@ class ExportDRCsv extends ExportCsv {
         "modification_date" => array("type" => "string"),
         "validation_user" => array("type" => "string"),
         "hash" => array("type" => "string"),
+        "type" => array("type" => "string"),
     );
 
     protected $_acheteur = null;
@@ -126,19 +128,31 @@ class ExportDRCsv extends ExportCsv {
                                     $this->addDetailNonRecolte($detail);
                                 }
                             }
+
+                            $this->addNoeudTotal($cepage);
+                            if($cepage->hasRecapitulatif()) {
+                                foreach ($cepage->acheteurs as $acheteurs) {
+                                    foreach ($acheteurs as $cvi_a => $acheteur) {
+                                            $this->addNoeudAcheteur($cepage, $acheteur);
+                                    }
+                                }
+                            }
                         }
-                        if($couleur->getKey() != "couleur") {
+                        if($couleur->hasRecapitulatif()) {
                             $this->addNoeudTotal($couleur);
+                            foreach ($couleur->acheteurs as $acheteurs) {
+                                foreach ($acheteurs as $cvi_a => $acheteur) {
+                                        $this->addNoeudAcheteur($couleur, $acheteur);
+                                }
+                            }
                         }
                     }
-
-                    if($appellation->getConfig()->hasManyLieu()) {
+                    if($lieu->hasRecapitulatif()) {
                         $this->addNoeudTotal($lieu);
-                    }
-
-                    foreach ($lieu->acheteurs as $acheteurs) {
-                        foreach ($acheteurs as $cvi_a => $acheteur) {
+                        foreach ($lieu->acheteurs as $acheteurs) {
+                            foreach ($acheteurs as $cvi_a => $acheteur) {
                                 $this->addNoeudAcheteur($lieu, $acheteur);
+                            }
                         }
                     }
                 }
@@ -146,6 +160,7 @@ class ExportDRCsv extends ExportCsv {
             }
         }
         $this->addJeunesVignes($dr);
+        $this->addJusRaisin($dr);
 
         if ($this->_debug) {
             echo "------------ \n" . count($this->_ids_dr) . " DRs \n ------------\n";
@@ -179,6 +194,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "detail_vente_".$acheteur->getParent()->getKey(),
                 ), $this->_validation_ligne);
     }
 
@@ -208,6 +224,7 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "type" => "detail_motif"
                 ), $this->_validation_ligne);
     }
 
@@ -237,44 +254,17 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
+            "type" => "detail_cave_particuliere"
                 ), $this->_validation_ligne);
     }
 
     protected function addNoeudAcheteur($noeud, $acheteur) {
-        $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
-
-        $this->add(array(
-            "cvi_acheteur" => $acheteur->cvi,
-            "nom_acheteur" => $acheteur->getNom(),
-            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
-            "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
-            "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
-            "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
-            "cepage" => "TOTAL",
-            "vtsgn" => $vtsgn,
-            "denomination" => null,
-            "superficie_livree" => $acheteur->superficie,
-            "volume_livre/sur place" => $acheteur->getVolume(),
-            "dont_dplc" => $acheteur->dontdplc,
-            "superficie_totale" => $noeud->getTotalSuperficie(),
-            "volume_total" => $noeud->getTotalVolume(),
-            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
-            "dont_vci" => $acheteur->exist('dontvci') && $acheteur->dontvci > 0 ? $acheteur->dontvci : null,
-            "vci_total" => ($noeud->getTotalVci() > 0) ? $noeud->getTotalVci() : null,
-            "validation_date" => $this->getValidationDate($acheteur->getCouchdbDocument()),
-            "modification_date" => $this->getModificationDate($acheteur->getCouchdbDocument()),
-            "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
-            "hash" => $noeud->getHash(),
-                ), $this->_validation_ligne);
-    }
-
-    protected function addNoeudTotal($noeud) {
-        if($noeud instanceof DRRecolteCouleur && !$noeud->getAppellation()->getConfig()->hasManyLieu()) {
-            $lieu = "TOTAL ".$noeud->getConfig()->getLibelle();
-            $cepage = "";
+        $cepage = "TOTAL";
+        if($noeud instanceof DRRecolteCepage) {
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
 
-        if($noeud instanceof DRRecolteCouleur && $noeud->getAppellation()->getConfig()->hasManyLieu()) {
+        if($noeud instanceof DRRecolteCouleur) {
             $lieu = $noeud->getLieu()->getConfig()->getLibelle();
             $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
         }
@@ -291,6 +281,63 @@ class ExportDRCsv extends ExportCsv {
         $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
 
         $this->add(array(
+            "cvi_acheteur" => $acheteur->cvi,
+            "nom_acheteur" => $acheteur->getNom(),
+            "cvi_recoltant" => $acheteur->getCouchdbDocument()->cvi,
+            "nom_recoltant" => $acheteur->getCouchdbDocument()->declarant->nom,
+            "appellation" => $noeud->getAppellation()->getConfig()->getLibelle(),
+            "lieu" => ($noeud instanceof DRRecolteLieu) ? $noeud->getConfig()->getLibelle() : $noeud->getLieu()->getConfig()->getLibelle(),
+            "cepage" => $cepage,
+            "vtsgn" => $vtsgn,
+            "denomination" => null,
+            "superficie_livree" => $acheteur->superficie,
+            "volume_livre/sur place" => $acheteur->getVolume(),
+            "dont_dplc" => $acheteur->dontdplc,
+            "superficie_totale" => $noeud->getTotalSuperficie(),
+            "volume_total" => $noeud->getTotalVolume(),
+            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
+            "dont_vci" => $acheteur->exist('dontvci') && $acheteur->dontvci > 0 ? $acheteur->dontvci : null,
+            "vci_total" => ($noeud->getTotalVci() > 0) ? $noeud->getTotalVci() : null,
+            "validation_date" => $this->getValidationDate($acheteur->getCouchdbDocument()),
+            "modification_date" => $this->getModificationDate($acheteur->getCouchdbDocument()),
+            "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
+            "hash" => $noeud->getHash(),
+            "type" => "total_vente_".$acheteur->getParent()->getKey(),
+                ), $this->_validation_ligne);
+    }
+
+    protected function addNoeudTotal($noeud) {
+        if($noeud instanceof DRRecolteCepage) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
+        }
+
+        if($noeud instanceof DRRecolteCouleur) {
+            $lieu = $noeud->getLieu()->getConfig()->getLibelle();
+            $cepage = "TOTAL ".$noeud->getConfig()->getLibelle();
+        }
+
+        if($noeud instanceof DRRecolteLieu) {
+            $lieu = $noeud->getConfig()->getLibelle();
+            $cepage = "TOTAL";
+        }
+
+        if($noeud instanceof DRRecolteMention) {
+            $lieu = "TOTAL";
+            $cepage = "";
+        }
+        $vtsgn = str_replace("mention", "", $noeud->getMention()->getKey());
+
+        $isRecapCalculable = $noeud->hasRecapitulatifVente();
+
+        $noeudRecap = $noeud->getNoeudRecapitulatif();
+
+        if(!$noeudRecap) {
+            $isRecapCalculable = true;
+            $noeudRecap = $noeud;
+        }
+
+        $this->add(array(
             "cvi_acheteur" => $noeud->getCouchdbDocument()->cvi,
             "nom_acheteur" => "SUR PLACE",
             "cvi_recoltant" => $noeud->getCouchdbDocument()->cvi,
@@ -300,18 +347,19 @@ class ExportDRCsv extends ExportCsv {
             "cepage" => $cepage,
             "vtsgn" => $vtsgn,
             "denomination" => null,
-            "superficie_livree" => ($noeud->canCalculSuperficieSurPlace()) ? $noeud->getSuperficieCaveParticuliere() : null,
-            "volume_livre/sur place" => $noeud->getTotalCaveParticuliere(),
-            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace()) ? $noeud->getUsagesIndustrielsSurPlace() : null,
+            "superficie_livree" => ($noeud->canCalculSuperficieSurPlace() && $isRecapCalculable) ? $noeud->getSuperficieCaveParticuliere() : null,
+            "volume_livre/sur place" => ($isRecapCalculable) ? $noeud->getTotalCaveParticuliere() : null,
+            "dont_dplc" => ($noeud->canCalculVolumeRevendiqueSurPlace() && $isRecapCalculable) ? $noeud->getUsagesIndustrielsSurPlace() : null,
             "superficie_totale" => $noeud->getTotalSuperficie(),
             "volume_total" => $noeud->getTotalVolume(),
-            "volume_a_detruire_total" => $noeud->getUsagesIndustriels(),
-            "dont_vci" => ($noeud->getVciCaveParticuliere() > 0) ? $noeud->getVciCaveParticuliere() : null,
+            "volume_a_detruire_total" => round($noeud->getRatioFromRecap() * $noeudRecap->getUsagesIndustriels(), 2),
+            "dont_vci" => ($noeud->getVciCaveParticuliere() > 0 && $isRecapCalculable) ? $noeud->getVciCaveParticuliere() : null,
             "vci_total" => ($noeud->getTotalVci()) ? $noeud->getTotalVci() : null,
             "validation_date" => $this->getValidationDate($noeud->getCouchdbDocument()),
             "modification_date" => $this->getModificationDate($noeud->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
+            "type" => "total_cave_particuliere",
                 ), $this->_validation_ligne);
     }
 
@@ -338,6 +386,42 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($dr),
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jeunes_vignes",
+            "type" => "annexe",
+                ), $this->_validation_ligne);
+    }
+
+    protected function addJusRaisin(DR $dr) {
+        if(!$dr->exist('jus_raisin_superficie') || !$dr->exist('jus_raisin_volume')) {
+            return;
+        }
+
+        if($dr->jus_raisin_superficie === null && $dr->jus_raisin_volume === null) {
+            return;
+        }
+
+        $this->add(array(
+            "cvi_acheteur" => $dr->cvi,
+            "nom_acheteur" => "SUR PLACE",
+            "cvi_recoltant" => $dr->cvi,
+            "nom_recoltant" => $dr->declarant->nom,
+            "appellation" => "Jus de raisin",
+            "lieu" => null,
+            "cepage" => null,
+            "vtsgn" => null,
+            "denomination" => null,
+            "superficie_livree" => $dr->jus_raisin_superficie,
+            "volume_livre/sur place" => $dr->jus_raisin_volume,
+            "dont_dplc" => null,
+            "superficie_totale" => $dr->jus_raisin_superficie,
+            "volume_total" => $dr->jus_raisin_volume,
+            "volume_a_detruire_total" => null,
+            "dont_vci" => null,
+            "vci_total" => null,
+            "validation_date" => $this->getValidationDate($dr),
+            "modification_date" => $this->getModificationDate($dr),
+            "validation_user" => $this->getValidationUser($dr),
+            "hash" => "/jus_raisin",
+            "type" => "annexe",
                 ), $this->_validation_ligne);
     }
 
@@ -386,7 +470,7 @@ class ExportDRCsv extends ExportCsv {
                    return "Automatique";
                 }
 
-                if (preg_match('/^COMPTE-[0-9]+$/', $compte)) {
+                if (preg_match('/^COMPTE-C?[0-9]+$/', $compte)) {
                     $user = "Récoltant";
                     break;
                 } elseif(preg_match('/^COMPTE-.*civa.*$/', $compte)) {

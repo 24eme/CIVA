@@ -213,9 +213,36 @@ class ExportDRPdf extends ExportDocument {
 
             $this->createRecap($dr, $vsig);
           }
+
+        $acheteursCepage = array();
+        $cepages = array();
+        if($dr->exist('/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur')) {
+            $cepages = $dr->get('/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur')->getChildrenNodeSorted();
+        }
+        foreach($cepages as $cepage) {
+            if(!$cepage->hasRecapitulatif() || !$cepage->hasAcheteurs()) {
+              continue;
+            }
+
+            $acheteursCepage[$cepage->getHash()] = array("libelle" => $cepage->getLibelle(), "acheteurs" => $cepage->acheteurs);
+            foreach($cepage->acheteurs as $type_key => $acheteursType) {
+                foreach($acheteursType as $cvi => $acheteur) {
+                    $type = 'Vente à ';
+                    if ($acheteur->type_acheteur == 'cooperatives') {
+                        $type = 'Apport à ';
+                    } else if ($acheteur->type_acheteur == 'mouts') {
+                        $type = 'Vente de mouts à ';
+                    }
+                }
+            }
+        }
+
+        if(count($acheteursCepage)) {
+            $this->document->addPage($this->getPartial('dr_export/annexeRepartitionCepage', array('dr' => $this->dr, 'acheteursCepage' => $acheteursCepage)));
+        }
     }
 
-      protected function createRecap($dr, $vsig = 0) {
+    protected function createRecap($dr, $vsig = 0) {
         $recap = $this->getRecapTotal($dr);
         $total = array("revendique_sur_place" => null,
                        "usages_industriels_sur_place" => null,
@@ -399,6 +426,7 @@ class ExportDRPdf extends ExportDocument {
         $hasLigneAppellation = false;
         $acheteurs = array();
         $acheteursLignes = array();
+        $hasAnnexeAchatParCepage = false;
 
         if($totalMentionLibelle) {
             $colonneTotalMention = array();
@@ -450,6 +478,10 @@ class ExportDRPdf extends ExportDocument {
                     if (!count($cepage->detail)) {
 
                         continue;
+                    }
+
+                    if($cepage->hasRecapitulatif() && $cepage->hasAcheteurs()) {
+                        $hasAnnexeAchatParCepage = true;
                     }
 
                     $i = 0;
@@ -660,7 +692,7 @@ class ExportDRPdf extends ExportDocument {
         $identification_enabled = 1;
         foreach($pages as $p) {
             $this->nb_pages++;
-            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $this->dr->recolte->getConfig()->hasNoUsagesIndustriels(), 'hasVci' => $this->dr->recolte->canHaveVci())));
+            $this->document->addPage($this->getPartial('dr_export/pageDR', array('dr' => $this->dr, 'libelle_appellation' => $libelle, 'colonnes_cepage' => $p, 'acheteurs' => $acheteurs, 'acheteursLignes' => $acheteursLignes, 'enable_identification' => $identification_enabled, 'nb_pages' => $this->nb_pages, 'hasLigneLieu' => $hasLigneLieu, 'hasLigneAppellation' => $hasLigneAppellation, 'hasVTSGN' => $hasVTSGN, 'has_no_usages_industriels' => $this->dr->recolte->getConfig()->hasNoUsagesIndustriels(), 'hasVci' => $this->dr->recolte->canHaveVci(), 'hasAnnexeAchatParCepage' => $hasAnnexeAchatParCepage)));
             $identification_enabled = 0;
         }
   	}

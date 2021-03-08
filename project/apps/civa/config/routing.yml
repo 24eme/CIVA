@@ -586,7 +586,7 @@ dr_recolte_noeud_suivant:
   requirements: { sf_method: [get, post] }
 
 dr_recolte_recapitulatif:
-  url:    /dr/:id/recolte/racapitulatif
+  url:    /dr/:id/recolte/recapitulatif
   param: {module: dr_recolte, action: recapitulatif }
   class: DRRoute
   options: { model: DR, type: object }
@@ -733,19 +733,19 @@ export_dr_validee_csv:
 statistiques:
   url: /statistiques
   param: {module: statistiques, action: index}
-  
+
 mercuriales:
   url: /mercuriales
   param: {module: statistiques, action: mercuriales}
-  
+
 mercuriales_delete:
   url: /mercuriales/:mercuriale/delete
   param: { module: statistiques, action: deleteMercuriale }
-  
+
 mercuriales_pdf:
   url: /mercuriales/:mercuriale/pdf
   param: { module: statistiques, action: pdfMercuriale }
-  
+
 mercuriales_csv:
   url: /mercuriales/:mercuriale/csv
   param: { module: statistiques, action: csvMercuriale }

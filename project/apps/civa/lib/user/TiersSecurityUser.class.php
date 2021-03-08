@@ -36,12 +36,24 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         }
     }
 
-    public function signInTiers($tiers) {
-
+    public function signInTiers($societe) {
         $this->requireCompte();
         $this->signOutTiers();
         $this->addCredential(self::CREDENTIAL_TIERS);
         $this->addCredential(self::CREDENTIAL_DECLARATION);
+
+        $etablissements = array();
+        $etablissementsObject = $societe->getEtablissementsObject();
+        if (count($etablissementsObject) >= 1) {
+    	    foreach ($etablissementsObject as $e) {
+                if (isset($etablissements[$e->getFamille()])) {
+                  continue;
+                }
+                $etablissements[$e->famille] = $e;
+            }
+        }
+
+        $tiers = array_values($etablissements);
 
         if (!is_array($tiers))
             $tiers = array($tiers);
