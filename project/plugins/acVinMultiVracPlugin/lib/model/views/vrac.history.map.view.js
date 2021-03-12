@@ -35,6 +35,20 @@ function(doc) {
     var acheteurNom = "";
     if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
     acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
+    
+    var mercuriales = "Viticulteur vers Négoce";
+	if (doc.vendeur_type == 'caves_cooperatives') {
+		mercuriales = "Coopérative vers Négoce";
+	}
+	if (doc.vendeur_type == 'negociants') {
+		mercuriales = "Négoce vers Négoce";
+	}
+	if (doc.acheteur_type == 'recoltants') {
+		mercuriales = "Vigneron vers Vigneron";
+	}
+	if (doc.interne) {
+		mercuriales = "Contrat interne";
+	}
 
     for(certification in doc.declaration) {
         if (certification.match(/^certification/g)) {
@@ -59,10 +73,27 @@ function(doc) {
                                                                 var produit = doc.declaration[certification][genre][appellation][mention][lieu][couleur][cepage].detail[detail];
                                                                 if (produit.actif) {
                                                                     if(doc.valide.date_validation){
+                                                                        if(produit.vtsgn) {
+                                                                            mention = produit.vtsgn;
+                                                                        }
                                                                         var produitHash = "/declaration/certifications/"+certification+"/genres/"+genre+"/appellations/"+appellation+"/mentions/"+mention+"/lieux/"+lieu+"/couleurs/"+couleur+"/cepages/"+cepage;
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
+                                                                        
+                                                                        var quantite = produit.volume_propose;
 
-                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, produit.prix_unitaire, produit.prix_unitaire, prix_variable, interne, original, doc.type_contrat, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, doc.type_contrat, produit.denomination, null, null, null, doc.cepage, libelle_cepage, produit.label]);
+                                                                        if(produit.nb_bouteille) {
+                                                                            quantite = produit.nb_bouteille;
+                                                                        }
+                                                                        
+                                                                        var centilisation = 1;
+                                                                        var prix_unitaire_hl = produit.prix_unitaire;
+                                                                        if(produit.centilisation) {
+                                                                            centilisation = produit.centilisation / 10000;
+                                                                            prix_unitaire_hl = 10000 / produit.centilisation * produit.prix_unitaire;
+                                                                            prix_unitaire_hl = Math.round(prix_unitaire_hl*100)/100;
+                                                                        }
+
+                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, mercuriales, produit.denomination.replace(',', ''), null, null, null, doc.cepage, libelle_cepage, produit.label, quantite, produit.prix_unitaire, centilisation]);
                                                                     }
                                                                 }
                                                             }
