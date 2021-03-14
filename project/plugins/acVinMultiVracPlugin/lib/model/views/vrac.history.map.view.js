@@ -36,18 +36,18 @@ function(doc) {
     if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
     acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
     
-    var mercuriales = "Viticulteur vers Négoce";
+    var mercuriales = "M - Viticulteur vers Négoce";
 	if (doc.vendeur_type == 'caves_cooperatives') {
-		mercuriales = "Coopérative vers Négoce";
+		mercuriales = "C - Coopérative vers Négoce";
 	}
 	if (doc.vendeur_type == 'negociants') {
-		mercuriales = "Négoce vers Négoce";
+		mercuriales = "X - Négoce vers Négoce";
 	}
 	if (doc.acheteur_type == 'recoltants') {
-		mercuriales = "Vigneron vers Vigneron";
+		mercuriales = "V - Vigneron vers Vigneron";
 	}
 	if (doc.interne) {
-		mercuriales = "Contrat interne";
+		mercuriales = "I - Contrat interne";
 	}
 
     for(certification in doc.declaration) {
@@ -92,8 +92,13 @@ function(doc) {
                                                                             prix_unitaire_hl = 10000 / produit.centilisation * produit.prix_unitaire;
                                                                             prix_unitaire_hl = Math.round(prix_unitaire_hl*100)/100;
                                                                         }
+                                                                        
+                                                                        var label = null;
+                                                                        if(produit.label) {
+                                                                            label = produit.label;
+                                                                        }
 
-                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, mercuriales, produit.denomination.replace(/,/g, ""), null, null, null, doc.cepage, libelle_cepage, produit.label, quantite, produit.prix_unitaire, centilisation]);
+                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_cloture, doc.valide.date_saisie, produit.millesime, mercuriales, produit.denomination.replace(/,/g, ""), null, null, null, doc.cepage, libelle_cepage, label, quantite, produit.prix_unitaire, centilisation]);
                                                                     }
                                                                 }
                                                             }
