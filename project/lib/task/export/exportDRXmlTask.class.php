@@ -76,6 +76,8 @@ EOF;
     }else{
         $dr_ids = acCouchdbManager::getClient("DR")->getAllByCampagne($arguments['campagne'], acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
     }
+    
+    $stats = array();
 
     foreach ($dr_ids as $id) {
 
@@ -109,7 +111,40 @@ EOF;
             file_put_contents($filename, $xml->getContent(), FILE_APPEND);
             $this->logSection($dr->_id, 'xml generated');
             $nb_exported++;
+            if($nb_exported > 100) {
+                break;
+            }
+            foreach($xml->getXml() as $col) {
+                $key = $col['L1'];
+                if(!isset($stats[$key])) {
+                    $stats[$key] = array_fill(0,18,0); 
+                    $stats[$key][0] = $key;
+                }
+                
+                if(isset($col['L4'])) {
+                    $stats[$key][1] += round($col['L4'], 2);
+                }
+                
+                for($i = 5; $i <= 19; $i++) {
+                    if(isset($col['exploitant']['L'.$i])) {
+                        $stats[$key][$i-3] += round($col['exploitant']['L'.$i], 2);
+                    }    
+                }
+                
+                foreach($col['exploitant'] as $k => $values) {
+                    if(preg_match('/^L6/', $k)) {
+                        $stats[$key][3] += round($values['volume'], 2);
+                    }
+                    if(preg_match('/^L7/', $k)) {
+                        $stats[$key][4] += round($values['volume'], 2);
+                    }
+                    if(preg_match('/^L8/', $k)) {
+                        $stats[$key][5] += round($values['volume'], 2);
+                    }
+                }
+            }
     }
+    
 
     if(isset($options['check'])) {
         return;
@@ -118,7 +153,17 @@ EOF;
 
     file_put_contents($filename, '</listeDecRec>', FILE_APPEND);
     $this->logSection("done", $filename);
+    
+    $statFile = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'_stats.csv';
+    $fp = fopen($statFile, 'w');
+    
+    fputcsv($fp, array('L1', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9', 'L10' ,'L11' ,'L12' ,'L13' ,'L14' ,'L15' ,'L16', 'L17', 'L17', 'L18', 'L19'), ';');
+    foreach ($stats as $data) {
+        fputcsv($fp, $data, ';');
+    }
 
+    fclose($fp);
+    $this->logSection("stats", $statFile);
   }
 
   protected function getFileDir() {

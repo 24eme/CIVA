@@ -6,6 +6,7 @@ class ExportDRXml {
     const DEST_CIVA = 'Civa';
 
     protected $content = null;
+    protected $xml = null;
     protected $partial_function = null;
     protected $destinataire = null;
     protected $erreurs = array();
@@ -315,12 +316,8 @@ class ExportDRXml {
                     }
                     $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
 
-                    foreach($lieuConfig->getCouleurs() as $couleurConfig) {
-                        if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
-                            continue;
-                        }
-                        $couleur = $dr->get(HashMapper::inverse($couleurConfig->getHash()));
-
+                    foreach($lieu->getCouleurs() as $couleur) {
+                        $couleurConfig = $couleur->getConfig();
                         $object = $lieu;
                         $objectChanged = true;
                         if ($lieuConfig->hasManyCouleur()) {
@@ -508,6 +505,14 @@ class ExportDRXml {
                             $total = array();
                         }
 
+                        if(preg_match("|appellation_LIEUDIT/mention/lieu/couleurRouge|", $object->getHash()) && $total && $this->destinataire == self::DEST_DOUANE) {
+                            if(!$total['mentionVal']) {
+                                unset($total['mentionVal']);
+                            }
+                            $this->addCol($total, $xml);
+                            $total = array();
+                        }
+
                         if($this->destinataire == self::DEST_CIVA) {
                             $totals[$total['L1']] = $total;
                         }
@@ -528,8 +533,13 @@ class ExportDRXml {
                 }
             }
         }
-
+        $this->xml = $xml;
         $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
+    }
+    
+    public function getXml() {
+        
+        return $this->xml;
     }
 
     protected function sumColonnes($cols, $col, $operator = "+") {
