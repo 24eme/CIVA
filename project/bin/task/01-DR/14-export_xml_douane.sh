@@ -15,5 +15,6 @@ php symfony export:dr-xml $DR_CAMPAGNE Douane --check=true > $TASK_DIR/$EXPORT_D
 php symfony export:dr-xml $DR_CAMPAGNE Douane > /dev/null
 
 cp $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane.xml $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane.xml
+cp $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane_stats.csv $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane_stats.csv
 
 echo "[Voir les fichiers]($LINK)"
