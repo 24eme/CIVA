@@ -315,12 +315,8 @@ class ExportDRXml {
                     }
                     $lieu = $dr->get(HashMapper::inverse($lieuConfig->getHash()));
 
-                    foreach($lieuConfig->getCouleurs() as $couleurConfig) {
-                        if (!$dr->exist(HashMapper::inverse($couleurConfig->getHash()))) {
-                            continue;
-                        }
-                        $couleur = $dr->get(HashMapper::inverse($couleurConfig->getHash()));
-
+                    foreach($lieu->getCouleurs() as $couleur) {
+                        $couleurConfig = $couleur->getConfig();
                         $object = $lieu;
                         $objectChanged = true;
                         if ($lieuConfig->hasManyCouleur()) {
@@ -501,6 +497,14 @@ class ExportDRXml {
                         }
 
                         if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_LIEUDIT', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE && $total) {
+                            if(!$total['mentionVal']) {
+                                unset($total['mentionVal']);
+                            }
+                            $this->addCol($total, $xml);
+                            $total = array();
+                        }
+
+                        if(preg_match("|appellation_LIEUDIT/mention/lieu/couleurRouge|", $object->getHash()) && $total && $this->destinataire == self::DEST_DOUANE) {
                             if(!$total['mentionVal']) {
                                 unset($total['mentionVal']);
                             }
