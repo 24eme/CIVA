@@ -111,9 +111,6 @@ EOF;
             file_put_contents($filename, $xml->getContent(), FILE_APPEND);
             $this->logSection($dr->_id, 'xml generated');
             $nb_exported++;
-            if($nb_exported > 100) {
-                break;
-            }
             foreach($xml->getXml() as $col) {
                 $key = $col['L1'];
                 if(!isset($stats[$key])) {
