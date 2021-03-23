@@ -6,6 +6,7 @@ class ExportDRXml {
     const DEST_CIVA = 'Civa';
 
     protected $content = null;
+    protected $xml = null;
     protected $partial_function = null;
     protected $destinataire = null;
     protected $erreurs = array();
@@ -532,8 +533,13 @@ class ExportDRXml {
                 }
             }
         }
-
+        $this->xml = $xml;
         $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
+    }
+    
+    public function getXml() {
+        
+        return $this->xml;
     }
 
     protected function sumColonnes($cols, $col, $operator = "+") {
