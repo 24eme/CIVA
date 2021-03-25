@@ -297,6 +297,9 @@ class ExportDRXml {
         $xml = array();
         $baliseachat = array();
         foreach ($dr->recolte->getConfig()->getArrayAppellations() as $appellationConfig) {
+            if(preg_match("|VINSSIG/genres/EFF|", $appellationConfig->getHash())) {
+                continue;
+            }
             if (!$dr->exist(HashMapper::inverse($appellationConfig->getHash()))) {
                 continue;
             }
