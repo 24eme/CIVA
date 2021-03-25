@@ -86,8 +86,12 @@ EOF;
                 continue;
             }
 
-            $dr = acCouchdbManager::getClient("DR")->find($id);
-
+            $dr = acCouchdbManager::getClient("DR")->find($id, acCouchdbClient::HYDRATE_DOCUMENT, true);
+            
+            if($dr->type == "LS") {
+                continue;
+            }
+            
             if (!$dr->isValideeTiers()) {
                 
                 continue;
