@@ -36,18 +36,18 @@ function(doc) {
     if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
     acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
     
-    var mercuriales = "M - Viticulteur vers Négoce";
+    var mercuriales = "M";
 	if (doc.vendeur_type == 'caves_cooperatives') {
-		mercuriales = "C - Coopérative vers Négoce";
+		mercuriales = "C";
 	}
 	if (doc.vendeur_type == 'negociants') {
-		mercuriales = "X - Négoce vers Négoce";
+		mercuriales = "X";
 	}
 	if (doc.acheteur_type == 'recoltants') {
-		mercuriales = "V - Vigneron vers Vigneron";
+		mercuriales = "V";
 	}
 	if (doc.interne) {
-		mercuriales = "I - Contrat interne";
+		mercuriales = "I";
 	}
 
     for(certification in doc.declaration) {
