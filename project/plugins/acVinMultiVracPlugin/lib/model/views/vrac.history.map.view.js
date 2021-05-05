@@ -36,18 +36,18 @@ function(doc) {
     if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
     acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
     
-    var mercuriales = "M - Viticulteur vers Négoce";
+    var mercuriales = "M";
 	if (doc.vendeur_type == 'caves_cooperatives') {
-		mercuriales = "C - Coopérative vers Négoce";
+		mercuriales = "C";
 	}
 	if (doc.vendeur_type == 'negociants') {
-		mercuriales = "X - Négoce vers Négoce";
+		mercuriales = "X";
 	}
 	if (doc.acheteur_type == 'recoltants') {
-		mercuriales = "V - Vigneron vers Vigneron";
+		mercuriales = "V";
 	}
 	if (doc.interne) {
-		mercuriales = "I - Contrat interne";
+		mercuriales = "I";
 	}
 
     for(certification in doc.declaration) {
@@ -73,10 +73,27 @@ function(doc) {
                                                                 var produit = doc.declaration[certification][genre][appellation][mention][lieu][couleur][cepage].detail[detail];
                                                                 if (produit.actif) {
                                                                     if(doc.valide.date_validation){
+                                                                        var mentionKey = "DEFAUT"
                                                                         if(produit.vtsgn) {
-                                                                            mention = produit.vtsgn;
+                                                                            mentionKey = produit.vtsgn;
                                                                         }
-                                                                        var produitHash = "/declaration/certifications/"+certification+"/genres/"+genre+"/appellations/"+appellation+"/mentions/"+mention+"/lieux/"+lieu+"/couleurs/"+couleur+"/cepages/"+cepage;
+                                                                        
+                                                                        var genreKey = "TRANQ";
+                                                                        if(appellation.match(/CREMANT/)) {
+                                                                            genreKey = "EFF";
+                                                                        }
+                                                                        var lieuKey = lieu.replace("lieu", "");
+                                                                        if(!lieuKey) {
+                                                                            lieuKey = "DEFAUT";
+                                                                        }
+                                                                        
+                                                                        var couleurKey = couleur.replace("couleur", "").toLowerCase();
+                                                                        if(!couleurKey) {
+                                                                            couleurKey = "DEFAUT";
+                                                                        }
+                                                                        
+                                                                        
+                                                                        var produitHash = "/declaration/certifications/AOC_ALSACE/genres/"+genreKey+"/appellations/"+appellation.replace('appellation_', '')+"/mentions/"+mentionKey+"/lieux/"+lieuKey+"/couleurs/"+couleurKey+"/cepages/"+cepage.replace("cepage_", "");
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
                                                                         
                                                                         var quantite = produit.volume_propose;
@@ -98,7 +115,7 @@ function(doc) {
                                                                             label = produit.label;
                                                                         }
 
-                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_cloture, doc.valide.date_saisie, produit.millesime, null, produit.denomination.replace(/,/g, ""), null, null, null, doc.cepage, libelle_cepage, label, quantite, produit.prix_unitaire, centilisation]);
+                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_cloture, doc.valide.date_saisie, produit.millesime, null, produit.denomination.replace(/,/g, ""), null, null, null, doc.cepage, libelle_cepage, label, quantite, produit.prix_unitaire, centilisation, doc.acheteur_type, doc.vendeur_type]);
                                                                     }
                                                                 }
                                                             }
