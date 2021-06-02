@@ -11,10 +11,10 @@ $hasCourtier = $vrac->hasCourtier();
 			<span style="background-color: grey; color: white; font-weight: bold;">&nbsp;Vendeur&nbsp;</span><br/>
 			<table cellpadding="0" cellspacing="0" border="0" width="99%" style="border: 1px solid #000;">
 				<tr>
-					<td>&nbsp;<i><?php echo truncate_text($vrac->vendeur->raison_sociale, 35); ?></i></td>
+					<td>&nbsp;<i><?php if($vrac->vendeur->intitule): ?><?php echo $vrac->vendeur->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->vendeur->raison_sociale, 35); ?></i></td>
 				</tr>
                                 <tr>
-                                        <td>&nbsp;<i><?php if($vrac->vendeur->intitule): ?><?php echo $vrac->vendeur->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->vendeur->adresse, 50, "...", false) ?></i><br/>
+                                        <td>&nbsp;<i><?php echo truncate_text($vrac->vendeur->adresse, 50, "...", false) ?></i><br/>
                                         <i>&nbsp;<?php echo $vrac->vendeur->code_postal; ?></i>&nbsp;<i><?php echo $vrac->vendeur->commune; ?></i><br/></td>
                                 </tr>
 				<tr>
