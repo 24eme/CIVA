@@ -1,7 +1,8 @@
-<?php include_partial('tiers/title') ?>
+<?php include_partial('tiers/onglets', array('active' => 'stock_'.$type_ds, 'compte' => $compte, 'blocs' => $blocs)) ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
-    <?php include_partial('tiers/onglets', array('active' => 'stock_'.$type_ds, 'compte' => $compte, 'blocs' => $blocs)) ?>
+    
+    <?php include_partial('tiers/title') ?>
 
     <div id="espace_alsace_recolte" class="contenu clearfix">
 

@@ -1,3 +1,4 @@
+<nav id="main_nav">
 <ul id="onglets_majeurs" class="clearfix">
 	<?php if(count($blocs) != 1): ?>
 	<li class="<?php if($active== 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa", array("identifiant" => $compte->getIdentifiant()), isset($absolute)) ?>">Accueil</a></li>
@@ -24,3 +25,4 @@
 	<li class="<?php if($active== 'stock_'.DSCivaClient::TYPE_DS_NEGOCE): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds_compte", array("type" => DSCivaClient::TYPE_DS_NEGOCE, "sf_subject" => $compte), isset($absolute)) ?>">Stocks Négoce</a></li>
 	<?php endif; ?>
 </ul>
+</nav>
