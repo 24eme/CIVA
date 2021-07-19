@@ -103,7 +103,7 @@ class tiersActions extends sfActions {
 
         $blocs = $this->buildBlocs($compte);
 
-        return $this->renderPartial("tiers/onglets", array("compte" => $compte, "blocs" => $blocs, "active" => "drm", 'absolute' => true));
+        return $this->renderPartial("tiers/onglets", array("compte" => $compte, "blocs" => $blocs, "active" => $request->getParameter('active'), 'absolute' => true));
     }
 
     protected function buildBlocs($compte) {
@@ -120,6 +120,16 @@ class tiersActions extends sfActions {
                 }
             }
 
+        }
+        $url_compte = sfConfig::get("app_giilda_url_compte",false);
+
+        if($url_compte) {
+            $blocs[Roles::CONTACT] = sprintf($url_compte, $etablissement->identifiant);
+        }
+
+        $url_facture = sfConfig::get("app_giilda_url_facture",false);
+        if($url_facture) {
+            $blocs[Roles::FACTURE] = sprintf($url_facture, $etablissement->identifiant);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {

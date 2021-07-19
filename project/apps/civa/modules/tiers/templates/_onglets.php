@@ -10,7 +10,7 @@
 	<li class="<?php if($active== 'recolte_acheteur'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur_compte", $compte, isset($absolute)) ?>">Achat Récolte</a></li>
 	<?php endif; ?>
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_DRM) && isset($blocs[Roles::TELEDECLARATION_DRM])): ?>
- 	<li class="<?php if($active== 'drm'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::TELEDECLARATION_DRM] ?>">DRM</a></li>
+ 	<li class="<?php if(preg_match('/(drm)/', $active)): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::TELEDECLARATION_DRM] ?>">DRM</a></li>
 	<?php endif; ?>
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_VRAC) && isset($blocs[Roles::TELEDECLARATION_VRAC])): ?>
 	<li class="<?php if($active== 'vrac'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_vrac_compte", $compte, isset($absolute)) ?>">Contrats</a></li>
@@ -24,5 +24,7 @@
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)): ?>
 	<li class="<?php if($active== 'stock_'.DSCivaClient::TYPE_DS_NEGOCE): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds_compte", array("type" => DSCivaClient::TYPE_DS_NEGOCE, "sf_subject" => $compte), isset($absolute)) ?>">Stocks Négoce</a></li>
 	<?php endif; ?>
+	<li class="<?php if(preg_match('/(facture)/', $active)): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::FACTURE] ?>">Factures</a></li>
+	<li class="<?php if(preg_match('/(societe|etablissement|compte)/', $active)): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::CONTACT] ?>">Contacts</a></li>
 </ul>
 </nav>
