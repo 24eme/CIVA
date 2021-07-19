@@ -24,7 +24,11 @@
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_DS_NEGOCE)): ?>
 	<li class="<?php if($active== 'stock_'.DSCivaClient::TYPE_DS_NEGOCE): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_ds_compte", array("type" => DSCivaClient::TYPE_DS_NEGOCE, "sf_subject" => $compte), isset($absolute)) ?>">Stocks Négoce</a></li>
 	<?php endif; ?>
+	<?php if(isset($blocs[Roles::FACTURE])): ?>
 	<li class="<?php if(preg_match('/(facture)/', $active)): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::FACTURE] ?>">Factures</a></li>
+	<?php endif; ?>
+	<?php if(isset($blocs[Roles::CONTACT])): ?>
 	<li class="<?php if(preg_match('/(societe|etablissement|compte)/', $active)): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo $blocs[Roles::CONTACT] ?>">Contacts</a></li>
+	<?php endif; ?>
 </ul>
 </nav>
