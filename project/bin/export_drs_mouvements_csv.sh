@@ -23,7 +23,7 @@ bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$A
 if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     base_ligne="DR;" campagne ";" $3 ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";" $9;
     if($13) {
-        print base_ligne ";superficie;" $13 ";;;"docid;
+        print base_ligne ";superficie;" $13 ";;;;"docid;
     }
 
     suffixe = ""
@@ -32,10 +32,10 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     }
 
     if($14) {
-        print base_ligne ";volume" suffixe ";" $14 ";;;"docid;
+        print base_ligne ";volume" suffixe ";" $14 ";;;;"docid;
     }
     if($11 && $1 == $3 && $5 !~ "Jus de raisin") {
-        print base_ligne ";volume" suffixe "_cave_particuliere;" $11 ";;;"docid;
+        print base_ligne ";volume" suffixe "_cave_particuliere;" $11 ";;;;"docid;
     }
     if($11 && $1 != $3) {
         gsub("\"", "", $22);
@@ -43,10 +43,10 @@ if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
         print base_ligne ";volume" suffixe "_" $22 ";" $11 ";" $1 ";" $1 ";" $2";"docid;
     }
     if($15) {
-        print base_ligne ";lies" suffixe ";" $15 ";;;"docid;
+        print base_ligne ";lies" suffixe ";" $15 ";;;;"docid;
     }
     if($17) {
-        print base_ligne ";vci" suffixe ";" $17 ";;;"docid;
+        print base_ligne ";vci" suffixe ";" $17 ";;;;"docid;
     }
 }
 if( $7 ~ "TOTAL" ) {
@@ -56,24 +56,24 @@ if( $7 ~ "TOTAL" ) {
     base_ligne="DR;" campagne ";" $3 ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";"
 
     if($1 == $3 && $7 && $7 !~ "Rebeche" && $7 != "Blanc" && $7 != "Rouge") {
-        print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;;"docid;
-        print base_ligne ";usages_industriels;" $15 ";;;"docid;
+        print base_ligne ";volume_revendique;" $14 - $15 - $17 ";;;;"docid;
+        print base_ligne ";usages_industriels;" $15 ";;;;"docid;
     }
 
     if(($11 || $10) && $1 == $3) {
         if($10) {
-            print base_ligne ";superficie_cave_particuliere;" $10 ";;;"docid;
+            print base_ligne ";superficie_cave_particuliere;" $10 ";;;;"docid;
         }
 
         if($11) {
-            print base_ligne ";volume_revendique_cave_particuliere;" $11 - $12 - $16 ";;;"docid;
+            print base_ligne ";volume_revendique_cave_particuliere;" $11 - $12 - $16 ";;;;"docid;
         }
 
         if($12) {
-            print base_ligne ";dplc_cave_particuliere;" $12 ";;;"docid;
+            print base_ligne ";dplc_cave_particuliere;" $12 ";;;;"docid;
         }
         if($16) {
-            print base_ligne ";vci_cave_particuliere;" $16 ";;;"docid;
+            print base_ligne ";vci_cave_particuliere;" $16 ";;;;"docid;
         }
     }
 
