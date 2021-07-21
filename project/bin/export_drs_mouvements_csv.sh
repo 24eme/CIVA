@@ -13,7 +13,7 @@ echo "type;annee;identifiant;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denom
 
 bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$ANNEE" -F ";" '{
     docid="DR-"$3"-"campagne
-    sub(/"/, "", docid)
+    gsub(/"/, "", docid)
     lieu=$6;
     lieudit="";
     if($5 ~ "Lieu-dit") {
