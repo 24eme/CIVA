@@ -22,7 +22,7 @@ done
 iconv -f UTF8 -t ISO88591//TRANSLIT data/dr.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.csv
 cp data/dr.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_dr.utf8.csv
 
-CSVHEADER="type;annee;cvi;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;cvi acheteur;nom acheteur"
+CSVHEADER="type;annee;cvi;identifiant;nom;appellation;lieu;cepage;vtsgn;lieudit;denomination;type mouvement;quantite;identifiant acheteur;cvi acheteur;nom acheteur;doc id"
 echo $CSVHEADER > data/dr_mouvements.utf8.csv
 for (( i=2017; i <= 2020; i++ ));
 do
