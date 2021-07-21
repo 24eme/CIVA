@@ -97,13 +97,12 @@ class tiersActions extends sfActions {
         }
 
         if(!$compte) {
-
-            return $this->renderText(null);
+            return $this->renderPartial("tiers/ongletsAdmin", array("active" => $request->getParameter('active'), 'absolute' => true));
         }
 
         $blocs = $this->buildBlocs($compte);
 
-        return $this->renderPartial("tiers/onglets", array("compte" => $compte, "blocs" => $blocs, "active" => $request->getParameter('active'), 'absolute' => true));
+        return $this->renderPartial("tiers/onglets", array("compte" => $compte, 'isAdmin' => true, "blocs" => $blocs, "active" => $request->getParameter('active'), 'absolute' => true));
     }
 
     protected function buildBlocs($compte) {

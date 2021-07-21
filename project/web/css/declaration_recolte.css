@@ -562,6 +562,11 @@ input.btn_inactif {
 
 #main_nav #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
 
+#main_nav #onglets_majeurs .ui-tabs-disabled a {
+	background: #fff;
+	color: #ddd;
+}
+
 #application_dr.mon_espace_civa .contenu
 {
 	background: #edecec;
