@@ -189,6 +189,9 @@ class vracActions extends sfActions
                 foreach($emails as $email) {
                 	VracMailer::getInstance()->annulationContrat($this->vrac, $email);
                 }
+				foreach(sfConfig::get('app_email_notifications', array()) as $email) {
+					VracMailer::getInstance()->annulationContrat($this->vrac, $email);
+				}
 				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }

@@ -557,15 +557,15 @@ input.btn_inactif {
 /**
  * Mon espace civa
  ******************************************/
-#application_dr.mon_espace_civa #onglets_majeurs
-{
-	float: none;
-	padding: 0;
+
+#main_nav #onglets_majeurs li a { background: #bcbdbc; }
+
+#main_nav #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
+
+#main_nav #onglets_majeurs .ui-tabs-disabled a {
+	background: #fff;
+	color: #ddd;
 }
-
-#application_dr.mon_espace_civa #onglets_majeurs li a { background: #bcbdbc; }
-
-#application_dr.mon_espace_civa #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
 
 #application_dr.mon_espace_civa .contenu
 {
