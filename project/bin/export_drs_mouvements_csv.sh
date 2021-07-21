@@ -23,7 +23,7 @@ bash bin/export_drs_csv.sh $ANNEE | grep -v "hash_produit" | awk -v campagne="$A
 if($6 !~ "TOTAL" && $7 !~ "TOTAL") {
     base_ligne="DR;" campagne ";" $3 ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";" $9;
     if($13) {
-        print base_ligne ";superficie;" $13 ";;docid";
+        print base_ligne ";superficie;" $13 ";;"docid;
     }
 
     suffixe = ""
