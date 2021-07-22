@@ -427,26 +427,25 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function getTotalVinSansIg() {
-        foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(preg_match('/appellation_VINTABLE/', $hash))
-                    return ($appellation->getTotalStock())? ($appellation->getTotalStock() - $this->getTotalMousseuxSansIg()) : 0;
+        if(!$this->exist('/declaration/certification/genre/appellation_VINTABLE')) {
+            return 0;
         }
-        return 0;
+        $volume = 0;
+        foreach ($this->get('/declaration/certification/genre/appellation_VINTABLE')->getProduitsDetails() as $produit) {
+            if(strpos($produit->getHash(), '/cepage_MS') !== false) {
+                continue;
+            } 
+            $volume += $produit->volume_normal;
+        }
+        return $volume;
     }
 
     public function getTotalMousseuxSansIg() {
-        foreach ($this->declaration->getAppellationsSorted() as $hash => $appellation) {
-            if(preg_match('/appellation_VINTABLE/', $hash)){
-                if(!$appellation->exist('mention')) return 0;
-                if(!$appellation->mention->exist('lieu')) return 0;
-                if(!$appellation->mention->lieu->exist('couleur')) return 0;
-                foreach ($appellation->mention->lieu->couleur->getCepages() as $hash_c => $cepage){
-                    if($hash_c == 'cepage_MS')
-                        return ($cepage->detail[0]->volume_normal)? $cepage->detail[0]->volume_normal : 0;
-                }
-            }
+        if(!$this->exist('/declaration/certification/genre/appellation_VINTABLE')) {
+            return 0;
         }
-        return 0;
+        
+        return $this->get('/declaration/certification/genre/appellation_VINTABLE')->getTotalStock() - $this->getTotalVinSansIg();
     }
 
     public function getTotalVCI() {
