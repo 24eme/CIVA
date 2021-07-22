@@ -75,7 +75,7 @@ class Current extends BaseCurrent {
             return CurrentClient::getInstance()->getCurrentFromTheFuture()."07";
         }
 
-        return "202007";
+        return "202107";
     }
 
     public function getAnneeDS($type_ds = null)
