@@ -316,22 +316,25 @@ class ExportDSPdf extends ExportDocument {
 
     protected function getAutres($ds, $tableauDivise = true) {
         if(!array_key_exists($ds->_id, $this->autres)) {
-            $tableauGauche = array(
-                "Moûts concentrés rectifiés" => $ds->isDSPrincipale() ? $ds->mouts : null,
-                "Vins sans IG (Vins de table)" => $ds->getTotalVinSansIg(),
-                "Vins sans IG mousseux" => $ds->getTotalMousseuxSansIg(),
-                "Rebêches" => $ds->isDSPrincipale() ? $ds->rebeches : null,
-                "Lies en stocks" => $ds->isDSPrincipale() ? $ds->lies : null,
-            );
-
-            if ($ds->exist("dplc_rouge")) {
-                $tableauGauche["DRA/DPLC Blanc"] = $ds->isDSPrincipale() ? $ds->dplc : null;
-                $tableauGauche["DRA/DPLC Rouge"] = $ds->isDSPrincipale() ? $ds->dplc_rouge : null;
-            }else{
-                $tableauGauche["Dépassements de rendements"] = $ds->isDSPrincipale() ? $ds->dplc : null;
+            $tableauGauche = array();
+            $tableauDroite = array();
+            foreach($ds->getConfig()->get(HashMapper::convert('/declaration/certification/genre/appellation_VINTABLE'))->getProduits() as $produit) {
+                if(!$produit->isForDS()) {
+                    continue;
+                }
+                $tableauGauche[$produit->getLibelleFormat()] = 0;
             }
-
-            $tableauDroite = $ds->getTotalVCI();
+            $tableauGauche = array_merge($tableauGauche, $ds->getTotalVCI());
+            $tableauDroite["Moûts concentrés rectifiés"] = $ds->isDSPrincipale() ? $ds->mouts : null;
+            $tableauDroite["Rebêches"] = $ds->isDSPrincipale() ? $ds->mouts : null;
+            $tableauDroite["Lies en stocks"] = $ds->isDSPrincipale() ? $ds->lies : null;
+            
+            if ($ds->exist("dplc_rouge")) {
+                $tableauDroite["DRA/DPLC Blanc"] = $ds->isDSPrincipale() ? $ds->dplc : null;
+                $tableauDroite["DRA/DPLC Rouge"] = $ds->isDSPrincipale() ? $ds->dplc_rouge : null;
+            }else{
+                $tableauDroite["Dépassements de rendements"] = $ds->isDSPrincipale() ? $ds->dplc : null;
+            }
 
             $hasTableauDroite = count($tableauDroite) > 0;
 
