@@ -176,23 +176,19 @@ Le CIVA");
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique
 sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le téléservice \"Alsace Stocks\" est accessible dès maintenant et jusqu'au 10 septembre 2020 inclus.
+Le téléservice \"Alsace Stocks\" sera accessible dès le 26 juillet, et jusqu'au 10 septembre 2021 inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF
 ou consulter l'aide en ligne.
 
 RAPPELS :
-    - DEPASSEMENT : depuis la dernière campagne, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
+    - DEPASSEMENT : depuis la campagne 2019/2020, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
     - VCI : si vous détenez encore du VCI, vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
 IMPORTANT : Clôture de Campagne
     - La DRM de Juillet (à déposer entre le 1er et le 10 Août) sera à établir de façon habituelle et donc à clôturer avec un STOCK THEORIQUE
-    - Les modalités concernant la DRM d'Août, les Pertes et Manquants, ainsi que la DAI (Déclaration Annuelle d'Inventaire) vous seront précisées par mail courant Août
-
-RAPPEL DRM :
-Le protocole qui avait été établi en 2017 entre la DGDDI et le CIVA, et qui concernait le regroupement de certains produits dans des colonnes TOTAL, prend fin au 31 Juillet 2020.
-Par conséquent la DRM d'Août 2020 devra donc OBLIGATOIREMENT être détaillée par cépage dans les différentes Appellations, hormis le Crémant d'Alsace qui est décliné par couleur.
+    - Les modalités concernant la DRM d'Août, les Pertes et Manquants, ainsi que la DAI (Déclaration Annuelle d'Inventaire) vous seront rapidement précisées par mail.
 
 Cordialement,
 
