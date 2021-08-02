@@ -326,7 +326,7 @@ class ExportDSPdf extends ExportDocument {
             }
             $tableauGauche = array_merge($tableauGauche, $ds->getTotalVCI());
             $tableauDroite["Moûts concentrés rectifiés"] = $ds->isDSPrincipale() ? $ds->mouts : null;
-            $tableauDroite["Rebêches"] = $ds->isDSPrincipale() ? $ds->mouts : null;
+            $tableauDroite["Rebêches"] = $ds->isDSPrincipale() ? $ds->rebeches : null;
             $tableauDroite["Lies en stocks"] = $ds->isDSPrincipale() ? $ds->lies : null;
             
             if ($ds->exist("dplc_rouge")) {
