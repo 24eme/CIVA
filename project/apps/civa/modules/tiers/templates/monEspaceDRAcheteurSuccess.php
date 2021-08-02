@@ -1,8 +1,7 @@
-<?php include_partial('tiers/title') ?>
+<?php include_partial('tiers/onglets', array('active' => 'recolte_acheteur', 'compte' => $compte, 'blocs' => $blocs)) ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
-
-    <?php include_partial('tiers/onglets', array('active' => 'recolte_acheteur', 'compte' => $compte, 'blocs' => $blocs)) ?>
+    <?php include_partial('tiers/title') ?>
 
      <div id="espace_acheteurs" class="contenu clearfix">
  	    <?php if($sf_user->hasFlash('confirmation')) : ?>

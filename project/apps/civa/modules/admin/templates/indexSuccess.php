@@ -1,5 +1,5 @@
+<?php include_partial('tiers/ongletsAdmin', array('active' => 'accueil')) ?>
 
-    <h2 class="titre_principal">Administration</h2>
     <!-- #application_dr -->
     <div class="clearfix" id="application_dr">
 
