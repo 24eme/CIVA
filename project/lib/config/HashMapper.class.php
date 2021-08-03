@@ -34,10 +34,6 @@ class HashMapper {
         return str_replace('/recolte/', '/declaration/', $hash);
     }
 
-    public static function hashDR2hashDS($hash) {
-        return str_replace('/recolte/', '/declaration/', $hash);
-    }
-
 }
 
 class HashMapperCached {
