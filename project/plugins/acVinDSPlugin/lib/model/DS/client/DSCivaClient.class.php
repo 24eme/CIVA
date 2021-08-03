@@ -702,7 +702,7 @@ class DSCivaClient extends DSClient {
             if($appellationConfig->getGenre()->getKey() == "VCI") {
                 $appellationConfig = $appellationConfig->getGenre();
             }
-            $result[preg_replace('/^\/recolte/','declaration',HashMapper::inverse($appellationConfig->getHash()))] = $appellationConfig;
+            $result[HashMapper::inverse($appellationConfig->getHash(), 'DS')] = $appellationConfig;
         }
 
         return $result;

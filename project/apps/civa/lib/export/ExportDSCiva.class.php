@@ -499,9 +499,6 @@ class ExportDSCiva {
                     return self::CODE_DOUANE_ED;
                 }
                 if ($cepage_code == "KL") {
-                    /*$hash = str_replace('/declaration', '/recolte', $cepage->getCouleur()->getHash());
-                    $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
-                    return $config->getDouane()->getFullAppCode($vtsgn);*/
 
                     return $cepage->getConfig()->getCodeDouane($vtsgn);
                 }
@@ -512,17 +509,16 @@ class ExportDSCiva {
                     return substr($config->getCodeDouane($vtsgn), 0, -1);
                 }
 
-                $hash = "/recolte/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_" . $cepage_code;
+                $hash = "/declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_" . $cepage_code;
                 $config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get(HashMapper::convert($hash));
 
                 return $config->getCodeDouane($vtsgn);
 
             case 'PINOTNOIR':
             case 'PINOTNOIRROUGE':
-                //$hash = str_replace('/declaration', '/recolte', $cepage->getLieu()->getHash());
-                //$config = $cepage->getCouchdbDocument()->getConfigurationCampagne()->get($hash);
 
                 return substr($cepage->getConfig()->getCodeDouane($vtsgn), 0, -1);
+
             default:
 
                 return $cepage->getConfig()->getCodeDouane($vtsgn);

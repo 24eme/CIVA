@@ -133,7 +133,6 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function addNoeud($hash) {
-        $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash = preg_replace("/(mentionVT|mentionSGN)/", "mention", $hash);
         $noeud = $this->getOrAdd($hash);
         $config = $noeud->getConfig();
@@ -147,14 +146,14 @@ class DSCiva extends DS implements IUtilisateursDocument {
                 if(!$item->isForDS()) {
                     continue;
                 }
-                $this->addDetail(HashMapper::inverse($item->getHash()));
+                $this->addDetail(HashMapper::inverse($item->getHash(), 'DS'));
             }
         }
 
         if($noeud instanceof DSAppellation) {
-            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash()));
+            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash(), 'DS'));
         } elseif(count($config->getChildrenNode()) == 1) {
-            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash()));
+            $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash(), 'DS'));
         }
 
         return $noeud;
@@ -177,7 +176,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
                 continue;
             }
 
-            $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
+            $this->addDetail(HashMapper::hashDR2hashDS($detail->getCepage()->getHash()), $detail->lieu);
         }
 
         if($dr->recolte->getVciCaveParticuliere() > 0) {
@@ -200,7 +199,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
 
                     continue;
                 }
-                $this->addDetail($detail->getCepage()->getHash(), $detail->lieu);
+                $this->addDetail(HashMapper::hashDR2hashDS($detail->getCepage()->getHash()), $detail->lieu);
             }
             if($dr->recolte->getTotalDontVciVendusByCvi('negoces', $cvi_acheteur) || $dr->recolte->getTotalDontVciVendusByCvi('cooperatives', $cvi_acheteur)) {
                 $this->addAppellation("declaration/certification/genreVCI");
@@ -229,7 +228,6 @@ class DSCiva extends DS implements IUtilisateursDocument {
 
 
     public function addProduit($hash,$fromDs = false) {
-        $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $hash = preg_replace("/(mentionVT|mentionSGN)/", "mention", $hash);
         $hash_config = HashMapper::convert($hash);
 
@@ -238,7 +236,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         }
 
         if(!$this->getConfig()->get($hash_config)->isForDS()) {
-            $this->addNoeud(HashMapper::inverse($this->getConfig()->get($hash_config)->getParentNode()->getHash()));
+            $this->addNoeud(HashMapper::inverse($this->getConfig()->get($hash_config)->getParentNode()->getHash(), 'DS'));
             return null;
         }
 
@@ -606,7 +604,6 @@ class DSCiva extends DS implements IUtilisateursDocument {
     }
 
     public function addVolumesWithHash($hash,$lieu,$vol_normal,$vol_vt,$vol_sgn,$sum = false) {
-        $hash = preg_replace('/^\/recolte/','declaration', $hash);
         $cepage = $this->getOrAdd($hash);
         if(!$cepage) return "NO_CEPAGE";
         if($lieu == "" || preg_match('/appellation_GRDCRU/', $hash)){

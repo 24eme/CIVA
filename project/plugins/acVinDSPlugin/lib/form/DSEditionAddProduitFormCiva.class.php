@@ -36,11 +36,10 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
         if (is_null($this->_choices_produits)) {
             $this->_choices_produits = array("" => "");
             foreach($this->getProduits() as $hash => $cepage) {
-                $hash = preg_replace('/^\/recolte/','declaration',$hash);
                 if(!$cepage->isForDS()) {
                     continue;
                 }
-                if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist(preg_replace('/^\/recolte/','declaration',$hash)) && count($this->_ds->get($hash)->detail) > 0) {
+                if(!$this->_config_noeud->hasLieuEditable() && $this->_ds->exist($hash) && count($this->_ds->get($hash)->detail) > 0) {
 
                     continue;
                 }
@@ -55,7 +54,7 @@ class DSEditionAddProduitFormCiva extends acCouchdbForm
     {
         $produits = array();
         foreach($this->_config_noeud->getProduits() as $produit) {
-            $produits[HashMapper::inverse($produit->getHash())] = $produit;
+            $produits[HashMapper::inverse($produit->getHash(), 'DS')] = $produit;
         }
 
         return $produits;

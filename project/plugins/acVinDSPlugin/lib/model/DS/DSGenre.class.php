@@ -19,7 +19,7 @@ class DSGenre extends BaseDSGenre {
         $items_sorted = array();
         foreach($itemsconfigParent as $items_config) {
             foreach($items_config->getChildrenNode() as $hashConfig => $item_config) {
-                $hashDS = str_replace("recolte", "declaration", HashMapper::inverse($item_config->getHash()));
+                $hashDS = HashMapper::inverse($item_config->getHash(), 'DS');
                 if($this->getDocument()->exist($hashDS)) {
                     $item = $this->getDocument()->get($hashDS);
                     $items_sorted[$item->getHash()] = $item;

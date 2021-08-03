@@ -9,9 +9,9 @@ class HashMapper {
         return self::getHashMapper()->convert($hash);
     }
 
-    public static function inverse($hash) {
+    public static function inverse($hash, $type = 'DR') {
 
-        return self::getHashMapper()->inverse($hash);
+        return self::getHashMapper()->inverse($hash, $type);
     }
 
     public static function getHashMapperCached() {
@@ -25,6 +25,10 @@ class HashMapper {
         }
 
         return self::$hashMapper;
+    }
+
+    public static function hashDR2hashDS($hash) {
+        return str_replace('/recolte/', '/declaration/', $hash);
     }
 
 }
@@ -95,12 +99,12 @@ class HashMapperCached {
         return $hash;
     }
 
-    public function inverse($hash) {
+    public function inverse($hash, $type) {
         $hashOrigine = $hash;
 
-        if(array_key_exists($hash, $this->inverse_hash)) {
+        if(array_key_exists($type.$hash, $this->inverse_hash)) {
 
-            return $this->inverse_hash[$hash];
+            return $this->inverse_hash[$type.$hash];
         }
 
         $hash = preg_replace("|^/declaration|", "/recolte", $hash);
@@ -126,7 +130,11 @@ class HashMapperCached {
         $hash = preg_replace("|/cepages/([a-zA-Z0-9_-]+)|", "/cepage_$1", $hash);
         $hash = str_replace("/genres/EFF", "/genre", $hash);
 
-        $this->inverse_hash[$hashOrigine] = $hash;
+        if ($type == 'DS') {
+            $hash = str_replace('/recolte/', '/declaration/', $hash);
+        }
+
+        $this->inverse_hash[$type.$hashOrigine] = $hash;
 
         return $hash;
     }
