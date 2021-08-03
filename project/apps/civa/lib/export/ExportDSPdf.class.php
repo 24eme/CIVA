@@ -323,6 +323,12 @@ class ExportDSPdf extends ExportDocument {
                     continue;
                 }
                 $tableauGauche[$produit->getLibelleFormat()] = 0;
+                $hash = HashMapper::inverse($produit->getHash(), 'DS');
+                if ($ds->exist($hash)) {
+                    $vsig = $ds->get($hash);
+                    $vsig->updateTotalVolumes();
+                    $tableauGauche[$produit->getLibelleFormat()] = $vsig->total_normal;
+                }
             }
             $tableauGauche = array_merge($tableauGauche, $ds->getTotalVCI());
             $tableauDroite["Moûts concentrés rectifiés"] = $ds->isDSPrincipale() ? $ds->mouts : null;
