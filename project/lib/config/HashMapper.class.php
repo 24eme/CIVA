@@ -11,20 +11,23 @@ class HashMapper {
 
     public static function inverse($hash, $type = 'DR') {
 
-        return self::getHashMapper()->inverse($hash, $type);
+        return self::getHashMapper($type)->inverse($hash, $type);
     }
 
-    public static function getHashMapperCached() {
+    public static function getHashMapperCached($type) {
 
-        return new HashMapperCached();
+        return new HashMapperCached($type);
     }
 
-    public static function getHashMapper() {
+    public static function getHashMapper($type = 'DR') {
         if(is_null(self::$hashMapper)) {
-            self::$hashMapper = CacheFunction::cache('model', "HashMapper::getHashMapperCached");
+            self::$hashMapper = array();
+        }
+        if (!isset(self::$hashMapper[$type])) {
+            self::$hashMapper[$type] = CacheFunction::cache('model', "HashMapper::getHashMapperCached", array($type));
         }
 
-        return self::$hashMapper;
+        return self::$hashMapper[$type];
     }
 
     public static function hashDR2hashDS($hash) {
@@ -38,12 +41,12 @@ class HashMapperCached {
     public $convert_hash = array();
     public $inverse_hash = array();
 
-    public function __construct() {
+    public function __construct($type = 'DR') {
         $configuration = ConfigurationClient::getCurrent();
-        $this->callAll($configuration->declaration);
+        $this->callAll($configuration->declaration, $type);
     }
 
-    public function callAll($child) {
+    public function callAll($child, $type) {
         if(!method_exists($child, "getChildrenNode")) {
 
             return;
@@ -55,10 +58,10 @@ class HashMapperCached {
         }
         foreach($child->getChildrenNode() as $child) {
             $hash = $this->convert($child->getHash());
-            $this->inverse($hash);
+            $this->inverse($hash, $type);
             $hash = $this->convert($child->getHash()."/");
-            $this->inverse($hash);
-            $this->callAll($child);
+            $this->inverse($hash, $type);
+            $this->callAll($child, $type);
         }
     }
 
