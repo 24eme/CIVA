@@ -45,7 +45,7 @@ class DSEditionAddLieuFormCiva extends acCouchdbForm
         $lieux = array();
 
         foreach($this->_config_noeud->mentions->getFirst()->getLieux() as $lieu) {
-            $lieux[HashMapper::inverse($lieu->getHash())] = $lieu;
+            $lieux[HashMapper::inverse($lieu->getHash(), 'DS')] = $lieu;
         }
 
         return $lieux;

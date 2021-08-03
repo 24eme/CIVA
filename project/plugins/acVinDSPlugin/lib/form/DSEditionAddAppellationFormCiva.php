@@ -27,8 +27,8 @@ class DSEditionAddAppellationFormCiva extends acCouchdbForm
         if (is_null($this->_choices)) {
             $this->_choices = array("" => "");
             foreach($this->getAppellations() as $key => $appellation) {
-                $hash = str_replace("recolte", "declaration", HashMapper::inverse($appellation->getHash()));
-                if($this->_ds->exist(preg_replace('/^\/recolte/','declaration', $hash))) {
+                $hash = HashMapper::inverse($appellation->getHash(), 'DS');
+                if($this->_ds->exist($hash)) {
 
                     continue;
                 }

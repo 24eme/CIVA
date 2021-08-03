@@ -24,7 +24,7 @@ class DSDeclaration extends BaseDSDeclaration {
     public function getAppellationsSorted() {
         $appellations = array();
         foreach(DSCivaClient::getInstance()->getConfigAppellations($this->getDocument()->getConfig()) as $item) {
-            $hash = str_replace("recolte", "declaration", HashMapper::inverse($item->getHash()));
+            $hash = HashMapper::inverse($item->getHash(), 'DS');
             if($this->getDocument()->exist($hash)) {
                 $appellations[$hash] = $this->getDocument()->get($hash);
             }
