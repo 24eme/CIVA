@@ -50,10 +50,29 @@
                 </div>
         </div>
     </div>
+    <h2 class="titre_principal" style="margin-bottom: 10px">Saisie du stock initial</h2>
+    <div class="clearfix" style="padding: 0 20px; margin-bottom: 10px">
+        <table class="table_donnees pyjama_auto">
+        <thead><tr><th style="width: auto;">Établissement</th><th>Identifiant</th><th>Mois de début de stock</th></tr></thead>
+        <tbody>
+        <?php foreach ($etablissements as $etablissement): ?>
+          <tr>
+            <td><?= $etablissement->raison_sociale ?></td>
+            <td><?= $etablissement->identifiant ?></td>
+            <td style="text-align: center;">
+                <?php
+                    echo ($etablissement->exist('mois_stock_debut')) ? $etablissement->mois_stock_debut : 8 ;
+                ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+        </table>
+    </div>
     <h2 class="titre_principal" style="margin-bottom: 10px">Régime CRD</h2>
     <div class="clearfix" style="padding: 0 20px; margin-bottom: 10px">
         <table class="table_donnees pyjama_auto">
-            <thead><tr><th>Établissement</th><th>Identifiant</th><th>Régime</th><th>Action</th></tr></thead>
+            <thead><tr><th style="width: auto;">Établissement</th><th>Identifiant</th><th>Régime</th><th>Action</th></tr></thead>
             <tbody>
                 <?php foreach ($etablissements as $etablissement): ?>
                 <tr>
