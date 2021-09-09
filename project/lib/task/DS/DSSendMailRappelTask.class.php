@@ -61,22 +61,22 @@ EOF;
         
         $drm = acCouchdbManager::getClient()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
         
+        if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && !$drm) {
+            
+            echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet\n";
+        }
+        
         if(!$drm) {
             return;
         }
         
-        f($arguments['type_ds'] == DSCivaClient::TYPE_DS_NEGOCE && $drm && strpos($drm->declarant->famille, "NEGO") === false) {
+        if($arguments['type_ds'] == DSCivaClient::TYPE_DS_NEGOCE && $drm && strpos($drm->declarant->famille, "NEGO") === false) {
             return;
         }
         
         if($arguments['type_ds'] == DSCivaClient::TYPE_DS_PROPRIETE && $drm && strpos($drm->declarant->famille, "NEGO" !== false)) {
             
             return;
-        }
-        
-        if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && !$drm) {
-            
-            echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet\n";
         }
         
         $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
