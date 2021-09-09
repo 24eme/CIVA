@@ -59,14 +59,22 @@ EOF;
             return;
         }
         
-        $drm = acCouchdbManager::getInstance()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
+        $drm = acCouchdbManager::getClient()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
         
         $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
 
         if(!$drm && !$ds) {
             return;
         }
-
+        
+        if(!$ds && $arguments['type_ds'] == DSCivaClient::TYPE_DS_NEGOCE && $drm && !strpos("NEGO", $drm->declarant->famille)) {
+            return;
+        }
+        
+        if(!$ds && $arguments['type_ds'] == DSCivaClient::v && $drm && strpos("NEGO", $drm->declarant->famille)) {
+            return;
+        }
+        
         if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && !$drm) {
             
             echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet\n";
