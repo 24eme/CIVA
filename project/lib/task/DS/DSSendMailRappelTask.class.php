@@ -61,17 +61,16 @@ EOF;
         
         $drm = acCouchdbManager::getClient()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
         
-        $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
-
-        if(!$drm && !$ds) {
+        if(!$drm) {
             return;
         }
         
-        if(!$ds && $arguments['type_ds'] == DSCivaClient::TYPE_DS_NEGOCE && $drm && !strpos("NEGO", $drm->declarant->famille)) {
+        f($arguments['type_ds'] == DSCivaClient::TYPE_DS_NEGOCE && $drm && strpos($drm->declarant->famille, "NEGO") === false) {
             return;
         }
         
-        if(!$ds && $arguments['type_ds'] == DSCivaClient::v && $drm && strpos("NEGO", $drm->declarant->famille)) {
+        if($arguments['type_ds'] == DSCivaClient::TYPE_DS_PROPRIETE && $drm && strpos($drm->declarant->famille, "NEGO" !== false)) {
+            
             return;
         }
         
