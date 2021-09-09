@@ -58,14 +58,20 @@ EOF;
         if(!preg_match("/^[C]*(67|68)/", $etablissement->identifiant)) {
             return;
         }
+        
+        $drm = acCouchdbManager::getInstance()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
+        
+        $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
 
-        if(!$etablissement->isActif()) {
+        if(!$drm && !$ds) {
             return;
         }
 
-        if(!$etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds'])) {
-            return;
+        if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && !$drm) {
+            
+            echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet\n";
         }
+        
         $ds = DSCivaClient::getInstance()->findPrincipaleByEtablissementAndPeriode($arguments['type_ds'], $etablissement, $arguments['periode']);
 
         if(!$ds) {
