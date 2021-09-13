@@ -362,6 +362,10 @@ class DRMGenerateCSV {
 
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
+        
+        if($mention) {
+            $libelle .= " ".$mention;
+        }
 
 	    if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && $produitDetail->lieu) {
 	        $complement = $produitDetail->lieu;
