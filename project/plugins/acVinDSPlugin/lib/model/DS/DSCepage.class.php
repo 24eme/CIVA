@@ -11,6 +11,11 @@ class DSCepage extends BaseDSCepage {
         return $this->getParent();
     }
 
+    public function getCepage() {
+
+        return $this;
+    }
+
     public function getLieu() {
 
         return $this->getCouleur()->getLieu();
