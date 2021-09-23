@@ -85,10 +85,10 @@ class ExportDSCiva {
         $lignes = "";
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
 
-        if ($ds->isDsPrincipale()) {
-            $lignes.= $this->makeXMLDSLigne($lieu_stockage, "LIES", $this->convertToFloat($ds->lies, false));
-            $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VDRA", $this->convertToFloat($ds->dplc, false));
-        }
+        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "LIES", $this->convertToFloat($ds->lies, false));
+        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VDRA", $this->convertToFloat($ds->dplc, false));
+        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "REBECHES", $this->convertToFloat($ds->rebeches, false));
+        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VNC", $this->convertToFloat(0, false));
 
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
 
@@ -96,9 +96,6 @@ class ExportDSCiva {
             $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
         }
 
-        if ($ds->hasRebechesForXML()) {
-            $lignes .= $this->addXMLDSRebeches($ds);
-        }
 
         $lignes .= $this->addXMLDSMouts($ds);
         return $lignes;
@@ -165,14 +162,6 @@ class ExportDSCiva {
         }
         $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
         return $this->makeXMLDSLigne($lieu_stockage, "MCR", $ds->getMouts());
-    }
-
-    protected function addXMLDSRebeches($ds) {
-        if (!$ds->hasRebechesForXML()) {
-            return '';
-        }
-        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        return $this->makeXMLDSLigne($lieu_stockage, "REBECHE", $ds->getRebeches());
     }
 
     public function exportEntete() {
