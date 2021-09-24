@@ -87,7 +87,7 @@ class ExportDSCiva {
 
         $lignes.= $this->makeXMLDSLigne($lieu_stockage, "LIES", $this->convertToFloat($ds->lies, false));
         $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VDRA", $this->convertToFloat($ds->dplc, false));
-        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "REBECHES", $this->convertToFloat($ds->rebeches, false));
+        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "REBECHE", $this->convertToFloat($ds->rebeches, false));
         $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VNC", $this->convertToFloat(0, false));
 
         $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
