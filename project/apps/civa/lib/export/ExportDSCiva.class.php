@@ -56,69 +56,6 @@ class ExportDSCiva {
         return $result;
     }
 
-    public function exportXml() {
-        $export_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" . "\r\n\r\n";
-        $export_xml.="<listeDecStock>\r\n";
-        $lieux_stockage_num = array();
-        $current_cvi = null;
-        $this->ds_liste["9999999999999"] = null;
-        foreach ($this->ds_liste as $ds) {
-            if((!$ds || $ds->declarant->cvi != $current_cvi) && !is_null($current_cvi)) {
-                foreach($lieux_stockage_num as $num) {
-                    $export_xml.= $this->makeXMLDSLigne($num, "LIES", $this->convertToFloat(0, false));
-                    $export_xml.= $this->makeXMLDSLigne($num, "VDRA", $this->convertToFloat(0, false));
-                    $export_xml.= $this->makeXMLDSLigne($num, "REBECHE", $this->convertToFloat(0, false));
-                    $export_xml.= $this->makeXMLDSLigne($num, "VNC", $this->convertToFloat(0, false));
-                }
-                $export_xml.="\t</decStock>\r\n";
-            }
-            if(!$ds) {
-                continue;
-            }
-            if($ds->declarant->cvi != $current_cvi) {
-                $lieux_stockage_num = array();
-                foreach($ds->getEtablissementObject()->lieux_stockage as $num => $lieu) {
-                    $lieux_stockage_num[$num] = $num;
-                }
-                $current_cvi = $ds->declarant->cvi;
-                $export_xml.="\t<decStock numCvi=\"" . $current_cvi . "\" dateDepot=\"".$ds->validee."\">\r\n";
-            }
-            $export_xml.= $this->makeXMLDS($ds);
-            unset($lieux_stockage_num[$ds->stockage->numero]);
-        }
-        $export_xml.="</listeDecStock>\r\n";
-        return $export_xml;
-    }
-
-    protected function makeXMLDS($ds) {
-        $lignes = "";
-        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-
-        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "LIES", $this->convertToFloat($ds->lies, false));
-        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VDRA", $this->convertToFloat($ds->dplc, false));
-        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "REBECHE", $this->convertToFloat($ds->rebeches, false));
-        $lignes.= $this->makeXMLDSLigne($lieu_stockage, "VNC", $this->convertToFloat(0, false));
-
-        $produitsAgreges = $this->getProduitsAgregesForDS($ds, true, true);
-
-        foreach ($produitsAgreges as $code_douane => $obj) {
-            $lignes.= $this->makeXMLDSLigne($lieu_stockage, $code_douane, $obj->volume);
-        }
-
-
-        $lignes .= $this->addXMLDSMouts($ds);
-        return $lignes;
-    }
-    
-    protected function makeXMLDSLigne($lieu_stockage, $code_douane, $volume) {
-        $ligne = "\t\t<ligne>\r\n";
-        $ligne .= "\t\t\t<codeInstallation>" . $lieu_stockage . "</codeInstallation>\r\n";
-        $ligne .= "\t\t\t<codeProduit>" . $code_douane . "</codeProduit>\r\n";
-        $ligne .= "\t\t\t<volume>" . $this->convertToFloat($volume, false) . "</volume>\r\n";
-        $ligne .= "\t\t</ligne>\r\n";
-        return $ligne;
-    }
-
     protected function createProduitsAgregat($products, $vtsgn = false, $xml = false) {
         $resultAgregat = array();
         foreach ($products as $app_produit => $produit) {
@@ -163,14 +100,6 @@ class ExportDSCiva {
             }
         }
         return $resultAgregat;
-    }
-
-    protected function addXMLDSMouts($ds) {
-        if (!$ds->hasMouts()) {
-            return '';
-        }
-        $lieu_stockage = $ds->identifiant . $ds->getLieuStockage();
-        return $this->makeXMLDSLigne($lieu_stockage, "MCR", $ds->getMouts());
     }
 
     public function exportEntete() {

@@ -45,11 +45,21 @@ EOF;
         set_time_limit(0);
         $periode = $arguments['periode'];
         $date = $arguments['date'];
-        $exportXmlManager = new ExportDSCiva($periode, array(DSCivaClient::TYPE_DS_PROPRIETE));
+        $exportXmlManager = new ExportDSCivaXML($periode, array(DSCivaClient::TYPE_DS_PROPRIETE));
         $xml = $exportXmlManager->exportXml();
         
-        $folderPath = $arguments['folderPath'];
-        file_put_contents($folderPath.'/dsXML'.$periode.'_'.$date.".xml", $xml);        
-        echo "EXPORT Xml fini\n";
+        $stats = $exportXmlManager->getStats();
+        ksort($stats);
+        $csvStats = "Libellé;Code Douane;Volume\n";
+        foreach($stats as $key => $volume) {
+            $csvStats .= $key.";".$volume."\n";
+        }
+
+        $fileXML = $arguments['folderPath'].'/dsXML'.$periode.'_'.$date.".xml";
+        $fileStats = $arguments['folderPath'].'/dsXML'.$periode.'_'.$date."_stats.csv";
+        file_put_contents($fileXML, $xml);
+        file_put_contents($fileStats, $csvStats);
+        echo $fileXML."\n";
+        echo $fileStats."\n";
     }
 }
