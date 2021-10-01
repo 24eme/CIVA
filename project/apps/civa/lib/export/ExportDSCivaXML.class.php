@@ -114,6 +114,10 @@ class ExportDSCivaXML {
         if($codeDouane == 'VT_SANS_IG_AUTRES' && strpos($libelleProduit, 'Rouge') !== null) {
             $codeDouane = '4R999';
         }
+
+        $codeDouane = str_replace("1R001S 1", "1R001S", $codeDouane);
+        $codeDouane = str_replace("1S001S 1", "1S001S", $codeDouane);
+
         $ligne = "\t\t<ligne>\r\n";
         $ligne .= "\t\t\t<codeInstallation>" . $lieu_stockage . "</codeInstallation>\r\n";
         $ligne .= "\t\t\t<codeProduit>" . $codeDouane . "</codeProduit>\r\n";
