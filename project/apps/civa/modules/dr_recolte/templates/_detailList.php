@@ -1,5 +1,5 @@
 <span class="ombre"></span>
-<div id="col_scroller">
+<div id="col_scroller" style="<?php if ($produit->getConfig()->hasTotalCepage() && $produit->getLieu()->getConfig()->hasManyCouleur()): ?>width: 291px;<?php endif; ?>">
     <div id="col_scroller_cont" class="clearfix">
         <?php foreach ($produit->detail as $key => $detail): ?>
         <?php if (in_array($detail_action_mode, array('add', 'update')) && $key == $detail_key): ?>
