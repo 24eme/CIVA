@@ -418,7 +418,7 @@ class dr_recolteActions extends _DRActions {
                             if($cepageConfig->getRendementCepage() == $mentionConfig->getRendementCepage()) {
                                 continue;
                             }
-                            @$this->rendement["Mentions"]['cepage'][$cepageConfig->getRendementCepage()][$cepageConfig->getMention()->getLibelle()." ".$cepageConfig->getLibelle()] += 1;
+                            @$this->rendement["Mentions"]['cepage'][$cepageConfig->getRendementCepage()][$cepageConfig->getMention()->getLibelle()." ".$mentionConfig->getAppellation()->getLibelle() ." ".$cepageConfig->getLibelle()] += 1;
                         }
 
                     }
@@ -434,7 +434,9 @@ class dr_recolteActions extends _DRActions {
         					$rd = $couleurConfig->getRendementCouleur();
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
     					}
-                    } elseif($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->getRendementCepage()) {
+                    }
+
+                    if($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->getRendementCepage()) {
                         $this->rendement[$appellation->getLibelle()]['cepage'][$lieu->getConfig()->getRendementCepage()][$lieu->getLibelle()] = 1;
     				} else {
         				if ($lieu->getConfig()->getRendementNoeud()) {
