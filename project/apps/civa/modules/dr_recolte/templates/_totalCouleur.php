@@ -53,10 +53,7 @@
             <input id="appellation_total_volume" class="num" type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
             <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
-            <?php endif; ?>
-            <?php if ($couleur->getConfig()->hasRendementCouleur()): ?>
             <li>
                 <input type="text" id="appellation_volume_revendique" class="num <?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
                 <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
@@ -71,7 +68,6 @@
                 <input type="hidden" id="appellation_lies" readonly="readonly" <?php if($couleur->isLiesSaisisCepage()) echo "mode='sum'" ?> class="num" value="<?php echoFloat($couleur->getLies()); ?>" />
                 <input type="hidden" id="appellation_lies_orig" value="<?php echoFloat($couleur->getLies()); ?>" />
             </li>
-            <?php endif; ?>
             <?php if($couleur->canHaveVci()): ?>
             <li>
                 <input class="num" type="text" id="appellation_vci" readonly="readonly" value="<?php echoFloat($couleur->getTotalVci()); ?>" />
@@ -81,21 +77,21 @@
             <?php endif; ?>
         </ul>
         <ul>
-            <li>
             <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
+            <li>
                 <input type="hidden" id="appellation_rendement" value="<?php echoFloat($couleur->getConfig()->getRendementNoeud()); ?>"/>
                 <input type="hidden" id="appellation_max_rendement" value="<?php echoFloat($couleur->getRendementMax()); ?>"/>
                 <input type="hidden" id="appellation_max_volume" value="<?php echoFloat($couleur->getVolumeMaxRendement()); ?>"/>
                 <input type="text" id="appellation_dplc_rendement" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
                 <input type="hidden" id="appellation_dplc_rendement_orig" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
-            <?php endif; ?>
             </li>
-            <li>
+            <?php endif; ?>
             <?php if ($couleur->getConfig()->existRendementCepage()):?>
-                <input type="text" id="appellation_total_dplc_sum_orig" class="num <?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
-                <input type="hidden" id="appellation_total_dplc_sum" readonly="readonly" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
-            <?php endif; ?>
+            <li>
+                <input type="text" id="appellation_total_dplc_sum" class="<?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" readonly="readonly" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
+                <input type="hidden" id="appellation_total_dplc_sum_orig" class="num" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
             </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>

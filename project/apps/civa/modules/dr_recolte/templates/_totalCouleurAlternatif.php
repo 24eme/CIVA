@@ -67,16 +67,16 @@
             <?php endif; ?>
         </ul>
         <ul>
-            <li>
             <?php if ($couleur->getConfig()->hasRendementNoeud()):?>
-                <input type="text" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
-            <?php endif; ?>
-            </li>
             <li>
-            <?php if ($couleur->getConfig()->existRendementCepage()):?>
-                <input type="text" class="num <?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
-            <?php endif; ?>
+                <input type="text" class="num <?php if ($couleur->getDplcRendement() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcRendement() > 0 && $couleur->getDplc() == $couleur->getDplcRendement()) echo 'alerte'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getDplcRendement()); ?>"/>
             </li>
+            <?php endif; ?>
+            <?php if ($couleur->getConfig()->existRendementCepage()):?>
+            <li>
+                <input type="text" class="num <?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
+            </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>
