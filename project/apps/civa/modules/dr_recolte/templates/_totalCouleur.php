@@ -88,8 +88,8 @@
             <?php endif; ?>
             <?php if ($couleur->getConfig()->existRendementCepage()):?>
             <li>
-                <input type="text" id="appellation_total_dplc_sum_orig" class="num <?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
-                <input type="hidden" id="appellation_total_dplc_sum" readonly="readonly" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
+                <input type="text" id="appellation_total_dplc_sum" class="<?php if ($couleur->getDplcTotal() > 0) echo 'rouge'; ?> <?php if ($couleur->getDplcTotal() > 0 && $couleur->getDplc() == $couleur->getDplcTotal()) echo 'alerte'; ?>" readonly="readonly" value="Σ <?php echoFloat($couleur->getDplcTotal()); ?>"/>
+                <input type="hidden" id="appellation_total_dplc_sum_orig" class="num" value="<?php echoFloat($couleur->getDplcTotal()); ?>"/>
             </li>
             <?php endif; ?>
         </ul>
