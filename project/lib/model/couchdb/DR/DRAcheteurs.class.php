@@ -32,6 +32,20 @@ class DRAcheteurs extends BaseDRAcheteurs {
         return array_keys($this->getArrayTypeWithAppellation($type));
     }
 
+    public function getTheoriticalNegoces() {
+        $negoces = ListAcheteursConfig::getNegoces();
+        foreach($this->getArrayNegoces() as $cvi) {
+            if (!isset($negoces[$cvi])) {
+                $etb = EtablissementClient::getInstance()->findByCvi($cvi);
+                if (!$etb) {
+                    continue;
+                }
+                $negoces[$cvi] = array('cvi' => $cvi, 'commune' => $etb->commune, 'nom' => $etb->raison_sociale);
+            }
+        }
+        return $negoces;
+    }
+
     public function getArrayNegoces() {
 
         return $this->getArrayType('negoces');

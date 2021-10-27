@@ -588,15 +588,22 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
 
         if($(this).hasClass('valider'))
         {
+            var cvi_acheteur;
             if(cvi.find('input').val() == '')
             {
-                alert("Veuillez renseigner le nom de l'acheteur");
-                return false;
+                cvi_acheteur = $("td.nom input").val();
+                if (!cvi_acheteur.match(/^[0-9A-Z]{10}$/)) {
+                    alert("Veuillez renseigner le nom de l'acheteur");
+                    return false;
+                }
             }
-            else
-            {
                 var donnees = Array();
 
+            if (cvi_acheteur) {
+                donnees.push("");
+                donnees.push(cvi_acheteur);
+                donnees.push("");
+            }else {
                 champs.each(function()
                 {
                     var chp = $(this)
@@ -607,24 +614,23 @@ var initTableAjout = function(table_achet, form_ajout, btn_ajout)
                         else donnees.push("0");
                     }
                 });
-
-                $.post(url_ajax,
-                {
-                    action: "ajout_ligne_table",
-                    donnees: donnees,
-                    acheteur_mouts: acheteur_mouts,
-                    qualite_name: qualite_name
-                },
-                function(data)
-                {
-                    var tr = $(data);
-                    tr.appendTo(table_achet);
-                    toggleTrVide(table_achet);
-                    styleTables(table_achet);
-
-                    deleteAcheteurFromAutocompletion(tr.find('td.cvi').html(), form_ajout);
-                });
             }
+            $.post(url_ajax,
+            {
+                action: "ajout_ligne_table",
+                donnees: donnees,
+                acheteur_mouts: acheteur_mouts,
+                qualite_name: qualite_name
+            },
+            function(data)
+            {
+                var tr = $(data);
+                tr.appendTo(table_achet);
+                toggleTrVide(table_achet);
+                styleTables(table_achet);
+
+                deleteAcheteurFromAutocompletion(tr.find('td.cvi').html(), form_ajout);
+            });
         }
 
         masquerTableAjout(table_achet, form_ajout, 1);

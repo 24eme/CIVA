@@ -30,7 +30,7 @@
             <?php
             include_partial('detailHeader', array('acheteurs' => $acheteurs,
                                                   'has_acheteurs_mout' => $has_acheteurs_mout,
-                                                  'produit' => $produit))
+                                                  'produit' => $produit, 'dr' => $declaration))
             ?>
 
             <?php
