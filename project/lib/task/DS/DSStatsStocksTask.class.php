@@ -109,17 +109,15 @@ EOF;
                 continue;
             }
             $appellation = $stats['appellations'][$confAppellationKey];
+            
+            if($confAppellationKey == "appellation_VINTABLE") {
+                continue;
+            }
 
             foreach($c_appellation->getProduits() as $cepageKey => $c_cepage) {
             	$confCepageKey = (preg_match('/cepage_/', $c_cepage->getKey()))? $c_cepage->getKey() : 'cepage_'.$c_cepage->getKey();
                 if($c_cepage->getKey() == "DEFAUT") {
                     $confCepageKey = "appellation_".$c_cepage->getAppellation()->getKey();
-                }
-                if($confAppellationKey == "appellation_VINTABLE" && $c_cepage->getGenre()->getKey() == "TRANQ") {
-                    $confCepageKey = "cepage_VINTABLE";
-                }
-                if($confAppellationKey == "appellation_VINTABLE" && $c_cepage->getGenre()->getKey() == "EFF") {
-                    $confCepageKey = "cepage_MS";
                 }
                 if(!array_key_exists($confCepageKey, $appellation['cepages'])) {
                     continue;
@@ -144,6 +142,20 @@ EOF;
                                  $appellation['volume_sgn']);
             
             unset($stats['appellations'][$confAppellationKey]);
+        }
+        
+        
+        foreach($stats['appellations'] as $confAppellationKey => $appellation) {
+            foreach($appellation['cepages'] as $confCepageKey => $cepage) {
+                echo sprintf($ligne, $confAppellationKey, 
+                                     $confCepageKey, 
+                                     $cepage['volume_total'],
+                                     $cepage['volume_normal'],
+                                     $cepage['volume_vt'],
+                                     $cepage['volume_sgn']);
+
+                unset($appellation['cepages'][$confCepageKey]);
+            }
         }
 
         echo sprintf($ligne, "TOTAL", 

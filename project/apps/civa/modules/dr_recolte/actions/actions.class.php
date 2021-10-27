@@ -397,6 +397,8 @@ class dr_recolteActions extends _DRActions {
     	$this->rendement = array();
     	$this->min_quantite = null;
     	$this->max_quantite = null;
+        @$this->rendement["Mentions"]['cepage'] = array();
+
     	foreach ($dr->getAppellationsAvecVtsgn() as $key_appellation => $appellationInfos) {
 			foreach ($appellationInfos["noeuds"] as $mention) {
                 $appellation = $mention->getAppellation();
@@ -406,8 +408,18 @@ class dr_recolteActions extends _DRActions {
                         if($mentionConfig->getRendementCepage() <= 0) {
                             continue;
                         }
-			$libelleSupplementaire = "";
-			$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()." (".$mentionConfig->getAppellation()->getLibelle().")"] += 1;
+                        if($mentionConfig->getRendementCepage() && !$mentionConfig->hasManyLieu()) {
+                            @$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] += 1;
+                        }
+                        if($mentionConfig->getRendementCepage() && strpos($mentionConfig->getHash(), "GRDCRU") && !isset($this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()])) {
+                            @$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()." ".$mentionConfig->getAppellation()->getLibelle() ." "] += 1;
+                        }
+                        foreach($mentionConfig->getProduits() as $cepageConfig) {
+                            if($cepageConfig->getRendementCepage() == $mentionConfig->getRendementCepage()) {
+                                continue;
+                            }
+                            @$this->rendement["Mentions"]['cepage'][$cepageConfig->getRendementCepage()][$cepageConfig->getMention()->getLibelle()." ".$mentionConfig->getAppellation()->getLibelle() ." ".$cepageConfig->getLibelle()] += 1;
+                        }
 
                     }
                     continue;
@@ -422,7 +434,9 @@ class dr_recolteActions extends _DRActions {
         					$rd = $couleurConfig->getRendementCouleur();
     						$this->rendement[$appellation->getLibelle()]['cepage'][$rd][$couleurConfig->getLibelle()] = 1;
     					}
-                    } elseif($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->existRendementCepage()) {
+                    }
+
+                    if($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->getRendementCepage()) {
                         $this->rendement[$appellation->getLibelle()]['cepage'][$lieu->getConfig()->getRendementCepage()][$lieu->getLibelle()] = 1;
     				} else {
         				if ($lieu->getConfig()->getRendementNoeud()) {
@@ -444,16 +458,11 @@ class dr_recolteActions extends _DRActions {
                 }
 			}
     	}
-	foreach($this->rendement["Mentions"]['cepage'] as $rendement => $libelles) {
-		if(count($libelles) == 1) {
-			continue;
-		}
 
-		foreach($libelles as $libelle => $mentionConfig) {
-			unset($this->rendement["Mentions"]['cepage'][$rendement][$libelle]);
-		}
-		$this->rendement["Mentions"]['cepage'][$rendement][preg_replace('/ \(.+\)$/', "", $libelle)] = 1;
-	}
+    if(!count($this->rendement["Mentions"]['cepage'])) {
+        unset($this->rendement["Mentions"]);
+    }
+
     	return $this->renderPartial('dr_recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite,
                                                                         'max_quantite'=> $this->max_quantite));

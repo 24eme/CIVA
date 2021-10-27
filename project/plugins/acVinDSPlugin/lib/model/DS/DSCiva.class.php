@@ -702,10 +702,6 @@ class DSCiva extends DS implements IUtilisateursDocument {
         return ($this->exist('rebeches') && $this->rebeches > 0);
     }
 
-    public function hasRebechesForXML() {
-        return ($this->isDsPrincipale() && $this->exist('rebeches') && $this->rebeches > 0);
-    }
-
     public function isValidee(){
 
         return $this->isValideeCiva();
@@ -835,8 +831,14 @@ class DSCiva extends DS implements IUtilisateursDocument {
       $lignesEdi = "";
       $isFirstDRMCampagne = ($drmGenerateCSV->getPeriode()-1 == $this->getPeriode());
 
-      foreach ($this->getProduits() as $hashProduit => $produit) {
-        $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($produit,$isFirstDRMCampagne);
+      foreach ($this->declaration->getProduits() as $produit) {
+          if($drmGenerateCSV->isProduitDetailWithLieuDit($produit)) {
+             foreach($produit->getProduitsDetails() as $detail) {
+                 $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($detail,$isFirstDRMCampagne);
+             } 
+             continue;
+          }
+          $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($produit,$isFirstDRMCampagne);
       }
 
       if($this->exist('lies') && $this->getLies()) {
