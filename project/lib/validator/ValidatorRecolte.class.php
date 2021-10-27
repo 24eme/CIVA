@@ -27,9 +27,11 @@ class ValidatorRecolte extends sfValidatorSchema {
             }
         }
         
-        $errorSchema->addError($this->doCleanAcheteurs($values, RecolteForm::FORM_NAME_NEGOCES, ListAcheteursConfig::getNegoces()));
+        $negoces = $this->getObject()->getDocument()->acheteurs->getTheoriticalNegoces();
+        
+        $errorSchema->addError($this->doCleanAcheteurs($values, RecolteForm::FORM_NAME_NEGOCES, $negoces));
 
-        $errorSchema->addError($this->doCleanAcheteurs($values, RecolteForm::FORM_NAME_NEGOCES . RecolteForm::FORM_SUFFIX_NEW, ListAcheteursConfig::getNegoces()));
+        $errorSchema->addError($this->doCleanAcheteurs($values, RecolteForm::FORM_NAME_NEGOCES . RecolteForm::FORM_SUFFIX_NEW, $negoces));
 
         $errorSchema->addError($this->doCleanAcheteurs($values, RecolteForm::FORM_NAME_COOPERATIVES, ListAcheteursConfig::getCooperatives()));
 

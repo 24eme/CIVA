@@ -163,62 +163,64 @@ class drActions extends _DRActions {
 
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
-        }
-
-        if (!$request->isMethod(sfWebRequest::POST) || !$this->form->isValid()) {
-            $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
-            $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
-            $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
-            $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
-
-            $this->acheteurs_negociant = ListAcheteursConfig::getNegoces();
-            $this->acheteurs_cave = ListAcheteursConfig::getCooperatives();
-            $this->acheteurs_mout = ListAcheteursConfig::getMouts();
-        }
-
-        if ($request->isMethod(sfWebRequest::POST)) {
             if ($this->form->isValid()) {
                 $this->form->save();
-                $this->dr->save();
-
-                $this->redirectByBoutonsEtapes(null, $this->dr);
+                return $this->redirectByBoutonsEtapes(null, $this->dr);
             }
         }
+
+        $this->appellations = ExploitationAcheteursForm::getListeAppellations($this->dr);
+        $this->acheteurs_negociant_using = $this->dr->acheteurs->getArrayNegoces();
+        $this->acheteurs_cave_using = $this->dr->acheteurs->getArrayCooperatives();
+        $this->acheteurs_mout_using = $this->dr->acheteurs->getArrayMouts();
+
+        $this->acheteurs_negociant = $this->dr->acheteurs->getTheoriticalNegoces();
+        $this->acheteurs_cave = ListAcheteursConfig::getCooperatives();
+        $this->acheteurs_mout = ListAcheteursConfig::getMouts();
     }
 
     public function executeRepartitionTableRowItemAjax(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
         $this->dr = $this->getRoute()->getDR();
-        if ($request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
-            $name = $request->getParameter('qualite_name');
-            $donnees = $request->getParameter('donnees');
-            $nom = $donnees[0];
-            $cvi = $donnees[1];
-            $commune = $donnees[2];
-            $mout = ($request->getParameter('acheteur_mouts', null) == '1');
-
-            $appellations_form = ExploitationAcheteursForm::getListeAppellations($this->dr);
-            if ($mout) {
-                $appellations_form = ExploitationAcheteursForm::getListeAppellationsMout($this->dr);
-            }
-            $values = array();
-            $i = 3;
-            foreach ($appellations_form as $key => $item) {
-                $values[$key] = (isset($donnees[$i]) && $donnees[$i] == '1');
-                $i++;
-            }
-
-            $form = ExploitationAcheteursForm::getNewItemAjax($name, $cvi, $values, $appellations_form);
-
-            return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
-                'cvi' => $cvi,
-                'commune' => $commune,
-                'appellations' => ExploitationAcheteursForm::getListeAppellations($this->dr),
-                'form_item' => $form[$name . ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
-                'mout' => $mout));
-        } else {
-            $this->forward404();
+        if (!$request->isXmlHttpRequest() && $request->isMethod(sfWebRequest::POST)) {
+            return $this->forward404();
         }
+        $name = $request->getParameter('qualite_name');
+        $donnees = $request->getParameter('donnees');
+        $nom = $donnees[0];
+        $cvi = $donnees[1];
+        $commune = $donnees[2];
+        if ($cvi && !$nom && !$commune) {
+            $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
+            if (!$etablissement) {
+                return $this->forward404();
+            }
+            $nom = $etablissement->raison_sociale;
+            $commune = $etablissement->commune;
+            $this->dr->add('acheteurs')->add('certification')->add('genre')->add('extra')->add('negoces')->add(null,$cvi);
+            $this->dr->save();
+        }
+        $mout = ($request->getParameter('acheteur_mouts', null) == '1');
+
+        $appellations_form = ExploitationAcheteursForm::getListeAppellations($this->dr);
+        if ($mout) {
+            $appellations_form = ExploitationAcheteursForm::getListeAppellationsMout($this->dr);
+        }
+        $values = array();
+        $i = 3;
+        foreach ($appellations_form as $key => $item) {
+            $values[$key] = (isset($donnees[$i]) && $donnees[$i] == '1');
+            $i++;
+        }
+
+        $form = ExploitationAcheteursForm::getNewItemAjax($name, $cvi, $values, $appellations_form);
+
+        return $this->renderPartial('exploitationAcheteursTableRowItem', array('nom' => $nom,
+            'cvi' => $cvi,
+            'commune' => $commune,
+            'appellations' => ExploitationAcheteursForm::getListeAppellations($this->dr),
+            'form_item' => $form[$name . ExploitationAcheteursForm::FORM_SUFFIX_NEW][$cvi],
+            'mout' => $mout, 'rev' => $this->dr->_rev));
     }
 
         public function executeRepartitionLieu(sfWebRequest $request) {

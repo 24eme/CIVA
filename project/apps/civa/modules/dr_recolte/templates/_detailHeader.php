@@ -1,4 +1,12 @@
-<div id="colonne_intitules">
+<?php 
+
+if (isset($dr)) {
+    $negoces = $dr->acheteurs->getTheoriticalNegoces();
+}else{
+    $negoces = ListAcheteursConfig::getNegoces();
+}
+
+ ?><div id="colonne_intitules">
 
     <?php if ($produit->getAppellation()->getConfig()->hasLieuEditable()): ?>
         <p class="lieu">
@@ -26,7 +34,7 @@
             <?php
             include_partial('headerAcheteurs', array('title' => "Ventes de Raisins",
                 'acheteurs' => $acheteurs->negoces,
-                'list_acheteurs' => ListAcheteursConfig::getNegoces(),
+                'list_acheteurs' => $negoces,
                 'var_rel_help' => 'help_popup_DR_vente_raisins'
             ));
             ?>
