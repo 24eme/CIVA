@@ -450,7 +450,7 @@ class dr_recolteActions extends _DRActions {
     	    						$this->max_quantite = $cepage_config->attributs->max_quantite * 100 ;
     	    					}
     	    					if($cepage_config->getRendementCepage()) {
-                                    $this->rendement[$appellation->getLibelle()]['cepage'][$cepage_config->getRendementCepage()][$cepage_config->getLibelle()] = 1;
+                                    $this->rendement[$appellation->getLibelle()." ".$lieu->getLibelle()]['cepage'][$cepage_config->getRendementCepage()][$cepage_config->getLibelle()] = 1;
     	    					}
     	    				}
     					}
