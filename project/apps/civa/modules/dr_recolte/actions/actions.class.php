@@ -411,7 +411,7 @@ class dr_recolteActions extends _DRActions {
                         if($mentionConfig->getRendementCepage() && !$mentionConfig->hasManyLieu()) {
                             @$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()] += 1;
                         }
-                        if($mentionConfig->getRendementCepage() && strpos($mentionConfig->getHash(), "GRDCRU") && !isset($this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()])) {
+                        if($mentionConfig->getRendementCepage() && (strpos($mentionConfig->getHash(), "GRDCRU") || strpos($mentionConfig->getHash(), "COMMUNALE")) && !isset($this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()])) {
                             @$this->rendement["Mentions"]['cepage'][$mentionConfig->getRendementCepage()][$mentionConfig->getLibelle()." ".$mentionConfig->getAppellation()->getLibelle() ." "] += 1;
                         }
                         foreach($mentionConfig->getProduits() as $cepageConfig) {
