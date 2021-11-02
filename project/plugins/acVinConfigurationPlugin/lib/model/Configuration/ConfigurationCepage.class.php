@@ -203,7 +203,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     public function existRendement() {
-        if($this->getKey() == 'cepage_RB') {
+        if($this->getKey() == 'RB') {
 
             return false;
         }
