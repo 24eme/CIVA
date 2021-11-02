@@ -1,7 +1,11 @@
 <?php use_helper('Float') ?>
 <div id="col_couleur_totale_alternatif" class="col_recolte col_total col_calcule <?php echo (count($produit->getLieu()->getConfig()->getCouleurs()) > 1) ? "col_double" : "" ?>">
     <h2>Total
-        <?php echo $produit->getAppellation()->getConfig()->libelle ?>
+        <?php if($produit->getAppellation()->getConfig()->hasManyLieu()): ?>
+            <?php echo $produit->getLieu()->getConfig()->libelle ?> <?php echo $produit->getMention()->getConfig()->libelle ?>
+        <?php else: ?>
+            <?php echo $produit->getAppellation()->getConfig()->libelle ?>
+        <?php endif; ?>
         <strong><?php echo $couleur->getLibelle() ?></strong>
         <a href="" class="msg_aide" rel="help_popup_DR_total_couleur_alternatif" title="Message aide"></a>
     </h2>
