@@ -620,7 +620,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour cette appellation ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour ce cépage ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
             return;
         }
     }
@@ -645,20 +645,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement et/ou tous les volumes de vci"));
         }
 
-        if (!$noeud->isValidRecapitulatifVente()) {
+        if (!$has_no_complete && !$noeud->isValidRecapitulatifVente()) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
             return;
         }
 
         $recap_is_ok = true;
 
-        if(round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
 
-        if(round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
             return;
@@ -666,18 +666,18 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         $entierementReparti = true;
 
-        if(round($noeud->getTotalSuperficieRecapitulatifVente(), 2) < round($noeud->getTotalSuperficieVendus(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalSuperficieRecapitulatifVente(), 2) < round($noeud->getTotalSuperficieVendus(), 2)) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la superficie n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }
 
-        if(round($noeud->getTotalDontVciRecapitulatifVente(), 2) < round($noeud->getDontVciVendusMin(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalDontVciRecapitulatifVente(), 2) < round($noeud->getDontVciVendusMin(), 2)) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le vci n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }
 
-        if(round($noeud->getTotalDontDplcRecapitulatifVente(), 2) < round($noeud->getDontDplcVendusMin(), 2)) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dpl n'a pas été entièrement reparti chez les acheteurs"));
+        if(!$has_no_complete && round($noeud->getTotalDontDplcRecapitulatifVente(), 2) < round($noeud->getDontDplcVendusMin(), 2)) {
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dplc n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }
 
