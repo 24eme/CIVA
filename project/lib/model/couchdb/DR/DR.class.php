@@ -620,7 +620,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour ce cépage ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour ".(($noeud instanceof DRRecolteCepage) ? " ce cépage " : " cette appellation ").sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
             return;
         }
     }
