@@ -1,17 +1,19 @@
 <form id="principal" action="" method="post">
 	<h2 class="titre_principal">Important</h2>
 	<div id="notice_evolutions">
-		<h2>Rendements 2020</h2>
-		<p style="font-size: 14px; margin-top: 15px;">Pour l'AOC Alsace blanc, le rendement se calcule désormais <strong>PAR CÉPAGE</strong>, y compris pour l'Assemblage (Edel) pour lequel la déclaration d'une surface est <strong>OBLIGATOIRE</strong></p>
+		<h2>Rendements 2021</h2>
+		<p style="font-size: 14px; margin-top: 15px;">Depuis la Récolte 2020 les rendements de l'AOC Alsace blanc sont calculés <strong>PAR CÉPAGE</strong>, avec cette année un rendement différencié entre les cépages. (pour plus de détails vous pouvez consulter la Notice d'aide en ligne).</p>
+        <p style="font-size: 14px; margin-top: 15px;">Par conséquent pour l'Assemblage (Edel), il est donc <strong>OBLIGATOIRE</strong> de déclarer une surface prise en déduction des surfaces des autres cépages blancs.</p>
+        <p style="font-size: 14px; margin-top: 15px;">Les  rendements des AOC Communale et Lieu-dit sont cette année également calculés <strong>PAR CÉPAGE</strong>.</p>
 		<br />
 		<h2>Constitution de VCI pour la Récolte 2020</h2>
 		<p style="font-size: 14px; margin-top: 15px;">Appellations :<br />
 			<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 			    <li style="padding-top: 5px;">
-					AOC Alsace : 5 hl/ha <strong>PAR CÉPAGE</strong>
+					AOC Alsace : 8 hl/ha <strong>PAR CÉPAGE</strong>
 			    </li>
 			    <li style="padding-top: 5px;">
-					AOC Crémant d’Alsace : reconduction des 5 hl/ha
+					AOC Crémant d’Alsace : 8 hl/ha pour l'Appellation, à constituer dans les différents cépages
 			    </li>
 			</ul>
 		</p>
