@@ -645,20 +645,20 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes vous n'avez pas complété toutes les superficies et/ou tous les volumes en dépassement et/ou tous les volumes de vci"));
         }
 
-        if (!$noeud->isValidRecapitulatifVente()) {
+        if (!$has_no_complete && !$noeud->isValidRecapitulatifVente()) {
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_invalide')));
             return;
         }
 
         $recap_is_ok = true;
 
-        if(round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalDontDplcVendus(),2) > round($noeud->getDontDplcVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_recap_vente_dontdplc_trop_eleve')));
             return;
         }
 
-        if(round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
+        if(!$has_no_complete && round($noeud->getTotalDontVciVendus(), 2) > round($noeud->getDontVciVendusMax(), 2)) {
 
             array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, la somme des volumes en \"dont vci\" des acheteurs ne peut pas être supérieure au \"volume de vci\" attribuable aux acheteurs"));
             return;
