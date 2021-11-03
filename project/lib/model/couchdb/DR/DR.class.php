@@ -620,7 +620,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             return;
         }
         if(round($noeud->getTotalVci(), 2) > round($noeud->getVolumeVciMax(), 2)) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour cette appellation ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $noeud->getHash())), 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Trop de vci déclaré, maximum pour ce cépage ".sprintf("%.2f", $noeud->getVolumeVciMax())." hl"));
             return;
         }
     }
@@ -677,7 +677,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         if(round($noeud->getTotalDontDplcRecapitulatifVente(), 2) < round($noeud->getDontDplcVendusMin(), 2)) {
-            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dpl n'a pas été entièrement reparti chez les acheteurs"));
+            array_push($validLogErreur, array('url' => $this->generateUrl('dr_recolte_recapitulatif', array('id' => $this->_id, 'hash' => $lieu->getHash()))."#form", 'log' => $noeud->getLibelleWithAppellation(), 'info' => "Dans le récapitulatif des ventes, le dplc n'a pas été entièrement reparti chez les acheteurs"));
             $entierementReparti = false;
         }
 
