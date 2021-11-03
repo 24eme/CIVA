@@ -183,10 +183,10 @@
 														<?php endif; ?>
 														<th><span>Superficie</span></th>
 														<th><span>Volume total</span></th>
-														<?php if($form_item->getObject()->canHaveVci()): ?>
+														<th><span>Dont dépas.</span></th>
+                                                        <?php if($form_item->getObject()->canHaveVci()): ?>
 														<th><span>Dont VCI</span></th>
 														<?php endif; ?>
-														<th><span>Dont dépas.</span></th>
 													</tr>
 												</thead>
 											<?php endif; ?>
@@ -210,13 +210,13 @@
 															<?php endif; ?>
                                                             <td class="superficie alt <?php echo ($form[$key]['acheteurs'][$type][$cvi]['superficie']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['superficie']->render(array("class" => 'num')); ?>&nbsp;ares</td>
                                                             <td class="volume"><?php echoFloat($info->getVolume()); ?> hl</td>
-															<?php if(isset($form[$key]['acheteurs'][$type][$cvi]['dontvci'])) : ?>
-                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?>&nbsp;hl</td>
-                                                            <?php endif; ?>
                                                             <?php if($form_item->getObject()->getConfig()->existRendement()) : ?>
                                                                 <td class="dplc <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontdplc']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontdplc']->render(array("class" => 'num')); ?>&nbsp;hl</td>
                                                             <?php else: ?>
                                                                 <td class="dplc"></td>
+                                                            <?php endif; ?>
+                                                            <?php if(isset($form[$key]['acheteurs'][$type][$cvi]['dontvci'])) : ?>
+                                                                <td class="vci <?php echo ($form[$key]['acheteurs'][$type][$cvi]['dontvci']->hasError()) ? sfConfig::get('app_css_class_field_error') : null ?>"><?php echo $form[$key]['acheteurs'][$type][$cvi]['dontvci']->render(array("class" => 'num')); ?>&nbsp;hl</td>
                                                             <?php endif; ?>
                                                     </tr>
                                                 <?php endforeach; ?>
