@@ -6,7 +6,7 @@
         <p style="font-size: 14px; margin-top: 15px;">Par conséquent pour l'Assemblage (Edel), il est donc <strong>OBLIGATOIRE</strong> de déclarer une surface prise en déduction des surfaces des autres cépages blancs.</p>
         <p style="font-size: 14px; margin-top: 15px;">Les  rendements des AOC Communale et Lieu-dit sont cette année également calculés <strong>PAR CÉPAGE</strong>.</p>
 		<br />
-		<h2>Constitution de VCI pour la Récolte 2020</h2>
+		<h2>Constitution de VCI pour la Récolte 2021</h2>
 		<p style="font-size: 14px; margin-top: 15px;">Appellations :<br />
 			<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 			    <li style="padding-top: 5px;">
@@ -22,14 +22,14 @@
 		<h2>Rappels</h2>
 		<p style="font-size: 14px; margin-top: 15px;">Depuis la Récolte 2018, la production de Jus de Raisin doit obligatoirement figurer sur la Déclaration de Récolte Alsace dans la rubrique 'Récolte Autres'.</p>
 		<p style="font-size: 14px; margin-top: 5px;">Les surfaces déclarées en production de jus de raisin viendront en déduction de la surface déclarée en AOC.</p>
-		<p style="font-size: 14px; margin-top: 5px;">Il n'existe pas de rendement maximum pour ce produit, la préconisation serait de respecter un rendement agronomique réaliste.</p>
+		<p style="font-size: 14px; margin-top: 5px;">Il n'existe pas de rendement maximum pour ce produit, la préconisation est de respecter un rendement agronomique réaliste.</p>
 		<br />
 
 		<div style="font-size: 14px; padding-left: 5px;">
 			<p style="font-size: 14px; margin-top: 15px;">Depuis la récolte 2016, un rendement spécifique est mis en place pour les mentions VT et SGN (le calcul du rendement se fait par Appellation/Cépage/Mention) :<br />
 				<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 				    <li style="padding-top: 5px;">
-						Vendanges Tardives : 55 hl/ha <strong>(Attention 50 hl/ha pour l'AOC Grand Cru)</strong>
+						Vendanges Tardives : 55 hl/ha <strong>(Attention 50 hl/ha pour l'AOC Grand Cru, ainsi que pour le GW Lieu-dit)</strong>
 				    </li>
 				    <li style="padding-top:5px;">
 						Sélection de Grains Nobles : 40 hl/ha
