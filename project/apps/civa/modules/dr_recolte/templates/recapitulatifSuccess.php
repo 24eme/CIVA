@@ -231,7 +231,7 @@
 									</table>
 									</div>
 									</div>
-									<?php else: ?>
+								<?php elseif(!$form_item || !$form_item->getObject()->hasAcheteurs()): ?>
 											<p> Aucune vente </p>
 									<?php endif; ?>
 
