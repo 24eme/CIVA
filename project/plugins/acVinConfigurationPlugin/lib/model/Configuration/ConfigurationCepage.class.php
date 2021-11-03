@@ -212,8 +212,12 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     public function canHaveVci() {
-
         if(!parent::canHaveVci()) {
+
+            return false;
+        }
+
+        if(!$this->existRendement()) {
 
             return false;
         }
