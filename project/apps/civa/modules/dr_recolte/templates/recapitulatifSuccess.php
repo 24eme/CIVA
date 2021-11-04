@@ -229,8 +229,6 @@
                   <?php endforeach; ?>
 									<?php if(isset($tableauOpen)): ?>
 									</table>
-									</div>
-									</div>
 								<?php elseif(!$form_item || !$form_item->getObject()->hasAcheteurs()): ?>
 											<p> Aucune vente </p>
 									<?php endif; ?>
@@ -243,6 +241,7 @@
                                 </div>
 							</div>
 						</div>
+                    </div>
                     </div>
 					<!-- fin #gestion_recolte -->
 					<?php include_partial('boutonAppellation', array('produit' => $noeud, 'is_recap' => true)) ?>

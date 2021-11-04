@@ -176,7 +176,7 @@ $(document).ready( function()
     }
 
     if($('#popup_rappel_log')){
-        openPopup($('#popup_rappel_log'));
+        setTimeout(function() {openPopup($('#popup_rappel_log'));}, 100);
         return false;
     }
 
