@@ -178,10 +178,9 @@ class DRClient extends acCouchdbClient {
         $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
         $detail->volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
         $detail->vci += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI]);
-        // if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
-        //   $detail->denomination = 'repli';
-        //   $detail->add('motif_non_recolte', 'AE');
-        // }
+        if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
+           $detail->add('motif_non_recolte', 'PC');
+        }
           if($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
               $acheteurDRType = "negoces";
