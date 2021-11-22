@@ -98,9 +98,6 @@ class uploadActions extends sfActions {
             if ($this->shouldHaveRebeche($line)) {
                 $this->errors[$cpt - 1][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
             }
-            if ($this->shouldHaveVolume($line)) {
-                $this->errors[$cpt - 1][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
-            }
             if ($this->shouldHaveSuperficieTotal($line)) {
                 //$this->errors[$cpt - 1][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
             }
@@ -141,6 +138,10 @@ class uploadActions extends sfActions {
                 $this->errors[$cpt][] = 'Le volume n\'est pas correct';
             else if (!$this->hasVolume($line))
                 $this->nb_noVolumes++;
+
+            if (!$this->no_volume && $line[CsvFileAcheteur::CSV_SUPERFICIE]*1 && !$line[CsvFileAcheteur::CSV_VOLUME]*1 ) {
+                $this->warnings[$cpt][] = 'Aucun volume déclaré la ligne sera importée et indiqué comme "Problème Climatique"';
+            }
 	    if ($this->hasForbidenDenomination($line)) {
 	      $this->errors[$cpt][] = 'La dénomination complémentaire utilisée n\'est pas autorisée';
 	    }
@@ -150,9 +151,6 @@ class uploadActions extends sfActions {
         }
         if ($this->shouldHaveRebeche(false)) {
             $this->errors[$cpt][] = 'Ce recoltant produit du cremant, il devrait avoir des rebeches';
-        }
-        if ($this->shouldHaveVolume(false)) {
-            $this->errors[$cpt][] = 'Il existe des volumes sans surfaces alors qu\'aucun assemblage n\'a été déclaré';
         }
         if ($this->shouldHaveSuperficieTotal(false)) {
             //$this->errors[$cpt][] = "La superficie totale de l'appellation AOC Alsace Blanc est nulle alors que de l'assemblage a été déclaré";
