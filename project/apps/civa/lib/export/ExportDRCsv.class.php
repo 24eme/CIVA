@@ -138,7 +138,7 @@ class ExportDRCsv extends ExportCsv {
                                 }
                             }
                         }
-                        if($couleur->hasRecapitulatif() || $lieu->getConfig()->hasManyCouleur()) {
+                        if($couleur->hasRecapitulatif() || $couleur->getKey() != "couleur") {
                             $this->addNoeudTotal($couleur);
                             foreach ($couleur->acheteurs as $acheteurs) {
                                 foreach ($acheteurs as $cvi_a => $acheteur) {
