@@ -67,6 +67,9 @@ class CompteLdap extends acVinLdap {
       $info['gidNumber']        = '1000';
       $info['homeDirectory']    = '/home/'.self::getIdentifiant($compte);
       $info['gecos']            = self::getGecos($compte);
+      if ($compte->isEtablissementContact()) {
+           $info['businessCategory'] = $compte->getEtablissement()->famille;
+      }
       if ($compte->email && preg_match('/@/', $compte->email))
 	$info['mail']             = $compte->email;
       if ($compte->adresse) {
