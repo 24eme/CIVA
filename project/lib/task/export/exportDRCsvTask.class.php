@@ -38,13 +38,18 @@ EOF;
 
         foreach ($arguments['ids'] as $id) {
             $dr = DRClient::getInstance()->find($id, acCouchdbClient::HYDRATE_JSON);
-            
+
             if(!$dr) {
 
                 throw new sfCommandArgumentsException("DR non trouvé : '".$id."'");
             }
 
-            $file = sprintf("%s/%s/%s/DR_%s_%s_%s.csv", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne, $dr->cvi, $dr->campagne, $dr->_rev);
+            $csvPath = sfConfig::get('sf_data_dir')."/export/dr/csv/".$dr->campagne;
+            if(!is_dir($csvPath)) {
+                mkdir($csvPath);
+            }
+
+            $file = sprintf("%s/DR_%s_%s_%s.csv", $csvPath, $dr->cvi, $dr->campagne, $dr->_rev);
 
             if(is_file($file)) {
 
