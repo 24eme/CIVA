@@ -57,7 +57,7 @@
             <input id="appellation_total_volume" class="num" type="text" readonly="readonly" value="<?php echoFloat($couleur->getTotalVolume()); ?>" />
         </p>
         <ul class="vol_revendique_dplc">
-            <li class="rendement <?php if (round($couleur->getRendementRecoltant()) > round($couleur->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
+            <li class="rendement <?php if ($couleur->getConfig()->hasRendementNoeud() && round($couleur->getRendementRecoltant()) > round($couleur->getRendementMax())): echo 'rouge'; endif;?>">Rdt : <strong><span id="appellation_current_rendement"><?php echo round($couleur->getRendementRecoltant(), 0); ?></span>&nbsp;hl/ha</strong><span class="picto_rdt_aide_col_total"><a href="" class="msg_aide" rel="help_popup_DR_total_appellation" title="Message aide"></a></span></li>
             <li>
                 <input type="text" id="appellation_volume_revendique" class="num <?php if ($couleur->getDplc() > 0) echo 'rouge'; ?>" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
                 <input type="hidden" id="appellation_volume_revendique_orig" readonly="readonly" value="<?php echoFloat($couleur->getVolumeRevendique()); ?>" />
