@@ -331,7 +331,7 @@ class Db2Tiers2Csv
             null,
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
-            sprintf("%06d", $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK)),
+            $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK),
             null,
             ($this->getInfos($tiers, Db2Tiers::COL_SIRET)),
             null,
