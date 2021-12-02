@@ -203,12 +203,12 @@ class ExportDRPdf extends ExportDocument {
           	$this->document->addPage($this->getPartial('dr_export/recapitulatif', array('dr'=> $this->dr, 'infos'=> $infos, 'has_total' => true, 'has_no_usages_industriels' => $dr->recolte->getConfig()->hasNoUsagesIndustriels())));
           }
           if(!$dr->recolte->getConfig()->hasNoUsagesIndustriels() && !$dr->recolte->getConfig()->hasNoRecapitulatifCouleur()) {
-              
+
               $vsig = 0;
               foreach ($infos['appellations'] as $a) {
-                  if (!preg_match('/(AOC|VT|SGN)/', $infos['libelle'][$a])) {
-                      $vsig = $infos['volume'][$a];
-                  }
+                   if (!preg_match('/(AOC|VT|SGN)/', $infos['libelle'][$a])) {
+                      $vsig = $infos['revendique_sur_place'][$a];
+                   }
               }
 
             $this->createRecap($dr, $vsig);
