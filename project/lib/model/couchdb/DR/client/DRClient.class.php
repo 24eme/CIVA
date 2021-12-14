@@ -260,7 +260,7 @@ class DRClient extends acCouchdbClient {
     }
 
     public function getAllByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-       return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-2020')->execute($hydrate);
+       return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-9999')->execute($hydrate);
     }
 
     /*
