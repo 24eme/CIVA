@@ -99,7 +99,7 @@ EOF;
 
 Vous avez commencé à saisir en ligne votre Déclaration de Récolte ".$campagne." sur le site VinsAlsace.pro, mais ne l'avez pas encore validée.
 
-Suite à quelques soucis techniques, et exceptionnellement cette année, vous devrez impérativement la valider AVANT le vendredi 11 décembre 23h59.
+Nous vous rappelons que, vous devrez impérativement la valider AVANT le vendredi 10 décembre 23h59.
 
 Pour terminer la saisie, cliquez sur le lien suivant : <https://declaration.vinsalsace.pro>
 
