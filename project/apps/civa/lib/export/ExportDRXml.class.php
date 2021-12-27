@@ -146,6 +146,9 @@ class ExportDRXml {
         }
 
         $col['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $vciNegoce;
+        if($this->destinataire == self::DEST_CIVA){
+          $col['exploitant']['L10'] -= $vciNegoce;
+        }
 
         $col['exploitant']['L11'] = 0; //HS
         $col['exploitant']['L12'] = 0; //HS
