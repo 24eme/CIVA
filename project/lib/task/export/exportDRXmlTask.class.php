@@ -148,12 +148,11 @@ EOF;
                 foreach($achats as $achat) {
                     $stats['achat'][0] = 'achat';
                     $stats['achat'][1] = null;
-                    $stats['achat'][2] = $achat['volume'];
+                    @$stats['achat'][2] += $achat['volume'];
                 }
             }
-
     }
-    
+
 
     if(isset($options['check'])) {
         return;
@@ -162,11 +161,12 @@ EOF;
 
     file_put_contents($filename, '</listeDecRec>', FILE_APPEND);
     $this->logSection("done", $filename);
-    
+
     $statFile = $this->getFileDir().'DR-'.$arguments['campagne'].'-'.$arguments['destinataire'].'_stats.csv';
     $fp = fopen($statFile, 'w');
-    
+
     fputcsv($fp, array('L1', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9', 'L10' ,'L11' ,'L12' ,'L13' ,'L14' ,'L15' ,'L16', 'L17', 'L17', 'L18', 'L19'), ';');
+    ksort($stats);
     foreach ($stats as $data) {
         fputcsv($fp, $data, ';');
     }
