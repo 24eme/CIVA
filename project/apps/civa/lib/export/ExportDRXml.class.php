@@ -537,12 +537,18 @@ class ExportDRXml {
             }
         }
         $this->xml = $xml;
+        $this->achats = $baliseachat;
         $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
     }
-    
+
     public function getXml() {
-        
+
         return $this->xml;
+    }
+
+    public function getAchats() {
+
+        return $this->achats;
     }
 
     protected function sumColonnes($cols, $col, $operator = "+") {
