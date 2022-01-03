@@ -144,6 +144,14 @@ EOF;
                     }
                 }
             }
+            foreach($xml->getAchats() as $achats) {
+                foreach($achats as $achat) {
+                    $stats['achat'][0] = 'achat';
+                    $stats['achat'][1] = null;
+                    $stats['achat'][2] = $achat['volume'];
+                }
+            }
+
     }
     
 
