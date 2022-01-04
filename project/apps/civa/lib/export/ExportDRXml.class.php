@@ -516,7 +516,7 @@ class ExportDRXml {
                             $total = array();
                         }
 
-                        if($this->destinataire == self::DEST_CIVA) {
+                        if($this->destinataire == self::DEST_CIVA && $appellation->getKey() != 'appellation_ALSACEBLANC') {
                             $totals[$total['L1']] = $total;
                         }
                     }
