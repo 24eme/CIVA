@@ -521,8 +521,8 @@ class ExportDRXml {
                         }
                     }
 
-                    if($this->destinataire == self::DEST_CIVA && $appellation->getKey() == 'appellation_ALSACEBLANC' && !$lieu->hasRecapitulatif()) {
-                        $totals[$this->getCodeDouane($lieu)] = $this->getCol($lieu, array());
+                    if($this->destinataire == self::DEST_CIVA && $appellation->getKey() == 'appellation_ALSACEBLANC') {
+                        $totals[$this->getCodeDouane($lieu)] = $this->sumColonnes($totals[$this->getCodeDouane($lieu)], $this->getCol($lieu, array()));
                     }
                 }
 
