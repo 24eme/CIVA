@@ -362,7 +362,19 @@ class DRMGenerateCSV {
 
         $complement = "";
         $libelle = $cepageConfig->getLibelleFormat();
-        
+
+        if($cepageConfig->getGenre()->getKey() == 'EFF' && strpos($cepage, "Rosé") !== false) {
+            $certification = "";
+            $appellation = "";
+            $cepage = "";
+            $libelle = $cepageConfig->getLieu()->getLibelleFormat()." Rosé";
+        } elseif($cepageConfig->getGenre()->getKey() == 'EFF') {
+            $certification = "";
+            $appellation = "";
+            $cepage = "";
+            $libelle = $cepageConfig->getLieu()->getLibelleFormat()." Blanc";
+        }
+
         if($mention) {
             $libelle .= " ".$mention;
         }
