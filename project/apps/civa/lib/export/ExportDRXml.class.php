@@ -7,6 +7,7 @@ class ExportDRXml {
 
     protected $content = null;
     protected $xml = null;
+    protected $achats = null;
     protected $partial_function = null;
     protected $destinataire = null;
     protected $erreurs = array();
@@ -335,7 +336,7 @@ class ExportDRXml {
                             }
                             $cepage = $dr->get(HashMapper::inverse($cepageConfig->getHash()));
                             foreach ($cepage->detail as $detail) {
-                              if (preg_match('/([0-9]{10})/', $detail->denomination, $m)) {
+                              if (preg_match('/([0-9]{8,12})/', $detail->denomination, $m) && strpos(strtolower($detail->denomination), 'vente') === false) {
                                 if (!isset($baliseachat[$m[0]])) {
                                   $baliseachat[$m[0]] = array('achat' => array('numCvi' => $m[0], 'motif' => 'SC', 'typeAchat' => 'F', 'volume' => 0));
                                 }
@@ -538,7 +539,7 @@ class ExportDRXml {
         }
         $this->xml = $xml;
         $this->achats = $baliseachat;
-        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $baliseachat, 'destinataire' => $this->destinataire));
+        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $this->achats, 'destinataire' => $this->destinataire));
     }
 
     public function getXml() {
