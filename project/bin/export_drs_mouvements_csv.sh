@@ -55,7 +55,7 @@ if( $7 ~ "TOTAL" ) {
 
     base_ligne="DR;" campagne ";" $3 ";" $3 ";" $4 ";" $5 ";" lieu ";" $7 ";" $8 ";" lieudit ";"
 
-    if(camapagne >= 2021 && ($7 == "Blanc" || $7 == "Rouge"))  {
+    if(campagne >= 2021 && ($7 == "Blanc" || $7 == "Rouge"))  {
 
         next;
     }
