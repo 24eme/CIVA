@@ -207,16 +207,9 @@ class Db2Tiers2Csv
         ksort($societes, SORT_NUMERIC);
 
         foreach($societes as $etablissements) {
-            $tiers = current($etablissements);
-
-            $societe = $this->importSociete($tiers, $etablissements);
-
-            if(!$societe) {
-                continue;
-            }
-
             foreach($etablissements as $tiers) {
-                $etablissement = $this->importEtablissement($societe, $tiers, $etablissements);
+                $societe = $this->importSociete($tiers, $tiers);
+                $etablissement = $this->importEtablissement($societe, $tiers, $tiers);
             }
         }
     }
