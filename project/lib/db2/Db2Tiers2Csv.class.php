@@ -207,9 +207,11 @@ class Db2Tiers2Csv
         ksort($societes, SORT_NUMERIC);
 
         foreach($societes as $etablissements) {
+            $societesLieesId = array();
             foreach($etablissements as $tiers) {
-                $societe = $this->importSociete($tiers, $tiers);
-                $etablissement = $this->importEtablissement($societe, $tiers, $tiers);
+                $societeId = $this->importSociete($tiers, $tiers, $societesLieesId);
+                $societesLieesId[] = $societeId;
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers);
             }
         }
     }
@@ -301,7 +303,7 @@ class Db2Tiers2Csv
         }
     }*/
 
-    protected function importSociete($tiers, $etablissements) {
+    protected function importSociete($tiers, $etablissements, $societes_liees_id) {
         $identifiantSociete = $this->buildIdentifiantSociete($tiers);
 
         if(!str_replace("C", "", $identifiantSociete)) {
@@ -349,6 +351,7 @@ class Db2Tiers2Csv
             $this->getInfos($tiers, Db2Tiers::COL_EMAIL),
             null,
             null,
+            implode('|', $societes_liees_id)
         );
 
         return "SOCIETE-".$identifiantSociete;

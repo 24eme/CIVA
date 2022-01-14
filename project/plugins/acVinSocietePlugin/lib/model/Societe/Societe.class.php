@@ -206,6 +206,10 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
     }
 
     public function addAndSaveSocieteLiee($societe) {
+        if(is_string($societe)) {
+            $societe = SocieteClient::getInstance()->find($societe);
+        }
+
         $this->add('societes_liees');
         if(!in_array($societe->_id, $this->societes_liees->toArray())) {
             $this->societes_liees->add(null, $societe->_id);

@@ -36,6 +36,7 @@ class SocieteCsvFile extends CompteCsvFile
     const CSV_EMAIL = 31;
     const CSV_WEB = 32;
     const CSV_COMMENTAIRE = 33;
+    const CSV_SOCIETE_LIEE = 34;
     // const CSV_EXPLOITANT_INTITULE = 34;
     // const CSV_EXPLOITANT_NOM = 35;
     // const CSV_EXPLOITANT_ADRESSE = 36;
@@ -96,12 +97,23 @@ class SocieteCsvFile extends CompteCsvFile
 
               	$s->save();
 
+
+
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
 
                 echo $s->_id." (".trim($modifications).")\n";
+
+                if(isset($line[self::CSV_SOCIETE_LIEE])) {
+                    foreach(explode("|", $line[self::CSV_SOCIETE_LIEE]) as $societeLieeId) {
+                        if(!$societeLieeId) {
+                            continue;
+                        }
+                        $s->addAndSaveSocieteLiee($societeLieeId);
+                    }
+                }
 
             }catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";
