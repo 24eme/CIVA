@@ -15,14 +15,14 @@ class GammaClient
         }
 
         $societe = $compte->getSociete();
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             if($compte->getIdentifiant() == $etablissement->cvi && $etablissement->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
 
                 return $etablissement;
             }
         }
 
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             if($etablissement->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
 
                 return $etablissement;

@@ -5,7 +5,7 @@ class CompteDroitsForm extends acCouchdbForm {
 
     public function __construct(acCouchdbDocument $doc, $defaults = array(), $options = array(), $CSRFSecret = null) {
         $this->comptes = array();
-        foreach($doc->getContactsObj() as $compte) {
+        foreach($doc->getContactsObj(true) as $compte) {
             if(!$compte->isActif() || !$compte->mot_de_passe) {
                 continue;
             }

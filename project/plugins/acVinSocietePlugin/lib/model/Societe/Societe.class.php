@@ -189,10 +189,18 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         return $etbObj->etablissement;
     }
 
-    public function getContactsObj() {
+    public function getContactsObj($withSocietesLiees = false) {
         $contacts = array();
         foreach ($this->contacts as $id => $obj) {
             $contacts[$id] = CompteClient::getInstance()->find($id);
+        }
+        if($withSocietesLiees && $this->exist('societes_liees')) {
+            foreach($this->societes_liees as $societeId) {
+                $societe = SocieteClient::getInstance()->find($societeId);
+                foreach ($societe->contacts as $id => $obj) {
+                    $contacts[$id] = CompteClient::getInstance()->find($id);
+                }
+            }
         }
         return $contacts;
     }
@@ -211,12 +219,13 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         $societe->save();
     }
 
-    public function getEtablissementsObject($withSuspendu = true) {
+    public function getEtablissementsObject($withSuspendu = true, $withSocietesLiees = false) {
         $etablissements = array();
-        foreach ($this->getEtablissementsObj($withSuspendu) as $id => $e) {
+        foreach ($this->getEtablissementsObj($withSuspendu, $withSocietesLiees) as $id => $e) {
             $etablissements[$id] = $e->etablissement;
 
         }
+
         return $etablissements;
     }
 
@@ -516,6 +525,15 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         }
     }
 
+    public function getSocietesLieesIds() {
+        if(!$this->exist('societes_liees')) {
+
+            return array($this->_id);
+        }
+
+        return array_merge(array($this->_id), $this->societes_liees->toArray());
+    }
+
     public function addCommentaire($s) {
         $c = $this->get('commentaire');
         if ($c) {
@@ -526,7 +544,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
 
     public function getDroits() {
         $droits = array();
-        foreach($this->getEtablissementsObject() as $etablissement) {
+        foreach($this->getEtablissementsObject(true, true) as $etablissement) {
             $droits = array_merge($droits, $etablissement->getDroits());
         }
 

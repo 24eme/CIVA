@@ -25,7 +25,7 @@ class EtablissementSecurity implements SecurityInterface {
 
         if(!$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) &&
            !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_OPERATEUR) &&
-            $this->etablissement->id_societe != $this->getUser()->getCompte()->id_societe) {
+            !in_array($this->etablissement->id_societe, $this->getUser()->getCompte()->getSociete()->getSocietesLieesIds())) {
 
             return false;
         }

@@ -112,7 +112,7 @@ class tiersActions extends sfActions {
         }
         $url_drm = sfConfig::get("app_giilda_url_drm");
         if($compte->hasDroit(Roles::TELEDECLARATION_DRM) && $url_drm) {
-            foreach($compte->getSociete()->getEtablissementsObject() as $etablissement) {
+            foreach($compte->getSociete()->getEtablissementsObject(true, true) as $etablissement) {
                 if($etablissement->hasDroit(Roles::TELEDECLARATION_DRM)) {
                     $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $etablissement->identifiant);
                     break;
