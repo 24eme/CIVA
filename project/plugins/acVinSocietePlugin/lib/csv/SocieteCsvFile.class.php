@@ -79,7 +79,10 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->no_tva_intracommunautaire = $line[self::CSV_TVA_INTRACOMMUNAUTAIRE] ? str_replace(" ", "", $line[self::CSV_TVA_INTRACOMMUNAUTAIRE]) : null;
                 $s->commentaire = ($line[self::CSV_COMMENTAIRE]) ? $line[self::CSV_COMMENTAIRE] : null;
                 $s->code_comptable_client = ($line[self::CSV_CODE_COMPTABLE_CLIENT]) ? $line[self::CSV_CODE_COMPTABLE_CLIENT] : null;
-                $s->add('num_interne', ($line[self::CSV_NUM_INTERNE]) ? $line[self::CSV_NUM_INTERNE] : null);
+                $s->remove('num_interne');
+                if($line[self::CSV_NUM_INTERNE]) {
+                    $s->add('num_interne', $line[self::CSV_NUM_INTERNE]);
+                }
                 $s->statut = $line[self::CSV_STATUT];
                 $this->storeCompteInfos($s, $line);
 

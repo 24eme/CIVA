@@ -328,7 +328,7 @@ class Db2Tiers2Csv
             null,
             $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK),
             $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
-            ($this->getInfos($tiers, Db2Tiers::COL_SIRET)),
+            $this->getInfos($tiers, Db2Tiers::COL_SIRET),
             null,
             null,
             null,
