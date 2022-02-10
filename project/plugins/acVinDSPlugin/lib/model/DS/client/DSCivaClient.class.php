@@ -142,7 +142,7 @@ class DSCivaClient extends DSClient {
     public function getEtablissements($societe, $type_ds) {
         $etablissements = array();
 
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
 
                 $etablissements[$etablissement->_id] = $etablissement;
@@ -166,7 +166,7 @@ class DSCivaClient extends DSClient {
         return $etablissements;
     }
     public function getEtablissement($societe, $type_ds = null) {
-        foreach($societe->getEtablissementsObject() as $etablissement) {
+        foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             if($type_ds == DSCivaClient::TYPE_DS_PROPRIETE && $etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
 
                 return $etablissement;

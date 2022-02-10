@@ -43,7 +43,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
         $this->addCredential(self::CREDENTIAL_DECLARATION);
 
         $etablissements = array();
-        $etablissementsObject = $societe->getEtablissementsObject();
+        $etablissementsObject = $societe->getEtablissementsObject(true, true);
         if (count($etablissementsObject) >= 1) {
     	    foreach ($etablissementsObject as $e) {
                 if (isset($etablissements[$e->getFamille()])) {
@@ -105,7 +105,7 @@ abstract class TiersSecurityUser extends CompteSecurityUser {
                     $this->_tiers[$t->famille] = $t;
                 }
             } else {
-            $this->_tiers = $this->getCompte()->getSociete()->getEtablissementsObject();
+            $this->_tiers = $this->getCompte()->getSociete()->getEtablissementsObject(true, true);
             }
             if (!$this->_tiers) {
                 $this->signOutCompte();

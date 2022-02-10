@@ -12,7 +12,7 @@ class SocieteCsvFile extends CompteCsvFile
     const CSV_NOM = 7;
     const CSV_NOM_COURT = 8;
     const CSV_CODE_COMPTABLE_CLIENT = 9;
-    const CSV_CODE_COMPTABLE_FOURNISSEUR = 10;
+    const CSV_NUM_INTERNE = 10;
     const CSV_SIRET = 11;
     const CSV_TVA_INTRACOMMUNAUTAIRE = 12;
     const CSV_CODE_NAF = 13;
@@ -36,6 +36,7 @@ class SocieteCsvFile extends CompteCsvFile
     const CSV_EMAIL = 31;
     const CSV_WEB = 32;
     const CSV_COMMENTAIRE = 33;
+    const CSV_SOCIETE_LIEE = 34;
     // const CSV_EXPLOITANT_INTITULE = 34;
     // const CSV_EXPLOITANT_NOM = 35;
     // const CSV_EXPLOITANT_ADRESSE = 36;
@@ -78,7 +79,10 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->no_tva_intracommunautaire = $line[self::CSV_TVA_INTRACOMMUNAUTAIRE] ? str_replace(" ", "", $line[self::CSV_TVA_INTRACOMMUNAUTAIRE]) : null;
                 $s->commentaire = ($line[self::CSV_COMMENTAIRE]) ? $line[self::CSV_COMMENTAIRE] : null;
                 $s->code_comptable_client = ($line[self::CSV_CODE_COMPTABLE_CLIENT]) ? $line[self::CSV_CODE_COMPTABLE_CLIENT] : null;
-                $s->code_comptable_fournisseur = ($line[self::CSV_CODE_COMPTABLE_FOURNISSEUR]) ? $line[self::CSV_CODE_COMPTABLE_FOURNISSEUR] : null;;
+                $s->remove('num_interne');
+                if($line[self::CSV_NUM_INTERNE]) {
+                    $s->add('num_interne', $line[self::CSV_NUM_INTERNE]);
+                }
                 $s->statut = $line[self::CSV_STATUT];
                 $this->storeCompteInfos($s, $line);
 
@@ -96,12 +100,23 @@ class SocieteCsvFile extends CompteCsvFile
 
               	$s->save();
 
+
+
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
 
                 echo $s->_id." (".trim($modifications).")\n";
+
+                if(isset($line[self::CSV_SOCIETE_LIEE])) {
+                    foreach(explode("|", $line[self::CSV_SOCIETE_LIEE]) as $societeLieeId) {
+                        if(!$societeLieeId) {
+                            continue;
+                        }
+                        $s->addAndSaveSocieteLiee($societeLieeId);
+                    }
+                }
 
             }catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";
