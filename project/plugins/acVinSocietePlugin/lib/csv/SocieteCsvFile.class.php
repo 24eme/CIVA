@@ -12,7 +12,7 @@ class SocieteCsvFile extends CompteCsvFile
     const CSV_NOM = 7;
     const CSV_NOM_COURT = 8;
     const CSV_CODE_COMPTABLE_CLIENT = 9;
-    const CSV_CODE_COMPTABLE_FOURNISSEUR = 10;
+    const CSV_NUM_INTERNE = 10;
     const CSV_SIRET = 11;
     const CSV_TVA_INTRACOMMUNAUTAIRE = 12;
     const CSV_CODE_NAF = 13;
@@ -79,7 +79,7 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->no_tva_intracommunautaire = $line[self::CSV_TVA_INTRACOMMUNAUTAIRE] ? str_replace(" ", "", $line[self::CSV_TVA_INTRACOMMUNAUTAIRE]) : null;
                 $s->commentaire = ($line[self::CSV_COMMENTAIRE]) ? $line[self::CSV_COMMENTAIRE] : null;
                 $s->code_comptable_client = ($line[self::CSV_CODE_COMPTABLE_CLIENT]) ? $line[self::CSV_CODE_COMPTABLE_CLIENT] : null;
-                $s->code_comptable_fournisseur = ($line[self::CSV_CODE_COMPTABLE_FOURNISSEUR]) ? $line[self::CSV_CODE_COMPTABLE_FOURNISSEUR] : null;;
+                $s->add('num_interne', ($line[self::CSV_NUM_INTERNE]) ? $line[self::CSV_NUM_INTERNE] : null);
                 $s->statut = $line[self::CSV_STATUT];
                 $this->storeCompteInfos($s, $line);
 
