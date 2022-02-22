@@ -58,7 +58,7 @@ class tiersActions extends sfActions {
             if($item->papier) {
                 continue;
             }
-            
+
             if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
                $this->vracs['CONTRAT_A_TERMINER'] += 1;
             }
@@ -122,7 +122,7 @@ class tiersActions extends sfActions {
 
         }
         $etablissement = $compte->getSociete()->getEtablissementPrincipal();
-        
+
         $url_compte = sfConfig::get("app_giilda_url_compte");
         if($isAdmin && $url_compte && preg_match('/(societe|etablissement|compte)/', $this->getRequest()->getParameter('active'))) {
             $blocs[Roles::CONTACT] = sfConfig::get("app_giilda_url_compte_admin");
@@ -134,7 +134,7 @@ class tiersActions extends sfActions {
         if($url_facture && $this->getRequest()->getParameter('active') == 'facture' && $isAdmin) {
             $blocs[Roles::FACTURE] = sfConfig::get("app_giilda_url_facture_admin");
         } elseif($url_facture) {
-            $blocs[Roles::FACTURE] = sprintf($url_facture, $etablissement->identifiant);
+            $blocs[Roles::FACTURE] = sprintf($url_facture, $compte->getSociete()->identifiant);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
