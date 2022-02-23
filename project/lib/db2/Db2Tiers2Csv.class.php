@@ -326,7 +326,7 @@ class Db2Tiers2Csv
             null,
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
-            ($this->getInfos($tiers, Db2Tiers::COL_HAS_DRM))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK),
+            ($this->allTiersHasDrm($tiers))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK),
             $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
             $this->getInfos($tiers, Db2Tiers::COL_SIRET),
             null,
@@ -545,6 +545,15 @@ class Db2Tiers2Csv
         }
 
         return $famille;
+    }
+
+    protected function allTiersHasDrm($tiers) {
+        foreach($tiers as $t) {
+            if(!$t->get(Db2Tiers::COL_HAS_DRM)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected function getInfos($tiers, $key) {
