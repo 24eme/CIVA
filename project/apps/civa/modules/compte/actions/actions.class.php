@@ -231,7 +231,7 @@ class compteActions extends sfActions {
     public function executeMotDePasseOublie(sfWebRequest $request) {
     	$this->service = $request->getParameter('service');
         $this->form = new CompteMotDePasseOublieForm();
-        if ($request->isMethod(sfWebRequest::POST)) {
+        if ($request->getParameter($this->form->getName())) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $compte = $this->form->save();

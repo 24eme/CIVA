@@ -20,7 +20,7 @@
                     <?php echo $form['login']->render() ?>
                 </div>
                 <div class="ligne_form ligne_btn">
-                    <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
+                    <input type="submit" alt="Valider" value="Valider" class="btn btn_majeur btn_petit btn_vert">
                 </div>
             </form>
         </div>
