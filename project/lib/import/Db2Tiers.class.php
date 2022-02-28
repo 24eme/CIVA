@@ -14,6 +14,7 @@ class Db2Tiers extends Db2 {
     const COL_NUM                   = 0;
     const COL_CIVABA                = 1;
     const COL_NO_STOCK              = 3;
+    const COL_HAS_DRM               = 4;
     const COL_NOM_PRENOM            = 6;
     const COL_ANNEE_NAISSANCE       = 8;
     const COL_INTITULE              = 9;
