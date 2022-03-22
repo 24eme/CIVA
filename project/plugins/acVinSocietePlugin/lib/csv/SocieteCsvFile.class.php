@@ -86,6 +86,11 @@ class SocieteCsvFile extends CompteCsvFile
                 $s->statut = $line[self::CSV_STATUT];
                 $this->storeCompteInfos($s, $line);
 
+                $cMaster = $s->getMasterCompte();
+                if($cMaster && $cMaster->email) {
+                    $s->email = $cMaster->email;
+                }
+
                 $s->cleanEtablissements();
                 $s->cleanComptes();
 
