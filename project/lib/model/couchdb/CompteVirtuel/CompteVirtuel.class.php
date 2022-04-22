@@ -33,4 +33,59 @@ class CompteVirtuel extends BaseCompteVirtuel {
     public function getGecos() {
         return $this->getLogin() . ',' . $this->getNoAccises() . ',' . $this->getNom(). ',';
     }
+
+    public function getSociete() {
+	return null;
+    }
+
+    public function isSocieteContact() {
+
+	return false;
+    }
+
+    public function getEtablissementOrigineObject() {
+	
+	return null;
+    }
+
+    public function getPrenom() {
+
+	return null;
+    }
+
+    public function getAdresse() {
+
+        return null;
+    }
+    
+    public function getTelephoneBureau() {
+
+        return null;
+    }
+
+    public function getTelephoneMobile() {
+
+        return null;
+    }
+
+    public function getFax() {
+
+        return null;
+    }
+
+    public function getIdentifiant() {
+
+	return $this->login;
+    }
+
+    public function isActif() {
+	
+	return true;
+    }
+
+    public function updateLdap($verbose = 0) {
+        $ldap = new CompteLdap();
+        $ldap->saveCompte($this, $verbose);
+    }
+
 }
