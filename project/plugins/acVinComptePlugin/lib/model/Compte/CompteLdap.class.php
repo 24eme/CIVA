@@ -77,7 +77,7 @@ class CompteLdap extends acVinLdap {
       if ($compte->adresse_complementaire)
 	$info['street']        .= " \n ".preg_replace('/;/', '\n', $compte->adresse_complementaire);
       }
-      $info['o']                = $compte->getSociete()->raison_sociale;
+      $info['o']                = ($compte->getSociete()) ? $compte->getSociete()->raison_sociale : $compte->nom_a_afficher;
       if ($compte->commune)
       $info['l']                = $compte->commune;
       if ($compte->code_postal)
