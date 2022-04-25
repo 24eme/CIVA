@@ -8,7 +8,7 @@ then
     exit 0
 fi
 
-cat $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_societes.utf8.csv | cut -d ";" -f 4,6 | sed 's/"//'g | awk -F ';' '{ print "s/^" $2 ",/" $1 ",/" }' > /tmp/tiers_2_societe.sed
+cut "$BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_societes.utf8.csv" -d ";" -f 4,6 | sed 's/"//g' | awk -F ';' '{ print "s/^" $2 ",/" $1 ",/" }' > /tmp/tiers_2_societe.sed
 
 sed -f /tmp/tiers_2_societe.sed "$1" > /tmp/TIECPT.tmp
 
