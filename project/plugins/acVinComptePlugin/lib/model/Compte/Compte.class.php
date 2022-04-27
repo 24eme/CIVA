@@ -33,7 +33,9 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function isSameAdresseThanSociete() {
-
+        if (!$this->getSociete()) {
+            return true;
+        }
         return CompteGenerique::isSameAdresseComptes($this, $this->getSociete()->getContact());
     }
 
