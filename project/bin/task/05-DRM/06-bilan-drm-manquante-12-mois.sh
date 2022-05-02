@@ -17,6 +17,7 @@ tail -n +2 $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv.tmp" | sort > $TASK_DIR/$PR
 head -n 1 $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv.tmp" | sed 's/CVI;/CVI;Raison sociale;Statut;/' > $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv"
 join -t ';' -1 1 -2 1 -a 2 $TASK_DIR/$PREFIX_EXPORT_FILE"_etablissements.csv.tmp" $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv.sorted.tmp" >> $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv"
 
+head -n 1 $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv.tmp" | sed 's/CVI;/CVI;Raison sociale;Statut;/' > $TASK_DIR/$PREFIX_EXPORT_FILE"_manquantes.csv"
 cat $TASK_DIR/$PREFIX_EXPORT_FILE"_toutes.csv" | grep  ';øø' | grep -v SUSPENDU  | grep -v '^75' >> $TASK_DIR/$PREFIX_EXPORT_FILE"_manquantes.csv"
 
 rm $TASK_DIR/$PREFIX_EXPORT_FILE"_"*".tmp"
