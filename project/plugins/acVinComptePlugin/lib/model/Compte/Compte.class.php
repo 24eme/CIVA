@@ -33,7 +33,9 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
     }
 
     public function isSameAdresseThanSociete() {
-
+        if (!$this->getSociete()) {
+            return true;
+        }
         return CompteGenerique::isSameAdresseComptes($this, $this->getSociete()->getContact());
     }
 
@@ -190,11 +192,11 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
 
         $new = $this->isNew();
 
-        if($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $this->isSameAdresseThanSociete()) {
+        if($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $this->isSameAdresseThanSociete() && $societe->getMasterCompte()) {
             CompteGenerique::pullAdresse($this, $societe->getMasterCompte());
         }
 
-        if($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $this->isSameContactThanSociete()) {
+        if($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $this->isSameContactThanSociete() && $societe->getMasterCompte()) {
             CompteGenerique::pullContact($this, $societe->getMasterCompte());
         }
 
