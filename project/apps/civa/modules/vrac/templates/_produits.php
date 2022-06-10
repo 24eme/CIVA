@@ -118,7 +118,7 @@
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
 		<tr class="<?php if ($alt): ?> alt<?php endif; ?>">
-		<td><strong class="printonly"><br/><br/>Enlevenemt :</strong></td>
+		<td><strong class="printonly"><br/><br/>Enlèvement :</strong></td>
 			<td></td>
 			<td></td>
 			<td class="echeance"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>

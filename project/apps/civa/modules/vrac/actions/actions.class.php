@@ -227,6 +227,7 @@ class vracActions extends sfActions
         foreach($tiers as $t) {
             if($vrac->isActeur($t->_id)) {
                 $user = $t;
+                break;
             }
         }
 
