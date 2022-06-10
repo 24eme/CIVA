@@ -58,7 +58,12 @@ class VracTousView extends acCouchdbView
     public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null, $type = null, $role = null) {
         $result = array();
         foreach($tiers as $t) {
-            $result = array_merge($result, $this->findSortedBy($t->_id, $campagne, $statut, $type, $role));
+            foreach($this->findSortedBy($t->_id, $campagne, $statut, $type, $role) as $key => $item) {
+                if(isset($result[$key])) {
+                    continue;
+                }
+                $result[$key] = $item;
+            }
         }
         krsort($result);
         return $result;
