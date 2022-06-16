@@ -10,6 +10,7 @@
 				<li><label for="statut">En tant que :</label><select id="role" name="role"><option value="">Tous</option><?php foreach ($roles as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($role == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
 				<?php endif; ?>
 				<li><label for="campagne">Campagne :</label><select id="campagne" name="campagne"><?php foreach ($campagnes as $c): ?><option value="<?php echo $c ?>"<?php if ($campagne == $c): ?> selected="selected"<?php endif; ?>><?php echo $c ?></option><?php endforeach; ?></select></li>
+                <li><label for="campagne">Commercial :</label><select id="commercial" name="commercial"><option value="">Tous</option><?php foreach ($commerciaux as $k => $com): ?><option value="<?php echo $k ?>"<?php if ($commercial == $k): ?> selected="selected"<?php endif; ?>><?php echo $k ?></option><?php endforeach; ?></select></li>
 				<li><button id="valide_form" style="cursor: pointer; background: none repeat scroll 0 0 transparent; border: 0 none;" type="submit"><img src="/images/boutons/btn_valider_2.png" alt="Continuer à l'étape suivante"></button></li>
 			</ul>
 		</form>
