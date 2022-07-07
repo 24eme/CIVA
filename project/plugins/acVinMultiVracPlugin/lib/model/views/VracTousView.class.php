@@ -42,11 +42,14 @@ class VracTousView extends acCouchdbView
     	return $result;
     }
 
-    public function findSortedBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null) {
+    public function findSortedBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null) {
     	$items = $this->findBy($identifiant, $campagne, $statut, $type, $role);
     	$result = array();
     	foreach ($items as $item) {
             if($role && $item->value->role != $role) {
+                continue;
+            }
+            if($commercial && $item->value->commercial != $commercial) {
                 continue;
             }
     		$result[$item->id] = $item;
@@ -55,10 +58,10 @@ class VracTousView extends acCouchdbView
     	return $result;
     }
 
-    public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null, $type = null, $role = null) {
+    public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null) {
         $result = array();
         foreach($tiers as $t) {
-            foreach($this->findSortedBy($t->_id, $campagne, $statut, $type, $role) as $key => $item) {
+            foreach($this->findSortedBy($t->_id, $campagne, $statut, $type, $role, $commercial) as $key => $item) {
                 if(isset($result[$key])) {
                     continue;
                 }

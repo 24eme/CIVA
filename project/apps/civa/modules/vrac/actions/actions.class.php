@@ -33,16 +33,19 @@ class vracActions extends sfActions
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
 		$this->role = $request->getParameter('role');
+        $this->commercial = $request->getParameter('commercial');
 
 		if (!$this->campagne) {
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
 		$etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
         $this->roles = $this->findRoles();
+        $annuaire = $this->getAnnuaire();
+        $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
 	}
 
     protected function findRoles() {
