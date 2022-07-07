@@ -427,6 +427,9 @@ class Db2Tiers2Csv
             $dateNaissanceExploitant = null;
         }
 
+        $carte_pro = ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null;
+
+
         $this->csv[] = array(
             "ETABLISSEMENT",
             $societe,
@@ -444,7 +447,7 @@ class Db2Tiers2Csv
             ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null,
             null,
             null,
-            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
+            $carte_pro,
             $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE),
             null,
             null,
@@ -472,6 +475,22 @@ class Db2Tiers2Csv
             $dateNaissanceExploitant,
         );
 
+        $extra = array();
+        $extra['cvi'] = $this->getInfos($tiers, Db2Tiers::COL_CVI);
+        $extra['civaba'] = $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $extra['siret'] = $this->getInfos($tiers, Db2Tiers::COL_SIRET);
+        $extra['no_accises'] = $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES);
+        $extra['carte_pro'] = $carte_pro;
+        $extra['no_tva_intracommunautaire'] = $insee_declaration;
+        $extra['code_comptable'] = $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $extra['famille'] = $famille;
+        $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
+        $extra['adherent_synvira'] = true;
+        $extra['declaration_commune'] = $this->getCommune($insee_declaration);
+        $extra['declaration_insee'] = $insee_declaration;
+        $extra['maison_mere'] = $insee_declaration;
+        $extra['maison_mere_raison_sociale'] = $insee_declaration;
+
         $this->csv[] = array(
             "COMPTE",
             "ETABLISSEMENT-".$identifiantEtablissement,
@@ -479,6 +498,7 @@ class Db2Tiers2Csv
             null,
             null,
             $statut,
+            json_encode($extra)
         );
 
         if($this->getInfos($tiers, Db2Tiers::COL_CVI) && $identifiantEtablissement != $this->getInfos($tiers, Db2Tiers::COL_CVI)) {
@@ -489,6 +509,7 @@ class Db2Tiers2Csv
                 null,
                 null,
                 $statut,
+                json_encode($extra)
             );
         }
 
