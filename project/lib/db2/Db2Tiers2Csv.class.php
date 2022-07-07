@@ -211,7 +211,12 @@ class Db2Tiers2Csv
             foreach($etablissements as $tiers) {
                 $societeId = $this->importSociete($tiers, $tiers, $societesLieesId);
                 $societesLieesId[] = $societeId;
-                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers);
+                $maisonMereNum = $this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE);
+                $tiersMaisonMere = null;
+                if($maisonMereNum && isset($etablissements[$maisonMereNum])) {
+                    $tiersMaisonMere = $etablissements[$maisonMereNum];
+                }
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $societesLieesId, $tiersMaisonMere);
             }
         }
     }
@@ -357,7 +362,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $societes)
+    protected function importEtablissement($societe, $tiers, $societes, $societesLieesId, $tiersMaisonMere)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -481,15 +486,19 @@ class Db2Tiers2Csv
         $extra['siret'] = $this->getInfos($tiers, Db2Tiers::COL_SIRET);
         $extra['no_accises'] = $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES);
         $extra['carte_pro'] = $carte_pro;
-        $extra['no_tva_intracommunautaire'] = $insee_declaration;
-        $extra['code_comptable'] = $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
+        $extra['code_comptable'] = ($this->allTiersHasDrm($tiers))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK);
         $extra['famille'] = $famille;
+        $extra['sous_region_viticole'] = null;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
         $extra['adherent_organisme'] = 'SYNVIRA';
         $extra['declaration_commune'] = $this->getCommune($insee_declaration);
         $extra['declaration_insee'] = $insee_declaration;
-        $extra['maison_mere'] = $insee_declaration;
-        $extra['maison_mere_raison_sociale'] = $insee_declaration;
+        $extra['societes_liees_identifiant'] = str_replace("SOCIETE-", "", implode(',', array_diff_assoc(array($societe), $societesLieesId)));
+        if($tiersMaisonMere) {
+            $extra['maison_mere_identifiant'] = $this->buildIdentifiantSociete($tiersMaisonMere);
+            $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
+            $extra['maison_mere_siret'] = $this->getInfos($tiersMaisonMere, Db2Tiers::COL_SIRET);
+        }
 
         $this->csv[] = array(
             "COMPTE",
