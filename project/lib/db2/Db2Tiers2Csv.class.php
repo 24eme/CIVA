@@ -485,7 +485,7 @@ class Db2Tiers2Csv
         $extra['code_comptable'] = $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
         $extra['famille'] = $famille;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
-        $extra['adherent_synvira'] = true;
+        $extra['adherent_organisme'] = 'SYNVIRA';
         $extra['declaration_commune'] = $this->getCommune($insee_declaration);
         $extra['declaration_insee'] = $insee_declaration;
         $extra['maison_mere'] = $insee_declaration;

@@ -8,42 +8,7 @@ class CompteCsvFile extends CsvFile
     const CSV_ID_COMPTE = 3;
     //const CSV_FAMILLE = 4;
     const CSV_STATUT = 5;
-    const CSV_INTITULE = 6;
-    const CSV_NOM = 7;
-    // const CSV_NOM_COURT = 8;
-    const CSV_CVI = 9;
-    const CSV_NUM_INTERNE = 10;
-    const CSV_SIRET = 11;
-    const CSV_NO_ACCISES = 12;
-    const CSV_CARTE_PRO = 13;
-    const CSV_RECETTE_LOCALE = 14;
-    const CSV_NATURE_INAO = 15;
-    const CSV_REGION = 16;
-    const CSV_ADRESSE = 17;
-    const CSV_ADRESSE_COMPLEMENTAIRE_1 = 18;
-    const CSV_ADRESSE_COMPLEMENTAIRE_2 = 19;
-    const CSV_CODE_POSTAL = 20;
-    const CSV_COMMUNE = 21;
-    const CSV_INSEE = 22;
-    const CSV_CEDEX = 23;
-    const CSV_PAYS = 24;
-    const CSV_INSEE_DECLARATION = 25;
-    const CSV_COMMUNE_DECLARATION = 26;
-    const CSV_TEL_BUREAU = 27;
-    const CSV_TEL_PERSO = 28;
-    const CSV_MOBILE = 29;
-    const CSV_FAX = 30;
-    const CSV_EMAIL = 31;
-    const CSV_WEB = 32;
-    const CSV_COMMENTAIRE = 33;
-    const CSV_EXPLOITANT_INTITULE = 34;
-    const CSV_EXPLOITANT_NOM = 35;
-    const CSV_EXPLOITANT_ADRESSE = 36;
-    const CSV_EXPLOITANT_CODE_POSTAL = 37;
-    const CSV_EXPLOITANT_COMMUNE = 38;
-    const CSV_EXPLOITANT_PAYS = 39;
-    const CSV_EXPLOITANT_TEL = 40;
-    const CSV_EXPLOITANT_DATE_NAISSANCE = 41;
+    const CSV_EXTRAS = 6;
 
     public function importComptes() {
         $this->errors = array();
@@ -109,6 +74,8 @@ class CompteCsvFile extends CsvFile
                     $c->add('droits', $c->getDroits());
                     $updateDroits = true;
                 }
+
+                $c->add('extras', json_decode($line[self::CSV_EXTRAS]));
 
                 $cFinal = new acCouchdbJsonNative($c->toJson());
                 $diffFinal = $cFinal->diff($cOrigin);
