@@ -171,7 +171,7 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 $compteExploitant->fonction = "Exploitant";
                 $compteExploitant->civilite = $e->exploitant->civilite;
-                $compteExploitant->nom = $e->exploitant->nom;
+                $compteExploitant->nom = null;
                 $compteExploitant->prenom = $e->exploitant->nom;
                 $compteExploitant->adresse = $e->exploitant->adresse;
                 $compteExploitant->code_postal = $e->exploitant->code_postal;
