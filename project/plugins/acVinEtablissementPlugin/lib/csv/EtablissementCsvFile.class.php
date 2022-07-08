@@ -163,6 +163,22 @@ class EtablissementCsvFile extends CompteCsvFile
                 }
 
                 echo $e->_id." (".trim($modifications).")\n";
+
+                $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'01');
+                if(!$compteExploitant) {
+                    $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($s);
+                }
+
+                $compteExploitant->fonction = "Exploitant";
+                $compteExploitant->civilite = $e->exploitant->civilite;
+                $compteExploitant->nom = $e->exploitant->nom;
+                $compteExploitant->prenom = $e->exploitant->nom;
+                $compteExploitant->adresse = $e->exploitant->adresse;
+                $compteExploitant->code_postal = $e->exploitant->code_postal;
+                $compteExploitant->commune = $e->exploitant->commune;
+                $compteExploitant->telephone = $e->exploitant->telephone;
+                $compteExploitant->save();
+
             } catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";
             }
