@@ -110,6 +110,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         $message = Swift_Message::newInstance()
                 ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
+                ->setReplyTo(sfConfig::get('app_email_reply_to'))
                 ->setTo($email);
 
         $this->configureMessage($message, $type_ds, $teledeclarant);
@@ -154,7 +155,7 @@ Ce document constitue une aide à la télé-déclaration et n'est en aucun cas �
 
 RAPPELS :
     - DEPASSEMENT : depuis la campagne 2019/2020, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
-    - VCI : si vous détenez encore du VCI , vous devez le déclarer dans l'Appellation correspondante.
+    - VCI : si vous détenez encore du VCI, vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
 IMPORTANT : Clôture de Campagne
@@ -173,8 +174,7 @@ Le CIVA");
                 $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique
-sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
 Le téléservice \"Alsace Stocks\" sera accessible dès le 22 juillet, et jusqu'au 10 septembre 2022 inclus.
 
