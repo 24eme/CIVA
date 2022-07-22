@@ -156,13 +156,25 @@ DS
 
 Valable pour la création et la mise à jour.
 
+Création du dossier d'export de l'année courante :
+
+ > mkdir data/export/ds/pdf/20XX
+
 Tache de génération des PDFs :
 
  > php symfony export:ds-pdf
 
+Cette tâche tourne dans un cron toutes les nuits
+
 ### Mise à jour des lieux de stockages
 
-/!\ Le fichier tableur envoyé par les douanes nécessitent un retravaille
+Le fichier est à demandé au CIVA et provient des douanes.
+
+Il faut réorganiser et supprimer les colonnes inutiles en se basant sur les fichiers des précédentes campagnes, contenu dans : data/import/Tiers/lieux_stockages_XXXX.csv
+
+Il faut également s'assurer qu'il n'y a pas de ';' et de '"'.
+
+Un petit meld entre le nouveau fichier obtenu et celui de l'année d'avant ne fait pas de mal avant l'import.
 
  > php symfony import:LieuxStockages [chemin vers le csv des lieux de stockages]
 
