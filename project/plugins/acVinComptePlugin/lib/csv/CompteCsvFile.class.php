@@ -48,9 +48,7 @@ class CompteCsvFile extends CsvFile
 
                 if($c->getIdentifiant() == $e->getIdentifiant()) {
                     $c->addOrigine($e->_id);
-                }
-
-                if($c->getIdentifiant() == $s->getIdentifiant()) {
+                }elseif($c->getIdentifiant() == $s->getIdentifiant()) {
                     $c->addOrigine($s->_id);
                 }
 
