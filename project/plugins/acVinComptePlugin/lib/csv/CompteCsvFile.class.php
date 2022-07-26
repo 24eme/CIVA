@@ -46,7 +46,13 @@ class CompteCsvFile extends CsvFile
                 $c->remove('origines');
                 $c->add('origines');
 
-                $c->addOrigine($e->_id);
+                if($c->getIdentifiant() == $e->getIdentifiant()) {
+                    $c->addOrigine($e->_id);
+                }
+
+                if($c->getIdentifiant() == $s->getIdentifiant()) {
+                    $c->addOrigine($s->_id);
+                }
 
                 if($c->id_societe != $s->_id) {
                     echo "Warning le compte $c->_id a changé de société : $c->id_societe => $s->_id\n";
