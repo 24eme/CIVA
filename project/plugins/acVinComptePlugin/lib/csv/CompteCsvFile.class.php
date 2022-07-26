@@ -75,6 +75,7 @@ class CompteCsvFile extends CsvFile
                     $updateDroits = true;
                 }
 
+                $c->remove('extras');
                 $c->add('extras', json_decode($line[self::CSV_EXTRAS]));
 
                 $cFinal = new acCouchdbJsonNative($c->toJson());

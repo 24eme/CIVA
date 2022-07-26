@@ -216,7 +216,7 @@ class Db2Tiers2Csv
                 if($maisonMereNum && isset($etablissements[$maisonMereNum])) {
                     $tiersMaisonMere = $etablissements[$maisonMereNum];
                 }
-                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $societesLieesId, $tiersMaisonMere);
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
             }
         }
     }
@@ -362,7 +362,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $societes, $societesLieesId, $tiersMaisonMere)
+    protected function importEtablissement($societe, $tiers, $societes, $tiersMaisonMere)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -481,20 +481,12 @@ class Db2Tiers2Csv
         );
 
         $extra = array();
-        $extra['cvi'] = $this->getInfos($tiers, Db2Tiers::COL_CVI);
-        $extra['civaba'] = $this->getInfos($tiers, Db2Tiers::COL_CIVABA);
-        $extra['siret'] = $this->getInfos($tiers, Db2Tiers::COL_SIRET);
-        $extra['no_accises'] = $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES);
-        $extra['carte_pro'] = $carte_pro;
-        $extra['code_comptable'] = ($this->allTiersHasDrm($tiers))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK);
-        $extra['famille'] = $famille;
+        $extra['date_creation'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CREATION));
+        $extra['date_cloture'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CLOTURE));
         $extra['activite'] = $this->concatInfos($tiers, Db2Tiers::COL_TYPE_TIERS);
         $extra['sous_region_viticole'] = null;
+        $extra['adherent_organisme'] = null;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
-        $extra['adherent_organisme'] = 'SYNVIRA';
-        $extra['declaration_commune'] = $this->getCommune($insee_declaration);
-        $extra['declaration_insee'] = $insee_declaration;
-        $extra['societes_liees_identifiant'] = str_replace("SOCIETE-", "", implode(',', array_diff_assoc(array($societe), $societesLieesId)));
         if($tiersMaisonMere) {
             $extra['maison_mere_identifiant'] = $this->buildIdentifiantSociete($tiersMaisonMere);
             $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
@@ -526,6 +518,14 @@ class Db2Tiers2Csv
         }
 
         return;
+    }
+
+    protected function formatDateDb2($date) {
+        if(!$date) {
+             return null;
+        }
+
+        return DateTime::createFromFormat('ymd', str_pad($date, 6, "0", STR_PAD_LEFT))->format('Y-m-d');
     }
 
     protected function buildIdentifiantSociete($tiers) {
