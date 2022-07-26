@@ -488,6 +488,7 @@ class Db2Tiers2Csv
         $extra['carte_pro'] = $carte_pro;
         $extra['code_comptable'] = ($this->allTiersHasDrm($tiers))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK);
         $extra['famille'] = $famille;
+        $extra['activite'] = $this->concatInfos($tiers, Db2Tiers::COL_TYPE_TIERS);
         $extra['sous_region_viticole'] = null;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
         $extra['adherent_organisme'] = 'SYNVIRA';
@@ -499,6 +500,8 @@ class Db2Tiers2Csv
             $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
             $extra['maison_mere_siret'] = $this->getInfos($tiersMaisonMere, Db2Tiers::COL_SIRET);
         }
+        $extra['db2_num_tiers'] = $this->concatInfos($tiers, Db2Tiers::COL_NUM);
+        $extra['db2_num_stock'] = $this->concatInfos($tiers, Db2Tiers::COL_NO_STOCK);
 
         $this->csv[] = array(
             "COMPTE",
@@ -584,6 +587,16 @@ class Db2Tiers2Csv
             }
         }
         return true;
+    }
+
+    protected function concatInfos($tiers, $key) {
+        $infos = array();
+
+        foreach($tiers as $t) {
+            $infos[$t->get($key)] = $t->get($key);
+        }
+
+        return implode("|", $infos);
     }
 
     protected function getInfos($tiers, $key) {
