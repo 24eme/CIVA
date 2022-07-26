@@ -213,8 +213,8 @@ class Db2Tiers2Csv
                 $societesLieesId[] = $societeId;
                 $maisonMereNum = $this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE);
                 $tiersMaisonMere = null;
-                if($maisonMereNum && isset($etablissements[$maisonMereNum])) {
-                    $tiersMaisonMere = $etablissements[$maisonMereNum];
+                if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
+                    $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
                 }
                 $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
             }
@@ -488,7 +488,7 @@ class Db2Tiers2Csv
         $extra['adherent_organisme'] = null;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
         if($tiersMaisonMere) {
-            $extra['maison_mere_identifiant'] = $this->buildIdentifiantSociete($tiersMaisonMere);
+            $extra['maison_mere_identifiant'] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);
             $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
             $extra['maison_mere_siret'] = $this->getInfos($tiersMaisonMere, Db2Tiers::COL_SIRET);
         }
