@@ -203,7 +203,7 @@ class Db2Tiers2Csv
 
         foreach($etablissements as $num => $tiers) {
             foreach($tiers as $t) {
-                $this->maisonsMeresIdentifiant[$t->get(Db2Tiers::COL_MAISON_MERE)] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);
+                $this->maisonsMeresIdentifiant[$t->get(Db2Tiers::COL_MAISON_MERE)] = "SOCIETE-".$this->buildIdentifiantSociete($societes[$t->get(Db2Tiers::COL_MAISON_MERE)][$t->get(Db2Tiers::COL_MAISON_MERE)]);
             }
         }
 
