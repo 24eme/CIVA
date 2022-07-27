@@ -5,6 +5,7 @@ class Db2Tiers2Csv
     protected $file = null;
     protected $csv = null;
     protected $_insee = null;
+    protected $maisonsMeresIdentifiant = array();
 
     public function __construct($file) {
         $this->file = $file;
@@ -200,6 +201,12 @@ class Db2Tiers2Csv
             }
         }
 
+        foreach($etablissements as $num => $tiers) {
+            foreach($tiers as $t) {
+                $this->maisonsMeresIdentifiant[$t->get(Db2Tiers::COL_MAISON_MERE)] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);
+            }
+        }
+
         if(count($etablissements) > 0) {
             throw new Exception("Erreurs tous les tiers n'ont pas été réparti");
         }
@@ -211,12 +218,7 @@ class Db2Tiers2Csv
             foreach($etablissements as $tiers) {
                 $societeId = $this->importSociete($tiers, $tiers, $societesLieesId);
                 $societesLieesId[] = $societeId;
-                $maisonMereNum = $this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE);
-                $tiersMaisonMere = null;
-                if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
-                    $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
-                }
-                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers);
             }
         }
     }
@@ -362,7 +364,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $societes, $tiersMaisonMere)
+    protected function importEtablissement($societe, $tiers, $societes)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -487,10 +489,11 @@ class Db2Tiers2Csv
         $extra['sous_region_viticole'] = null;
         $extra['adherent_organisme'] = null;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
-        if($tiersMaisonMere) {
-            $extra['maison_mere_identifiant'] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);
-            $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
-            $extra['maison_mere_siret'] = $this->getInfos($tiersMaisonMere, Db2Tiers::COL_SIRET);
+        if(isset($this->maisonsMeresIdentifiant[$this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE)])) {
+            $extra['maison_mere_identifiant'] = $this->maisonsMeresIdentifiant[$this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE)];
+            $societeMaisonMere = SocieteClient::getInstance()->find($extra['maison_mere_identifiant'], acCouchdbClient::HYDRATE_JSON);
+            $extra['maison_mere_raison_sociale'] = $societeMaisonMere->nom;
+            $extra['maison_mere_siret'] = $societeMaisonMere->siret;
         }
         $extra['db2_num_tiers'] = $this->concatInfos($tiers, Db2Tiers::COL_NUM);
         $extra['db2_num_stock'] = $this->concatInfos($tiers, Db2Tiers::COL_NO_STOCK);
