@@ -5,6 +5,7 @@ class Db2Tiers2Csv
     protected $file = null;
     protected $csv = null;
     protected $_insee = null;
+    protected $societesMeres = array();
 
     public function __construct($file) {
         $this->file = $file;
@@ -206,6 +207,10 @@ class Db2Tiers2Csv
 
         ksort($societes, SORT_NUMERIC);
 
+        if(!$suspendu) {
+            $this->societesMeres = $societes;
+        }
+
         foreach($societes as $etablissements) {
             $societesLieesId = array();
             foreach($etablissements as $tiers) {
@@ -215,6 +220,9 @@ class Db2Tiers2Csv
                 $tiersMaisonMere = null;
                 if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
                     $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
+                }
+                if(!$tiersMaisonMere && $maisonMereNum && isset($this->societesMeres[$maisonMereNum][$maisonMereNum])) {
+                    $tiersMaisonMere = $this->societesMeres[$maisonMereNum][$maisonMereNum];
                 }
                 if(!$tiersMaisonMere) {
                     $tiersMaisonMere = $tiers;
