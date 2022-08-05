@@ -191,7 +191,9 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         $this->societe_informations->fax = $societe->fax;
 
         $this->add('extras');
-        $this->extras->add('societes_liees_identifiant', implode('|', sort($societe->getSocietesLieesIds())));
+        $societesLieesId = $societe->getSocietesLieesIds();
+        sort($societesLieesId);
+        $this->extras->add('societes_liees_identifiant', implode('|', $societesLieesId));
         $this->extras->add('code_comptable', $societe->code_comptable_client);
         $this->extras->add('siret', $societe->siret);
 

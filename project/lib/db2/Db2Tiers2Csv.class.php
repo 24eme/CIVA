@@ -216,6 +216,9 @@ class Db2Tiers2Csv
                 if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
                     $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
                 }
+                if(!$tiersMaisonMere) {
+                    $tiersMaisonMere = $tiers;
+                }
                 $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
             }
         }
