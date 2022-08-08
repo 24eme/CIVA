@@ -422,12 +422,17 @@ class Db2Tiers2Csv
             $dateNaissanceExploitant,
         );
 
+        $adherentOrganisme = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_SYNVIRA) == "S") {
+            $adherentOrganisme = "SYNVIRA";
+        }
+
         $extra = array();
         $extra['date_creation'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CREATION));
         $extra['date_cloture'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CLOTURE));
         $extra['activite'] = $this->concatInfos($tiers, Db2Tiers::COL_TYPE_TIERS);
         $extra['sous_region_viticole'] = null;
-        $extra['adherent_organisme'] = null;
+        $extra['adherent_organisme'] = $adherentOrganisme;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
         if($tiersMaisonMere) {
             $extra['maison_mere_identifiant'] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);

@@ -37,6 +37,7 @@ class Db2Tiers extends Db2 {
     const COL_DATE_CREATION         = 43;
     const COL_DATE_CLOTURE          = 44;
     const COL_ADRESSE_SIEGE         = 46;
+    const COL_SYNVIRA               = 54;
     const COL_CCV_REC               = 55;
     const COL_DS_DECEMBRE           = 56;
     const COL_CVI                   = 57;
