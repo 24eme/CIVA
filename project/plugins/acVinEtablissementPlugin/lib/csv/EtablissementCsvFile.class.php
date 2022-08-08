@@ -44,6 +44,7 @@ class EtablissementCsvFile extends CompteCsvFile
     const CSV_EXPLOITANT_PAYS = 39;
     const CSV_EXPLOITANT_TEL = 40;
     const CSV_EXPLOITANT_DATE_NAISSANCE = 41;
+    const CSV_EXTRAS = 42;
 
     private function verifyCsvLine($line) {
         if (!preg_match('/[0-9]+/', $line[self::CSV_ID_SOCIETE])) {
@@ -167,6 +168,8 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'00');
                 if(!$compteExploitant) {
                     $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($s);
+                    $compteExploitant->identifiant = $s->identifiant.'00';
+                    $compteExploitant->constructId();
                 }
 
                 $compteExploitant->fonction = "Exploitant";
@@ -179,9 +182,9 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant->commune = $e->exploitant->commune;
                 $compteExploitant->telephone = $e->exploitant->telephone;
                 $compteExploitant->remove('extras');
-                $compteExploitant->add('extras', $e->getMasterCompte()->extras);
-
+                $compteExploitant->add('extras', json_decode($line[self::CSV_EXTRAS]));
                 $compteExploitant->save();
+                echo $compteExploitant->_id."\n";
 
             } catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";
