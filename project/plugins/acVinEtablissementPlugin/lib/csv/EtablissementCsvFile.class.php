@@ -164,7 +164,7 @@ class EtablissementCsvFile extends CompteCsvFile
 
                 echo $e->_id." (".trim($modifications).")\n";
 
-                $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'01');
+                $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'00');
                 if(!$compteExploitant) {
                     $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($s);
                 }
@@ -179,7 +179,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant->commune = $e->exploitant->commune;
                 $compteExploitant->telephone = $e->exploitant->telephone;
                 $compteExploitant->remove('extras');
-                $compteExploitant->add('extras', $e->extras->getData());
+                $compteExploitant->add('extras', $e->getMasterCompte()->extras);
 
                 $compteExploitant->save();
 
