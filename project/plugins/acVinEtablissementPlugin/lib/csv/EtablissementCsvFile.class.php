@@ -178,6 +178,9 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant->code_postal = $e->exploitant->code_postal;
                 $compteExploitant->commune = $e->exploitant->commune;
                 $compteExploitant->telephone = $e->exploitant->telephone;
+                $compteExploitant->remove('extras');
+                $compteExploitant->add('extras', $e->extras->getData());
+
                 $compteExploitant->save();
 
             } catch(Exception $e) {
