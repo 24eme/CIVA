@@ -50,7 +50,7 @@ td.echeance {display: inline;}
 
 		<?php use_helper('Date') ?>
 
-		<?php if (!$vrac->isValide() && !$vrac->hasValide($user->_id)): ?>
+		<?php if (!$vrac->isValide() && $user->_id && !$vrac->hasValide($user->_id)): ?>
 		<fieldset class="message">
 		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
 		     <ul class="messages_log">
@@ -143,7 +143,7 @@ td.echeance {display: inline;}
 						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
 					</a>
 				<?php endif; ?>
-				<?php if(!$vrac->isValide() && $vrac->hasValide($user->_id)): ?>
+				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
