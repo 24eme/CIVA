@@ -1,13 +1,21 @@
 <?php
 class VracMercurialeForm extends acCouchdbObjectForm {
 
-    const interne_choices = [1 => 'VRAI', 0 => 'FAUX'];
+    const interne_choices = [1 => 'Oui (Merc. I)', 0 => 'Non'];
 
     public function setup() {
+
+        $acheteurs = AnnuaireClient::$annuaire_types;
+        $acheteurs['recoltants'] = $acheteurs['recoltants'].' (Merc. V)';
+
+        $vendeurs = AnnuaireClient::$annuaire_types;
+        $vendeurs['negociants'] = $vendeurs['negociants'].' (Merc. X)';
+        $vendeurs['caves_cooperatives'] = $vendeurs['caves_cooperatives'].' (Merc. C)';
+
         $this->setWidgets(array(
             'interne' => new sfWidgetFormChoice(array('choices' => self::interne_choices)),
-            'acheteur_type' => new sfWidgetFormChoice(array('choices' => AnnuaireClient::$annuaire_types), array('required'=>false)),
-            'vendeur_type' => new sfWidgetFormChoice(array('choices' => AnnuaireClient::$annuaire_types), array('required'=>false)),
+            'acheteur_type' => new sfWidgetFormChoice(array('choices' => $acheteurs), array('required'=>false)),
+            'vendeur_type' => new sfWidgetFormChoice(array('choices' => $vendeurs), array('required'=>false)),
 
         ));
         $this->widgetSchema->setLabels(array(
