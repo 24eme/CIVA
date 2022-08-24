@@ -223,6 +223,23 @@ class vracActions extends sfActions
         }
     }
 
+
+	public function executeMercurialeEdit(sfWebRequest $request)
+	{
+        $this->vrac = $this->getRoute()->getVrac();
+        $this->forward404Unless($this->vrac);
+        $this->forward404Unless($this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
+        $this->form = new VracMercurialeForm($this->vrac);
+        if ($request->isMethod(sfWebRequest::POST)) {
+		    $this->form->bind($request->getParameter($this->form->getName()));
+            if ($this->form->isValid()) {
+                $this->form->save();
+                $this->getUser()->setFlash('notice', 'Le contrat a été mis à jour avec succès.');
+                return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+            }
+        }
+	}
+
     protected function getTiersOfVrac($vrac) {
         $tiers = $this->getUser()->getDeclarantsVrac();
         $user = null;

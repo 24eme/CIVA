@@ -213,6 +213,15 @@ vrac_annuaire:
     allow_empty: true
   requirements:
     sf_method: [get, post]
+vrac_mercuriale:
+  url: /vrac/:numero_contrat/mercuriale
+  param: { module: vrac, action: mercurialeEdit }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_etape:
   url: /vrac/:numero_contrat/:etape
   param: { module: vrac, action: etape }
