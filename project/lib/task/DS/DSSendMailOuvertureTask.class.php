@@ -110,6 +110,7 @@ class DSSendBrouillonTask extends sfBaseTask
 
         $message = Swift_Message::newInstance()
                 ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
+                ->setReplyTo(sfConfig::get('app_email_reply_to'))
                 ->setTo($email);
 
         $this->configureMessage($message, $type_ds, $teledeclarant);
@@ -144,17 +145,17 @@ class DSSendBrouillonTask extends sfBaseTask
 
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique.
 
-Comme les années précédentes, vous pourrez accéder à ce télé-service dès le 26 juillet sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Comme les années précédentes, vous pourrez accéder à ce télé-service dès le 22 juillet sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Attention la date limite de la télé-déclaration est fixée par la Douane au 10 septembre 2021 MINUIT.
+Attention la date limite de la télé-déclaration est fixée par la Douane au 10 septembre 2022 MINUIT.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2021, qui reprend les produits théoriquement détenus en stocks.
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2022, qui reprend les produits théoriquement détenus en stocks, vous pouvez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
 RAPPELS :
     - DEPASSEMENT : depuis la campagne 2019/2020, les volumes en dépassement de rendement doivent être déclarés par couleur dans les rubriques DRA/DPLC blanc et rouge.
-    - VCI : si vous détenez encore du VCI , vous devez le déclarer dans l'Appellation correspondante.
+    - VCI : si vous détenez encore du VCI, vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
 IMPORTANT : Clôture de Campagne
@@ -173,10 +174,9 @@ Le CIVA");
                 $message->setSubject("Déclaration de Stocks \"Négoce\" au 31 juillet ".$campagne)
                     ->setBody("Bonjour,
 
-Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique
-sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le téléservice \"Alsace Stocks\" sera accessible dès le 26 juillet, et jusqu'au 10 septembre 2021 inclus.
+Le téléservice \"Alsace Stocks\" sera accessible dès le 22 juillet, et jusqu'au 10 septembre 2022 inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF
 ou consulter l'aide en ligne.
@@ -186,7 +186,7 @@ RAPPELS :
     - VCI : si vous détenez encore du VCI, vous devez le déclarer dans l'Appellation correspondante.
     - STOCK NEANT : en cas de Stock Néant, un Arrêté du 18 juillet 2018 exempte les opérateurs vitivinicoles de l'obligation de souscrire une Déclaration de Stock.
 
-IMPORTANT : Clôture de Campagne
+IMPORTANT : Clôture de Campagne (pour les opérateurs qui clôturent au 31 juillet)
     - La DRM de Juillet (à déposer entre le 1er et le 10 Août) sera à établir de façon habituelle et donc à clôturer avec un STOCK THEORIQUE
     - Les modalités concernant la DRM d'Août, les Pertes et Manquants, ainsi que la DAI (Déclaration Annuelle d'Inventaire) vous seront rapidement précisées par mail.
 

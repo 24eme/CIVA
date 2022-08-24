@@ -190,6 +190,25 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         $this->societe_informations->telephone = $societe->telephone;
         $this->societe_informations->fax = $societe->fax;
 
+        $this->add('extras');
+        $societesLieesId = $societe->getSocietesLieesIds();
+        sort($societesLieesId);
+        $this->extras->add('societes_liees_identifiant', implode('|', $societesLieesId));
+        $this->extras->add('code_comptable', $societe->code_comptable_client);
+        $this->extras->add('siret', $societe->siret);
+
+        if ($this->isEtablissementContact()) {
+            $etablissement = $this->getEtablissement();
+            $this->extras->add('cvi', $etablissement->cvi);
+            $this->extras->add('civaba', $etablissement->num_interne);
+            $this->extras->add('no_accises', $etablissement->no_accises);
+            $this->extras->add('famille', $etablissement->famille);
+            $this->extras->add('declaration_commune', $etablissement->declaration_commune);
+            $this->extras->add('declaration_insee', $etablissement->declaration_insee);
+            $this->extras->add('siret', $etablissement->siret);
+            $this->extras->add('carte_pro', $etablissement->carte_pro);
+        }
+
         $new = $this->isNew();
 
         if($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR && $this->isSameAdresseThanSociete() && $societe->getMasterCompte()) {

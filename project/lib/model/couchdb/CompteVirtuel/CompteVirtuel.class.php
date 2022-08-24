@@ -43,8 +43,13 @@ class CompteVirtuel extends BaseCompteVirtuel {
 	return false;
     }
 
+    public function isEtablissementContact() {
+
+    return false;
+    }
+
     public function getEtablissementOrigineObject() {
-	
+
 	return null;
     }
 
