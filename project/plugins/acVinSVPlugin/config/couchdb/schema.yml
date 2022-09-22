@@ -46,6 +46,7 @@ SV:
                               identifiant: { }
                               cvi: { }
                               nom: { }
+                              commune: { }
                               libelle: { }
                               denomination_complementaire: { }
                               superficie_recolte: { }
