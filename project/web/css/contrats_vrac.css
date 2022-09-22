@@ -603,8 +603,6 @@
 /* Fiche contrat */
 /* =================================================== */
 
-#contrat_onglet ul#onglets_majeurs li { width: 100%; }
-
 #contrat_onglet span.statut
 {
     display: block;

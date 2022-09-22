@@ -18,22 +18,22 @@ td.echeance {display: inline;}
 <div id="contrat_onglet">
 <ul id="onglets_majeurs" class="clearfix">
 	<li class="ui-tabs-selected">
-		<a href="#" style="height: 18px;">
+		<a style="height: 18px;">
 		<?php if ($vrac->isValide()): ?>
 			Contrat <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
 			Validation de votre contrat
 		<?php endif; ?>
 		</a>
-		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
-			<span style="color: #BBB;"> - <abbr title=" - I : contrat interne (vrac->interne = true)
-- C : vendeur est une cave cooperative (vendeur_type == caves_cooperatives)
-- X : vendeur est négociant (vendeur_type == negociants)
-- V : l'acheteur est un récoltant (acheteur_type == recoltants)
-- M : contrat par défaut (acheteur pas récoltant et vendeur ni coopérative ni négociant)">Merc. <?php echo $vrac->getMercurialeValue(); ?></abbr>
+	</li>
+	<li style="float: right; opacity: 0.2;">
+			<span><a href="<?php echo url_for('vrac_mercuriale', $vrac); ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
 			</span>
 		</span>
 	</li>
+    <li style="float: right">
+		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
+    </li>
 </ul>
 </div>
 <div id="contrats_vrac" class="fiche_contrat">
@@ -50,7 +50,7 @@ td.echeance {display: inline;}
 
 		<?php use_helper('Date') ?>
 
-		<?php if (!$vrac->isValide() && !$vrac->hasValide($user->_id)): ?>
+		<?php if (!$vrac->isValide() && $user->_id && !$vrac->hasValide($user->_id)): ?>
 		<fieldset class="message">
 		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
 		     <ul class="messages_log">
@@ -143,7 +143,7 @@ td.echeance {display: inline;}
 						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
 					</a>
 				<?php endif; ?>
-				<?php if(!$vrac->isValide() && $vrac->hasValide($user->_id)): ?>
+				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
