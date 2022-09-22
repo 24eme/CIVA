@@ -1,0 +1,13 @@
+sv:
+  url: /sv
+  param: { module: sv, action: index }
+
+sv_etablissement:
+  url: /sv/etablissement/:identifiant
+  param: { module: sv, action: etablissement }
+  class: EtablissementRoute
+  options:
+    model:    Etablissement
+    type:     object
+  requirements:
+    sf_method: [get, post]

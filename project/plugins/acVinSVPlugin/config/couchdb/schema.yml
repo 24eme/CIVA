@@ -1,0 +1,60 @@
+
+# SV
+SV:
+  definition:
+    fields:
+      _id: {  }
+      _rev: { }
+      type: { }
+      identifiant: {  }
+      campagne: {  }
+      periode: {  }
+      numero_archive: {  }
+      declarant:
+        type: collection
+        definition:
+          fields:
+            nom: {  }
+            raison_sociale: {  }
+            cvi: {  }
+            no_accises: {   }
+            adresse: {  }
+            commune: {  }
+            code_postal: {   }
+            region: {  }
+            famille: {  }
+      apporteurs:
+        type: collection
+        class: SVApporteurs
+        definition:
+          fields:
+            '*':
+              type: collection
+              class: SVApporteur
+              definition:
+                fields:
+                  '*':
+                    type: collection
+                    class: SVCepage
+                    definition:
+                      fields:
+                        '*':
+                          type: collection
+                          class: SVProduit
+                          definition:
+                            fields:
+                              identifiant: { }
+                              cvi: { }
+                              nom: { }
+                              libelle: { }
+                              denomination_complementaire: { }
+                              superficie_recolte: { }
+                              quantite_recolte: { }
+                              volume_recolte: { }
+                              volume_revendique: { }
+      valide:
+        type: collection
+        definition:
+          fields:
+            date_saisie: {  }
+            statut: {  }
