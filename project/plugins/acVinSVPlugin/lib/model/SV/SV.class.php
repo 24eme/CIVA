@@ -12,6 +12,11 @@ class SV extends BaseSV {
         return ConfigurationClient::getInstance()->getCurrent();
     }
 
+    public function constructId() {
+        $id = 'SV-' . $this->identifiant . '-' . $this->periode;
+        $this->set('_id', $id);
+    }
+
     public static function buildDetailKey($denominationComplementaire = null, $hidden_denom = null) {
         $detailKey = self::DEFAULT_KEY;
 

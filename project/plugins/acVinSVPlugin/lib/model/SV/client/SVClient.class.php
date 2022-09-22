@@ -11,6 +11,10 @@ class SVClient extends acCouchdbClient {
     {
         $sv = new SV();
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
+        $sv->identifiant = $etablissement->identifiant;
+        $sv->periode = '2021';
+        $sv->campagne = '2021-2022';
+        $sv->constructId();
         $cvi_acheteur = $etablissement->getCvi();
         if(!$cvi_acheteur) {
             return;
