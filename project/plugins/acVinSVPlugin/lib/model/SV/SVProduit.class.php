@@ -21,6 +21,11 @@ class SVProduit extends BaseSVProduit {
 		return $this->_get('libelle');
 	}
 
+    public function getCoefficient() {
+
+        return 130;
+    }
+
 	public function getLibelleComplet()
 	{
 

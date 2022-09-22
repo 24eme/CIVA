@@ -17,6 +17,16 @@ class SV extends BaseSV {
         $this->set('_id', $id);
     }
 
+    public function getProduits($region = null) {
+        $produits = array();
+
+        foreach($this->apporteurs as $apporteur) {
+            $produits = array_merge($produits, $apporteur->getProduits());
+        }
+
+        return $produits;
+    }
+
     public static function buildDetailKey($denominationComplementaire = null, $hidden_denom = null) {
         $detailKey = self::DEFAULT_KEY;
 

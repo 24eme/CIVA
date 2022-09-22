@@ -28,4 +28,10 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
     }
 
+    public function executeSaisie(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+        $this->form = new SVSaisieForm($this->sv);
+    }
+
 }

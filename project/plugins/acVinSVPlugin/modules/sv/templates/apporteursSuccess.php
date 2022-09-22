@@ -1,5 +1,4 @@
-<?php
-include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <table class="table table-bordered table-striped">
   <thead>
@@ -15,7 +14,7 @@ include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInsta
   <td><?php echo $apporteur->nom ?></td>
   <td><?php echo $apporteur->cvi ?></td>
   <td><?php echo $apporteur->commune ?></td>
-  <td class="text-right"><a href="" class="btn btn-xs btn-default">Saisir</a></td>
+  <td class="text-right"><a href="<?php echo url_for('sv_saisie', $sv); ?>" class="btn btn-xs btn-default">Saisir</a></td>
 </tr>
 <?php endforeach; ?>
 </table>

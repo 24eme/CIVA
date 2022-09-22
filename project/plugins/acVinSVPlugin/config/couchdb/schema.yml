@@ -49,10 +49,11 @@ SV:
                               commune: { }
                               libelle: { }
                               denomination_complementaire: { }
-                              superficie_recolte: { }
-                              quantite_recolte: { }
-                              volume_recolte: { }
-                              volume_revendique: { }
+                              superficie_recolte: { type: float }
+                              quantite_recolte: { type: float }
+                              volume_recolte: { type: float }
+                              volume_revendique: { type: float }
+                              volume_detruit: { type: float }
       valide:
         type: collection
         definition:
