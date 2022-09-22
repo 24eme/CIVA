@@ -1,28 +1,37 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_SAISIE)); ?>
 
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th class="col-xs-3">Apporteur</th>
-      <th class="col-xs-3">Produit</th>
-      <th class="col-xs-1 text-center">Superficie récolté<br /><small>(ares)</small></th>
-      <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
-      <th class="col-xs-1 text-center">Coefficient</th>
-      <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
-    </tr>
-  </thead>
-<?php foreach($form['produits'] as $hash => $formProduit): ?>
-<?php $produit = $sv->get($hash); ?>
-<tr>
-    <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
-  <td><?php echo $produit->libelle ?></td>
-  <td><?php echo $formProduit['superficie_recolte']->render() ?></td>
-  <td><?php echo $formProduit['quantite_recolte']->render() ?></td>
-  <td><?php echo $formProduit['coefficient']->render() ?></td>
-  <td><?php echo $formProduit['volume_revendique']->render() ?></td>
-</tr>
-<?php endforeach; ?>
-</table>
+<form action="" method="POST">
+  <?php echo $form->renderHiddenFields(); ?>
+  <?php echo $form->renderGlobalErrors(); ?>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="col-xs-3">Apporteur</th>
+        <th class="col-xs-3">Produit</th>
+        <th class="col-xs-1 text-center">Superficie récolté<br /><small>(ares)</small></th>
+        <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
+        <th class="col-xs-1 text-center">Coefficient</th>
+        <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
+      </tr>
+    </thead>
+  <?php foreach($form['produits'] as $hash => $formProduit): ?>
+  <?php $produit = $sv->get($hash); ?>
+  <tr>
+      <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
+    <td><?php echo $produit->libelle ?></td>
+    <td><?php echo $formProduit['superficie_recolte']->render() ?></td>
+    <td><?php echo $formProduit['quantite_recolte']->render() ?></td>
+    <td><?php echo $formProduit['coefficient']->render() ?></td>
+    <td><?php echo $formProduit['volume_revendique']->render() ?></td>
+  </tr>
+  <?php endforeach; ?>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-6 text-left"></div>
+    <div class="col-xs-6 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
+  </div>
+</form>
 <script>
   let calculVolumeRenvendique = function(ligne) {
     let input_quantite = ligne.querySelector('.input_quantite');
@@ -30,6 +39,10 @@
     let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
 
     if(!input_coefficient.value) {
+      return;
+    }
+
+    if(!input_quantite.value) {
       return;
     }
 
@@ -59,16 +72,22 @@
   document.querySelectorAll('.input_quantite').forEach(function(item) {
     item.addEventListener('keyup', function(e) {
       calculVolumeRenvendique(this.parentNode.parentNode);
-  })});
+    });
+    item.addEventListener('change', function(e) {
+      calculVolumeRenvendique(this.parentNode.parentNode);
+    });
+  });
   document.querySelectorAll('.input_coefficient').forEach(function(item) {
     item.addEventListener('keyup', function(e) {
       calculVolumeRenvendique(this.parentNode.parentNode);
-  })});
+    });
+    item.addEventListener('change', function(e) {
+      calculVolumeRenvendique(this.parentNode.parentNode);
+    });
+  });
   document.querySelectorAll('.input_volume_revendique').forEach(function(item) {
     item.addEventListener('change', function(e) {
       calculQuantite(this.parentNode.parentNode);
-    });
-    item.addEventListener('keyup', function(e) {
       calculCoefficient(this.parentNode.parentNode);
     });
   });

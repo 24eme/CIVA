@@ -22,6 +22,10 @@ class SVProduit extends BaseSVProduit {
 	}
 
     public function getCoefficient() {
+        if($this->getQuantiteRecolte() > 0 && $this->getVolumeRevendique() > 0) {
+
+            return round($this->getQuantiteRecolte() / $this->getVolumeRevendique(), 2);
+        }
 
         return 130;
     }
