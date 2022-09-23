@@ -18,6 +18,18 @@ class SVApporteur extends BaseSVApporteur {
         return $produits;
     }
 
+    public function getNbSaisies() {
+        $nbSaisies = 0;
+        foreach($this->getProduits() as $produit) {
+            if(!$produit->superficie_recolte || !$produit->quantite_recolte || !$produit->volume_revendique) {
+                continue;
+            }
+            $nbSaisies++;
+        }
+
+        return $nbSaisies;
+    }
+
     public function getCvi() {
 
         return $this->getFirst()->getFirst()->cvi;
