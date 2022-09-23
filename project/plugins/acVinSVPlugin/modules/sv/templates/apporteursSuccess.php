@@ -23,6 +23,6 @@
 </table>
 
 <div class="row">
-  <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_exploitation', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
+  <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_produits', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-6 text-right"><a href="<?php echo url_for('sv_saisie', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>

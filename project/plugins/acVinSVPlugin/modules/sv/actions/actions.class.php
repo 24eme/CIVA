@@ -21,6 +21,11 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
     }
 
+    public function executeProduits(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+    }
+
     public function executeApporteurs(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
