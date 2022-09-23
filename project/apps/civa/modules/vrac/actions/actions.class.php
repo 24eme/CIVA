@@ -38,7 +38,7 @@ class vracActions extends sfActions
 		if (!$this->campagne) {
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
-		$etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
+		$etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
         $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
