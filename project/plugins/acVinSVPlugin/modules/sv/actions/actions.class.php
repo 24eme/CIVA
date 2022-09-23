@@ -8,14 +8,12 @@ class svActions extends sfActions {
     public function executeEtablissement(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
 
-        $this->sv = SVClient::getInstance()->find('SV-'.$this->etablissement->identifiant.'-2011');
+        $this->sv = SVClient::getInstance()->find('SV-'.$this->etablissement->identifiant.'-2021');
 
         if(!$this->sv) {
             $this->sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, "2021");
             $this->sv->save();
         }
-
-        return $this->redirect('sv_apporteurs', $this->sv);
     }
 
     public function executeExploitation(sfWebRequest $request) {
