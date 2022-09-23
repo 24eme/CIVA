@@ -2,19 +2,22 @@
 class SVEtapes extends Etapes
 {
 	const ETAPE_EXPLOITATION = 'exploitation';
+	const ETAPE_PRODUITS = 'produits';
 	const ETAPE_APPORTEURS = 'apporteurs';
 	const ETAPE_SAISIE = 'saisie';
 	const ETAPE_VALIDATION = 'validation';
 
 	public static $etapes = array(
         self::ETAPE_EXPLOITATION => 0,
-        self::ETAPE_APPORTEURS => 1,
-        self::ETAPE_SAISIE => 2,
-        self::ETAPE_VALIDATION => 3
+        self::ETAPE_PRODUITS => 1,
+        self::ETAPE_APPORTEURS => 2,
+        self::ETAPE_SAISIE => 3,
+        self::ETAPE_VALIDATION => 4
     );
 
 	public static $links = array(
         self::ETAPE_EXPLOITATION => 'sv_exploitation',
+        self::ETAPE_PRODUITS => 'sv_apporteurs',
         self::ETAPE_APPORTEURS => 'sv_apporteurs',
         self::ETAPE_SAISIE => 'sv_saisie',
         self::ETAPE_VALIDATION => 'sv_validation'
@@ -22,6 +25,7 @@ class SVEtapes extends Etapes
 
 	public static $libelles = array(
         self::ETAPE_EXPLOITATION => 'Exploitation',
+        self::ETAPE_PRODUITS => 'Produits',
         self::ETAPE_APPORTEURS => 'Apporteurs',
         self::ETAPE_SAISIE => 'Saisie',
         self::ETAPE_VALIDATION => 'Validation'
