@@ -1,5 +1,6 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_SAISIE)); ?>
 
+<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo $cvi ?><?php endif; ?></h3>
 <form action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
   <?php echo $form->renderGlobalErrors(); ?>
@@ -28,7 +29,7 @@
   </table>
 
   <div class="row">
-    <div class="col-xs-6 text-left"></div>
+    <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-6 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
   </div>
 </form>

@@ -31,7 +31,8 @@ class svActions extends sfActions {
     public function executeSaisie(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
-        $this->form = new SVSaisieForm($this->sv);
+        $this->cvi = $request->getParameter('cvi', null);
+        $this->form = new SVSaisieForm($this->sv, $request->getParameter('cvi', null));
 
         if (!$request->isMethod(sfWebRequest::POST)) {
         	return sfView::SUCCESS;
@@ -45,6 +46,17 @@ class svActions extends sfActions {
 	    }
 
         $this->form->save();
+
+        if($this->cvi) {
+            $finded = false;
+            foreach($this->sv->apporteurs as $cvi => $apporteur) {
+                if($finded) {
+
+                    return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $cvi));
+                }
+                $finded = ($cvi == $this->cvi);
+            }
+        }
 
         return $this->redirect('sv_validation', $this->sv);
     }

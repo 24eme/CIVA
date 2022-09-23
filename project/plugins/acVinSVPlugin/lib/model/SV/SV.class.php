@@ -27,6 +27,27 @@ class SV extends BaseSV {
         return $produits;
     }
 
+    public function getRecapProduits() {
+        $recap = array();
+        foreach($this->getProduits() as $produit) {
+            if(!isset($recap[$produit->getProduitHash()])) {
+                $recap[$produit->getProduitHash()] = new stdClass();
+                $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
+                $recap[$produit->getProduitHash()]->superficie_recolte = 0;
+                $recap[$produit->getProduitHash()]->quantite_recolte = 0;
+                $recap[$produit->getProduitHash()]->volume_revendique = 0;
+                $recap[$produit->getProduitHash()]->apporteurs = array();
+            }
+            $recapProduit = $recap[$produit->getProduitHash()];
+            $recapProduit->superficie_recolte += $produit->superficie_recolte;
+            $recapProduit->quantite_recolte += $produit->quantite_recolte;
+            $recapProduit->volume_revendique += $produit->volume_revendique;
+            $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
+        }
+
+        return $recap;
+    }
+
     public static function buildDetailKey($denominationComplementaire = null, $hidden_denom = null) {
         $detailKey = self::DEFAULT_KEY;
 
