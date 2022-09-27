@@ -216,6 +216,7 @@ Vrac:
       etape: {  }
       type: {  }
       type_contrat: {  }
+      contrat_pluriannuel: {  }
       date_modification: {  }
       date_export_creation: {  }
       motif_suppression: {  }
