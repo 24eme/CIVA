@@ -74,6 +74,10 @@
 						</tr>
 					</table>
 				</div>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujeti à la TVA</label>
+                    <?php echo $form['vendeur_assujetti_tva']->render(); ?>
+                </div>
 			</div>
 
 			<div id="vendeur_infos" class="cible">
@@ -100,6 +104,10 @@
 				<?php else: ?>
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujeti à la TVA</label>
+                    <?php echo $form['vendeur_assujetti_tva']->render(); ?>
+                </div>
 			</div>
 
 
@@ -164,6 +172,10 @@
 						</tr>
 					</table>
 				</div>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujeti à la TVA</label>
+                    <?php echo $form['acheteur_assujetti_tva']->render(); ?>
+                </div>
 			</div>
 			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
@@ -220,6 +232,10 @@
 				<?php else: ?>
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujeti à la TVA</label>
+                    <?php echo $form['acheteur_assujetti_tva']->render(); ?>
+                </div>
 			</div>
 
 
