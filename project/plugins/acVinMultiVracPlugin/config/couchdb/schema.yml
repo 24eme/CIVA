@@ -8,6 +8,7 @@ Vrac:
       createur_identifiant: {  }
       acheteur_type: {  }
       acheteur_identifiant: {  }
+      acheteur_assujetti_tva: {  }
       acheteur:
         type: collection
         class: VracAcheteur
@@ -33,6 +34,7 @@ Vrac:
             identifiant: {  }
       vendeur_type: {  }
       vendeur_identifiant: {  }
+      vendeur_assujetti_tva: {  }
       vendeur:
         type: collection
         class: VracVendeur
