@@ -41,7 +41,7 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys(array_merge($commerciauxChoices, array('add' => '')))))
         ));
         if (!$this->getObject()->isNew()) {
-        	unset($this['type_contrat']);
+        	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
         $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
