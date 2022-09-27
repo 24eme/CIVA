@@ -231,9 +231,13 @@
 }
 
 /* Bloc type de contrat */
+#contrat_pluriannuel_radio_list {
+    padding: 0px 15px !important;
+}
+
 #contrats_vrac #type_contrat.bloc_infos .radio_list li { margin: 0 0 0 10px; }
 
-#contrats_vrac #type_contrat.bloc_infos .radio_list li label
+#contrats_vrac #type_contrat.bloc_infos #type_contrat_radio_list .radio_list li label
 {
 	display: inline-block;
 	height: 25px;

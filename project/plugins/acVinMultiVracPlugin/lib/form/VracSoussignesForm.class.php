@@ -18,6 +18,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
             'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
+			'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat ponctuel", "Contrat pluriannuel"], 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
         	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
@@ -31,6 +32,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	));
         $this->setValidators(array(
         	'type_contrat' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($contratTypes))),
+            'contrat_pluriannuel' => new sfValidatorChoice(array('choices' => [0,1])),
         	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
@@ -62,7 +64,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
 		}
 
         if (!$this->getObject()->isNew()) {
-        	unset($this['type_contrat']);
+        	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
@@ -80,6 +82,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         }
         if ($this->getObject()->isNew() && !$this->getObject()->type_contrat) {
         	$defaults['type_contrat'] = VracClient::TYPE_VRAC;
+        }
+        if ($this->getObject()->isNew()) {
+        	$defaults['contrat_pluriannuel'] = 0;
         }
         $this->setDefaults($defaults);
     }
@@ -108,6 +113,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->storeVendeurInformations($vendeur);
     	if ($this->getObject()->isNew()) {
     		$this->getObject()->type_contrat = $values['type_contrat'];
+            $this->getObject()->contrat_pluriannuel = (isset($values['contrat_pluriannuel']) && $values['contrat_pluriannuel'])? 1 : 0;
             $this->getObject()->type_archive = null;
             $this->getObject()->getTypeArchive();
     		$this->getObject()->initProduits();
