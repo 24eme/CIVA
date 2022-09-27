@@ -10,19 +10,17 @@
 					<?php if ($form->getObject()->isNew()): ?>
 						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
-						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?></label></li></ul>
+						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?>&nbsp;<?php echo ($form->getObject()->type_contrat)? 'pluriannuel' : 'ponctuel'; ?></label></li></ul>
 					<?php endif; ?>
 				</div>
 			</div>
+            <?php if ($form->getObject()->isNew()): ?>
             <div id="contrat_pluriannuel_radio_list" class="form_col selecteur">
                 <div class="ligne_form">
-                    <?php if ($form->getObject()->isNew()): ?>
                         <?php echo $form['contrat_pluriannuel']->render(); ?>
-                    <?php else: ?>
-                        <ul class="radio_list"><li><label for="vrac_soussignes_contrat_pluriannuel"><?php echo ($form->getObject()->type_contrat)? 'Contrat pluriannuel' : 'Contrat ponctuel'; ?></label></li></ul>
-                    <?php endif; ?>
                 </div>
             </div>
+            <?php endif; ?>
 		</div>
 	</fieldset>
 
