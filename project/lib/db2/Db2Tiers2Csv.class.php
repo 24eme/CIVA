@@ -216,7 +216,7 @@ class Db2Tiers2Csv
             foreach($etablissements as $tiers) {
                 $societeId = $this->importSociete($tiers, $tiers, $societesLieesId);
                 $societesLieesId[] = $societeId;
-                $maisonMereNum = $this->getInfos($tiers, Db2Tiers::COL_MAISON_MERE);
+                $maisonMereNum = $this->getMaisonMere($tiers);
                 $tiersMaisonMere = null;
                 if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
                     $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
@@ -544,6 +544,26 @@ class Db2Tiers2Csv
         }
 
         return implode("|", $infos);
+    }
+
+    protected function getMaisonMere($tiers) {
+        $nums = array();
+        foreach($tiers as $t) {
+            $nums[$t->get(DB2Tiers::COL_NUM)] = $t->get(DB2Tiers::COL_MAISON_MERE);
+        }
+
+        foreach($nums as $num => $maisonMere) {
+            if(isset($nums[$maisonMere])) {
+                unset($nums[$num]);
+            }
+        }
+
+        if(count($nums) == 1) {
+
+            return array_values($nums)[0];
+        }
+
+        return $this->getInfos($tiers, DB2Tiers::COL_MAISON_MERE);
     }
 
     protected function getInfos($tiers, $key) {
