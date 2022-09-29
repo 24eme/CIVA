@@ -42,6 +42,9 @@ class VracValidationForm extends acCouchdbObjectForm
 				$this->setValidator('clause_reserve_propriete', new sfValidatorBoolean(array('required' => false)));
 				$this->getWidgetSchema()->setLabel('clause_reserve_propriete', "Clause de réserve de propriété :");
 			}
+
+            $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
+            $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 		}
 
         $this->widgetSchema->setNameFormat('vrac_validation[%s]');
@@ -49,6 +52,9 @@ class VracValidationForm extends acCouchdbObjectForm
 
     public function doUpdateObject($values) {
     	parent::doUpdateObject($values);
+        foreach ($this->getEmbeddedForms() as $key => $embedForm) {
+            $embedForm->doUpdateObject($values[$key]);
+        }
 
 		if($this->getObject()->isPapier()) {
 			$this->getObject()->signerPapier(Date::getIsoDateFromFrenchDate($values['date_signature']));
