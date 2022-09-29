@@ -175,6 +175,8 @@ Vrac:
                                                                   centilisation: { type: float, required: false }
                                                                   nb_bouteille: { type: integer, required: false }
                                                                   label: { required: false }
+                                                                  retiraison_date_debut: {  }
+                                                                  retiraison_date_limite: {  }
                                                                   retiraisons:
                                                                     type: array_collection
                                                                     definition:
