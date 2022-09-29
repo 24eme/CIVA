@@ -60,9 +60,11 @@
 }
 
 #contrats_vrac .table_donnees .volume,
+#contrats_vrac .table_donnees .date_retiraison,
 #contrats_vrac .table_donnees .prix { width: 100px; }
 
 #contrats_vrac .table_donnees td.volume,
+#contrats_vrac .table_donnees td.date_retiraison,
 #contrats_vrac .table_donnees td.prix { text-align: right; }
 
 #contrats_vrac .bloc_infos h2,
@@ -495,11 +497,15 @@
 #contrats_vrac .validation.table_donnees .prix,
 #contrats_vrac .validation.table_donnees .volume,
 #contrats_vrac .validation.table_donnees .bouteille,
-
+#contrats_vrac .validation.table_donnees .date_retiraison,
 #contrats_vrac .validation.table_donnees td.prix,
 #contrats_vrac .validation.table_donnees td.volume,
 #contrats_vrac .validation.table_donnees td.bouteille,
+#contrats_vrac .validation.table_donnees td.date_retiraison,
 #contrats_vrac .validation.table_donnees td.centilisation { text-align:center; }
+
+
+#contrats_vrac .validation.table_donnees td.date_retiraison input { width: 100px; }
 
 #contrats_vrac .conditions { margin: 0 0 20px; }
 

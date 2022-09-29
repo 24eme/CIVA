@@ -12,6 +12,8 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>
 			<th class="prix" style="text-align: center">Prix</th>
+			<th class="date_retiraison" style="text-align: center">Début retir.</th>
+			<th class="date_retiraison" style="text-align: center">Limite retir.</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,6 +36,14 @@
 			</td>
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+			</td>
+			<td class="date_retiraison">
+    			<span><?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_debut']->renderError() ?></span>
+    			<?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_debut']->render(array('class' => 'input_date datepicker')) ?>
+			</td>
+			<td class="date_retiraison">
+    			<span><?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_limite']->renderError() ?></span>
+    			<?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_limite']->render(array('class' => 'input_date datepicker')) ?>
 			</td>
 		</tr>
 		<?php
