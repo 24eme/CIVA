@@ -12,8 +12,6 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>
 			<th class="prix" style="text-align: center">Prix</th>
-			<th class="date_retiraison" style="text-align: center">Début retir.</th>
-			<th class="date_retiraison" style="text-align: center">Limite retir.</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -37,14 +35,6 @@
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-			<td class="date_retiraison">
-    			<span><?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_debut']->renderError() ?></span>
-    			<?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_debut']->render(array('class' => 'input_date datepicker')) ?>
-			</td>
-			<td class="date_retiraison">
-    			<span><?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_limite']->renderError() ?></span>
-    			<?php echo $form['produits_retiraisons'][$detail->getHash()]['retiraison_date_limite']->render(array('class' => 'input_date datepicker')) ?>
-			</td>
 		</tr>
 		<?php
 			$counter++;  endforeach;
@@ -53,46 +43,6 @@
 
 	</tbody>
 </table>
-
-<?php if(!$vrac->isPapier()): ?>
-<table class="validation table_donnees">
-	<thead>
-		<tr>
-			<th style="width: 212px;">Conditions</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>
-				<?php echo $form['conditions_paiement']->renderLabel() ?>
-			</td>
-			<td>
-				<span><?php echo $form['conditions_paiement']->renderError() ?></span>
-				<?php echo $form['conditions_paiement']->render(array('class' => 'input_long')) ?>
-			</td>
-		</tr>
-		<tr class="alt">
-			<td>
-				<?php echo $form['conditions_particulieres']->renderLabel() ?>
-			</td>
-			<td>
-				<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
-				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
-			</td>
-		</tr>
-		<?php if(isset($form['clause_reserve_propriete'])): ?>
-		<tr>
-			<td>
-				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
-			</td>
-			<td>
-			<?php echo $form['clause_reserve_propriete']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
-			</td>
-		</tr>
-		<?php endif; ?>
-	</tbody>
-</table>
-<?php endif; ?>
 
 <?php if($vrac->isPapier()): ?>
 <table class="validation table_donnees">

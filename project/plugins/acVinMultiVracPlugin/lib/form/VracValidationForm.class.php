@@ -21,30 +21,6 @@ class VracValidationForm extends acCouchdbObjectForm
 			$this->setValidator('date_signature',  new sfValidatorRegex(array('required' => true, 'pattern' => "/^([0-9]){2}\/([0-9]){2}\/([0-9]){4}$/"),array('invalid' => 'Le format de la date d\'édition doit être jj/mm/aaaa')));
 			$this->getWidgetSchema()->setLabel('date_signature', "Date de la signature :");
 			$this->getValidator('date_signature')->setMessage('required', 'La date de signature est requise');
-		} else {
-			$this->setWidgets(array(
-	        	'conditions_paiement' => new sfWidgetFormInputText(),
-	        	'conditions_particulieres' => new sfWidgetFormInputText(),
-	    	));
-
-	        $this->widgetSchema->setLabels(array(
-	        	'conditions_paiement' => 'Conditions de paiement :',
-	        	'conditions_particulieres' => 'Conditions particulières :',
-	        ));
-
-			$this->setValidators(array(
-	        	'conditions_paiement' => new sfValidatorString(array('required' => false)),
-	        	'conditions_particulieres' => new sfValidatorString(array('required' => false)),
-	        ));
-
-			if($this->getObject()->exist('clause_reserve_propriete')) {
-				$this->setWidget('clause_reserve_propriete', new sfWidgetFormInputCheckbox());
-				$this->setValidator('clause_reserve_propriete', new sfValidatorBoolean(array('required' => false)));
-				$this->getWidgetSchema()->setLabel('clause_reserve_propriete', "Clause de réserve de propriété :");
-			}
-
-            $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
-            $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 		}
 
         $this->widgetSchema->setNameFormat('vrac_validation[%s]');
