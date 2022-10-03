@@ -38,10 +38,53 @@
 </table>
 
 <?php if(!$vrac->isPapier()): ?>
+<?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th style="width: 212px;">Conditions</th>
+			<th style="width: 212px;">Frais et primes</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+            if(isset($form['vendeur_frais_annexes'])):
+                $attr = (!$form->getObject()->vendeur_frais_annexes)? array('rows' => '2', 'cols' => '61', 'disabled' => 'disabled') : array('rows' => '2', 'cols' => '61');
+        ?>
+		<tr>
+			<td>
+				<?php echo $form['vendeur_frais_annexes']->renderLabel() ?>
+			</td>
+			<td width="465">
+			<?php echo $form['vendeur_frais_annexes']->render($attr) ?>
+			</td>
+            <td>
+                <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Saisir les frais</a>
+            </td>
+		</tr>
+		<?php endif; ?>
+		<?php
+            if(isset($form['acheteur_primes_diverses'])):
+                $attr = (!$form->getObject()->acheteur_primes_diverses)? array('rows' => '2', 'cols' => '61', 'disabled' => 'disabled') : array('rows' => '2', 'cols' => '61');
+         ?>
+		<tr class="alt">
+			<td>
+				<?php echo $form['acheteur_primes_diverses']->renderLabel() ?>
+			</td>
+			<td width="465">
+			<?php echo $form['acheteur_primes_diverses']->render($attr) ?>
+			</td>
+            <td>
+                <a class="btn_minus action_aidesaisie aideSaisiePrimesPopup" href="">Saisir les primes</a>
+            </td>
+		</tr>
+		<?php endif; ?>
+	</tbody>
+</table>
+<?php endif; ?>
+<table class="validation table_donnees">
+	<thead>
+		<tr>
+			<th style="width: 212px;">Clauses</th>
 		</tr>
 	</thead>
 	<tbody>
