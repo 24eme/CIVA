@@ -9,6 +9,7 @@ Vrac:
       acheteur_type: {  }
       acheteur_identifiant: {  }
       acheteur_assujetti_tva: {  }
+      acheteur_primes_diverses: { required: false }
       acheteur:
         type: collection
         class: VracAcheteur
