@@ -36,6 +36,7 @@ Vrac:
       vendeur_type: {  }
       vendeur_identifiant: {  }
       vendeur_assujetti_tva: {  }
+      vendeur_frais_annexes: { required: false }
       vendeur:
         type: collection
         class: VracVendeur
