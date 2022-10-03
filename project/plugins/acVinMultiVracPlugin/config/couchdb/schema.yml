@@ -225,5 +225,6 @@ Vrac:
       date_export_creation: {  }
       motif_suppression: {  }
       clause_reserve_propriete: { required: false }
+      clause_mandat_facturation: { required: false }
       papier: { required: false }
       interne: { required: false }
