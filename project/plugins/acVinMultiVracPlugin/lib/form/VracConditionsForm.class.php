@@ -31,6 +31,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_mandat_facturation', "Mandat de facturation :");
 		}
 
+		if($this->getObject()->exist('acheteur_primes_diverses')) {
+			$this->setWidget('acheteur_primes_diverses', new sfWidgetFormTextarea());
+			$this->setValidator('acheteur_primes_diverses', new sfValidatorString(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('acheteur_primes_diverses', "Primes diverses à la charge de l'acheteur :");
+		}
+
         $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
         $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 
