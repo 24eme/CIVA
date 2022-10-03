@@ -73,6 +73,16 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php if(isset($form['clause_mandat_facturation'])): ?>
+		<tr class="alt">
+			<td>
+				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
+			</td>
+			<td>
+			<?php echo $form['clause_mandat_facturation']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">Le vendeur donne mandat à l'acheteur ou au représentant du vendeur mandaté d'établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small>
+			</td>
+		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>

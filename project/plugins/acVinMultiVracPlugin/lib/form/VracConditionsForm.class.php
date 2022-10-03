@@ -25,6 +25,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_reserve_propriete', "Clause de réserve de propriété :");
 		}
 
+		if($this->getObject()->exist('clause_mandat_facturation')) {
+			$this->setWidget('clause_mandat_facturation', new sfWidgetFormInputCheckbox());
+			$this->setValidator('clause_mandat_facturation', new sfValidatorBoolean(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('clause_mandat_facturation', "Mandat de facturation :");
+		}
+
         $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
         $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 
