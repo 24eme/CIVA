@@ -31,6 +31,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_mandat_facturation', "Mandat de facturation :");
 		}
 
+		if($this->getObject()->exist('vendeur_frais_annexes')) {
+			$this->setWidget('vendeur_frais_annexes', new sfWidgetFormTextarea());
+			$this->setValidator('vendeur_frais_annexes', new sfValidatorString(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('vendeur_frais_annexes', "Frais annexes en sus à la charge du vendeur :");
+		}
+
 		if($this->getObject()->exist('acheteur_primes_diverses')) {
 			$this->setWidget('acheteur_primes_diverses', new sfWidgetFormTextarea());
 			$this->setValidator('acheteur_primes_diverses', new sfValidatorString(array('required' => false)));
