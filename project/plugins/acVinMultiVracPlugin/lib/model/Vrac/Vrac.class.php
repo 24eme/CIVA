@@ -698,6 +698,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		if($this->isNew()) {
 			$this->add('clause_reserve_propriete', true);
 			$this->add('clause_mandat_facturation', true);
+			$this->add('vendeur_frais_annexes');
+			$this->add('acheteur_primes_diverses');
 		}
     }
 
