@@ -95,6 +95,7 @@
 			<td>
 				<span><?php echo $form['conditions_paiement']->renderError() ?></span>
 				<?php echo $form['conditions_paiement']->render(array('class' => 'input_long')) ?>
+                <a class="btn_minus action_aidesaisie aideSaisieDelaiPaiementPopup" href="">Saisir le délai de paiement</a>
 			</td>
 		</tr>
 		<tr class="alt">
@@ -129,3 +130,6 @@
 	</tbody>
 </table>
 <?php endif; ?>
+<?php include_partial('vrac/popupAideSaisieFrais', array('target' => $form['vendeur_frais_annexes']->renderId())); ?>
+<?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>
+<?php include_partial('vrac/popupAideSaisieDelaiPaiement', array('target' => $form['conditions_paiement']->renderId())); ?>
