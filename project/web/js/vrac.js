@@ -191,6 +191,24 @@ var initChoixTypeVrac = function()
     });
 };
 
+var initAideALaSaisie = function()
+{
+    $('.aideSaisieFraisPopup').click(function() {
+        openPopup($("#popup_vendeur_frais_annexes"));
+        return false;
+    });
+
+	$('.aideSaisiePrimesPopup').click(function() {
+        openPopup($("#popup_acheteur_primes_diverses"));
+        return false;
+    });
+
+	$('.aideSaisieDelaiPaiementPopup').click(function() {
+        openPopup($("#popup_conditions_paiement"));
+        return false;
+    });
+};
+
 var initClotureContrat = function()
 {
     $('#clotureContrat_OK').click(function() {
@@ -481,6 +499,7 @@ var sumContrat = function(brothers, cible)
          $.hauteurListesAnnuaire();
          initConfirmeSignatureVrac();
          initChoixTypeVrac();
+         initAideALaSaisie();
          initConfirmeValidationVrac();
          initClotureContrat();
          initSummableContrat();
