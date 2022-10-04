@@ -1,30 +1,28 @@
 <div id="popup_clause_resiliation" class="popup_ajout" title="En cas de résiliation du contrat">
-    <form method="post" action="">
-        <table>
-            <tr>
-                <th align="right">Cas de résiliation :</th>
-                <td align="left">
-                    <input type="text" name="resiliation" style="width:225px;margin-bottom:5px;" />
-                </td>
-            </tr>
-            <tr>
-                <th align="right">Délai de préavis :</th>
-                <td align="left">
-                    <input type="text" name="preavis" style="width:225px;margin-bottom:5px;" />
-                </td>
-            </tr>
-            <tr>
-                <th align="right">Indemnités :</th>
-                <td align="left">
-                    <input type="text" name="indemnites" style="width:225px;margin-bottom:5px;" />
-                </td>
-            </tr>
-        </table>
-        <div class="clearfix" style="text-align: center; margin-top: 15px;">
-            <input type="image" src="/images/boutons/btn_valider.png" alt="Ajouter" name="boutons[next]" class="ajouter" />
-            <a class="close_popup" href=""><img alt="Annuler" src="/images/boutons/btn_annuler.png"></a>
-        </div>
-    </form>
+    <table>
+        <tr>
+            <th align="right">Cas de résiliation :</th>
+            <td align="left">
+                <input type="text" name="resiliation" style="width:225px;margin-bottom:5px;" />
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Délai de préavis :</th>
+            <td align="left">
+                <input type="text" name="preavis" style="width:225px;margin-bottom:5px;" />
+            </td>
+        </tr>
+        <tr>
+            <th align="right">Indemnités :</th>
+            <td align="left">
+                <input type="text" name="indemnites" style="width:225px;margin-bottom:5px;" />
+            </td>
+        </tr>
+    </table>
+    <div class="clearfix" style="text-align: center; margin-top: 15px;">
+        <input type="image" src="/images/boutons/btn_valider.png" alt="Ajouter" name="boutons[next]" class="ajouter" />
+        <a class="close_popup" href=""><img alt="Annuler" src="/images/boutons/btn_annuler.png"></a>
+    </div>
 </div>
 <script type="text/javascript">
     $('#<?php echo $target ?>').focus(function() {
