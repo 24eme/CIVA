@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th>Type de frais</th>
-                    <th>Montant (€ HT)</th>
+                    <th>Montant</th>
                     <th>Unité</th>
                 </tr>
             </thead>
@@ -12,10 +12,10 @@
                 <tr>
                     <td>
                         <select style="width:120px;margin:0px;" name="type">
-                            <option value="Apport global :">Apport global</option>
-                            <option value="Engagement surface / volume :">Engagement surface / volume</option>
-                            <option value="Vendange Manuelle :">Vendange Manuelle</option>
-                            <option value="Autre :">Autre</option>
+                            <option value="d'apport global.">Apport global</option>
+                            <option value="d'engagement surface/volume.">Engagement surface / volume</option>
+                            <option value="de vendange manuelle.">Vendange Manuelle</option>
+                            <option value="en autre prime.">Autre</option>
                         </select>
                     </td>
                     <td>
@@ -23,8 +23,8 @@
                     </td>
                     <td>
                         <select style="width:100px;margin:0px;" name="unite">
-                            <option value="par Hl">Hl</option>
-                            <option value="pourcent">en %</option>
+                            <option value="€ HT/Hl">€ HT/Hl</option>
+                            <option value="%">%</option>
                         </select>
                     </td>
                 </tr>
@@ -45,14 +45,14 @@
     $("#popup_acheteur_primes_diverses .ajouter").click(function() {
         var type = $('#popup_acheteur_primes_diverses select[name="type"]').val();
         var montant = $('#popup_acheteur_primes_diverses input[name="montant"]').val();
-        if (!montant) {
-            montant = 0;
-        }
         var unite = $('#popup_acheteur_primes_diverses select[name="unite"]').val();
-        var ligne = type+' '+montant+'€ HT '+unite;
-        var content = $('#<?php echo $target ?>').val();
-        if (content) {
-            content += "\n";
+        var ligne = montant+unite+' '+type;
+        var contenu = $('#<?php echo $target ?>').val();
+        if (contenu) {
+            contenu += "\n";
+        }
+        if (montant) {
+            $('#<?php echo $target ?>').val(contenu+ligne);
         }
         $("#popup_acheteur_primes_diverses a.close_popup").trigger("click");
         $('#popup_acheteur_primes_diverses select[name="type"]').val($('#popup_acheteur_primes_diverses select[name="type"] option:first').val());
