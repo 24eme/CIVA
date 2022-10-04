@@ -90,20 +90,23 @@
 			<td>
 				<?php echo $form['conditions_paiement']->renderLabel() ?>
 			</td>
-			<td>
+			<td width="465">
 				<span><?php echo $form['conditions_paiement']->renderError() ?></span>
 				<?php echo $form['conditions_paiement']->render(array('class' => 'input_long')) ?>
-                <a class="btn_minus action_aidesaisie aideSaisieDelaiPaiementPopup" href="">Saisir le délai de paiement</a>
+			</td>
+			<td>
+				<a class="btn_minus action_aidesaisie aideSaisieDelaiPaiementPopup" href="">Choisir un délai de paiement</a>
 			</td>
 		</tr>
 		<tr class="alt">
 			<td>
 				<?php echo $form['conditions_particulieres']->renderLabel() ?>
 			</td>
-			<td>
+			<td width="465">
 				<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
 				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
 			</td>
+			<td></td>
 		</tr>
 		<?php
             if(isset($form['clause_resiliation'])):
@@ -135,7 +138,7 @@
 			<td>
 				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
 			</td>
-			<td>
+			<td colspan="2">
 			<?php echo $form['clause_mandat_facturation']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">Le vendeur donne mandat à l'acheteur ou au représentant du vendeur mandaté d'établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small>
 			</td>
 		</tr>
