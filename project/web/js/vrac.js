@@ -207,6 +207,11 @@ var initAideALaSaisie = function()
         openPopup($("#popup_conditions_paiement"));
         return false;
     });
+
+	$('.aideSaisieResiliationPopup').click(function() {
+        openPopup($("#popup_clause_resiliation"));
+        return false;
+    });
 };
 
 var initClotureContrat = function()
