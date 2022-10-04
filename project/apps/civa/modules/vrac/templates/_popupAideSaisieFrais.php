@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th>Type de frais</th>
-                    <th>Montant (€ HT)</th>
+                    <th>Montant</th>
                     <th>Unité</th>
                 </tr>
             </thead>
@@ -12,10 +12,10 @@
                 <tr>
                     <td>
                         <select style="width:120px;margin:0px;" name="type">
-                            <option value="Transport :">Transport</option>
-                            <option value="Cotisation CIVA :">Cotisation CIVA</option>
-                            <option value="Courtage :">Courtage</option>
-                            <option value="Autre :">Autre</option>
+                            <option value="de frais de transport.">Transport</option>
+                            <option value="de cotisation CIVA.">Cotisation CIVA</option>
+                            <option value="de frais de courtage.">Courtage</option>
+                            <option value="en autre frais.">Autre</option>
                         </select>
                     </td>
                     <td>
@@ -23,9 +23,9 @@
                     </td>
                     <td>
                         <select style="width:100px;margin:0px;" name="unite">
-                            <option value="par Hl">Hl</option>
-                            <option value="au forfait">au forfait</option>
-                            <option value="pourcent">en %</option>
+                            <option value="€ HT/Hl">€ HT/Hl</option>
+                            <option value="€ HT">€ HT</option>
+                            <option value="%">%</option>
                         </select>
                     </td>
                 </tr>
@@ -46,14 +46,14 @@
     $("#popup_vendeur_frais_annexes .ajouter").click(function() {
         var type = $('#popup_vendeur_frais_annexes select[name="type"]').val();
         var montant = $('#popup_vendeur_frais_annexes input[name="montant"]').val();
-        if (!montant) {
-            montant = 0;
-        }
         var unite = $('#popup_vendeur_frais_annexes select[name="unite"]').val();
-        var ligne = type+' '+montant+'€ HT '+unite;
-        var content = $('#<?php echo $target ?>').val();
-        if (content) {
-            content += "\n";
+        var ligne = montant+unite+' '+type;
+        var contenu = $('#<?php echo $target ?>').val();
+        if (contenu) {
+            contenu += "\n";
+        }
+        if (montant) {
+            $('#<?php echo $target ?>').val(contenu+ligne);
         }
         $("#popup_vendeur_frais_annexes a.close_popup").trigger("click");
         $('#popup_vendeur_frais_annexes select[name="type"]').val($('#popup_vendeur_frais_annexes select[name="type"] option:first').val());
