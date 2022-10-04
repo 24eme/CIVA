@@ -675,6 +675,7 @@
 
 #contrats_vrac table .action_aidesaisie { background-image: url('../images/pictos/pi_crayon.png'); background-repeat:no-repeat; padding: 2px 0 0 18px; }
 
+.dpHideYear .ui-datepicker-year { display: none; }
 /* =================================================== */
 /* Ajout produit */
 /* =================================================== */

@@ -255,7 +255,7 @@ $.fn.datepickerInit = function(){
     $(this).datepicker({
     		        changeMonth: true,
     		        changeYear: true,
-    		        dateFormat: 'dd/mm/yy',
+    		        dateFormat: 'dd/mm',
     		        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     		        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
     		        firstDay: 1,
@@ -509,6 +509,19 @@ var sumContrat = function(brothers, cible)
          initClotureContrat();
          initSummableContrat();
          initClotureContratCheckboxes();
+
+
+         $('.smalldatepicker').datepicker(
+         {
+             changeMonth: true,
+             beforeShow: function (input, object) { object.dpDiv.get(0).setAttribute('class', object.dpDiv.get(0).getAttribute('class')+' dpHideYear'); },
+             dateFormat: 'dd/mm',
+             dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+             dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+             firstDay: 1,
+             monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+             monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+         });
 	});
 
 })(jQuery);
