@@ -228,5 +228,6 @@ Vrac:
       motif_suppression: {  }
       clause_reserve_propriete: { required: false }
       clause_mandat_facturation: { required: false }
+      clause_resiliation: { required: false }
       papier: { required: false }
       interne: { required: false }
