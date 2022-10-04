@@ -105,18 +105,33 @@
 				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
 			</td>
 		</tr>
-		<?php if(isset($form['clause_reserve_propriete'])): ?>
+		<?php
+            if(isset($form['clause_resiliation'])):
+        ?>
 		<tr>
+			<td>
+				<?php echo $form['clause_resiliation']->renderLabel() ?>
+			</td>
+			<td width="465">
+			<?php echo $form['clause_resiliation']->render(array('rows' => '2', 'cols' => '61')) ?>
+			</td>
+            <td>
+                <a class="btn_minus action_aidesaisie aideSaisieResiliationPopup" href="">Saisir les modalités</a>
+            </td>
+		</tr>
+		<?php endif; ?>
+		<?php if(isset($form['clause_reserve_propriete'])): ?>
+		<tr class="alt">
 			<td>
 				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
 			</td>
-			<td>
+			<td colspan="2">
 			<?php echo $form['clause_reserve_propriete']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
 			</td>
 		</tr>
 		<?php endif; ?>
 		<?php if(isset($form['clause_mandat_facturation'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
 			</td>

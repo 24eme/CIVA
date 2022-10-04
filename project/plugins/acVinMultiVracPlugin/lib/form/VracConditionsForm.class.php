@@ -43,6 +43,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('acheteur_primes_diverses', "Primes diverses à la charge de l'acheteur :");
 		}
 
+		if($this->getObject()->exist('clause_resiliation')) {
+			$this->setWidget('clause_resiliation', new sfWidgetFormTextarea());
+			$this->setValidator('clause_resiliation', new sfValidatorString(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('clause_resiliation', "Résiliation :");
+		}
+
         $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
         $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 

@@ -700,6 +700,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$this->add('clause_mandat_facturation', true);
 			$this->add('vendeur_frais_annexes');
 			$this->add('acheteur_primes_diverses');
+			$this->add('clause_resiliation');
 		}
     }
 
