@@ -24,6 +24,11 @@
     </form>
 </div>
 <script type="text/javascript">
+    $('#<?php echo $target ?>').focus(function() {
+        if (!$('#<?php echo $target ?>').val()) {
+            $(".aideSaisieDelaiPaiementPopup").trigger("click");
+        }
+    });
     $('#ligneEscompte').hide();
     $('#popup_conditions_paiement select[name="delai"]').change(function() {
         if ($(this).val() == 'Paiement sous 7 jours') {
