@@ -49,8 +49,6 @@
         if (content) {
             content += "\n";
         }
-        $('#<?php echo $target ?>').val(content+ligne);
-        $('#<?php echo $target ?>').removeAttr('disabled');
         $("#popup_acheteur_primes_diverses a.close_popup").trigger("click");
         $('#popup_acheteur_primes_diverses select[name="type"]').val($('#popup_acheteur_primes_diverses select[name="type"] option:first').val());
         $('#popup_acheteur_primes_diverses input[name="montant"]').val('');
