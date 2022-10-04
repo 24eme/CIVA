@@ -6,6 +6,11 @@
                 <select style="width:280px;margin-bottom:5px" name="delai">
                     <option value="Délai légal : 60 jours après la date d’émission de la facture">Délai légal : 60 jours après la date d’émission de la facture</option>
                     <option value="Paiement sous 7 jours">Paiement sous 7 jours</option>
+                    <?php if($isPluriannuelCadre): ?>
+                        <option value="Dans un délai maximum de 150 jours après l'enlèvement et au plus tard le 15 septembre de l'année suivant la récolte">Dans un délai maximum de 150 jours après l'enlèvement et au plus tard le 15 septembre de l'année suivant la récolte</option>
+                        <option value="Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte">Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte</option>
+                        <option value="En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte">En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte</option>
+                    <?php endif; ?>
                 </select>
             </td>
         </tr>
