@@ -38,6 +38,11 @@
     </form>
 </div>
 <script type="text/javascript">
+    $('#<?php echo $target ?>').focus(function() {
+        if (!$('#<?php echo $target ?>').val()) {
+            $(".aideSaisieFraisPopup").trigger("click");
+        }
+    });
     $("#popup_vendeur_frais_annexes .ajouter").click(function() {
         var type = $('#popup_vendeur_frais_annexes select[name="type"]').val();
         var montant = $('#popup_vendeur_frais_annexes input[name="montant"]').val();
