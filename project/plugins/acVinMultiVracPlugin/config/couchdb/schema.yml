@@ -230,5 +230,6 @@ Vrac:
       clause_reserve_propriete: { required: false }
       clause_mandat_facturation: { required: false }
       clause_resiliation: { required: false }
+      clause_evolution_prix: { required: false }
       papier: { required: false }
       interne: { required: false }

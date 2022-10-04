@@ -212,6 +212,12 @@ var initAideALaSaisie = function()
         openPopup($("#popup_clause_resiliation"));
         return false;
     });
+
+	$('.aideSaisieEvolutionsPrixPopup').click(function() {
+        openPopup($("#popup_clause_evolution_prix"));
+        return false;
+    });
+
 };
 
 var initClotureContrat = function()
