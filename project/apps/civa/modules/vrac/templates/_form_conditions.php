@@ -1,12 +1,21 @@
 <?php use_helper('Float') ?>
+<?php
+    if($form->getObject()->isPluriannuelCadre()) {
+        $datepickerClass = 'smalldatepicker';
+        $header = 'Période';
+    } else {
+        $datepickerClass = 'datepicker';
+        $header = 'Date';
+    }
+?>
 <p class="intro_contrat_vrac">Veuillez saisir ici les conditions applicables au contrat.</p>
 
 <table class="validation table_donnees">
 	<thead>
 		<tr>
 			<th>Produits</th>
-			<th class="date_retiraison" style="text-align: center">Date début retiraison</th>
-			<th class="date_retiraison" style="text-align: center">Date limite retiraison</th>
+			<th class="date_retiraison" style="text-align: center"><?php echo $header?> début retiraison</th>
+			<th class="date_retiraison" style="text-align: center"><?php echo $header?> limite retiraison</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -22,11 +31,11 @@
 			</td>
 			<td class="date_retiraison">
     			<span><?php echo $embedForm['retiraison_date_debut']->renderError() ?></span>
-    			<?php echo $embedForm['retiraison_date_debut']->render(array('class' => 'input_date datepicker')) ?>
+    			<?php echo $embedForm['retiraison_date_debut']->render(array('class' => 'input_date '.$datepickerClass)) ?>
 			</td>
 			<td class="date_retiraison">
     			<span><?php echo $embedForm['retiraison_date_limite']->renderError() ?></span>
-    			<?php echo $embedForm['retiraison_date_limite']->render(array('class' => 'input_date datepicker')) ?>
+    			<?php echo $embedForm['retiraison_date_limite']->render(array('class' => 'input_date '.$datepickerClass)) ?>
 			</td>
 		</tr>
 		<?php
