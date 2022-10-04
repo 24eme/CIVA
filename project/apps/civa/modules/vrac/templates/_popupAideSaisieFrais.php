@@ -50,8 +50,6 @@
         if (content) {
             content += "\n";
         }
-        $('#<?php echo $target ?>').val(content+ligne);
-        $('#<?php echo $target ?>').removeAttr('disabled');
         $("#popup_vendeur_frais_annexes a.close_popup").trigger("click");
         $('#popup_vendeur_frais_annexes select[name="type"]').val($('#popup_vendeur_frais_annexes select[name="type"] option:first').val());
         $('#popup_vendeur_frais_annexes input[name="montant"]').val('');

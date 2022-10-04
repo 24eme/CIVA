@@ -38,7 +38,6 @@
             ligne += ', avec escompte de '+escompte+'%';
         }
         $('#<?php echo $target ?>').val(ligne);
-        $('#<?php echo $target ?>').removeAttr('disabled');
         $("#popup_conditions_paiement a.close_popup").trigger("click");
         $('#ligneEscompte').hide();
         $('#popup_conditions_paiement select[name="delai"]').val($('#popup_conditions_paiement select[name="delai"] option:first').val());

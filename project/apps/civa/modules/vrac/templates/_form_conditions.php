@@ -48,33 +48,31 @@
 	<tbody>
 		<?php
             if(isset($form['vendeur_frais_annexes'])):
-                $attr = (!$form->getObject()->vendeur_frais_annexes)? array('rows' => '2', 'cols' => '61', 'disabled' => 'disabled') : array('rows' => '2', 'cols' => '61');
         ?>
 		<tr>
 			<td>
 				<?php echo $form['vendeur_frais_annexes']->renderLabel() ?>
 			</td>
 			<td width="465">
-			<?php echo $form['vendeur_frais_annexes']->render($attr) ?>
+			<?php echo $form['vendeur_frais_annexes']->render(array('rows' => '2', 'cols' => '61')) ?>
 			</td>
             <td>
-                <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Saisir les frais</a>
+                <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Ajouter des frais</a>
             </td>
 		</tr>
 		<?php endif; ?>
 		<?php
             if(isset($form['acheteur_primes_diverses'])):
-                $attr = (!$form->getObject()->acheteur_primes_diverses)? array('rows' => '2', 'cols' => '61', 'disabled' => 'disabled') : array('rows' => '2', 'cols' => '61');
          ?>
 		<tr class="alt">
 			<td>
 				<?php echo $form['acheteur_primes_diverses']->renderLabel() ?>
 			</td>
 			<td width="465">
-			<?php echo $form['acheteur_primes_diverses']->render($attr) ?>
+			<?php echo $form['acheteur_primes_diverses']->render(array('rows' => '2', 'cols' => '61')) ?>
 			</td>
             <td>
-                <a class="btn_minus action_aidesaisie aideSaisiePrimesPopup" href="">Saisir les primes</a>
+                <a class="btn_minus action_aidesaisie aideSaisiePrimesPopup" href="">Ajouter des primes</a>
             </td>
 		</tr>
 		<?php endif; ?>
