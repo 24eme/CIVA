@@ -701,6 +701,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$this->add('vendeur_frais_annexes');
 			$this->add('acheteur_primes_diverses');
 			$this->add('clause_resiliation');
+            if ($this->isPluriannuelCadre()) {
+			    $this->add('clause_evolution_prix');
+            }
 		}
     }
 

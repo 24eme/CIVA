@@ -49,6 +49,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_resiliation', "Résiliation :");
 		}
 
+		if($this->getObject()->exist('clause_evolution_prix')) {
+			$this->setWidget('clause_evolution_prix', new sfWidgetFormTextarea());
+			$this->setValidator('clause_evolution_prix', new sfValidatorString(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('clause_evolution_prix', "Critères et modalités d'évolution des prix pour les années N+1 et N+2 :");
+		}
+
         $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
         $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 
