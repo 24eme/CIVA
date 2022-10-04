@@ -146,3 +146,4 @@
 <?php include_partial('vrac/popupAideSaisieFrais', array('target' => $form['vendeur_frais_annexes']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisieDelaiPaiement', array('target' => $form['conditions_paiement']->renderId())); ?>
+<?php include_partial('vrac/popupAideSaisieResiliation', array('target' => $form['clause_resiliation']->renderId())); ?>
