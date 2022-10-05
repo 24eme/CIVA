@@ -11,10 +11,10 @@
             <tr>
                 <td>
                     <select style="width:120px;margin:0px;" name="type">
-                        <option value="d'apport global.">Apport global</option>
-                        <option value="d'engagement surface/volume.">Engagement surface / volume</option>
-                        <option value="de vendange manuelle.">Vendange Manuelle</option>
-                        <option value="en autre prime.">Autre</option>
+                        <option value="d'apport global">Apport global</option>
+                        <option value="d'engagement surface/volume">Engagement surface / volume</option>
+                        <option value="de vendange manuelle">Vendange Manuelle</option>
+                        <option value="en autre prime">Autre</option>
                     </select>
                 </td>
                 <td>
