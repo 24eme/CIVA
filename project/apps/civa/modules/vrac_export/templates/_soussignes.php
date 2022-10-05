@@ -21,7 +21,7 @@ $hasCourtier = $vrac->hasCourtier();
 					<?php if($vrac->vendeur->cvi): ?>
                     <td>&nbsp;CVI : <i><?php echo $vrac->vendeur->cvi; ?></i></td>
                     <?php elseif($vrac->vendeur->civaba): ?>
-                    <td>&nbsp;CIVA : <i><?php echo $vrac->vendeur->civaba; ?></i></td> 
+                    <td>&nbsp;CIVA : <i><?php echo $vrac->vendeur->civaba; ?></i></td>
                     <?php else: ?>
                     <td>&nbsp;</td>
                     <?php endif; ?>
@@ -33,15 +33,20 @@ $hasCourtier = $vrac->hasCourtier();
 					<td>&nbsp;SIRET : <i><?php echo $vrac->vendeur->siret; ?></i></td>
 				</tr>
 				<tr>
-					<td>&nbsp;N° d'accise : <i><?php echo $vrac->vendeur->num_accise; ?></i></td>  
+					<td>&nbsp;N° d'accise : <i><?php echo $vrac->vendeur->num_accise; ?></i></td>
 				</tr>
                 <tr>
                     <?php if(count($vrac->vendeur->emails->toArray(true, false)) > 0): ?>
-                    <td>&nbsp;Email : <i><?php echo $vrac->vendeur->emails[0]; ?></i></td>  
+                    <td>&nbsp;Email : <i><?php echo $vrac->vendeur->emails[0]; ?></i></td>
                     <?php else: ?>
                     <td>&nbsp;</td>
                     <?php endif; ?>
                 </tr>
+                <?php if($vrac->exist('vendeur_assujetti_tva')): ?>
+				<tr>
+					<td>&nbsp;Assujeti à la TVA : <?php if($vrac->vendeur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->vendeur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
+				</tr>
+                <?php endif; ?>
 			</table>
 		</td>
 		<td width="50%" valign="top" >
@@ -54,11 +59,11 @@ $hasCourtier = $vrac->hasCourtier();
                                         <td>&nbsp;<i><?php echo truncate_text($vrac->acheteur->adresse, 50, "...", false) ?></i><br/>
                                         <i>&nbsp;<?php echo $vrac->acheteur->code_postal; ?></i>&nbsp;<i><?php echo $vrac->acheteur->commune; ?></i><br/></td>
                                 </tr>
-                                <tr>    
+                                <tr>
                                         <?php if($vrac->acheteur->cvi): ?>
                                         <td>&nbsp;CVI : <i><?php echo $vrac->acheteur->cvi; ?></i></td>
                                         <?php elseif($vrac->acheteur->civaba): ?>
-                                        <td>&nbsp;CIVA : <i><?php echo $vrac->acheteur->civaba; ?></i></td> 
+                                        <td>&nbsp;CIVA : <i><?php echo $vrac->acheteur->civaba; ?></i></td>
                                         <?php else: ?>
                                         <td>&nbsp;</td>
                                         <?php endif; ?>
@@ -74,11 +79,16 @@ $hasCourtier = $vrac->hasCourtier();
                                 </tr>
                                 <tr>
                                     <?php if(count($vrac->acheteur->emails->toArray(true, false)) > 0): ?>
-                                        <td>&nbsp;Email : <i><?php echo $vrac->acheteur->emails[0]; ?></i></td>  
+                                        <td>&nbsp;Email : <i><?php echo $vrac->acheteur->emails[0]; ?></i></td>
                                     <?php else: ?>
                                         <td>&nbsp;</td>
                                     <?php endif; ?>
                                 </tr>
+                                <?php if($vrac->exist('acheteur_assujetti_tva')): ?>
+                				<tr>
+                					<td>&nbsp;Assujeti à la TVA : <?php if($vrac->acheteur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->acheteur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
+                				</tr>
+                                <?php endif; ?>
 			</table>
 		</td>
 	</tr>
@@ -91,8 +101,8 @@ $hasCourtier = $vrac->hasCourtier();
 		<td width="100%">
 			<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #000;">
 				<tr>
-					<td>&nbsp;<?php if($hasCourtier): ?><i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i><?php endif; ?></td> 
-					<td>N° de Carte Pro : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td> 
+					<td>&nbsp;<?php if($hasCourtier): ?><i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i><?php endif; ?></td>
+					<td>N° de Carte Pro : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td>
 				</tr>
 				<tr>
 					<td>&nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->adresse ?></i><?php endif; ?></td>
