@@ -84,22 +84,44 @@ td.echeance {display: inline;}
 		</tr>
 	</thead>
 	<tbody>
+        <?php if($vrac->exist('vendeur_frais_annexes')): ?>
+        <tr>
+			<td>
+				Frais annexes en sus à la charge du vendeur
+			</td>
+			<td>
+				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <?php if($vrac->exist('acheteur_primes_diverses')): ?>
+        <tr class="alt">
+			<td>
+				Primes diverses à la charge de l'acheteur
+			</td>
+			<td>
+				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
 		<tr>
 			<td>
-				Conditions de paiement
+				Délais de paiement
 			</td>
 			<td>
 				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
 			</td>
 		</tr>
-		<tr class="alt">
+        <?php if($vrac->exist('clause_resiliation')): ?>
+        <tr class="alt">
 			<td>
-				Conditions particulières
+				Résiliation
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucunes'; ?>
 			</td>
 		</tr>
+		<?php endif; ?>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
 		<tr>
 			<td>
@@ -111,6 +133,24 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
+        <?php if($vrac->exist('clause_mandat_facturation')): ?>
+		<tr class="alt">
+			<td>
+				<label>Mandat de facturation</label>
+			</td>
+			<td>
+				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small><?php endif; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <tr>
+			<td>
+				Autre clauses particulières
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+			</td>
+		</tr>
 		<?php if($vrac->isInterne()): ?>
                 <tr class="alt">
                         <td>
