@@ -172,4 +172,6 @@
 <?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisieDelaiPaiement', array('target' => $form['conditions_paiement']->renderId(), 'isPluriannuelCadre' => $form->getObject()->isPluriannuelCadre())); ?>
 <?php include_partial('vrac/popupAideSaisieResiliation', array('target' => $form['clause_resiliation']->renderId())); ?>
+<?php if(isset($form['clause_evolution_prix'])): ?>
 <?php include_partial('vrac/popupAideSaisieEvolutionsPrix', array('target' => $form['clause_evolution_prix']->renderId())); ?>
+<?php endif; ?>
