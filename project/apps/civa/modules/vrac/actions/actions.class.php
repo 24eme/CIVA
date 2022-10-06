@@ -502,6 +502,11 @@ class vracActions extends sfActions
 
     protected function getFormRetiraisons($vrac, $user)
     {
+		if($vrac->isPluriannuelCadre()) {
+
+			return null;
+		}
+
     	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule()) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
