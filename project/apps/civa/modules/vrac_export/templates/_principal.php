@@ -42,7 +42,7 @@
         foreach ($vrac->declaration->getProduitsDetailsSorted() as $product):
 			$productLine = $product->getRawValue();
 					foreach ($productLine as $detailKey => $detailLine):
-                                            $nb_ligne--;
+                                            $nb_ligne = $nb_ligne - 1.5;
 							$backgroundColor = getColorRowDetail($detailLine);
 			$libelle_produit = $detailLine->getCepage()->getLibelle()." ".$detailLine->getLieuLibelle()." ".$detailLine->getLieuDit()." ".$detailLine->getVtsgn()." ".$detailLine->getDenomination();
 			$libelle_produit.= ($detailLine->exist('label') && $detailLine->get("label"))? " ".VracClient::$label_libelles[$detailLine->get("label")] : "";
@@ -68,7 +68,7 @@
 			<?php else: ?>
 			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoVolume($detailLine->volume_propose); ?></td>
 			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-            <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?></td>
+            <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?><?php if (!$dateRetiraison): ?> font-size: 7pt;<?php endif; ?>"><?php if (!$dateRetiraison): ?>Du <?php echo getDateFr($detailLine->retiraison_date_debut) ?><br />au <?php echo getDateFr($detailLine->retiraison_date_limite) ?><?php else: ?><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?><?php endif; ?></td>
 			<?php endif; ?>
         </tr>
         <?php
@@ -77,7 +77,7 @@
         $cpt = 0;
         foreach ($detailLine->retiraisons as $retiraison):
             $border_bottom = (((count($detailLine->retiraisons) - 1 ) == $cpt) && $lastDetail)? "border-bottom: 1px solid black; border-bottom: 1px solid black;" : "";
-            $nb_ligne--;
+            $nb_ligne = $nb_ligne - 1.5;
             ?>
                 <tr>
                     <td class="td-large" colspan="5" style="border-left: 1px solid black; <?php echo $border_bottom; ?> "><?php echo pdfTdLargeStart() ?></td>
@@ -103,32 +103,46 @@
                         <td class="td-large" style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
 	</tr>
 	<?php endif; ?>
-	<?php if (!$odg): ?>
-	<tr>
-		<td style="text-align: left;" colspan="4" >*&nbsp;<span style="font-size: 6pt; padding-left: 20px"><?php echo getExplicationEtoile(); ?></span></td>
-		<td>&nbsp;</td>
-		<?php if ($vrac->isCloture()): ?>
-		<td>&nbsp;</td>
-                <td>&nbsp;</td>
-		<?php endif; ?>
-	</tr>
-	<?php endif; ?>
 </table>
 <br />
-<?php if ($vrac->conditions_paiement): $nb_ligne-=3; ?><p>Date de paiement : <?php echo $vrac->conditions_paiement; ?></p><?php endif; ?>
-<?php if ($vrac->conditions_particulieres): $nb_ligne-=3; ?><p>Conditions particulières : <?php echo $vrac->conditions_particulieres; ?></p><?php endif; ?>
-
-<p>Les parties reconnaissent l'application de l'ensemble des stipulations figurant au verso ce ce contrat intitulées « Contrat de vente en vrac de vins AOC produits en Alsace ».</p>
-
-<?php if($vrac->exist('clause_reserve_propriete')): ?>
-<p>Clause de réserve de propriété <small>(les modalités sont indiquées au verso de ce formulaire)</small> :&nbsp;&nbsp;&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span></p>
-<?php endif; ?>
+<small><br /></small>
+<!--<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Conditions&nbsp;</span><br/>-->
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
+	<tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; width: 408px; text-align:left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) ?></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) ?></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Délais de paiement</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo nl2br($vrac->conditions_paiement) ?></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Les modalités sont indiquées au verso de ce formulaire</i></small></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Résiliation <small style="font-weight: normal;">(délai de préavis et indemnités applicables)</small></th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Mandat de facturation</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_mandat_facturation): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux<br />&nbsp;récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</i></small></td>
+    </tr>
+    <tr>
+        <th class="td-large" style="text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Autres clauses particulières</th>
+        <td class="td-large" style="text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo nl2br($vrac->conditions_particulieres) ?></td>
+    </tr>
+</table>
+<?php $nb_ligne -= 6?>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;
 <?php endfor;?>
 
-<div style="display: absolute; bottom: 5px;">
 <?php if($vrac->hasCourtier()) {$widthSignataire = 33.33;} else {$widthSignataire = 50; } ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="text-align: left; border-collapse: collapse;">
 	<tr>
@@ -176,11 +190,10 @@
 	</tr>
 
 </table>
-<table cellspacing="0" cellpadding="0" border="0" style="text-align: right;">
+<table cellspacing="0" cellpadding="0" border="0" style="text-align: right; margin:0; padding: 0;">
 	<tr>
 		<td style="text-align: left; font-size: 6pt;"><?php echo getLastSentence(); ?></td>
     </tr>
 </table>
-</div>
 </body>
 </html>

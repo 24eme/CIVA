@@ -23,8 +23,8 @@ class VracRetiraisonsProduitForm extends acCouchdbObjectForm
             ));
         } else {
             $this->setValidators(array(
-            	'retiraison_date_debut' => new sfValidatorRegex(array('date_output' => 'Y-m-d', 'date_format' => '~(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})~', 'required' => false), array('invalid' => 'Format valide : dd/mm/aaaa')),
-            	'retiraison_date_limite' => new sfValidatorRegex(array('date_output' => 'Y-m-d', 'date_format' => '~(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})~', 'required' => false), array('invalid' => 'Format valide : dd/mm/aaaa')),
+                'retiraison_date_debut' => new sfValidatorDate(array('date_output' => 'Y-m-d', 'date_format' => '~(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})~', 'required' => false), array('invalid' => 'Format valide : dd/mm/aaaa')),
+                'retiraison_date_limite' => new sfValidatorDate(array('date_output' => 'Y-m-d', 'date_format' => '~(?P<day>\d{2})/(?P<month>\d{2})/(?P<year>\d{4})~', 'required' => false), array('invalid' => 'Format valide : dd/mm/aaaa')),
             ));
         }
   		$this->widgetSchema->setNameFormat('produit_retiraisons[%s]');
