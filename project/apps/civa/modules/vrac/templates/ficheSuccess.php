@@ -20,9 +20,9 @@ td.echeance {display: inline;}
 	<li class="ui-tabs-selected">
 		<a style="height: 18px;">
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
+			Contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat
+			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
@@ -104,16 +104,8 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
-		<tr>
-			<td>
-				Délais de paiement
-			</td>
-			<td>
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
-			</td>
-		</tr>
         <?php if($vrac->exist('clause_resiliation')): ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Résiliation
 			</td>
@@ -122,6 +114,14 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
+        <tr class="alt">
+			<td>
+				Délais de paiement
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
+			</td>
+		</tr>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
 		<tr>
 			<td>
@@ -139,7 +139,7 @@ td.echeance {display: inline;}
 				<label>Mandat de facturation</label>
 			</td>
 			<td>
-				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small><?php endif; ?>
+				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat).</small><?php endif; ?>
 			</td>
 		</tr>
 		<?php endif; ?>

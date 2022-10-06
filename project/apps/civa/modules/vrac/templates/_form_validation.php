@@ -1,4 +1,6 @@
 <?php use_helper('Float') ?>
+<?php use_helper('Date') ?>
+
 <p class="intro_contrat_vrac">Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernées. <br />Saisissez ici les éventuelles conditions du contrat.</p>
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => false)) ?>
 
@@ -12,6 +14,8 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>
 			<th class="prix" style="text-align: center">Prix</th>
+			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
+			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -34,6 +38,20 @@
 			</td>
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
+                <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+                    <?php echo str_replace('-', '/', $detail->retiraison_date_debut) ?>
+                <?php endif; ?>
+			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+                <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
+                    <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+	                <?php echo str_replace('-', '/', $detail->retiraison_date_limite) ?>
+                <?php endif;  ?>
 			</td>
 		</tr>
 		<?php
@@ -72,16 +90,8 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-		<tr>
-			<td>
-				Délais de paiement
-			</td>
-			<td>
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
-			</td>
-		</tr>
         <?php if($vrac->exist('clause_resiliation')): ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Résiliation
 			</td>
@@ -90,6 +100,14 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+        <tr class="alt">
+			<td>
+				Délais de paiement
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
+			</td>
+		</tr>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
 		<tr>
 			<td>
