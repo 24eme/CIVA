@@ -1,8 +1,10 @@
 <?php use_helper('Float') ?>
+<?php use_helper('Date') ?>
+
 <p class="intro_contrat_vrac">Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernées. <br />Saisissez ici les éventuelles conditions du contrat.</p>
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => false)) ?>
 
-<table class="validation table_donnees">
+<table class="validation table_donnees" style="margin: 0 0 20px;">
 	<thead>
 		<tr>
 			<th>Produits</th>
@@ -12,6 +14,8 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center">Volume</th>
 			<th class="prix" style="text-align: center">Prix</th>
+			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
+			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,6 +39,20 @@
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
+                <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+                    <?php echo str_replace('-', '/', $detail->retiraison_date_debut) ?>
+                <?php endif; ?>
+			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+                <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
+                    <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+	                <?php echo str_replace('-', '/', $detail->retiraison_date_limite) ?>
+                <?php endif;  ?>
+			</td>
 		</tr>
 		<?php
 			$counter++;  endforeach;
@@ -43,6 +61,95 @@
 
 	</tbody>
 </table>
+
+<?php if(!$vrac->isPapier()): ?>
+<table class="validation table_donnees" style="margin:0 0 20px;">
+	<thead>
+		<tr>
+			<th style="width: 212px;">Conditions</th>
+		</tr>
+	</thead>
+	<tbody>
+        <?php if($vrac->exist('vendeur_frais_annexes')): ?>
+        <tr>
+			<td>
+				Frais annexes en sus à la charge du vendeur
+			</td>
+			<td>
+				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <?php if($vrac->exist('acheteur_primes_diverses')): ?>
+        <tr class="alt">
+			<td>
+				Primes diverses à la charge de l'acheteur
+			</td>
+			<td>
+				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <?php if($vrac->exist('clause_resiliation')): ?>
+        <tr>
+			<td>
+				Résiliation
+			</td>
+			<td>
+				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <tr class="alt">
+			<td>
+				Délais de paiement
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php if($vrac->exist('clause_reserve_propriete')): ?>
+		<tr>
+			<td>
+				<label>Clause de réserve de propriété</label>
+			</td>
+			<td>
+				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
+
+			</td>
+		</tr>
+		<?php endif; ?>
+        <?php if($vrac->exist('clause_mandat_facturation')): ?>
+		<tr class="alt">
+			<td>
+				<label>Mandat de facturation</label>
+			</td>
+			<td>
+				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small><?php endif; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <tr>
+			<td>
+				Autre clauses particulières
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php if($vrac->isInterne()): ?>
+                <tr class="alt">
+                        <td>
+                                <label>Interne</label>
+                        </td>
+                        <td>
+                                <strong>Oui</strong>
+                        </td>
+                </tr>
+                <?php endif; ?>
+	</tbody>
+</table>
+<?php endif; ?>
 
 <?php if($vrac->isPapier()): ?>
 <table class="validation table_donnees">
