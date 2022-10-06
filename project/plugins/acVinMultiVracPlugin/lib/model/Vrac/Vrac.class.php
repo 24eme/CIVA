@@ -484,6 +484,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
+            $this->generatePluriannuelApplication();
     	}
     	if ($valide && $this->type_contrat == VracClient::TYPE_BOUTEILLE) {
     		$this->valide->email_validation = date('Y-m-d');
@@ -794,5 +795,19 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	public function isApplicationPluriannuel() {
         return (!$this->isPonctuel() && $this->hasReferencePluriannuel());
+	}
+
+	public function generatePluriannuelApplication() {
+		$vrac = clone $this;
+        $vrac->numero_contrat = VracClient::getInstance()->getNumeroContratSuivant($vrac->valide->date_saisie);
+        $vrac->constructId();
+		$vrac->add('reference_contrat_pluriannuel', $this->_id);
+		foreach($vrac->declaration->getProduitsDetailsSorted() as $detail) {
+            $detail->millesime = date('Y');
+            $detail->retiraison_date_debut = date('Y').'-'.$detail->retiraison_date_debut;
+            $detail->retiraison_date_limite = date('Y').'-'.$detail->retiraison_date_limite;
+        }
+        $vrac->save();
+        $vrac->save();
 	}
 }
