@@ -17,7 +17,10 @@
 			<?php if ($vrac->isCloture() || $form): ?>
 			<th class="echeance">Date</th>
 			<th class="enleve">Volume réel</th>
-			<?php endif; ?>
+            <?php else: ?>
+            <th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
+			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
+            <?php endif; ?>
 			<?php if ($form): ?>
 			<th class="cloture">Cloture</th>
 			<th class="actions"></th>
@@ -158,6 +161,20 @@
 			</td>
 			<td class="prix">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
+			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
+                <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+                    <?php echo str_replace('-', '/', $detail->retiraison_date_debut) ?>
+                <?php endif; ?>
+			</td>
+            <td class="date_retiraison_limite" style="text-align: center;">
+                <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
+                    <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
+                <?php else: ?>
+	                <?php echo str_replace('-', '/', $detail->retiraison_date_limite) ?>
+                <?php endif;  ?>
 			</td>
 			<?php endif; ?>
 		</tr>
