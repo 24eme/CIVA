@@ -40,11 +40,19 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function init($filename = null) {
+        $title = "CONTRAT";
+        $leftLength = 81;
+        if($this->vrac->isPluriannuelCadre()) {
+            $title .= " PLURIANNUEL";
+            $leftLength = 67;
+        }
     	if ($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
-        	$title = "CONTRAT DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
+        	$title .= " DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
     	} else {
-        	$title = "CONTRAT DE VENTE EN VRAC                                                          Visa du CIVA N° ".$this->vrac->numero_visa;
+        	$title .= " DE VENTE EN VRAC";
+            $title = str_pad($title, $leftLength, " ", STR_PAD_RIGHT);
+            $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
     	}
         if ($this->vrac->isAnnule()) {
