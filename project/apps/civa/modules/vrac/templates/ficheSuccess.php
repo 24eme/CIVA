@@ -20,9 +20,9 @@ td.echeance {display: inline;}
 	<li class="ui-tabs-selected">
 		<a style="height: 18px;">
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
+			Contrat <?php if($vrac->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
+			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
@@ -196,7 +196,7 @@ td.echeance {display: inline;}
     				Campagne 2022
     			</td>
     			<td>
-                    <a href="">Générer</a>
+                    <a href="">Générer le contrat</a>
     			</td>
     		</tr>
             <tr>
