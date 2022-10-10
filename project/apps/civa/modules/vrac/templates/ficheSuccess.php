@@ -175,6 +175,42 @@ td.echeance {display: inline;}
 </table>
 <?php endif; ?>
 
+<?php if ($vrac->isPluriannuelCadre()): ?>
+    <table class="validation table_donnees" style="width: 400px;">
+    	<thead>
+    		<tr>
+    			<th style="width: 212px;">Campagnes pluriannel</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+            <tr>
+    			<td>
+    				Campagne 2021
+    			</td>
+    			<td>
+                    <a href="">Voir le contrat</a>
+    			</td>
+    		</tr>
+            <tr class="alt">
+    			<td>
+    				Campagne 2022
+    			</td>
+    			<td>
+                    <a href="">Générer</a>
+    			</td>
+    		</tr>
+            <tr>
+    			<td>
+    				Campagne 2023
+    			</td>
+    			<td>
+                    <i class="text-muted">Non disponible</i>
+    			</td>
+    		</tr>
+        </tbody>
+    </table>
+<?php endif; ?>
+
 	</div>
 <?php if (!$vrac->isPapier()) : ?>
 <div class="printonly">
