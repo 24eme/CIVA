@@ -161,6 +161,16 @@ td.echeance {display: inline;}
                         </td>
                 </tr>
                 <?php endif; ?>
+        <?php if($vrac->exist('clause_evolution_prix') && $vrac->isPluriannuelCadre()): ?>
+        <tr class="alt">
+			<td>
+				Critères et modalités d’évolution des prix
+			</td>
+			<td>
+				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucunes'; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>

@@ -158,7 +158,7 @@
 				<?php echo $form['clause_evolution_prix']->renderLabel() ?>
 			</td>
             <td width="465">
-			<?php echo $form['clause_evolution_prix']->render(array('rows' => '2', 'cols' => '61')) ?>
+			<?php echo $form['clause_evolution_prix']->render(array('rows' => '2', 'cols' => '61', 'readonly' => 'readonly')) ?>
 			</td>
             <td>
                 <a class="btn_minus action_aidesaisie aideSaisieEvolutionsPrixPopup" href="">Ajouter des indicateurs</a>
