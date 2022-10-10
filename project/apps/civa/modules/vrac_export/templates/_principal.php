@@ -68,7 +68,7 @@
 			<?php else: ?>
 			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php echoVolume($detailLine->volume_propose); ?></td>
 			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
-            <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?><?php if (!$dateRetiraison): ?> font-size: 7pt;<?php endif; ?>"><?php if (!$dateRetiraison): ?>Du <?php echo getDateFr($detailLine->retiraison_date_debut) ?><br />au <?php echo getDateFr($detailLine->retiraison_date_limite) ?><?php else: ?><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?><?php endif; ?></td>
+            <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?><?php if (!$dateRetiraison): ?> font-size: 7pt;<?php endif; ?>"><?php if (!$dateRetiraison): ?>Du <?php echo (!$vrac->isPluriannuelCadre() ? getDateFr($detailLine->retiraison_date_debut) : $detailLine->retiraison_date_debut) ?><br />au <?php echo (!$vrac->isPluriannuelCadre() ? getDateFr($detailLine->retiraison_date_limite) : $detailLine->retiraison_date_limite) ?><?php else: ?><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?><?php endif; ?></td>
 			<?php endif; ?>
         </tr>
         <?php
@@ -116,9 +116,17 @@
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
         <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) ?></td>
     </tr>
+	<?php if($vrac->isPluriannuelCadre()):  ?>
+	<tr>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Critères et modalités d’évolution des prix</th>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->clause_evolution_prix) ?>
+		<br /><small><i>Les indicateurs ainsi que la méthode de calcul du prix, basé sur ces indicateurs resteront les mêmes sur l’ensemble de la
+période contractualisée (Année N, N+1 et N+2).</i></small></td>
+    </tr>
+	<?php endif; ?>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Délais de paiement</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo nl2br($vrac->conditions_paiement) ?></td>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->conditions_paiement) ?></td>
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
@@ -137,7 +145,7 @@
         <td class="td-large" style="text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo nl2br($vrac->conditions_particulieres) ?></td>
     </tr>
 </table>
-<?php $nb_ligne -= 6?>
+<?php $nb_ligne -= 8?>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;
