@@ -20,9 +20,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
             'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
 			'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat ponctuel", "Contrat pluriannuel"], 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
-            'acheteur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["Oui", "Non"], 'expanded' => true)),
+            'acheteur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
-            'vendeur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["Oui", "Non"], 'expanded' => true)),
+            'vendeur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)),
         	'acheteur_recoltant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($recoltantChoices, array('add' => 'Ajouter un contact')))),
         	'acheteur_negociant_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($negociantChoices, array('add' => 'Ajouter un contact')))),
         	'acheteur_cave_cooperative_identifiant' => new sfWidgetFormChoice(array('choices' => array_merge($caveCooperativeChoices, array('add' => 'Ajouter un contact')))),
@@ -91,10 +91,10 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	$defaults['contrat_pluriannuel'] = 0;
         }
         if ($this->getObject()->acheteur_assujetti_tva === null) {
-            $defaults['acheteur_assujetti_tva'] = 0;
+            $defaults['acheteur_assujetti_tva'] = 1;
         }
         if ($this->getObject()->vendeur_assujetti_tva === null) {
-            $defaults['vendeur_assujetti_tva'] = 0;
+            $defaults['vendeur_assujetti_tva'] = 1;
         }
         $this->setDefaults($defaults);
     }
