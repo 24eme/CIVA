@@ -18,7 +18,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" name="montant" style="width:100px;" />
+                    <input type="text" class="num" name="montant" style="width:100px; text-align: right; padding-right: 5px;" />
                 </td>
                 <td>
                     <select style="width:100px;margin:0px;" name="unite">
