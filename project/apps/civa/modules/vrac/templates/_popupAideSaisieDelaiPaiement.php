@@ -17,7 +17,7 @@
         <tr id="ligneEscompte">
             <th align="right">Escompte :</th>
             <td align="left">
-                <input type="text" name="escompte" style="width:100px;" />&nbsp;%
+                <input type="text" name="escompte" class="num" style="width:100px; text-align: right; padding-right: 5px;" />&nbsp;%
             </td>
         </tr>
     </table>

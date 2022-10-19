@@ -19,7 +19,7 @@
         <tr>
             <th align="right">Part de l'indicateur :</th>
             <td align="left">
-                <input type="text" name="part" style="width:100px;" />&nbsp;%
+                <input type="text" name="part" class="num" style="width:100px; text-align: right; padding-right: 5px;" />&nbsp;%
             </td>
         </tr>
         <tr>
