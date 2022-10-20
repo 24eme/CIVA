@@ -70,6 +70,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if (!$this->getObject()->isNew()) {
         	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
+        if($this->getObject()->exist('contrat_pluriannuel_mode_surface')) {
+            $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ha)"], 'expanded' => true)));
+            $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1])));
+            $this->getWidgetSchema()->setLabel('contrat_pluriannuel_mode_surface', "Vous contractualisez sur :");
+        }
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
@@ -95,6 +100,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         }
         if ($this->getObject()->vendeur_assujetti_tva === null) {
             $defaults['vendeur_assujetti_tva'] = 1;
+        }
+        if ($this->getObject()->exist('contrat_pluriannuel_mode_surface') && $this->getObject()->contrat_pluriannuel_mode_surface === null) {
+            $defaults['contrat_pluriannuel_mode_surface'] = 0;
         }
         $this->setDefaults($defaults);
     }
@@ -123,9 +131,15 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->storeVendeurInformations($vendeur);
         $this->getObject()->acheteur_assujetti_tva = (isset($values['acheteur_assujetti_tva']) && $values['acheteur_assujetti_tva'])? 1 : 0;
         $this->getObject()->vendeur_assujetti_tva = (isset($values['vendeur_assujetti_tva']) && $values['vendeur_assujetti_tva'])? 1 : 0;
-    	if ($this->getObject()->isNew()) {
+        if ($this->getObject()->exist('contrat_pluriannuel_mode_surface')) {
+            $this->getObject()->contrat_pluriannuel_mode_surface = (isset($values['contrat_pluriannuel_mode_surface']) && $values['contrat_pluriannuel_mode_surface'])? 1 : 0;
+        }
+        if ($this->getObject()->isNew()) {
     		$this->getObject()->type_contrat = $values['type_contrat'];
             $this->getObject()->contrat_pluriannuel = (isset($values['contrat_pluriannuel']) && $values['contrat_pluriannuel'])? 1 : 0;
+            if ($this->getObject()->isPluriannuelCadre()) {
+                $this->getObject()->add('contrat_pluriannuel_mode_surface');
+            }
             $this->getObject()->type_archive = null;
             $this->getObject()->getTypeArchive();
     		$this->getObject()->initProduits();

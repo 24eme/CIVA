@@ -535,6 +535,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return $this->volume_propose_total;
     }
 
+    public function getTotalSurfacePropose()
+    {
+    	return $this->surface_propose_total;
+    }
+
     public function getTotalPrixEnleve()
     {
     	return $this->prix_reel_total;
@@ -659,6 +664,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     {
     	$this->volume_enleve_total = $this->declaration->getTotalVolumeEnleve();
     	$this->volume_propose_total = $this->declaration->getTotalVolumePropose();
+        $this->surface_propose_total = $this->declaration->getTotalSurfacePropose();
     	$this->prix_reel_total = $this->declaration->getTotalPrixEnleve();
     	$this->prix_total = $this->declaration->getTotalPrixPropose();
     }
@@ -795,6 +801,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	public function isApplicationPluriannuel() {
         return (!$this->isPonctuel() && $this->hasReferencePluriannuel());
 	}
+
+    public function isInModeSurface() {
+        return ($this->exist('contrat_pluriannuel_mode_surface') && $this->contrat_pluriannuel_mode_surface);
+    }
 
 	public function generatePluriannuelApplication() {
 		$vrac = clone $this;

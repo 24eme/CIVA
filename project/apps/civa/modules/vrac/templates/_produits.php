@@ -12,7 +12,7 @@
 			<th class="prix">Prix</th>
 			<th class="volume">Volume</th>
 			<?php else: ?>
-			<th class="volume">Volume estimé</th>
+			<th class="volume"><?php echo ($vrac->isInModeSurface())? 'Surface' : 'Volume' ?> estimé</th>
 			<th class="prix">Prix</th>
 			<?php if ($vrac->isCloture() || $form): ?>
 			<th class="echeance">Date</th>
@@ -36,7 +36,7 @@
 			foreach ($form['produits'] as $key => $formProduit):
 				$detail = $vrac->get($key);
 				$alt = ($counter%2);
-    			$volumeTotal += $detail->volume_propose;
+    			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
@@ -55,11 +55,11 @@
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume">
-				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;hl
+				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?></span>&nbsp;hl
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat($detail->volume_propose) ?></span>&nbsp;hl
+				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?></span>&nbsp;hl
 			</td>
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
@@ -97,7 +97,7 @@
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
 				$alt = ($counter%2);
-    			$volumeTotal += $detail->volume_propose;
+    			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
@@ -114,7 +114,7 @@
 			<td class="volume"><strong><span class="printonly">Volume enlevé : </span><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php else: ?>
 			<td class="volume">
-				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
@@ -144,7 +144,7 @@
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
 				$alt = ($counter%2);
-    			$volumeTotal += $detail->volume_propose;
+    			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
@@ -159,11 +159,11 @@
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume">
-				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<span class="printonly">Volume proposé : </span><?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<td class="prix">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>

@@ -63,7 +63,7 @@ function truncate_text($text, $length = 30, $truncate_string = '<small>…</smal
   return $text;
 }
 
-function echoVolume($volume, $bold = false) {
+function echoQuantite($volume, $bold = false, $type) {
     if(!is_null($volume)) {
         if($bold) {
             echo "<b>";
@@ -75,10 +75,18 @@ function echoVolume($volume, $bold = false) {
             echo "</b>";
         }
 
-        echo "&nbsp;<small>hl</small>&nbsp;&nbsp;";
+        echo "&nbsp;<small>$type</small>&nbsp;&nbsp;";
     } else {
         echo "&nbsp;";
     }
+}
+
+function echoVolume($volume, $bold = false) {
+    echoQuantite($volume, $bold, 'hl');
+}
+
+function echoSurface($surface, $bold = false) {
+    echoQuantite($surface, $bold, 'ha');
 }
 
 function echoPrix($prix, $bold = false) {
