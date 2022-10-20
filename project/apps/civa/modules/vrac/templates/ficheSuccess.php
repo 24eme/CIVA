@@ -107,7 +107,7 @@ td.echeance {display: inline;}
         <?php if($vrac->exist('clause_resiliation')): ?>
         <tr>
 			<td>
-				Résiliation
+				Résiliation hors cas de force majeur
 			</td>
 			<td>
 				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucunes'; ?>
