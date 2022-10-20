@@ -315,18 +315,22 @@
 
 #contrats_vrac .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
 
-#contrats_vrac .bloc_infos .radio_list { display: inline-block; }
+#contrats_vrac .radio_list { display: inline-block; }
 #contrats_vrac .bloc_infos #type_contrat_radio_list ul { margin: 10px 0 0 0; }
 #contrats_vrac #type_contrat.bloc_infos #type_contrat_radio_list ul li { margin: 0 30px 0 10px; }
-.ielt9 #contrats_vrac .bloc_infos .radio_list { display: inline; }
+.ielt9 #contrats_vrac .radio_list { display: inline; }
 
-#contrats_vrac .bloc_infos .radio_list li
+#contrats_vrac .radio_list li
 {
 	display: inline-block;
 	margin: 0 0 0 32px;
 }
 
-.ielt9 #contrats_vrac .bloc_infos .radio_list li { display: inline; }
+.ielt9 #contrats_vrac .radio_list li { display: inline; }
+
+table.table_donnees td .radio_list label {
+    display: inline-block;
+}
 
 /* =================================================== */
 /* Etape produits */
@@ -344,7 +348,7 @@
 #contrats_vrac .etape_produits.table_donnees .denomination { width: 185px; }
 #contrats_vrac .etape_produits.table_donnees .millesime { width: 70px; }
 #contrats_vrac .etape_produits.table_donnees .bio { width: 70px; }
-#contrats_vrac .etape_produits.table_donnees .volume { width: 80px; }
+#contrats_vrac .etape_produits.table_donnees .volume { width: 82px; }
 #contrats_vrac .etape_produits.table_donnees .prix { width: 140px; }
 #contrats_vrac table.table_donnees thead th:first-child { width: auto; }
 

@@ -162,6 +162,15 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         return $total;
     }
 
+    public function getTotalSurfacePropose()
+    {
+    	$total = 0;
+        foreach($this->getChildrenNode() as $key => $item) {
+            $total += $item->getTotalSurfacePropose();
+        }
+        return $total;
+    }
+
     public function getTotalPrixEnleve()
     {
     	$total = 0;

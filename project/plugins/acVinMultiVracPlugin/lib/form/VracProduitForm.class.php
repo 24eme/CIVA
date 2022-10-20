@@ -3,29 +3,30 @@ class VracProduitForm extends acCouchdbObjectForm
 {
    	public function configure()
     {
+        $quantiteType = ($this->getObject()->getDocument()->isInModeSurface())? 'surface' : 'volume';
   		$this->setWidgets(array(
         	'millesime' => new sfWidgetFormInputText(),
   		    'denomination' => new sfWidgetFormInputText(),
  		    'label' => new sfWidgetFormChoice(array('choices' => $this->getBioChoices())),
         	'prix_unitaire' => new sfWidgetFormInputFloat(),
-        	'volume_propose' => new sfWidgetFormInputFloat()
+        	$quantiteType.'_propose' => new sfWidgetFormInputFloat()
     	));
         $this->widgetSchema->setLabels(array(
         	'millesime' => 'Millésime:',
         	'denomination' => 'Dénomination:',
             'label' => 'Agriculture biologique:',
         	'prix_unitaire' => 'Prix unitaire:',
-        	'volume_propose' => 'Volume estimé:'
+        	$quantiteType.'_propose' => ucfirst($quantiteType).' estimé:'
         ));
         $this->setValidators(array(
         	'millesime' => new sfValidatorString(array('required' => false, 'max_length' => 4, 'min_length' => 4), array('max_length' =>  '4 caractères max.', 'min_length' =>  '4 caractères min.')),
         	'denomination' => new sfValidatorString(array('required' => false)),
             'label' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getBioChoices()))),
         	'prix_unitaire' => new sfValidatorNumber(array('required' => false)),
-        	'volume_propose' => new sfValidatorNumber(array('required' => false))
+        	$quantiteType.'_propose' => new sfValidatorNumber(array('required' => false))
         ));
         if ($this->getObject()->getDocument()->type_contrat == VracClient::TYPE_BOUTEILLE) {
-        	unset($this['volume_propose']);
+        	unset($this[$quantiteType.'_propose']);
         	$centilisations = array('' => '')+VracClient::getCentilisations();
         	$this->setWidget('centilisation', new sfWidgetFormChoice(array('choices' => $centilisations)));
         	$this->setWidget('nb_bouteille', new sfWidgetFormInputText());

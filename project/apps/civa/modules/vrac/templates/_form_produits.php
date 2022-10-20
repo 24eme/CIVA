@@ -1,4 +1,5 @@
-<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, la mention obligatoire "BIO" (oui/non), le prix à l'hectolitre et le volume estimé.<?php endif; ?></p>
+<?php $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume'; ?>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, le label obligatoire, le prix à l'hectolitre et <?php echo ($vrac->isInModeSurface())? 'la surface' : 'le volume'; ?> estimé.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
@@ -12,7 +13,7 @@
 			<th class="bouteille"><span>Nb bouteilles</span></th>
 			<th class="centilisation"><span>Centilisation</span></th>
 			<?php else: ?>
-			<th class="volume"><span>Volume</span></th>
+			<th class="volume"><span><?php echo ucfirst($quantiteType); ?></span></th>
 			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
 		</tr>
@@ -59,8 +60,8 @@
 			</td>
 			<?php else: ?>
 			<td class="volume">
-				<span><?php echo $embedForm['volume_propose']->renderError() ?></span>
-				<?php echo $embedForm['volume_propose']->render(array('class' => 'num')) ?>&nbsp;hl
+				<span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
+				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>
 			</td>
 			<?php endif; ?>
 			<td class="prix">

@@ -25,7 +25,7 @@
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
 			$alt = ($counter%2);
-			$volumeTotal += $detail->volume_propose;
+			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td>
@@ -36,7 +36,7 @@
 			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<?php endif; ?>
 			<td class="volume">
-				<?php echoFloat($detail->volume_propose) ?>&nbsp;hl
+				<?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ha' : 'hl' ?>
 			</td>
 			<td class="prix">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
@@ -61,7 +61,7 @@
 			endforeach;
 		?>
 		<tr<?php if (!$alt): ?> class="alt"<?php endif; ?>>
-			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong>Volume total</strong></td>
+			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong><?php echo ($vrac->isInModeSurface())? 'Surface' : 'Volume' ?> total</strong></td>
 			<td class="volume">
 				<?php echoFloat($volumeTotal) ?>&nbsp;hl
 			</td>

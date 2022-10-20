@@ -21,6 +21,15 @@
                 </div>
             </div>
             <?php endif; ?>
+            <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
+            <div class="form_col selecteur">
+                <div class="ligne_form">
+                <?php echo $form['contrat_pluriannuel_mode_surface']->renderError() ?>
+					<?php echo $form['contrat_pluriannuel_mode_surface']->renderLabel(null, array("class" => "bold")) ?>
+					<?php echo $form['contrat_pluriannuel_mode_surface']->render() ?>
+                </div>
+            </div>
+            <?php endif; ?>
 		</div>
 	</fieldset>
 

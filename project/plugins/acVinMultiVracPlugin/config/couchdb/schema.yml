@@ -172,6 +172,7 @@ Vrac:
                                                                   prix_unitaire: { type: float }
                                                                   denomination: { }
                                                                   cloture: { type: integer }
+                                                                  surface_propose: { type: float }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
                                                                   centilisation: { type: float, required: false }
@@ -217,6 +218,7 @@ Vrac:
       numero_papier: {  }
       prix_total: { type: float }
       prix_reel_total: { type: float }
+      surface_propose_total: { type: float }
       volume_propose_total: { type: float }
       volume_enleve_total: { type: float }
       etape: {  }
@@ -224,6 +226,7 @@ Vrac:
       type_contrat: {  }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
+      contrat_pluriannuel_mode_surface: { required: false }
       date_modification: {  }
       date_export_creation: {  }
       motif_suppression: {  }
