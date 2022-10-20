@@ -133,7 +133,7 @@ période contractualisée (Année N, N+1 et N+2).</i></small></td>
         <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Les modalités sont indiquées au verso de ce formulaire</i></small></td>
     </tr>
     <tr>
-        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Résiliation <small style="font-weight: normal;">(délai de préavis et indemnités applicables)</small></th>
+        <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Résiliation hors cas de force majeur <small style="font-weight: normal;">(délai de préavis et indemnités applicables)</small></th>
         <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
     </tr>
     <tr>

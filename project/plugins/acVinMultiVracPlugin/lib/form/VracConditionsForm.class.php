@@ -46,7 +46,7 @@ class VracConditionsForm extends acCouchdbObjectForm
 		if($this->getObject()->exist('clause_resiliation')) {
 			$this->setWidget('clause_resiliation', new sfWidgetFormTextarea());
 			$this->setValidator('clause_resiliation', new sfValidatorString(array('required' => false)));
-			$this->getWidgetSchema()->setLabel('clause_resiliation', "Résiliation :");
+			$this->getWidgetSchema()->setLabel('clause_resiliation', "Résiliation hors cas de force majeur :");
 		}
 
 		if($this->getObject()->exist('clause_evolution_prix')) {
