@@ -32,9 +32,11 @@
 	<?php if ($form): ?>
 		<?php
 			$counter = 0;
+            $volumeTotal = 0;
 			foreach ($form['produits'] as $key => $formProduit):
 				$detail = $vrac->get($key);
 				$alt = ($counter%2);
+    			$volumeTotal += $detail->volume_propose;
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
 			<td class="produit">
@@ -91,9 +93,11 @@
 	<?php elseif($vrac->isCloture()): ?>
 		<?php
 			$counter = 0;
+            $volumeTotal = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
 				$alt = ($counter%2);
+    			$volumeTotal += $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
@@ -136,9 +140,11 @@
 	<?php else: ?>
 		<?php
 			$counter = 0;
+            $volumeTotal = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
 				$alt = ($counter%2);
+    			$volumeTotal += $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
 			<td class="produit">
@@ -183,5 +189,12 @@
 			endforeach;
 		?>
 	<?php endif; ?>
+    <tr<?php if (!$alt): ?> class="alt"<?php endif; ?>>
+        <td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="4"<?php endif; ?>><strong>Volume total</strong></td>
+        <td class="volume">
+            <?php echoFloat($volumeTotal) ?>&nbsp;hl
+        </td>
+        <td colspan="<?php $colspan=2; if ($vrac->type_contrat != VracClient::TYPE_BOUTEILLE) $colspan += 1; if ($form) $colspan += 2; echo $colspan; ?>"></td>
+    </tr>
 	</tbody>
 </table>
