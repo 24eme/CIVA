@@ -20,14 +20,14 @@ class VracConditionsForm extends acCouchdbObjectForm
         ));
 
 		if($this->getObject()->exist('clause_reserve_propriete')) {
-			$this->setWidget('clause_reserve_propriete', new sfWidgetFormInputCheckbox());
-			$this->setValidator('clause_reserve_propriete', new sfValidatorBoolean(array('required' => false)));
+			$this->setWidget('clause_reserve_propriete', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
+			$this->setValidator('clause_reserve_propriete', new sfValidatorChoice(array('choices' => [1,0])));
 			$this->getWidgetSchema()->setLabel('clause_reserve_propriete', "Clause de réserve de propriété :");
 		}
 
 		if($this->getObject()->exist('clause_mandat_facturation')) {
-			$this->setWidget('clause_mandat_facturation', new sfWidgetFormInputCheckbox());
-			$this->setValidator('clause_mandat_facturation', new sfValidatorBoolean(array('required' => false)));
+			$this->setWidget('clause_mandat_facturation', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
+			$this->setValidator('clause_mandat_facturation', new sfValidatorChoice(array('choices' => [1,0])));
 			$this->getWidgetSchema()->setLabel('clause_mandat_facturation', "Mandat de facturation :");
 		}
 
@@ -61,8 +61,24 @@ class VracConditionsForm extends acCouchdbObjectForm
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 
+    protected function updateDefaultsFromObject() {
+        parent::updateDefaultsFromObject();
+        $defaults = $this->getDefaults();
+        if ($this->getObject()->exist('clause_reserve_propriete') && $this->getObject()->clause_reserve_propriete === null) {
+            $defaults['clause_reserve_propriete'] = 1;
+        }
+        if ($this->getObject()->exist('clause_mandat_facturation') && $this->getObject()->clause_mandat_facturation === null) {
+            $defaults['clause_mandat_facturation'] = 1;
+        }
+        $this->setDefaults($defaults);
+    }
+
     public function doUpdateObject($values) {
     	parent::doUpdateObject($values);
+        if ($this->getObject()->exist('clause_reserve_propriete'))
+            $this->getObject()->clause_reserve_propriete = (isset($values['clause_reserve_propriete']) && $values['clause_reserve_propriete'])? 1 : 0;
+        if ($this->getObject()->exist('clause_mandat_facturation'))
+            $this->getObject()->clause_mandat_facturation = (isset($values['clause_mandat_facturation']) && $values['clause_mandat_facturation'])? 1 : 0;
         foreach ($this->getEmbeddedForms() as $key => $embedForm) {
             $embedForm->doUpdateObject($values[$key]);
         }
