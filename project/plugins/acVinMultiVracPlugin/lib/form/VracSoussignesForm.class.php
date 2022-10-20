@@ -18,7 +18,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
             'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
-			'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat ponctuel", "Contrat pluriannuel"], 'expanded' => true)),
+			'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat annuel", "Contrat pluriannuel"], 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
             'acheteur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),

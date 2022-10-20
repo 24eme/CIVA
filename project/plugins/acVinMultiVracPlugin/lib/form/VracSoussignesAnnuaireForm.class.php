@@ -12,7 +12,7 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
     	$commerciauxChoices = $this->getCommerciaux();
         $this->setWidgets(array(
             'type_contrat' => new sfWidgetFormChoice(array('choices' => $contratTypes, 'expanded' => true)),
-            'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat ponctuel", "Contrat pluriannuel"], 'expanded' => true)),
+            'contrat_pluriannuel' => new sfWidgetFormChoice(array('choices' => ["Contrat annuel", "Contrat pluriannuel"], 'expanded' => true)),
         	'acheteur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
             'acheteur_assujetti_tva' => new sfWidgetFormChoice(array('choices' => ["Non", "Oui"], 'expanded' => true)),
         	'vendeur_type' => new sfWidgetFormChoice(array('choices' => $types, 'expanded' => true)),
