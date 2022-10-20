@@ -3,7 +3,7 @@
 	<thead>
 		<tr>
 			<th class="produit">Produits</th>
-			<th class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>"><span>Dénomination</span></th>
+			<th class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>"><span>Dénomination et précisions</span></th>
 			<?php if ($form->hasBio()): ?>
 			<th class="bio"><span>Bio</span></th>
 			<?php endif; ?>
