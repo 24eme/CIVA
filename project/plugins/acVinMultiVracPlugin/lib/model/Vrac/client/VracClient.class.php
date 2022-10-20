@@ -13,6 +13,8 @@ class VracClient extends acCouchdbClient {
 	const TYPE_VRAC_LIBELLE = 'Vrac';
 	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
 	const LABEL_BIO = 'BIO';
+	const LABEL_HVE = 'HVE';
+	const LABEL_BIO_HVE = 'BIO_HVE';
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
@@ -38,7 +40,7 @@ class VracClient extends acCouchdbClient {
 									'600' => '600 cl'
                                  );
 
-	public static $label_libelles = array(self::LABEL_BIO => "BIO");
+	public static $label_libelles = array(self::LABEL_BIO => "BIO", self::LABEL_HVE => "HVE", self::LABEL_BIO_HVE => "BIO & HVE");
 
     public static function getInstance()
     {

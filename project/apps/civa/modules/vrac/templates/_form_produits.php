@@ -5,7 +5,7 @@
 			<th class="produit">Produits</th>
 			<th class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>"><span>Dénomination et précisions</span></th>
 			<?php if ($form->hasBio()): ?>
-			<th class="bio"><span>Bio</span></th>
+			<th class="bio"><span>Labels</span></th>
 			<?php endif; ?>
 			<th class="millesime"><span>Millésime</span></th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
