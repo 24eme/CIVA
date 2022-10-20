@@ -6,7 +6,7 @@
 		<div class="clearfix">
 			<div id="type_contrat_radio_list" class="form_col selecteur">
 				<div class="ligne_form">
-					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Veuillez selectionner le type de votre contrat :<?php else: ?>Vous avez selectionner le type de contrat : <?php endif; ?></label>
+					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Type du contrat :<?php else: ?>Type du contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
 						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
@@ -17,12 +17,43 @@
             <?php if ($form->getObject()->isNew()): ?>
             <div id="contrat_pluriannuel_radio_list" class="form_col selecteur">
                 <div class="ligne_form">
-                        <?php echo $form['contrat_pluriannuel']->render(); ?>
+					<label for="" class="bold">Durée du contrat :</label>
+                    <?php echo $form['contrat_pluriannuel']->render(); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+			<?php if ($form->getObject()->isNew()): ?>
+            <div class="form_col selecteur" style="padding-top: 0;">
+                <div id="ligne_campagnes_application" class="ligne_form">
+					<label style="opacity: 0.25;" for="" class="bold">Campagnes d'application :</label>
+                    <select disabled="disabled" style="margin-left: 5px; width: 100px;">
+						<option></option>
+						<option>2022 à 2024</option>
+						<option>2023 à 2025</option>
+						<option>2024 à 2026</option>
+					</select>
+                </div>
+            </div>
+            <script>
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
+                    document.querySelector('#ligne_campagnes_application select').disabled = true;
+                    document.querySelector('#ligne_campagnes_application label').style.opacity = '0.25';
+                });
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').addEventListener('change', function(e) {
+                    document.querySelector('#ligne_campagnes_application select').disabled = false;
+                    document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
+                });
+            </script>
+            <?php elseif($vrac->isPluriannuelCadre()): ?>
+            <div class="form_col selecteur" style="padding-top: 0;">
+                <div class="ligne_form">
+					<label for="" class="bold">Campagnes d'application :</label>
+                    <span style="margin-left: 5px;">2022 à 2024</span>
                 </div>
             </div>
             <?php endif; ?>
             <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
-            <div class="form_col selecteur">
+            <div class="form_col selecteur" style="padding-top: 0;">
                 <div class="ligne_form">
                 <?php echo $form['contrat_pluriannuel_mode_surface']->renderError() ?>
 					<?php echo $form['contrat_pluriannuel_mode_surface']->renderLabel(null, array("class" => "bold")) ?>
