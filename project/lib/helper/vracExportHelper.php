@@ -109,6 +109,12 @@ function echoPrix($prix, $bold = false) {
 
 function getDateFr($dateIso) {
     $dateExplosed = explode('-', $dateIso);
+
+    if(count($dateExplosed) == 2) {
+
+        return $dateExplosed[1].'/'.$dateExplosed[0];
+    }
+
     return $dateExplosed[2].'/'.$dateExplosed[1].'/'.substr($dateExplosed[0],2);
 }
 
