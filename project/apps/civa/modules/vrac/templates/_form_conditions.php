@@ -107,20 +107,10 @@
 				<a class="btn_minus action_aidesaisie aideSaisieDelaiPaiementPopup" href="">Choisir un délai de paiement</a>
 			</td>
 		</tr>
-		<tr class="alt">
-			<td>
-				<?php echo $form['conditions_particulieres']->renderLabel() ?>
-			</td>
-			<td width="465">
-				<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
-				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
-			</td>
-			<td></td>
-		</tr>
 		<?php
             if(isset($form['clause_resiliation'])):
         ?>
-		<tr>
+		<tr class="alt">
 			<td>
 				<?php echo $form['clause_resiliation']->renderLabel() ?>
 			</td>
@@ -166,6 +156,16 @@
             </td>
 		</tr>
 		<?php endif; ?>
+		<tr>
+			<td>
+				<?php echo $form['conditions_particulieres']->renderLabel() ?>
+			</td>
+			<td width="465">
+				<span><?php echo $form['conditions_particulieres']->renderError() ?></span>
+				<?php echo $form['conditions_particulieres']->render(array('class' => 'input_long')) ?>
+			</td>
+			<td></td>
+		</tr>
 	</tbody>
 </table>
 <?php endif; ?>
