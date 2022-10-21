@@ -63,7 +63,12 @@
 	<li class="noprint">Commune : <strong><?php echo $tiers->commune ?></strong></li>
 	<li class="noprint">Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
 	<li class="noprint">E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
-	<?php if ($fiche): ?>
+    <?php if($vrac->exist($tiers->getKey().'_assujetti_tva')): ?>
+    <li class="noprint">
+        Assujeti à la TVA : <strong><?php if($vrac->get($tiers->getKey().'_assujetti_tva')): ?>Oui<?php else: ?>Non<?php endif; ?></strong>
+    </li>
+    <?php endif; ?>
+    <?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
 	<li class="noprint">Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php else: ?>
