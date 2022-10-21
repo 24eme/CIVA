@@ -110,7 +110,7 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; width: 408px; text-align:left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) ?></td>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; width: 408px; text-align:left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
