@@ -143,14 +143,6 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
-        <tr>
-			<td>
-				Autre clauses particulières
-			</td>
-			<td>
-				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
-			</td>
-		</tr>
 		<?php if($vrac->isInterne()): ?>
                 <tr class="alt">
                         <td>
@@ -162,7 +154,7 @@ td.echeance {display: inline;}
                 </tr>
                 <?php endif; ?>
         <?php if($vrac->exist('clause_evolution_prix') && $vrac->isPluriannuelCadre()): ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Critères et modalités d’évolution des prix
 			</td>
@@ -171,6 +163,14 @@ td.echeance {display: inline;}
 			</td>
 		</tr>
 		<?php endif; ?>
+        <tr class="alt">
+			<td>
+				Autre clauses particulières
+			</td>
+			<td>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+			</td>
+		</tr>
 	</tbody>
 </table>
 <?php endif; ?>
