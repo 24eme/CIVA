@@ -22,7 +22,8 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
-    	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser si vos produits sont biologiques ou non.');
+    	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
+        $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraisins pour l\'ensemble de vos produits.');
   	}
 
     public function controle()
@@ -31,6 +32,7 @@ class VracContratValidation extends DocumentValidation
 		$doublon_libelles = array();
 		$label_libelles = array();
 		$produits = array();
+        $retiraisons_manquantes = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
 				if (!isset($produits[$detail->getCepage()->getHash()])) {
@@ -44,6 +46,12 @@ class VracContratValidation extends DocumentValidation
                 }
 				if ($detail->exist('label') && ($detail->label === null || $detail->label === "")) {
 				    $label_libelles[] = $detail->getLibelle();
+				}
+				if (
+                    ($detail->exist('retiraison_date_debut') && ($detail->retiraison_date_debut === null || $detail->retiraison_date_debut === "")) ||
+                    ($detail->exist('retiraison_date_limite') && ($detail->retiraison_date_limite === null || $detail->retiraison_date_limite === "")))
+                 {
+				    $retiraisons_manquantes[] = $detail->getLibelle();
 				}
 
 			}
@@ -76,9 +84,13 @@ class VracContratValidation extends DocumentValidation
         if(!$this->document->isVendeurProprietaire() && $this->annuaire && !$this->annuaire->exist($this->document->vendeur_type."/".$this->document->vendeur_identifiant)) {
             $this->addPoint('vigilance', 'presence_annuaire', $this->document->vendeur->raison_sociale, $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'soussignes')));
         }
-        
+
         if (count($label_libelles) > 0) {
             $this->addPoint('erreur', 'label_non_saisi', implode(",", $label_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
+        }
+
+        if (count($retiraisons_manquantes) > 0) {
+            $this->addPoint('erreur', 'retiraisons_non_saisi', implode(",", $retiraisons_manquantes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
   	}
 
