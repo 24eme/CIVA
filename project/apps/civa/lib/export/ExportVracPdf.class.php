@@ -55,8 +55,16 @@ class ExportVracPdf extends ExportDocument {
             $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
     	}
+
+        $headerBlankToBottom = "\n\n";
+
+        if($this->vrac->isPluriannuelCadre()) {
+            $header .= "\nCAMPAGNES D'APPLICATION 2022 à 2025";
+            $headerBlankToBottom = "\n";
+        }
+
         if ($this->vrac->isAnnule()) {
-        	$header .= "\n\nANNULÉ";
+            $header .= $headerBlankToBottom."ANNULÉ";
         }
 
         if (!$filename) {
