@@ -46,9 +46,13 @@
 			</td>
 			<?php endif; ?>
 			<td class="millesime">
+                <?php if($vrac->isPluriannuelCadre()): ?>
+                2022 à 2024
+                <?php else: ?>
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
 				<?php echo $embedForm['millesime']->render(array("maxlength" => 4)) ?>
-			</td>
+                <?php endif; ?>
+            </td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<td class="bouteille">
 				<span><?php echo $embedForm['nb_bouteille']->renderError() ?></span>
