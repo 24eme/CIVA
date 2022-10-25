@@ -180,7 +180,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant->adresse = $e->exploitant->adresse;
                 $compteExploitant->code_postal = $e->exploitant->code_postal;
                 $compteExploitant->commune = $e->exploitant->commune;
-                $compteExploitant->telephone = $e->exploitant->telephone;
+                $compteExploitant->telephone_perso = $e->exploitant->telephone;
                 $compteExploitant->remove('extras');
                 $compteExploitant->add('extras', json_decode($line[self::CSV_EXTRAS]));
                 $compteExploitant->save();
