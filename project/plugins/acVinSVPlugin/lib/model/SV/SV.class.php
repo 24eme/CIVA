@@ -62,7 +62,7 @@ class SV extends BaseSV {
         $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
         $detailKey = self::buildDetailKey($denominationComplementaire, $hidden_denom);
 
-        $hashToAdd = preg_replace("|/declaration/|", '', $hash);
+        $hashToAdd = str_replace("/declaration/", '', $hash);
         $exist = $this->exist('apporteurs/'.$identifiant.'/'.$hashToAdd);
         $produit = $this->apporteurs->add($identifiant)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;
