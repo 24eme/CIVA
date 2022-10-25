@@ -7,22 +7,17 @@
   <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
   <div class="contenu_section">
       <p class="intro">Vous souhaitez :</p>
+      <form action="<?= url_for('sv_etablissement', ['identifiant' => $etablissement->identifiant]) ?>" method="POST">
         <div class="ligne_form">
-            <input type="radio" id="type_declaration_visualisation_avant_import" name="dr[type_declaration]" value="visualisation_avant_import" checked="checked" />
-            <label for="type_declaration_visualisation_avant_import">Démarrer depuis les données de la DR</label>
+          <?php echo $formCreation['type_creation']->renderError() ?>
+          <?php echo $formCreation['type_creation']->render() ?>
         </div>
-        <div class="ligne_form">
-            <input type="radio" id="type_declaration_import" name="dr[type_declaration]" value="import" />
-            <label for="type_declaration_import">Démarrer à partir d'un fichier</label>
+        <div class="ligne_form ligne_btn">
+           <button type="submit" id="mon_espace_civa_valider" class="btn">
+              <img src="/images/boutons/btn_valider.png" alt="Valider" />
+           </button>
         </div>
-        <div class="ligne_form">
-            <input type="radio" id="type_declaration_vierge" name="dr[type_declaration]" value="vierge" />
-            <label for="type_declaration_vierge">Démarrer d'une déclaration vierge</label>
-        </div>
-
-      <div class="ligne_form ligne_btn">
-         <a href="<?php echo url_for('sv_apporteurs', $sv) ?>" id="mon_espace_civa_valider" class="btn"><img src="/images/boutons/btn_valider.png" alt="Valider" /></a>
-      </div>
+      </form>
   </div>
 </div>
 
