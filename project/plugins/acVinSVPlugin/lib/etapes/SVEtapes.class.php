@@ -2,7 +2,7 @@
 class SVEtapes extends Etapes
 {
 	const ETAPE_EXPLOITATION = 'exploitation';
-	const ETAPE_PRODUITS = 'soutirage';
+	const ETAPE_PRODUITS = 'extraction';
 	const ETAPE_APPORTEURS = 'apporteurs';
 	const ETAPE_SAISIE = 'saisie';
 	const ETAPE_VALIDATION = 'validation';
@@ -25,7 +25,7 @@ class SVEtapes extends Etapes
 
 	public static $libelles = array(
         self::ETAPE_EXPLOITATION => 'Exploitation',
-        self::ETAPE_PRODUITS => 'Soutirage',
+        self::ETAPE_PRODUITS => 'Extraction',
         self::ETAPE_APPORTEURS => 'Apporteurs',
         self::ETAPE_SAISIE => 'Saisie',
         self::ETAPE_VALIDATION => 'Validation'

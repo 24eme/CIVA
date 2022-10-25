@@ -1,12 +1,12 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_PRODUITS)); ?>
 
-<h3>Coefficient de soutirage</h3>
+<h3>Coefficient d'extraction</h3>
 <table class="table table-bordered table-striped table-condensed">
   <thead>
     <tr>
       <th class="col-xs-10">Produit</th>
-      <th class="col-xs-2 text-center">Coefficient de soutirage</th>
+      <th class="col-xs-2 text-center">Coefficient d'extraction</th>
     </tr>
   </thead>
 <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
