@@ -23,11 +23,9 @@ class SVClient extends acCouchdbClient {
         foreach ($drs as $id => $doc) {
             $dr = DRClient::getInstance()->find($id);
             foreach ($dr->getProduitsDetails() as $detail) {
-                if(!$detail->getVolumeByAcheteur($cvi_acheteur)) {
-
-                    continue;
+                if($detail->getVolumeByAcheteur($cvi_acheteur)) {
+                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()));
                 }
-                $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()));
             }
             if($dr->recolte->getTotalDontVciVendusByCvi('negoces', $cvi_acheteur) || $dr->recolte->getTotalDontVciVendusByCvi('cooperatives', $cvi_acheteur)) {
                 //$this->addAppellation("declaration/certification/genreVCI");
