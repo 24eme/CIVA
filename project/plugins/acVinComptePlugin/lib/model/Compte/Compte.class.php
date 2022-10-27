@@ -196,12 +196,14 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         $this->extras->add('societes_liees_identifiant', implode('|', $societesLieesId));
         $this->extras->add('code_comptable', $societe->code_comptable_client);
         $this->extras->add('siret', $societe->siret);
+        $this->extras->add('region', $societe->getRegionViticole(false));
 
         if ($this->isEtablissementContact()) {
             $etablissement = $this->getEtablissement();
             $this->extras->add('cvi', $etablissement->cvi);
             $this->extras->add('civaba', $etablissement->num_interne);
             $this->extras->add('no_accises', $etablissement->no_accises);
+            $this->extras->add('region', $etablissement->region);
             $this->extras->add('famille', $etablissement->famille);
             $this->extras->add('declaration_commune', $etablissement->declaration_commune);
             $this->extras->add('declaration_insee', $etablissement->declaration_insee);
