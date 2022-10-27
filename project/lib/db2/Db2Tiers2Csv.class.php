@@ -6,6 +6,7 @@ class Db2Tiers2Csv
     protected $csv = null;
     protected $_insee = null;
     protected $_sous_region_viticole = null;
+    protected $_cooperative = null;
     protected $societesMeres = array();
 
     public function __construct($file) {
@@ -398,11 +399,17 @@ class Db2Tiers2Csv
             $adherentOrganisme = "SYNVIRA";
         }
 
+        $cooperative = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS) == "COP") {
+            $cooperative = $this->getCooperative($this->getInfos($tiers, Db2Tiers::COL_TYPE_DECLARATION));
+        }
+
         $extra = array();
         $extra['date_creation'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CREATION));
         $extra['date_cloture'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CLOTURE));
         $extra['activite'] = $this->concatInfos($tiers, Db2Tiers::COL_TYPE_TIERS);
         $extra['sous_region_viticole'] = $this->getSousRegionViticole($insee_declaration);
+        $extra['cooperative'] = $cooperative;
         $extra['adherent_organisme'] = $adherentOrganisme;
         $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
         if($tiersMaisonMere) {
@@ -609,6 +616,23 @@ class Db2Tiers2Csv
 
         if(array_key_exists($insee, $this->_sous_region_viticole)) {
             return $this->_sous_region_viticole[$insee];
+        } else {
+            return null;
+        }
+    }
+
+    private function getCooperative($key) {
+        if (is_null($this->_cooperative)) {
+            $csv = array();
+            $this->_cooperative = array();
+            foreach (file(sfConfig::get('sf_data_dir') . '/import/Cooperative') as $c) {
+                $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+                $this->_cooperative[$csv[0]] = str_replace(array("\n", "\r"), "", $csv[1]);
+            }
+        }
+
+        if(array_key_exists($key, $this->_cooperative)) {
+            return $this->_cooperative[$key];
         } else {
             return null;
         }
