@@ -404,7 +404,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
 
     public function createCompteSociete($identifiant = null) {
         if ($this->compte_societe) {
-            return;
+            $identifiant = str_replace("COMPTE-", "", $this->compte_societe);
         }
 
         $compte = CompteClient::getInstance()->findOrCreateCompteSociete($this);
@@ -439,9 +439,8 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
     public function save() {
         $this->add('date_modification', date('Y-m-d'));
         $this->interpro = "INTERPRO-declaration";
-
-        if ($this->isSynchroAutoActive() && !$compteMaster) {
-            $compteMaster = $this->getMasterCompte();
+        $compteMaster = $this->getMasterCompte();
+        if (!$compteMaster) {
             $compteMaster = $this->createCompteSociete();
         }
 
@@ -451,7 +450,7 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
 
         parent::save();
 
-        if ($this->isSynchroAutoActive() && $compteMaster->isNew()) {
+        if ($compteMaster && $compteMaster->isNew()) {
             $compteMaster->nom = $this->raison_sociale;
             $compteMaster->save();
         }

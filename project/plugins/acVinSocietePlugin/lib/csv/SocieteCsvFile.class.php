@@ -113,6 +113,9 @@ class SocieteCsvFile extends CompteCsvFile
                 if($nouveau) { $modifications = "Création"; }
 
                 echo $s->_id." (".trim($modifications).")\n";
+                if($nouveau) {
+                    echo $s->compte_societe." (".trim($modifications).")\n";
+                }
 
                 if(isset($line[self::CSV_SOCIETE_LIEE])) {
                     foreach(explode("|", $line[self::CSV_SOCIETE_LIEE]) as $societeLieeId) {
