@@ -414,7 +414,7 @@ class Db2Tiers2Csv
             $carte_pro,
             null,
             null,
-            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
+            ($famille == EtablissementFamilles::FAMILLE_COURTIER || !preg_match('/^C?6(7|8)[0-9]{8}/', $identifiantEtablissement)) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
             $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE),
             null,
             null,
