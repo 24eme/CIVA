@@ -212,6 +212,22 @@ class Db2Tiers2Csv
             $this->societesMeres = $societes;
         }
 
+        foreach($societes as $ks => $etablissements) {
+            foreach($etablissements as $ke => $tiers) {
+                $civaba = null;
+                foreach($tiers as $kt => $t) {
+                    if(!$suspendu && $t->isCloture()) {
+                        $civaba = $t->get(Db2Tiers::COL_CIVABA);
+                        unset($societes[$ks][$ke][$kt]);
+                        continue;
+                    }
+                    if(isset($civaba) && $civaba && !$this->getInfos($tiers, Db2Tiers::COL_CIVABA)) {
+                        $t->set(Db2Tiers::COL_CIVABA, $civaba);
+                    }
+                }
+            }
+        }
+
         foreach($societes as $etablissements) {
             $societesLieesId = array();
             foreach($etablissements as $tiers) {
