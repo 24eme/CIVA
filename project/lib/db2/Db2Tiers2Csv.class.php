@@ -221,7 +221,7 @@ class Db2Tiers2Csv
                         unset($societes[$ks][$ke][$kt]);
                         continue;
                     }
-                    if(isset($civaba) && $civaba && !$this->getInfos($tiers, Db2Tiers::COL_CIVABA)) {
+                    if(isset($civaba) && $civaba && !$this->getInfos($societes[$ks][$ke], Db2Tiers::COL_CIVABA)) {
                         $t->set(Db2Tiers::COL_CIVABA, $civaba);
                     }
                 }
