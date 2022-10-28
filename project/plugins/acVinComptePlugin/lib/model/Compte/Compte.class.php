@@ -205,6 +205,11 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
             $this->extras->add('no_accises', $etablissement->no_accises);
             $this->extras->add('famille', $etablissement->famille);
             $this->extras->add('region', $etablissement->region);
+            if($etablissement->exist('acheteur_raisin')) {
+                $this->extras->add('acheteur_raisin', $etablissement->acheteur_raisin);
+            } else {
+                $this->extras->add('acheteur_raisin', null);
+            }
             $this->extras->add('declaration_commune', $etablissement->declaration_commune);
             $this->extras->add('declaration_insee', $etablissement->declaration_insee);
             $this->extras->add('siret', $etablissement->siret);
