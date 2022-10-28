@@ -1,0 +1,63 @@
+sv:
+  url: /sv
+  param: { module: sv, action: index }
+
+sv_etablissement:
+  url: /sv/etablissement/:identifiant
+  param: { module: sv, action: etablissement }
+  class: EtablissementRoute
+  options:
+    model:    Etablissement
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_exploitation:
+  url: /sv/exploitation/:id
+  param: { module: sv, action: exploitation }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_produits:
+  url: /sv/produits/:id
+  param: { module: sv, action: produits }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_apporteurs:
+  url: /sv/apporteurs/:id
+  param: { module: sv, action: apporteurs }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_saisie:
+  url: /sv/saisie/:id
+  param: { module: sv, action: saisie }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_validation:
+  url: /sv/validation/:id
+  param: { module: sv, action: validation }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]

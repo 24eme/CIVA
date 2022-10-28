@@ -5,6 +5,9 @@ class Db2Tiers2Csv
     protected $file = null;
     protected $csv = null;
     protected $_insee = null;
+    protected $_sous_region_viticole = null;
+    protected $_cooperative = null;
+    protected $societesMeres = array();
 
     public function __construct($file) {
         $this->file = $file;
@@ -206,12 +209,43 @@ class Db2Tiers2Csv
 
         ksort($societes, SORT_NUMERIC);
 
+        if(!$suspendu) {
+            $this->societesMeres = $societes;
+        }
+
+        foreach($societes as $ks => $etablissements) {
+            foreach($etablissements as $ke => $tiers) {
+                $civaba = null;
+                foreach($tiers as $kt => $t) {
+                    if(!$suspendu && $t->isCloture()) {
+                        $civaba = $t->get(Db2Tiers::COL_CIVABA);
+                        unset($societes[$ks][$ke][$kt]);
+                        continue;
+                    }
+                    if(isset($civaba) && $civaba && !$this->getInfos($societes[$ks][$ke], Db2Tiers::COL_CIVABA)) {
+                        $t->set(Db2Tiers::COL_CIVABA, $civaba);
+                    }
+                }
+            }
+        }
+
         foreach($societes as $etablissements) {
             $societesLieesId = array();
             foreach($etablissements as $tiers) {
                 $societeId = $this->importSociete($tiers, $tiers, $societesLieesId);
                 $societesLieesId[] = $societeId;
-                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers);
+                $maisonMereNum = $this->getMaisonMere($tiers);
+                $tiersMaisonMere = null;
+                if($maisonMereNum && isset($societes[$maisonMereNum][$maisonMereNum])) {
+                    $tiersMaisonMere = $societes[$maisonMereNum][$maisonMereNum];
+                }
+                if(!$tiersMaisonMere && $maisonMereNum && isset($this->societesMeres[$maisonMereNum][$maisonMereNum])) {
+                    $tiersMaisonMere = $this->societesMeres[$maisonMereNum][$maisonMereNum];
+                }
+                if(!$tiersMaisonMere) {
+                    $tiersMaisonMere = $tiers;
+                }
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
             }
         }
     }
@@ -233,75 +267,6 @@ class Db2Tiers2Csv
 
         return false;
     }
-
-    /*public function fillArray() {
-        $lines = file($this->file);
-
-        foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
-
-            if($db2Tiers->get(Db2Tiers::COL_NO_STOCK) == $db2Tiers->get(Db2Tiers::COL_MAISON_MERE)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
-            }
-        }
-
-        foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
-
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes)) {
-                continue;
-            }
-
-            $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)] = array();
-        }
-
-        foreach ($lines as $a) {
-            $db2Tiers = new Db2Tiers(str_getcsv($a, ",", '"'));
-
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_NO_STOCK), $societes)) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)]["00000".$db2Tiers->getFamille()][] = $db2Tiers;
-
-                continue;
-            }
-
-            if(array_key_exists($db2Tiers->get(Db2Tiers::COL_MAISON_MERE), $societes) && !array_key_exists("00000".$db2Tiers->getFamille(), $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)])) {
-                $societes[$db2Tiers->get(Db2Tiers::COL_MAISON_MERE)][$db2Tiers->getFamille()][] = $db2Tiers;
-
-                continue;
-            }
-
-            $societes[$db2Tiers->get(Db2Tiers::COL_NO_STOCK)][$db2Tiers->getFamille()][] = $db2Tiers;
-        }
-
-        ksort($societes, SORT_NUMERIC);
-
-        //echo count($societes);
-
-        return;
-
-        foreach($societes as $numSoc => $etablissements) {
-            ksort($etablissements);
-
-            $tiers = current($etablissements);
-
-            $societe = $this->importSociete($tiers, $etablissements);
-
-            if(!$societe) {
-                continue;
-            }
-
-            $num = 1;
-
-            foreach($etablissements as $tiers) {
-                try {
-                    $etablissement = $this->importEtablissement($societe, $tiers, sprintf("%02d", $num), $etablissements);
-                } catch (Exception $e) {
-                    continue;
-                }
-                $num++;
-            }
-        }
-    }*/
 
     protected function importSociete($tiers, $etablissements, $societes_liees_id) {
         $identifiantSociete = $this->buildIdentifiantSociete($tiers);
@@ -357,7 +322,7 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $societes)
+    protected function importEtablissement($societe, $tiers, $societes, $tiersMaisonMere)
     {
         $famille = $this->getFamille($tiers);
         $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
@@ -427,6 +392,34 @@ class Db2Tiers2Csv
             $dateNaissanceExploitant = null;
         }
 
+        $carte_pro = ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null;
+
+        $adherentOrganisme = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_SYNVIRA) == "S") {
+            $adherentOrganisme = "SYNVIRA";
+        }
+
+        $cooperative = null;
+        if($this->getInfos($tiers, Db2Tiers::COL_TYPE_TIERS) == "COP") {
+            $cooperative = $this->getCooperative($this->getInfos($tiers, Db2Tiers::COL_TYPE_DECLARATION));
+        }
+
+        $extra = array();
+        $extra['date_creation'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CREATION));
+        $extra['date_cloture'] = $this->formatDateDb2($this->getInfos($tiers, Db2Tiers::COL_DATE_CLOTURE));
+        $extra['activite'] = $this->concatInfos($tiers, Db2Tiers::COL_TYPE_TIERS);
+        $extra['sous_region_viticole'] = $this->getSousRegionViticole($insee_declaration);
+        $extra['cooperative'] = $cooperative;
+        $extra['adherent_organisme'] = $adherentOrganisme;
+        $extra['site_internet'] = $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET);
+        if($tiersMaisonMere) {
+            $extra['maison_mere_identifiant'] = "SOCIETE-".$this->buildIdentifiantSociete($tiersMaisonMere);
+            $extra['maison_mere_raison_sociale'] = preg_replace('/ +/', ' ', trim($this->getInfos($tiersMaisonMere, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiersMaisonMere, Db2Tiers::COL_NOM_PRENOM)));
+            $extra['maison_mere_siret'] = $this->getInfos($tiersMaisonMere, Db2Tiers::COL_SIRET);
+        }
+        $extra['db2_num_tiers'] = $this->concatInfos($tiers, Db2Tiers::COL_NUM);
+        $extra['db2_num_stock'] = $this->concatInfos($tiers, Db2Tiers::COL_NO_STOCK);
+
         $this->csv[] = array(
             "ETABLISSEMENT",
             $societe,
@@ -441,10 +434,10 @@ class Db2Tiers2Csv
             ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_NUM)  : $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
             $this->getInfos($tiers, Db2Tiers::COL_SIRET),
             $this->getInfos($tiers, Db2Tiers::COL_NO_ASSICES),
-            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? $this->getInfos($tiers, Db2Tiers::COL_SITE_INTERNET) : null,
+            $carte_pro,
             null,
             null,
-            ($famille == EtablissementFamilles::FAMILLE_COURTIER) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
+            ($famille != EtablissementFamilles::FAMILLE_COURTIER && !preg_match('/^C?6(7|8)[0-9]{8}/', $identifiantEtablissement)) ? EtablissementClient::REGION_HORS_CVO : EtablissementClient::REGION_CVO,
             $this->getInfos($tiers, Db2Tiers::COL_ADRESSE_SIEGE),
             null,
             null,
@@ -470,6 +463,7 @@ class Db2Tiers2Csv
             "FR",
             $telExploitant,
             $dateNaissanceExploitant,
+            json_encode($extra)
         );
 
         $this->csv[] = array(
@@ -479,6 +473,7 @@ class Db2Tiers2Csv
             null,
             null,
             $statut,
+            json_encode($extra)
         );
 
         if($this->getInfos($tiers, Db2Tiers::COL_CVI) && $identifiantEtablissement != $this->getInfos($tiers, Db2Tiers::COL_CVI)) {
@@ -489,10 +484,19 @@ class Db2Tiers2Csv
                 null,
                 null,
                 $statut,
+                json_encode($extra)
             );
         }
 
         return;
+    }
+
+    protected function formatDateDb2($date) {
+        if(!$date) {
+             return null;
+        }
+
+        return DateTime::createFromFormat('ymd', str_pad($date, 6, "0", STR_PAD_LEFT))->format('Y-m-d');
     }
 
     protected function buildIdentifiantSociete($tiers) {
@@ -556,6 +560,36 @@ class Db2Tiers2Csv
         return true;
     }
 
+    protected function concatInfos($tiers, $key) {
+        $infos = array();
+
+        foreach($tiers as $t) {
+            $infos[$t->get($key)] = $t->get($key);
+        }
+
+        return implode("|", $infos);
+    }
+
+    protected function getMaisonMere($tiers) {
+        $nums = array();
+        foreach($tiers as $t) {
+            $nums[$t->get(DB2Tiers::COL_NUM)] = $t->get(DB2Tiers::COL_MAISON_MERE);
+        }
+
+        foreach($nums as $num => $maisonMere) {
+            if(isset($nums[$maisonMere])) {
+                unset($nums[$num]);
+            }
+        }
+
+        if(count($nums) == 1) {
+
+            return array_values($nums)[0];
+        }
+
+        return $this->getInfos($tiers, DB2Tiers::COL_MAISON_MERE);
+    }
+
     protected function getInfos($tiers, $key) {
         $val = null;
         foreach($tiers as $t) {
@@ -572,13 +606,47 @@ class Db2Tiers2Csv
         return $val;
     }
 
+    private function getSousRegionViticole($insee) {
+        if(!$insee) {
+
+            return null;
+        }
+
+        $this->getCommune($insee);
+
+        if(array_key_exists($insee, $this->_sous_region_viticole)) {
+            return $this->_sous_region_viticole[$insee];
+        } else {
+            return null;
+        }
+    }
+
+    private function getCooperative($key) {
+        if (is_null($this->_cooperative)) {
+            $csv = array();
+            $this->_cooperative = array();
+            foreach (file(sfConfig::get('sf_data_dir') . '/import/Cooperative') as $c) {
+                $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
+                $this->_cooperative[$csv[0]] = str_replace(array("\n", "\r"), "", $csv[1]);
+            }
+        }
+
+        if(array_key_exists($key, $this->_cooperative)) {
+            return $this->_cooperative[$key];
+        } else {
+            return null;
+        }
+    }
+
     private function getCommune($insee) {
         if (is_null($this->_insee)) {
             $csv = array();
             $this->_insee = array();
+            $this->_sous_region_viticole = array();
             foreach (file(sfConfig::get('sf_data_dir') . '/import/Commune') as $c) {
                 $csv = explode(',', preg_replace('/"/', '', preg_replace('/"\W+$/', '"', $c)));
                 $this->_insee[$csv[0]] = $csv[1];
+                $this->_sous_region_viticole[$csv[0]] = str_replace(array("\n", "\r"), "", $csv[2]);
             }
         }
 

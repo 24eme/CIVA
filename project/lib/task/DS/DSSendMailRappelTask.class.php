@@ -146,7 +146,7 @@ Dominique WOLFF");
         ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
         ->setBody("Bonjour,
 
-La Déclaration de Stocks \"Papier\" a définitivement disparue depuis 2017 et vous devez donc désormais télé-déclarer votre Stock sur le Portail du CIVA.
+La Déclaration de Stocks \"Papier\" a définitivement disparue depuis 2017, vous devez donc désormais télé-déclarer votre Stock sur le Portail du CIVA.
 
 A ce jour nous n'avons pas enregistré de saisie pour la déclaration au 31 juillet ".date('Y').".
 

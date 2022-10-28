@@ -291,7 +291,10 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         $this->initFamille();
         $this->raison_sociale = $societe->raison_sociale;
         $this->interpro = "INTERPRO-declaration";
-        $this->region = EtablissementClient::getInstance()->calculRegion($this);
+
+        if($this->region != EtablissementClient::REGION_HORS_CVO) {
+            $this->region = EtablissementClient::getInstance()->calculRegion($this);
+        }
 
         if($this->isNew() || $this->_id_societe_origine) {
             $societe->addEtablissement($this);

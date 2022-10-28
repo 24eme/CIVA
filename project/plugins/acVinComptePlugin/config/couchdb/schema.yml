@@ -55,6 +55,12 @@ Compte:
       date_modification: { required: false }
       date_creation: { required: false}
       statut: {  }
+      extras:
+        type: collection
+        required: false
+        definition:
+          fields:
+            '*': { }
       tags:
         type: collection
         definition:
