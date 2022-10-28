@@ -188,6 +188,7 @@ class EtablissementCsvFile extends CompteCsvFile
                 }
                 $compteExploitant->remove('extras');
                 $compteExploitant->add('extras', json_decode($line[self::CSV_EXTRAS]));
+                $compteExploitant->save();
 
                 $eFinal = new acCouchdbJsonNative($compteExploitant->toJson());
                 $diffFinal = $eFinal->diff($eOrigin);
@@ -197,13 +198,13 @@ class EtablissementCsvFile extends CompteCsvFile
                 if(!count($diffFinal) && !count($diffOrigin)) {
                     continue;
                 }
+
                 $modifications = null;
                 foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
                 foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
                 echo $compteExploitant->_id." (".trim($modifications).")\n";
 
-                $compteExploitant->save();
             } catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";
             }
