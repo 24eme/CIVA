@@ -23,6 +23,15 @@ SV:
             code_postal: {   }
             region: {  }
             famille: {  }
+      extraction:
+        type: collection
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  taux: {}
       apporteurs:
         type: collection
         class: SVApporteurs
