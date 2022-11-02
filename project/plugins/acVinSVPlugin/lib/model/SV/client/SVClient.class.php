@@ -15,6 +15,7 @@ class SVClient extends acCouchdbClient {
         $sv->periode = '2021';
         $sv->campagne = '2021-2022';
         $sv->constructId();
+        $sv->storeDeclarant();
         $cvi_acheteur = $etablissement->getCvi();
         if(!$cvi_acheteur) {
             return;
