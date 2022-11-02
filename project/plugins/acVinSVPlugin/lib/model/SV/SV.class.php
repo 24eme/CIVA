@@ -13,7 +13,7 @@ class SV extends BaseSV {
     }
 
     public function constructId() {
-        $id = 'SV-' . $this->identifiant . '-' . $this->periode;
+        $id = $this->type.'-' . $this->identifiant . '-' . $this->periode;
         $this->set('_id', $id);
     }
 
