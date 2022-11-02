@@ -4,9 +4,10 @@
  *
  */
 
-class SV extends BaseSV {
-
+class SV extends BaseSV implements InterfaceDeclarantDocument
+{
     const DEFAULT_KEY = 'DEFAUT';
+    protected $declarant_document = null;
 
     public function getConfiguration() {
         return ConfigurationClient::getInstance()->getCurrent();
@@ -15,6 +16,25 @@ class SV extends BaseSV {
     public function constructId() {
         $id = $this->type.'-' . $this->identifiant . '-' . $this->periode;
         $this->set('_id', $id);
+    }
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->initDocuments();
+    }
+
+    public function initDocuments()
+    {
+        $this->declarant_document = new DeclarantDocument($this);
+    }
+
+    public function getEtablissementObject() {
+        return $this->getEtablissement();
+    }
+
+    public function storeDeclarant() {
+        $this->declarant_document->storeDeclarant();
     }
 
     public function getProduits($region = null) {
