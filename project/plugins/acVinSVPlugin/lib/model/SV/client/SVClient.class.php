@@ -11,7 +11,7 @@ class SVClient extends acCouchdbClient {
     {
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
 
-        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$this->etablissement->identifiant.'-'.$campagne);
+        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->identifiant.'-'.$campagne);
     }
 
     public static function getTypeByEtablissement($etablissement) {
