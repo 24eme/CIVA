@@ -21,7 +21,7 @@ class SVProduit extends BaseSVProduit {
 		return $this->_get('libelle');
 	}
 
-    public function getCoefficient() {
+    public function getTauxExtraction() {
         if($this->getQuantiteRecolte() > 0 && $this->getVolumeRevendique() > 0) {
 
             return round($this->getQuantiteRecolte() / $this->getVolumeRevendique(), 2);
