@@ -438,23 +438,24 @@ class dr_recolteActions extends _DRActions {
 
                     if($appellation->getConfig()->hasManyLieu() && $lieu->getConfig()->getRendementCepage()) {
                         $this->rendement[$appellation->getLibelle()]['cepage'][$lieu->getConfig()->getRendementCepage()][$lieu->getLibelle()] = 1;
-    				} else {
+    				}
         				if ($lieu->getConfig()->getRendementNoeud()) {
         					$rd = $lieu->getConfig()->getRendementNoeud();
         					$this->rendement[$appellation->getLibelle()]['appellation'][$rd][$lieu->getLibelle()] = 1;
         				}
-    					foreach($lieu->getCouleurs() as $couleur) {
-    	    				foreach ($couleur->getConfig()->getCepages() as $key => $cepage_config) {
+    					foreach($lieu->getConfig()->getCouleurs() as $couleur) {
+    	    				foreach ($couleur->getCepages() as $key => $cepage_config) {
     	    					if($cepage_config->hasMinQuantite()) {
     	    						$this->min_quantite = $cepage_config->attributs->min_quantite * 100 ;
     	    						$this->max_quantite = $cepage_config->attributs->max_quantite * 100 ;
     	    					}
-    	    					if($cepage_config->getRendementCepage()) {
+    	    					if($cepage_config->getRendementCepage() && (!$lieu->getLibelle() || !isset($this->rendement[$appellation->getLibelle()]['cepage'][$cepage_config->getRendementCepage()]))) {
                                     $this->rendement[trim($appellation->getLibelle()." ".$lieu->getLibelle())]['cepage'][$cepage_config->getRendementCepage()][$cepage_config->getLibelle()] = 1;
     	    					}
     	    				}
     					}
-    				}
+
+
                 }
 			}
     	}
