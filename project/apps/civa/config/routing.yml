@@ -43,6 +43,20 @@ mon_espace_civa_dr_acheteur:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+mon_espace_civa_production_compte:
+  url:   /mon_espace_civa_compte/:identifiant/production
+  param: { module: tiers, action: monEspaceCompteProduction }
+  class: CompteRoute
+  options: { model: Compte, type: object }
+  requirements: { sf_method: [get, post] }
+
+mon_espace_civa_production:
+  url:   /mon_espace_civa/:identifiant/production
+  param: { module: tiers, action: monEspaceProduction }
+  class: EtablissementRoute
+  options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
 mon_espace_civa_ds_compte:
   url:   /mon_espace_civa_compte/:identifiant/ds/:type
   param: { module: tiers, action: monEspaceCompteDS }
