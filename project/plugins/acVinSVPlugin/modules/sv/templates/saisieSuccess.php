@@ -4,49 +4,20 @@
 <form action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
   <?php echo $form->renderGlobalErrors(); ?>
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th class="col-xs-3">Apporteur</th>
-        <th class="col-xs-3">Produit</th>
-        <th class="col-xs-1 text-center">Superficie récolté<br /><small>(ares)</small></th>
-        <?php if($type != "SV11"): ?>
-        <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
-        <th class="col-xs-1 text-center">Taux d'extraction</th>
-        <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
-        <?php else: ?>
-        <th class="col-xs-1 text-center">Volume récolté<br /><small>(hl)</small></th>
-        <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
-        <th class="col-xs-1 text-center">Usage industriels<br /><small>(hl)</small></th>
-        <th class="col-xs-1 text-center">VCI<br /><small>(hl)</small></th>
-        <?php endif; ?>
-      </tr>
-    </thead>
-  <?php foreach($form['produits'] as $hash => $formProduit): ?>
-  <?php $produit = $sv->get($hash); ?>
-    <tr>
-      <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
-    <td><?php echo $produit->libelle ?></td>
-    <td><?php echo $formProduit['superficie_recolte']->render() ?></td>
-    <?php if($type != "SV11"): ?>
-    <td><?php echo $formProduit['quantite_recolte']->render() ?></td>
-    <td><?php echo $formProduit['taux_extraction']->render() ?></td>
-    <td><?php echo $formProduit['volume_revendique']->render() ?></td>
-    <?php else: ?>
-      <td><?php echo $formProduit['volume_recolte']->render() ?></td>
-      <td><?php echo $formProduit['volume_revendique']->render() ?></td>
-      <td><?php echo $formProduit['usages_industriels']->render() ?></td>
-      <td><?php echo $formProduit['vci']->render() ?></td>
-    <?php endif; ?>
-  </tr>
-  <?php endforeach; ?>
-  </table>
+
+  <?php if($type == "SV11"): ?>
+    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv]) ?>
+  <?php else: ?>
+    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv]) ?>
+  <?php endif ?>
 
   <div class="row">
     <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-6 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
   </div>
 </form>
+
+<?php if($type == "SV12"): ?>
 <script>
   let calculVolumeRenvendique = function(ligne) {
     let input_quantite = ligne.querySelector('.input_quantite');
@@ -107,3 +78,4 @@
     });
   });
 </script>
+<?php endif ?>
