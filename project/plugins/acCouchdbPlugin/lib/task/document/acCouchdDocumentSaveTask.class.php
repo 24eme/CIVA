@@ -34,8 +34,10 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
     $doc = acCouchdbManager::getClient()->find($arguments['doc_id']);
+    $rev = $doc->_rev;
     $doc->save();
-
-    echo "Document ".$doc->_id."@".$doc->_rev." saved\n";
+    if($rev != $doc->_rev) {
+        echo "Document ".$doc->_id."@".$doc->_rev." saved\n";
+    }
   }
 }

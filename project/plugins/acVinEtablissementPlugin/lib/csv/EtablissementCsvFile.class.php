@@ -145,25 +145,24 @@ class EtablissementCsvFile extends CompteCsvFile
                 $diffOrigin = $eOrigin->diff($eFinal);
                 $nouveau = $e->isNew();
 
-                if(!count($diffFinal) && !count($diffOrigin)) {
-                    continue;
+                if(count($diffFinal) || count($diffOrigin)) {
+                    $modifications = null;
+                    foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                    foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
+                    if($nouveau) { $modifications = "Création"; }
+
+                    $e->save();
+
+                    if($familleOrigine && $e->famille && $familleOrigine != $e->famille) {
+                        $compte = $e->getMasterCompte();
+                        $compte->remove('droits');
+                        $compte->save();
+
+                        $modifications .= "(réinitialisation des droits du compte)";
+                    }
+
+                    echo $e->_id." (".trim($modifications).")\n";
                 }
-                $modifications = null;
-                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
-                foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
-                if($nouveau) { $modifications = "Création"; }
-
-                $e->save();
-
-                if($familleOrigine && $e->famille && $familleOrigine != $e->famille) {
-                    $compte = $e->getMasterCompte();
-                    $compte->remove('droits');
-                    $compte->save();
-
-                    $modifications .= "(réinitialisation des droits du compte)";
-                }
-
-                echo $e->_id." (".trim($modifications).")\n";
 
                 $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'00');
                 if(!$compteExploitant) {
@@ -171,6 +170,8 @@ class EtablissementCsvFile extends CompteCsvFile
                     $compteExploitant->identifiant = $s->identifiant.'00';
                     $compteExploitant->constructId();
                 }
+
+                $eOrigin = new acCouchdbJsonNative($compteExploitant->toJson());
 
                 $compteExploitant->fonction = "Exploitant";
                 $compteExploitant->statut = $e->statut;
@@ -180,11 +181,29 @@ class EtablissementCsvFile extends CompteCsvFile
                 $compteExploitant->adresse = $e->exploitant->adresse;
                 $compteExploitant->code_postal = $e->exploitant->code_postal;
                 $compteExploitant->commune = $e->exploitant->commune;
-                $compteExploitant->telephone = $e->exploitant->telephone;
+
+                $compteExploitant->telephone_perso = null;
+                if($e->exploitant->telephone != $e->telephone) {
+                    $compteExploitant->telephone_perso = $e->exploitant->telephone;
+                }
                 $compteExploitant->remove('extras');
                 $compteExploitant->add('extras', json_decode($line[self::CSV_EXTRAS]));
                 $compteExploitant->save();
-                echo $compteExploitant->_id."\n";
+
+                $eFinal = new acCouchdbJsonNative($compteExploitant->toJson());
+                $diffFinal = $eFinal->diff($eOrigin);
+                $diffOrigin = $eOrigin->diff($eFinal);
+                $nouveau = $compteExploitant->isNew();
+
+                if(!count($diffFinal) && !count($diffOrigin)) {
+                    continue;
+                }
+
+                $modifications = null;
+                foreach($diffFinal as $key => $value) { $modifications .= "$key: $value ";}
+                foreach($diffOrigin as $key => $value) { $modifications .= "$key: -$value ";}
+                if($nouveau) { $modifications = "Création"; }
+                echo $compteExploitant->_id." (".trim($modifications).")\n";
 
             } catch(Exception $e) {
                 echo $e->getMessage()." ".$line[self::CSV_ID]."\n";

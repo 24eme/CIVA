@@ -29,4 +29,9 @@ class Db2 {
         }
         return ($this->_data[$column]) ? $this->_data[$column] : null;
     }
+
+    public function set($column, $value) {
+
+        $this->_data[$column] = $value;
+    }
 }

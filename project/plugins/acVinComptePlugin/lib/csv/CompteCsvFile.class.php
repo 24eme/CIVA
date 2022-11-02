@@ -79,8 +79,11 @@ class CompteCsvFile extends CsvFile
                     $updateDroits = true;
                 }
 
-                $c->remove('extras');
-                $c->add('extras', json_decode($line[self::CSV_EXTRAS]));
+                $extras = (array) json_decode($line[self::CSV_EXTRAS]);
+                if($c->exist('extras')) {
+                    $extras = array_merge($c->extras->toArray(true, false), $extras);
+                }
+                $c->add('extras', $extras);
 
                 $cFinal = new acCouchdbJsonNative($c->toJson());
                 $diffFinal = $cFinal->diff($cOrigin);
@@ -96,6 +99,9 @@ class CompteCsvFile extends CsvFile
                 foreach($diffOrigin as $key => $value) { $modifications .= " $key: -$value ";}
                 if($nouveau) { $modifications = "Création"; }
                 if($updateDroits) { $modifications .= " (mise à jour des droits)"; }
+
+                $c->remove('extras');
+                $c->add('extras', json_decode($line[self::CSV_EXTRAS]));
 
                 $c->save();
 

@@ -42,6 +42,11 @@ done;
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
 
+cd $GIILDA_BASEDIR
+php symfony export:comptes $SYMFONYTASKOPTIONS > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv
+iconv -f UTF8 -t ISO88591//TRANSLIT $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.csv
+cd -
+
 if test "$METABASE_SQLITE"; then
     cp $METABASE_SQLITE $METABASE_SQLITE".tmp"
     python $BASEDIR"/bin/csv2sql.py" $METABASE_SQLITE".tmp" $PATH_MISEADISPO_CIVA/export/bi
