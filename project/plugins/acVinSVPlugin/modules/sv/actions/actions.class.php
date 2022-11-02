@@ -37,6 +37,20 @@ class svActions extends sfActions {
     public function executeProduits(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+        $this->form = new SVExtractionForm($this->sv);
+
+        if (! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+        $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }
 
     public function executeApporteurs(sfWebRequest $request) {

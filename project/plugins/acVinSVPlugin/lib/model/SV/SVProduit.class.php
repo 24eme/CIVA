@@ -27,7 +27,20 @@ class SVProduit extends BaseSVProduit {
             return round($this->getQuantiteRecolte() / $this->getVolumeRevendique(), 2);
         }
 
-        return 130;
+        return $this->getTauxExtractionDefault();
+    }
+
+    public function getTauxExtractionDefault()
+    {
+        $noeud = str_replace('/declaration/', '', $this->getProduitHash());
+
+        if ($this->getDocument()->extraction->exist($noeud) && $this->getDocument()->extraction->get($noeud)->taux_extraction) {
+            $default_taux = $this->getDocument()->extraction->get($noeud)->taux_extraction;
+        } else {
+            $default_taux = (strpos($noeud, 'EFF') !== false) ? 150 : 130;
+        }
+
+        return $default_taux;
     }
 
 	public function getLibelleComplet()
