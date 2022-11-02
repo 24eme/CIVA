@@ -7,11 +7,33 @@ class SVClient extends acCouchdbClient {
         return acCouchdbManager::getClient("SV");
     }
 
+    public function findByIdentifiantAndCampagne($identifiant, $campagne)
+    {
+        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
+
+        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->identifiant.'-'.$campagne);
+    }
+
+    public static function getTypeByEtablissement($etablissement) {
+        $type = null;
+
+        if($etablissement->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
+            $type = 'SV11';
+        } elseif($etablissement->famille == EtablissementFamilles::FAMILLE_NEGOCIANT) {
+            $type = 'SV12';
+        } else {
+            throw new Exception("La famille ".$etablissement->famille." ne peut pas faire de document de production");
+        }
+
+        return $type;
+    }
+
     public function createFromDR($identifiant, $campagne)
     {
         $sv = new SV();
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
         $sv->identifiant = $etablissement->identifiant;
+        $sv->type = SVClient::getTypeByEtablissement($etablissement);
         $sv->periode = '2021';
         $sv->campagne = '2021-2022';
         $sv->constructId();

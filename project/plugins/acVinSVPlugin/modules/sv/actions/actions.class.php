@@ -8,7 +8,7 @@ class svActions extends sfActions {
     public function executeEtablissement(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
 
-        if ($sv = SVClient::getInstance()->find('SV-'.$this->etablissement->identifiant.'-2021')) {
+        if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, '2021')) {
             $this->redirect('sv_exploitation', ['id' => $sv->_id]);
         }
 

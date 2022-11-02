@@ -14,7 +14,7 @@ class SV extends BaseSV implements InterfaceDeclarantDocument
     }
 
     public function constructId() {
-        $id = 'SV-' . $this->identifiant . '-' . $this->periode;
+        $id = $this->type.'-' . $this->identifiant . '-' . $this->periode;
         $this->set('_id', $id);
     }
 
