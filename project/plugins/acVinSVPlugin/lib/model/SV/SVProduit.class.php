@@ -34,8 +34,8 @@ class SVProduit extends BaseSVProduit {
     {
         $noeud = str_replace('/declaration/', '', $this->getProduitHash());
 
-        if ($this->getDocument()->extraction->exist($noeud) && $this->getDocument()->extraction->get($noeud)->taux) {
-            $default_taux = $this->getDocument()->extraction->get($noeud)->taux;
+        if ($this->getDocument()->extraction->exist($noeud) && $this->getDocument()->extraction->get($noeud)->taux_extraction) {
+            $default_taux = $this->getDocument()->extraction->get($noeud)->taux_extraction;
         } else {
             $default_taux = (strpos($noeud, 'EFF') !== false) ? 150 : 130;
         }

@@ -15,8 +15,8 @@
   <tbody>
     <?php foreach ($form['produits'] as $produit): ?>
       <tr>
-        <td><?php echo $produit['taux']->renderLabel() ?></td>
-        <td><?php echo $produit['taux']->render(['class' => 'form-control text-right input-float input-sm']) ?></td>
+        <td><?php echo $produit['taux_extraction']->renderLabel() ?></td>
+        <td><?php echo $produit['taux_extraction']->render(['class' => 'form-control text-right input-float input-sm']) ?></td>
       </tr>
     <?php endforeach ?>
   </tbody>
