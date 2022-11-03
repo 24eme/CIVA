@@ -33,6 +33,13 @@ class SV extends BaseSV implements InterfaceDeclarantDocument
         return $this->getEtablissement();
     }
 
+    public function getEtablissement() {
+         $etablissement = EtablissementClient::getInstance()->find($this->identifiant);
+
+         return $etablissement;
+    }
+
+
     public function storeDeclarant() {
         $this->declarant_document->storeDeclarant();
     }
