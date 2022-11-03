@@ -90,7 +90,7 @@ td.echeance {display: inline;}
 				Frais annexes en sus à la charge du vendeur
 			</td>
 			<td>
-				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucunes'; ?>
+				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -100,7 +100,7 @@ td.echeance {display: inline;}
 				Primes diverses à la charge de l'acheteur
 			</td>
 			<td>
-				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucunes'; ?>
+				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -110,7 +110,7 @@ td.echeance {display: inline;}
 				Résiliation hors cas de force majeur
 			</td>
 			<td>
-				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucunes'; ?>
+				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -119,7 +119,7 @@ td.echeance {display: inline;}
 				Délais de paiement
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
@@ -159,16 +159,16 @@ td.echeance {display: inline;}
 				Critères et modalités d’évolution des prix
 			</td>
 			<td>
-				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucunes'; ?>
+				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
         <tr class="alt">
 			<td>
-				Autre clauses particulières
+				Autres clauses particulières
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
 			</td>
 		</tr>
 	</tbody>
