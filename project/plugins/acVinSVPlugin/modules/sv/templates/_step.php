@@ -1,6 +1,6 @@
 <?php
-$etapeMax = ($object->exist('etape') && $object->etape)? $object->etape : null;
-$stepNum = $etapes->getEtapeNum($etapeMax);
+$etapeMax = ($object->exist('etape') && $object->etape)? $object->etape : $step;
+$stepNum = $etapes->getEtapeNum($step);
 ?>
 <nav class="navbar navbar-default nav-step">
     <ul class="nav navbar-nav">
@@ -16,7 +16,7 @@ $stepNum = $etapes->getEtapeNum($etapeMax);
     }else{
        echo url_for($etapes->getRouteLink($k), $object);
     }
-    ?>" class="<?php echo strtolower($k); ?> <?php if(isset($ajax) && $ajax): ?>ajax<?php endif; ?>"><?php echo str_replace('%campagne%', intval($object->campagne) - 1, $etapes->getLibelle($k, $object, ESC_RAW));?></a>
+    ?>" class="<?php echo strtolower($k); ?> <?php if(isset($ajax) && $ajax): ?>ajax<?php endif; ?>"><span><?php echo str_replace('%campagne%', intval($object->campagne) - 1, $etapes->getLibelle($k, $object, ESC_RAW));?></span><small class="hidden">Etape <?php echo $num + 1 ?></small></a>
         </li>
     <?php endforeach; ?>
     </ul>
