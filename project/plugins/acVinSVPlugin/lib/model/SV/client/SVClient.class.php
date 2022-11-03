@@ -2,6 +2,9 @@
 
 class SVClient extends acCouchdbClient {
 
+    const TYPE_SV11 = "SV11";
+    const TYPE_SV12 = "SV12";
+
     public static function getInstance()
     {
         return acCouchdbManager::getClient("SV");

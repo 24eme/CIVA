@@ -3,7 +3,17 @@
 
 <h3>Autres</h3>
 
-<form action="" method="POST">
+<form action="" method="POST" id="form_autres">
+<?php echo $form->renderHiddenFields() ?>
+<div class="form-group">
+  <?php echo $form['lies']->renderLabel(null, ['class' => 'col-xs-4 control-label']) ?>
+  <?php echo $form['lies']->render(['class' => 'form-control']) ?>
+</div>
+
+<div class="form-group">
+  <?php echo $form['mouts']->renderLabel(null, ['class' => 'col-xs-4 control-label']) ?>
+  <?php echo $form['mouts']->render(['class' => 'form-control']) ?>
+</div>
 
 </form>
 
