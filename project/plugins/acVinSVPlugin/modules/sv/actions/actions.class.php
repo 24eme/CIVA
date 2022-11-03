@@ -29,6 +29,14 @@ class svActions extends sfActions {
         $this->redirect('sv_exploitation', ['id' => $sv->_id]);
     }
 
+    public function executeCreateFromCSV(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $sv = SVClient::getInstance()->createFromCSV($this->etablissement->identifiant, "2021", file_get_contents(sfConfig::get('sf_data_dir').'/sv12.csv'));
+        $sv->save();
+
+        return $this->redirect('sv_validation', $sv);
+    }
+
     public function executeExploitation(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
