@@ -17,7 +17,7 @@
   </div>
 </form>
 
-<?php if($sv->getType() == SVClient::SV12): ?>
+<?php if($sv->getType() == SVClient::TYPE_SV12): ?>
 <script>
   let calculVolumeRenvendique = function(ligne) {
     let input_quantite = ligne.querySelector('.input_quantite');
