@@ -132,9 +132,19 @@ class SVClient extends acCouchdbClient {
             }
 
             $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash());
+
             $produit->superficie_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
-            $produit->quantite_recolte += (int) $line[CsvFileAcheteur::CSV_QUANTITE];
-            $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_REVENDIQUE]);
+
+            if($sv->getType() == SVClient::TYPE_SV12) {
+                $produit->quantite_recolte += (int) $line[CsvFileAcheteur::CSV_QUANTITE];
+                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_REVENDIQUE]);
+            }
+            if($sv->getType() == SVClient::TYPE_SV11) {
+                $produit->volume_recolte += (int) $line[CsvFileAcheteur::CSV_VOLUME];
+                $produit->volume_detruit += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_DPLC + 1]);
+                $produit->volume_vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI + 1]);
+                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_REVENDIQUE]);
+            }
         }
 
         return $sv;

@@ -63,6 +63,7 @@ SV:
                               volume_recolte: { type: float }
                               volume_revendique: { type: float }
                               volume_detruit: { type: float }
+                              vci: { type: float }
       lies: { type: float }
       mouts: { type: float }
       valide:
