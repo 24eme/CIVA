@@ -14,10 +14,14 @@ class CsvFileAcheteur
   const CSV_DENOMINATION = 8;
   const CSV_SUPERFICIE = 9;
   const CSV_VOLUME = 10;
-  const CSV_QUANTITE = 11;
-  const CSV_VOLUME_REVENDIQUE = 14;
   const CSV_VOLUME_DPLC = 11;
   const CSV_VOLUME_VCI = 15;
+
+  const CSV_SV_QUANTITE_VF = 10;
+  const CSV_SV_VOLUME_VF = 11;
+  const CSV_SV_VOLUME_DPLC = 12;
+  const CSV_SV_VOLUME_VCI = 13;
+  const CSV_SV_VOLUME_PRODUIT = 14;
 
   private $file = null;
   private $separator = null;
@@ -113,7 +117,10 @@ class CsvFileAcheteur
   }
 
   public static function recodeNumber($value) {
+      if(!$value) {
 
+          return 0;
+      }
       return round(str_replace(",", ".", $value)*1, 2);
   }
 }

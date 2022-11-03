@@ -136,14 +136,14 @@ class SVClient extends acCouchdbClient {
             $produit->superficie_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
             if($sv->getType() == SVClient::TYPE_SV12) {
-                $produit->quantite_recolte += (int) $line[CsvFileAcheteur::CSV_QUANTITE];
-                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_REVENDIQUE]);
+                $produit->quantite_recolte += (int) $line[CsvFileAcheteur::CSV_SV_QUANTITE_VF];
+                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
             }
             if($sv->getType() == SVClient::TYPE_SV11) {
-                $produit->volume_recolte += (int) $line[CsvFileAcheteur::CSV_VOLUME];
-                $produit->volume_detruit += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_DPLC + 1]);
-                $produit->volume_vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI + 1]);
-                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_REVENDIQUE]);
+                $produit->volume_recolte += (int) $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
+                $produit->volume_detruit += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC]);
+                $produit->vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]);
+                $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
             }
         }
 
