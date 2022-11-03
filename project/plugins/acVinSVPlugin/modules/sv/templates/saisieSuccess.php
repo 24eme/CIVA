@@ -5,7 +5,7 @@
   <?php echo $form->renderHiddenFields(); ?>
   <?php echo $form->renderGlobalErrors(); ?>
 
-  <?php if($type == "SV11"): ?>
+  <?php if($sv->getType() === SVClient::TYPE_SV11): ?>
     <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv]) ?>
   <?php else: ?>
     <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv]) ?>

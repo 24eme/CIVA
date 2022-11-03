@@ -75,9 +75,8 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
-        $this->type = $request->getParameter('type', "SV12");
 
-        $this->form = new SVSaisieForm($this->sv, $this->cvi, $this->type);
+        $this->form = new SVSaisieForm($this->sv, $this->cvi);
 
         if (!$request->isMethod(sfWebRequest::POST)) {
         	return sfView::SUCCESS;
