@@ -67,4 +67,14 @@ class SVEtapes extends Etapes
 		return $this->filterItems(self::$libelles);
     }
 
+    public function isEtapeDisabled($etape, $doc)
+    {
+        if ($doc->getType() === SVClient::TYPE_SV11) {
+            if ($etape === self::ETAPE_EXTRACTION) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

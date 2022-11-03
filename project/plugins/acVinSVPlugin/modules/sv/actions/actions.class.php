@@ -37,6 +37,14 @@ class svActions extends sfActions {
     public function executeExtraction(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        if (SVEtapes::getInstance()->isEtapeDisabled(SVEtapes::ETAPE_EXTRACTION, $this->sv)) {
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getNext(SVEtapes::ETAPE_EXTRACTION)],
+                $this->sv
+            );
+        }
+
         $this->form = new SVExtractionForm($this->sv);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
