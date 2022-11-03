@@ -14,6 +14,8 @@ class CsvFileAcheteur
   const CSV_DENOMINATION = 8;
   const CSV_SUPERFICIE = 9;
   const CSV_VOLUME = 10;
+  const CSV_QUANTITE = 11;
+  const CSV_VOLUME_REVENDIQUE = 14;
   const CSV_VOLUME_DPLC = 11;
   const CSV_VOLUME_VCI = 15;
 
@@ -78,5 +80,40 @@ class CsvFileAcheteur
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
       array_shift($this->csvdata);
     return $this->csvdata;
+  }
+
+  public static function identifyProductCSV($line) {
+      $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
+      $appellation = preg_replace("/^0$/", "", $appellation);
+      $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);
+
+      $lieu = $line[CsvFileAcheteur::CSV_LIEU];
+      $lieu = preg_replace("/^0$/", "", $lieu);
+
+      $cepage = $line[CsvFileAcheteur::CSV_CEPAGE];
+      $cepage = preg_replace("/^0$/", "", $cepage);
+      $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
+      $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
+      $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
+
+      if(preg_match("/(AOC ALSACE PINOT NOIR|AOC ALSACE PN ROUGE)/i", $appellation)) {
+          $cepage = null;
+      }
+
+      $vtsgn = $line[CsvFileAcheteur::CSV_VTSGN];
+      $vtsgn = preg_replace("/^0$/", "", $vtsgn);
+
+      $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s %s", $appellation, $lieu, $cepage, $vtsgn)));
+
+      if(!$produit) {
+          $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s", $appellation, $cepage, $vtsgn)));
+      }
+
+      return $produit;
+  }
+
+  public static function recodeNumber($value) {
+
+      return round(str_replace(",", ".", $value)*1, 2);
   }
 }
