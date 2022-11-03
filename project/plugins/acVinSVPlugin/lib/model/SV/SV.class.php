@@ -61,13 +61,39 @@ class SV extends BaseSV implements InterfaceDeclarantDocument
                 $recap[$produit->getProduitHash()] = new stdClass();
                 $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
                 $recap[$produit->getProduitHash()]->superficie_recolte = 0;
-                $recap[$produit->getProduitHash()]->quantite_recolte = 0;
+
+                if ($this->getType() === SVClient::TYPE_SV11) {
+                    $recap[$produit->getProduitHash()]->volume_recolte = 0;
+                    $recap[$produit->getProduitHash()]->usages_industriels = 0;
+                    $recap[$produit->getProduitHash()]->vci = 0;
+                }
+
+                if ($this->getType() === SVClient::TYPE_SV12) {
+                    $recap[$produit->getProduitHash()]->quantite_recolte = 0;
+                }
+
                 $recap[$produit->getProduitHash()]->volume_revendique = 0;
                 $recap[$produit->getProduitHash()]->apporteurs = array();
             }
+
             $recapProduit = $recap[$produit->getProduitHash()];
             $recapProduit->superficie_recolte += $produit->superficie_recolte;
-            $recapProduit->quantite_recolte += $produit->quantite_recolte;
+
+            if ($this->getType() === SVClient::TYPE_SV11) {
+                $recapProduit->volume_recolte += $produit->volume_recolte;
+                $recapProduit->usages_industriels += (isset($produit->usages_industriels))
+                    ?  $produit->usages_industriels
+                    : 0;
+                $recapProduit->vci += (isset($produit->vci))
+                    ? $produit->vci
+                    : 0;
+
+            }
+
+            if ($this->getType() === SVClient::TYPE_SV12) {
+                $recapProduit->quantite_recolte += $produit->quantite_recolte;
+            }
+
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
         }
