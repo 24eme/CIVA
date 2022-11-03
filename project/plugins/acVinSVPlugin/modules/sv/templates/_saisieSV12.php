@@ -7,6 +7,7 @@
       <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
       <th class="col-xs-1 text-center">Taux d'extraction</th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
+      <th class="col-xs-1 text-center">Volume de moûts<br /><small>(hl)</small></th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,7 @@
       <td><?php echo $formProduit['quantite_recolte']->render() ?></td>
       <td><?php echo $formProduit['taux_extraction']->render() ?></td>
       <td><?php echo $formProduit['volume_revendique']->render() ?></td>
+      <td><?php echo $formProduit['volume_mouts']->render() ?></td>
     </tr>
   <?php endforeach ?>
   </tbody>
