@@ -5,9 +5,9 @@ class SVSaisieForm extends acCouchdbForm
     protected $cvi = null;
     protected $type = null;
 
-	public function __construct(acCouchdbDocument $doc, $cvi = null, $type = "SV", $defaults = array(), $options = array(), $CSRFSecret = null) {
+	public function __construct(acCouchdbDocument $doc, $cvi = null, $defaults = array(), $options = array(), $CSRFSecret = null) {
         $this->cvi = $cvi;
-        $this->type = $type;
+        $this->type = $doc->getType();
         parent::__construct($doc, $defaults, $options, $CSRFSecret);
     }
 
