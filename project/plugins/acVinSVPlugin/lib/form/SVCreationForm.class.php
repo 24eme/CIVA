@@ -15,13 +15,17 @@ class SVCreationForm extends BaseForm
 
     public function configure()
     {
+        $this->setWidget('file', new sfWidgetFormInputFile(array('label' => 'Fichier')));
+        $this->setValidator('file', new ValidatorImportCsv(array('file_path' => sfConfig::get('sf_data_dir').'/upload', 'required' => false)));
+
         $this->setWidget('type_creation', new sfWidgetFormChoice([
             'expanded' => true,
             'choices' => $this->getTypeCreationChoices()
         ]));
 
         $this->setValidator('type_creation', new sfValidatorChoice([
-            'choices' => array_keys($this->getTypeCreationChoices())
+            'choices' => array_keys($this->getTypeCreationChoices()),
+            'required' => false
         ]));
 
         $this->widgetSchema->setNameFormat('sv_creation[%s]');
@@ -30,18 +34,22 @@ class SVCreationForm extends BaseForm
     protected function getTypeCreationChoices()
     {
         return [
-            'DR' => 'Démarrer depuis les données de la DR',
             'CSV' => 'Démarrer à partir d\'un fichier',
+            'DR' => 'Démarrer depuis les données de la DR',
             'VIERGE' => 'Démarrer avec un document vierge'
         ];
     }
 
     public function save()
     {
-        //TODO: faire quelquechose avec le type de création
-        // if value === TYPE_DR
-        $sv = SVClient::getInstance()->createFromDR($this->identifiant, "2021");
+        if($this->getValue('file')) {
+            $sv = SVClient::getInstance()->createFromCSV($this->identifiant, "2021", file_get_contents($this->getValue('file')->getTempName()));
+        } else {
+            $sv = SVClient::getInstance()->createFromDR($this->identifiant, "2021");
+        }
+
         $sv->save();
+
         return $sv;
     }
 }

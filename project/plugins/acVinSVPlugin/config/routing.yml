@@ -12,16 +12,6 @@ sv_etablissement:
   requirements:
     sf_method: [get, post]
 
-sv_csv:
-    url: /sv/csv/:identifiant
-    param: { module: sv, action: createFromCSV }
-    class: EtablissementRoute
-    options:
-      model:    Etablissement
-      type:     object
-    requirements:
-      sf_method: [get, post]
-
 sv_exploitation:
   url: /sv/exploitation/:id
   param: { module: sv, action: exploitation }

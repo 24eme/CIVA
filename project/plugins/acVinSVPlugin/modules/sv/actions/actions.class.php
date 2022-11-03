@@ -15,10 +15,10 @@ class svActions extends sfActions {
         $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
 
         if (! $request->isMethod(sfWebRequest::POST)) {
+
             return sfView::SUCCESS;
         }
-
-        $this->formCreation->bind($request->getParameter($this->formCreation->getName()));
+        $this->formCreation->bind($request->getParameter($this->formCreation->getName()), $request->getFiles($this->formCreation->getName()));
 
         if (! $this->formCreation->isValid()) {
             return sfView::SUCCESS;
@@ -26,15 +26,12 @@ class svActions extends sfActions {
 
         $sv = $this->formCreation->save();
 
+        if($this->formCreation->getValue('file')) {
+
+            return $this->redirect('sv_validation', ['id' => $sv->_id]);
+        }
+
         $this->redirect('sv_exploitation', ['id' => $sv->_id]);
-    }
-
-    public function executeCreateFromCSV(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
-        $sv = SVClient::getInstance()->createFromCSV($this->etablissement->identifiant, "2021", file_get_contents(sfConfig::get('sf_data_dir').'/sv12.csv'));
-        $sv->save();
-
-        return $this->redirect('sv_validation', $sv);
     }
 
     public function executeExploitation(sfWebRequest $request) {
