@@ -1,5 +1,5 @@
 <?php use_helper('Float'); ?>
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_PRODUITS)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_EXTRACTION)); ?>
 
 <h3>Taux d'extraction</h3>
 

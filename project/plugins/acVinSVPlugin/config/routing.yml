@@ -22,9 +22,9 @@ sv_exploitation:
   requirements:
     sf_method: [get, post]
 
-sv_produits:
-  url: /sv/produits/:id
-  param: { module: sv, action: produits }
+sv_extraction:
+  url: /sv/extraction/:id
+  param: { module: sv, action: extraction }
   class: SVRoute
   options:
     model:    SV
