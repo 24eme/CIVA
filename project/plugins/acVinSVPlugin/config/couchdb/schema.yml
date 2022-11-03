@@ -65,6 +65,7 @@ SV:
                               volume_detruit: { type: float }
       lies: { type: float }
       mouts: { type: float }
+      rebeches: { type: float }
       valide:
         type: collection
         definition:

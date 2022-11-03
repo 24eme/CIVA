@@ -15,6 +15,11 @@
   <?php echo $form['mouts']->render(['class' => 'form-control']) ?>
 </div>
 
+<div class="form-group">
+  <?php echo $form['rebeches']->renderLabel(null, ['class' => 'col-xs-4 control-label']) ?>
+  <?php echo $form['rebeches']->render(['class' => 'form-control']) ?>
+</div>
+
 </form>
 
 <div class="row">
