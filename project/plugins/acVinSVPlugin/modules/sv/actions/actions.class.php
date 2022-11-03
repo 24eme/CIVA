@@ -96,6 +96,20 @@ class svActions extends sfActions {
     public function executeAutres(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+        $this->form = new SVAutreForm($this->sv);
+
+        if (! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+        return $this->redirect('sv_validation', $this->sv);
     }
 
     public function executeValidation(sfWebRequest $request) {

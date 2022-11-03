@@ -1,25 +1,20 @@
 <?php
 
-class SVAutreForm extends acCouchdbForm
+class SVAutreForm extends acCouchdbObjectForm
 {
     public function __construct(SV $doc, $options = [], $CSRFSecret = null)
     {
-        parent::__construct($doc, [], $options, $CSRFSecret);
+        parent::__construct($doc, $options, $CSRFSecret);
     }
 
     public function configure()
     {
-        $this->setWidget('lies', new sfWidgetFormInput());
-        $this->setWidget('mouts', new sfWidgetFormInput());
+        $this->setWidget('lies', new bsWidgetFormInput());
+        $this->setWidget('mouts', new bsWidgetFormInput());
 
-        $this->setValidator('lies', new sfValidatorNumber());
-        $this->setValidator('mouts', new sfValidatorNumber());
+        $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
+        $this->setValidator('mouts', new sfValidatorNumber(['min' => 0]));
 
         $this->widgetSchema->setNameFormat('sv_autres[%s]');
-    }
-
-    public function save()
-    {
-        $this->getDocument()->save();
     }
 }
