@@ -230,7 +230,7 @@ class tiersActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->formUploadCsv = new UploadCSVForm();
+        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), '2021');
     }
 
     public function executeMonEspaceCompteDS(sfWebRequest $request) {

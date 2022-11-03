@@ -27,7 +27,7 @@ class SVEtapes extends Etapes
     );
 
 	public static $libelles = array(
-        self::ETAPE_EXPLOITATION => 'Exploitation',
+        self::ETAPE_EXPLOITATION => 'Entreprise',
         self::ETAPE_EXTRACTION => 'Extraction',
         self::ETAPE_APPORTEURS => 'Apporteurs',
         self::ETAPE_SAISIE => 'Saisie',

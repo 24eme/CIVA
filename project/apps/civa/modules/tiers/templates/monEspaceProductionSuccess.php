@@ -14,6 +14,16 @@
               <form action="<?= url_for('sv_etablissement', ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data">
               <?php echo $formCreation->renderHiddenFields() ?>
               <?php echo $formCreation->renderGlobalErrors() ?>
+              <?php if ($sv): ?>
+                  <div class="ligne_form">
+                      <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="brouillon" checked="checked" />
+                      <label for="type_declaration_brouillon">Continuer ma déclaration</label>
+                  </div>
+                  <div class="ligne_form">
+                      <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
+                      <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
+              </div>
+              <?php else: ?>
               <div class="form_ligne">
                   <?php echo $formCreation['file']->renderError() ?>
                   <?php echo $formCreation['file']->renderLabel() ?>
@@ -23,11 +33,12 @@
                   <?php echo $formCreation['type_creation']->renderError() ?>
                   <?php echo $formCreation['type_creation']->render() ?>
                 </div>
-                <div class="ligne_form ligne_btn">
-                   <button type="submit" id="mon_espace_civa_valider" class="btn">
+              <?php endif; ?>
+              <div class="ligne_form ligne_btn">
+                  <button type="submit" id="mon_espace_civa_valider" class="btn">
                       <img src="/images/boutons/btn_valider.png" alt="Valider" />
-                   </button>
-                </div>
+                  </button>
+              </div>
               </form>
           </div>
         </div>
