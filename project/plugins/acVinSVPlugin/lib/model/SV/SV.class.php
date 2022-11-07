@@ -4,10 +4,11 @@
  *
  */
 
-class SV extends BaseSV implements InterfaceDeclarantDocument
+class SV extends BaseSV
 {
+    use HasDeclarantDocument;
+
     const DEFAULT_KEY = 'DEFAUT';
-    protected $declarant_document = null;
 
     public function getConfiguration() {
         return ConfigurationClient::getInstance()->getCurrent();
@@ -26,22 +27,13 @@ class SV extends BaseSV implements InterfaceDeclarantDocument
 
     public function initDocuments()
     {
-        $this->declarant_document = new DeclarantDocument($this);
-    }
-
-    public function getEtablissementObject() {
-        return $this->getEtablissement();
+        $this->initDeclarantDocument();
     }
 
     public function getEtablissement() {
          $etablissement = EtablissementClient::getInstance()->find($this->identifiant);
 
          return $etablissement;
-    }
-
-
-    public function storeDeclarant() {
-        $this->declarant_document->storeDeclarant();
     }
 
     public function getProduits($region = null) {
