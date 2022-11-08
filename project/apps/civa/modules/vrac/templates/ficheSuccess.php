@@ -247,6 +247,7 @@ td.echeance {display: inline;}
 	</form>
 	<?php endif; ?>
 	<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
+    <?php if ($formApplication) include_partial('popupGenerationContratApplication', array('form' => $formApplication)); ?>
 </div>
 <script type="text/javascript">
 $(document).ready(function()
