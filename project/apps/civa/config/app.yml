@@ -16,6 +16,7 @@ all:
       "VF": "Vigne en friche"
   configuration:
     vrac:
+      nb_campagnes_pluriannuel: 3
       delai_suppression: 5
       etapes:
         soussignes: 1
