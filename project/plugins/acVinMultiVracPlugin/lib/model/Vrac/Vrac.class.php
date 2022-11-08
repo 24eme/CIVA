@@ -806,17 +806,21 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->exist('contrat_pluriannuel_mode_surface') && $this->contrat_pluriannuel_mode_surface);
     }
 
-	public function generatePluriannuelApplication() {
+	public function generateNextPluriannuelApplication() {
+        $numContratApplication = $this->getNextNumContratApplication();
+        if (!$numContratApplication)
+            throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
+        $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
-        $vrac->numero_contrat = VracClient::getInstance()->getNumeroContratSuivant($vrac->valide->date_saisie);
+        $vrac->campagne = $millesime.'-'.($millesime+1);
+        $vrac->numero_contrat = $numContratApplication;
         $vrac->constructId();
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
-		foreach($vrac->declaration->getProduitsDetailsSorted() as $detail) {
-            $detail->millesime = date('Y');
-            $detail->retiraison_date_debut = date('Y').'-'.$detail->retiraison_date_debut;
-            $detail->retiraison_date_limite = date('Y').'-'.$detail->retiraison_date_limite;
+		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
+            $detail->millesime = $millesime;
+            $detail->retiraison_date_debut = $millesime.'-'.$detail->retiraison_date_debut;
+            $detail->retiraison_date_limite = $millesime.'-'.$detail->retiraison_date_limite;
         }
-        $vrac->save();
-        $vrac->save();
+        return $vrac;
 	}
 }
