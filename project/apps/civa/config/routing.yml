@@ -222,6 +222,15 @@ vrac_mercuriale:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_generer_contrat_application:
+  url: /vrac/:numero_contrat/generer-application/:campagne
+  param: { module: vrac, action: genererContratApplication }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_etape:
   url: /vrac/:numero_contrat/:etape
   param: { module: vrac, action: etape }
