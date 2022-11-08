@@ -53,7 +53,7 @@
 	<?php endif; ?>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('carte_pro')): ?>
-	<li class="noprint">N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
+	<li class="noprint">N° d'inscription au registre national : <strong><?php echo $tiers->carte_pro ?></strong></li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('num_accise')): ?>
 	<li class="noprint">N°Accises : <strong><?php echo $tiers->num_accise ?></strong></li>
