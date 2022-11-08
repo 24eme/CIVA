@@ -9,7 +9,10 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
 
         if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, '2021')) {
-            $this->redirect('sv_exploitation', ['id' => $sv->_id]);
+            $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                ['id' => $sv->_id]
+            );
         }
 
         $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
@@ -31,12 +34,10 @@ class svActions extends sfActions {
             return $this->redirect('sv_validation', ['id' => $sv->_id]);
         }
 
-        $this->redirect('sv_exploitation', ['id' => $sv->_id]);
-    }
-
-    public function executeExploitation(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
-        $this->sv = $this->getRoute()->getSV();
+        $this->redirect(
+            SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+            ['id' => $sv->_id]
+        );
     }
 
     public function executeExtraction(sfWebRequest $request) {
