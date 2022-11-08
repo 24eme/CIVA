@@ -27,4 +27,4 @@ foreach (glob(__DIR__.'/../data/*.json') as $file) {
 
 //// Création des vues
 $viewTask = new acCouchdbBuildViewTask(new sfEventDispatcher(), new sfFormatter());
-$viewTask->run([], ['connection' => 'test']);
+$viewTask->run([], ['connection' => 'test', 'display' => 'false']);
