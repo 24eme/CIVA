@@ -806,6 +806,21 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->exist('contrat_pluriannuel_mode_surface') && $this->contrat_pluriannuel_mode_surface);
     }
 
+	public function getContratsApplication() {
+		$contrats = array();
+		if ($this->isPluriannuelCadre() && $this->isValide()) {
+            $nbCampagnes = VracClient::getConfigVar('nb_campagnes_pluriannuel');
+			$millesime = substr($this->campagne, 0, 4) * 1;
+            $maxMillesime = $millesime+$nbCampagnes;
+            while($millesime < $maxMillesime) {
+                $numContrat = $this->numero_contrat.$millesime;
+                $contrats[$numContrat] = VracClient::getInstance()->findByNumeroContrat($numContrat);
+                $millesime++;
+            }
+		}
+		return $contrats;
+	}
+
 	public function generateNextPluriannuelApplication() {
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
