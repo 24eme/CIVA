@@ -102,7 +102,7 @@ $hasCourtier = $vrac->hasCourtier();
 			<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #000;">
 				<tr>
 					<td>&nbsp;<?php if($hasCourtier): ?><i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i><?php endif; ?></td>
-					<td>N° de Carte Pro : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td>
+					<td>N° d'inscription au registre national : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td>
 				</tr>
 				<tr>
 					<td>&nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->adresse ?></i><?php endif; ?></td>
