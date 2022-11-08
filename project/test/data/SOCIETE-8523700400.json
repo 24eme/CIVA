@@ -1,0 +1,44 @@
+{
+   "_id": "SOCIETE-8523700400",
+   "type": "Societe",
+   "identifiant": "8523700400",
+   "type_societe": "RESSORTISSANT",
+   "raison_sociale": "GAEC ACTUALYS JEAN",
+   "raison_sociale_abregee": null,
+   "statut": "ACTIF",
+   "code_comptable_client": "8523700400",
+   "code_comptable_fournisseur": null,
+   "code_naf": null,
+   "siret": "750938426",
+   "interpro": "INTERPRO-declaration",
+   "no_tva_intracommunautaire": null,
+   "email": "",
+   "telephone": "",
+   "fax": "",
+   "commentaire": null,
+   "siege": {
+       "adresse": "1 RUE GARNIER",
+       "adresse_complementaire": null,
+       "code_postal": "92200",
+       "commune": "NEUILLY-SUR-SEINE",
+       "pays": "FR"
+   },
+   "cooperative": false,
+   "enseignes": [
+   ],
+   "compte_societe": "COMPTE-8523700400",
+   "contacts": {
+       "COMPTE-8523700400": {
+           "nom": "GAEC ACTUALYS JEAN",
+           "ordre": 0
+       }
+   },
+   "etablissements": {
+       "ETABLISSEMENT-8523700400": {
+           "nom": "ACTUALYS JEAN",
+           "ordre": null
+       }
+   },
+   "paiement_douane_frequence": "ANNUELLE",
+   "paiement_douane_moyen": "VIREMENT"
+}

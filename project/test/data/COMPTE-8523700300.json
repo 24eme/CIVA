@@ -1,0 +1,38 @@
+{
+   "_id": "COMPTE-8523700300",
+   "type": "Compte",
+   "identifiant": "8523700300",
+   "mot_de_passe": "",
+   "civilite": "GAEC",
+   "prenom": null,
+   "nom": "ACTUALYS JEAN",
+   "nom_a_afficher": "GAEC ACTUALYS JEAN",
+   "fonction": null,
+   "commentaire": null,
+   "origines": [
+       "ETABLISSEMENT-8523700300"
+   ],
+   "id_societe": "SOCIETE-8523700300",
+   "adresse_societe": null,
+   "adresse": "1 RUE GARNIER",
+   "adresse_complementaire": null,
+   "code_postal": "92200",
+   "commune": "NEUILLY-SUR-SEINE",
+   "insee": "92200",
+   "compte_type": "ETABLISSEMENT",
+   "cedex": null,
+   "pays": "FR",
+   "site_internet": null,
+   "societe_informations": {
+       "type": "RESSORTISSANT",
+       "raison_sociale": "GAEC ACTUALYS JEAN",
+       "adresse": "1 RUE GARNIER",
+       "adresse_complementaire": null,
+       "code_postal": "92200",
+       "commune": "NEUILLY-SUR-SEINE"
+   },
+   "interpro": "INTERPRO-declaration",
+   "statut": "ACTIF",
+   "tags": {
+   }
+}
