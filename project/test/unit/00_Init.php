@@ -1,32 +1,13 @@
 <?php
 
-$COUCHTEST = (getenv('COUCHTEST')) ?: 'civa_test';
-
-$couchClient = new couchClient(
-    'http://localhost:5984/',
-    $COUCHTEST
-);
-
-if (strpos($couchClient->getDatabaseName(), '_test') === false) {
-    die("La connection à la base ne semble pas être une base de test. [".$couchClient->getDatabaseName()."]".PHP_EOL);
-}
-
-if ($couchClient->databaseExists()) {
-    $couchClient->deleteDatabase();
-}
-
-$couchClient->createDatabase();
-
-////
+//// Création Base + init avec documents
 
 $configuration = ProjectConfiguration::getApplicationConfiguration('civa', 'test', true);
 @sfContext::createInstance($configuration);
 
 $db = sfContext::getInstance()->getDatabaseManager();
-$db->setDatabase('default', new acCouchdbDatabase([
-    'dsn' => 'http://localhost:5984/',
-    'dbname' => $COUCHTEST
-]));
+acCouchdbManager::initializeClient($db->getDatabase('test')->getParameter('dsn'), $db->getDatabase('test')->getParameter('dbname'));
+$db->setDatabase('default', $db->getDatabase('test'));
 
 $connection = $db->getDatabase()->getConnection();
 
@@ -34,6 +15,16 @@ if (strpos($connection->getDatabaseName(), '_test') === false) {
     die("La connection à la base ne semble pas être une base de test. [".$connection->getDatabaseName()."]".PHP_EOL);
 }
 
+if ($connection->databaseExists()) {
+    $connection->deleteDatabase();
+}
+
+$connection->createDatabase();
+
 foreach (glob(__DIR__.'/../data/*.json') as $file) {
     $doc = $connection->storeDoc(json_decode(file_get_contents($file)));
 }
+
+//// Création des vues
+$viewTask = new acCouchdbBuildViewTask(new sfEventDispatcher(), new sfFormatter());
+$viewTask->run([], ['connection' => 'test']);

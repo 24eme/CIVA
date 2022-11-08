@@ -25,9 +25,6 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
-    	$databaseManager = new sfDatabaseManager($this->configuration);
-        $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
     	$file_regexp = "/([a-zA-Z0-9\-\_]+)\.([a-zA-Z0-9\-\_]+)\.(map|reduce)\.view\.js$/";
 
     	$files = sfFinder::type("file")->name($file_regexp)->in(sfConfig::get('sf_root_dir'));
