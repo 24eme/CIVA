@@ -220,6 +220,14 @@ var initAideALaSaisie = function()
 
 };
 
+var initGenerationContratApplication = function()
+{
+    $('#generationContratApplication').click(function() {
+        openPopup($("#popup_generation_contratApplication"));
+        return false;
+    });
+};
+
 var initClotureContrat = function()
 {
     $('#clotureContrat_OK').click(function() {
@@ -515,6 +523,7 @@ var sumContrat = function(brothers, cible)
          initClotureContrat();
          initSummableContrat();
          initClotureContratCheckboxes();
+         initGenerationContratApplication();
 
 
          $('.smalldatepicker').datepicker(
