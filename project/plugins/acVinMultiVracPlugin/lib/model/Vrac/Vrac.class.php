@@ -821,6 +821,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		return $contrats;
 	}
 
+    public function getNextNumContratApplication() {
+        $contratsApplication = $this->getContratsApplication();
+        if (!$contratsApplication)
+            throw new Exception('Le contrat '.$this->_id.' ne permet pas la création de contrat d\'application');
+        foreach($contratsApplication as $numContratApplication => $contratApplication) {
+            if (!$contratApplication) return $numContratApplication;
+        }
+        return null;
+    }
+
 	public function generateNextPluriannuelApplication() {
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
