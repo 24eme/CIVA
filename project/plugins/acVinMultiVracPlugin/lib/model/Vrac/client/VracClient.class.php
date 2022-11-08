@@ -95,6 +95,15 @@ class VracClient extends acCouchdbClient {
     	throw new sfException('Aucune configuration vrac définie dans l\'app!');
     }
 
+    public static function getConfigVar($var)
+    {
+        $config = self::getConfig();
+        if (!isset($config[$var])) {
+            throw new sfException('La variable '.$var.' n\'est pas défini dans la configuration vrac');
+        }
+        return $config[$var];
+    }
+
 	  public function buildId($numero_contrat) {
 
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
