@@ -221,6 +221,13 @@ class vracActions extends sfActions
        			return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
         	}
         }
+
+        try {
+            $this->formApplication = $this->getForm($this->vrac->generateNextPluriannuelApplication(), VracEtapes::ETAPE_PRODUITS);
+        } catch (Exception $e) {
+		    $this->formApplication = null;
+        }
+
     }
 
 
