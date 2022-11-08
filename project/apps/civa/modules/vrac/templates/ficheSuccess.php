@@ -90,7 +90,7 @@ td.echeance {display: inline;}
 				Frais annexes en sus à la charge du vendeur
 			</td>
 			<td>
-				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucune'; ?>
+				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -119,7 +119,7 @@ td.echeance {display: inline;}
 				Délais de paiement
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucune'; ?>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
@@ -159,7 +159,7 @@ td.echeance {display: inline;}
 				Critères et modalités d’évolution des prix
 			</td>
 			<td>
-				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucune'; ?>
+				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -250,4 +250,3 @@ $(document).ready(function()
 	$('#onglets_majeurs .ui-tabs-selected a').focus();
 });
 </script>
-
