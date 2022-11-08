@@ -84,7 +84,7 @@
 				Frais annexes en sus à la charge du vendeur
 			</td>
 			<td>
-				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucunes'; ?>
+				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -94,7 +94,7 @@
 				Primes diverses à la charge de l'acheteur
 			</td>
 			<td>
-				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucunes'; ?>
+				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -104,7 +104,7 @@
 				Résiliation hors cas de force majeur
 			</td>
 			<td>
-				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucunes'; ?>
+				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucune'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -113,7 +113,7 @@
 				Délais de paiement
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucunes'; ?>
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
@@ -153,7 +153,7 @@
 				Critères et modalités d’évolution des prix
 			</td>
 			<td>
-				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucunes'; ?>
+				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucun'; ?>
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -162,7 +162,7 @@
 				Autre clauses particulières
 			</td>
 			<td>
-				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucunes'; ?>
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
 			</td>
 		</tr>
 	</tbody>
