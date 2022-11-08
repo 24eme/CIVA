@@ -114,7 +114,7 @@
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->acheteur_primes_diverses) ? str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) : "Aucun" ?></td>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->acheteur_primes_diverses) ? str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) : "Aucune" ?></td>
     </tr>
 	<?php if($vrac->isPluriannuelCadre()):  ?>
 	<tr>
@@ -125,7 +125,7 @@
 	<?php endif; ?>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Délais de paiement</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php str_replace("\n", '<br />&nbsp;', $vrac->conditions_paiement) ?></td>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_paiement)? str_replace("\n", '<br />&nbsp;', $vrac->conditions_paiement) : 'Aucun' ?></td>
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
