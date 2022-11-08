@@ -175,7 +175,7 @@ td.echeance {display: inline;}
 </table>
 <?php endif; ?>
 
-<?php if ($vrac->isPluriannuelCadre()): ?>
+<?php $contratsApplication = $vrac->getContratsApplication(); if (count($contratsApplication)>0): ?>
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
@@ -183,30 +183,22 @@ td.echeance {display: inline;}
     		</tr>
     	</thead>
     	<tbody>
-            <tr>
+			<?php $i=0;foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
+            <tr<?php if($i%2): ?> class="alt"<?php endif; ?>>
     			<td>
-    				Campagne 2022
+    				Campagne <?php echo substr($numContratApplication, -4) ?>
     			</td>
     			<td>
-                    <a href="">Générer le contrat</a>
-    			</td>
-    		</tr>
-            <tr class="alt">
-    			<td>
-    				Campagne 2023
-    			</td>
-    			<td>
-                    <i class="text-muted">Non disponible</i>
-    			</td>
-    		</tr>
-            <tr>
-    			<td>
-    				Campagne 2024
-    			</td>
-    			<td>
-                    <i class="text-muted">Non disponible</i>
+					<?php if($contratApplication): ?>
+						<a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>">Voir le contrat</a>
+					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat): ?>
+						<a href="" id="generationContratApplication">Générer le contrat</a>
+					<?php else: ?>
+						<i class="text-muted">Non disponible</i>
+					<?php endif; ?>
     			</td>
     		</tr>
+			<?php $i++; endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>
