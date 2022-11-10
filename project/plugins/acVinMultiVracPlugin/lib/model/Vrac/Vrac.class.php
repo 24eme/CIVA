@@ -858,7 +858,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$vrac = clone $this;
         $vrac->setArchivageDocument();
         $vrac->campagne = $millesime.'-'.($millesime+1);
-        $vrac->numero_contrat = $numContratApplication;
+        $vrac->numero_contrat = "$numContratApplication";
+        $vrac->numero_archive = null;
+        $vrac->numero_visa = null;
+        $vrac->numero_db2 = null;
         $vrac->constructId();
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
