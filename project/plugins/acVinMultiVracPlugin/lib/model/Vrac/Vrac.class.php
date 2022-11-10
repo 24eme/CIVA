@@ -697,6 +697,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	    		}
                 $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
         }
+        if ($this->isApplicationPluriannuel()) {
+            $reference = $this->getContratDeReference();
+            $this->numero_visa = $reference->numero_visa.substr($this->campagne, 0, 4);
+        }
     }
 
     protected function doSave()
