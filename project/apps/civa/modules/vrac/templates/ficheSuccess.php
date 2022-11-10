@@ -17,15 +17,26 @@ td.echeance {display: inline;}
 </style>
 <div id="contrat_onglet">
 <ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected">
-		<a style="height: 18px;">
+	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>">
+		<a style="height: 18px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if($vrac->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->numero_archive): ?>(visa n° <?php echo $vrac->numero_archive ?>)<?php endif; ?>
+			Contrat <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
 			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
+    <?php if (count($contratsApplication)>0): ?>
+		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
+			<?php if($contratApplication): ?>
+                <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>"><a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>"><?php echo $contratApplication->campagne ?></a></li>
+            <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat): ?>
+                <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
+            <?php else: ?>
+                <li class="ui-tabs" style="opacity: 0.5;"><a href="javascript:void(0)"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
+			<?php endif; ?>
+		<?php endforeach; ?>
+    <?php endif; ?>
 	<li style="float: right; opacity: 0.2;">
 			<span><a href="<?php echo url_for('vrac_mercuriale', $vrac); ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
 			</span>
@@ -61,7 +72,11 @@ td.echeance {display: inline;}
 		</fieldset>
 		<?php endif; ?>
 
-		<?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => true)) ?>
+		<?php
+            if (!$vrac->isApplicationPluriannuel()) {
+                include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => true));
+            }
+        ?>
 
 		<?php
 			if($validation->hasPoints()) {
@@ -75,7 +90,7 @@ td.echeance {display: inline;}
 			<a class="noprint" style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
 		<?php endif; ?>
 
-<?php if(!$vrac->isPapier()): ?>
+<?php if(!$vrac->isApplicationPluriannuel() && !$vrac->isPapier()): ?>
 <hr class="printonly"/>
 <table class="validation table_donnees">
 	<thead>
@@ -175,7 +190,7 @@ td.echeance {display: inline;}
 </table>
 <?php endif; ?>
 
-<?php $contratsApplication = $vrac->getContratsApplication(); if (count($contratsApplication)>0): ?>
+<?php if ($vrac->isPluriannuelCadre() && count($contratsApplication)>0): ?>
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
@@ -186,13 +201,13 @@ td.echeance {display: inline;}
 			<?php $i=0;foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
             <tr<?php if($i%2): ?> class="alt"<?php endif; ?>>
     			<td>
-    				Campagne <?php echo substr($numContratApplication, -4) ?>
+    				Campagne <?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?>
     			</td>
     			<td>
 					<?php if($contratApplication): ?>
 						<a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>">Voir le contrat</a>
 					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat): ?>
-						<a href="" id="generationContratApplication">Générer le contrat</a>
+						<a href="" class="generationContratApplication">Générer le contrat</a>
 					<?php else: ?>
 						<i class="text-muted">Non disponible</i>
 					<?php endif; ?>
