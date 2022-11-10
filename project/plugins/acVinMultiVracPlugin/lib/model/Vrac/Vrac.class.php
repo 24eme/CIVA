@@ -94,6 +94,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function  __construct() {
         parent::__construct();
+        $this->setArchivageDocument();
+    }
+
+    public function setArchivageDocument() {
         $this->archivage_document = new ArchivageDocument($this);
     }
 
@@ -837,6 +841,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
         $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
+        $vrac->setArchivageDocument();
         $vrac->campagne = $millesime.'-'.($millesime+1);
         $vrac->numero_contrat = $numContratApplication;
         $vrac->constructId();
