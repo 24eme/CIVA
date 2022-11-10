@@ -76,5 +76,6 @@
        "telephone": null,
        "date_naissance": "1986-08-04"
    },
-   "ds_decembre": true
+   "ds_decembre": true,
+   "acheteur_raisin": "Negociant"
 }

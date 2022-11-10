@@ -11,6 +11,7 @@ class acCouchdbBuildViewTask extends sfBaseTask {
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('display', null, sfCommandOption::PARAMETER_REQUIRED, 'Affichage des vues créées', 'true')
         ));
 
         $this->namespace = 'couchdb';
@@ -25,9 +26,6 @@ EOF;
     }
 
     protected function execute($arguments = array(), $options = array()) {
-    	$databaseManager = new sfDatabaseManager($this->configuration);
-        $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-
     	$file_regexp = "/([a-zA-Z0-9\-\_]+)\.([a-zA-Z0-9\-\_]+)\.(map|reduce)\.view\.js$/";
 
     	$files = sfFinder::type("file")->name($file_regexp)->in(sfConfig::get('sf_root_dir'));
@@ -47,15 +45,17 @@ EOF;
 
     	foreach($designs as $design) {
     		acCouchdbManager::getClient()->storeDoc($design);
-    		foreach($design->views as $view => $content) {
-    			echo acCouchdbManager::getClient()->getDatabaseUri().'/'.$design->_id."/_view/".$view."\n";
-    		}
+            if ($options['display'] === 'true') {
+                foreach($design->views as $view => $content) {
+                    echo acCouchdbManager::getClient()->getDatabaseUri().'/'.$design->_id."/_view/".$view."\n";
+                }
+            }
     	}
     }
 
     protected function getDesign($name) {
     	$id = '_design/'.$name;
-    	
+
     	$design = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
     	if (!$design) {
     		$design = new stdClass();
