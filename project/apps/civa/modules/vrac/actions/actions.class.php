@@ -210,6 +210,9 @@ class vracActions extends sfActions
 
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
 		$this->validation = new VracValidation($this->vrac);
+
+        $this->contratsApplication = $this->vrac->getContratDeReference()->getContratsApplication();
+
     	if ($request->isMethod(sfWebRequest::POST)) {
 
             $this->secureVrac(VracSecurity::ENLEVEMENT, $this->vrac);
@@ -223,7 +226,7 @@ class vracActions extends sfActions
         }
 
         try {
-            $this->formApplication = $this->getForm($this->vrac->generateNextPluriannuelApplication(), VracEtapes::ETAPE_PRODUITS);
+            $this->formApplication = $this->getForm($this->vrac->getContratDeReference()->generateNextPluriannuelApplication(), VracEtapes::ETAPE_PRODUITS);
         } catch (Exception $e) {
 		    $this->formApplication = null;
         }
