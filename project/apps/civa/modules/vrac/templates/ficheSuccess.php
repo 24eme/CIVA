@@ -20,9 +20,9 @@ td.echeance {display: inline;}
 	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>">
 		<a style="height: 18px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
+			Contrat <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>cadre pluriannuel<?php endif; ?>
+			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
