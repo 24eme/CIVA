@@ -73,9 +73,7 @@ td.echeance {display: inline;}
 		<?php endif; ?>
 
 		<?php
-            if (!$vrac->isApplicationPluriannuel()) {
-                include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => true));
-            }
+            include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => true));
         ?>
 
 		<?php
@@ -90,7 +88,7 @@ td.echeance {display: inline;}
 			<a class="noprint" style="float: right; bottom: 6px; color: #2A2A2A; text-decoration: none;" onclick="return confirm('Êtes vous sur de vouloir forcer la cloture de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>">Forcer la cloture</a>
 		<?php endif; ?>
 
-<?php if(!$vrac->isApplicationPluriannuel() && !$vrac->isPapier()): ?>
+<?php if(!$vrac->isPapier()): ?>
 <hr class="printonly"/>
 <table class="validation table_donnees">
 	<thead>
