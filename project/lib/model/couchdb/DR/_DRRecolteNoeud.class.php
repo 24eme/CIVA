@@ -394,7 +394,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
             return 0;
         }
-        $rendementExcedent = round($this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud(), 2);
+
+        $rendementExcedent = $this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud();
 
         if($rendementExcedent > $this->getConfigRendementVci()) {
 
