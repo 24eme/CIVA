@@ -222,7 +222,7 @@ var initAideALaSaisie = function()
 
 var initGenerationContratApplication = function()
 {
-    $('#generationContratApplication').click(function() {
+    $('.generationContratApplication').click(function() {
         openPopup($("#popup_generation_contratApplication"));
         return false;
     });
