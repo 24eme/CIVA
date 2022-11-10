@@ -829,6 +829,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		return $contrats;
 	}
 
+	public function getContratPluriannuelCadre() {
+		return ($this->isApplicationPluriannuel())? VracClient::getInstance()->find($this->reference_contrat_pluriannuel) : null;
+	}
+
+    public function getContratDeReference() {
+        if ($pluriannuelCadre = $this->getContratPluriannuelCadre()) {
+            return $pluriannuelCadre;
+        }
+        return $this;
+    }
+
     public function getNextNumContratApplication() {
         $contratsApplication = $this->getContratsApplication();
         if (!$contratsApplication)
