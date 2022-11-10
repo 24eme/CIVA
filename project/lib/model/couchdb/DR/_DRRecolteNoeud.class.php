@@ -87,9 +87,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getSuperficieCaveParticuliere() {
+        if(!$this->getTotalCaveParticuliere()) {
+            return 0;
+        }
 
-        return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
+       return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
     }
+
 
     public function getVolumeRevendiqueCaveParticuliere() {
 
