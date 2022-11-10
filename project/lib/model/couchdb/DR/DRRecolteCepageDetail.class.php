@@ -209,13 +209,17 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->_storage[$key];
     }
 
-    public function getVolumeByAcheteur($cvi) {
-       if(!$this->exist('negoces')){
+    public function getVolumeByAcheteur($cvi, $type_acheteur = 'negoces') {
+        if (in_array($type_acheteur, ['negoces', 'cooperatives']) === false) {
+            return 0;
+        }
+
+       if(!$this->exist($type_acheteur)){
            return 0;
        }
-       foreach ($this->negoces as $negoce) {
-           if($negoce->cvi == $cvi){
-               return $negoce->quantite_vendue;
+       foreach ($this->$type_acheteur as $acheteur) {
+           if($acheteur->cvi == $cvi){
+               return $acheteur->quantite_vendue;
            }
        }
        return 0;

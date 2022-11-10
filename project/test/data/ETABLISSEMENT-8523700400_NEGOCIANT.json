@@ -1,0 +1,81 @@
+{
+   "_id": "ETABLISSEMENT-8523700400",
+   "type": "Etablissement",
+   "cooperative": null,
+   "interpro": "INTERPRO-declaration",
+   "identifiant": "8523700400",
+   "id_societe": "SOCIETE-8523700400",
+   "statut": "ACTIF",
+   "nature_inao": null,
+   "siret": "75093842600019",
+   "region": "REGION_HORS_CVO",
+   "compte": "COMPTE-8523700400",
+   "num_interne": "8523702410",
+   "raison_sociale": "GAEC ACTUALYS JEAN",
+   "nom": "ACTUALYS JEAN",
+   "intitule": "GAEC",
+   "cvi": "8523700400",
+   "no_accises": "FR093101E0492",
+   "carte_pro": null,
+   "famille": "NEGOCIANT",
+   "telephone": "",
+   "fax": "",
+   "commentaire": null,
+   "adresse_compta": null,
+   "caution": null,
+   "siege": {
+       "adresse": "1 RUE GARNIER",
+       "adresse_complementaire": null,
+       "code_postal": "92200",
+       "commune": "NEUILLY-SUR-SEINE",
+       "pays": "FR"
+   },
+   "raisins_mouts": null,
+   "exclusion_drm": null,
+   "relance_ds": null,
+   "recette_locale": {
+       "id_douane": null,
+       "nom": null,
+       "ville": null
+   },
+   "type_dr": null,
+   "liaisons_operateurs": {
+   },
+   "site_fiche": null,
+   "sous_famille": null,
+   "comptabilite": {
+       "adresse": null,
+       "code_postal": null,
+       "commune": null,
+       "pays": null
+   },
+   "declaration_insee": "92200",
+   "declaration_commune": null,
+   "lieux_stockage": {
+       "8523700400001": {
+           "numero": "8523700400001",
+           "nom": "GARAGE ACTUALYS",
+           "adresse": "1 RUE GARNIER",
+           "commune": "PARIS",
+           "code_postal": "75000"
+       },
+       "8523700400002": {
+           "numero": "8523700400002",
+           "nom": "CAVE ACTUALYS",
+           "adresse": "1 RUE DES VIGNES",
+           "commune": "PARIS",
+           "code_postal": "75000"
+       }
+   },
+   "exploitant": {
+       "civilite": null,
+       "nom": null,
+       "adresse": null,
+       "code_postal": null,
+       "commune": null,
+       "telephone": null,
+       "date_naissance": "1986-08-04"
+   },
+   "ds_decembre": true,
+   "acheteur_raisin": "Negociant"
+}

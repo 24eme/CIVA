@@ -36,8 +36,8 @@ class acCouchdbManager {
     public static function initializeClient($dsn, $dbname) {
         self::getInstance()->_client = new acCouchdbClient($dsn, $dbname);
 		if (!self::getInstance()->_client->databaseExists())
-	  		throw new Exception($dbname." does not exist");
-		
+	  		//throw new Exception($dbname." does not exist");
+
 		return self::getInstance()->_client;
     }
 

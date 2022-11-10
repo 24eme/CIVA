@@ -42,13 +42,7 @@ abstract class Etapes
 
     public function getFirst()
 	{
-		$etapes = $this->getEtapes();
-		$first = null;
-		foreach ($etapes as $etape) {
-			$first = $etape;
-			break;
-		}
-		return $first;
+        return current($this->getEtapes());
 	}
 
 	public function getNext($etape)

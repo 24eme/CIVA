@@ -87,9 +87,13 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getSuperficieCaveParticuliere() {
+        if(!$this->getTotalCaveParticuliere()) {
+            return 0;
+        }
 
-        return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
+       return round($this->getTotalSuperficie() - $this->getTotalSuperficieVendus(), 2);
     }
+
 
     public function getVolumeRevendiqueCaveParticuliere() {
 
@@ -398,7 +402,8 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
 
             return 0;
         }
-        $rendementExcedent = round($this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud(), 2);
+
+        $rendementExcedent = $this->getRendementRecoltant() - $this->getConfig()->getRendementNoeud();
 
         if($rendementExcedent > $this->getConfigRendementVci()) {
 

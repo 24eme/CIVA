@@ -12,19 +12,9 @@ sv_etablissement:
   requirements:
     sf_method: [get, post]
 
-sv_exploitation:
-  url: /sv/exploitation/:id
-  param: { module: sv, action: exploitation }
-  class: SVRoute
-  options:
-    model:    SV
-    type:     object
-  requirements:
-    sf_method: [get, post]
-
-sv_produits:
-  url: /sv/produits/:id
-  param: { module: sv, action: produits }
+sv_extraction:
+  url: /sv/extraction/:id
+  param: { module: sv, action: extraction }
   class: SVRoute
   options:
     model:    SV
@@ -45,6 +35,16 @@ sv_apporteurs:
 sv_saisie:
   url: /sv/saisie/:id
   param: { module: sv, action: saisie }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_autres:
+  url: /sv/autres/:id
+  param: { module: sv, action: autres }
   class: SVRoute
   options:
     model:    SV

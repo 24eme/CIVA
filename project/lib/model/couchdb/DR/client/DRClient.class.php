@@ -72,36 +72,6 @@ class DRClient extends acCouchdbClient {
     return $acheteurs;
   }
 
-    public function identifyProductCSV($line) {
-        $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
-        $appellation = preg_replace("/^0$/", "", $appellation);
-        $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);
-
-        $lieu = $line[CsvFileAcheteur::CSV_LIEU];
-        $lieu = preg_replace("/^0$/", "", $lieu);
-
-        $cepage = $line[CsvFileAcheteur::CSV_CEPAGE];
-        $cepage = preg_replace("/^0$/", "", $cepage);
-        $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
-        $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
-        $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
-
-        if(preg_match("/(AOC ALSACE PINOT NOIR|AOC ALSACE PN ROUGE)/i", $appellation)) {
-            $cepage = null;
-        }
-
-        $vtsgn = $line[CsvFileAcheteur::CSV_VTSGN];
-        $vtsgn = preg_replace("/^0$/", "", $vtsgn);
-
-        $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s %s", $appellation, $lieu, $cepage, $vtsgn)));
-
-        if(!$produit) {
-            $produit = ConfigurationClient::getConfiguration()->identifyProductByLibelle(trim(sprintf("%s %s %s", $appellation, $cepage, $vtsgn)));
-        }
-
-        return $produit;
-    }
-
   public function createFromCSVRecoltant($campagne, $tiers, &$import, $depot_mairie = false) {
     $csvs = CSVClient::getInstance()->getCSVsFromRecoltant($campagne, $tiers->cvi);
     if (!$csvs || !count($csvs))
@@ -122,23 +92,23 @@ class DRClient extends acCouchdbClient {
           foreach ($csv->getCsvRecoltant($tiers->cvi) as $line) {
         $linenum++;
         if (preg_match('/JEUNES +VIGNES/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
-          if($doc->jeunes_vignes == $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
+          if($doc->jeunes_vignes == CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
             continue;
           }
-          $doc->jeunes_vignes += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+          $doc->jeunes_vignes += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
           continue;
         }
 
         if (preg_match('/JUS DE RAISIN/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
-          if($doc->jus_raisin_volume == $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) && $doc->jus_raisin_superficie == $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
+          if($doc->jus_raisin_volume == CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) && $doc->jus_raisin_superficie == CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE])) {
             continue;
           }
-          $doc->jus_raisin_volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
-          $doc->jus_raisin_superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+          $doc->jus_raisin_volume += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+          $doc->jus_raisin_superficie += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
           continue;
         }
 
-        $produit = $this->identifyProductCSV($line);
+        $produit = CsvFileAcheteur::identifyProductCSV($line);
         $prod = array();
 
         if($produit) {
@@ -175,13 +145,13 @@ class DRClient extends acCouchdbClient {
         $denom = $denom.$acheteur_obj->nom;
 
         $detail = $cepage->retrieveDetailFromUniqueKeyOrCreateIt($denom, $vtsgn, $denomlieu);
-        $detail->superficie += $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
-        $detail->volume += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
-        $detail->vci += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI]);
-        if ($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
+        $detail->superficie += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+        $detail->volume += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+        $detail->vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME_VCI]);
+        if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) == 0) {
            $detail->add('motif_non_recolte', 'PC');
         }
-          if($this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) > 0 || $this->recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
+          if(CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]) > 0 || CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
               $acheteurDRType = "negoces";
               if ($acheteur_obj->acheteur_raisin == self::ACHETEUR_COOPERATIVE) {
@@ -197,7 +167,7 @@ class DRClient extends acCouchdbClient {
             if (!$acheteur)
               $acheteur = $acheteurs->add();
             $acheteur->cvi = $acheteur_cvi;
-            $acheteur->quantite_vendue += $this->recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
+            $acheteur->quantite_vendue += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_VOLUME]);
 
             if($line[CsvFileAcheteur::CSV_VOLUME_VCI]) {
                 $acheteurRecap = $detail->getCepage()->getNoeudRecapitulatif()->add('acheteurs')->get($acheteur->getParent()->getKey())->add($acheteur->cvi);

@@ -4,7 +4,9 @@
  *
  */
 
-class SV extends BaseSV {
+class SV extends BaseSV
+{
+    use HasDeclarantDocument;
 
     const DEFAULT_KEY = 'DEFAUT';
 
@@ -13,8 +15,25 @@ class SV extends BaseSV {
     }
 
     public function constructId() {
-        $id = 'SV-' . $this->identifiant . '-' . $this->periode;
+        $id = $this->type.'-' . $this->identifiant . '-' . $this->periode;
         $this->set('_id', $id);
+    }
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->initDocuments();
+    }
+
+    public function initDocuments()
+    {
+        $this->initDeclarantDocument();
+    }
+
+    public function getEtablissement() {
+         $etablissement = EtablissementClient::getInstance()->find($this->identifiant);
+
+         return $etablissement;
     }
 
     public function getProduits($region = null) {
@@ -34,13 +53,39 @@ class SV extends BaseSV {
                 $recap[$produit->getProduitHash()] = new stdClass();
                 $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
                 $recap[$produit->getProduitHash()]->superficie_recolte = 0;
-                $recap[$produit->getProduitHash()]->quantite_recolte = 0;
+
+                if ($this->getType() === SVClient::TYPE_SV11) {
+                    $recap[$produit->getProduitHash()]->volume_recolte = 0;
+                    $recap[$produit->getProduitHash()]->usages_industriels = 0;
+                    $recap[$produit->getProduitHash()]->vci = 0;
+                }
+
+                if ($this->getType() === SVClient::TYPE_SV12) {
+                    $recap[$produit->getProduitHash()]->quantite_recolte = 0;
+                }
+
                 $recap[$produit->getProduitHash()]->volume_revendique = 0;
                 $recap[$produit->getProduitHash()]->apporteurs = array();
             }
+
             $recapProduit = $recap[$produit->getProduitHash()];
             $recapProduit->superficie_recolte += $produit->superficie_recolte;
-            $recapProduit->quantite_recolte += $produit->quantite_recolte;
+
+            if ($this->getType() === SVClient::TYPE_SV11) {
+                $recapProduit->volume_recolte += $produit->volume_recolte;
+                $recapProduit->usages_industriels += (isset($produit->usages_industriels))
+                    ?  $produit->usages_industriels
+                    : 0;
+                $recapProduit->vci += (isset($produit->vci))
+                    ? $produit->vci
+                    : 0;
+
+            }
+
+            if ($this->getType() === SVClient::TYPE_SV12) {
+                $recapProduit->quantite_recolte += $produit->quantite_recolte;
+            }
+
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
         }
@@ -62,7 +107,7 @@ class SV extends BaseSV {
         $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
         $detailKey = self::buildDetailKey($denominationComplementaire, $hidden_denom);
 
-        $hashToAdd = preg_replace("|/declaration/|", '', $hash);
+        $hashToAdd = str_replace("/declaration/", '', $hash);
         $exist = $this->exist('apporteurs/'.$identifiant.'/'.$hashToAdd);
         $produit = $this->apporteurs->add($identifiant)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;

@@ -212,6 +212,27 @@ class tiersActions extends sfActions {
         $this->formUploadCsv = new UploadCSVForm();
     }
 
+    public function executeMonEspaceCompteProduction(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
+        $compte = $this->getRoute()->getCompte();
+
+        if($this->getUser()->hasFlash('form_error')) {
+            $this->getUser()->setFlash('form_error', $this->getUser()->getFlash('form_error'));
+        }
+
+        return $this->redirect('mon_espace_civa_production', DRClient::getInstance()->getEtablissementAcheteur($compte->getSociete()));
+    }
+
+    public function executeMonEspaceProduction(sfWebRequest $request) {
+        $this->secure(Roles::TELEDECLARATION_DR_ACHETEUR);
+        $this->compte = $this->getUser()->getCompte();
+        $this->blocs = $this->buildBlocs($this->compte, $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
+        $this->help_popup_action = "help_popup_mon_espace_civa";
+        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), '2021');
+    }
+
     public function executeMonEspaceCompteDS(sfWebRequest $request) {
         if($request->getParameter('type') == DSCivaClient::TYPE_DS_PROPRIETE) {
             $this->secure(Roles::TELEDECLARATION_DS_PROPRIETE);
