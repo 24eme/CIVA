@@ -44,14 +44,14 @@
             <td class="date_retiraison_limite" style="text-align: center;">
 				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
                 <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
-                <?php else: ?>
+				<?php elseif($detail->retiraison_date_debut): ?>
 					<?php echo format_date('1970-'.$detail->retiraison_date_debut, 'dd/MM') ?>
                 <?php endif; ?>
 			</td>
             <td class="date_retiraison_limite" style="text-align: center;">
                 <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
                     <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
-                <?php else: ?>
+                <?php elseif($detail->retiraison_date_limite): ?>
 	                <?php echo format_date('1970-'.$detail->retiraison_date_limite, 'dd/MM') ?>
                 <?php endif;  ?>
 			</td>
