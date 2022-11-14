@@ -260,7 +260,7 @@ class uploadActions extends sfActions {
             return "cepage vide";
         }
 
-        $produit = DRClient::getInstance()->identifyProductCSV($line);
+        $produit = CsvFileAcheteur::identifyProductCSV($line);
 
         if($produit) {
             $prod["hash"] = $produit->getHash();
