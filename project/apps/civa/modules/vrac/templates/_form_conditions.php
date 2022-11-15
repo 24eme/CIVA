@@ -128,7 +128,7 @@
 				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
 			</td>
 			<td colspan="2">
-            <?php echo $form['clause_reserve_propriete']->render() ?>
+            <?php echo $form['clause_reserve_propriete']->render(array('required' => 'required')) ?>
 			<small style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
 			</td>
 		</tr>
@@ -139,7 +139,7 @@
 				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
 			</td>
 			<td colspan="2">
-			 <small style="font-size: 12px; color: #666;">Le vendeur donne</small> <?php echo $form['clause_mandat_facturation']->render() ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">mandat à l'acheteur ou au représentant du vendeur mandaté d'établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small>
+			 <small style="font-size: 12px; color: #666;">Le vendeur donne</small> <?php echo $form['clause_mandat_facturation']->render(array('required' => 'required')) ?> <small style="font-size: 12px; color: #666; margin-left: 10px;">mandat à l'acheteur ou au représentant du vendeur mandaté d'établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</small>
 			</td>
 		</tr>
 		<?php endif; ?>
