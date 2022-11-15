@@ -616,7 +616,7 @@ class vracActions extends sfActions
             $typeTiers = 'vendeur';
         }
 
-    	if ($vrac->isNew() && $typeTiers) {
+    	if ($vrac->isNew()) {
 			if ($typeTiers == 'vendeur') {
 				$vrac->vendeur_identifiant = $declarant->_id;
 	            $vrac->storeVendeurInformations($declarant);
