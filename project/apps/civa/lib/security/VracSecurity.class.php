@@ -123,7 +123,7 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
-        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isProjet() && $this->vrac->vendeur_identifiant != $etablissement->_id) {
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isProposition() && !$this->vrac->hasVendeurSigne() && $this->vrac->vendeur_identifiant != $etablissement->_id) {
 
             return false;
         }

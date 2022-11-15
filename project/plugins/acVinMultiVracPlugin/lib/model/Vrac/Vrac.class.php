@@ -8,7 +8,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 
 	const STATUT_CREE = 'CREE';
-	const STATUT_PROJET = 'PROJET';
+	const STATUT_PROPOSITION = 'PROPOSITION';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
 	const STATUT_VALIDE = 'VALIDE';
 	const STATUT_ANNULE = 'ANNULE';
@@ -33,7 +33,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Brouillon',
-		self::STATUT_PROJET => 'Projet',
+		self::STATUT_PROPOSITION => 'Proposition',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
 		self::STATUT_VALIDE => 'Validé',
 		self::STATUT_ANNULE => 'Annulé',
@@ -43,7 +43,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => null,
-		self::STATUT_PROJET => 'Visualiser pour signer',
+		self::STATUT_PROPOSITION => 'Visualiser pour signer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
 		self::STATUT_VALIDE => 'Visualiser',
 		self::STATUT_ANNULE => 'Visualiser',
@@ -53,7 +53,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
-		self::STATUT_PROJET => 'Visualiser',
+		self::STATUT_PROPOSITION => 'Visualiser',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
 		self::STATUT_VALIDE => 'Enlever',
 		self::STATUT_ENLEVEMENT => 'Enlever',
@@ -61,7 +61,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
-		self::STATUT_PROJET,
+		self::STATUT_PROPOSITION,
 		self::STATUT_VALIDE_PARTIELLEMENT,
 		self::STATUT_VALIDE
 	);
@@ -381,9 +381,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return (!$this->valide->statut || $this->valide->statut == self::STATUT_CREE)? true : false;
     }
 
-	public function isProjet()
+	public function isProposition()
     {
-        return ($this->valide->statut == self::STATUT_PROJET);
+        return ($this->valide->statut == self::STATUT_PROPOSITION);
     }
 
     public function isValide()
@@ -458,8 +458,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             return;
         }
 
-        $this->valide->add('date_projet', date('Y-m-d'));
-        $this->valide->statut = self::STATUT_PROJET;
+        $this->valide->add('date_proposition', date('Y-m-d'));
+        $this->valide->statut = self::STATUT_PROPOSITION;
     }
 
 	public function signerPapier($date) {
@@ -602,6 +602,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isVendeurProprietaire()
     {
     	return ($this->createur_identifiant == $this->vendeur_identifiant)? true : false;
+    }
+
+    public function hasVendeurSigne()
+    {
+    	return (bool) $this->valide->date_validation_vendeur;
     }
 
     public function hasCourtier() {
