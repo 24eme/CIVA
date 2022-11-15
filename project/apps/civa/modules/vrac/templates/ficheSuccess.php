@@ -234,6 +234,9 @@ td.echeance {display: inline;}
 						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
 					</a>
 				<?php endif; ?>
+                <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjet()): ?>
+                    <p>En attente de signature par le vendeur</p>
+                <?php endif; ?>
 				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>

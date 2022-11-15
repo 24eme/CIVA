@@ -381,6 +381,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return (!$this->valide->statut || $this->valide->statut == self::STATUT_CREE)? true : false;
     }
 
+	public function isProjet()
+    {
+        return ($this->valide->statut == self::STATUT_PROJET);
+    }
+
     public function isValide()
     {
     	return ($this->numero_visa)? true : false;
