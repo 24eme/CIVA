@@ -24,6 +24,12 @@ class VracContratValidation extends DocumentValidation
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
     	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
         $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraisins pour l\'ensemble de vos produits.');
+
+        $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraisins ne peuvent dépasser le 31/07 dans le cadre d\'un contrat pluriannuel');
+        $this->addControle('erreur', 'vendeur_assujetti_tva_required', 'Vous devez préciser si le vendeur est assujetti à la tva ou non');
+        $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
+        $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
+        $this->addControle('erreur', 'clause_mandat_facturation_required', 'Vous devez préciser si le vendeur donne mandat de facturation ou non à l\'acheteur');
   	}
 
     public function controle()
@@ -33,6 +39,7 @@ class VracContratValidation extends DocumentValidation
 		$label_libelles = array();
 		$produits = array();
         $retiraisons_manquantes = array();
+        $retiraisons_incoherentes = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
 				if (!isset($produits[$detail->getCepage()->getHash()])) {
@@ -53,6 +60,9 @@ class VracContratValidation extends DocumentValidation
                  {
 				    $retiraisons_manquantes[] = $detail->getLibelle();
 				}
+                if ($this->document->isPluriannuelCadre() && $detail->exist('retiraison_date_limite') && ('1970-'.$detail->retiraison_date_limite > '1970-07-31')) {
+                    $retiraisons_incoherentes[] = $detail->getLibelle();
+                }
 
 			}
 			foreach ($produits as $produit) {
@@ -91,6 +101,26 @@ class VracContratValidation extends DocumentValidation
 
         if (count($retiraisons_manquantes) > 0) {
             $this->addPoint('erreur', 'retiraisons_non_saisi', implode(",", $retiraisons_manquantes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
+        if (count($retiraisons_incoherentes) > 0) {
+            $this->addPoint('erreur', 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
+        if ($this->document->exist('vendeur_assujetti_tva') && $this->document->vendeur_assujetti_tva === null) {
+            $this->addPoint('erreur', 'vendeur_assujetti_tva_required', 'vendeur assujetti tva', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
+        if ($this->document->exist('acheteur_assujetti_tva') && $this->document->acheteur_assujetti_tva === null) {
+            $this->addPoint('erreur', 'acheteur_assujetti_tva_required', 'acheteur assujetti tva', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
+        if ($this->document->exist('clause_reserve_propriete') && $this->document->clause_reserve_propriete === null) {
+            $this->addPoint('erreur', 'clause_reserve_propriete_required', 'clause reserve propriete', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
+        if ($this->document->exist('clause_mandat_facturation') && $this->document->clause_mandat_facturation === null) {
+            $this->addPoint('erreur', 'clause_mandat_facturation_required', 'clause mandat facturation', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
   	}
 
