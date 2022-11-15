@@ -16,6 +16,7 @@
 			<th>Produits</th>
 			<th class="date_retiraison" style="text-align: center"><?php echo $header?> début retiraison</th>
 			<th class="date_retiraison" style="text-align: center"><?php echo $header?> limite retiraison</th>
+            <th style="width: 0;"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -36,7 +37,12 @@
 			<td class="date_retiraison">
     			<span><?php echo $embedForm['retiraison_date_limite']->renderError() ?></span>
     			<?php echo $embedForm['retiraison_date_limite']->render(array('class' => 'input_date '.$datepickerClass)) ?>
+
 			</td>
+            <td>
+
+                <button <?php if($counter >= count($form['produits_retiraisons']) - 1): ?>disabled="disabled" style="opacity: 0.3;"<?php endif; ?> type="button" title="Copier les dates sur la ligne du dessous"  class="btn_majeur btn_petit btn_copy">🔽</button>
+            </td>
 		</tr>
 		<?php
 			$counter++;
@@ -45,6 +51,20 @@
 
 	</tbody>
 </table>
+
+<script>
+    document.querySelectorAll('.btn_copy').forEach(function(btnCopy) {
+        btnCopy.addEventListener('click', function() {
+            let ligne = this.parentNode.parentNode;
+            let ligneSuivante = ligne.nextSibling.nextSibling;
+            if(!ligneSuivante) {
+                return;
+            }
+            ligneSuivante.querySelector("input[name*='debut']").value = ligne.querySelector("input[name*='debut']").value;
+            ligneSuivante.querySelector("input[name*='limite']").value = ligne.querySelector("input[name*='limite']").value;
+        });
+    });
+</script>
 
 <?php if(!$vrac->isPapier()): ?>
 <?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>
@@ -128,7 +148,7 @@
 				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
 			</td>
 			<td colspan="2">
-            <?php echo $form['suivi_qualitatif']->render() ?>
+            <?php echo $form['suivi_qualitatif']->render() ?><small style="font-size: 12px; color: #666; margin-left: 10px;">La date limite de retiraison doit être avant le XX XXXX</small>
 			</td>
 		</tr>
 		<?php endif; ?>
