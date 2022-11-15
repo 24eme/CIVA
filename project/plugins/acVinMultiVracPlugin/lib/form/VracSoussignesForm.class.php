@@ -36,9 +36,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'type_contrat' => new sfValidatorChoice(array('required' => true, 'choices' => array_keys($contratTypes))),
             'contrat_pluriannuel' => new sfValidatorChoice(array('choices' => [0,1])),
         	'acheteur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
-            'acheteur_assujetti_tva' => new sfValidatorChoice(array('choices' => [1,0])),
+            'acheteur_assujetti_tva' => new sfValidatorChoice(array('choices' => [1,0], 'required' => false)),
         	'vendeur_type' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($types))),
-            'vendeur_assujetti_tva' => new sfValidatorChoice(array('choices' => [1,0])),
+            'vendeur_assujetti_tva' => new sfValidatorChoice(array('choices' => [1,0], 'required' => false)),
         	'acheteur_recoltant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($recoltantChoices))),
         	'acheteur_negociant_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($negociantChoices))),
         	'acheteur_cave_cooperative_identifiant' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($caveCooperativeChoices))),
@@ -94,12 +94,6 @@ class VracSoussignesForm extends acCouchdbObjectForm
         }
         if ($this->getObject()->isNew()) {
         	$defaults['contrat_pluriannuel'] = 0;
-        }
-        if ($this->getObject()->acheteur_assujetti_tva === null) {
-            $defaults['acheteur_assujetti_tva'] = 1;
-        }
-        if ($this->getObject()->vendeur_assujetti_tva === null) {
-            $defaults['vendeur_assujetti_tva'] = 1;
         }
         if ($this->getObject()->exist('contrat_pluriannuel_mode_surface') && $this->getObject()->contrat_pluriannuel_mode_surface === null) {
             $defaults['contrat_pluriannuel_mode_surface'] = 0;

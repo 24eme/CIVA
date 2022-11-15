@@ -27,13 +27,13 @@ class VracConditionsForm extends acCouchdbObjectForm
 
 		if($this->getObject()->exist('clause_reserve_propriete')) {
 			$this->setWidget('clause_reserve_propriete', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
-			$this->setValidator('clause_reserve_propriete', new sfValidatorChoice(array('choices' => [1,0])));
+			$this->setValidator('clause_reserve_propriete', new sfValidatorChoice(array('choices' => [1,0], 'required' => false)));
 			$this->getWidgetSchema()->setLabel('clause_reserve_propriete', "Clause de réserve de propriété :");
 		}
 
 		if($this->getObject()->exist('clause_mandat_facturation')) {
 			$this->setWidget('clause_mandat_facturation', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
-			$this->setValidator('clause_mandat_facturation', new sfValidatorChoice(array('choices' => [1,0])));
+			$this->setValidator('clause_mandat_facturation', new sfValidatorChoice(array('choices' => [1,0], 'required' => false)));
 			$this->getWidgetSchema()->setLabel('clause_mandat_facturation', "Mandat de facturation :");
 		}
 
@@ -65,18 +65,6 @@ class VracConditionsForm extends acCouchdbObjectForm
         $this->embedForm('produits_retiraisons', $produitsRetiraisons);
 
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
-    }
-
-    protected function updateDefaultsFromObject() {
-        parent::updateDefaultsFromObject();
-        $defaults = $this->getDefaults();
-        if ($this->getObject()->exist('clause_reserve_propriete') && $this->getObject()->clause_reserve_propriete === null) {
-            $defaults['clause_reserve_propriete'] = 1;
-        }
-        if ($this->getObject()->exist('clause_mandat_facturation') && $this->getObject()->clause_mandat_facturation === null) {
-            $defaults['clause_mandat_facturation'] = 1;
-        }
-        $this->setDefaults($defaults);
     }
 
     public function doUpdateObject($values) {
