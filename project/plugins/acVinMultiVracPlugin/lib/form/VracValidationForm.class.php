@@ -35,7 +35,7 @@ class VracValidationForm extends acCouchdbObjectForm
 		if($this->getObject()->isPapier()) {
 			$this->getObject()->signerPapier(Date::getIsoDateFromFrenchDate($values['date_signature']));
 		} else {
-			$this->getObject()->signerProrietaire();
+			$this->getObject()->validate();
 		}
 
 		$annuaireUpdated = false;

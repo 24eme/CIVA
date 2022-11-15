@@ -189,7 +189,7 @@
 /* =================================================== */
 /* Boutons précédent / suivant */
 /* =================================================== */
-#contrats_vrac #btn_etape button { border: 0; background: none; }
+#contrats_vrac #btn_etape button.btn_image { border: 0; background: none; }
 
 /* =================================================== */
 /* Formulaires */
@@ -689,4 +689,8 @@ table.table_donnees td .radio_list label {
 	border: 1px solid #c6c8c7;
 	padding: 0 0 0 5px;
 	text-align: left;
+}
+
+#contrats_vrac .btn_grand {
+    padding: 6px 8px;
 }
