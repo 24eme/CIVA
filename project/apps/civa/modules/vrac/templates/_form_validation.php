@@ -198,4 +198,4 @@
 	</tbody>
 </table>
 <?php endif; ?>
-<?php include_partial('vrac/popupConfirmeValidation'); ?>
+<?php include_partial('vrac/popupConfirmeValidation', array('vrac' => $vrac)); ?>
