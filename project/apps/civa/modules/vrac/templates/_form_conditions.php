@@ -122,6 +122,16 @@
             </td>
 		</tr>
 		<?php endif; ?>
+        <?php if(isset($form['suivi_qualitatif'])): ?>
+		<tr>
+			<td>
+				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
+			</td>
+			<td colspan="2">
+            <?php echo $form['suivi_qualitatif']->render() ?>
+			</td>
+		</tr>
+		<?php endif; ?>
 		<?php if(isset($form['clause_reserve_propriete'])): ?>
 		<tr class="alt">
 			<td>
