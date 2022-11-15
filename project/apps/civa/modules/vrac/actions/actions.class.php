@@ -611,6 +611,11 @@ class vracActions extends sfActions
 		$declarant = $this->getEtablissementCreateur();
 
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
+
+        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+            $typeTiers = 'vendeur';
+        }
+
     	if ($vrac->isNew() && $typeTiers) {
 			if ($typeTiers == 'vendeur') {
 				$vrac->vendeur_identifiant = $declarant->_id;

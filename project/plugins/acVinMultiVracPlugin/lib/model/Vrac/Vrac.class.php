@@ -452,6 +452,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         if(!$this->isBrouillon()) {
             return;
         }
+
+		if($this->isVendeurProprietaire()) {
+            $this->createur_identifiant = $this->acheteur_identifiant;
+            return;
+        }
+
         $this->valide->add('date_projet', date('Y-m-d'));
         $this->valide->statut = self::STATUT_PROJET;
     }
