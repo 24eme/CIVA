@@ -616,17 +616,24 @@ class vracActions extends sfActions
             $typeTiers = 'vendeur';
         }
 
-    	if ($vrac->isNew()) {
-			if ($typeTiers == 'vendeur') {
-				$vrac->vendeur_identifiant = $declarant->_id;
-	            $vrac->storeVendeurInformations($declarant);
-	            $vrac->setVendeurQualite($declarant->getFamille());
-			} else {
-				$vrac->acheteur_identifiant = $declarant->_id;
-	            $vrac->storeAcheteurInformations($declarant);
-	            $vrac->setAcheteurQualite($declarant->getFamille());
-			}
+        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+            $typeTiers = 'mandataire';
+        }
+
+        if(!$typeTiers) {
+            $typeTiers = 'acheteur';
+        }
+
+    	if ($vrac->isNew() && $typeTiers == 'vendeur') {
+    		$vrac->vendeur_identifiant = $declarant->_id;
+            $vrac->storeVendeurInformations($declarant);
+            $vrac->setVendeurQualite($declarant->getFamille());
+    	} elseif($vrac->isNew() && $typeTiers == 'acheteur') {
+    		$vrac->acheteur_identifiant = $declarant->_id;
+            $vrac->storeAcheteurInformations($declarant);
+            $vrac->setAcheteurQualite($declarant->getFamille());
 		}
+
 		return $vrac;
     }
 
