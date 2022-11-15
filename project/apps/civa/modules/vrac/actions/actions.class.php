@@ -616,7 +616,7 @@ class vracActions extends sfActions
             $typeTiers = 'vendeur';
         }
 
-        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_COURTIER))) {
             $typeTiers = 'mandataire';
         }
 
