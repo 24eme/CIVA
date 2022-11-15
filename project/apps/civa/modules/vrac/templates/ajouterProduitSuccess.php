@@ -59,7 +59,7 @@
 	            </a>
 		    </li>
 		    <li class="suiv">
-		    	<button id="valide_form" type="submit" name="valider" style="cursor: pointer;">
+		    	<button id="valide_form" type="submit" name="valider" class="btn_image" style="cursor: pointer;">
 		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
 		    	</button>
 		    </li>

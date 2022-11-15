@@ -32,9 +32,9 @@
             <?php if(!$validation->hasErreurs() || $next_etape): ?>
             <li class="suiv">
                 <?php if ($etapes->getLast() == $etape): ?>
-                 <input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre contrat" id="valideVrac" />
+                 <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac">Valider et envoyer<small style="font-size: 12px; display: block; font-weight: normal;">le projet au vendeur</small></button>
                 <?php else: ?>
-                <button type="submit" name="valider" style="cursor: pointer;">
+                <button class="btn_image" type="submit" name="valider" style="cursor: pointer;">
                     <img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />
                 </button>
                 <?php endif; ?>
