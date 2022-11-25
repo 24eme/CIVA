@@ -11,27 +11,23 @@
           <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
           <div class="contenu_section">
               <p class="intro">Vous souhaitez :</p>
-              <form action="<?= url_for('sv_etablissement', ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data">
-              <?php echo $formCreation->renderHiddenFields() ?>
-              <?php echo $formCreation->renderGlobalErrors() ?>
+              <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data">
+              <?php echo $form->renderHiddenFields() ?>
+              <?php echo $form->renderGlobalErrors() ?>
               <?php if ($sv): ?>
                   <div class="ligne_form">
-                      <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="brouillon" checked="checked" />
-                      <label for="type_declaration_brouillon">Continuer ma déclaration</label>
+                    <?php echo $form['action']->renderError() ?>
+                    <?php echo $form['action']->render() ?>
                   </div>
-                  <div class="ligne_form">
-                      <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
-                      <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
-              </div>
               <?php else: ?>
               <div class="form_ligne">
-                  <?php echo $formCreation['file']->renderError() ?>
-                  <?php echo $formCreation['file']->renderLabel() ?>
-                  <?php echo $formCreation['file']->render() ?>
+                  <?php echo $form['file']->renderError() ?>
+                  <?php echo $form['file']->renderLabel() ?>
+                  <?php echo $form['file']->render() ?>
               </div>
                 <div class="ligne_form">
-                  <?php echo $formCreation['type_creation']->renderError() ?>
-                  <?php echo $formCreation['type_creation']->render() ?>
+                  <?php echo $form['type_creation']->renderError() ?>
+                  <?php echo $form['type_creation']->render() ?>
                 </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
