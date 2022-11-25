@@ -247,7 +247,7 @@ class tiersActions extends sfActions {
                     SVClient::getInstance()->delete($this->sv);
                     return $this->redirect('mon_espace_civa_production', ['identifiant' => $this->etablissement->identifiant]);
                 } else {
-                    return $this->redirect('sv_etablissement');
+                    return $this->redirect('sv_etablissement', ['identifiant' => $this->etablissement->identifiant]);
                 }
             }
         }
