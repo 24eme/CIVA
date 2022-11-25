@@ -23,6 +23,8 @@ $(document).ready(function()
 
     initLoadingCreationDS();
 
+    initLoadingCreationSV();
+
     if(!appDS.length) {
 
         return;
@@ -65,6 +67,17 @@ $(document).ready(function()
 
 
 });
+
+var initLoadingCreationSV = function ()
+{
+    var btn = document.querySelector('#form_sv #mon_espace_civa_valider[data-popup-loading=true]')
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        openPopup($("#popup_loader_creation_sv"));
+      })
+    }
+}
 
 
 /**

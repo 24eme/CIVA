@@ -11,7 +11,7 @@
           <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
           <div class="contenu_section">
               <p class="intro">Vous souhaitez :</p>
-              <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data">
+              <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data" id="form_sv">
               <?php echo $form->renderHiddenFields() ?>
               <?php echo $form->renderGlobalErrors() ?>
               <?php if ($sv): ?>
@@ -45,7 +45,7 @@
               </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
-                  <button type="submit" id="mon_espace_civa_valider" class="btn">
+                  <button type="submit" id="mon_espace_civa_valider" class="btn" data-popup-loading="true">
                       <img src="/images/boutons/btn_valider.png" alt="Valider" />
                   </button>
               </div>
@@ -58,4 +58,10 @@
             <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
         </div>
     <?php endif;?>
+</div>
+
+<div style="display: none" id="popup_loader_creation_sv" title="Génération de la SV">
+    <div class="popup-loading">
+    <p>La génération de votre SV est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
+    </div>
 </div>
