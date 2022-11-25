@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th class="col-xs-3">Produit</th>
-      <th class="col-xs-1 text-center">Superficie récolté<br /><small>(ares)</small></th>
+      <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Volume récolté<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">Usage industriels<br /><small>(hl)</small></th>

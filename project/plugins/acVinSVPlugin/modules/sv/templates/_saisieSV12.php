@@ -3,7 +3,7 @@
     <tr>
       <th class="col-xs-3">Apporteur</th>
       <th class="col-xs-3">Produit</th>
-      <th class="col-xs-1 text-center">Superficie récolté<br /><small>(ares)</small></th>
+      <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
       <th class="col-xs-1 text-center">Taux d'extraction</th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
