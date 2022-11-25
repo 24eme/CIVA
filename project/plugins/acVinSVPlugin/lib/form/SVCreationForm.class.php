@@ -34,8 +34,8 @@ class SVCreationForm extends BaseForm
     protected function getTypeCreationChoices()
     {
         return [
-            'CSV' => 'Démarrer à partir d\'un fichier',
             'DR' => 'Démarrer depuis les données de la DR',
+            'CSV' => 'Démarrer à partir d\'un fichier',
             'VIERGE' => 'Démarrer avec un document vierge'
         ];
     }
