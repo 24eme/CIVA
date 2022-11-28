@@ -6,7 +6,7 @@
       <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Volume récolté<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
-      <th class="col-xs-1 text-center">Usage industriels<br /><small>(hl)</small></th>
+      <th class="col-xs-1 text-center">Volume à détruire<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">VCI<br /><small>(hl)</small></th>
     </tr>
   </thead>
