@@ -23,9 +23,10 @@ class VracContratValidation extends DocumentValidation
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
     	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
-        $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraisins pour l\'ensemble de vos produits.');
+        $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraison pour l\'ensemble de vos produits.');
 
-        $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraisins ne peuvent dépasser le 31/07 dans le cadre d\'un contrat pluriannuel');
+        $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraison ne peuvent dépasser le 31/07 dans le cadre d\'un contrat pluriannuel');
+        $this->addControle('erreur', 'retiraisons_incoherence', 'Les dates de retiraison débutent le '.date('d/m/Y').' et ne peuvent dépasser le '.date('d/m/Y', strtotime('+60 days')).' dans le cadre d\'un contrat pluriannuel sans suivi qualitatif');
         $this->addControle('erreur', 'vendeur_assujetti_tva_required', 'Vous devez préciser si le vendeur est assujetti à la tva ou non');
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
@@ -60,8 +61,17 @@ class VracContratValidation extends DocumentValidation
                  {
 				    $retiraisons_manquantes[] = $detail->getLibelle();
 				}
-                if ($this->document->isPluriannuelCadre() && $detail->exist('retiraison_date_limite') && ('1970-'.$detail->retiraison_date_limite > '1970-07-31')) {
+                if ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite && ('1970-'.$detail->retiraison_date_limite > '1970-07-31')) {
                     $retiraisons_incoherentes[] = $detail->getLibelle();
+                }
+                if ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0') {
+                    $rdd = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? date('Y').'-'.$detail->retiraison_date_debut : $detail->retiraison_date_debut;
+                    $rdl = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? date('Y').'-'.$detail->retiraison_date_limite : $detail->retiraison_date_limite;
+                    if ($rdd && $rdd != date('Y-m-d')) {
+                        $retiraisons_incoherentes[] = $detail->getLibelle();
+                    } elseif($rdl && $rdl > date('Y-m-d', strtotime('+60 days'))) {
+                        $retiraisons_incoherentes[] = $detail->getLibelle();
+                    }
                 }
 
 			}
@@ -104,7 +114,7 @@ class VracContratValidation extends DocumentValidation
         }
 
         if (count($retiraisons_incoherentes) > 0) {
-            $this->addPoint('erreur', 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+            $this->addPoint('erreur', ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0')? 'retiraisons_incoherence' : 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
         if ($this->document->exist('vendeur_assujetti_tva') && $this->document->vendeur_assujetti_tva === null) {
