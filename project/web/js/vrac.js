@@ -218,6 +218,12 @@ var initAideALaSaisie = function()
         return false;
     });
 
+	$('.inputCleaner').click(function() {
+        let target=$('#'+$(this).attr('data-target'));
+        target.val('');
+        return false;
+    });
+
 };
 
 var initGenerationContratApplication = function()
