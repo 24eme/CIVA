@@ -135,4 +135,19 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
     }
+
+    public function executePdf(sfWebRequest $request)
+    {
+        $sv = $this->getRoute()->getSV();
+        $this->document = new ExportSVPdf($sv, $request->getParameter('output', 'pdf'));
+        $this->document->setPartialFunction(array($this, 'getPartial'));
+
+        if ($request->getParameter('force')) {
+            $this->document->removeCache();
+        }
+
+        $this->document->generatePDF();
+        $this->document->addHeaders($this->getResponse());
+        return $this->renderText($this->document->output());
+    }
 }
