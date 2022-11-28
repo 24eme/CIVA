@@ -52,6 +52,16 @@ sv_autres:
   requirements:
     sf_method: [get, post]
 
+sv_stockage:
+  url: /sv/stockage/:id
+  param: { module: sv, action: stockage }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [get, post]
+
 sv_validation:
   url: /sv/validation/:id
   param: { module: sv, action: validation }

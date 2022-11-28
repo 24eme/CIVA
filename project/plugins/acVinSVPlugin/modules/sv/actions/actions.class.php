@@ -125,6 +125,11 @@ class svActions extends sfActions {
         return $this->redirect('sv_validation', $this->sv);
     }
 
+    public function executeStockage(sfWebRequest $request)
+    {
+
+    }
+
     public function executeValidation(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
