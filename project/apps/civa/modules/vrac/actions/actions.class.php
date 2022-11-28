@@ -255,6 +255,9 @@ class vracActions extends sfActions
 	{
         $contratPluriannuel = $this->getRoute()->getVrac();
         $this->forward404Unless($contratPluriannuel);
+        $user = $this->getTiersOfVrac($contratPluriannuel);
+        $this->forward404Unless($user);
+        $this->forward404Unless($user->_id == $contratPluriannuel->acheteur_identifiant);
         $campagne = $request->getParameter('campagne');
         try {
             $nextContratApplication = $contratPluriannuel->generateNextPluriannuelApplication();

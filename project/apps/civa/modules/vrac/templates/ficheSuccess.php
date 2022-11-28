@@ -109,7 +109,7 @@ td.echeance {display: inline;}
     			<td>
 					<?php if($contratApplication): ?>
 						<a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>">Voir le contrat</a>
-					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat): ?>
+					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->acheteur_identifiant)): ?>
 						<a href="" class="generationContratApplication">Générer le contrat</a>
 					<?php else: ?>
 						<i class="text-muted">Non disponible</i>
