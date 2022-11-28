@@ -58,11 +58,11 @@ class SVClient extends acCouchdbClient {
             $dr = DRClient::getInstance()->find($id);
             foreach ($dr->getProduitsDetails() as $detail) {
                 if($detail->getVolumeByAcheteur($cvi_acheteur)) {
-                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()));
+                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), $detail->denomination);
                 }
 
                 if($detail->getVolumeByAcheteur($cvi_acheteur, 'cooperatives')) {
-                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()));
+                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), $detail->denomination);
                 }
             }
         }
