@@ -21,6 +21,15 @@ class SVProduit extends BaseSVProduit {
 		return $this->_get('libelle');
 	}
 
+    public function getLibelleHtml() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+		if($this->denomination_complementaire) {
+			$libelle .= ' <span class="text-muted">'.$this->denomination_complementaire.'</span>';
+		}
+
+		return $libelle;
+	}
+
     public function getTauxExtraction() {
         if($this->getQuantiteRecolte() > 0 && $this->getVolumeRevendique() > 0) {
 
@@ -51,6 +60,11 @@ class SVProduit extends BaseSVProduit {
 
     public function getProduitHash() {
 
-        return preg_replace('|/apporteurs/[^/]*/|', '/declaration/', $this->getParent()->getHash());
+        return preg_replace('|/apporteurs/[^/]*/|', '/declaration/', $this->getCepage()->getHash());
+    }
+
+    public function getCepage() {
+
+        return $this->getParent();
     }
 }

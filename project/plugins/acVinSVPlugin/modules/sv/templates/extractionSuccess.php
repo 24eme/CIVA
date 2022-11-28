@@ -8,15 +8,15 @@
 <table class="table table-bordered table-striped table-condensed">
   <thead>
     <tr>
-      <th class="col-xs-10">Produit</th>
-      <th class="col-xs-2 text-center">Taux d'extraction</th>
+      <th class="col-xs-1 text-center">Taux d'extraction</th>
+      <th class="col-xs-11">Produit</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($form['produits'] as $produit): ?>
       <tr>
-        <td><?php echo $produit['taux_extraction']->renderLabel() ?></td>
-        <td><?php echo $produit['taux_extraction']->render(['class' => 'form-control text-right input-float input-sm']) ?></td>
+        <td><?php echo $produit['taux_extraction']->render(['class' => 'form-control text-right input-float input-xs']) ?></td>
+        <td><?php echo $produit['taux_extraction']->renderLabel(null, array('style' => 'font-weight: normal')) ?></td>
       </tr>
     <?php endforeach ?>
   </tbody>
