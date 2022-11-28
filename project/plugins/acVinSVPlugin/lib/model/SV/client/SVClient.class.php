@@ -105,10 +105,10 @@ class SVClient extends acCouchdbClient {
             $prod = array();
 
             if(!$produit) {
-                throw new Exception("Produit non trouvé");
+                throw new Exception("Produit non trouvé : ".implode(";", $line));
             }
 
-            $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash());
+            $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $line[CsvFileAcheteur::CSV_DENOMINATION]);
 
             $produit->superficie_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 

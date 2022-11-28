@@ -99,6 +99,9 @@ class CsvFileAcheteur
       $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
       $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
       $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
+      $cepage = preg_replace("/Rebêches Blanc/i", "Rebêches", $cepage);
+      $cepage = preg_replace("/Rebêches Rouge/i", "Rebêches", $cepage);
+      $cepage = preg_replace("/Rebêches Rosé/i", "Rebêches", $cepage);
 
       if(preg_match("/(AOC ALSACE PINOT NOIR|AOC ALSACE PN ROUGE)/i", $appellation)) {
           $cepage = null;
