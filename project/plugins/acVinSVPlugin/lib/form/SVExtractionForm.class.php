@@ -21,7 +21,7 @@ class SVExtractionForm extends acCouchdbForm
             $formProduitTauxExtraction = new BaseForm();
             $formProduitTauxExtraction->setWidget('taux_extraction', new sfWidgetFormInput());
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber());
-            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle);
+            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->getLibelleHtml());
 
             $default_taux = $produit->getTauxExtractionDefault();
             $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);

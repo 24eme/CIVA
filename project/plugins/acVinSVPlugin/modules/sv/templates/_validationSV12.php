@@ -12,7 +12,7 @@
   <tbody>
   <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
     <tr>
-      <td><?php echo $produit->libelle ?></td>
+      <td><?php echo $produit->getRawValue()->libelle_html ?></td>
       <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
       <td class="text-right"><?php echo $produit->quantite_recolte ?> <small class="text-muted">kg</small></td>
       <td class="text-right"><?php echoFloat($produit->volume_revendique) ?> <small class="text-muted">hl</small></td>

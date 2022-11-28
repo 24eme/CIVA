@@ -52,6 +52,7 @@ class SV extends BaseSV
             if(!isset($recap[$produit->getProduitHash()])) {
                 $recap[$produit->getProduitHash()] = new stdClass();
                 $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
+                $recap[$produit->getProduitHash()]->libelle_html = $produit->getLibelleHtml();
                 $recap[$produit->getProduitHash()]->superficie_recolte = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {

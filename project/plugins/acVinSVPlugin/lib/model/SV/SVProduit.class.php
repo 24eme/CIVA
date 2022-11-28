@@ -21,6 +21,15 @@ class SVProduit extends BaseSVProduit {
 		return $this->_get('libelle');
 	}
 
+    public function getLibelleHtml() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+		if($this->denomination_complementaire) {
+			$libelle .= ' <span class="text-muted">'.$this->denomination_complementaire.'</span>';
+		}
+
+		return $libelle;
+	}
+
     public function getTauxExtraction() {
         if($this->getQuantiteRecolte() > 0 && $this->getVolumeRevendique() > 0) {
 
