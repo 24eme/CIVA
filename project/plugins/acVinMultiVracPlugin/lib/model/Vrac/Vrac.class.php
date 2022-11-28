@@ -724,7 +724,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         if ($this->isApplicationPluriannuel()) {
             $reference = $this->getContratDeReference();
-            $this->numero_visa = $reference->numero_visa.substr($this->campagne, 0, 4);
+            $this->numero_visa = $reference->numero_visa.'-'.substr($this->campagne, 0, 4);
         }
     }
 
