@@ -31,7 +31,7 @@
                 <label for="type_ds_neant">Déclaration de Stocks Néant</label>
             </div>
             <div class="ligne_form ligne_btn">
-                <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />
+                <input type="image" name="boutons[valider]" id="mon_espace_civa_valider" data-popup-loading="true" class="btn" src="/images/boutons/btn_demarrer.png" alt="Démarrer" />
             </div>
         <?php endif; ?>
         <p class="intro msg_mon_espace_civa"><?php echo acCouchdbManager::getClient('Messages')->getMessage('intro_mon_espace_civa_ds'); ?></p>
