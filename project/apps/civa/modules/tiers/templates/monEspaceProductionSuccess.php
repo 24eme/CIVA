@@ -45,7 +45,7 @@
               </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
-                  <button type="submit" id="mon_espace_civa_valider" class="btn" data-popup-loading="true">
+                  <button type="submit" id="mon_espace_civa_valider" class="btn">
                       <img src="/images/boutons/btn_valider.png" alt="Valider" />
                   </button>
               </div>
