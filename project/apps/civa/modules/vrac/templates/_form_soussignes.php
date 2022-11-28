@@ -23,41 +23,56 @@
             </div>
             <?php endif; ?>
 			<?php if ($form->getObject()->isNew()): ?>
+            <div id="contrat_pluriannuel_inputs" style="display: none;">
             <div class="form_col selecteur" style="padding-top: 0;">
                 <div id="ligne_campagnes_application" class="ligne_form">
-					<label style="opacity: 0.25;" for="" class="bold">Campagnes d'application :</label>
-                    <select disabled="disabled" style="margin-left: 5px; width: 100px;">
-						<option></option>
-						<option>2022 à 2024</option>
-						<option>2023 à 2025</option>
-						<option>2024 à 2026</option>
-					</select>
+                    <?php echo $form['campagne']->renderError() ?>
+    				<?php echo $form['campagne']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
+    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 100px;")) ?>
                 </div>
+            </div>
+            <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
+            <div class="form_col selecteur" style="padding-top: 0;">
+                <div id="ligne_contrat_pluriannuel_mode_surface" class="ligne_form">
+                    <?php echo $form['contrat_pluriannuel_mode_surface']->renderError() ?>
+				    <?php echo $form['contrat_pluriannuel_mode_surface']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
+					<?php echo $form['contrat_pluriannuel_mode_surface']->render(array("disabled" => "disabled")) ?>
+                </div>
+            </div>
+            <?php endif; ?>
             </div>
             <script>
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
+                    document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
                     document.querySelector('#ligne_campagnes_application select').disabled = true;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').disabled = true;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
+                      item.disabled = true;
+                    });
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '0.25';
+                    document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '0.25';
                 });
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').addEventListener('change', function(e) {
+                    document.getElementById('contrat_pluriannuel_inputs').style.display = 'block';
                     document.querySelector('#ligne_campagnes_application select').disabled = false;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
+                      item.disabled = false;
+                    });
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
+                    document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';
                 });
             </script>
             <?php elseif($vrac->isPluriannuelCadre()): ?>
             <div class="form_col selecteur" style="padding-top: 0;">
                 <div class="ligne_form">
 					<label for="" class="bold">Campagnes d'application :</label>
-                    <span style="margin-left: 5px;">2022 à 2024</span>
+                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo ($millesime+VracClient::getConfigVar('nb_campagnes_pluriannuel',0)-1) ?></span>
                 </div>
             </div>
-            <?php endif; ?>
-            <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
             <div class="form_col selecteur" style="padding-top: 0;">
                 <div class="ligne_form">
-                <?php echo $form['contrat_pluriannuel_mode_surface']->renderError() ?>
-					<?php echo $form['contrat_pluriannuel_mode_surface']->renderLabel(null, array("class" => "bold")) ?>
-					<?php echo $form['contrat_pluriannuel_mode_surface']->render() ?>
+					<label for="" class="bold">Vous contractualisez sur :</label>
+                    <span style="margin-left: 5px;"><?php if(!$vrac->isInModeSurface()): ?>Du volume (hl)<?php else: ?>De la surface (ha)<?php endif; ?></span>
                 </div>
             </div>
             <?php endif; ?>

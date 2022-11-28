@@ -227,7 +227,7 @@ Vrac:
       type_contrat: {  }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
-      contrat_pluriannuel_mode_surface: { required: false }
+      contrat_pluriannuel_mode_surface: { }
       date_modification: {  }
       date_export_creation: {  }
       motif_suppression: {  }
