@@ -147,7 +147,7 @@
 				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
 			</td>
 			<td colspan="2">
-            <?php echo $form['suivi_qualitatif']->render() ?><small style="font-size: 12px; color: #666; margin-left: 10px;">La date limite de retiraison doit être avant le XX XXXX</small>
+            <?php echo $form['suivi_qualitatif']->render() ?>
 			</td>
 		</tr>
 		<?php endif; ?>
