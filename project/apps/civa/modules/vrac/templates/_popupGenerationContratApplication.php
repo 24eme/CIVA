@@ -11,8 +11,10 @@
             			<th class="produit">Produits</th>
             			<th class="volume"><span>Volume estimé</span></th>
             			<th class="prix"><span>Prix</span></th>
+                        <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<th class="volume"><span>Volume</span></th>
             			<th class="prix"><span>Prix</span></th>
+                        <?php endif; ?>
             		</tr>
             	</thead>
             	<tbody>
@@ -33,14 +35,16 @@
             			<td class="prix">
             				<?php echo $detail->prix_unitaire; ?>&nbsp;&euro;/hl
             			</td>
+                        <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<td class="volume">
         				    <span><?php echo $embedForm['volume_propose']->renderError() ?></span>
-        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => '')) ?>&nbsp;hl
+        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;hl
             			</td>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => '')) ?>&nbsp;&euro;/hl
+            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;&euro;/hl
             			</td>
+                        <?php endif; ?>
             		</tr>
             	<?php $counter++; endforeach; ?>
             	</tbody>
