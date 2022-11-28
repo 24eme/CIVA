@@ -31,7 +31,7 @@ class svActions extends sfActions {
 
         if($this->formCreation->getValue('file')) {
 
-            return $this->redirect('sv_validation', ['id' => $sv->_id]);
+            return $this->redirect('sv_stockage', ['id' => $sv->_id]);
         }
 
         $this->redirect(
