@@ -23,7 +23,7 @@
               <div class="ligne_form">
                 <ul class="radio_list">
                     <li>
-                        <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR">
+                        <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
                         <label for="sv_creation_type_creation_DR">Démarrer depuis les données de la DR</label>
                     </li>
                     <li>
