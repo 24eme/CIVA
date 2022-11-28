@@ -837,7 +837,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
     public function isInModeSurface() {
-        return ($this->exist('contrat_pluriannuel_mode_surface') && $this->contrat_pluriannuel_mode_surface);
+        return $this->contrat_pluriannuel_mode_surface;
     }
 
 	public function getContratsApplication() {
