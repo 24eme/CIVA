@@ -1,7 +1,7 @@
 <?php use_helper('Float') ?>
 <?php use_helper('Date') ?>
 
-<p class="intro_contrat_vrac">Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernées. <br />Saisissez ici les éventuelles conditions du contrat.</p>
+<p class="intro_contrat_vrac">Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernées.</p>
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => false)) ?>
 
 <table class="validation table_donnees" style="margin: 0 0 20px;">
