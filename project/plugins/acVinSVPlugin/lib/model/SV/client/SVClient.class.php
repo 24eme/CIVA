@@ -68,7 +68,14 @@ class SVClient extends acCouchdbClient {
                     if(!$detail->getVolumeByAcheteur($cvi_acheteur, $drAcheteurType)) {
                         continue;
                     }
-                    $detail = $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), trim(str_replace($etablissement->nom, null, $detail->denomination)));
+                    $hash = HashMapper::convert($detail->getCepage()->getHash());
+                    if($detail->getAppelationNode()->getKey() == "appellation_CREMANT" && $detail->getCepage()->getKey() == "cepage_PN") {
+                        $hash = HashMapper::convert($detail->getCouleur()->getHash()).'/cepages/RS';
+                    } elseif($detail->getAppelationNode()->getKey() == "appellation_CREMANT" && $detail->getCepage()->getKey() != "cepage_RB") {
+                        $hash = HashMapper::convert($detail->getCouleur()->getHash()).'/cepages/BL';
+                    }
+
+                    $detail = $sv->addProduit($dr->identifiant, $hash, trim(str_replace($etablissement->nom, null, $detail->denomination)));
 
                     if(!$detail) {
                         continue;

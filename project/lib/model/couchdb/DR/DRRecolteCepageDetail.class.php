@@ -31,6 +31,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return $this->getCepage()->getCouleur();
     }
 
+    public function getAppelationNode() {
+        return $this->getCouleur()->getAppellation();
+    }
+
     public function getLieuNode() {
         return $this->getCouleur()->getLieu();
     }
