@@ -9,8 +9,8 @@ class SVAutreForm extends acCouchdbObjectForm
 
     public function configure()
     {
-        $this->setWidget('lies', new bsWidgetFormInput());
-        $this->setWidget('rebeches', new bsWidgetFormInput());
+        $this->setWidget('lies', new bsWidgetFormInputFloat());
+        $this->setWidget('rebeches', new bsWidgetFormInputFloat());
 
         $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
         $this->setValidator('rebeches', new sfValidatorNumber(['min' => 0]));
