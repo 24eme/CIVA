@@ -898,6 +898,21 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $vrac;
 	}
 
+	public function getPourcentageTotalDesClausesEvolutionPrix() {
+		if ($this->exist('clause_evolution_prix') && $this->clause_evolution_prix) {
+            $total = 0;
+            $clauses = explode(PHP_EOL, $this->clause_evolution_prix);
+            foreach($clauses as $clause) {
+                $pos = strpos($clause, '%');
+                if ($pos !== false) {
+                    $total += (substr($clause, 0, $pos) * 1);
+                }
+            }
+            return $total;
+        }
+        return 100;
+	}
+
 	public function isPremiereApplication() {
 		if ($cadre = $this->getContratPluriannuelCadre()) {
             $applications = $cadre->getContratsApplication();
