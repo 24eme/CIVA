@@ -14,6 +14,8 @@
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<th class="volume"><span>Volume</span></th>
             			<th class="prix"><span>Prix</span></th>
+                        <?php elseif ($form->getObject()->contrat_pluriannuel_mode_surface): ?>
+            			<th class="volume"><span>Volume</span></th>
                         <?php endif; ?>
             		</tr>
             	</thead>
@@ -43,6 +45,11 @@
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
             				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;&euro;/hl
+            			</td>
+                        <?php elseif ($form->getObject()->contrat_pluriannuel_mode_surface): ?>
+            			<td class="volume">
+        				    <span><?php echo $embedForm['volume_propose']->renderError() ?></span>
+        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;hl
             			</td>
                         <?php endif; ?>
             		</tr>
