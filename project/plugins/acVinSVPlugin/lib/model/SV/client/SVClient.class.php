@@ -54,17 +54,30 @@ class SVClient extends acCouchdbClient {
         if(!$cvi_acheteur) {
             return;
         }
+        $drAcheteurType = 'negoces';
+        if($sv->getType() == SVClient::TYPE_SV11) {
+            $drAcheteurType = 'cooperatives';
+        }
+
         $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($drs as $id => $doc) {
             $dr = DRClient::getInstance()->find($id);
-            foreach ($dr->getProduitsDetails() as $detail) {
-                $denomination = trim(str_replace($etablissement->nom, null, $detail->denomination));
-                if($detail->getVolumeByAcheteur($cvi_acheteur)) {
-                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), $denomination);
-                }
+            foreach ($dr->getProduits() as $cepage) {
+                $svCepage = null;
+                foreach ($cepage->getProduitsDetails() as $detail) {
+                    if(!$detail->getVolumeByAcheteur($cvi_acheteur, $drAcheteurType)) {
+                        continue;
+                    }
+                    $detail = $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), trim(str_replace($etablissement->nom, null, $detail->denomination)));
 
-                if($detail->getVolumeByAcheteur($cvi_acheteur, 'cooperatives')) {
-                    $sv->addProduit($dr->identifiant, HashMapper::convert($detail->getCepage()->getHash()), $denomination);
+                    if(!$detail) {
+                        continue;
+                    }
+
+                    $svCepage = $detail->getCepage();
+                }
+                if($svCepage && count($svCepage->toArray(true, false)) == 1) {
+                    $svCepage->getFirst()->superficie_recolte = $cepage->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
                 }
             }
         }

@@ -60,6 +60,11 @@ class SVProduit extends BaseSVProduit {
 
     public function getProduitHash() {
 
-        return preg_replace('|/apporteurs/[^/]*/|', '/declaration/', $this->getParent()->getHash());
+        return preg_replace('|/apporteurs/[^/]*/|', '/declaration/', $this->getCepage()->getHash());
+    }
+
+    public function getCepage() {
+
+        return $this->getParent();
     }
 }
