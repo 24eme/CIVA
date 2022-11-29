@@ -148,6 +148,9 @@ td.echeance {display: inline;}
 					</a>
                     <?php endif; ?>
 				<?php endif; ?>
+                <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isBrouillon() && $user->_id == $vrac->vendeur_identifiant): ?>
+                    <p>En attente de validation du projet par l'acheteur</p>
+                <?php endif; ?>
                 <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProposition() && !$vrac->hasValide($user->_id)): ?>
                     <p>En attente de signature par le vendeur</p>
                 <?php endif; ?>
