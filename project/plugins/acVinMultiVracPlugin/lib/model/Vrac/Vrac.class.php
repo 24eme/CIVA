@@ -35,7 +35,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     protected $diff_with_mother = null;
 
 	static $statuts_libelles = array(
-		self::STATUT_CREE => 'Brouillon',
+		self::STATUT_CREE => 'Projet',
 		self::STATUT_PROPOSITION => 'Proposition',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
 		self::STATUT_VALIDE => 'Validé',
