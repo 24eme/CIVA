@@ -362,6 +362,12 @@ class vracActions extends sfActions
 
 					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 			    } else {
+                    if ($this->user->_id == $this->vrac->vendeur_identifiant) {
+                        $this->saveVendeurProjetAttachment($this->vrac);
+                        $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur afin qu\'il le valide.');
+                    } else {
+                        $this->getUser()->setFlash('notice', 'Le contrat a été créé avec succès et votre signature a bien été prise en compte. Chacun des acteurs du contrat va recevoir un email de demande de signature.');
+                    }
 		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 					foreach ($emails as $email) {
 						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
@@ -370,11 +376,17 @@ class vracActions extends sfActions
 					foreach ($emails as $email) {
 						VracMailer::getInstance()->demandeSignature($this->vrac, $email);
 					}
-					$this->getUser()->setFlash('notice', 'Le contrat a été créé avec succès et votre signature a bien été prise en compte. Chacun des acteurs du contrat va recevoir un email de demande de signature.');
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
        			}
         	}
         }
+    }
+
+    protected function saveVendeurProjetAttachment($vrac) {
+        $file = tmpfile();
+        fwrite($file, json_encode($vrac->getData()));
+        $vrac->storeAttachment(stream_get_meta_data($file)['uri'], 'application/json', Vrac::VENDEUR_PROJET_FILENAME);
+        fclose($file);
     }
 
     public function executeAjouterProduit(sfWebRequest $request)
