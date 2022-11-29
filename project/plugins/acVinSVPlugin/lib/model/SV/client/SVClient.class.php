@@ -63,22 +63,30 @@ class SVClient extends acCouchdbClient {
         foreach ($drs as $id => $doc) {
             $dr = DRClient::getInstance()->find($id);
             foreach ($dr->getProduits() as $cepage) {
+                if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
+                    continue;
+                }
+                $hasRebeches = $cepage->getCouleur()->exist('cepage_RB') && $cepage->getCouleur()->get('cepage_RB')->getVolumeAcheteur($cvi_acheteur, $drAcheteurType, false);
                 $svCepage = null;
+                $hash = HashMapper::convert($cepage->getHash());
+                if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && $cepage->getKey() == "cepage_PN") {
+                    $hash = HashMapper::convert($cepage->getCouleur()->getHash()).'/cepages/RS';
+                } elseif($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getKey(), "cepage_RB") === false) {
+                    $hash = HashMapper::convert($cepage->getCouleur()->getHash()).'/cepages/BL';
+                }
                 foreach ($cepage->getProduitsDetails() as $detail) {
                     if(!$detail->getVolumeByAcheteur($cvi_acheteur, $drAcheteurType)) {
                         continue;
                     }
-                    $hash = HashMapper::convert($detail->getCepage()->getHash());
-                    if($detail->getAppelationNode()->getKey() == "appellation_CREMANT" && $detail->getCepage()->getKey() == "cepage_PN") {
-                        $hash = HashMapper::convert($detail->getCouleur()->getHash()).'/cepages/RS';
-                    } elseif($detail->getAppelationNode()->getKey() == "appellation_CREMANT" && $detail->getCepage()->getKey() != "cepage_RB") {
-                        $hash = HashMapper::convert($detail->getCouleur()->getHash()).'/cepages/BL';
-                    }
 
                     $detail = $sv->addProduit($dr->identifiant, $hash, trim(str_replace($etablissement->nom, null, $detail->denomination)));
 
-                    if(!$detail) {
-                        continue;
+                    if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/RS") !== false && $hasRebeches) {
+                        $sv->addProduit($dr->identifiant, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
+                    }
+
+                    if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/BL") !== false && $hasRebeches) {
+                        $sv->addProduit($dr->identifiant, str_replace("/cepages/BL", "/cepages/RBBL", $hash));
                     }
 
                     $svCepage = $detail->getCepage();
