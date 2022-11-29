@@ -79,7 +79,7 @@ class SVClient extends acCouchdbClient {
                         continue;
                     }
 
-                    $detail = $sv->addProduit($dr->identifiant, $hash, trim(str_replace($etablissement->nom, null, $detail->denomination)));
+                    $detail = $sv->addProduit($dr->identifiant, $hash, $this->formatDenomination($detail->denomination));
 
                     if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/RS") !== false && $hasRebeches) {
                         $sv->addProduit($dr->identifiant, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
@@ -96,12 +96,38 @@ class SVClient extends acCouchdbClient {
                 }
                 if($cepage->getVolumeAcheteur($cvi_acheteur, 'mouts')) {
                     $svProduit = $sv->addProduit($dr->identifiant, $hash);
-                    $svProduit->add('volume_mouts');
+                    $svProduit->add('volume_mouts', $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts'));
                 }
             }
         }
 
         return $sv;
+    }
+
+    protected function formatDenomination($denomination) {
+        $denoms = array();
+
+        if(preg_match('/VIEILLES[ ]*VIGNES/i', $denomination)) {
+            $denoms[] = 'VIEILLES VIGNES';
+        }
+
+        if(preg_match('/(-| |^)AB(-| |$)/i', $denomination)) {
+            $denoms[] = 'AB';
+        }
+
+        if(preg_match('/(-| |^)BIO(-| |$)/i', $denomination)) {
+            $denoms[] = 'BIO';
+        }
+
+        if(preg_match('/(-| |^)HVE(-| |$)/i', $denomination)) {
+            $denoms[] = 'BIO';
+        }
+
+        if(preg_match('/AUXERROIS/i', $denomination)) {
+            $denoms[] = 'AUXERROIS';
+        }
+
+        return implode(" ", $denoms);
     }
 
     public function identifyProductCSV($line) {
