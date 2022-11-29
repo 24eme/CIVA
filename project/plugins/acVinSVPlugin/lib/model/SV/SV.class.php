@@ -51,8 +51,8 @@ class SV extends BaseSV
         foreach($this->getProduits() as $produit) {
             if(!isset($recap[$produit->getProduitHash()])) {
                 $recap[$produit->getProduitHash()] = new stdClass();
-                $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
-                $recap[$produit->getProduitHash()]->libelle_html = $produit->getLibelleHtml();
+                $recap[$produit->getProduitHash()]->libelle = $produit->getConfig()->getLibelleFormat();
+                $recap[$produit->getProduitHash()]->libelle_html = $produit->getConfig()->getLibelleFormat();
                 $recap[$produit->getProduitHash()]->superficie_recolte = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
@@ -93,7 +93,16 @@ class SV extends BaseSV
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
         }
 
-        return $recap;
+        $recapSorted = array();
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            if(!isset($recap[$hashProduit])) {
+                continue;
+            }
+            $recapSorted[$hashProduit] = $recap[$hashProduit];
+        }
+
+        return $recapSorted;
     }
 
     public static function buildDetailKey($denominationComplementaire = null, $hidden_denom = null) {
