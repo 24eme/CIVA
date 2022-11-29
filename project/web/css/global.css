@@ -659,3 +659,7 @@ input[type="text"].ui-autocomplete-input
     white-space: nowrap;
     width: 14px;
 }
+
+.versionner {
+    outline: 1px dotted #ff0000 !important;
+}
