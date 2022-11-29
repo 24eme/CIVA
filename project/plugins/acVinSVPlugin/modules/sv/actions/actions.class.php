@@ -27,16 +27,21 @@ class svActions extends sfActions {
             return sfView::SUCCESS;
         }
 
-        $sv = $this->formCreation->save();
+        $typeCreation = $this->formCreation->process();
 
-        if($this->formCreation->getValue('file')) {
+        if ($typeCreation === 'DR') {
+            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, "2021");
+            $sv->save();
 
-            return $this->redirect('sv_stockage', ['id' => $sv->_id]);
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                ['id' => $sv->_id]
+            );
         }
 
-        $this->redirect(
-            SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
-            ['id' => $sv->_id]
+        return $this->redirect(
+            'sv_csv_verify',
+            ['hash' => $typeCreation]
         );
     }
 
