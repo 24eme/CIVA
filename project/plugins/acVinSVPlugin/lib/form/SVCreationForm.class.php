@@ -40,16 +40,12 @@ class SVCreationForm extends BaseForm
         ];
     }
 
-    public function save()
+    public function process()
     {
-        if($this->getValue('file')) {
-            $sv = SVClient::getInstance()->createFromCSV($this->identifiant, "2021", file_get_contents($this->getValue('file')->getTempName()));
-        } else {
-            $sv = SVClient::getInstance()->createFromDR($this->identifiant, "2021");
+        if ($this->getValue('type_creation') === 'CSV') {
+            return ($this->getValue('file')) ? $this->getValue('file')->getMd5() : null;
         }
 
-        $sv->save();
-
-        return $sv;
+        return $this->getValue('type_creation');
     }
 }

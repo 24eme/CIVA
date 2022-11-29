@@ -27,17 +27,47 @@ class svActions extends sfActions {
             return sfView::SUCCESS;
         }
 
-        $sv = $this->formCreation->save();
+        $typeCreation = $this->formCreation->process();
 
-        if($this->formCreation->getValue('file')) {
+        if ($typeCreation === 'DR') {
+            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, "2021");
+            $sv->save();
 
-            return $this->redirect('sv_stockage', ['id' => $sv->_id]);
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                ['id' => $sv->_id]
+            );
         }
 
-        $this->redirect(
-            SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
-            ['id' => $sv->_id]
+        return $this->redirect(
+            'sv_csv_verify',
+            ['identifiant' => $this->etablissement->identifiant, 'campagne' => "2021", 'hash' => $typeCreation]
         );
+    }
+
+    public function executeVerify(sfWebRequest $request)
+    {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->verify = SVClient::getInstance()->checkCSV(
+            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash'),
+            $this->etablissement->cvi,
+            $request->getParameter('campagne')
+        );
+
+        if (empty($this->verify)) {
+            $sv = SVClient::getInstance()->createFromCSV(
+                $this->etablissement->identifiant,
+                $request->getParameter('campagne'),
+                sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
+            );
+
+            $sv->save();
+
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                ['id' => $sv->_id]
+            );
+        }
     }
 
     public function executeExtraction(sfWebRequest $request) {

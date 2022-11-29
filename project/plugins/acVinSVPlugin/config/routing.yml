@@ -2,6 +2,15 @@ sv:
   url: /sv
   param: { module: sv, action: index }
 
+sv_csv_verify:
+  url: /sv/verify/:identifiant/:campagne/:hash
+  param: { module: sv, action: verify }
+  class: EtablissementRoute
+  options:
+    model: Etablissement
+    type:  object
+  requirement: [get, post]
+
 sv_etablissement:
   url: /sv/etablissement/:identifiant
   param: { module: sv, action: etablissement }

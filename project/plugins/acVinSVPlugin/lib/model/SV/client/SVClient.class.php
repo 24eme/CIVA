@@ -5,6 +5,10 @@ class SVClient extends acCouchdbClient {
     const TYPE_SV11 = "SV11";
     const TYPE_SV12 = "SV12";
 
+    const CSV_ERROR_ACHETEUR  = "CSV_ERROR_ACHETEUR";
+    const CSV_ERROR_APPORTEUR = "CSV_ERROR_APPORTEUR";
+    const CSV_ERROR_PRODUIT   = "CSV_ERROR_PRODUIT";
+
     public static function getInstance()
     {
         return acCouchdbManager::getClient("SV");
@@ -137,6 +141,7 @@ class SVClient extends acCouchdbClient {
 
     public function createFromCSV($identifiant, $campagne, $csvFile) {
         $sv = $this->createSV($identifiant, $campagne);
+        $csvFile = file_get_contents($csvFile);
 
         foreach (explode("\n", $csvFile) as $lineContent) {
             $line = str_getcsv($lineContent, ";");
@@ -154,17 +159,7 @@ class SVClient extends acCouchdbClient {
             }
 
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
-
-            if(!$apporteur) {
-                throw new Exception("Apporteur non trouvé");
-            }
-
             $produit = CsvFileAcheteur::identifyProductCSV($line);
-            $prod = array();
-
-            if(!$produit) {
-                throw new Exception("Produit non trouvé : ".implode(";", $line));
-            }
 
             $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $line[CsvFileAcheteur::CSV_DENOMINATION]);
 
@@ -174,6 +169,7 @@ class SVClient extends acCouchdbClient {
                 $produit->quantite_recolte += (int) $line[CsvFileAcheteur::CSV_SV_QUANTITE_VF];
                 $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
             }
+
             if($sv->getType() == SVClient::TYPE_SV11) {
                 $produit->volume_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
                 $produit->volume_detruit += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC]);
@@ -188,6 +184,55 @@ class SVClient extends acCouchdbClient {
     protected function recodeNumber($value) {
 
         return round(str_replace(",", ".", $value)*1, 2);
+    }
+
+    public function checkCSV($csvFile, $identifiant, $campagne)
+    {
+        if (! is_file($csvFile)) {
+            throw new Exception("Le fichier $csvFile n'existe pas");
+        }
+
+        $check = [];
+        $csvFile = file_get_contents($csvFile);
+
+        $i = 0;
+        foreach (explode("\n", $csvFile) as $lineContent) {
+            $i++;
+            $line = str_getcsv($lineContent, ";");
+
+            if(!preg_match('/^[0-9]+/', $line[0])) {
+                continue;
+            }
+
+            if ($line[CsvFileAcheteur::CSV_ACHETEUR_CVI] !== $identifiant) {
+                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "Mauvais acheteur"];
+                continue;
+            }
+
+            if (preg_match('/JEUNES +VIGNES/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
+                continue;
+            }
+
+            if (preg_match('/JUS DE RAISIN/i', $line[CsvFileAcheteur::CSV_APPELLATION])) {
+                continue;
+            }
+
+            $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
+
+            if(! $apporteur) {
+                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non trouvé'];
+                continue;
+            }
+
+            $produit = CsvFileAcheteur::identifyProductCSV($line);
+
+            if(! $produit) {
+                $check[self::CSV_ERROR_PRODUIT][] = [$i, 'Produit', "Produit non trouvé : ".implode(";", $line)];
+                continue;
+            }
+        }
+
+        return $check;
     }
 
 }
