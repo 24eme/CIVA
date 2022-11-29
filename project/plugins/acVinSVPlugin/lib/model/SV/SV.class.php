@@ -123,7 +123,7 @@ class SV extends BaseSV
         $produit->commune = $etablissement->declaration_commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
-            //$this->declaration->reorderByConf();
+            $this->apporteurs->get($identifiant)->reorderByConf();
         }
         return $this->get($produit->getHash());
     }

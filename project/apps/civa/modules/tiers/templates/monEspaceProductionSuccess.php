@@ -21,33 +21,20 @@
                   </div>
               <?php else: ?>
               <div class="ligne_form">
-                <ul class="radio_list">
-                    <li>
-                        <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
-                        <label for="sv_creation_type_creation_DR">Démarrer depuis les données de la DR</label>
-                    </li>
-                    <li>
-                        <input name="sv_creation[type_creation]" type="radio" value="CSV" id="sv_creation_type_creation_CSV">
-                        <label for="sv_creation_type_creation_CSV">Démarrer à partir d'un fichier</label>
-                    </li>
-                </ul>
-
-                <?php echo $form['file']->renderError() ?>
-                <?php echo $form['file']->renderLabel() ?>
-                <?php echo $form['file']->render() ?>
-
-                <ul class="radio_list">
-                    <li>
-                        <input name="sv_creation[type_creation]" type="radio" value="VIERGE" id="sv_creation_type_creation_VIERGE">
-                        <label for="sv_creation_type_creation_VIERGE">Démarrer avec un document vierge</label>
-                    </li>
-                </ul>
+                    <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
+                    <label for="sv_creation_type_creation_DR">Démarrer depuis les données de la DR</label>
+              </div>
+              <div class="ligne_form">
+                    <input name="sv_creation[type_creation]" type="radio" value="CSV" id="sv_creation_type_creation_CSV">
+                    <label for="sv_creation_type_creation_CSV">Démarrer à partir d'un fichier</label>
+                    <div style="margin-top: 5px; padding-left: 20px;">
+                        <?php echo $form['file']->renderError() ?>
+                        <?php echo $form['file']->render() ?>
+                    </div>
               </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
-                  <button type="submit" id="mon_espace_civa_valider" class="btn">
-                      <img src="/images/boutons/btn_valider.png" alt="Valider" />
-                  </button>
+                  <button type="submit" id="mon_espace_civa_valider" class="btn btn_vert btn_majeur">Valider</button>
               </div>
               </form>
           </div>
