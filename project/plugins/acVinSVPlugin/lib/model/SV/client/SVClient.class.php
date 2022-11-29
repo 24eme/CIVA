@@ -83,7 +83,12 @@ class SVClient extends acCouchdbClient {
                         continue;
                     }
 
-                    $detail = $sv->addProduit($dr->identifiant, $hash, $this->formatDenomination($detail->denomination));
+                    $denomination = $this->formatDenomination($detail->denomination);
+                    if($detail->lieu) {
+                        $denomination = strtoupper(trim(preg_replace('/[ ]+/', ' ', $detail->lieu)));
+                    }
+
+                    $detail = $sv->addProduit($dr->identifiant, $hash, $denomination);
 
                     if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/RS") !== false && $hasRebeches) {
                         $sv->addProduit($dr->identifiant, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
