@@ -72,6 +72,7 @@ var initLoadingCreationSV = function ()
     var btn = document.querySelector('#form_sv #mon_espace_civa_valider')
     var radioDR = document.querySelector('#form_sv #sv_creation_type_creation_DR')
     var radioCSV = document.querySelector('#form_sv #sv_creation_type_creation_CSV')
+    var inputSVCsv = document.querySelector('#sv_creation_file')
 
     if (btn) {
       btn.addEventListener('click', function () {
@@ -79,6 +80,12 @@ var initLoadingCreationSV = function ()
           openPopup($("#popup_loader_creation_sv"));
         }
       })
+    }
+
+    if (inputSVCsv) {
+        inputSVCsv.addEventListener('change', function () {
+            radioCSV.checked = true
+        })
     }
 }
 
