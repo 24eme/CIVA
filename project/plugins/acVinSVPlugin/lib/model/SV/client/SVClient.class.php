@@ -94,6 +94,10 @@ class SVClient extends acCouchdbClient {
                 if($svCepage && count($svCepage->toArray(true, false)) == 1) {
                     $svCepage->getFirst()->superficie_recolte = $cepage->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
                 }
+                if($cepage->getVolumeAcheteur($cvi_acheteur, 'mouts')) {
+                    $svProduit = $sv->addProduit($dr->identifiant, $hash);
+                    $svProduit->add('volume_mouts');
+                }
             }
         }
 
