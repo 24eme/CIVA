@@ -41,8 +41,33 @@ class svActions extends sfActions {
 
         return $this->redirect(
             'sv_csv_verify',
-            ['hash' => $typeCreation]
+            ['identifiant' => $this->etablissement->identifiant, 'campagne' => "2021", 'hash' => $typeCreation]
         );
+    }
+
+    public function executeVerify(sfWebRequest $request)
+    {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->verify = SVClient::getInstance()->checkCSV(
+            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash'),
+            $this->etablissement->cvi,
+            $request->getParameter('campagne')
+        );
+
+        if (empty($this->verify)) {
+            $sv = SVClient::getInstance()->createFromCSV(
+                $this->etablissement->identifiant,
+                $request->getParameter('campagne'),
+                sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
+            );
+
+            $sv->save();
+
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                ['id' => $sv->_id]
+            );
+        }
     }
 
     public function executeExtraction(sfWebRequest $request) {
