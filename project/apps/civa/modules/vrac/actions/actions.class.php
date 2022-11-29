@@ -640,4 +640,18 @@ class vracActions extends sfActions
 		return $vrac;
     }
 
+	public function executeRefuserProposition(sfWebRequest $request)
+	{
+		$this->cleanSessions();
+		$vrac = $this->getRoute()->getVrac();
+        $vrac->valide->statut = Vrac::STATUT_CREE;
+        $vrac->valide->remove('date_proposition');
+        $emails = $vrac->getEmailsActeur($vrac->acheteur_identifiant);
+        foreach ($emails as $email) {
+            VracMailer::getInstance()->refusProposition($vrac, $email);
+        }
+        $this->getUser()->setFlash('notice', 'Le refus de la proposition a été notifié à l\'acheteur.');
+		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
+    }
+
 }
