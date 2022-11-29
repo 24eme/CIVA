@@ -39,7 +39,7 @@
 <br />
 
 <div>
-<span class="h3">&nbsp;Déclaration de production&nbsp;</span>
+<span class="h3">&nbsp;Récapitulatif par produit&nbsp;</span>
 </div>
 
 <?php if (count($produits)): ?>
