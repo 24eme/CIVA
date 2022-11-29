@@ -61,7 +61,7 @@ td.echeance {display: inline;}
 
 		<?php use_helper('Date') ?>
 
-		<?php if (!$vrac->isValide() && $user->_id && !$vrac->hasValide($user->_id)): ?>
+		<?php if (!$vrac->isValide() && $user->_id && !$vrac->hasValide($user->_id) && !$vrac->isPluriannuelCadre()): ?>
 		<fieldset class="message">
 		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
 		     <ul class="messages_log">
