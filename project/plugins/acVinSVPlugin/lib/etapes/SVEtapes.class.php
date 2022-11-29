@@ -5,6 +5,7 @@ class SVEtapes extends Etapes
 	const ETAPE_APPORTEURS = 'apporteurs';
 	const ETAPE_SAISIE = 'saisie';
 	const ETAPE_AUTRES = 'autres';
+    const ETAPE_LIEU_STOCKAGE = 'stockage';
 	const ETAPE_VALIDATION = 'validation';
 
 	public static $etapes = array(
@@ -12,7 +13,8 @@ class SVEtapes extends Etapes
         self::ETAPE_APPORTEURS => 1,
         self::ETAPE_SAISIE => 2,
         self::ETAPE_AUTRES => 3,
-        self::ETAPE_VALIDATION => 4
+        self::ETAPE_LIEU_STOCKAGE => 4,
+        self::ETAPE_VALIDATION => 5
     );
 
 	public static $links = array(
@@ -20,6 +22,7 @@ class SVEtapes extends Etapes
         self::ETAPE_APPORTEURS => 'sv_apporteurs',
         self::ETAPE_SAISIE => 'sv_saisie',
         self::ETAPE_AUTRES => 'sv_autres',
+        self::ETAPE_LIEU_STOCKAGE => 'sv_stockage',
         self::ETAPE_VALIDATION => 'sv_validation'
     );
 
@@ -28,6 +31,7 @@ class SVEtapes extends Etapes
         self::ETAPE_APPORTEURS => 'Apporteurs',
         self::ETAPE_SAISIE => 'Saisie',
         self::ETAPE_AUTRES => 'Autres',
+        self::ETAPE_LIEU_STOCKAGE => 'Lieu de stockage',
         self::ETAPE_VALIDATION => 'Validation'
     );
 

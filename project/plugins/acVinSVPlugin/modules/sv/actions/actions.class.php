@@ -31,7 +31,7 @@ class svActions extends sfActions {
 
         if($this->formCreation->getValue('file')) {
 
-            return $this->redirect('sv_validation', ['id' => $sv->_id]);
+            return $this->redirect('sv_stockage', ['id' => $sv->_id]);
         }
 
         $this->redirect(
@@ -122,11 +122,32 @@ class svActions extends sfActions {
         }
 
         $this->form->save();
-        return $this->redirect('sv_validation', $this->sv);
+        return $this->redirect('sv_stockage', $this->sv);
+    }
+
+    public function executeStockage(sfWebRequest $request)
+    {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
     }
 
     public function executeValidation(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+    }
+
+    public function executePdf(sfWebRequest $request)
+    {
+        $sv = $this->getRoute()->getSV();
+        $this->document = new ExportSVPdf($sv, $request->getParameter('output', 'pdf'));
+        $this->document->setPartialFunction(array($this, 'getPartial'));
+
+        if ($request->getParameter('force')) {
+            $this->document->removeCache();
+        }
+
+        $this->document->generatePDF();
+        $this->document->addHeaders($this->getResponse());
+        return $this->renderText($this->document->output());
     }
 }

@@ -6,13 +6,13 @@
 <form action="" method="POST" id="form_autres">
 <?php echo $form->renderHiddenFields() ?>
 <div class="form-group">
-  <?php echo $form['lies']->renderLabel(null, ['class' => 'col-xs-4 control-label']) ?>
-  <?php echo $form['lies']->render(['class' => 'form-control']) ?>
+  <?php echo $form['lies']->renderLabel(null, ['style' => '']) ?>
+  <?php echo $form['lies']->render(['class' => 'form-control input-float']) ?>
 </div>
 
 <div class="form-group">
-  <?php echo $form['rebeches']->renderLabel(null, ['class' => 'col-xs-4 control-label']) ?>
-  <?php echo $form['rebeches']->render(['class' => 'form-control']) ?>
+  <?php echo $form['rebeches']->renderLabel(null, ['style' => '']) ?>
+  <?php echo $form['rebeches']->render(['class' => 'form-control input-float']) ?>
 </div>
 
 </form>
