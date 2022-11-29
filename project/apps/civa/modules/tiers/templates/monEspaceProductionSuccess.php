@@ -65,3 +65,22 @@
     <p>La génération de votre SV est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
     </div>
 </div>
+
+<script>
+var initLoadingCreationSV = function ()
+{
+    var btn = document.querySelector('#form_sv #mon_espace_civa_valider')
+    var radioDR = document.querySelector('#form_sv #sv_creation_type_creation_DR')
+    var radioCSV = document.querySelector('#form_sv #sv_creation_type_creation_CSV')
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (radioCSV.checked || radioDR.checked) {
+          openPopup($("#popup_loader_creation_sv"));
+        }
+      })
+    }
+}
+
+initLoadingCreationSV();
+</script>

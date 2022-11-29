@@ -23,8 +23,6 @@ $(document).ready(function()
 
     initLoadingCreationDS();
 
-    initLoadingCreationSV();
-
     if(!appDS.length) {
 
         return;
@@ -67,21 +65,6 @@ $(document).ready(function()
 
 
 });
-
-var initLoadingCreationSV = function ()
-{
-    var btn = document.querySelector('#form_sv #mon_espace_civa_valider')
-    var radioDR = document.querySelector('#form_sv #sv_creation_type_creation_DR')
-    var radioCSV = document.querySelector('#form_sv #sv_creation_type_creation_CSV')
-
-    if (btn) {
-      btn.addEventListener('click', function () {
-        if (radioCSV.checked || radioDR.checked) {
-          openPopup($("#popup_loader_creation_sv"));
-        }
-      })
-    }
-}
 
 
 /**
