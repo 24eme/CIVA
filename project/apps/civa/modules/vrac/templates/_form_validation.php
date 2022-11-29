@@ -71,7 +71,7 @@
 </table>
 
 <?php if(!$vrac->isPapier()): ?>
-<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac)); ?>
+<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'ficher' => false)); ?>
 <?php endif; ?>
 
 <?php if($vrac->isPapier()): ?>

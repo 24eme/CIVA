@@ -39,7 +39,7 @@
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
-			<td class="produit">
+			<td class="produit <?php echo isVersionnerCssClass($detail, 'millesime') ?> <?php echo isVersionnerCssClass($detail, 'denomination') ?> <?php echo isVersionnerCssClass($detail, 'label') ?> <?php echo isVersionnerCssClass($detail, 'actif') ?>">
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong>
 					<?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 				<?php if(isset($produits_hash_in_error) && in_array($detail->getHash(), $produits_hash_in_error->getRawValue())): ?>
@@ -47,21 +47,21 @@
 				<?php endif; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td class="bouteille">
+			<td class="bouteille <?php echo isVersionnerCssClass($detail, 'nb_bouteille') ?>">
 				<?php echo $detail->nb_bouteille ?>
 			</td>
-			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
-			<td class="prix">
+			<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'volume_propose') ?> <?php echo isVersionnerCssClass($detail, 'surface_propose') ?>">
 				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?></span>&nbsp;hl
 			</td>
 			<?php else: ?>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'volume_propose') ?> <?php echo isVersionnerCssClass($detail, 'surface_propose') ?>">
 				<span id="prop<?php echo renderProduitIdentifiant($detail) ?>"><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?></span>&nbsp;hl
 			</td>
-			<td class="prix">
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<?php endif; ?>
@@ -100,23 +100,23 @@
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td class="produit">
+			<td class="produit <?php echo isVersionnerCssClass($detail, 'millesime') ?> <?php echo isVersionnerCssClass($detail, 'denomination') ?> <?php echo isVersionnerCssClass($detail, 'label') ?> <?php echo isVersionnerCssClass($detail, 'actif') ?>">
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td class="bouteille">
+			<td class="bouteille <?php echo isVersionnerCssClass($detail, 'nb_bouteille') ?>">
 				<span class="printonly">Nombre de bouteilles : </span><?php echo $detail->nb_bouteille ?>
 			</td>
-			<td class="centilisation"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
-			<td class="prix">
+			<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td class="volume"><strong><span class="printonly">Volume enlevé : </span><?php echoFloat($detail->volume_enleve) ?>&nbsp;hl</strong></td>
 			<?php else: ?>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'surface_propose') ?> <?php echo isVersionnerCssClass($detail, 'volume_propose') ?>">
 				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
-			<td class="prix">
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
 			<td></td>
@@ -147,35 +147,35 @@
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td class="produit">
+			<td class="produit <?php echo isVersionnerCssClass($detail, 'millesime') ?> <?php echo isVersionnerCssClass($detail, 'denomination') ?> <?php echo isVersionnerCssClass($detail, 'label') ?> <?php echo isVersionnerCssClass($detail, 'actif') ?>">
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?> <?php echo $detail->millesime; ?> <i><?php echo $detail->denomination; ?></i></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td class="bouteille">
+			<td class="bouteille <?php echo isVersionnerCssClass($detail, 'nb_bouteille') ?>">
 				<span class="printonly">Nombre de bouteilles : </span><?php echo $detail->nb_bouteille ?>
 			</td>
-			<td class="centilisation"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
-			<td class="prix">
+			<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'surface_propose') ?> <?php echo isVersionnerCssClass($detail, 'volume_propose') ?>">
 				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
 			<?php else: ?>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'surface_propose') ?> <?php echo isVersionnerCssClass($detail, 'volume_propose') ?>">
 				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;hl
 			</td>
-			<td class="prix">
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-            <td class="date_retiraison_limite" style="text-align: center;">
+            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
 				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
                 <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
                 <?php else: ?>
                     <?php echo format_date('1970-'.$detail->retiraison_date_debut, 'dd/MM') ?>
                 <?php endif; ?>
 			</td>
-            <td class="date_retiraison_limite" style="text-align: center;">
+            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_limite') ?>" style="text-align: center;">
                 <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
                     <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
                 <?php else: ?>

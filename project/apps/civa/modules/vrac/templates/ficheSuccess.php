@@ -90,7 +90,7 @@ td.echeance {display: inline;}
 
 <?php if(!$vrac->isPapier()): ?>
 <hr class="printonly"/>
-<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac)); ?>
+<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => true)); ?>
 <?php endif; ?>
 
 <?php if ($vrac->isPluriannuelCadre() && count($contratsApplication)>0): ?>

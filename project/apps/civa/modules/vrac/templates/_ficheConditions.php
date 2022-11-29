@@ -1,3 +1,5 @@
+<?php use_helper('vrac') ?>
+<?php if (!isset($fiche)) $fiche = false; ?>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -10,7 +12,7 @@
 			<td>
 				Frais annexes en sus à la charge du vendeur
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'vendeur_frais_annexes') : null; ?>">
 				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
@@ -20,7 +22,7 @@
 			<td>
 				Primes diverses à la charge de l'acheteur
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'acheteur_primes_diverses') : null; ?>">
 				<?php echo ($vrac->acheteur_primes_diverses)? nl2br($vrac->acheteur_primes_diverses) : 'Aucune'; ?>
 			</td>
 		</tr>
@@ -30,7 +32,7 @@
 			<td>
 				Résiliation hors cas de force majeur
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'clause_resiliation') : null; ?>">
 				<?php echo ($vrac->clause_resiliation)? nl2br($vrac->clause_resiliation) : 'Aucune'; ?>
 			</td>
 		</tr>
@@ -39,7 +41,7 @@
 			<td>
 				Délais de paiement
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'conditions_paiement') : null; ?>">
 				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucun'; ?>
 			</td>
 		</tr>
@@ -48,7 +50,7 @@
 			<td>
 				<label>Suivi qualitatif</label>
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'suivi_qualitatif') : null; ?>">
 				<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?>
 			</td>
 		</tr>
@@ -58,7 +60,7 @@
 			<td>
 				<label>Clause de réserve de propriété</label>
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'clause_reserve_propriete') : null; ?>">
 				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
 
 			</td>
@@ -69,7 +71,7 @@
 			<td>
 				<label>Mandat de facturation</label>
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'clause_mandat_facturation') : null; ?>">
 				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat).</small><?php endif; ?>
 			</td>
 		</tr>
@@ -88,7 +90,7 @@
 			<td>
 				Autres clauses particulières
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'conditions_particulieres') : null; ?>">
 				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
 			</td>
 		</tr>
@@ -97,7 +99,7 @@
 			<td>
 				Critères et modalités d’évolution des prix
 			</td>
-			<td>
+			<td class="<?php echo ($fiche)? isVersionnerCssClass($vrac, 'clause_evolution_prix') : null; ?>">
 				<?php echo ($vrac->clause_evolution_prix)? nl2br($vrac->clause_evolution_prix) : 'Aucun'; ?>
 			</td>
 		</tr>
