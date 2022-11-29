@@ -78,6 +78,10 @@ var initLoadingCreationSV = function ()
     if (btn) {
       btn.addEventListener('click', function () {
         if (radioCSV.checked || radioDR.checked) {
+          if (radioCSV.checked && inputSVCsv.value === '') {
+            return false;
+          }
+
           openPopup($("#popup_loader_creation_sv"));
         }
       })
