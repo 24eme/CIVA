@@ -11,8 +11,8 @@ class SVExtractionForm extends acCouchdbForm
     {
         $formProduit = new BaseForm();
 
-        foreach ($this->getDocument()->getProduits() as $hash => $produit) {
-            $noeud = str_replace('/declaration/', '', $produit->getProduitHash());
+        foreach ($this->getDocument()->getRecapProduits() as $hash => $produit) {
+            $noeud = str_replace('/declaration/', '', $hash);
 
             if (array_key_exists($noeud, $formProduit->getEmbeddedForms())) {
                 continue;
@@ -21,9 +21,9 @@ class SVExtractionForm extends acCouchdbForm
             $formProduitTauxExtraction = new BaseForm();
             $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat());
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber());
-            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->getLibelleHtml());
+            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
 
-            $default_taux = $produit->getTauxExtractionDefault();
+            $default_taux = 130;
             $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
