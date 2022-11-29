@@ -31,7 +31,7 @@ class SVClient extends acCouchdbClient {
         return $type;
     }
 
-    protected function createDR($identifiant, $campagne) {
+    protected function createSV($identifiant, $campagne) {
         $sv = new SV();
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
 
@@ -47,7 +47,7 @@ class SVClient extends acCouchdbClient {
 
     public function createFromDR($identifiant, $campagne)
     {
-        $sv = $this->createDR($identifiant, $campagne);
+        $sv = $this->createSV($identifiant, $campagne);
 
         $etablissement = $sv->getEtablissementObject();
         $cvi_acheteur = $etablissement->getCvi();
@@ -106,7 +106,7 @@ class SVClient extends acCouchdbClient {
     }
 
     public function createFromCSV($identifiant, $campagne, $csvFile) {
-        $sv = $this->createDR($identifiant, $campagne);
+        $sv = $this->createSV($identifiant, $campagne);
 
         foreach (explode("\n", $csvFile) as $lineContent) {
             $line = str_getcsv($lineContent, ";");
