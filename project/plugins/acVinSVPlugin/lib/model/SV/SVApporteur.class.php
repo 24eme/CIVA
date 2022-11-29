@@ -44,4 +44,29 @@ class SVApporteur extends BaseSVApporteur {
 
         return $this->getFirst()->getFirst()->commune;
     }
+
+    public function reorderByConf() {
+        $children = array();
+
+
+        foreach($this as $hashProduit => $child) {
+            $children[$hashProduit] = $child->getData();
+        }
+
+        foreach($children as $hashProduit => $child) {
+            $this->remove($hashProduit);
+        }
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            $hashProduit = str_replace("/declaration/", "", $hashProduit);
+            if(!array_key_exists($hashProduit, $children)) {
+                continue;
+            }
+            $this->add($hashProduit, $children[$hashProduit]);
+            unset($children[$hashProduit]);
+        }
+        foreach($children as $hashProduit => $child) {
+            $this->add($hashProduit, $child);
+        }
+    }
 }

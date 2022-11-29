@@ -49,28 +49,29 @@ class SV extends BaseSV
     public function getRecapProduits() {
         $recap = array();
         foreach($this->getProduits() as $produit) {
-            if(!isset($recap[$produit->getProduitHash()])) {
-                $recap[$produit->getProduitHash()] = new stdClass();
-                $recap[$produit->getProduitHash()]->libelle = $produit->libelle;
-                $recap[$produit->getProduitHash()]->libelle_html = $produit->getLibelleHtml();
-                $recap[$produit->getProduitHash()]->superficie_recolte = 0;
+            $key = $produit->getProduitHash().'/'.$produit->getKey();
+            if(!isset($recap[$key])) {
+                $recap[$key] = new stdClass();
+                $recap[$key]->libelle = $produit->getLibelle();
+                $recap[$key]->libelle_html = $produit->getLibelleHtml();
+                $recap[$key]->superficie_recolte = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
-                    $recap[$produit->getProduitHash()]->volume_recolte = 0;
-                    $recap[$produit->getProduitHash()]->usages_industriels = 0;
-                    $recap[$produit->getProduitHash()]->vci = 0;
+                    $recap[$key]->volume_recolte = 0;
+                    $recap[$key]->usages_industriels = 0;
+                    $recap[$key]->vci = 0;
                 }
 
                 if ($this->getType() === SVClient::TYPE_SV12) {
-                    $recap[$produit->getProduitHash()]->quantite_recolte = 0;
-                    $recap[$produit->getProduitHash()]->volume_mouts = 0;
+                    $recap[$key]->quantite_recolte = 0;
+                    $recap[$key]->volume_mouts = 0;
                 }
 
-                $recap[$produit->getProduitHash()]->volume_revendique = 0;
-                $recap[$produit->getProduitHash()]->apporteurs = array();
+                $recap[$key]->volume_revendique = 0;
+                $recap[$key]->apporteurs = array();
             }
 
-            $recapProduit = $recap[$produit->getProduitHash()];
+            $recapProduit = $recap[$key];
             $recapProduit->superficie_recolte += $produit->superficie_recolte;
 
             if ($this->getType() === SVClient::TYPE_SV11) {
@@ -93,7 +94,17 @@ class SV extends BaseSV
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
         }
 
-        return $recap;
+        $recapSorted = array();
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            foreach(array_keys($recap) as $hash) {
+                if(strpos($hash, $hashProduit) !== false) {
+                    $recapSorted[$hash] = $recap[$hash];
+                }
+            }
+        }
+
+        return $recapSorted;
     }
 
     public static function buildDetailKey($denominationComplementaire = null, $hidden_denom = null) {
@@ -123,7 +134,7 @@ class SV extends BaseSV
         $produit->commune = $etablissement->declaration_commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
-            //$this->declaration->reorderByConf();
+            $this->apporteurs->get($identifiant)->reorderByConf();
         }
         return $this->get($produit->getHash());
     }
