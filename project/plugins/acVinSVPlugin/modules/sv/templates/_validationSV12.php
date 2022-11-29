@@ -16,7 +16,7 @@
       <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
       <td class="text-right"><?php echo $produit->quantite_recolte ?> <small class="text-muted">kg</small></td>
       <td class="text-right"><?php echoFloat($produit->volume_revendique) ?> <small class="text-muted">hl</small></td>
-      <td class="text-right">0.00 <small class="text-muted">hl</small></td>
+      <td class="text-right"><?php if($produit->volume_mouts > 0): ?><?php echoFloat($produit->volume_mouts) ?> <small class="text-muted">hl</small><?php endif; ?></td>
       <td class="text-right"><?php echo count($produit->apporteurs) ?></td>
     </tr>
   <?php endforeach ?>
