@@ -65,3 +65,44 @@
     <p>La génération de votre SV est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
     </div>
 </div>
+
+<script>
+var initLoadingCreationSV = function ()
+{
+    var btn = document.querySelector('#form_sv #mon_espace_civa_valider')
+    var formSV = document.querySelector('#form_sv')
+    var radioDR = document.querySelector('#form_sv #sv_creation_type_creation_DR')
+    var radioCSV = document.querySelector('#form_sv #sv_creation_type_creation_CSV')
+    var inputSVCsv = document.querySelector('#sv_creation_file')
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (radioCSV.checked || radioDR.checked) {
+          if (radioCSV.checked && inputSVCsv.value === '') {
+            return false;
+          }
+
+          openPopup($("#popup_loader_creation_sv"));
+        }
+      })
+    }
+
+    if (inputSVCsv) {
+        inputSVCsv.addEventListener('change', function () {
+            radioCSV.checked = true
+        })
+    }
+
+    if (formSV) {
+        formSV.addEventListener('change', function () {
+            if (radioCSV.checked) {
+                inputSVCsv.required = true
+            } else {
+                inputSVCsv.removeAttribute('required')
+            }
+        })
+    }
+}
+
+initLoadingCreationSV();
+</script>

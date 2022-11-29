@@ -10,14 +10,11 @@ class SVAutreForm extends acCouchdbObjectForm
     public function configure()
     {
         $this->setWidget('lies', new bsWidgetFormInputFloat());
-        $this->setWidget('rebeches', new bsWidgetFormInputFloat());
 
         $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
-        $this->setValidator('rebeches', new sfValidatorNumber(['min' => 0]));
 
         $this->widgetSchema->setLabels([
-            'lies' => 'Lies (en hl)',
-            'rebeches' => 'Rebêches'
+            'lies' => 'Lies',
         ]);
 
         $this->widgetSchema->setNameFormat('sv_autres[%s]');

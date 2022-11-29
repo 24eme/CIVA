@@ -3,16 +3,14 @@
 
 <h3>Autres</h3>
 
-<form action="" method="POST" id="form_autres">
+<form action="" method="POST" id="form_autres" class="form-horizontal">
 <?php echo $form->renderHiddenFields() ?>
 <div class="form-group">
-  <?php echo $form['lies']->renderLabel(null, ['style' => '']) ?>
-  <?php echo $form['lies']->render(['class' => 'form-control input-float']) ?>
-</div>
-
-<div class="form-group">
-  <?php echo $form['rebeches']->renderLabel(null, ['style' => '']) ?>
-  <?php echo $form['rebeches']->render(['class' => 'form-control input-float']) ?>
+  <?php echo $form['lies']->renderLabel(null, ['style' => '', 'class' => 'col-xs-2 control-label']) ?>
+  <div class="input-group col-xs-3">
+    <?php echo $form['lies']->render(['class' => 'form-control input-float']) ?>
+    <div class="input-group-addon">hl</div>
+  </div>
 </div>
 
 </form>
