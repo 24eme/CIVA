@@ -14,3 +14,11 @@ function renderTiersLibelle($tiers) {
 function renderProduitIdentifiant($detail) {
 	return str_replace('/', '_', $detail->getHash());
 }
+
+function isVersionnerCssClass($object, $key) {
+    return (isVersionner($object, $key))? 'versionner' : null;
+}
+
+function isVersionner($object, $key) {
+    return !$object->getDocument()->isValide() && $object->getDocument()->isModifiedMother($object->getHash(), $key);
+}
