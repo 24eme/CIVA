@@ -14,6 +14,19 @@ class VracMailer {
 		return self::$_instance;
     }
 
+    public function refusProposition($vrac, $destinataire)
+    {
+        $from = self::getFrom();
+        $to = array($destinataire);
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Refus du vendeur ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_refuser_proposition', array('vrac' => $vrac));
+        $message = self::getMailer()->compose($from, $to, $subject, $body);
+
+        return self::getMailer()->send($message);
+    }
+
     public function demandeSignature($vrac, $destinataire)
     {
         $from = self::getFrom();
