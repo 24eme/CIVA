@@ -28,8 +28,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     const ROLE_ACHETEUR = 'acheteur';
     const ROLE_MANDATAIRE = 'mandataire';
 
+    const VENDEUR_PROJET_FILENAME = 'projet_vendeur.json';
+
 	protected $_config;
 	protected $archivage_document;
+    protected $diff_with_mother = null;
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Brouillon',
@@ -923,4 +926,42 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		}
 		return false;
 	}
+
+    public function hasVersion() {
+        return $this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME);
+    }
+
+    public function getMother() {
+        $mother = new Vrac();
+        if ($projet = file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME))) {
+            $mother->loadFromCouchdb(json_decode($projet));
+        }
+        return $mother;
+    }
+
+    public function getDiffWithMother() {
+        if (is_null($this->diff_with_mother)) {
+            $mother = $this->getMother();
+            $this->diff_with_mother = $this->getDiffWithAnotherDocument($mother->getData());
+        }
+        return $this->diff_with_mother;
+    }
+
+    public function isModifiedMother($hash_or_object, $key = null) {
+        if(!$this->document->hasVersion()) {
+            return false;
+        }
+        $hash = ($hash_or_object instanceof acCouchdbJson) ? $hash_or_object->getHash() : $hash_or_object;
+        $hash .= ($key) ? "/".$key : null;
+
+        return array_key_exists($hash, $this->getDiffWithMother());
+    }
+
+    protected function getDiffWithAnotherDocument(stdClass $document) {
+
+        $other_json = new acCouchdbJsonNative($document);
+        $current_json = new acCouchdbJsonNative($this->document->getData());
+
+        return $current_json->diff($other_json);
+    }
 }
