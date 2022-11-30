@@ -98,9 +98,11 @@ class SV extends BaseSV
 
         foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
             foreach(array_keys($recap) as $hash) {
-                if(strpos($hash, $hashProduit) !== false) {
-                    $recapSorted[$hash] = $recap[$hash];
+                if(strpos($hash, $hashProduit) === false) {
+                    continue;
                 }
+                $recapSorted[$hash] = $recap[$hash];
+                unset($recap[$hash]);
             }
         }
 

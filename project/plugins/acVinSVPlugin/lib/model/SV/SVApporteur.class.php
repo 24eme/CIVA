@@ -65,8 +65,5 @@ class SVApporteur extends BaseSVApporteur {
             $this->add($hashProduit, $children[$hashProduit]);
             unset($children[$hashProduit]);
         }
-        foreach($children as $hashProduit => $child) {
-            $this->add($hashProduit, $child);
-        }
     }
 }
