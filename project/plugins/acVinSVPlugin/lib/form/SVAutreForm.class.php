@@ -14,7 +14,7 @@ class SVAutreForm extends acCouchdbObjectForm
         $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
 
         $this->widgetSchema->setLabels([
-            'lies' => 'Lies',
+            'lies' => 'Volume total lies et bourbes',
         ]);
 
         $this->widgetSchema->setNameFormat('sv_autres[%s]');
