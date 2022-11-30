@@ -92,6 +92,7 @@ class SV extends BaseSV
 
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
+            $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
         }
 
         $recapSorted = array();

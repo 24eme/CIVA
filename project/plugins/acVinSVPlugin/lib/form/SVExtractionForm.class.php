@@ -23,7 +23,7 @@ class SVExtractionForm extends acCouchdbForm
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber());
             $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
 
-            $default_taux = 130;
+            $default_taux = $produit->taux_extraction;
             $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
