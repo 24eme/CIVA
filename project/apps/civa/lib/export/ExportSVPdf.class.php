@@ -35,6 +35,24 @@ class ExportSVPdf extends ExportDocument
             $p = array_slice($produits, self::PRODUITS_PAR_PAGES * $i, self::PRODUITS_PAR_PAGES, true);
             @$this->document->addPage($this->getPartial('sv/pdf_par_produit', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'produits' => $p)));
         }
+
+        $apporteurs = $this->declaration->getApporteurs()->toArray();
+
+        $a = [];
+        $total_produit_page = 0;
+        foreach ($apporteurs as $apporteur) {
+            $total_produit_page += count($apporteur->getProduits());
+
+            if ($total_produit_page < 16 && count($a) < 4) {
+                $a[] = $apporteur;
+                continue;
+            }
+
+            @$this->document->addPage($this->getPartial('sv/pdf_par_apporteur', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'apporteurs' => $a)));
+            $total_produit_page = count($apporteur->getProduits());
+            $a = [];
+            $a[] = $apporteur;
+        }
     }
 
     public function output() {
