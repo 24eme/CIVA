@@ -33,7 +33,7 @@ class ExportSVPdf extends ExportDocument
 
         for ($i = 0; $i < ceil(count($produits) / self::PRODUITS_PAR_PAGES); $i++) {
             $p = array_slice($produits, self::PRODUITS_PAR_PAGES * $i, self::PRODUITS_PAR_PAGES, true);
-            @$this->document->addPage($this->getPartial('sv/pdf', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'produits' => $p)));
+            @$this->document->addPage($this->getPartial('sv/pdf_par_produit', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'produits' => $p)));
         }
     }
 
