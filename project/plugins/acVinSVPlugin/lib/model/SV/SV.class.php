@@ -10,6 +10,8 @@ class SV extends BaseSV
 
     const DEFAULT_KEY = 'DEFAUT';
 
+    protected $cacheProduits = [];
+
     public function getConfiguration() {
         return ConfigurationClient::getInstance()->getCurrent();
     }
@@ -36,14 +38,17 @@ class SV extends BaseSV
          return $etablissement;
     }
 
-    public function getProduits($region = null) {
-        $produits = array();
-
-        foreach($this->apporteurs as $apporteur) {
-            $produits = array_merge($produits, $apporteur->getProduits());
+    public function getProduits($region = null)
+    {
+        if (empty($this->cacheProduits) === false) {
+            return $this->cacheProduits;
         }
 
-        return $produits;
+        foreach($this->apporteurs as $apporteur) {
+            $this->cacheProduits = array_merge($this->cacheProduits, $apporteur->getProduits());
+        }
+
+        return $this->cacheProduits;
     }
 
     public function getRecapProduits() {
