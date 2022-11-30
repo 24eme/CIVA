@@ -24,6 +24,7 @@
   </tbody>
 </table>
 
+<?php if ($form->hasMouts()): ?>
 <h3>Apport de Moûts</h3>
 <table class="table table-bordered table-striped">
   <thead>
@@ -47,4 +48,6 @@
   <?php endforeach ?>
   </tbody>
 </table>
+
+<?php endif ?>
 
