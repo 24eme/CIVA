@@ -18,7 +18,7 @@
   <?php endforeach ?>
 </div>
 
-<table class="table table-striped">
+<table class="table table-striped table-bordered">
   <tbody>
   <?php $loop_index = 0 ?>
   <?php foreach (explode("\n", $csv) as $linecontent): ?>
