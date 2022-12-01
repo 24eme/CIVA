@@ -229,13 +229,16 @@ class tiersActions extends sfActions {
         $this->blocs = $this->buildBlocs($this->compte, $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), '2021');
+
+        $campagne = CurrentClient::getCurrent()->campagne;
+
+        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), $campagne);
         if ($this->sv) {
             $this->form = new SVStartupForm($this->sv);
             $this->formaction = 'mon_espace_civa_production';
         } else {
             // redirigé vers sv_etablissement
-            $this->form = new SVCreationForm($this->etablissement->identifiant, "2021");
+            $this->form = new SVCreationForm($this->etablissement->identifiant, $campagne);
             $this->formaction = 'sv_etablissement';
         }
 

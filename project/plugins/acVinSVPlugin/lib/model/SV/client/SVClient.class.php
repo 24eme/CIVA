@@ -42,8 +42,8 @@ class SVClient extends acCouchdbClient {
 
         $sv->identifiant = $etablissement->identifiant;
         $sv->type = SVClient::getTypeByEtablissement($etablissement);
-        $sv->periode = '2021';
-        $sv->campagne = '2021-2022';
+        $sv->periode = $campagne;
+        $sv->campagne = ''.$campagne.'-'.($campagne+1);
         $sv->constructId();
         $sv->storeDeclarant();
 

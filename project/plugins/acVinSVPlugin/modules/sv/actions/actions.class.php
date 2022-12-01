@@ -7,15 +7,16 @@ class svActions extends sfActions {
 
     public function executeEtablissement(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
+        $campagne = CurrentClient::getCurrent()->campagne;
 
-        if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, '2021')) {
+        if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, $campagne)) {
             $this->redirect(
                 SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
                 ['id' => $sv->_id]
             );
         }
 
-        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
+        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, $campagne);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
 
@@ -30,7 +31,7 @@ class svActions extends sfActions {
         $typeCreation = $this->formCreation->process();
 
         if ($typeCreation === 'DR') {
-            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, "2021");
+            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, $campagne);
             $sv->save();
 
             return $this->redirect(
@@ -41,7 +42,7 @@ class svActions extends sfActions {
 
         return $this->redirect(
             'sv_csv_verify',
-            ['identifiant' => $this->etablissement->identifiant, 'campagne' => "2021", 'hash' => $typeCreation]
+            ['identifiant' => $this->etablissement->identifiant, 'campagne' => $campagne, 'hash' => $typeCreation]
         );
     }
 
