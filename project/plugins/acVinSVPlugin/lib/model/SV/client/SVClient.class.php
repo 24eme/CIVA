@@ -210,7 +210,7 @@ class SVClient extends acCouchdbClient {
             }
 
             if ($line[CsvFileAcheteur::CSV_ACHETEUR_CVI] !== $identifiant) {
-                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "Mauvais acheteur"];
+                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "La ligne concerne un autre acheteur."];
                 continue;
             }
 
@@ -225,14 +225,14 @@ class SVClient extends acCouchdbClient {
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
 
             if(! $apporteur) {
-                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non trouvé'];
+                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non reconnu : '.$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]];
                 continue;
             }
 
             $produit = CsvFileAcheteur::identifyProductCSV($line);
 
             if(! $produit) {
-                $check[self::CSV_ERROR_PRODUIT][] = [$i, 'Produit', "Produit non trouvé : ".implode(";", $line)];
+                $check[self::CSV_ERROR_PRODUIT][] = [$i, $line[CsvFileAcheteur::CSV_APPELLATION], "Produit non reconnu : ".$line[CsvFileAcheteur::CSV_APPELLATION]];
                 continue;
             }
         }
