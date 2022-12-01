@@ -48,8 +48,11 @@ class svActions extends sfActions {
     public function executeVerify(sfWebRequest $request)
     {
         $this->etablissement = $this->getRoute()->getEtablissement();
+
+        $filepath = sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash');
+
         $this->verify = SVClient::getInstance()->checkCSV(
-            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash'),
+            $filepath,
             $this->etablissement->cvi,
             $request->getParameter('campagne')
         );
@@ -58,7 +61,7 @@ class svActions extends sfActions {
             $sv = SVClient::getInstance()->createFromCSV(
                 $this->etablissement->identifiant,
                 $request->getParameter('campagne'),
-                sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
+                $filepath
             );
 
             $sv->save();
@@ -69,9 +72,7 @@ class svActions extends sfActions {
             );
         }
 
-        $this->csv = file_get_contents(
-            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
-        );
+        $this->csv = file_get_contents($filepath);
     }
 
     public function executeExtraction(sfWebRequest $request) {
