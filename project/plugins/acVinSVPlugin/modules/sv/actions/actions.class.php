@@ -7,15 +7,16 @@ class svActions extends sfActions {
 
     public function executeEtablissement(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
+        $campagne = CurrentClient::getCurrent()->campagne;
 
-        if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, '2021')) {
+        if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, $campagne)) {
             $this->redirect(
                 SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
                 ['id' => $sv->_id]
             );
         }
 
-        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
+        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, $campagne);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
 
@@ -30,7 +31,7 @@ class svActions extends sfActions {
         $typeCreation = $this->formCreation->process();
 
         if ($typeCreation === 'DR') {
-            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, "2021");
+            $sv = SVClient::getInstance()->createFromDR($this->etablissement->identifiant, $campagne);
             $sv->save();
 
             return $this->redirect(
@@ -41,15 +42,19 @@ class svActions extends sfActions {
 
         return $this->redirect(
             'sv_csv_verify',
-            ['identifiant' => $this->etablissement->identifiant, 'campagne' => "2021", 'hash' => $typeCreation]
+            ['identifiant' => $this->etablissement->identifiant, 'campagne' => $campagne, 'hash' => $typeCreation]
         );
     }
 
     public function executeVerify(sfWebRequest $request)
     {
         $this->etablissement = $this->getRoute()->getEtablissement();
+
+        $filepath = sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash');
+        $this->csv = new CsvFileAcheteur($filepath);
+
         $this->verify = SVClient::getInstance()->checkCSV(
-            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash'),
+            $this->csv,
             $this->etablissement->cvi,
             $request->getParameter('campagne')
         );
@@ -58,7 +63,7 @@ class svActions extends sfActions {
             $sv = SVClient::getInstance()->createFromCSV(
                 $this->etablissement->identifiant,
                 $request->getParameter('campagne'),
-                sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
+                $this->csv
             );
 
             $sv->save();
@@ -178,6 +183,15 @@ class svActions extends sfActions {
     public function executeValidation(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        if (! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->sv->validate();
+        $this->sv->save();
+
+        return $this->redirect('sv_validation', $this->sv);
     }
 
     public function executePdf(sfWebRequest $request)

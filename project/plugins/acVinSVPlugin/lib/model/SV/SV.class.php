@@ -9,6 +9,7 @@ class SV extends BaseSV
     use HasDeclarantDocument;
 
     const DEFAULT_KEY = 'DEFAUT';
+    const STATUT_VALIDE = 'VALIDE';
 
     public function getConfiguration() {
         return ConfigurationClient::getInstance()->getCurrent();
@@ -148,5 +149,16 @@ class SV extends BaseSV
             $this->apporteurs->get($identifiant)->reorderByConf();
         }
         return $this->get($produit->getHash());
+    }
+
+    public function validate()
+    {
+        $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        $this->valide->statut = self::STATUT_VALIDE;
+    }
+
+    public function isValide()
+    {
+        return $this->valide->statut === self::STATUT_VALIDE;
     }
 }

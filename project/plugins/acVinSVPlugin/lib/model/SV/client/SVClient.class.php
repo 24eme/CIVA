@@ -8,6 +8,7 @@ class SVClient extends acCouchdbClient {
     const CSV_ERROR_ACHETEUR  = "CSV_ERROR_ACHETEUR";
     const CSV_ERROR_APPORTEUR = "CSV_ERROR_APPORTEUR";
     const CSV_ERROR_PRODUIT   = "CSV_ERROR_PRODUIT";
+    const CSV_ERROR_VOLUME    = "CSV_ERROR_VOLUME";
 
     public static function getInstance()
     {
@@ -41,8 +42,8 @@ class SVClient extends acCouchdbClient {
 
         $sv->identifiant = $etablissement->identifiant;
         $sv->type = SVClient::getTypeByEtablissement($etablissement);
-        $sv->periode = '2021';
-        $sv->campagne = '2021-2022';
+        $sv->periode = $campagne;
+        $sv->campagne = ''.$campagne.'-'.($campagne+1);
         $sv->constructId();
         $sv->storeDeclarant();
         $sv->storeStorage();
@@ -145,13 +146,10 @@ class SVClient extends acCouchdbClient {
         return CsvFileAcheteur::identifyProductCSV($line);
     }
 
-    public function createFromCSV($identifiant, $campagne, $csvFile) {
+    public function createFromCSV($identifiant, $campagne, CsvFileAcheteur $csv) {
         $sv = $this->createSV($identifiant, $campagne);
-        $csvFile = file_get_contents($csvFile);
 
-        foreach (explode("\n", $csvFile) as $lineContent) {
-            $line = str_getcsv($lineContent, ";");
-
+        foreach ($csv->getCsv() as $line) {
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
             }
@@ -184,6 +182,7 @@ class SVClient extends acCouchdbClient {
             }
         }
 
+        $sv->storeAttachment($csv->getFileName(), "text/csv", md5_file($csv->getFileName()));
         return $sv;
     }
 
@@ -192,26 +191,20 @@ class SVClient extends acCouchdbClient {
         return round(str_replace(",", ".", $value)*1, 2);
     }
 
-    public function checkCSV($csvFile, $identifiant, $campagne)
+    public function checkCSV(CsvFileAcheteur $csv, $identifiant, $campagne)
     {
-        if (! is_file($csvFile)) {
-            throw new Exception("Le fichier $csvFile n'existe pas");
-        }
-
         $check = [];
-        $csvFile = file_get_contents($csvFile);
-
         $i = 0;
-        foreach (explode("\n", $csvFile) as $lineContent) {
+
+        foreach ($csv->getCsv() as $line) {
             $i++;
-            $line = str_getcsv($lineContent, ";");
 
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
             }
 
             if ($line[CsvFileAcheteur::CSV_ACHETEUR_CVI] !== $identifiant) {
-                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "Mauvais acheteur"];
+                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "La ligne concerne un autre acheteur."];
                 continue;
             }
 
@@ -226,15 +219,29 @@ class SVClient extends acCouchdbClient {
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
 
             if(! $apporteur) {
-                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non trouvé'];
+                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non reconnu : '.$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]];
                 continue;
             }
 
             $produit = CsvFileAcheteur::identifyProductCSV($line);
 
             if(! $produit) {
-                $check[self::CSV_ERROR_PRODUIT][] = [$i, 'Produit', "Produit non trouvé : ".implode(";", $line)];
+                $check[self::CSV_ERROR_PRODUIT][] = [$i, $line[CsvFileAcheteur::CSV_APPELLATION], "Produit non reconnu : ".$line[CsvFileAcheteur::CSV_APPELLATION]];
                 continue;
+            }
+
+            if ($line[CsvFileAcheteur::CSV_VOLUME] <= 0) {
+                $check[self::CSV_ERROR_VOLUME][] = [$i, $line[CsvFileAcheteur::CSV_VOLUME], "Le volume ne peut pas être nul"];
+            }
+
+            $volume = $line[CsvFileAcheteur::CSV_VOLUME] - $line[CsvFileAcheteur::CSV_VOLUME_DPLC];
+            if (isset($line[CsvFileAcheteur::CSV_VOLUME_VCI])) {
+                $volume -= $line[CsvFileAcheteur::CSV_VOLUME_VCI];
+            }
+
+            if ($volume <= 0)
+            {
+                $check[self::CSV_ERROR_VOLUME][] = [$i, $volume, "Le volume revendiqué ne peut pas être nul"];
             }
         }
 

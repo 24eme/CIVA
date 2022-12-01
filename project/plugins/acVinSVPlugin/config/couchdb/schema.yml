@@ -5,6 +5,16 @@ SV:
     fields:
       _id: {  }
       _rev: { }
+      _attachments:
+        type: collection
+        indexable: false
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  '*': { }
       type: { }
       identifiant: {  }
       campagne: {  }
