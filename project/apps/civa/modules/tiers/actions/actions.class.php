@@ -139,6 +139,7 @@ class tiersActions extends sfActions {
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
             $blocs[Roles::TELEDECLARATION_DR_ACHETEUR] = $this->generateUrl('mon_espace_civa_dr_acheteur_compte', $compte);
+            $blocs[Roles::TELEDECLARATION_PRODUCTION] = $this->generateUrl('mon_espace_civa_production_compte', $compte);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
