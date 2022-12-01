@@ -165,19 +165,13 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
-        $this->form = new SVValidationForm($this->sv);
-
         if (! $request->isMethod(sfWebRequest::POST)) {
             return sfView::SUCCESS;
         }
 
-        $this->form->bind($request->getParameter($this->form->getName()));
+        $this->sv->validate();
+        $this->sv->save();
 
-        if (! $this->form->isValid()) {
-            return sfView::SUCCESS;
-        }
-
-        $this->form->save();
         return $this->redirect('sv_validation', $this->sv);
     }
 

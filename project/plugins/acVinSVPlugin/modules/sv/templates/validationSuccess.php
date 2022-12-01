@@ -15,4 +15,4 @@
   <div class="col-xs-4 text-right"><button id="valideSV" class="btn btn-success">Terminer la saisie <span class="glyphicon glyphicon glyphicon-ok"></span></button></div>
 </div>
 
-<?php include_partial('sv/popup_validation', ['sv' => $sv, 'form' => $form]); ?>
+<?php include_partial('sv/popup_validation', ['sv' => $sv]); ?>
