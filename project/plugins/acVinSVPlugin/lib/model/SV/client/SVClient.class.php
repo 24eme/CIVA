@@ -181,6 +181,7 @@ class SVClient extends acCouchdbClient {
             }
         }
 
+        $sv->storeAttachment($csv->getFileName(), "text/csv", md5_file($csv->getFileName()));
         return $sv;
     }
 
