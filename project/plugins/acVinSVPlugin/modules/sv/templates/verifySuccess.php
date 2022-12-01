@@ -21,9 +21,8 @@
 <table class="table table-striped table-bordered">
   <tbody>
   <?php $loop_index = 0 ?>
-  <?php foreach (explode("\n", $csv) as $linecontent): ?>
+  <?php foreach ($csv->getCsv() as $line): ?>
   <?php $loop_index++ ?>
-  <?php $line = str_getcsv($linecontent, ";"); ?>
     <tr id="line<?php echo $loop_index ?>" class="<?php echo (in_array($loop_index, $lignes_en_erreur)) ? 'text-danger' : '' ?>">
       <td><?php echo $loop_index; ?></td>
       <?php foreach($line as $col): ?>

@@ -145,13 +145,10 @@ class SVClient extends acCouchdbClient {
         return CsvFileAcheteur::identifyProductCSV($line);
     }
 
-    public function createFromCSV($identifiant, $campagne, $csvFile) {
+    public function createFromCSV($identifiant, $campagne, CsvFileAcheteur $csv) {
         $sv = $this->createSV($identifiant, $campagne);
-        $csvFile = file_get_contents($csvFile);
 
-        foreach (explode("\n", $csvFile) as $lineContent) {
-            $line = str_getcsv($lineContent, ";");
-
+        foreach ($csv->getCsv() as $line) {
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
             }
@@ -192,19 +189,13 @@ class SVClient extends acCouchdbClient {
         return round(str_replace(",", ".", $value)*1, 2);
     }
 
-    public function checkCSV($csvFile, $identifiant, $campagne)
+    public function checkCSV(CsvFileAcheteur $csv, $identifiant, $campagne)
     {
-        if (! is_file($csvFile)) {
-            throw new Exception("Le fichier $csvFile n'existe pas");
-        }
-
         $check = [];
-        $csvFile = file_get_contents($csvFile);
-
         $i = 0;
-        foreach (explode("\n", $csvFile) as $lineContent) {
+
+        foreach ($csv->getCsv() as $line) {
             $i++;
-            $line = str_getcsv($lineContent, ";");
 
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
