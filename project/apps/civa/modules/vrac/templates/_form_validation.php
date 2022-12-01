@@ -1,5 +1,6 @@
 <?php use_helper('Float') ?>
 <?php use_helper('Date') ?>
+<?php $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume'; ?>
 
 <p class="intro_contrat_vrac">Vous trouverez ci-dessous le récapitulatif du contrat, les informations relatives aux soussignés et les quantités de produit concernées.</p>
 <?php include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => false)) ?>
@@ -12,7 +13,7 @@
 			<th class="bouteille" style="text-align: center">Nb bouteilles</th>
 			<th class="centilisation" style="text-align: center">Centilisation</th>
 			<?php endif; ?>
-			<th class="volume" style="text-align: center">Volume</th>
+			<th class="volume" style="text-align: center"><?php echo ucfirst($quantiteType); ?></th>
 			<th class="prix" style="text-align: center">Prix</th>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
@@ -61,9 +62,9 @@
 			endforeach;
 		?>
 		<tr<?php if (!$alt): ?> class="alt"<?php endif; ?>>
-			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong><?php echo ($vrac->isInModeSurface())? 'Surface' : 'Volume' ?> total</strong></td>
+			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong><?php echo ucfirst($quantiteType); ?> total</strong></td>
 			<td class="volume">
-				<?php echoFloat($volumeTotal) ?>&nbsp;hl
+				<?php echoFloat($volumeTotal) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ha' : 'hl' ?>
 			</td>
 			<td colspan="3"></td>
 		</tr>
