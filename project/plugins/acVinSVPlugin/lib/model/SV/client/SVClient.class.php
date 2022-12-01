@@ -180,6 +180,15 @@ class SVClient extends acCouchdbClient {
                 $produit->vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]);
                 $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
             }
+
+            if (strpos('mouts', KeyInflector::slugify($produit->libelle)) !== false) {
+                $produitOriginal = ConfigurationClient::getConfiguration()->identifyProductByLibelle(
+                    trim(sprintf("%s %s %s", str_replace('Moûts ', $produit->appellation, $produit->cepage, $produit->vtsgn)))
+                );
+
+                $sv->get($produitOriginal->getHash())->add('volume_mouts', $produit->volume_recolte);
+                $sv->remove($produit->getHash());
+            }
         }
 
         $sv->storeAttachment($csv->getFileName(), "text/csv", md5_file($csv->getFileName()));
