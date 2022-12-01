@@ -68,6 +68,10 @@ class svActions extends sfActions {
                 ['id' => $sv->_id]
             );
         }
+
+        $this->csv = file_get_contents(
+            sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash')
+        );
     }
 
     public function executeExtraction(sfWebRequest $request) {
