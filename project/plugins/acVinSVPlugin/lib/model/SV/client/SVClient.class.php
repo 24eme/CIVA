@@ -45,6 +45,7 @@ class SVClient extends acCouchdbClient {
         $sv->campagne = '2021-2022';
         $sv->constructId();
         $sv->storeDeclarant();
+        $sv->storeStorage();
 
         return $sv;
     }
