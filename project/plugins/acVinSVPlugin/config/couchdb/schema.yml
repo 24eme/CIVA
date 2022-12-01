@@ -78,6 +78,25 @@ SV:
       lies: { type: float }
       mouts: { type: float }
       rebeches: { type: float }
+      stockage:
+        type: collection
+        definition:
+          fields:
+            '*':
+              class: SVStockage
+              type: collection
+              definition:
+                fields:
+                  numero: {  }
+                  nom: {  }
+                  adresse: {  }
+                  commune: {  }
+                  code_postal: {  }
+                  produits:
+                    type: array_collection
+                    definition:
+                      fields:
+                        '*': {  }
       valide:
         type: collection
         definition:

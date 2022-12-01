@@ -31,6 +31,14 @@ class SV extends BaseSV
         $this->initDeclarantDocument();
     }
 
+    public function storeStorage() {
+        $etablissement = $this->getEtablissementObject();
+        $lieux = $etablissement->getLieuxStockage(false, $etablissement->cvi);
+        foreach($lieux as $lieu) {
+            $this->stockage->add($lieu->numero, $lieu);
+        }
+    }
+
     public function getEtablissement() {
          $etablissement = EtablissementClient::getInstance()->find($this->identifiant);
 

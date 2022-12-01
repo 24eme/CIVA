@@ -164,6 +164,20 @@ class svActions extends sfActions {
     {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        $this->recapProduits = $this->sv->getRecapProduits();
+        $this->form = new SVStockageForm($this->sv);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+        	return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+	    }
     }
 
     public function executeValidation(sfWebRequest $request) {

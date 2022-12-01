@@ -46,6 +46,7 @@ class SVClient extends acCouchdbClient {
         $sv->campagne = ''.$campagne.'-'.($campagne+1);
         $sv->constructId();
         $sv->storeDeclarant();
+        $sv->storeStorage();
 
         return $sv;
     }
