@@ -33,9 +33,17 @@
 				<?php if($item->type_contrat): ?>
 					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Type <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
 				<?php endif ?>
-                <?php if(isset(VracClient::getInstance()->find($vrac->id, acCouchdbClient::HYDRATE_JSON)->contrat_pluriannuel)): ?>
-                    <svg title="Contrat pluriannuel" style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-collection-fill" viewBox="0 0 16 16">
-                      <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3zm2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1z"/>
+                <?php $object = VracClient::getInstance()->find($vrac->id, acCouchdbClient::HYDRATE_JSON); ?>
+                <?php if(isset($object->reference_contrat_pluriannuel) && $object->reference_contrat_pluriannuel): ?>
+                    <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16">
+                      <title>Contrat d'application <?php echo substr($object->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo substr($object->numero_visa, 0, -4) ?></title>
+                      <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                    </svg>
+                <?php elseif($object->contrat_pluriannuel): ?>
+                    <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                      <title>Contrat pluriannuel n°<?php echo $object->numero_visa ?></title>
+                      <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
+                      <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
                     </svg>
                 <?php endif; ?>
 			</td>
