@@ -8,6 +8,7 @@ class SVClient extends acCouchdbClient {
     const CSV_ERROR_ACHETEUR  = "CSV_ERROR_ACHETEUR";
     const CSV_ERROR_APPORTEUR = "CSV_ERROR_APPORTEUR";
     const CSV_ERROR_PRODUIT   = "CSV_ERROR_PRODUIT";
+    const CSV_ERROR_VOLUME    = "CSV_ERROR_VOLUME";
 
     public static function getInstance()
     {
@@ -234,6 +235,14 @@ class SVClient extends acCouchdbClient {
             if(! $produit) {
                 $check[self::CSV_ERROR_PRODUIT][] = [$i, $line[CsvFileAcheteur::CSV_APPELLATION], "Produit non reconnu : ".$line[CsvFileAcheteur::CSV_APPELLATION]];
                 continue;
+            }
+
+            if ($line[CsvFileAcheteur::CSV_VOLUME] <= 0) {
+                $check[self::CSV_ERROR_VOLUME][] = [$i, $line[CsvFileAcheteur::CSV_VOLUME], "Le volume ne peut pas être nul"];
+            }
+
+            if ($line[CsvFileAcheteur::CSV_VOLUME] - $line[CsvFileAcheteur::CSV_VOLUME_DPLC] - $line[CsvFileAcheteur::CSV_VOLUME_VCI] <= 0) {
+                $check[self::CSV_ERROR_VOLUME][] = [$i, $line[CsvFileAcheteur::CSV_VOLUME] - $line[CsvFileAcheteur::CSV_VOLUME_DPLC] - $line[CsvFileAcheteur::CSV_VOLUME_VCI], "Le volume revendiqué ne peut pas être nul"];
             }
         }
 
