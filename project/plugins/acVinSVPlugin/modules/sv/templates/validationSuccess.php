@@ -14,6 +14,8 @@
   <?php include_partial('sv/validationSV12', ['sv' => $sv]); ?>
 <?php endif ?>
 
+<?php include_partial('sv/validationLies', ['sv' => $sv]); ?>
+
 <?php if ($sv->isValide()): ?>
   <div class="row">
     <div class="text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
