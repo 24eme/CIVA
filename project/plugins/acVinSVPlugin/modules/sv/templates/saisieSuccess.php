@@ -36,6 +36,10 @@
       return;
     }
 
+    if(input_volume_revendique.value) {
+      return;
+    }
+
     input_volume_revendique.value = Math.round(parseFloat(input_quantite.value) / parseFloat(input_taux_extraction.value)*100)/100;
   }
   let calculTauxExtraction = function(ligne) {
@@ -43,7 +47,17 @@
     let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
     let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
 
+    if(input_quantite.value && input_volume_revendique.value) {
+      input_taux_extraction.setAttribute('readonly', 'readonly');
+    } else {
+      input_taux_extraction.removeAttribute('readonly', 'readonly');
+    }
+
     if(!input_quantite.value) {
+      return;
+    }
+
+    if(!input_volume_revendique.value) {
       return;
     }
 
@@ -57,29 +71,73 @@
     if(input_quantite.value) {
       return;
     }
+
     input_quantite.value = Math.round(parseFloat(input_volume_revendique.value) * parseFloat(input_taux_extraction.value));
   }
   document.querySelectorAll('.input_quantite').forEach(function(item) {
-    item.addEventListener('keyup', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
     item.addEventListener('change', function(e) {
       calculVolumeRenvendique(this.parentNode.parentNode);
+      calculTauxExtraction(this.parentNode.parentNode);
     });
+    item.addEventListener('focus', function(e) {
+      let ligne = this.parentNode.parentNode
+      let input_quantite = ligne.querySelector('.input_quantite');
+      let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
+      let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
+      if(!input_quantite.value && !input_volume_revendique.value) {
+        input_volume_revendique.setAttribute('readonly', 'readonly');
+      } else {
+        input_volume_revendique.removeAttribute('readonly', 'readonly');
+      }
+      input_taux_extraction.setAttribute('readonly', 'readonly');
+    });
+    item.addEventListener('blur', function(e) {
+      let ligne = this.parentNode.parentNode
+      let input_quantite = ligne.querySelector('.input_quantite');
+      let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
+      let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
+      if(!input_quantite.value) {
+        input_taux_extraction.removeAttribute('readonly', 'readonly');
+      }
+      input_volume_revendique.removeAttribute('readonly', 'readonly');
+    });
+    calculVolumeRenvendique(item.parentNode.parentNode);
   });
   document.querySelectorAll('.input_taux_extraction').forEach(function(item) {
-    item.addEventListener('keyup', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
     item.addEventListener('change', function(e) {
       calculVolumeRenvendique(this.parentNode.parentNode);
     });
+    calculTauxExtraction(item.parentNode.parentNode);
   });
   document.querySelectorAll('.input_volume_revendique').forEach(function(item) {
     item.addEventListener('change', function(e) {
       calculQuantite(this.parentNode.parentNode);
       calculTauxExtraction(this.parentNode.parentNode);
     });
+    item.addEventListener('focus', function(e) {
+      let ligne = this.parentNode.parentNode
+      let input_quantite = ligne.querySelector('.input_quantite');
+      let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
+      let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
+      if(!input_quantite.value && !input_volume_revendique.value) {
+        input_quantite.setAttribute('readonly', 'readonly');
+        input_taux_extraction.setAttribute('readonly', 'readonly');
+      } else {
+        input_quantite.removeAttribute('readonly', 'readonly');
+      }
+    });
+    item.addEventListener('blur', function(e) {
+      let ligne = this.parentNode.parentNode
+      let input_quantite = ligne.querySelector('.input_quantite');
+      let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
+      let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
+      if(!input_volume_revendique.value) {
+        input_taux_extraction.removeAttribute('readonly', 'readonly');
+      }
+      input_quantite.removeAttribute('readonly', 'readonly');
+    });
   });
+
+
 </script>
 <?php endif ?>
