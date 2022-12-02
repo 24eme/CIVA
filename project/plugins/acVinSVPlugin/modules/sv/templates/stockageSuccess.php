@@ -11,9 +11,9 @@
     <thead>
       <tr>
         <th class="col-xs-3">Produit</th>
-        <th class="col-xs-1 text-center">Total</th>
+        <th class="col-xs-1 text-center">Total revendiqué</th>
         <?php foreach($sv->stockage as $stockage): ?>
-        <th class="col-xs-1 text-center"><?php echo $stockage->numero ?></th>
+        <th class="col-xs-1 text-center"><?php echo $stockage->numero ?><br /><?php echo $stockage->nom ?><br /><?php echo $stockage->adresse ?><br  /><?php echo $stockage->code_postal ?> <?php echo $stockage->commune ?></th>
         <?php endforeach; ?>
       </tr>
     </thead>
@@ -22,9 +22,9 @@
       <?php $produit = $recapProduits[$hash]; ?>
       <tr>
         <td style="vertical-align: middle"><?php echo $produit->getRawValue()->libelle_html ?></td>
-        <th style="vertical-align: middle" class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique) ?></span></th>
+        <th style="vertical-align: middle" class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique) ?></span> <small class="text-muted">hl</span></th>
         <?php foreach($formProduit as $num_stockage => $formStockage): ?>
-          <td class="col-xs-1"><?php echo $formStockage->render() ?></td>
+          <td class="col-xs-1"><div class="input-group"><?php echo $formStockage->render() ?><span class="input-group-addon" style="background: #ccc;">hl</span></div></td>
         <?php endforeach ?>
       </tr>
       <?php endforeach ?>
