@@ -27,6 +27,12 @@ class SV12ProduitForm extends acCouchdbObjectForm
             $this->setWidget('volume_mouts', new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm input_volume_revendique')));
             $this->setValidator('volume_mouts', new sfValidatorNumber(array('required' => false)));
         }
+
+        if($this->getObject()->exist('volume_mouts_revendique')) {
+            $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm input_volume_revendique')));
+            $this->setValidator('volume_mouts_revendique', new sfValidatorNumber(array('required' => false)));
+        }
+
         $this->widgetSchema->setNameFormat('[%s]');
     }
 

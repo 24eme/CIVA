@@ -39,7 +39,7 @@ class SVSaisieForm extends acCouchdbForm
     public function hasMouts()
     {
         return count(array_filter($this->getEmbeddedForm('produits')->getEmbeddedForms(), function ($produit) {
-            return isset($produit['volume_mouts']);
+            return isset($produit['volume_mouts']) || isset($produit['volume_mouts_revendique']);
         })) > 0;
     }
 }
