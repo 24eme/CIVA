@@ -5,7 +5,6 @@ class SVAutreForm extends acCouchdbForm
     public function __construct(SV $doc, $options = [], $CSRFSecret = null)
     {
         parent::__construct($doc, $options, $CSRFSecret);
-        $this->setDefault('lies', $this->getDocument()->lies);
     }
 
     public function configure()
@@ -18,11 +17,15 @@ class SVAutreForm extends acCouchdbForm
             'lies' => 'Volume total lies et bourbes',
         ]);
 
+        $this->setDefault('lies', $this->getDocument()->lies);
+
         $this->widgetSchema->setNameFormat('sv_autres[%s]');
     }
 
     public function save()
     {
+        $values = $this->getValues();
         $this->getDocument()->lies = $values['lies'];
+        $this->getDocument()->save();
     }
 }
