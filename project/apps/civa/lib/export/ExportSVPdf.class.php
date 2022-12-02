@@ -89,8 +89,13 @@ class ExportSVPdf extends ExportDocument
 
     protected function getTitle()
     {
-        $date = new DateTime($this->declaration->valide->date_saisie);
-        $titre = sprintf("Déclaration de Production du %s", $date->format('d/m/Y'));
+        $titre = "Déclaration de Production";
+
+        if ($this->declaration->valide->date_saisie) {
+
+            $date = new DateTime($this->declaration->valide->date_saisie);
+            $titre .= sprintf(" validée le %s", IntlDateFormatter::formatObject($date, "d MMMM y", 'fr_FR'));
+        }
         return $titre;
     }
 
