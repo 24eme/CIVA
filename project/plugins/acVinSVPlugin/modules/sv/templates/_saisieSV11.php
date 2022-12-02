@@ -19,7 +19,7 @@
     <td><?php echo $formProduit['superficie_recolte']->render() ?></td>
     <td><?php echo $formProduit['volume_recolte']->render() ?></td>
     <td><?php echo $formProduit['volume_revendique']->render() ?></td>
-    <td><?php echo $formProduit['usages_industriels']->render() ?></td>
+    <td><?php echo $formProduit['volume_detruit']->render() ?></td>
     <td><?php echo $formProduit['vci']->render() ?></td>
   </tr>
   <?php endforeach ?>
