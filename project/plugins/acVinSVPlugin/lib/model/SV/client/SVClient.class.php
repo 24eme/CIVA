@@ -36,7 +36,7 @@ class SVClient extends acCouchdbClient {
         return $type;
     }
 
-    protected function createSV($identifiant, $campagne) {
+    public function createSV($identifiant, $campagne) {
         $sv = new SV();
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
 

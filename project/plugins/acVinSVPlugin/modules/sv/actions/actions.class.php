@@ -40,6 +40,13 @@ class svActions extends sfActions {
             );
         }
 
+        if ($typeCreation === 'VIERGE') {
+            $sv = SVClient::getInstance()->createSV($this->etablissement->identifiant, $campagne);
+            $sv->save();
+
+            return $this->redirect('sv_validation', ['id' => $sv->_id]);
+        }
+
         return $this->redirect(
             'sv_csv_verify',
             ['identifiant' => $this->etablissement->identifiant, 'campagne' => $campagne, 'hash' => $typeCreation]
@@ -111,6 +118,10 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+
+        if ($this->cvi && $cvi_index = array_search($this->cvi, array_keys($this->sv->apporteurs->toArray()))) {
+            $this->cvi_precedent = $this->sv->apporteurs->get($this->cvi)->getPreviousSister()->getKey();
+        }
 
         $this->form = new SVSaisieForm($this->sv, $this->cvi);
 

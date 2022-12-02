@@ -34,6 +34,10 @@
                         <?php echo $form['file']->render() ?>
                     </div>
               </div>
+              <div class="ligne_form">
+                    <input name="sv_creation[type_creation]" type="radio" value="VIERGE" id="sv_creation_type_creation_VIERGE">
+                    <label for="sv_creation_type_creation_VIERGE">Créer une déclaration à néant</label>
+              </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
                   <button type="submit" id="mon_espace_civa_valider" class="btn btn_vert btn_majeur">Valider</button>

@@ -15,7 +15,11 @@
   <?php endif ?>
 
   <div class="row">
-    <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a></div>
+    <?php if (isset($cvi_precedent)): ?>
+      <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_saisie', ['id' => $sv->_id, 'cvi' => $cvi_precedent]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Apporteur précédent</a></div>
+    <?php else: ?>
+      <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a></div>
+    <?php endif ?>
     <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default">Voir la liste des apporteur</a></div>
     <div class="col-xs-4 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
   </div>
