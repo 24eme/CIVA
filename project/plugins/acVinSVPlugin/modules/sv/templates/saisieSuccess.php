@@ -93,16 +93,12 @@
       } else {
         input_volume_revendique.removeAttribute('readonly', 'readonly');
       }
-      input_taux_extraction.setAttribute('readonly', 'readonly');
     });
     item.addEventListener('blur', function(e) {
       let ligne = this.parentNode.parentNode
       let input_quantite = ligne.querySelector('.input_quantite');
       let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
       let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
-      if(!input_quantite.value) {
-        input_taux_extraction.removeAttribute('readonly', 'readonly');
-      }
       input_volume_revendique.removeAttribute('readonly', 'readonly');
     });
     calculVolumeRenvendique(item.parentNode.parentNode);
@@ -125,7 +121,6 @@
       let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
       if(!input_quantite.value && !input_volume_revendique.value) {
         input_quantite.setAttribute('readonly', 'readonly');
-        input_taux_extraction.setAttribute('readonly', 'readonly');
       } else {
         input_quantite.removeAttribute('readonly', 'readonly');
       }
@@ -135,9 +130,6 @@
       let input_quantite = ligne.querySelector('.input_quantite');
       let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
       let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
-      if(!input_volume_revendique.value) {
-        input_taux_extraction.removeAttribute('readonly', 'readonly');
-      }
       input_quantite.removeAttribute('readonly', 'readonly');
     });
   });

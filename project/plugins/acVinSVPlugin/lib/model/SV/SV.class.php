@@ -33,7 +33,7 @@ class SV extends BaseSV
 
     public function storeStorage() {
         $etablissement = $this->getEtablissementObject();
-        $lieux = $etablissement->getLieuxStockage(false, $etablissement->cvi);
+        $lieux = $etablissement->getLieuxStockage(false, ($this->type == SVClient::TYPE_SV11) ? $etablissement->cvi : $etablissement->identifiant);
         foreach($lieux as $lieu) {
             $this->stockage->add($lieu->numero, $lieu);
         }
