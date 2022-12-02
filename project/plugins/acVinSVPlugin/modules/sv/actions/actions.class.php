@@ -40,6 +40,13 @@ class svActions extends sfActions {
             );
         }
 
+        if ($typeCreation === 'VIERGE') {
+            $sv = SVClient::getInstance()->createSV($this->etablissement->identifiant, $campagne);
+            $sv->save();
+
+            return $this->redirect('sv_validation', ['id' => $sv->_id]);
+        }
+
         return $this->redirect(
             'sv_csv_verify',
             ['identifiant' => $this->etablissement->identifiant, 'campagne' => $campagne, 'hash' => $typeCreation]
