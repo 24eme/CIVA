@@ -149,7 +149,10 @@ class svActions extends sfActions {
             }
         }
 
-        return $this->redirect('sv_validation', $this->sv);
+        return $this->redirect(
+            SVEtapes::$links[SVEtapes::getInstance()->getNext()],
+            ['id' => $sv->_id]
+        );
     }
 
     public function executeAutres(sfWebRequest $request) {
