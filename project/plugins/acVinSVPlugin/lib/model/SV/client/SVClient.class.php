@@ -243,9 +243,12 @@ class SVClient extends acCouchdbClient {
                 $check[self::CSV_ERROR_VOLUME][] = [$i, $line[CsvFileAcheteur::CSV_VOLUME], "Le volume ne peut pas être nul"];
             }
 
-            $volume = $line[CsvFileAcheteur::CSV_VOLUME] - $line[CsvFileAcheteur::CSV_VOLUME_DPLC];
+            $volume = $line[CsvFileAcheteur::CSV_VOLUME];
+            if (isset($line[CsvFileAcheteur::CSV_VOLUME_DPLC])) {
+                $volume -= (float) $line[CsvFileAcheteur::CSV_VOLUME_DPLC];
+            }
             if (isset($line[CsvFileAcheteur::CSV_VOLUME_VCI])) {
-                $volume -= $line[CsvFileAcheteur::CSV_VOLUME_VCI];
+                $volume -= (float) $line[CsvFileAcheteur::CSV_VOLUME_VCI];
             }
 
             if ($volume <= 0)
