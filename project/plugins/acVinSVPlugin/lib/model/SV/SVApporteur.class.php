@@ -21,7 +21,7 @@ class SVApporteur extends BaseSVApporteur {
     public function getNbSaisies() {
         $nbSaisies = 0;
         foreach($this->getProduits() as $produit) {
-            if(!$produit->superficie_recolte || !$produit->quantite_recolte || !$produit->volume_revendique) {
+            if(!$produit->isComplete()) {
                 continue;
             }
             $nbSaisies++;
