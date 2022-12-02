@@ -4,6 +4,7 @@
 <h3>Lieu de stockage</h3>
 
 <form action="" method="POST">
+  <?php echo $form->renderHiddenFields(); ?>
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
@@ -58,9 +59,9 @@
       </a>
     </div>
     <div class="col-xs-6 text-right">
-      <a href="<?php echo url_for('sv_validation', $sv) ?>" class="btn btn-success">
+      <button type="submit" class="btn btn-success">
         <span class="glyphicon glyphicon-chevron-right"></span> Étape suivante
-      </a>
+      </button>
     </div>
   </div>
 </form>

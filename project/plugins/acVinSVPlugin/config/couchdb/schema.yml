@@ -94,10 +94,10 @@ SV:
                   commune: {  }
                   code_postal: {  }
                   produits:
-                    type: array_collection
+                    type: collection
                     definition:
                       fields:
-                        '*': {  }
+                        '*': { type: float }
       valide:
         type: collection
         definition:
