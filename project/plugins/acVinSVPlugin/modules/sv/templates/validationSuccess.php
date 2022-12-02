@@ -3,6 +3,8 @@
 
 <h3>Récapitulatif par produit</h3>
 
+<p>Texte d'intro</p>
+
 <?php if ($sv->getType() === SVClient::TYPE_SV11): ?>
   <?php include_partial('sv/validationSV11', ['sv' => $sv]); ?>
 <?php else: ?>

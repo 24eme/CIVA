@@ -3,6 +3,8 @@
 
 <h3>Lieu de stockage</h3>
 
+<p>Texte d'intro</p>
+
 <form action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
   <table class="table table-bordered table-striped">

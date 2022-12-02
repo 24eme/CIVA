@@ -3,6 +3,8 @@
 
 <h3>Autres</h3>
 
+<p>Texte d'intro</p>
+
 <form action="" method="POST" id="form_autres" class="form-horizontal">
 <?php echo $form->renderHiddenFields() ?>
 <div class="form-group">

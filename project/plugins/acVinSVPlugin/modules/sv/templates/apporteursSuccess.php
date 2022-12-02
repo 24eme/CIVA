@@ -1,6 +1,9 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <h3>Liste de vos apporteurs</h3>
+
+<p>Texte d'intro</p>
+
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
