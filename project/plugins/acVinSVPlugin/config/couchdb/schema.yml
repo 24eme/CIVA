@@ -74,6 +74,7 @@ SV:
                               volume_revendique: { type: float }
                               volume_detruit: { type: float }
                               volume_mouts: { type: float, required: false }
+                              volume_mouts_revendique: { type: float, required: false }
                               vci: { type: float }
       lies: { type: float }
       mouts: { type: float }
