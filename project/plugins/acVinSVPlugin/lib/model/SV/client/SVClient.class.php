@@ -167,6 +167,15 @@ class SVClient extends acCouchdbClient {
 
             $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $line[CsvFileAcheteur::CSV_DENOMINATION]);
 
+            if (strpos('mouts', KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION])) !== false) {
+                $produit->add('volume_mouts');
+                $produit->add('volume_mouts_revendique');
+                $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
+                $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
+
+                continue;
+            }
+
             $produit->superficie_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
             if($sv->getType() == SVClient::TYPE_SV12) {
@@ -179,15 +188,6 @@ class SVClient extends acCouchdbClient {
                 $produit->volume_detruit += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC]);
                 $produit->vci += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]);
                 $produit->volume_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
-            }
-
-            if (strpos('mouts', KeyInflector::slugify($produit->libelle)) !== false) {
-                $produitOriginal = ConfigurationClient::getConfiguration()->identifyProductByLibelle(
-                    trim(sprintf("%s %s %s", str_replace('Moûts ', $produit->appellation, $produit->cepage, $produit->vtsgn)))
-                );
-
-                $sv->get($produitOriginal->getHash())->add('volume_mouts', $produit->volume_recolte);
-                $sv->remove($produit->getHash());
             }
         }
 
