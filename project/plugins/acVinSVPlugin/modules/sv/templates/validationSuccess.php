@@ -1,5 +1,8 @@
 <?php use_helper('Float'); ?>
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
+
+<?php if (! $sv->isValide()): ?>
+  <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
+<?php endif ?>
 
 <h3>Récapitulatif par produit</h3>
 
@@ -13,7 +16,7 @@
 
 <?php if ($sv->isValide()): ?>
   <div class="row">
-    <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
+    <div class="text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
   </div>
 <?php else: ?>
   <div class="row">
