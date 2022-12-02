@@ -1,6 +1,6 @@
 <?php
 
-class CsvFileAcheteur 
+class CsvFileAcheteur
 {
   const CSV_ACHETEUR_CVI = 0;
   const CSV_ACHETEUR_LIBELLE = 1;
@@ -90,6 +90,7 @@ class CsvFileAcheteur
       $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
       $appellation = preg_replace("/^0$/", "", $appellation);
       $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);
+      $appellation = preg_replace('/Mo[uû]ts?/i', '', $appellation);
 
       $lieu = $line[CsvFileAcheteur::CSV_LIEU];
       $lieu = preg_replace("/^0$/", "", $lieu);
