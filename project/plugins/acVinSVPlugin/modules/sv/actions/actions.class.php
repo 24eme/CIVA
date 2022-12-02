@@ -112,6 +112,10 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
 
+        if ($this->cvi && $cvi_index = array_search($this->cvi, array_keys($this->sv->apporteurs->toArray()))) {
+            $this->cvi_precedent = $this->sv->apporteurs->get($this->cvi)->getPreviousSister()->getKey();
+        }
+
         $this->form = new SVSaisieForm($this->sv, $this->cvi);
 
         if (!$request->isMethod(sfWebRequest::POST)) {
