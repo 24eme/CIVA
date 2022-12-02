@@ -65,7 +65,7 @@
           <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_recolte) ?>&nbsp;<small>hl</small></td>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
-            <td class="td">&nbsp;<?php echo sprintFloatFr($produit->usages_industriels) ?>&nbsp;<small>hl</small></td>
+            <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_detruit) ?>&nbsp;<small>hl</small></td>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->vci) ?>&nbsp;<small>hl</small></td>
           <?php else: ?>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->quantite_recolte) ?>&nbsp;<small>kg</small></td>
