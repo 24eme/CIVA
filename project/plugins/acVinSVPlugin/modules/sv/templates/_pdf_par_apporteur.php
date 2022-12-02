@@ -53,9 +53,10 @@
           <th class="th" style="text-align: center; width: 84px">&nbsp;Volume à détruire</th>
           <th class="th" style="text-align: center; width: 84px">&nbsp;VCI</th>
         <?php else: ?>
-          <th class="th" style="text-align: center; width: 112px">&nbsp;Quantité récoltée</th>
-          <th class="th" style="text-align: center; width: 112px">&nbsp;Volume revendiqué</th>
-          <th class="th" style="text-align: center; width: 112px">&nbsp;Volume de moûts</th>
+          <th class="th" style="text-align: center; width: 84px">&nbsp;Quantité récoltée</th>
+          <th class="th" style="text-align: center; width: 84px">&nbsp;Volume revendiqué</th>
+          <th class="th" style="text-align: center; width: 84px">&nbsp;Volume de moûts</th>
+          <th class="th" style="text-align: center; width: 84px">&nbsp;Volume de moûts revendique</th>
         <?php endif ?>
       </tr>
       <?php foreach($apporteur->getProduits() as $produit): ?>
@@ -68,9 +69,10 @@
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_detruit) ?>&nbsp;<small>hl</small></td>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->vci) ?>&nbsp;<small>hl</small></td>
           <?php else: ?>
-            <td class="td">&nbsp;<?php echo sprintFloatFr($produit->quantite_recolte) ?>&nbsp;<small>kg</small></td>
+            <td class="td">&nbsp;<?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small></td>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
-            <td class="td">&nbsp;<?php echo sprintFloatFr(0.00) ?>&nbsp;<small>hl</small></td>
+            <td class="td">&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
+            <td class="td">&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts_revendique) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
           <?php endif ?>
         </tr>
       <?php endforeach; ?>
