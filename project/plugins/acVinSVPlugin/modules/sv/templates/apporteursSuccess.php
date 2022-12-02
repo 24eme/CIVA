@@ -1,6 +1,9 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <h3>Liste de vos apporteurs</h3>
+
+<p>Texte d'intro</p>
+
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
@@ -24,5 +27,5 @@
 
 <div class="row">
   <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
-  <div class="col-xs-6 text-right"><a href="<?php echo url_for('sv_saisie', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
+  <div class="col-xs-6 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>

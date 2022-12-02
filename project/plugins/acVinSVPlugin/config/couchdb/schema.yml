@@ -77,8 +77,8 @@ SV:
                               volume_mouts_revendique: { type: float, required: false }
                               vci: { type: float }
       lies: { type: float }
-      mouts: { type: float }
-      rebeches: { type: float }
+      mouts: { type: float, required: false } #deprécié
+      rebeches: { type: float, required: false } #deprécié
       stockage:
         type: collection
         definition:
@@ -94,10 +94,10 @@ SV:
                   commune: {  }
                   code_postal: {  }
                   produits:
-                    type: array_collection
+                    type: collection
                     definition:
                       fields:
-                        '*': {  }
+                        '*': { type: float }
       valide:
         type: collection
         definition:

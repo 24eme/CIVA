@@ -3,6 +3,8 @@
 
 <h3>Taux d'extraction</h3>
 
+<p>Texte d'intro</p>
+
 <form action="" method="POST" id="form_extraction">
 <?php echo $form->renderHiddenFields() ?>
 <table class="table table-bordered table-striped table-condensed">
