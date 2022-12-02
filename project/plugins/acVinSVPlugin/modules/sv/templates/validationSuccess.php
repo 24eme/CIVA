@@ -17,7 +17,7 @@
   </div>
 <?php else: ?>
   <div class="row">
-    <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_saisie', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
+    <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_stockage', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
     <div class="col-xs-4 text-right"><button id="valideSV" class="btn btn-success">Terminer la saisie <span class="glyphicon glyphicon glyphicon-ok"></span></button></div>
   </div>
