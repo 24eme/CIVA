@@ -1,6 +1,6 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo $cvi ?><?php endif; ?></h3>
+<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> (<?php echo $cvi ?>)<?php endif; ?></h3>
 
 <p>Texte d'intro</p>
 
