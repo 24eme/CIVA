@@ -10,7 +10,7 @@
 <table class="table table-bordered table-striped table-condensed">
   <thead>
     <tr>
-      <th class="col-xs-1 text-center">Taux d'extraction</th>
+      <th class="col-xs-1 text-center">Taux d'extraction<br/><small>(kg/hl)</small></th>
       <th class="col-xs-11">Produit</th>
     </tr>
   </thead>
