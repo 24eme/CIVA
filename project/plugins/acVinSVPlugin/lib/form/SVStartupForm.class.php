@@ -1,6 +1,6 @@
 <?php
 
-class SVStartupForm extends acCouchdbObjectForm
+class SVStartupForm extends acCouchdbForm
 {
     public function __construct(SV $doc, $options = [], $CSRFSecret = null)
     {

@@ -15,10 +15,12 @@
               <?php echo $form->renderHiddenFields() ?>
               <?php echo $form->renderGlobalErrors() ?>
               <?php if ($sv): ?>
-                  <div class="ligne_form">
-                    <?php echo $form['action']->renderError() ?>
-                    <?php echo $form['action']->render() ?>
-                  </div>
+              <div class="ligne_form">
+                  <label for="sv_startup_action_reprendre" class="radio-inline"><input name="sv_startup[action]" type="radio" checked="checked" value="reprendre" id="sv_startup_action_reprendre">&nbsp;Continuer ma déclaration</label>
+              </div>
+              <div class="ligne_form">
+                  <label for="sv_startup_action_supprimer" class="radio-inline"><input name="sv_startup[action]" type="radio" value="supprimer" id="sv_startup_action_supprimer">&nbsp;Supprimer ma déclaration</label>
+              </div>
               <?php else: ?>
               <div class="ligne_form">
                     <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
