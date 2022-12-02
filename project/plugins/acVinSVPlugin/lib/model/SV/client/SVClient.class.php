@@ -167,7 +167,7 @@ class SVClient extends acCouchdbClient {
 
             $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $line[CsvFileAcheteur::CSV_DENOMINATION]);
 
-            if (strpos('mouts', KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION])) !== false) {
+            if (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false) {
                 $produit->add('volume_mouts');
                 $produit->add('volume_mouts_revendique');
                 $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
