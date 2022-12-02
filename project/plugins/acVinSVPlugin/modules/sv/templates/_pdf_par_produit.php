@@ -26,7 +26,6 @@
       <tr>
         <td>&nbsp;Nom : <i><?php echo $document->declarant->raison_sociale ?></i></td>
         <td>&nbsp;N° CVI : <i><?php echo $document->declarant->cvi ?></i></td>
-        <td>&nbsp;N° Adhérent : <i><?php echo preg_replace('/..$/', '', $document->identifiant); ?></i></td>
       </tr>
       <tr>
         <td>&nbsp;Adresse : <i><?php echo str_replace('−', '-', $document->declarant->adresse); ?></i></td>
