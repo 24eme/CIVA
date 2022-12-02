@@ -1,7 +1,7 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_AUTRES)); ?>
 
-<h3>Autres</h3>
+<h3>Lies et bourbes</h3>
 
 <p>Texte d'intro</p>
 
