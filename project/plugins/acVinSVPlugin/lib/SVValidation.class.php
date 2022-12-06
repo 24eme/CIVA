@@ -5,6 +5,7 @@ class SVValidation extends DocumentValidation
     public function configure()
     {
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
+        $this->addControle('erreur', 'lies_vides', "Les lies n'ont pas été remplies");
     }
 
     public function controle()
@@ -24,6 +25,10 @@ class SVValidation extends DocumentValidation
                     );
                 }
             }
+        }
+
+        if ($this->document->lies === null || is_numeric($this->document->lies) === false) {
+            $this->addPoint('erreur', 'lies_vides', '');
         }
     }
 }
