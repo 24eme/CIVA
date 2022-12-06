@@ -86,6 +86,8 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+
         if (SVEtapes::getInstance()->isEtapeDisabled(SVEtapes::ETAPE_EXTRACTION, $this->sv)) {
             return $this->redirect(
                 SVEtapes::$links[SVEtapes::getInstance()->getNext(SVEtapes::ETAPE_EXTRACTION)],
@@ -112,12 +114,16 @@ class svActions extends sfActions {
     public function executeApporteurs(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
     }
 
     public function executeSaisie(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
 
         if ($this->cvi && $cvi_index = array_search($this->cvi, array_keys($this->sv->apporteurs->toArray()))) {
             $this->cvi_precedent = $this->sv->apporteurs->get($this->cvi)->getPreviousSister()->getKey();
@@ -149,12 +155,18 @@ class svActions extends sfActions {
             }
         }
 
-        return $this->redirect('sv_validation', $this->sv);
+        return $this->redirect(
+            SVEtapes::$links[SVEtapes::getInstance()->getNext()],
+            ['id' => $sv->_id]
+        );
     }
 
     public function executeAutres(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+
         $this->form = new SVAutreForm($this->sv);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
@@ -175,6 +187,8 @@ class svActions extends sfActions {
     {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
 
         $this->recapProduits = $this->sv->getRecapProduits();
         $this->form = new SVStockageForm($this->sv);

@@ -5,7 +5,7 @@
       <th class="col-xs-4">Produit</th>
       <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Quantité récolté<br /><small>(kg)</small></th>
-      <th class="col-xs-1 text-center">Taux d'extraction</th>
+      <th class="col-xs-1 text-center">Taux d'extraction<br /><small>(kg/hl)</small></th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
     </tr>
   </thead>

@@ -27,7 +27,7 @@ class SVEtapes extends Etapes
         self::ETAPE_EXTRACTION => 'Extraction',
         self::ETAPE_APPORTEURS => 'Apporteurs',
         self::ETAPE_AUTRES => 'Autres',
-        self::ETAPE_LIEU_STOCKAGE => 'Lieu de stockage',
+        self::ETAPE_LIEU_STOCKAGE => 'Lieux de stockage',
         self::ETAPE_VALIDATION => 'Validation'
     );
 
