@@ -2,7 +2,7 @@
   <h3>Points bloquants</h3>
   <?php foreach ($validation->getErreurs() as $erreur): ?>
   <div class="alert alert-danger">
-    <?php echo $erreur->getMessage() ?>
+    <?php echo $erreur ?>
   </div>
   <?php endforeach ?>
 <?php endif ?>
