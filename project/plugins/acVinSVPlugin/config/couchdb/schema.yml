@@ -78,7 +78,7 @@ SV:
                               vci: { type: float }
       lies: { type: float }
       mouts: { type: float, required: false } #deprécié
-      rebeches: { type: float, required: false } #deprécié
+      rebeches: { type: float }
       stockage:
         type: collection
         definition:
