@@ -156,8 +156,8 @@ class svActions extends sfActions {
         }
 
         return $this->redirect(
-            SVEtapes::$links[SVEtapes::getInstance()->getNext()],
-            ['id' => $sv->_id]
+            SVEtapes::$links[SVEtapes::getInstance()->getNext(SVEtapes::ETAPE_APPORTEURS)],
+            ['id' => $this->sv->_id]
         );
     }
 
