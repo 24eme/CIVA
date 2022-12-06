@@ -212,6 +212,7 @@ class svActions extends sfActions {
     public function executeValidation(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+        $this->svvalidation = new SVValidation($this->sv);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
             return sfView::SUCCESS;

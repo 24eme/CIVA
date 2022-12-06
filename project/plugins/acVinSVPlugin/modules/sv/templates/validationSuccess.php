@@ -4,6 +4,8 @@
   <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
 <?php endif ?>
 
+<?php include_partial('sv/points', ['validation' => $svvalidation]) ?>
+
 <h3>Récapitulatif par produit</h3>
 
 <p>Texte d'intro</p>
