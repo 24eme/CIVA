@@ -218,6 +218,10 @@ class svActions extends sfActions {
             return sfView::SUCCESS;
         }
 
+        if ($this->svvalidation->isValide() === false) {
+            return sfView::SUCCESS;
+        }
+
         $this->sv->validate();
         $this->sv->save();
 
