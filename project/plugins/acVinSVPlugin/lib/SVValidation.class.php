@@ -19,11 +19,7 @@ class SVValidation extends DocumentValidation
                 });
 
                 if (empty($stocks_negatifs) === false) {
-                    $this->addPoint(
-                        'erreur',
-                        'stockage_repartition',
-                        $stockage->numero
-                    );
+                    $this->addPoint('erreur', 'stockage_repartition', $stockage->numero);
                 }
             }
         }
