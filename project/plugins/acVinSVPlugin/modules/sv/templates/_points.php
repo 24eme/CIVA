@@ -7,7 +7,8 @@
   <?php endforeach ?>
 <?php endif ?>
 
-<?php if ($validation->hasErreurs()): ?>
+<?php if ($validation->hasVigilances()): ?>
+  <h3>Points de vigilance</h3>
   <?php foreach ($validation->getVigilances() as $vigilance): ?>
   <div class="alert alert-warning">
     <?php echo $vigilance->getMessage() ?>
