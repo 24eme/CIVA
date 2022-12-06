@@ -2,8 +2,6 @@
 
 class SVAutreForm extends acCouchdbForm
 {
-    protected $produits_rebeches = null;
-
     public function __construct(SV $doc, $options = [], $CSRFSecret = null)
     {
         parent::__construct($doc, $options, $CSRFSecret);
@@ -12,7 +10,7 @@ class SVAutreForm extends acCouchdbForm
     public function configure()
     {
         $this->setWidget('lies', new bsWidgetFormInputFloat());
-        $this->setWidget('rebeches', new bsWidgetFormInputFloat([], ['disabled' => ($this->hasRebechesInProduits()) ? true : false]));
+        $this->setWidget('rebeches', new bsWidgetFormInputFloat([], ['disabled' => ($this->getDocument()->hasRebechesInProduits()) ? true : false]));
 
         $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
         $this->setValidator('rebeches', new sfValidatorNumber(['required' => false, 'min' => 0]));
@@ -23,30 +21,9 @@ class SVAutreForm extends acCouchdbForm
         ]);
 
         $this->setDefault('lies', $this->getDocument()->lies);
-        $this->setDefault('rebeches', $this->calculateRebeches());
+        $this->setDefault('rebeches', $this->getDocument()->calculateRebeches());
 
         $this->widgetSchema->setNameFormat('sv_autres[%s]');
-    }
-
-    public function hasRebechesInProduits()
-    {
-        if ($this->produits_rebeches !== null) {
-            return empty($this->produits_rebeches) === false;
-        }
-
-        $this->produits_rebeches = array_filter($this->getDocument()->getRecapProduits(), function ($v, $k) { return strpos($k, '/cepages/RB') !== false; }, ARRAY_FILTER_USE_BOTH);
-        return empty($this->produits_rebeches) === false;
-    }
-
-    public function calculateRebeches()
-    {
-        $total_rebeches = $this->getDocument()->rebeches ?? null;
-
-        if ($this->hasRebechesInProduits()) {
-            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_recolte; }, 0);
-        }
-
-        return $total_rebeches;
     }
 
     public function save()
@@ -54,8 +31,8 @@ class SVAutreForm extends acCouchdbForm
         $values = $this->getValues();
         $this->getDocument()->lies = $values['lies'];
 
-        if ($this->hasRebechesInProduits()) {
-            $this->getDocument()->rebeches = $this->calculateRebeches();
+        if ($this->getDocument()->hasRebechesInProduits()) {
+            $this->getDocument()->rebeches = $this->getDocument()->calculateRebeches();
         } else {
             $this->getDocument()->rebeches = $values['rebeches'];
         }

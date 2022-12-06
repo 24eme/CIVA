@@ -11,6 +11,8 @@ class SV extends BaseSV
     const DEFAULT_KEY = 'DEFAUT';
     const STATUT_VALIDE = 'VALIDE';
 
+    protected $produits_rebeches = null;
+
     public function getConfiguration() {
         return ConfigurationClient::getInstance()->getCurrent();
     }
@@ -149,6 +151,27 @@ class SV extends BaseSV
             $this->apporteurs->get($identifiant)->reorderByConf();
         }
         return $this->get($produit->getHash());
+    }
+
+    public function hasRebechesInProduits()
+    {
+        if ($this->produits_rebeches !== null) {
+            return empty($this->produits_rebeches) === false;
+        }
+
+        $this->produits_rebeches = array_filter($this->getDocument()->getRecapProduits(), function ($v, $k) { return strpos($k, '/cepages/RB') !== false; }, ARRAY_FILTER_USE_BOTH);
+        return empty($this->produits_rebeches) === false;
+    }
+
+    public function calculateRebeches()
+    {
+        $total_rebeches = $this->getDocument()->rebeches ?? null;
+
+        if ($this->hasRebechesInProduits()) {
+            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_recolte; }, 0);
+        }
+
+        return $total_rebeches;
     }
 
     public function validate()
