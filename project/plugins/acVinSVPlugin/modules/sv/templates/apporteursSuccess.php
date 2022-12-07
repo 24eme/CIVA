@@ -1,7 +1,7 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <?php if(count($sv->extraction)): ?>
-<a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right btn btn-link btn-sm"><span class="glyphicon glyphicon-cog"></span> Paramètrer mes taux d'extraction globaux</a>
+<a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right btn btn-link btn-sm"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</a>
 <?php endif; ?>
 
 <h3>Liste de vos apporteurs</h3>

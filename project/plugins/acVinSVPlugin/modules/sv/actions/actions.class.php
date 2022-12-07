@@ -118,6 +118,7 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
 
