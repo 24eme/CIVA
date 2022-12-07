@@ -81,6 +81,16 @@ sv_validation:
   requirements:
     sf_method: [get, post]
 
+sv_confirmation:
+  url: /sv/confirmation/:id
+  param: { module: sv, action: confirmation }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get]
+
 sv_pdf:
   url: /sv/pdf/:id
   param: { module: sv, action: pdf }
@@ -90,3 +100,13 @@ sv_pdf:
     type:  object
   requirements:
     sf_method: [get]
+
+sv_feed_back:
+  url: /sv/feedback/:id
+  param: { module: sv, action: feedBack }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]

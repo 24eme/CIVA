@@ -196,7 +196,17 @@ class svActions extends sfActions {
         $this->sv->validate();
         $this->sv->save();
 
-        return $this->redirect('sv_validation', $this->sv);
+        return $this->redirect('sv_confirmation', $this->sv);
+    }
+
+    public function executeConfirmation(sfWebRequest $request)
+    {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide() === false) {
+            return $this->redirect('sv_validation', $this->sv);
+        }
     }
 
     public function executePdf(sfWebRequest $request)
