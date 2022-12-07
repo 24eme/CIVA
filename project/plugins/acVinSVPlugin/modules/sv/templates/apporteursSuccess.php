@@ -9,16 +9,21 @@
     <tr>
       <th class="col-xs-1">CVI</th>
       <th class="col-xs-3">Nom de l'apporteur</th>
-      <th class="col-xs-6 text-center">Commune</th>
-      <th class="col-xs-2">Statut</th>
+      <th class="col-xs-2 text-center">Commune</th>
+      <th class="col-xs-2 text-center">Superficie<br/>par apporteur</th>
+      <th class="col-xs-2 text-center">Revendiqué<br/>par apporteur</th>
+      <th class="col-xs-2 text-center">Statut</th>
       <th></th>
     </tr>
   </thead>
 <?php foreach($sv->apporteurs as $apporteur): ?>
 <tr>
+  <?php $recap = $apporteur->getRecapProduits(); ?>
   <td><?php echo $apporteur->cvi ?></td>
   <td><?php echo $apporteur->nom ?></td>
   <td><?php echo $apporteur->commune ?></td>
+  <td class="text-right"><?php echo $recap['superficie'] ?> <small class="text-muted">ares</small></td>
+  <td class="text-right"><?php echo $recap['revendique'] ?> <small class="text-muted">hl</small></td>
   <td class="text-center"><?php if($apporteur->getNbSaisies() >= count($apporteur->produits)): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
   <td class="text-right"><a href="<?php echo url_for('sv_saisie', array('sf_subject' => $sv, 'cvi' => $apporteur->getKey())); ?>" class="btn btn-xs btn-default">Saisir <span class="glyphicon glyphicon-chevron-right"></span></a></td>
 </tr>
