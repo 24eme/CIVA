@@ -4,6 +4,8 @@
   <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
 <?php endif ?>
 
+<?php include_partial('sv/points', ['validation' => $svvalidation]) ?>
+
 <h3>Récapitulatif par produit</h3>
 
 <p>Texte d'intro</p>
@@ -24,7 +26,7 @@
   <div class="row">
     <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_stockage', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
-    <div class="col-xs-4 text-right"><button id="valideSV" class="btn btn-success">Terminer la saisie <span class="glyphicon glyphicon glyphicon-ok"></span></button></div>
+    <div class="col-xs-4 text-right"><button id="valideSV" class="btn btn-success"<?php echo ($svvalidation->isValide()) ? '' : 'disabled' ?>>Terminer la saisie <span class="glyphicon glyphicon glyphicon-ok"></span></button></div>
   </div>
 
   <?php include_partial('sv/popup_validation', ['sv' => $sv]); ?>

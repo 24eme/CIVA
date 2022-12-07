@@ -19,13 +19,13 @@
   <td><?php echo $apporteur->cvi ?></td>
   <td><?php echo $apporteur->nom ?></td>
   <td><?php echo $apporteur->commune ?></td>
-  <td class="text-center"><?php if($apporteur->getNbSaisies() >= count($apporteur->produits)): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php elseif($apporteur->getNbSaisies() == 0): ?><span class="text-muted">À saisir</span><?php endif; ?></td>
+  <td class="text-center"><?php if($apporteur->getNbSaisies() >= count($apporteur->produits)): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
   <td class="text-right"><a href="<?php echo url_for('sv_saisie', array('sf_subject' => $sv, 'cvi' => $apporteur->getKey())); ?>" class="btn btn-xs btn-default">Saisir <span class="glyphicon glyphicon-chevron-right"></span></a></td>
 </tr>
 <?php endforeach; ?>
 </table>
 
 <div class="row">
-  <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
+  <div class="col-xs-6 text-left"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-6 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>

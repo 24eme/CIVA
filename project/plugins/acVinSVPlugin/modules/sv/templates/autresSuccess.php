@@ -7,7 +7,9 @@
 
 <form action="" method="POST" id="form_autres" class="form-horizontal">
 <?php echo $form->renderHiddenFields() ?>
+<?php echo $form->renderGlobalErrors() ?>
 <div class="form-group">
+  <?php echo $form['lies']->renderError() ?>
   <?php echo $form['lies']->renderLabel(null, ['style' => '', 'class' => 'col-xs-3 control-label']) ?>
   <div class="input-group col-xs-3">
     <?php echo $form['lies']->render(['class' => 'form-control input-float text-right']) ?>
@@ -15,6 +17,14 @@
   </div>
 </div>
 
+<div class="form-group">
+  <?php echo $form['rebeches']->renderError() ?>
+  <?php echo $form['rebeches']->renderLabel(null, ['style' => '', 'class' => 'col-xs-3 control-label']) ?>
+  <div class="input-group col-xs-3">
+    <?php echo $form['rebeches']->render(['class' => 'form-control input-float text-right']) ?>
+    <div class="input-group-addon">hl</div>
+  </div>
+</div>
 </form>
 
 <div class="row">

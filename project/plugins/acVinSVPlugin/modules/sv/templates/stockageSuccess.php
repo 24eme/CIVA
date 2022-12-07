@@ -34,7 +34,17 @@
   <script>
     (document.querySelectorAll('input.secondaire') || []).forEach(function(item) {
       item.addEventListener('change', function(e) {
-        const tr = this.parentNode.parentNode;
+        let parent = this.parentNode;
+        while (parent.tagName !== 'TR') {
+          parent = parent.parentNode;
+
+          if (parent === null) {
+            console.error('Balise tr non trouvée');
+            return false;
+          }
+        }
+
+        const tr = parent;
         const inputPrincipal = tr.querySelector('.principal');
         const total = parseFloat(tr.querySelector('.total').innerText);
         let totalSecondaire = 0;
