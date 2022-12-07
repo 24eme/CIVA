@@ -79,4 +79,9 @@ class SVProduit extends BaseSVProduit {
             return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte) && !is_null($this->volume_revendique);
         }
     }
+
+    public function isRebeche()
+    {
+        return strpos($this->getProduitHash(), '/cepages/RB') !== false;
+    }
 }

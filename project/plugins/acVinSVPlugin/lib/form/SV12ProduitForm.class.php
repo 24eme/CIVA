@@ -8,7 +8,7 @@ class SV12ProduitForm extends acCouchdbObjectForm
     }
 
     public function configure() {
-        $this->setWidget('superficie_recolte', new bsWidgetFormInputFloat(array(), array('placeholder' => 'ares', 'class' => 'form-control text-right input-float input-sm')));
+        $this->setWidget('superficie_recolte', new bsWidgetFormInputFloat(array(), ['placeholder' => 'ares', 'class' => 'form-control text-right input-float input-sm', 'disabled' => $this->getObject()->isRebeche()]));
         $this->setValidator('superficie_recolte', new sfValidatorNumber(array('required' => false)));
 
         $this->setWidget('quantite_recolte', new bsWidgetFormInputInteger(array(), array('placeholder' => 'kg', 'class' => 'form-control text-right input-integer input-sm input_quantite')));
@@ -20,7 +20,7 @@ class SV12ProduitForm extends acCouchdbObjectForm
         $this->setWidget('volume_recolte', new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm')));
         $this->setValidator('volume_recolte', new sfValidatorNumber(array('required' => false)));
 
-        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm input_volume_revendique')));
+        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm input_volume_revendique', 'disabled' => $this->getObject()->isRebeche()]));
         $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
 
         if($this->getObject()->exist('volume_mouts')) {
