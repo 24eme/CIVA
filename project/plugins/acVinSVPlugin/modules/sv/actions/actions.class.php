@@ -85,9 +85,34 @@ class svActions extends sfActions {
     public function executeApporteurs(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
     }
+
+    public function executeExtraction(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+
+        $this->form = new SVExtractionForm($this->sv);
+
+        if (! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
+    }
+
 
     public function executeSaisie(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();

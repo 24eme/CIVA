@@ -198,3 +198,7 @@ ul.navbar-nav  > .active > a:focus {
     color: #555 !important;
 
 }
+
+.modal.modal-overflow {
+    overflow: auto;
+}

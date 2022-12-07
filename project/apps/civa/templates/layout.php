@@ -46,7 +46,7 @@
     <script src="/js/lib/jquery-ui-1.8.21.min.js"></script>
     <script src="/js/lib/jquery.sticky.js"></script>
     <script src="/js/ajaxHelper.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/main.js?202212071549"></script>
     <script src="/js/popups.js"></script>
     <script src="/js/drm.js"></script>
     <script src="/js/colonnes.js"></script>
