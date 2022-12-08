@@ -1,8 +1,8 @@
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
-      <th class="col-xs-3">Apporteur</th>
-      <th class="col-xs-4">Produit</th>
+      <th class="col-xs-2">Apporteur</th>
+      <th class="col-xs-3">Produit</th>
       <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Volume récolté<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
