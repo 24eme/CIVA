@@ -11,33 +11,36 @@
           <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
           <div class="contenu_section">
               <p class="intro">Vous souhaitez :</p>
-              <form action="<?= url_for('sv_etablissement', ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data">
-              <?php echo $formCreation->renderHiddenFields() ?>
-              <?php echo $formCreation->renderGlobalErrors() ?>
+              <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data" id="form_sv">
+              <?php echo $form->renderHiddenFields() ?>
+              <?php echo $form->renderGlobalErrors() ?>
               <?php if ($sv): ?>
-                  <div class="ligne_form">
-                      <input type="radio" id="type_declaration_brouillon" name="dr[type_declaration]" value="brouillon" checked="checked" />
-                      <label for="type_declaration_brouillon">Continuer ma déclaration</label>
-                  </div>
-                  <div class="ligne_form">
-                      <input type="radio" id="type_declaration_suppr" name="dr[type_declaration]" value="supprimer" />
-                      <label for="type_declaration_suppr">Supprimer ma déclaration <?php echo $sf_user->getCampagne() ?> en cours</label>
+              <div class="ligne_form">
+                  <label for="sv_startup_action_reprendre" class="radio-inline"><input name="sv_startup[action]" type="radio" checked="checked" value="reprendre" id="sv_startup_action_reprendre">&nbsp;Continuer ma déclaration</label>
+              </div>
+              <div class="ligne_form">
+                  <label for="sv_startup_action_supprimer" class="radio-inline"><input name="sv_startup[action]" type="radio" value="supprimer" id="sv_startup_action_supprimer">&nbsp;Supprimer ma déclaration</label>
               </div>
               <?php else: ?>
-              <div class="form_ligne">
-                  <?php echo $formCreation['file']->renderError() ?>
-                  <?php echo $formCreation['file']->renderLabel() ?>
-                  <?php echo $formCreation['file']->render() ?>
+              <div class="ligne_form">
+                    <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
+                    <label for="sv_creation_type_creation_DR">Démarrer depuis les données de la DR</label>
               </div>
-                <div class="ligne_form">
-                  <?php echo $formCreation['type_creation']->renderError() ?>
-                  <?php echo $formCreation['type_creation']->render() ?>
-                </div>
+              <div class="ligne_form">
+                    <input name="sv_creation[type_creation]" type="radio" value="CSV" id="sv_creation_type_creation_CSV">
+                    <label for="sv_creation_type_creation_CSV">Démarrer à partir d'un fichier</label>
+                    <div style="margin-top: 5px; padding-left: 20px;">
+                        <?php echo $form['file']->renderError() ?>
+                        <?php echo $form['file']->render() ?>
+                    </div>
+              </div>
+              <div class="ligne_form">
+                    <input name="sv_creation[type_creation]" type="radio" value="VIERGE" id="sv_creation_type_creation_VIERGE">
+                    <label for="sv_creation_type_creation_VIERGE">Créer une déclaration à néant</label>
+              </div>
               <?php endif; ?>
               <div class="ligne_form ligne_btn">
-                  <button type="submit" id="mon_espace_civa_valider" class="btn">
-                      <img src="/images/boutons/btn_valider.png" alt="Valider" />
-                  </button>
+                  <button type="submit" id="mon_espace_civa_valider" class="btn btn_vert btn_majeur">Valider</button>
               </div>
               </form>
           </div>
@@ -49,3 +52,50 @@
         </div>
     <?php endif;?>
 </div>
+
+<div style="display: none" id="popup_loader_creation_sv" title="Génération de la SV">
+    <div class="popup-loading">
+    <p>La génération de votre SV est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
+    </div>
+</div>
+
+<script>
+var initLoadingCreationSV = function ()
+{
+    var btn = document.querySelector('#form_sv #mon_espace_civa_valider')
+    var formSV = document.querySelector('#form_sv')
+    var radioDR = document.querySelector('#form_sv #sv_creation_type_creation_DR')
+    var radioCSV = document.querySelector('#form_sv #sv_creation_type_creation_CSV')
+    var inputSVCsv = document.querySelector('#sv_creation_file')
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (radioCSV.checked || radioDR.checked) {
+          if (radioCSV.checked && inputSVCsv.value === '') {
+            return false;
+          }
+
+          openPopup($("#popup_loader_creation_sv"));
+        }
+      })
+    }
+
+    if (inputSVCsv) {
+        inputSVCsv.addEventListener('change', function () {
+            radioCSV.checked = true
+        })
+    }
+
+    if (formSV) {
+        formSV.addEventListener('change', function () {
+            if (radioCSV.checked) {
+                inputSVCsv.required = true
+            } else {
+                inputSVCsv.removeAttribute('required')
+            }
+        })
+    }
+}
+
+initLoadingCreationSV();
+</script>

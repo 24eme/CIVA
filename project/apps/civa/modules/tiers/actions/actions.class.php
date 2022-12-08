@@ -139,6 +139,7 @@ class tiersActions extends sfActions {
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
             $blocs[Roles::TELEDECLARATION_DR_ACHETEUR] = $this->generateUrl('mon_espace_civa_dr_acheteur_compte', $compte);
+            $blocs[Roles::TELEDECLARATION_PRODUCTION] = $this->generateUrl('mon_espace_civa_production_compte', $compte);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_GAMMA)) {
@@ -228,9 +229,32 @@ class tiersActions extends sfActions {
         $this->compte = $this->getUser()->getCompte();
         $this->blocs = $this->buildBlocs($this->compte, $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
         $this->etablissement = $this->getRoute()->getEtablissement();
-        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, "2021");
         $this->help_popup_action = "help_popup_mon_espace_civa";
-        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), '2021');
+
+        $campagne = CurrentClient::getCurrent()->campagne;
+
+        $this->sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->getIdentifiant(), $campagne);
+        if ($this->sv) {
+            $this->form = new SVStartupForm($this->sv);
+            $this->formaction = 'mon_espace_civa_production';
+        } else {
+            // redirigé vers sv_etablissement
+            $this->form = new SVCreationForm($this->etablissement->identifiant, $campagne);
+            $this->formaction = 'sv_etablissement';
+        }
+
+        if ($request->isMethod(sfWebRequest::POST)) {
+            $this->form->bind($request->getParameter($this->form->getName()));
+
+            if ($this->form->isValid()) {
+                if ($this->form->save() === false) {
+                    SVClient::getInstance()->delete($this->sv);
+                    return $this->redirect('mon_espace_civa_production', ['identifiant' => $this->etablissement->identifiant]);
+                } else {
+                    return $this->redirect('sv_etablissement', ['identifiant' => $this->etablissement->identifiant]);
+                }
+            }
+        }
     }
 
     public function executeMonEspaceCompteDS(sfWebRequest $request) {

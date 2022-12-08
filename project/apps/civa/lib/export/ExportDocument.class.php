@@ -24,4 +24,15 @@ abstract class ExportDocument {
         return $this->document->output();
     }
 
+    public function setPartialFunction($function) {
+        $this->partial_function = $function;
+    }
+
+    public function getPartial($templateName, $vars = null) {
+        sfContext::getInstance()->getConfiguration()->loadHelpers('Partial');
+
+        $vars = null !== $vars ? $vars : array();
+
+        return get_partial($templateName, $vars);
+    }
 }

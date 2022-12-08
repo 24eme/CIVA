@@ -21,13 +21,23 @@ class SVApporteur extends BaseSVApporteur {
     public function getNbSaisies() {
         $nbSaisies = 0;
         foreach($this->getProduits() as $produit) {
-            if(!$produit->superficie_recolte || !$produit->quantite_recolte || !$produit->volume_revendique) {
+            if(!$produit->isComplete()) {
                 continue;
             }
             $nbSaisies++;
         }
 
         return $nbSaisies;
+    }
+
+    public function getRecapProduits()
+    {
+        return array_reduce($this->getProduits(), function ($recap, $p) {
+            $recap['superficie'] += $p->superficie_recolte;
+            $recap['revendique'] += $p->volume_revendique;
+
+            return $recap;
+        }, ['superficie' => 0, 'revendique' => 0]);
     }
 
     public function getCvi() {
@@ -43,5 +53,27 @@ class SVApporteur extends BaseSVApporteur {
     public function getCommune() {
 
         return $this->getFirst()->getFirst()->commune;
+    }
+
+    public function reorderByConf() {
+        $children = array();
+
+
+        foreach($this as $hashProduit => $child) {
+            $children[$hashProduit] = $child->getData();
+        }
+
+        foreach($children as $hashProduit => $child) {
+            $this->remove($hashProduit);
+        }
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            $hashProduit = str_replace("/declaration/", "", $hashProduit);
+            if(!array_key_exists($hashProduit, $children)) {
+                continue;
+            }
+            $this->add($hashProduit, $children[$hashProduit]);
+            unset($children[$hashProduit]);
+        }
     }
 }

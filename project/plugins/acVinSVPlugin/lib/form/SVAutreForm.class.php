@@ -1,6 +1,6 @@
 <?php
 
-class SVAutreForm extends acCouchdbObjectForm
+class SVAutreForm extends acCouchdbForm
 {
     public function __construct(SV $doc, $options = [], $CSRFSecret = null)
     {
@@ -9,17 +9,34 @@ class SVAutreForm extends acCouchdbObjectForm
 
     public function configure()
     {
-        $this->setWidget('lies', new bsWidgetFormInput());
-        $this->setWidget('rebeches', new bsWidgetFormInput());
+        $this->setWidget('lies', new bsWidgetFormInputFloat());
+        $this->setWidget('rebeches', new bsWidgetFormInputFloat([], ['disabled' => ($this->getDocument()->hasRebechesInProduits()) ? true : false]));
 
         $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
-        $this->setValidator('rebeches', new sfValidatorNumber(['min' => 0]));
+        $this->setValidator('rebeches', new sfValidatorNumber(['required' => false, 'min' => 0]));
 
         $this->widgetSchema->setLabels([
-            'lies' => 'Lies (en hl)',
-            'rebeches' => 'Rebêches'
+            'lies' => 'Volume total lies et bourbes produit',
+            'rebeches' => 'Volume total rebêches',
         ]);
 
+        $this->setDefault('lies', $this->getDocument()->lies);
+        $this->setDefault('rebeches', $this->getDocument()->calculateRebeches());
+
         $this->widgetSchema->setNameFormat('sv_autres[%s]');
+    }
+
+    public function save()
+    {
+        $values = $this->getValues();
+        $this->getDocument()->lies = $values['lies'];
+
+        if ($this->getDocument()->hasRebechesInProduits()) {
+            $this->getDocument()->rebeches = $this->getDocument()->calculateRebeches();
+        } else {
+            $this->getDocument()->rebeches = $values['rebeches'];
+        }
+
+        $this->getDocument()->save();
     }
 }

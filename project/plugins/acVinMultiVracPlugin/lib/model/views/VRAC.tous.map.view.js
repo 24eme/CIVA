@@ -3,7 +3,7 @@ function(doc) {
 		return;
 	}
 
-	var date = doc.valide.date_saisie;
+	var date = doc.valide.date_validation;
 	var statut = doc.valide.statut;
 	var vendeur = {identifiant: doc.vendeur_identifiant, intitule: doc.vendeur.intitule, raison_sociale: doc.vendeur.raison_sociale, date_validation: doc.valide.date_validation_vendeur};
 	var acheteur = {identifiant: doc.acheteur_identifiant, intitule: doc.acheteur.intitule, raison_sociale: doc.acheteur.raison_sociale, date_validation: doc.valide.date_validation_acheteur};

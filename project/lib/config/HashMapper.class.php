@@ -92,8 +92,8 @@ class HashMapperCached {
         $hash = preg_replace("|/couleur([a-zA-Z0-9_-]{2,30})/|", "/couleurs/$1/", $hash);
         $hash = preg_replace("|/couleur([a-zA-Z0-9_-]{2,30})$|", "/couleurs/$1", $hash);
         $hash = preg_replace("|/cepage_([a-zA-Z0-9_-]+)|", "/cepages/$1", $hash);
-        $hash = str_replace("couleur/Rouge", "couleur/rouge", $hash);
-        $hash = str_replace("couleur/Blanc", "couleur/blanc", $hash);
+        $hash = str_replace("couleurs/Rouge", "couleurs/rouge", $hash);
+        $hash = str_replace("couleurs/Blanc", "couleurs/blanc", $hash);
         $hash = preg_replace("|/genres/TRANQ/appellations/CREMANT|", "/genres/EFF/appellations/CREMANT", $hash);
         $hash = preg_replace("|/certifications/AOC_ALSACE/genres/TRANQ/appellations/VINTABLE|", "/certifications/VINSSIG/genres/TRANQ/appellations/VINTABLE", $hash);
 

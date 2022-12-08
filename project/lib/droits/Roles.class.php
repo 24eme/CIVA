@@ -29,6 +29,7 @@ class Roles
     const TELEDECLARATION = 'teledeclaration';
     const TELEDECLARATION_DR = 'teledeclaration_dr';
     const TELEDECLARATION_DR_ACHETEUR = 'teledeclaration_dr_acheteur';
+    const TELEDECLARATION_PRODUCTION = 'teledeclaration_production';
     const TELEDECLARATION_DS_PROPRIETE = 'teledeclaration_ds_propriete';
     const TELEDECLARATION_DS_NEGOCE = 'teledeclaration_ds_negoce';
     const TELEDECLARATION_DS_DECEMBRE = 'teledeclaration_ds_decembre';

@@ -221,9 +221,15 @@
 
             return false;
         });
-        $(this).find('.pointer').on('click', function () {
+        $(this).find('.pointer').on('click', function (e) {
             if ($(this).attr('data-pointer')) {
-                $($(this).attr('data-pointer')).click();
+              $($(this).attr('data-pointer')).click();
+            } else if(e.target.href != this.querySelector('a').href) {
+              this.querySelector('a').click();
+              return true;
+            } else if(e.target.href == this.querySelector('a').href) {
+
+              return true;
             }
 
             return false;

@@ -3,6 +3,7 @@
 .settings/
 nbproject/
 *~
+*.swp
 .idea
 project/cache
 project/log

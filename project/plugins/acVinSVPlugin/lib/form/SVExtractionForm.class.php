@@ -11,19 +11,19 @@ class SVExtractionForm extends acCouchdbForm
     {
         $formProduit = new BaseForm();
 
-        foreach ($this->getDocument()->getProduits() as $hash => $produit) {
-            $noeud = str_replace('/declaration/', '', $produit->getProduitHash());
+        foreach ($this->getDocument()->getRecapProduits() as $hash => $produit) {
+            $noeud = str_replace('/declaration/', '', $hash);
 
             if (array_key_exists($noeud, $formProduit->getEmbeddedForms())) {
                 continue;
             }
 
             $formProduitTauxExtraction = new BaseForm();
-            $formProduitTauxExtraction->setWidget('taux_extraction', new sfWidgetFormInput());
-            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber());
-            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle);
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ['placeholder' => 130]));
+            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
+            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
 
-            $default_taux = $produit->getTauxExtractionDefault();
+            $default_taux = $produit->taux_extraction;
             $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
@@ -35,9 +35,13 @@ class SVExtractionForm extends acCouchdbForm
     public function save()
     {
         $values = $this->getValues();
-
-        foreach ($values['produits'] as $hash => $taux) {
-            $this->getDocument()->extraction->add($hash)->taux_extraction = current($taux);
+        $this->getDocument()->remove('extraction');
+        $this->getDocument()->add('extraction');
+        foreach ($values['produits'] as $hash => $value) {
+            if(is_null($value['taux_extraction'])) {
+                continue;
+            }
+            $this->getDocument()->extraction->add($hash)->taux_extraction = $value['taux_extraction'];
         }
 
         $this->getDocument()->save();

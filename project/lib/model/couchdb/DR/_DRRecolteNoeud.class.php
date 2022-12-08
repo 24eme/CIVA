@@ -1029,9 +1029,9 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->_storage[$key];
     }
 
-    public function getVolumeAcheteur($cvi, $type) {
+    public function getVolumeAcheteur($cvi, $type, $excludeTotal = true) {
         $volume = 0;
-        $acheteurs = $this->getVolumeAcheteurs($type);
+        $acheteurs = $this->getVolumeAcheteurs($type, $excludeTotal);
         if (array_key_exists($cvi, $acheteurs)) {
             $volume = $acheteurs[$cvi];
         }

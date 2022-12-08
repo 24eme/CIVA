@@ -48,6 +48,17 @@
                 </div>
             </div>
             <?php $i = $i -1 ?>
+            <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
+                <div class="bloc_acceuil_icon icon-raisins"></div>
+                <div class="bloc_acceuil_header">Production</div>
+                <div class="bloc_acceuil_content">
+                    <p class="mineure">Aucune information à signaler</p>
+                </div>
+                <div class="bloc_acceuil_footer">
+                    <a href="<?php echo url_for('mon_espace_civa_production_compte', $compte) ?>">Accéder</a>
+                </div>
+            </div>
+            <?php $i = $i -1 ?>
             <?php endif; ?>
             <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DRM) && isset($blocs[Roles::TELEDECLARATION_DRM])): ?>
             <?php

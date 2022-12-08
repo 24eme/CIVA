@@ -1,81 +1,36 @@
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_SAISIE)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo $cvi ?><?php endif; ?></h3>
-<form action="" method="POST">
+<?php if($sv->getType() === SVClient::TYPE_SV12): ?>
+<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link btn-sm"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</button>
+<?php endif; ?>
+
+<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> (<?php echo $cvi ?>)<?php endif; ?></h3>
+
+<p>Texte d'intro</p>
+
+<form id="form_saisie" action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
   <?php echo $form->renderGlobalErrors(); ?>
 
   <?php if($sv->getType() === SVClient::TYPE_SV11): ?>
-    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv]) ?>
+    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php else: ?>
-    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv]) ?>
+    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php endif ?>
 
   <div class="row">
-    <div class="col-xs-6 text-left"><a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
-    <div class="col-xs-6 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
+    <?php if (isset($cvi_precedent)): ?>
+      <div class="col-xs-4 text-left">
+        <button type="submit" name="precedent_cvi" value="<?php echo $cvi_precedent ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Apporteur précédent</button>
+      </div>
+    <?php else: ?>
+      <div class="col-xs-4 text-left"><button type="submit" name="retour_liste" value="1" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</button></div>
+    <?php endif ?>
+    <div class="col-xs-4 text-center"><button type="submit" name="retour_liste" value="1" class="btn btn-default"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Retour à la liste des apporteurs</button></div>
+    <div class="col-xs-4 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
   </div>
 </form>
 
-<?php if($sv->getType() == SVClient::TYPE_SV12): ?>
-<script>
-  let calculVolumeRenvendique = function(ligne) {
-    let input_quantite = ligne.querySelector('.input_quantite');
-    let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
-    let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
-
-    if(!input_taux_extraction.value) {
-      return;
-    }
-
-    if(!input_quantite.value) {
-      return;
-    }
-
-    input_volume_revendique.value = Math.round(parseFloat(input_quantite.value) / parseFloat(input_taux_extraction.value)*100)/100;
-  }
-  let calculTauxExtraction = function(ligne) {
-    let input_quantite = ligne.querySelector('.input_quantite');
-    let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
-    let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
-
-    if(!input_quantite.value) {
-      return;
-    }
-
-    input_taux_extraction.value = Math.round(parseFloat(input_quantite.value) / parseFloat(input_volume_revendique.value)*100)/100;
-  }
-  let calculQuantite = function(ligne) {
-    let input_quantite = ligne.querySelector('.input_quantite');
-    let input_taux_extraction = ligne.querySelector('.input_taux_extraction');
-    let input_volume_revendique = ligne.querySelector('.input_volume_revendique');
-
-    if(input_quantite.value) {
-      return;
-    }
-    input_quantite.value = Math.round(parseFloat(input_volume_revendique.value) * parseFloat(input_taux_extraction.value));
-  }
-  document.querySelectorAll('.input_quantite').forEach(function(item) {
-    item.addEventListener('keyup', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
-    item.addEventListener('change', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
-  });
-  document.querySelectorAll('.input_taux_extraction').forEach(function(item) {
-    item.addEventListener('keyup', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
-    item.addEventListener('change', function(e) {
-      calculVolumeRenvendique(this.parentNode.parentNode);
-    });
-  });
-  document.querySelectorAll('.input_volume_revendique').forEach(function(item) {
-    item.addEventListener('change', function(e) {
-      calculQuantite(this.parentNode.parentNode);
-      calculTauxExtraction(this.parentNode.parentNode);
-    });
-  });
-</script>
-<?php endif ?>
+<?php if(isset($showModalExtraction) && $showModalExtraction): ?>
+  <?php include_component('sv', 'modalExtraction', array('sv' => $sv, 'url' => url_for('sv_saisie', ['sf_subject' => $sv, 'cvi' => $cvi]))); ?>
+<?php endif; ?>
