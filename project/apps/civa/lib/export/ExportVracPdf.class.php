@@ -106,7 +106,7 @@ class ExportVracPdf extends ExportDocument {
 
     }
 
-    protected function getPartial($templateName, $vars = null) {
+    public function getPartial($templateName, $vars = null) {
         return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
