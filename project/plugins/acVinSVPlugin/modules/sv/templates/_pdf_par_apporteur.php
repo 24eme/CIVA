@@ -62,7 +62,7 @@
       <?php foreach($apporteur->getProduits() as $produit): ?>
         <tr>
           <td class="td" style="text-align: left;">&nbsp;<?php echo $produit->libelle; ?></td>
-          <td class="td">&nbsp;<?php echo $produit->superficie_recolte; ?>&nbsp;<small>ares</small></td>
+          <td class="td">&nbsp;<?php echo echoLongFloatFr($produit->superficie_recolte / 100); ?>&nbsp;<small>ha</small></td>
           <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_recolte) ?>&nbsp;<small>hl</small></td>
             <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
