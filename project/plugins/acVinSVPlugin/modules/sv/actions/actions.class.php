@@ -258,6 +258,49 @@ class svActions extends sfActions {
         }
     }
 
+    public function executeFeedBack(sfWebRequest $request)
+    {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide() === false) {
+            return $this->redirect('sv_validation', $this->sv);
+        }
+
+        $this->form = new FeedBackForm();
+
+        if(! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $message = $this->form->getValue('message');
+        $message .= "\n\n-------\n\n".$this->getUser()->getCompte()->nom."\ncvi: ".$this->getRoute()->getSV()->cvi;
+
+        $to = sfConfig::get('app_email_feed_back');
+        $mail = Swift_Message::newInstance()
+                ->setFrom($this->getUser()->getCompte()->email)
+                ->setTo($to)
+                ->setSubject("CIVA - Retour d'expérience sur la Déclaration de Production")
+                ->setBody($message);
+
+        try {
+            if(is_array($to) && count($to) < 1) {
+                throw new sfException("emails not configure in app.yml email->feed_back");
+            }
+
+            $this->getMailer()->send($mail);
+            $this->emailSent = true;
+        } catch (Exception $e) {
+            $this->emailSent = false;
+        }
+    }
+
     public function executePdf(sfWebRequest $request)
     {
         $sv = $this->getRoute()->getSV();
