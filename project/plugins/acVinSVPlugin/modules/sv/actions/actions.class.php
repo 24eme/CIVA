@@ -94,6 +94,8 @@ class svActions extends sfActions {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
+        $this->url = $request->getParameter('url', null);
+
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
 
         $this->form = new SVExtractionForm($this->sv);
@@ -109,6 +111,11 @@ class svActions extends sfActions {
         }
 
         $this->form->save();
+
+        if($this->url) {
+
+            return $this->redirect($this->url);
+        }
 
         $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }

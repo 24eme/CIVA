@@ -4,11 +4,11 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <a href="<?php echo url_for('sv_apporteurs', $sv) ?>"  class="close"><span aria-hidden="true">&times;</span></a>
+        <a href="<?php echo ($url) ? $url : url_for('sv_apporteurs', $sv) ?>"  class="close"><span aria-hidden="true">&times;</span></a>
         <h4 class="modal-title" id="gridSystemModalLabel">Paramétrage des taux d'extraction globaux</h4>
       </div>
       <div class="modal-body">
-        <form action="<?php echo url_for('sv_extraction', $sv) ?>" method="POST" id="form_extraction">
+        <form action="<?php echo url_for('sv_extraction', ['sf_subject' => $sv, 'url' => $url]) ?>" method="POST" id="form_extraction">
         <?php echo $form->renderHiddenFields() ?>
         <?php echo $form->renderGlobalErrors() ?>
         <table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0;">
@@ -32,7 +32,7 @@
       <div class="modal-footer">
         <div class="row">
           <div class="col-xs-6 text-left">
-            <a href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default">Annuler</a>
+            <a href="<?php echo ($url) ? $url : url_for('sv_apporteurs', $sv) ?>" class="btn btn-default">Annuler</a>
           </div>
           <div class="col-xs-6">
             <button form="form_extraction" type="submit" class="btn btn-success">Enregistrer</button>

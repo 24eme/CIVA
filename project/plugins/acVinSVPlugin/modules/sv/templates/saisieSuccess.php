@@ -13,9 +13,9 @@
   <?php echo $form->renderGlobalErrors(); ?>
 
   <?php if($sv->getType() === SVClient::TYPE_SV11): ?>
-    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv]) ?>
+    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php else: ?>
-    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv]) ?>
+    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php endif ?>
 
   <div class="row">
@@ -30,5 +30,5 @@
 </form>
 
 <?php if(isset($showModalExtraction) && $showModalExtraction): ?>
-  <?php include_component('sv', 'modalExtraction', array('sv' => $sv)); ?>
+  <?php include_component('sv', 'modalExtraction', array('sv' => $sv, 'url' => url_for('sv_saisie', ['sf_subject' => $sv, 'cvi' => $cvi]))); ?>
 <?php endif; ?>

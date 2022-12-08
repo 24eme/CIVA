@@ -42,7 +42,7 @@ sv_apporteurs:
     sf_method: [get, post]
 
 sv_saisie:
-  url: /sv/saisie/:id
+  url: /sv/saisie/:id/:cvi
   param: { module: sv, action: saisie }
   class: SVRoute
   options:
