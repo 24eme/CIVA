@@ -3,6 +3,7 @@
 class ExportSVPdf extends ExportDocument
 {
     const PRODUITS_PAR_PAGES = 22;
+    const KEY_AUTRES_PRODUITS = 'Autres produits';
 
     protected $declaration = null;
     protected $etablissement = null;
@@ -30,6 +31,7 @@ class ExportSVPdf extends ExportDocument
     public function create()
     {
         $produits = $this->declaration->getRecapProduits();
+        $produits[self::KEY_AUTRES_PRODUITS] = ['Lies et bourbes' => $this->declaration->lies, 'Rebêches' => $this->declaration->rebeches];
 
         for ($i = 0; $i < ceil(count($produits) / self::PRODUITS_PAR_PAGES); $i++) {
             $p = array_slice($produits, self::PRODUITS_PAR_PAGES * $i, self::PRODUITS_PAR_PAGES, true);

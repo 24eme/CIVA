@@ -58,7 +58,8 @@
         <th class="th" style="text-align: center; width: 84px">&nbsp;Volume de moûts revendique</th>
       <?php endif ?>
     </tr>
-    <?php foreach($produits as $produit): ?>
+    <?php foreach($produits as $hash => $produit): ?>
+    <?php if ($hash !== ExportSVPdf::KEY_AUTRES_PRODUITS): ?>
       <tr>
         <td class="td" style="text-align: left;">&nbsp;<?php echo $produit->libelle; ?></td>
         <td class="td">&nbsp;<?php echo $produit->superficie_recolte; ?>&nbsp;<small>ares</small></td>
@@ -74,8 +75,30 @@
           <td class="td">&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts_revendique) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
         <?php endif ?>
       </tr>
+    <?php endif; ?>
     <?php endforeach; ?>
   </table>
+
+  <?php if (isset($produits[ExportSVPdf::KEY_AUTRES_PRODUITS])): ?>
+  <br/>
+  <div><span class="h3">Récapitulatif&nbsp;<?php echo ExportSVPdf::KEY_AUTRES_PRODUITS ?>&nbsp;</span></div>
+
+  <table border="1" class="table" cellspacing=0 cellpadding=0 style="text-align: right;">
+    <tr>
+      <th class="th" style="text-align: left; width: 503px">&nbsp;Produit</th>
+      <th class="th" style="text-align: center; width: 107px">&nbsp;Volume total</th>
+    </tr>
+    <tbody>
+      <?php foreach ($produits[ExportSVPdf::KEY_AUTRES_PRODUITS] as $produit => $autre): ?>
+      <tr>
+        <td class="td" style="text-align: left;">&nbsp;<?php echo $produit; ?></td>
+        <td class="td">&nbsp;<?php echo sprintFloatFr($autre); ?>&nbsp;<small>hl</small></td>
+      </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+
+  <?php endif ?>
 <?php else: ?>
   <br />
   <em>Aucun produit déclaré</em>
