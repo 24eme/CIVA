@@ -1,8 +1,8 @@
 <table class="table table-bordered table-striped">
   <thead>
     <tr>
-      <th class="col-xs-3">Apporteur</th>
-      <th class="col-xs-4">Produit</th>
+      <th class="col-xs-2">Apporteur</th>
+      <th class="col-xs-3">Produit</th>
       <th class="col-xs-1 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-1 text-center">Volume récolté<br /><small>(hl)</small></th>
       <th class="col-xs-1 text-center">Volume revendiqué<br /><small>(hl)</small></th>
@@ -13,7 +13,7 @@
   <tbody>
   <?php foreach($form['produits'] as $hash => $formProduit): ?>
   <?php $produit = $sv->get($hash); ?>
-  <tr>
+  <tr class="vertical-center">
     <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
     <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
     <td><?php echo $formProduit['superficie_recolte']->render() ?></td>

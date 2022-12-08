@@ -85,14 +85,47 @@ class svActions extends sfActions {
     public function executeApporteurs(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
+        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
     }
+
+    public function executeExtraction(sfWebRequest $request) {
+        $this->etablissement = $this->getRoute()->getEtablissement();
+        $this->sv = $this->getRoute()->getSV();
+
+        $this->url = $request->getParameter('url', null);
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+
+        $this->form = new SVExtractionForm($this->sv);
+
+        if (! $request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        if($this->url) {
+
+            return $this->redirect($this->url);
+        }
+
+        $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
+    }
+
 
     public function executeSaisie(sfWebRequest $request) {
         $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
 
@@ -115,15 +148,31 @@ class svActions extends sfActions {
 
         $this->form->save();
 
-        if($this->cvi) {
-            $finded = false;
-            foreach($this->sv->apporteurs as $cvi => $apporteur) {
-                if($finded) {
+        if($request->getParameter('parametrage_extraction')) {
 
-                    return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $cvi));
-                }
-                $finded = ($cvi == $this->cvi);
+            return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $this->cvi, 'parametrage_extraction' => 1));
+        }
+
+        if($request->getParameter('precedent_cvi')) {
+
+            return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $request->getParameter('precedent_cvi')));
+        }
+
+        if($request->getParameter('retour_liste')) {
+
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::ETAPE_APPORTEURS],
+                ['id' => $this->sv->_id]
+            );
+        }
+
+        $finded = false;
+        foreach($this->sv->apporteurs as $cvi => $apporteur) {
+            if($finded) {
+
+                return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $cvi));
             }
+            $finded = ($cvi == $this->cvi);
         }
 
         return $this->redirect(
