@@ -334,7 +334,7 @@ class ExportDSPdf extends ExportDocument {
             $tableauDroite["Moûts concentrés rectifiés"] = $ds->isDSPrincipale() ? $ds->mouts : null;
             $tableauDroite["Rebêches"] = $ds->isDSPrincipale() ? $ds->rebeches : null;
             $tableauDroite["Lies en stocks"] = $ds->isDSPrincipale() ? $ds->lies : null;
-            
+
             if ($ds->exist("dplc_rouge")) {
                 $tableauDroite["DRA/DPLC Blanc"] = $ds->isDSPrincipale() ? $ds->dplc : null;
                 $tableauDroite["DRA/DPLC Rouge"] = $ds->isDSPrincipale() ? $ds->dplc_rouge : null;
@@ -677,7 +677,7 @@ class ExportDSPdf extends ExportDocument {
         return sprintf("%03d", $this->order[$key]);
     }
 
-    protected function getPartial($templateName, $vars = null) {
+    public function getPartial($templateName, $vars = null) {
       return call_user_func_array($this->partial_function, array($templateName, $vars));
     }
 
