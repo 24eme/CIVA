@@ -28,7 +28,7 @@ echo "Using file $FILE_RECOLTANTSANSDR"
 
 cat $FILE_RECOLTANTSANSDR | cut -d ";" -f 6 | grep "@" | sort | uniq | while read email ; do
 	echo "Sending $email ...";
-	echo -e $MAIL_BODY | REPLY_TO=$MAIL_REPLYTO mail -s "$MAIL_SUBJECT" -r "$MAIL_FROM" $email;
+	echo -e $MAIL_BODY | REPLY_TO=$MAIL_REPLYTO mail -s "$MAIL_SUBJECT" -r "$MAIL_FROM" -a "Reply-To:$MAIL_REPLYTO" $email;
 	echo "Sended $email";
 	sleep 2;
 done
