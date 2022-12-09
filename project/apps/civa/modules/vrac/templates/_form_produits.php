@@ -66,7 +66,7 @@
 			<?php else: ?>
 			<td class="volume">
 				<span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
-				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>
+				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
 			</td>
 			<?php endif; ?>
 			<td class="prix">
