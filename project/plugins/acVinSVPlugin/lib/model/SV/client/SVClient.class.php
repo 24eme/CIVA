@@ -163,6 +163,11 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
+            if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIES') !== false || strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'Bourbes') !== false) {
+                $sv->lies = $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
+                continue;
+            }
+
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
             $produit = CsvFileAcheteur::identifyProductCSV($line);
 
