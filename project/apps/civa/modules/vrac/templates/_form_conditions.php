@@ -180,6 +180,9 @@
 			</td>
             <td width="465">
 			<?php echo $form['clause_evolution_prix']->render(array('rows' => '2', 'cols' => '61', 'readonly' => 'readonly')) ?>
+            <p style="display: <?php echo ($form->getObject()->getPourcentageTotalDesClausesEvolutionPrix() > 0 && $form->getObject()->clause_evolution_prix)? 'block' : 'none'; ?>;">
+                Part totale : <span id="partTotale"><?php echo $form->getObject()->getPourcentageTotalDesClausesEvolutionPrix() ?></span>/100
+            </p>
 			</td>
             <td>
                 <a class="btn_minus action_aidesaisie aideSaisieEvolutionsPrixPopup" href="">Ajouter des indicateurs</a> / <a class="inputCleaner" data-target="<?php echo $form['clause_evolution_prix']->renderId() ?>" href="">[x] Vider</a>

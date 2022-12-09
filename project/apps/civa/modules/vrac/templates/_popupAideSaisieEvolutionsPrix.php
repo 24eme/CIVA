@@ -49,13 +49,26 @@
         var part = $('#popup_clause_evolution_prix input[name="part"]').val();
         var ligne = part+'% '+indicateur;
         var contenu = $('#<?php echo $target ?>').val();
+        var lignes = contenu.split("\n");
+        var total = 0;
+        lignes.forEach(function(item){
+            if (item.indexOf('%') >= 0)
+                total += parseInt(item.substring(0, item.indexOf('%')));
+        });
+        total += parseInt(part);
         if (contenu) {
             contenu += "\n";
         }
         $('#<?php echo $target ?>').val(contenu+ligne);
         $("#popup_clause_evolution_prix a.close_popup").trigger("click");
+        $("#partTotale").text(total);
+        $("#partTotale").parent('p').show();
         $('#popup_clause_evolution_prix select[name="indicateur"]').val($('#popup_clause_evolution_prix select[name="indicateur"] option:first').val());
         $('#popup_clause_evolution_prix input[name="part"]').val('');
         return false;
+    });
+    $(".inputCleaner").click(function() {
+        $("#partTotale").text(0);
+        $("#partTotale").parent('p').hide();
     });
 </script>
