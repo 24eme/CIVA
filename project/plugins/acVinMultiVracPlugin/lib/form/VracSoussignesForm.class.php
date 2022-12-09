@@ -84,7 +84,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     }
 
     public function getCurrentCampagne() {
-        $campagne_manager = new CampagneManager('08-01');
+        $campagne_manager = new CampagneManager('12-01');
         return $campagne_manager->getCampagneByDate(date('Y-m-d'));
     }
 
