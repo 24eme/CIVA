@@ -55,7 +55,7 @@
                     <?php if (SVClient::getInstance()->isTeledeclarationOuverte()): ?>
                         <p>Le portail est <strong>ouvert</strong></p>
                     <?php else: ?>
-                        <p>Le portail est <strong>actuellemet fermé</strong></p>
+                        <p>Le portail est <strong>actuellement fermé</strong></p>
                     <?php endif ?>
                 </div>
                 <div class="bloc_acceuil_footer">
