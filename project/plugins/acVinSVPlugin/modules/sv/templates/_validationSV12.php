@@ -20,6 +20,15 @@
       <td class="text-right"><?php echo count($produit->apporteurs) ?></td>
     </tr>
   <?php endforeach ?>
+  <tr>
+    <?php $totalParColonne = $sv->getSum() ?>
+    <td class="text-right"><strong>Total</strong></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['superficie']) ?> <small class="text-muted">ares</small></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['recolte']) ?> <small class="text-muted">kg</small></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['revendique']) ?> <small class="text-muted">hl</small></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['mouts']) ?> <small class="text-muted">hl</small></td>
+    <td class="text-right"><?php echo count($sv->apporteurs) ?></td>
+  </tr>
   </tbody>
 </table>
 
