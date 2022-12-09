@@ -348,7 +348,7 @@ table.table_donnees td .radio_list label {
 #contrats_vrac .etape_produits.table_donnees .denomination { width: 185px; }
 #contrats_vrac .etape_produits.table_donnees .millesime { width: 70px; }
 #contrats_vrac .etape_produits.table_donnees .bio { width: 70px; }
-#contrats_vrac .etape_produits.table_donnees .volume { width: 82px; }
+#contrats_vrac .etape_produits.table_donnees .volume { width: 91px; }
 #contrats_vrac .etape_produits.table_donnees .prix { width: 140px; }
 #contrats_vrac table.table_donnees thead th:first-child { width: auto; }
 
