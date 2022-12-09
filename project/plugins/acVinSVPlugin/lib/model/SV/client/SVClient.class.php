@@ -36,6 +36,15 @@ class SVClient extends acCouchdbClient {
         return $type;
     }
 
+    public function isTeledeclarationOuverte()
+    {
+        $now = new DateTimeImmutable();
+        $ouverture = new DateTimeImmutable(sfConfig::get('app_production_date_ouverture'));
+        $fermeture = new DateTimeImmutable(sfConfig::get('app_production_date_fermeture'));
+
+        return $now > $ouverture && $now < $fermeture;
+    }
+
     public function createSV($identifiant, $campagne) {
         $sv = new SV();
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
