@@ -1,6 +1,6 @@
 <?php use_helper('vrac') ?>
 <?php $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume'; ?>
-<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, le label obligatoire, le prix à l'hectolitre et <?php echo ($vrac->isInModeSurface())? 'la surface' : 'le volume'; ?> estimé.<?php endif; ?></p>
+<p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, le label obligatoire, le prix à l'hectolitre et <?php echo ($vrac->isInModeSurface())? 'la surface engagée' : 'le volume estimé'; ?>.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
 		<tr>
