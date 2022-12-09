@@ -55,6 +55,8 @@ class ExportSVPdf extends ExportDocument
             $a = [];
             $a[] = $apporteur;
         }
+
+        @$this->document->addPage($this->getPartial('sv/pdf_par_apporteur', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'apporteurs' => $a)));
     }
 
     public function output() {
