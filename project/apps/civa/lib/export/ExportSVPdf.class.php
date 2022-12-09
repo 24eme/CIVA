@@ -2,7 +2,7 @@
 
 class ExportSVPdf extends ExportDocument
 {
-    const PRODUITS_PAR_PAGES = 22;
+    const PRODUITS_PAR_PAGES = 20;
     const KEY_AUTRES_PRODUITS = 'Autres produits';
 
     protected $declaration = null;

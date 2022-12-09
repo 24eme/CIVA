@@ -44,35 +44,35 @@
 <?php if (count($produits)): ?>
   <table border="1" class="table" cellspacing=0 cellpadding=0 style="text-align: right;">
     <tr>
-      <th class="th" style="text-align: left; width: 503px">&nbsp;Produit</th>
-      <th class="th" style="text-align: center; width: 107px">&nbsp;Superficie déclarée</th>
+      <th class="th" style="text-align: left; width: 531px">&nbsp;Produit</th>
+      <th class="th" style="text-align: center; width: 83px">&nbsp;Superficie déclarée</th>
       <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume récolté</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume revendiqué</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume à détruire</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;VCI</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume récolté</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume revendiqué</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume à détruire</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;VCI</th>
       <?php else: ?>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Quantité récoltée</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume revendiqué</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume de moûts</th>
-        <th class="th" style="text-align: center; width: 84px">&nbsp;Volume de moûts revendique</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Quantité récoltée</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume revendiqué</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume de moûts</th>
+        <th class="th" style="text-align: center; width: 83px">&nbsp;Volume de moûts revendique</th>
       <?php endif ?>
     </tr>
     <?php foreach($produits as $hash => $produit): ?>
     <?php if ($hash !== ExportSVPdf::KEY_AUTRES_PRODUITS): ?>
       <tr>
-        <td class="td" style="text-align: left;">&nbsp;<?php echo $produit->libelle; ?></td>
-        <td class="td">&nbsp;<?php echo echoLongFloatFr($produit->superficie_recolte / 100); ?>&nbsp;<small>ha</small></td>
+        <td class="td" style="text-align: left;"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit->libelle; ?></td>
+        <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo echoLongFloatFr($produit->superficie_recolte / 100); ?>&nbsp;<small>ha</small></td>
         <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
-          <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_recolte) ?>&nbsp;<small>hl</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr($produit->usages_industriels) ?>&nbsp;<small>hl</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr($produit->vci) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_recolte) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->usages_industriels) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->vci) ?>&nbsp;<small>hl</small></td>
         <?php else: ?>
-          <td class="td">&nbsp;<?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
-          <td class="td">&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts_revendique) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts_revendique) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
         <?php endif ?>
       </tr>
     <?php endif; ?>
@@ -85,14 +85,14 @@
 
   <table border="1" class="table" cellspacing=0 cellpadding=0 style="text-align: right;">
     <tr>
-      <th class="th" style="text-align: left; width: 503px">&nbsp;Produit</th>
-      <th class="th" style="text-align: center; width: 107px">&nbsp;Volume total</th>
+      <th class="th" style="text-align: left; width: 531px">&nbsp;Produit</th>
+      <th class="th" style="text-align: center; width: 83px">&nbsp;Volume total</th>
     </tr>
     <tbody>
       <?php foreach ($produits[ExportSVPdf::KEY_AUTRES_PRODUITS] as $produit => $autre): ?>
       <tr>
-        <td class="td" style="text-align: left;">&nbsp;<?php echo $produit; ?></td>
-        <td class="td">&nbsp;<?php echo sprintFloatFr($autre); ?>&nbsp;<small>hl</small></td>
+        <td class="td" style="text-align: left;"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit; ?></td>
+        <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($autre); ?>&nbsp;<small>hl</small></td>
       </tr>
       <?php endforeach ?>
     </tbody>
