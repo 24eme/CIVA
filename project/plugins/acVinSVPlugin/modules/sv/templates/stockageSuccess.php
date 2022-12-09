@@ -24,7 +24,7 @@
         <td style="vertical-align: middle"><?php echo $produit->getRawValue()->libelle_html ?></td>
         <th style="vertical-align: middle" class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique) ?></span> <small class="text-muted">hl</span></th>
         <?php foreach($formProduit as $num_stockage => $formStockage): ?>
-          <td class="col-xs-1"><div class="input-group"><?php echo $formStockage->render() ?><span class="input-group-addon" style="background: #ccc;">hl</span></div></td>
+          <td class="col-xs-1"><div class="input-group"><?php echo $formStockage->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
         <?php endforeach ?>
       </tr>
       <?php endforeach ?>
