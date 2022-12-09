@@ -31,7 +31,7 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
         $this->addControle('erreur', 'clause_mandat_facturation_required', 'Vous devez préciser si le vendeur donne mandat de facturation ou non à l\'acheteur');
-        $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne comptabilisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
+        $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne totalisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
 
   	}
 
