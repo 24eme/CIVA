@@ -7,7 +7,7 @@
 
 <h3>Liste de vos apporteurs</h3>
 
-<p>Texte d'intro</p>
+<p style="margin-bottom: 15px;">Texte d'intro</p>
 
 <?php if(!count($sv->extraction)): ?>
 <div class="alert alert-warning pointer">
