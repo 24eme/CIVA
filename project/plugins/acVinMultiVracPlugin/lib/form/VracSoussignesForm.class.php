@@ -92,7 +92,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $campagne = $this->getCurrentCampagne();
         $millesime = substr($campagne, 0, 4) * 1;
         $campagnes = [];
-        for($i=($millesime-1); $i<($millesime+3); $i++) {
+        for($i=$millesime; $i<=$millesime+1; $i++) {
             $campagnes[$i.'-'.($i+1)] = $i.' à '.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0))-1);
         }
         return $campagnes;
