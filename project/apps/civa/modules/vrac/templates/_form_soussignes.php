@@ -28,7 +28,7 @@
                 <div id="ligne_campagnes_application" class="ligne_form">
                     <?php echo $form['campagne']->renderError() ?>
     				<?php echo $form['campagne']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
-    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 100px;")) ?>
+    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 120px;")) ?>
                 </div>
             </div>
             <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
