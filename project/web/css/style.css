@@ -1,4 +1,13 @@
+body {
+    font-size: 14px;
+}
+
 #main {min-height: 400px;}
+
+.form-group-xs .form-control, .input-sm {
+    font-size: 14px;
+    padding-top: 6px;
+}
 
 .form-group-xs .form-control, .input-xs {
     height: 22px;
@@ -170,7 +179,7 @@ ul.navbar-nav li small {
     background: rgba(0, 0, 0, 0) url("https://declaration.vinsalsace.pro/images/fonds/bg_etapes_declaration.png") repeat-x scroll 0 0;
     color: #c8ce79;
     display: block !important;
-    font-size: 12px;
+        font-size: 12px;
     font-style: italic;
     font-weight: bold;
     margin: 2px 0 0;

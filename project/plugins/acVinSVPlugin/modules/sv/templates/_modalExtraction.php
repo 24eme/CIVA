@@ -21,7 +21,7 @@
           <tbody>
             <?php foreach ($form['produits'] as $produit): ?>
               <tr class="vertical-center">
-                <td styl><?php echo $produit['taux_extraction']->renderLabel(null, array('style' => 'font-weight: normal')) ?></td>
+                <td><?php echo $produit['taux_extraction']->renderLabelName() ?></td>
                 <td><?php echo $produit['taux_extraction']->render(['class' => 'form-control text-right input-float input-sm']) ?></td>
               </tr>
             <?php endforeach ?>

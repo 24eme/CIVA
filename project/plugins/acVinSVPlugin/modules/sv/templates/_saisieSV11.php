@@ -14,7 +14,7 @@
   <?php foreach($form['produits'] as $hash => $formProduit): ?>
   <?php $produit = $sv->get($hash); ?>
   <tr class="vertical-center">
-    <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
+    <td><?php echo $produit->nom ?></td>
     <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
     <td><?php echo $formProduit['superficie_recolte']->render() ?></td>
     <td><?php echo $formProduit['volume_recolte']->render() ?></td>
