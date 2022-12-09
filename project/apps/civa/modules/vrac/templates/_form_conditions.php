@@ -148,6 +148,7 @@
 			</td>
 			<td colspan="2">
             <?php echo $form['suivi_qualitatif']->render() ?>
+            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
 			</td>
 		</tr>
 		<?php endif; ?>
