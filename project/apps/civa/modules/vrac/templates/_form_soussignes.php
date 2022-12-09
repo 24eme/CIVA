@@ -72,7 +72,7 @@
             <div class="form_col selecteur" style="padding-top: 0;">
                 <div class="ligne_form">
 					<label for="" class="bold">Vous contractualisez sur :</label>
-                    <span style="margin-left: 5px;"><?php if(!$vrac->isInModeSurface()): ?>Du volume (hl)<?php else: ?>De la surface (ha)<?php endif; ?></span>
+                    <span style="margin-left: 5px;"><?php if(!$vrac->isInModeSurface()): ?>Du volume (hl)<?php else: ?>De la surface (ares)<?php endif; ?></span>
                 </div>
             </div>
             <?php endif; ?>
