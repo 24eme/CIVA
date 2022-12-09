@@ -16,9 +16,11 @@
       <tr class="vertical-center">
         <td><?php echo $produit->getRawValue()->libelle_html ?></td>
         <?php foreach($sv->getNotEmptyLieuxStockage() as $id => $lieu): ?>
+          <?php $produits = $lieu->produits->getRawValue(); ?>
+          <?php if (is_array($produits) === false) { $produits = $produits->toArray(); } ?>
           <td class="col-xs-1 text-right" style="vertical-align: middle">
-            <?php if (array_key_exists($hash, $lieu->produits->getRawValue())): ?>
-              <?php echoFloat($lieu->produits->get($hash)) ?> <span class="text-muted">hl</span>
+            <?php if (array_key_exists($hash, $produits)): ?>
+              <?php echoFloat($produits[$hash]) ?> <span class="text-muted">hl</span>
             <?php endif ?>
           </td>
         <?php endforeach ?>
