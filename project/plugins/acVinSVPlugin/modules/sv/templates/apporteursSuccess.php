@@ -1,7 +1,7 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<?php if(count($sv->extraction)): ?>
+<?php if(count($sv->extraction) && $sv->getType() === SVClient::TYPE_SV12): ?>
 <a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</a>
 <?php endif; ?>
 
@@ -9,10 +9,10 @@
 
 <p style="margin-bottom: 15px;">Texte d'intro</p>
 
-<?php if(!count($sv->extraction)): ?>
+<?php if(!count($sv->extraction) && $sv->getType() === SVClient::TYPE_SV12): ?>
 <div class="alert alert-warning pointer">
   <a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right"><span class="glyphicon glyphicon-cog"></span> Paramétrer les taux d'extraction globaux</a>
-  <span class="glyphicon glyphicon-info-sign"></span> Afin de facilité et accélerer votre saisie vour pouvez configurer vos taux d'extraction globaux par cépage.
+  <span class="glyphicon glyphicon-info-sign"></span> Afin de faciliter et accélerer votre saisie vous pouvez configurer vos taux d'extraction globaux par cépage.
 </div>
 <?php endif; ?>
 
