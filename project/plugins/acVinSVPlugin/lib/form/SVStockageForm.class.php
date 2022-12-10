@@ -15,8 +15,8 @@ class SVStockageForm extends acCouchdbForm
             $formStockage = new BaseForm();
             foreach($this->getDocument()->stockage as $stockage) {
                 $produits = $stockage->getProduits();
-                $formStockage->setWidget($stockage->numero, new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm input_volume_revendique')));
-                $formStockage->setWidget($stockage->numero, new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float input-sm')));
+                $formStockage->setWidget($stockage->numero, new bsWidgetFormInputFloat(array(), array( 'class' => 'form-control text-right input-float input-sm input_volume_revendique')));
+                $formStockage->setWidget($stockage->numero, new bsWidgetFormInputFloat(array(), array( 'class' => 'form-control text-right input-float input-sm')));
                 $formStockage->setValidator($stockage->numero, new sfValidatorNumber(array('required' => false)));
 
                 if(isset($produits[$hash])) {

@@ -12,7 +12,7 @@ class SVAutreForm extends acCouchdbForm
         $this->setWidget('lies', new bsWidgetFormInputFloat());
         $this->setWidget('rebeches', new bsWidgetFormInputFloat([], ['disabled' => ($this->getDocument()->hasRebechesInProduits()) ? true : false]));
 
-        $this->setValidator('lies', new sfValidatorNumber(['min' => 0]));
+        $this->setValidator('lies', new sfValidatorNumber(['required' => false, 'min' => 0]));
         $this->setValidator('rebeches', new sfValidatorNumber(['required' => false, 'min' => 0]));
 
         $this->widgetSchema->setLabels([

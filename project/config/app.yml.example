@@ -50,6 +50,9 @@ all:
   ds:
     date_ouverture: "Y-m-d"
     date_fermeture: "Y-m-d"
+  production:
+    date_ouverture: "Y-m-d"
+    date_fermeture: "Y-m-d"
 
 test:
 #  autologin: login

@@ -52,7 +52,11 @@
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Production</div>
                 <div class="bloc_acceuil_content">
-                    <p class="mineure">Aucune information à signaler</p>
+                    <?php if (SVClient::getInstance()->isTeledeclarationOuverte()): ?>
+                        <p>Le portail est <strong>ouvert</strong></p>
+                    <?php else: ?>
+                        <p>Le portail est <strong>actuellement fermé</strong></p>
+                    <?php endif ?>
                 </div>
                 <div class="bloc_acceuil_footer">
                     <a href="<?php echo url_for('mon_espace_civa_production_compte', $compte) ?>">Accéder</a>

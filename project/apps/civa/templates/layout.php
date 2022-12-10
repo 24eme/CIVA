@@ -12,6 +12,7 @@
         printf(html_entity_decode($title) , $sf_request->getParameter('annee', date("Y"))); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/css/global.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/components/vins/vins.css" rel="stylesheet">
     <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
@@ -19,7 +20,6 @@
     <link href="/components/select2/select2.css" rel="stylesheet">
     <link href="/components/select2/select2-bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
-    <?php include_stylesheets() ?>
   </head>
   <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->

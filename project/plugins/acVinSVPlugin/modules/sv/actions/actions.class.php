@@ -245,6 +245,22 @@ class svActions extends sfActions {
         $this->sv->validate();
         $this->sv->save();
 
+        $message = "%%%CHANGEME%%%";
+
+        $to = $this->etablissement->getEmailTeledeclaration();
+        $mail = Swift_Message::newInstance()
+                ->setFrom(sfConfig::get('app_email_from'))
+                ->setTo($to)
+                ->setSubject("CIVA - Validation de votre Déclaration de Production")
+                ->setBody($message);
+
+        try {
+            $this->getMailer()->send($mail);
+            $this->emailSent = true;
+        } catch (Exception $e) {
+            $this->emailSent = false;
+        }
+
         return $this->redirect('sv_confirmation', $this->sv);
     }
 

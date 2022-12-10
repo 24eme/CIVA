@@ -10,7 +10,12 @@
         <div id="nouvelle_declaration">
           <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
           <div class="contenu_section">
-              <p class="intro">Vous souhaitez :</p>
+              <?php if(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
+                  <p class="intro">Vous souhaitez :</p>
+              <?php else: ?>
+                  <p class="intro">Le téléservice pour la déclaration de production est actuellement fermé :</p>
+              <?php endif; ?>
+              <?php if(SVClient::getInstance()->isTeledeclarationOuverte() || $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)): ?>
               <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data" id="form_sv">
               <?php echo $form->renderHiddenFields() ?>
               <?php echo $form->renderGlobalErrors() ?>
@@ -43,6 +48,7 @@
                   <button type="submit" id="mon_espace_civa_valider" class="btn btn_vert btn_majeur">Valider</button>
               </div>
               </form>
+              <?php endif; ?>
           </div>
         </div>
     </div>

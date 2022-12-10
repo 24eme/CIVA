@@ -1,12 +1,12 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <?php if($sv->getType() === SVClient::TYPE_SV12): ?>
-<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link btn-sm"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</button>
+<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</button>
 <?php endif; ?>
 
-<h3>Saisie des données de production <?php if($cvi): ?>de <?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> (<?php echo $cvi ?>)<?php endif; ?></h3>
+<h3><?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->find($cvi)->commune; ?></small></h3>
 
-<p>Texte d'intro</p>
+<p style="margin-bottom: 15px;">Texte d'intro</p>
 
 <form id="form_saisie" action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
@@ -18,7 +18,7 @@
     <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php endif ?>
 
-  <div class="row">
+  <div class="row" style="margin-top: 30px;">
     <?php if (isset($cvi_precedent)): ?>
       <div class="col-xs-4 text-left">
         <button type="submit" name="precedent_cvi" value="<?php echo $cvi_precedent ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Apporteur précédent</button>

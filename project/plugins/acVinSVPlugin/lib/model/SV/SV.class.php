@@ -174,6 +174,19 @@ class SV extends BaseSV
         return $total_rebeches;
     }
 
+    public function getNotEmptyLieuxStockage()
+    {
+        $lieux = [];
+
+        foreach ($this->stockage as $stockage) {
+            if ($stockage->isPrincipale() || empty($stockage->produits->toArray()) === false) {
+                $lieux[] = $stockage;
+            }
+        }
+
+        return $lieux;
+    }
+
     public function validate()
     {
         $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');

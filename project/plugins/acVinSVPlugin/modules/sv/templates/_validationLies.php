@@ -1,10 +1,11 @@
 <div class="row">
-  <div class="col-xs-4">
+  <div class="col-xs-6">
+    <h3 style="margin-top: 0;">Autres produits</h3>
     <table class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th class="col-xs-3">Produit</th>
-          <th class="col-xs-9 text-center">Volume total</th>
+          <th class="col-xs-9">Produits</th>
+          <th class="col-xs-3 text-center">Volume total</th>
         </tr>
       </thead>
       <tbody>
