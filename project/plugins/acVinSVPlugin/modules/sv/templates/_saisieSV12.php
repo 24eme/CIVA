@@ -42,7 +42,7 @@
   <?php if(!isset($formProduit['volume_mouts'])): continue; endif; ?>
   <?php $produit = $sv->get($hash); ?>
     <tr class="vertical-center">
-      <td><?php echo $produit->nom ?><br /><small class="text-muted"><?php echo $produit->cvi ?> - <?php echo $produit->commune ?></small></td>
+      <td><?php echo $produit->nom ?></td>
       <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
       <td></td>
       <td><div class="input-group"><?php echo $formProduit['volume_mouts']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
