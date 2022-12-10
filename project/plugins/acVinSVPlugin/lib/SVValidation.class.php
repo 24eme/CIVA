@@ -4,6 +4,7 @@ class SVValidation extends DocumentValidation
 {
     public function configure()
     {
+        $this->addControle('erreur', 'apporteurs_complet', "Toutes les données des apporteurs n'ont pas été saisies");
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
         $this->addControle('erreur', 'lies_vides', "Les lies n'ont pas été remplies");
         $this->addControle('erreur', 'rebeches_vides', "Les rebêches n'ont pas été remplies");
@@ -14,6 +15,13 @@ class SVValidation extends DocumentValidation
 
     public function controle()
     {
+        foreach($this->document->apporteurs as $apporteur) {
+            if(!$apporteur->isComplete()) {
+                $this->addPoint('erreur', 'apporteurs_complet', '');
+                break;
+            }
+        }
+
         if (count($this->document->stockage) > 1) {
             foreach($this->document->stockage as $stockage) {
                 $produits = is_array($stockage->getProduits()) ? $stockage->getProduits() : $stockage->getProduits()->toArray();

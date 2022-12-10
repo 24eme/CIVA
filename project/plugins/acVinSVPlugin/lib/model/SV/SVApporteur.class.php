@@ -18,6 +18,11 @@ class SVApporteur extends BaseSVApporteur {
         return $produits;
     }
 
+    public function isComplete() {
+
+        return $this->getNbSaisies() >= count($this->produits);
+    }
+
     public function getNbSaisies() {
         $nbSaisies = 0;
         foreach($this->getProduits() as $produit) {
