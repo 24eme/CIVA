@@ -17,8 +17,8 @@
     <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
     <td class="text-right"><?php echo $produit->volume_recolte ?> <small class="text-muted">hl</small></td>
     <td class="text-right"><?php echoFloat($produit->volume_revendique) ?> <small class="text-muted">hl</small></td>
-    <td class="text-right"><?php echoFloat($produit->usages_industriels) ?> <small class="text-muted">hl</small></td>
-    <td class="text-right"><?php echoFloat($produit->vci) ?> <small class="text-muted">hl</small></td>
+    <td class="text-right"><?php if($produit->usages_industriels): ?><?php echoFloat($produit->usages_industriels) ?> <small class="text-muted">hl</small><?php endif; ?></td>
+    <td class="text-right"><?php if($produit->vci): ?><?php echoFloat($produit->vci) ?> <small class="text-muted">hl</small><?php endif; ?></td>
     <td class="text-right"><?php echo count($produit->apporteurs) ?></td>
   </tr>
   <?php endforeach ?>

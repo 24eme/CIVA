@@ -19,9 +19,9 @@
 <?php elseif($isAdmin): ?>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur_compte", $compte, isset($absolute)) ?>">Achat Récolte</a></li>
 	<?php endif; ?>
-    <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR) && $isAdmin): ?>
+    <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)): ?>
 	<li class="<?php if($active == 'production'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_production_compte", $compte, isset($absolute)) ?>">Production</a></li>
-<?php elseif($isAdmin): ?>
+    <?php elseif($isAdmin): ?>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("mon_espace_civa_dr_acheteur_compte", $compte, isset($absolute)) ?>">Production</a></li>
 	<?php endif; ?>
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_DRM) && isset($blocs[Roles::TELEDECLARATION_DRM])): ?>

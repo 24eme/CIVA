@@ -25,7 +25,7 @@
 </table>
 
 <?php if ($form->hasMouts()): ?>
-<h3>Apport de Moûts</h3>
+<h4>Apport de Moûts</h4>
 <table class="table table-bordered table-striped">
   <thead>
     <tr>

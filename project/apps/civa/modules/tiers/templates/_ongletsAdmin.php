@@ -3,6 +3,7 @@
 	<li class="<?php if($active=='accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Admin</a></li>
 	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Récolte</a></li>
 	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Achat Récolte</a></li>
+	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Production</a></li>
 	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">DRM</a></li>
 	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Contrats</a></li>
 	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Gamm@</a></li>
