@@ -1,7 +1,7 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<?php if(count($sv->extraction) && $sv->getType() === SVClient::TYPE_SV12): ?>
+<?php if(count($sv->extraction)): ?>
 <a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</a>
 <?php endif; ?>
 
