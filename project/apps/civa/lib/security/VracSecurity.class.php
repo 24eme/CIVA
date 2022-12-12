@@ -137,6 +137,11 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isAnnule()) {
+
+            return false;
+        }
+
         if(in_array(self::SIGNATURE, $droits) && $this->vrac->isValide()) {
 
             return false;
