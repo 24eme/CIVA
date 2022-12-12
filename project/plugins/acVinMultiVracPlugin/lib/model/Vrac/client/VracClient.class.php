@@ -234,8 +234,8 @@ class VracClient extends acCouchdbClient {
   		if ($proprietaire) {
   			$libelles = Vrac::getStatutsLibellesActionsProprietaire();
   		}
-  		if ($statut == Vrac::STATUT_VALIDE_PARTIELLEMENT && $hasValidated) {
-  			return $libelles[Vrac::STATUT_CLOTURE];
+  		if (in_array($statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION)) && $hasValidated) {
+        	return $libelles[Vrac::STATUT_CLOTURE];
   		}
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}
