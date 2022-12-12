@@ -53,29 +53,38 @@
 				<ul class="liste_soussignes">
 					<?php
 						if ($item->soussignes->vendeur->identifiant):
-							if (array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue()) && $item->soussignes->vendeur->date_validation) {
-								$hasValidated = true;
-							}
+                            foreach($tiers as $t) {
+                                if($item->soussignes->vendeur->date_validation && $t->_id == $item->soussignes->vendeur->identifiant) {
+                                    $hasValidated = true;
+                                    break;
+                                }
+                            }
 					?>
 					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier && $item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Vendeur : <strong>
 					<?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
 					<?php
-						if ($item->soussignes->acheteur->identifiant):
-							if (array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue()) && $item->soussignes->acheteur->date_validation) {
-								$hasValidated = true;
-							}
+                        if ($item->soussignes->acheteur->identifiant):
+                        foreach($tiers as $t) {
+                            if($item->soussignes->acheteur->date_validation && $t->_id == $item->soussignes->acheteur->identifiant) {
+                                $hasValidated = true;
+                                break;
+                            }
+                        }
 					?>
 					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier && $item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Acheteur : <strong>
 						<?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong></li>
 					<?php endif; ?>
 					<?php
-						if ($item->soussignes->mandataire->identifiant):
-							if (array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue()) && $item->soussignes->mandataire->date_validation) {
-								$hasValidated = true;
-							}
+                        if ($item->soussignes->mandataire->identifiant):
+                        foreach($tiers as $t) {
+                            if($item->soussignes->mandataire->date_validation && $t->_id == $item->soussignes->mandataire->identifiant) {
+                                $hasValidated = true;
+                                break;
+                            }
+                        }
 					?>
 					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier  && $item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Courtier :  <strong>
 							<?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
@@ -83,7 +92,7 @@
 					<?php endif; ?>
 				</ul>
 			</td>
-			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && $item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
+			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
 					<?php if (in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?>
