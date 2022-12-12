@@ -21,7 +21,7 @@ class VracMailer {
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Refus du vendeur ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_refuser_projet', array('vrac' => $vrac));
+        $body = self::getBodyFromPartial('vrac_refus_projet', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
