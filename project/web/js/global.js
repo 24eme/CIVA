@@ -20,7 +20,7 @@ $(document).ready( function()
 });
 
 var initFlashMessage = function() {
-	$('p.flash_message').delay(10000).animate({
+	$('p.flash_message').delay(14000).animate({
 opacity: 0
 }, 1500);
 }
