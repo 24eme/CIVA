@@ -29,27 +29,27 @@
 			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
-			<td>
+			<td class="produit <?php echo isVersionnerCssClass($detail, 'millesime') ?> <?php echo isVersionnerCssClass($detail, 'denomination') ?> <?php echo isVersionnerCssClass($detail, 'label') ?> <?php echo isVersionnerCssClass($detail, 'actif') ?>">
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
-			<td class="bouteille"><?php echo $detail->nb_bouteille ?></td>
-			<td class="centilisation"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
+			<td class="bouteille <?php echo isVersionnerCssClass($detail, 'nb_bouteille') ?>"><?php echo $detail->nb_bouteille ?></td>
+			<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<?php endif; ?>
-			<td class="volume">
+			<td class="volume <?php echo isVersionnerCssClass($detail, 'volume_propose') ?> <?php echo isVersionnerCssClass($detail, 'surface_propose') ?>">
 				<?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl' ?>
 			</td>
-			<td class="prix">
+			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
-            <td class="date_retiraison_limite" style="text-align: center;">
+            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
 				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
                 <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
 				<?php elseif($detail->retiraison_date_debut): ?>
 					<?php echo format_date('1970-'.$detail->retiraison_date_debut, 'dd/MM') ?>
                 <?php endif; ?>
 			</td>
-            <td class="date_retiraison_limite" style="text-align: center;">
+            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_limite') ?>" style="text-align: center;">
                 <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
                     <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
                 <?php elseif($detail->retiraison_date_limite): ?>

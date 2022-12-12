@@ -25,12 +25,14 @@ class VracContratValidation extends DocumentValidation
     	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
         $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraison pour l\'ensemble de vos produits.');
 
+        $this->addControle('erreur', 'retiraisons_pb', 'La date limite de retiraison ne peut pas être antérieur à la date de début de retiraison');
         $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraison ne peuvent dépasser le 31/07 dans le cadre d\'un contrat pluriannuel');
         $this->addControle('erreur', 'retiraisons_incoherence', 'Les dates de retiraison débutent le '.date('d/m/Y').' et ne peuvent dépasser le '.date('d/m/Y', strtotime('+60 days')).' dans le cadre d\'un contrat pluriannuel sans suivi qualitatif');
         $this->addControle('erreur', 'vendeur_assujetti_tva_required', 'Vous devez préciser si le vendeur est assujetti à la tva ou non');
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
         $this->addControle('erreur', 'clause_mandat_facturation_required', 'Vous devez préciser si le vendeur donne mandat de facturation ou non à l\'acheteur');
+        $this->addControle('erreur', 'clause_evolution_prix_required', 'Vous devez préciser les critères et modalités d’évolution des prix');
         $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne totalisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
 
   	}
@@ -43,6 +45,7 @@ class VracContratValidation extends DocumentValidation
 		$produits = array();
         $retiraisons_manquantes = array();
         $retiraisons_incoherentes = array();
+        $retiraisons_pb  = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
 				if (!isset($produits[$detail->getCepage()->getHash()])) {
@@ -63,15 +66,17 @@ class VracContratValidation extends DocumentValidation
                  {
 				    $retiraisons_manquantes[] = $detail->getLibelle();
 				}
-                if ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite && ('1970-'.$detail->retiraison_date_limite > '1970-07-31')) {
+
+                $dateDebutRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? $this->getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_debut) : $detail->retiraison_date_debut;
+                $dateLimiteRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? $this->getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_limite) : $detail->retiraison_date_limite;
+                if ($dateDebutRetiraison && $dateLimiteRetiraison && $dateDebutRetiraison >  $dateLimiteRetiraison) {
+                    $retiraisons_pb[] = $detail->getLibelle();
+                }
+                if ($dateLimiteRetiraison && ($dateLimiteRetiraison > substr($this->document->campagne, -4).'-07-31')) {
                     $retiraisons_incoherentes[] = $detail->getLibelle();
                 }
                 if ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0') {
-                    $rdd = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? date('Y').'-'.$detail->retiraison_date_debut : $detail->retiraison_date_debut;
-                    $rdl = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? date('Y').'-'.$detail->retiraison_date_limite : $detail->retiraison_date_limite;
-                    if ($rdd && $rdd != date('Y-m-d')) {
-                        $retiraisons_incoherentes[] = $detail->getLibelle();
-                    } elseif($rdl && $rdl > date('Y-m-d', strtotime('+60 days'))) {
+                    if($dateLimiteRetiraison && $dateLimiteRetiraison > date('Y-m-d', strtotime('+60 days'))) {
                         $retiraisons_incoherentes[] = $detail->getLibelle();
                     }
                 }
@@ -115,6 +120,10 @@ class VracContratValidation extends DocumentValidation
             $this->addPoint('erreur', 'retiraisons_non_saisi', implode(",", $retiraisons_manquantes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
+        if (count($retiraisons_pb) > 0) {
+            $this->addPoint('erreur', 'retiraisons_pb', implode(",", $retiraisons_pb), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
         if (count($retiraisons_incoherentes) > 0) {
             $this->addPoint('erreur', ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0')? 'retiraisons_incoherence' : 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
@@ -134,11 +143,23 @@ class VracContratValidation extends DocumentValidation
         if ($this->document->exist('clause_mandat_facturation') && $this->document->clause_mandat_facturation === null) {
             $this->addPoint('erreur', 'clause_mandat_facturation_required', 'clause mandat facturation', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
+
+        if ($this->document->exist('clause_evolution_prix') && !$this->document->clause_evolution_prix) {
+            $this->addPoint('erreur', 'clause_evolution_prix_required', 'Critères et modalités d\'évolution des prix', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
         $totalPourcentage = $this->document->getPourcentageTotalDesClausesEvolutionPrix();
         if ($totalPourcentage != 100) {
             $this->addPoint('erreur', 'clause_evolution_prix_incomplete', 'clause evolution prix répartie à '.$totalPourcentage.'%', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
   	}
+
+    public function getDateRetiraisonByCampagne($campagne, $periode) {
+        if (substr($periode, 0, 2) == 12) {
+            return substr($campagne, 0, 4)."-".$periode;
+        }
+        return substr($campagne, -4)."-".$periode;
+    }
 
   	public function getProduitsHashInError() {
 
