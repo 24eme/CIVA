@@ -8,6 +8,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 
 	const STATUT_CREE = 'CREE';
+	const STATUT_PROJET_VENDEUR = 'PROJET_VENDEUR';
+	const STATUT_PROJET_ACHETEUR = 'PROJET_ACHETEUR';
 	const STATUT_PROPOSITION = 'PROPOSITION';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
 	const STATUT_VALIDE = 'VALIDE';
@@ -35,7 +37,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     protected $diff_with_mother = null;
 
 	static $statuts_libelles = array(
-		self::STATUT_CREE => 'Projet',
+		self::STATUT_CREE => 'Créé',
+		self::STATUT_PROJET_VENDEUR => 'Projet',
+		self::STATUT_PROJET_ACHETEUR => 'Projet',
 		self::STATUT_PROPOSITION => 'Proposition',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
 		self::STATUT_VALIDE => 'Validé',
@@ -45,7 +49,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	);
 
 	static $statuts_libelles_actions = array(
-		self::STATUT_CREE => null,
+		self::STATUT_CREE => 'Continuer',
+		self::STATUT_PROJET_VENDEUR => 'Visualiser',
+		self::STATUT_PROJET_ACHETEUR => 'Signer le projet',
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
 		self::STATUT_VALIDE => 'Visualiser',
@@ -56,7 +62,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
-		self::STATUT_PROPOSITION => 'Visualiser',
+		self::STATUT_PROJET_VENDEUR => 'Valider le projet',
+		self::STATUT_PROJET_ACHETEUR => 'Visualiser',
+		self::STATUT_PROPOSITION => 'Visualiser pour signer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
 		self::STATUT_VALIDE => 'Enlever',
 		self::STATUT_ENLEVEMENT => 'Enlever',
@@ -64,6 +72,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
+		self::STATUT_PROJET_VENDEUR,
+		self::STATUT_PROJET_ACHETEUR,
 		self::STATUT_PROPOSITION,
 		self::STATUT_VALIDE_PARTIELLEMENT,
 		self::STATUT_VALIDE
@@ -381,12 +391,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isBrouillon()
     {
-    	return (!$this->valide->statut || $this->valide->statut == self::STATUT_CREE)? true : false;
+
+    	return (!$this->valide->statut || in_array($this->valide->statut, array(self::STATUT_CREE, self::STATUT_PROJET_VENDEUR)))? true : false;
     }
 
-	public function isProposition()
+	public function isProjetVendeur()
     {
-        return ($this->valide->statut == self::STATUT_PROPOSITION);
+        return ($this->valide->statut == self::STATUT_PROJET_VENDEUR);
+    }
+
+    public function isProjetAcheteur()
+    {
+        return ($this->valide->statut == self::STATUT_PROJET_ACHETEUR);
     }
 
     public function isValide()
@@ -458,11 +474,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		if($this->isVendeurProprietaire()) {
             $this->createur_identifiant = $this->acheteur_identifiant;
+            $this->valide->statut = self::STATUT_PROJET_VENDEUR;
             return;
         }
 
-        $this->valide->add('date_proposition', date('Y-m-d'));
-        $this->valide->statut = self::STATUT_PROPOSITION;
+        $this->valide->statut = self::STATUT_PROJET_ACHETEUR;
     }
 
 	public function signerPapier($date) {
@@ -484,8 +500,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		throw new sfException('Le tiers "'.$tiers_id.'" n\'est pas un acteur du contrat : '.$this->_id);
     	}
 
+        $this->declaration->cleanAllNodes();
+        $this->valide->statut = Vrac::STATUT_PROPOSITION;
+
         if($this->isProprietaire($tiers_id)) {
-            $this->declaration->cleanAllNodes();
             $this->valide->statut = Vrac::STATUT_VALIDE_PARTIELLEMENT;
         }
 
