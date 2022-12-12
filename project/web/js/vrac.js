@@ -275,7 +275,7 @@ $.fn.datepickerInit = function(){
     $(this).datepicker({
     		        changeMonth: true,
     		        changeYear: true,
-    		        dateFormat: 'dd/mm',
+    		        dateFormat: 'dd/mm/yy',
     		        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     		        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
     		        firstDay: 1,
