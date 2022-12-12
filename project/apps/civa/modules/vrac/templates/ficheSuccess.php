@@ -137,7 +137,7 @@ td.echeance {display: inline;}
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
                     <?php if ($vrac->isProjetAcheteur()): ?>
                     <a href="<?php echo url_for('vrac_refuser_projet', array('sf_subject' => $vrac)) ?>" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet ?')">
-                        [x] Refuser le projet
+                        [x] Refuser le projet de contrat
                     </a>
                     <a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
                         <button class="btn_majeur btn_vert btn_grand btn_upper_case">Signer</button>
