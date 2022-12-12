@@ -13,6 +13,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const STATUT_PROPOSITION = 'PROPOSITION';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
 	const STATUT_VALIDE = 'VALIDE';
+	const STATUT_VALIDE_CADRE = 'VALIDE_CADRE';
 	const STATUT_ANNULE = 'ANNULE';
 	const STATUT_ENLEVEMENT = 'ENLEVEMENT';
 	const STATUT_CLOTURE = 'CLOTURE';
@@ -43,6 +44,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_PROPOSITION => 'Proposition',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'En attente de validation',
 		self::STATUT_VALIDE => 'Validé',
+		self::STATUT_VALIDE_CADRE => 'Validé',
 		self::STATUT_ANNULE => 'Annulé',
 		self::STATUT_ENLEVEMENT => 'En cours d\'enlèvement',
 		self::STATUT_CLOTURE => 'Cloturé'
@@ -55,6 +57,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
 		self::STATUT_VALIDE => 'Visualiser',
+		self::STATUT_VALIDE_CADRE => 'Visualiser',
 		self::STATUT_ANNULE => 'Visualiser',
 		self::STATUT_ENLEVEMENT => 'Visualiser',
 		self::STATUT_CLOTURE => 'Visualiser'
@@ -67,6 +70,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
 		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
 		self::STATUT_VALIDE => 'Enlever',
+		self::STATUT_VALIDE_CADRE => 'Gérer',
 		self::STATUT_ENLEVEMENT => 'Enlever',
 	);
 
@@ -76,7 +80,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_PROJET_ACHETEUR,
 		self::STATUT_PROPOSITION,
 		self::STATUT_VALIDE_PARTIELLEMENT,
-		self::STATUT_VALIDE
+		self::STATUT_VALIDE,
+		self::STATUT_VALIDE_CADRE,
 	);
 
 	static $types_tiers = array(
@@ -526,6 +531,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     			$valide = false;
     		}
     	}
+        if ($valide && $this->isPluriannuelCadre()) {
+    		$this->valide->statut = self::STATUT_VALIDE_CADRE;
+    		$this->valide->date_validation = date('Y-m-d');
+    	    return;
+        }
     	if ($valide) {
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
@@ -782,7 +792,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isArchivageCanBeSet()
     {
-        return ($this->valide->statut == self::STATUT_VALIDE || $this->valide->statut == self::STATUT_CLOTURE);
+        return ($this->valide->statut == self::STATUT_VALIDE || $this->valide->statut == self::STATUT_VALIDE_CADRE || $this->valide->statut == self::STATUT_CLOTURE);
     }
 
     public function setTiersQualite($noeud, $qualite)
