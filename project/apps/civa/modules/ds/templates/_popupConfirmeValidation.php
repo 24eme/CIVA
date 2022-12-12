@@ -2,7 +2,7 @@
     <form method="post" action="">
         <p>
             Une fois votre déclaration validée, vous ne pourrez plus la modifier. <br /><br />
-            Confirmez vous la validation de votre déclaration de stock ? <br />
+            Confirmez-vous la validation de votre déclaration de stock ? <br />
         </p>
         <div id="btns" class="clearfix">
             <input type="image" src="/images/boutons/btn_valider.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDS_OK" class="valideDS_OK" />
