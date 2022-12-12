@@ -190,6 +190,16 @@ input[type=radio]
     background-image: linear-gradient(to top, #BBCC00, #e4e4b5);
 }
 
+.btn_gris
+{
+    background: #5b5b5b;
+    background-image: -webkit-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: -moz-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: -o-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: linear-gradient(to top, #5b5b5b, #dedede);
+    color: #000;
+}
+
 .btn_jaune
 {
     background: #FF8500;
