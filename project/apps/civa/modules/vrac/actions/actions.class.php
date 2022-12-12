@@ -657,6 +657,7 @@ class vracActions extends sfActions
 		$this->cleanSessions();
 		$vrac = $this->getRoute()->getVrac();
         $vrac->valide->statut = Vrac::STATUT_PROJET_VENDEUR;
+        $vrac->save();
         $emails = $vrac->getEmailsActeur($vrac->acheteur_identifiant);
         foreach ($emails as $email) {
             VracMailer::getInstance()->refusProjet($vrac, $email);
