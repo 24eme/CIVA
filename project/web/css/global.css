@@ -210,6 +210,16 @@ input[type=radio]
     color: #000;
 }
 
+.btn_noir
+{
+    background: #5b5b5b;
+    background-image: -webkit-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: -moz-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: -o-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: linear-gradient(-8deg, #5b5b5b, #dddddd);
+    color: white;
+}
+
 /* Tailles */
 .btn_minus
 {
