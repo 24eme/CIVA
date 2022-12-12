@@ -135,12 +135,12 @@ td.echeance {display: inline;}
 			<td align="center"><?php if ($vrac->isValide() && !$vrac->isPapier()): ?><input type="image" src="/images/boutons/btn_pdf_visualiser.png" alt="Visualiser" name="boutons[previsualiser]" id="previsualiserContrat"><?php endif; ?></td>
 			<td style="width: 40%; text-align: right;">
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
-                    <?php if ($vrac->isProposition()): ?>
-                    <a href="<?php echo url_for('vrac_refuser_proposition', array('sf_subject' => $vrac)) ?>" style="margin-right: 50px;" onclick="return confirm('Etes vous surs de vouloir refuser cette proposition ?')">
-                        [x] Refuser la proposition
+                    <?php if ($vrac->isProjetAcheteur()): ?>
+                    <a href="<?php echo url_for('vrac_refuser_projet', array('sf_subject' => $vrac)) ?>" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet ?')">
+                        [x] Refuser le projet
                     </a>
                     <a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
-                        <button class="btn_majeur btn_vert btn_grand btn_upper_case">Valider</button>
+                        <button class="btn_majeur btn_vert btn_grand btn_upper_case">Signer</button>
                     </a>
                     <?php else: ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
@@ -148,10 +148,9 @@ td.echeance {display: inline;}
 					</a>
                     <?php endif; ?>
 				<?php endif; ?>
-                <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isBrouillon() && $user->_id == $vrac->vendeur_identifiant): ?>
+                <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjetVendeur() && $user->_id == $vrac->vendeur_identifiant): ?>
                     <p>En attente de validation du projet par l'acheteur</p>
-                <?php endif; ?>
-                <?php if(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProposition() && !$vrac->hasValide($user->_id)): ?>
+                <?php elseif(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjetAcheteur()): ?>
                     <p>En attente de signature par le vendeur</p>
                 <?php endif; ?>
 				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>

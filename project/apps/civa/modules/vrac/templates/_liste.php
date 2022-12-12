@@ -19,10 +19,10 @@
 				if (!$archive && ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
 					continue;
 				}
-				if ($item->statut == Vrac::STATUT_CREE && !$item->is_proprietaire) {
+				if (in_array($item->statut, array(Vrac::STATUT_CREE)) && !$item->is_proprietaire) {
 					continue;
 				}
-				if($item->papier && $item->statut == Vrac::STATUT_CREE && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+				if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 					continue;
 				}
 				$alt = ($counter%2);
@@ -86,7 +86,7 @@
 			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && $item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
-					<?php if ($item->statut == Vrac::STATUT_CREE): ?>
+					<?php if (in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?>
 					<li class="action_<?php echo strtolower(VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire))?>"><a href="<?php echo url_for('vrac_etape', array('numero_contrat' => $item->numero, 'etape' => $item->etape)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a></li>
 					<?php else: ?>
 					<li class="action_<?php echo strtolower(VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated))?>"><a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated) ?></a></li>

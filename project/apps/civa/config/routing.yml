@@ -171,9 +171,9 @@ vrac_validation:
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_refuser_proposition:
-  url: /vrac/:numero_contrat/fiche/refuser-proposition
-  param: { module: vrac, action: refuserProposition }
+vrac_refuser_projet:
+  url: /vrac/:numero_contrat/fiche/refuser-projet
+  param: { module: vrac, action: refuserProjet }
   class: VracRoute
   options:
     model:    Vrac

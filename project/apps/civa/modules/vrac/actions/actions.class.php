@@ -177,7 +177,7 @@ class vracActions extends sfActions
 
 		$this->user = $this->getEtablissementCreateur();
 
-		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
+		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))) {
 			$this->vrac->delete();
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
@@ -652,12 +652,11 @@ class vracActions extends sfActions
 		return $vrac;
     }
 
-	public function executeRefuserProposition(sfWebRequest $request)
+	public function executeRefuserProjet(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$vrac = $this->getRoute()->getVrac();
-        $vrac->valide->statut = Vrac::STATUT_CREE;
-        $vrac->valide->remove('date_proposition');
+        $vrac->valide->statut = Vrac::STATUT_PROJET_VENDEUR;
         $emails = $vrac->getEmailsActeur($vrac->acheteur_identifiant);
         foreach ($emails as $email) {
             VracMailer::getInstance()->refusProposition($vrac, $email);
