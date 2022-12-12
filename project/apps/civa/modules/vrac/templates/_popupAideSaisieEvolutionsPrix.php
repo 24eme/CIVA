@@ -7,19 +7,19 @@
             <th align="right">Indicateur :</th>
             <td align="left">
                 <select style="width:225px;margin-bottom:5px" name="indicateur">
+                    <option value="du pourcentage d'évolution du prix librement convenu entre les parties">Pourcentage d'évolution du prix librement convenu entre les parties</option>
                     <option value="de l'indicateur IPAMPA">IPAMPA.</option>
                     <option value="de l'indicateur IPAP">IPAP.</option>
                     <option value="de l'indicateur SMIC">SMIC.</option>
                     <option value="de l'indicateur d'évolution des stocks par cépage">Evolution des stocks par cépage</option>
                     <option value="de l'indicateur de dynamique commerciale par cépage">Dynamique commerciale par cépage</option>
-                    <option value="du pourcentage d'évolution du prix librement convenu entre les parties">Pourcentage d'évolution du prix librement convenu entre les parties</option>
                 </select>
             </td>
         </tr>
         <tr>
             <th align="right">Part de l'indicateur :</th>
             <td align="left">
-                <input type="text" name="part" class="num" style="width:100px; text-align: right; padding-right: 5px;" />&nbsp;%
+                <input required type="text" name="part" class="num" style="width:100px; text-align: right; padding-right: 5px;" />&nbsp;%
             </td>
         </tr>
         <tr>
@@ -47,6 +47,9 @@
     $("#popup_clause_evolution_prix .ajouter").click(function() {
         var indicateur = $('#popup_clause_evolution_prix select[name="indicateur"]').val();
         var part = $('#popup_clause_evolution_prix input[name="part"]').val();
+        if (!part) {
+            return;
+        }
         var ligne = part+'% '+indicateur;
         var contenu = $('#<?php echo $target ?>').val();
         var lignes = contenu.split("\n");
