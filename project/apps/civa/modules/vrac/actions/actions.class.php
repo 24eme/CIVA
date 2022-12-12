@@ -177,7 +177,7 @@ class vracActions extends sfActions
 
 		$this->user = $this->getEtablissementCreateur();
 
-		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))) {
+		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_ACHETEUR, Vrac::STATUT_PROJET_VENDEUR))) {
 			$this->vrac->delete();
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
