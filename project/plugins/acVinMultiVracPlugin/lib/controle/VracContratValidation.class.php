@@ -76,9 +76,7 @@ class VracContratValidation extends DocumentValidation
                     $retiraisons_incoherentes[] = $detail->getLibelle();
                 }
                 if ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0') {
-                    if ($dateDebutRetiraison && $dateDebutRetiraison != date('Y-m-d')) {
-                        $retiraisons_incoherentes[] = $detail->getLibelle();
-                    } elseif($dateLimiteRetiraison && $dateLimiteRetiraison > date('Y-m-d', strtotime('+60 days'))) {
+                    if($dateLimiteRetiraison && $dateLimiteRetiraison > date('Y-m-d', strtotime('+60 days'))) {
                         $retiraisons_incoherentes[] = $detail->getLibelle();
                     }
                 }
