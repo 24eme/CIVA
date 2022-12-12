@@ -919,6 +919,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $vrac;
 	}
 
+    public static function getDateRetiraisonByCampagne($campagne, $periode) {
+        if (substr($periode, 0, 2) == 12) {
+            return substr($campagne, 0, 4)."-".$periode;
+        }
+        return substr($campagne, -4)."-".$periode;
+    }
+
 	public function getPourcentageTotalDesClausesEvolutionPrix() {
 		if ($this->exist('clause_evolution_prix') && $this->clause_evolution_prix) {
             $total = 0;
