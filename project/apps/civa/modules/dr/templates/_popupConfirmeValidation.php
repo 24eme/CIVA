@@ -2,7 +2,7 @@
     <form method="post" action="">
         <p>
             Une fois votre déclaration validée, vous ne pourrez plus la modifier. <br /><br />
-            Confirmez vous la validation de votre déclaration de récolte ?<br />
+            Confirmez-vous la validation de votre déclaration de récolte ?<br />
         </p>
         <?php $need_acheteurs_autorisation = !$dr->hasDateDepotMairie() && DRClient::getInstance()->hasImport($dr->cvi, $dr->campagne); ?>
         <?php $need_ava_autorisation = !$dr->hasDateDepotMairie() && $dr->hasVolumeSurPlace(); ?>
