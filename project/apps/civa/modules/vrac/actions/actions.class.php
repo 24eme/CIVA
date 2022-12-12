@@ -659,7 +659,7 @@ class vracActions extends sfActions
         $vrac->valide->statut = Vrac::STATUT_PROJET_VENDEUR;
         $emails = $vrac->getEmailsActeur($vrac->acheteur_identifiant);
         foreach ($emails as $email) {
-            VracMailer::getInstance()->refusProposition($vrac, $email);
+            VracMailer::getInstance()->refusProjet($vrac, $email);
         }
         $this->getUser()->setFlash('notice', 'Le refus de la proposition a été notifié à l\'acheteur.');
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
