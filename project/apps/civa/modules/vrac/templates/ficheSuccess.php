@@ -157,7 +157,7 @@ td.echeance {display: inline;}
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
-                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">VALIDER VOS ENLÈVEMENTS</button>
+                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider vos enlèvements</button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
 					<p>Contrat vrac numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
