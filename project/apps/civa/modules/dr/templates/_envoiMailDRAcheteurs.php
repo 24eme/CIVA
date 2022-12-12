@@ -20,7 +20,7 @@
 <div id="popup_confirme_mail_acheteur" class="popup_ajout popup_confirme" title="Confirmation d'envoi de mail de votre DR">
     <form method="post" action="">
         <p>
-            Confirmez vous l'envoi par mail aux acheteurs de votre Déclaration de Récolte&nbsp;?<br />
+            Confirmez-vous l'envoi par mail aux acheteurs de votre Déclaration de Récolte&nbsp;?<br />
         </p>
         <div id="btns">
             <input onclick="sendMailAcheteurs()" type="image" src="/images/boutons/btn_valider.png" alt="Valider votre déclaration" name="boutons[next]" id="valideDR" class="valideDR_OK" />

@@ -1,7 +1,7 @@
 <div id="popup_confirme_signatureVrac" class="popup_ajout" title="Signature de votre contrat">
     <form method="post" action="">
         <p>
-            Confirmez vous la signature de votre contrat ? <br />
+            Confirmez-vous la signature de votre contrat ? <br />
         </p>
 
         <div id="btns" class="clearfix" style="text-align: center; margin-top: 30px;">
