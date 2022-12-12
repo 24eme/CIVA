@@ -23,6 +23,7 @@ class VracContratValidation extends DocumentValidation
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
     	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
+        $this->addControle('erreur', 'millesime_non_saisi', 'Vous devez préciser les millésimes de vos produits.');
         $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraison pour l\'ensemble de vos produits.');
 
         $this->addControle('erreur', 'retiraisons_pb', 'La date limite de retiraison ne peut pas être antérieur à la date de début de retiraison');
@@ -42,6 +43,7 @@ class VracContratValidation extends DocumentValidation
   		$this->produits_controle = array();
 		$doublon_libelles = array();
 		$label_libelles = array();
+		$millesimes = array();
 		$produits = array();
         $retiraisons_manquantes = array();
         $retiraisons_incoherentes = array();
@@ -57,7 +59,7 @@ class VracContratValidation extends DocumentValidation
                 } elseif((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL) {
                     $this->addPoint('vigilance', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
                 }
-				if ($detail->exist('label') && ($detail->label === null || $detail->label === "")) {
+				if (!$detail->exist('label') || $detail->label === null || $detail->label === "") {
 				    $label_libelles[] = $detail->getLibelle();
 				}
 				if (
@@ -80,6 +82,9 @@ class VracContratValidation extends DocumentValidation
                         $retiraisons_incoherentes[] = $detail->getLibelle();
                     }
                 }
+				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
+				    $millesimes[] = $detail->getLibelle();
+				}
 
 			}
 			foreach ($produits as $produit) {
@@ -114,6 +119,10 @@ class VracContratValidation extends DocumentValidation
 
         if (count($label_libelles) > 0) {
             $this->addPoint('erreur', 'label_non_saisi', implode(",", $label_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
+        }
+
+        if (count($millesimes) > 0) {
+            $this->addPoint('erreur', 'millesime_non_saisi', implode(",", $millesimes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
         }
 
         if (count($retiraisons_manquantes) > 0) {
