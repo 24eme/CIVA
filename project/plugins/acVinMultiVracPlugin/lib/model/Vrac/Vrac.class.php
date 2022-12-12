@@ -914,8 +914,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
             $detail->millesime = $millesime;
-            $detail->retiraison_date_debut = $millesime.'-'.$detail->retiraison_date_debut;
-            $detail->retiraison_date_limite = $millesime.'-'.$detail->retiraison_date_limite;
+            $detail->retiraison_date_debut = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_debut);
+            $detail->retiraison_date_limite = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_limite);
         }
         return $vrac;
 	}
