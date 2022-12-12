@@ -217,7 +217,7 @@ input[type=radio]
     background-image: -moz-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: -o-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: linear-gradient(-8deg, #b70101, #fdafaf);
-    color: #000;
+    color: #fff;
 }
 
 .btn_noir
