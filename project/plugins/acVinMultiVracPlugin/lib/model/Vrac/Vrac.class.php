@@ -903,6 +903,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
         $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
+        $vrac->remove('_attachments');
         $vrac->setArchivageDocument();
         $vrac->campagne = $millesime.'-'.($millesime+1);
         $vrac->numero_contrat = "$numContratApplication";
@@ -913,11 +914,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
             $detail->millesime = $millesime;
-            $detail->retiraison_date_debut = $millesime.'-'.$detail->retiraison_date_debut;
-            $detail->retiraison_date_limite = $millesime.'-'.$detail->retiraison_date_limite;
+            $detail->retiraison_date_debut = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_debut);
+            $detail->retiraison_date_limite = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_limite);
         }
         return $vrac;
 	}
+
+    public static function getDateRetiraisonByCampagne($campagne, $periode) {
+        if (substr($periode, 0, 2) == 12) {
+            return substr($campagne, 0, 4)."-".$periode;
+        }
+        return substr($campagne, -4)."-".$periode;
+    }
 
 	public function getPourcentageTotalDesClausesEvolutionPrix() {
 		if ($this->exist('clause_evolution_prix') && $this->clause_evolution_prix) {

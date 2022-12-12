@@ -37,6 +37,17 @@ class VracProduitForm extends acCouchdbObjectForm
             unset($this->widgetSchema['label']);
             unset($this->validatorSchema['label']);
         }
+        if ($this->getObject()->getDocument()->isApplicationPluriannuel()) {
+            $this->setWidget('millesime', new sfWidgetFormInputHidden());
+            $this->setWidget('denomination', new sfWidgetFormInputHidden());
+            $this->setWidget('label', new sfWidgetFormInputHidden());
+            if ($this->getObject()->getDocument()->isPremiereApplication()) {
+                $this->setWidget('prix_unitaire', new sfWidgetFormInputHidden());
+                if (!$this->getObject()->getDocument()->isInModeSurface()) {
+                    $this->setWidget('volume_propose', new sfWidgetFormInputHidden());
+                }
+            }
+        }
 
   		$this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
