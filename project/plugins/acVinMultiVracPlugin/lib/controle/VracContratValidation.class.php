@@ -32,6 +32,7 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
         $this->addControle('erreur', 'clause_mandat_facturation_required', 'Vous devez préciser si le vendeur donne mandat de facturation ou non à l\'acheteur');
+        $this->addControle('erreur', 'clause_evolution_prix_required', 'Vous devez préciser les critères et modalités d’évolution des prix');
         $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne totalisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
 
   	}
@@ -144,6 +145,11 @@ class VracContratValidation extends DocumentValidation
         if ($this->document->exist('clause_mandat_facturation') && $this->document->clause_mandat_facturation === null) {
             $this->addPoint('erreur', 'clause_mandat_facturation_required', 'clause mandat facturation', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
+
+        if ($this->document->exist('clause_evolution_prix') && !$this->document->clause_evolution_prix) {
+            $this->addPoint('erreur', 'clause_evolution_prix_required', 'Critères et modalités d\'évolution des prix', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+        }
+
         $totalPourcentage = $this->document->getPourcentageTotalDesClausesEvolutionPrix();
         if ($totalPourcentage != 100) {
             $this->addPoint('erreur', 'clause_evolution_prix_incomplete', 'clause evolution prix répartie à '.$totalPourcentage.'%', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
