@@ -8,7 +8,9 @@
 <table class="validation table_donnees" style="margin: 0 0 20px;">
 	<thead>
 		<tr>
-			<th>Produits</th>
+			<th>Produits
+                <a href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS)) ?>" style="float:right;text-decoration: none;font-size:13px;padding-top:1px;">Modifier</a>
+            </th>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			<th class="bouteille" style="text-align: center">Nb bouteilles</th>
 			<th class="centilisation" style="text-align: center">Centilisation</th>
@@ -72,7 +74,7 @@
 </table>
 
 <?php if(!$vrac->isPapier()): ?>
-<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'ficher' => false)); ?>
+<?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => false)); ?>
 <?php endif; ?>
 
 <?php if($vrac->isPapier()): ?>
