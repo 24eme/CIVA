@@ -63,15 +63,16 @@ class VracContratValidation extends DocumentValidation
                  {
 				    $retiraisons_manquantes[] = $detail->getLibelle();
 				}
-                if ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite && ('1970-'.$detail->retiraison_date_limite > '1970-07-31')) {
+
+                $dateDebutRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? $this->getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_debut) : $detail->retiraison_date_debut;
+                $dateLimiteRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? $this->getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_limite) : $detail->retiraison_date_limite;
+                if ($dateLimiteRetiraison && ($dateLimiteRetiraison > substr($this->document->campagne, -4).'-07-31')) {
                     $retiraisons_incoherentes[] = $detail->getLibelle();
                 }
                 if ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0') {
-                    $rdd = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? date('Y').'-'.$detail->retiraison_date_debut : $detail->retiraison_date_debut;
-                    $rdl = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? date('Y').'-'.$detail->retiraison_date_limite : $detail->retiraison_date_limite;
-                    if ($rdd && $rdd != date('Y-m-d')) {
+                    if ($dateDebutRetiraison && $dateDebutRetiraison != date('Y-m-d')) {
                         $retiraisons_incoherentes[] = $detail->getLibelle();
-                    } elseif($rdl && $rdl > date('Y-m-d', strtotime('+60 days'))) {
+                    } elseif($dateLimiteRetiraison && $dateLimiteRetiraison > date('Y-m-d', strtotime('+60 days'))) {
                         $retiraisons_incoherentes[] = $detail->getLibelle();
                     }
                 }
@@ -139,6 +140,13 @@ class VracContratValidation extends DocumentValidation
             $this->addPoint('erreur', 'clause_evolution_prix_incomplete', 'clause evolution prix répartie à '.$totalPourcentage.'%', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
   	}
+
+    public function getDateRetiraisonByCampagne($campagne, $periode) {
+        if (substr($periode, 0, 2) == 12) {
+            return substr($campagne, 0, 4)."-".$periode;
+        }
+        return substr($campagne, -4)."-".$periode;
+    }
 
   	public function getProduitsHashInError() {
 
