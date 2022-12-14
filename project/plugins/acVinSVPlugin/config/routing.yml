@@ -110,3 +110,13 @@ sv_feed_back:
     type:     object
   requirements:
     sf_method: [get, post]
+
+sv_invalider_civa:
+  url: /sv/invalider_civa/:id
+  param: { module: sv, action: invaliderCiva }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [get]

@@ -202,4 +202,9 @@ class SV extends BaseSV
     {
         return $this->valide->statut === self::STATUT_VALIDE;
     }
+
+    public function devalidate()
+    {
+        $this->valide->statut = null;
+    }
 }
