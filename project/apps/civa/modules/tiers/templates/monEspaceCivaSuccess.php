@@ -53,7 +53,7 @@
                 <div class="bloc_acceuil_header">Production</div>
                 <div class="bloc_acceuil_content">
                     <?php if (SVClient::getInstance()->isTeledeclarationOuverte()): ?>
-                        <p><strong>À valider</strong> avant le 09 janvier 2023 minuit</p>
+                        <p><strong>À valider</strong> avant le 9 janvier 2023 minuit</p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
                     <?php endif ?>
