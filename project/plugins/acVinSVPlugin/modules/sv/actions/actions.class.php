@@ -258,7 +258,7 @@ L'application de télédéclaration de production du CIVA
 
 ";
 
-        $pdf = new ExportSVPdf($sv, 'pdf');
+        $pdf = new ExportSVPdf($this->sv, 'pdf');
         $to = $this->etablissement->getEmailTeledeclaration();
         $mail = Swift_Message::newInstance()
                 ->setFrom(sfConfig::get('app_email_from'))
