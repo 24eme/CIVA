@@ -3,7 +3,7 @@
 
 <h3>Lieux de stockage</h3>
 
-<p style="margin-bottom: 15px">Texte d'intro</p>
+<p style="margin-bottom: 15px">D'après la nouvelle réglementation entrée en vigueur à compter de 2022, vous devez ici répartir les volumes produits entre vos différents lieux de stockage, à la date de dépôt de votre déclaration.</p>
 
 <form action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
