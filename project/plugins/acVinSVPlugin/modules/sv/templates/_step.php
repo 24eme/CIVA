@@ -1,3 +1,5 @@
+<?php include_partial('sv/breadcrumb', array('sv' => $object)); ?>
+
 <?php
 $etapeMax = ($object->exist('etape') && $object->etape)? $object->etape : $step;
 $stepNum = $etapes->getEtapeNum($step);
