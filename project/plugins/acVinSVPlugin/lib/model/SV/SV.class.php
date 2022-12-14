@@ -196,6 +196,16 @@ class SV extends BaseSV
     {
         $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
         $this->valide->statut = self::STATUT_VALIDE;
+
+        $this->getRebeches();
+
+        if($this->lies === null) {
+            $this->lies = 0;
+        }
+
+        if($this->rebeches === null) {
+            $this->rebeches = 0;
+        }
     }
 
     public function isValide()
@@ -206,5 +216,13 @@ class SV extends BaseSV
     public function devalidate()
     {
         $this->valide->statut = null;
+    }
+
+    public function getRebeches() {
+        if($this->getDocument()->hasRebechesInProduits()) {
+            $this->getDocument()->rebeches = $this->getDocument()->calculateRebeches();
+        }
+
+        return $this->getDocument()->_get('rebeches');
     }
 }

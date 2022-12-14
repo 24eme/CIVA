@@ -17,6 +17,10 @@ class SVStockage extends BaseSVStockage {
             return $this->_get('produits');
         }
 
+        if(!$this->isPrincipale()) {
+            return [];
+        }
+
         $produits = [];
         foreach($this->getDocument()->getRecapProduits() as $hash => $produit) {
             $produits[$hash] = $produit->volume_revendique;

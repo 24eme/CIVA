@@ -11,7 +11,11 @@
       <tbody>
       <tr>
         <td>Lies et bourbes</td>
-        <td class="text-right"><?php echoFloat($sv->lies) ?> <small class="text-muted">hl</small></td>
+        <td class="text-right"><?php echoFloat($sv->lies ? $sv->lies : 0) ?> <small class="text-muted">hl</small></td>
+      </tr>
+      <tr>
+        <td>Rebêches</td>
+        <td class="text-right"><?php echoFloat($sv->rebeches ? $sv->rebeches : 0) ?> <small class="text-muted">hl</small></td>
       </tr>
       </tbody>
     </table>

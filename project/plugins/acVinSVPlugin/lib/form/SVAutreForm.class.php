@@ -16,8 +16,8 @@ class SVAutreForm extends acCouchdbForm
         $this->setValidator('rebeches', new sfValidatorNumber(['required' => false, 'min' => 0]));
 
         $this->widgetSchema->setLabels([
-            'lies' => 'Volume total lies et bourbes',
-            'rebeches' => 'Volume total rebêches',
+            'lies' => 'Volume total de lies et bourbes',
+            'rebeches' => 'Volume total de rebêches',
         ]);
 
         $this->setDefault('lies', $this->getDocument()->lies);
@@ -31,9 +31,7 @@ class SVAutreForm extends acCouchdbForm
         $values = $this->getValues();
         $this->getDocument()->lies = $values['lies'];
 
-        if ($this->getDocument()->hasRebechesInProduits()) {
-            $this->getDocument()->rebeches = $this->getDocument()->calculateRebeches();
-        } else {
+        if (!$this->getDocument()->hasRebechesInProduits()) {
             $this->getDocument()->rebeches = $values['rebeches'];
         }
 
