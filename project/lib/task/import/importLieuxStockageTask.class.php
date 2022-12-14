@@ -79,20 +79,20 @@ EOF;
       return;
     }
 
-    if(!$etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
-      $this->logLignes("ERROR", sprintf("Ne fait pas de DS propriété", $cvi), $lines);
+    if(!$etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE) || !$etablissement->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
+      //$this->logLignes("ERROR", sprintf("Ne fait pas de DS propriété", $cvi), $lines);
 
       return;
     }
 
     if(!$etablissement->isActif()) {
-        $this->logLignes("ERROR", sprintf("L'établissement n'est pas actif", $cvi), $lines);
+        //$this->logLignes("ERROR", sprintf("L'établissement n'est pas actif", $cvi), $lines);
 
         return;
     }
 
     if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COOPERATIVE) {
-      $this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
+      //$this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
     }
 
     $etablissement->removeLieuxStockage($cvi);
