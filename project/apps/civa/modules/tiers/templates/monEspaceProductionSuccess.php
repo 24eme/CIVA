@@ -13,7 +13,7 @@
               <?php if(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
                   <p class="intro">Vous souhaitez :</p>
               <?php else: ?>
-                  <p class="intro">Le téléservice pour la déclaration de production est actuellement fermé :</p>
+                  <p class="intro">Le téléservice pour la déclaration de production est actuellement fermé</p>
               <?php endif; ?>
               <?php if(SVClient::getInstance()->isTeledeclarationOuverte() || $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR)): ?>
               <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data" id="form_sv">
