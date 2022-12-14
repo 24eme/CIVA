@@ -8,7 +8,7 @@
         	<p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
 		<?php endif; ?>
         <div id="nouvelle_declaration">
-          <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
+          <h3 class="titre_section">Déclaration de l'année</h3>
           <div class="contenu_section">
               <?php if(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
                   <p class="intro">Vous souhaitez :</p>
