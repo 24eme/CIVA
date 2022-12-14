@@ -16,7 +16,7 @@ class SVAutreForm extends acCouchdbForm
         $this->setValidator('rebeches', new sfValidatorNumber(['required' => false, 'min' => 0]));
 
         $this->widgetSchema->setLabels([
-            'lies' => 'Volume total lies et bourbes produit',
+            'lies' => 'Volume total lies et bourbes',
             'rebeches' => 'Volume total rebêches',
         ]);
 

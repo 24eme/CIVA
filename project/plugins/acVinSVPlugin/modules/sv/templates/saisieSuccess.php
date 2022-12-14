@@ -1,12 +1,12 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <?php if($sv->getType() === SVClient::TYPE_SV12): ?>
-<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction globaux</button>
+<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction réels</button>
 <?php endif; ?>
 
 <h3><?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->find($cvi)->commune; ?></small></h3>
 
-<p style="margin-bottom: 15px;">Texte d'intro</p>
+<p style="margin-bottom: 15px;">Saisissez ici les données de production de cet apporteur.</p>
 
 <form id="form_saisie" action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>

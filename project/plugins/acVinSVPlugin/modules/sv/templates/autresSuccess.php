@@ -3,7 +3,7 @@
 
 <h3>Autres</h3>
 
-<p style="margin-bottom: 15px">Texte d'intro</p>
+<p style="margin-bottom: 15px">Saisissez ici le volume TOTAL de lies et bourbes, et de rebêches produits.</p>
 
 <form action="" method="POST" id="form_autres" class="form-horizontal">
 <?php echo $form->renderHiddenFields() ?>
