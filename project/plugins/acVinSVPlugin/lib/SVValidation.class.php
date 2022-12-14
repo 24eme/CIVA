@@ -6,18 +6,16 @@ class SVValidation extends DocumentValidation
     {
         $this->addControle('erreur', 'apporteurs_complet', "Toutes les données des apporteurs n'ont pas été saisies");
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
-        $this->addControle('erreur', 'lies_vides', "Les lies n'ont pas été remplies");
-        $this->addControle('erreur', 'rebeches_vides', "Les rebêches n'ont pas été remplies");
-        $this->addControle('erreur', 'rebeches_incoherentes', "Les rebêches totales ne correspondent pas au détail");
-        $this->addControle('erreur', 'rebeches_cremant_manquant', "Il y a des rebêches alors qu'il n'y a pas de crémant");
-        $this->addControle('erreur', 'cremant_rebeches_manquant', "Il y a du crémant alors qu'il n'y a pas de rebêches");
+        $this->addControle('erreur', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
+        $this->addControle('erreur', 'rebeches_cremant_manquant', "Vous avez déclaré des rebêches alors que vous ne produisez pas de Crémant");
+        $this->addControle('erreur', 'cremant_rebeches_manquant', "Vous n'avez pas déclaré de rebêches alors que vous produisez du Crémant");
     }
 
     public function controle()
     {
         foreach($this->document->apporteurs as $apporteur) {
             if(!$apporteur->isComplete()) {
-                $this->addPoint('erreur', 'apporteurs_complet', '');
+                $this->addPoint('erreur', 'apporteurs_complet', "Terminer la saisie", $this->generateUrl('sv_apporteurs', $this->document));
                 break;
             }
         }
@@ -30,30 +28,22 @@ class SVValidation extends DocumentValidation
                 });
 
                 if (empty($stocks_negatifs) === false) {
-                    $this->addPoint('erreur', 'stockage_repartition', $stockage->numero);
+                    $this->addPoint('erreur', 'stockage_repartition', $stockage->numero, $this->generateUrl('sv_stockage', $this->document));
                 }
             }
         }
 
-        if ($this->document->lies === null || is_numeric($this->document->lies) === false) {
-            $this->addPoint('erreur', 'lies_vides', '');
-        }
-
-        if ($this->document->rebeches === null || is_numeric($this->document->rebeches) === false) {
-            $this->addPoint('erreur', 'rebeches_vides', '');
+        if (!$this->document->lies && count($this->document->apporteurs) > 0) {
+            $this->addPoint('erreur', 'lies_vides', 'Saisir les lies et bourbes', $this->generateUrl('sv_autres', $this->document));
         }
 
         if ($this->document->hasRebechesInProduits()) {
-           if ($this->document->calculateRebeches() !== $this->document->rebeches) {
-               $this->addPoint('erreur', 'rebeches_incoherentes', '');
-           }
-
            // Si rebeches sans crémant: si array_filter ressort 0 produits, alors pas de crémant
            if (count(array_filter($this->document->getRecapProduits(), function ($k) {
                // on filtre sur les produit crémant et qui ne sont pas cépage rebeches
                return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false;
            }, ARRAY_FILTER_USE_KEY)) === 0) {
-               $this->addPoint('erreur', 'rebeches_cremant_manquant', "");
+               $this->addPoint('erreur', 'rebeches_cremant_manquant', 'Modifier les rebêches', $this->generateUrl('sv_autres', $this->document));
            }
         }
 
@@ -63,7 +53,7 @@ class SVValidation extends DocumentValidation
                 // on filtre sur les produit crémant et qui ne sont pas cépage rebeches
                 return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false;
             }, ARRAY_FILTER_USE_KEY)) > 0) {
-               $this->addPoint('erreur', 'cremant_rebeches_manquant', "");
+               $this->addPoint('erreur', 'cremant_rebeches_manquant', 'Saisir les rebêches', $this->generateUrl('sv_autres', $this->document));
             }
         }
     }
