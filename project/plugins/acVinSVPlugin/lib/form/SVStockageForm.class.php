@@ -44,7 +44,6 @@ class SVStockageForm extends acCouchdbForm
 
         foreach($this->getDocument()->stockage as $stockage) {
             $stockage->remove('produits');
-            $stockage->add('produits');
         }
 
         foreach($values['produits'] as $hash => $volumes) {
@@ -59,6 +58,7 @@ class SVStockageForm extends acCouchdbForm
                     continue;
                 }
 
+                $stockage->add('produits');
                 $stockage->produits->add($hash, $volume);
             }
         }

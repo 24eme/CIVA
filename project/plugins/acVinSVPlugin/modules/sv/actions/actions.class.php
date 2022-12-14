@@ -245,7 +245,18 @@ class svActions extends sfActions {
         $this->sv->validate();
         $this->sv->save();
 
-        $message = "%%%CHANGEME%%%";
+        $message = "Bonjour,
+
+Vous venez de valider votre déclaration de production pour l'année ".$this->sv->periode." a été validée.
+
+Vous trouverez ci-joint votre déclaration au format PDF
+
+Vous pouvez également toujours la visualiser sur votre espace civa : https://declaration.preprod.vinsalsace.pro/sv/validation/".$this->sv->_id."
+
+--
+L'application de télédéclaration de production du CIVA
+
+";
 
         $to = $this->etablissement->getEmailTeledeclaration();
         $mail = Swift_Message::newInstance()

@@ -96,6 +96,7 @@ SV:
                   code_postal: {  }
                   produits:
                     type: collection
+                    required: false
                     definition:
                       fields:
                         '*': { type: float }
