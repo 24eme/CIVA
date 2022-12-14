@@ -2,14 +2,15 @@
 
 <?php if (! $sv->isValide()): ?>
   <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
+<?php else: ?>
+  <?php include_partial('sv/breadcrumb', array('sv' => $sv)); ?>
 <?php endif ?>
 
 <?php if ($sv->isValide()): ?>
-<h3>Visualisation de la déclaration de production <?php echo $sv->campagne ?></h3>
+<h2>Déclaration de production <?php echo $sv->campagne ?></h2>
 
-<p style="margin-bottom: 15px;">Vous avez déjà validé votre déclaration de production. Vous ne pouvez plus la modifier, mais juste la consulter et l'imprimer. En cas de problème, contactez au CIVA Dominique WOLFF ou Marco RIBEIRO.</p>
 <?php else: ?>
-<h3>Validation de la déclaration de production <?php echo $sv->campagne ?></h3>
+<h2>Validation de la déclaration de production <?php echo $sv->campagne ?></h2>
 
 <p style="margin-bottom: 15px;">Veuillez vérifier les informations saisies avant de valider votre déclaration. Vous pouvez à tout moment visualiser votre déclaration de production au format PDF en cliquant sur le bouton "Prévisualiser' en bas de l'écran.</p>
 <?php endif; ?>
@@ -41,7 +42,8 @@
 
 <div class="row" style="margin-top: 10px;">
 <?php if ($sv->isValide()): ?>
-    <div class="text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
+    <div class="col-xs-4"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
+    <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
 <?php else: ?>
     <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_stockage', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>

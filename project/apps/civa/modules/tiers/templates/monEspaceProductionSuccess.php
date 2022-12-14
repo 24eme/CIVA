@@ -8,9 +8,11 @@
         	<p class="flash_message"><?php echo $sf_user->getFlash('confirmation'); ?></p>
 		<?php endif; ?>
         <div id="nouvelle_declaration">
-          <h3 class="titre_section">Déclaration de l'année<a href="" class="msg_aide" rel="help_popup_mon_espace_civa_ma_dr" title="Message aide"></a></h3>
+          <h3 class="titre_section">Déclaration de l'année</h3>
           <div class="contenu_section">
-              <?php if(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
+              <?php if($sv && $sv->isValide()): ?>
+                 <p class="intro">Vous avez déjà validé votre déclaration. Vous ne pouvez plus la modifier. Vous pouvez uniquement la visualiser et l'imprimer. En cas de problème contactez au CIVA Dominique WOLFF ou Marco RIBEIRO.</p>
+              <?php elseif(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
                   <p class="intro">Vous souhaitez :</p>
               <?php else: ?>
                   <p class="intro">Le téléservice pour la déclaration de production est actuellement fermé</p>
@@ -22,9 +24,9 @@
               <?php if ($sv): ?>
                 <?php if ($sv->isValide()): ?>
                     <div class="ligne_form ligne_btn">
-                        <?php echo link_to('<img src="/images/boutons/btn_visualiser.png" alt="" class="btn" />', 'sv_validation', array('id' => $sv->_id, 'annee' => $sf_user->getCampagne())); ?>
+                        <a class="btn btn_petit btn_majeur btn_vert" href="<?php echo url_for('sv_validation', $sv) ?>">Visualiser</a>
                         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
-                            <a href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Si vous éditez cette SV, pensez à la revalider.')"><img src="/images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
+                            <a class="btn btn_petit btn_majeur btn_jaune" href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Êtes-vous sur de vouloir dévalider cette déclaration ?')">Dévalider</a>
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
@@ -53,9 +55,11 @@
                     <label for="sv_creation_type_creation_VIERGE">Créer une déclaration à néant</label>
               </div>
               <?php endif; ?>
+              <?php if(!$sv || !$sv->isValide()): ?>
               <div class="ligne_form ligne_btn">
                   <button type="submit" id="mon_espace_civa_valider" class="btn btn_vert btn_majeur">Valider</button>
               </div>
+              <?php endif; ?>
               </form>
               <?php endif; ?>
           </div>
