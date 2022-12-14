@@ -38,7 +38,7 @@
               <?php else: ?>
               <div class="ligne_form">
                     <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
-                    <label for="sv_creation_type_creation_DR">Démarrer depuis les données de la DR</label>
+                    <label for="sv_creation_type_creation_DR">Démarrer depuis les données des DR Apporteurs</label>
               </div>
               <div class="ligne_form">
                     <input name="sv_creation[type_creation]" type="radio" value="CSV" id="sv_creation_type_creation_CSV">
