@@ -340,4 +340,18 @@ L'application de télédéclaration de production du CIVA
         $this->document->addHeaders($this->getResponse());
         return $this->renderText($this->document->output());
     }
+
+    public function executeInvaliderCiva(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide() === false || $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) === false) {
+            return $this->redirect('sv_validation', $this->sv);
+        }
+
+        $this->sv->devalidate();
+        $this->sv->save();
+
+        return $this->redirect('sv_validation', $this->sv);
+    }
 }

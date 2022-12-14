@@ -20,12 +20,21 @@
               <?php echo $form->renderHiddenFields() ?>
               <?php echo $form->renderGlobalErrors() ?>
               <?php if ($sv): ?>
-              <div class="ligne_form">
-                  <label for="sv_startup_action_reprendre" class="radio-inline"><input name="sv_startup[action]" type="radio" checked="checked" value="reprendre" id="sv_startup_action_reprendre">&nbsp;Continuer ma déclaration</label>
-              </div>
-              <div class="ligne_form">
-                  <label for="sv_startup_action_supprimer" class="radio-inline"><input name="sv_startup[action]" type="radio" value="supprimer" id="sv_startup_action_supprimer">&nbsp;Supprimer ma déclaration</label>
-              </div>
+                <?php if ($sv->isValide()): ?>
+                    <div class="ligne_form ligne_btn">
+                        <?php echo link_to('<img src="/images/boutons/btn_visualiser.png" alt="" class="btn" />', 'sv_validation', array('id' => $sv->_id, 'annee' => $sf_user->getCampagne())); ?>
+                        <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+                            <a href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Si vous éditez cette SV, pensez à la revalider.')"><img src="/images/boutons/btn_editer_dr.png" alt="" class="btn" id="rendreEditable"  /></a>
+                        <?php endif; ?>
+                    </div>
+                <?php else: ?>
+                  <div class="ligne_form">
+                      <label for="sv_startup_action_reprendre" class="radio-inline"><input name="sv_startup[action]" type="radio" checked="checked" value="reprendre" id="sv_startup_action_reprendre">&nbsp;Continuer ma déclaration</label>
+                  </div>
+                  <div class="ligne_form">
+                      <label for="sv_startup_action_supprimer" class="radio-inline"><input name="sv_startup[action]" type="radio" value="supprimer" id="sv_startup_action_supprimer">&nbsp;Supprimer ma déclaration</label>
+                  </div>
+                <?php endif ?>
               <?php else: ?>
               <div class="ligne_form">
                     <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>

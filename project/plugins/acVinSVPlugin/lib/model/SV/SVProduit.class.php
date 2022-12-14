@@ -71,7 +71,7 @@ class SVProduit extends BaseSVProduit {
     public function isComplete() {
         if($this->getDocument()->type == SVClient::TYPE_SV11) {
 
-            return !is_null($this->superficie_recolte) && !is_null($this->volume_recolte) && !is_null($this->volume_revendique) && !is_null($this->volume_detruit) && !is_null($this->vci);
+            return !is_null($this->superficie_recolte) && !is_null($this->volume_recolte) && !is_null($this->volume_revendique) && !is_null($this->volume_detruit);
         }
 
         if($this->getDocument()->type == SVClient::TYPE_SV12) {
