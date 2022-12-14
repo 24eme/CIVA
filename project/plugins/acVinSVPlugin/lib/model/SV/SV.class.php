@@ -184,7 +184,7 @@ class SV extends BaseSV
         $lieux = [];
 
         foreach ($this->stockage as $stockage) {
-            if ($stockage->isPrincipale() || empty($stockage->produits->toArray()) === false) {
+            if ($stockage->isPrincipale() || ($stockage->exist('produits') && empty($stockage->produits->toArray()) === false)) {
                 $lieux[] = $stockage;
             }
         }
@@ -196,6 +196,14 @@ class SV extends BaseSV
     {
         $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
         $this->valide->statut = self::STATUT_VALIDE;
+
+        if($this->lies === null) {
+            $this->lies = 0;
+        }
+
+        if($this->rebeches === null) {
+            $this->rebeches = 0;
+        }
     }
 
     public function isValide()
