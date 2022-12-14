@@ -83,7 +83,6 @@ class svActions extends sfActions {
     }
 
     public function executeApporteurs(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
@@ -91,7 +90,6 @@ class svActions extends sfActions {
     }
 
     public function executeExtraction(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
         $this->url = $request->getParameter('url', null);
@@ -122,7 +120,6 @@ class svActions extends sfActions {
 
 
     public function executeSaisie(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
         $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
@@ -182,7 +179,6 @@ class svActions extends sfActions {
     }
 
     public function executeAutres(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
@@ -205,7 +201,6 @@ class svActions extends sfActions {
 
     public function executeStockage(sfWebRequest $request)
     {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
@@ -230,7 +225,6 @@ class svActions extends sfActions {
     }
 
     public function executeValidation(sfWebRequest $request) {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
         $this->svvalidation = new SVValidation($this->sv);
 
@@ -281,7 +275,6 @@ L'application de télédéclaration de production du CIVA
 
     public function executeConfirmation(sfWebRequest $request)
     {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide() === false) {
@@ -291,7 +284,6 @@ L'application de télédéclaration de production du CIVA
 
     public function executeFeedBack(sfWebRequest $request)
     {
-        $this->etablissement = $this->getRoute()->getEtablissement();
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide() === false) {
