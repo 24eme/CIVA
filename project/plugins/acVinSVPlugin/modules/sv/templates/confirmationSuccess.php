@@ -14,7 +14,7 @@
             <div class="contenu_section">
                 <div class="bloc_vert">
                     <p class="important">Votre Déclaration de Production a bien été enregistrée au CIVA.</p>
-                    <p>Vous allez recevoir d'ici quelques minutes un e-mail de confirmation avec en pièce jointe votre déclaration de Production au format PDF.</p>
+                    <p>Vous allez recevoir d'ici quelques instants un e-mail de confirmation avec en pièce jointe votre déclaration de Production au format PDF.</p>
                 </div>
             </div>
         </div>
