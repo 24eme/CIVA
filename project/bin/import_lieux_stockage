@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#if ! test "$1"; then
-#    bash bin/download_data
-#fi
-
-cat data/import/Tiers/lieux_stockages_campagne2014.csv | sed -r 's/[ ]+/ /g' | sed 's/; /;/g' | sed 's/ ;/;/g' | sort -t ";" -k 3,3 > /tmp/lieux_stockages.csv
-
-php symfony import:LieuxStockages /tmp/lieux_stockages.csv

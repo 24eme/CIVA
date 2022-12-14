@@ -15,11 +15,11 @@ class SVClient extends acCouchdbClient {
         return acCouchdbManager::getClient("SV");
     }
 
-    public function findByIdentifiantAndCampagne($identifiant, $campagne)
+    public function findByIdentifiantAndCampagne($identifiantEtablissement, $campagne)
     {
-        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
+        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiantEtablissement);
 
-        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->identifiant.'-'.$campagne);
+        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->cvi.'-'.$campagne);
     }
 
     public static function getTypeByEtablissement($etablissement) {
@@ -45,11 +45,12 @@ class SVClient extends acCouchdbClient {
         return $now > $ouverture && $now < $fermeture;
     }
 
-    public function createSV($identifiant, $campagne) {
-        $sv = new SV();
-        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiant);
+    public function createSV($identifiantEtablissement, $campagne) {
+        $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiantEtablissement);
 
-        $sv->identifiant = $etablissement->identifiant;
+        $sv = new SV();
+        $sv->identifiant = $etablissement->cvi;
+        $sv->id_etablissement = $etablissement->_id;
         $sv->type = SVClient::getTypeByEtablissement($etablissement);
         $sv->periode = $campagne;
         $sv->campagne = ''.$campagne.'-'.($campagne+1);
@@ -60,12 +61,11 @@ class SVClient extends acCouchdbClient {
         return $sv;
     }
 
-    public function createFromDR($identifiant, $campagne)
+    public function createFromDR($identifiantEtablissement, $campagne)
     {
-        $sv = $this->createSV($identifiant, $campagne);
+        $sv = $this->createSV($identifiantEtablissement, $campagne);
 
-        $etablissement = $sv->getEtablissementObject();
-        $cvi_acheteur = $etablissement->getCvi();
+        $cvi_acheteur = $sv->identifiant;
         if(!$cvi_acheteur) {
             return;
         }
@@ -185,8 +185,8 @@ class SVClient extends acCouchdbClient {
         return CsvFileAcheteur::identifyProductCSV($line);
     }
 
-    public function createFromCSV($identifiant, $campagne, CsvFileAcheteur $csv) {
-        $sv = $this->createSV($identifiant, $campagne);
+    public function createFromCSV($identifiantEtablissement, $campagne, CsvFileAcheteur $csv) {
+        $sv = $this->createSV($identifiantEtablissement, $campagne);
 
         foreach ($csv->getCsv() as $line) {
             if(!preg_match('/^[0-9]+/', $line[0])) {

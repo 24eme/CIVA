@@ -74,25 +74,25 @@ EOF;
     $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
 
     if(!$etablissement) {
-      $this->logLignes("ERROR", sprintf("Pas trouvé", $cvi), $lines);
+      //$this->logLignes("ERROR", sprintf("Pas trouvé", $cvi), $lines);
 
       return;
     }
 
-    if(!$etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
-      $this->logLignes("ERROR", sprintf("Ne fait pas de DS propriété", $cvi), $lines);
+    if(!$etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE) && !$etablissement->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
+      //$this->logLignes("ERROR", sprintf("Ne fait pas de DS propriété", $cvi), $lines);
 
       return;
     }
 
     if(!$etablissement->isActif()) {
-        $this->logLignes("ERROR", sprintf("L'établissement n'est pas actif", $cvi), $lines);
+        //$this->logLignes("ERROR", sprintf("L'établissement n'est pas actif", $cvi), $lines);
 
         return;
     }
 
     if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COOPERATIVE) {
-      $this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
+      //$this->logLignes("INFO", sprintf("Cave coop %s", $cvi), $lines);
     }
 
     $etablissement->removeLieuxStockage($cvi);
@@ -127,18 +127,13 @@ EOF;
       throw new sfException(sprintf("Le CVI '%s' n'est pas compris dans le numéro d'installation '%s'", $line[self::CSV_CVI], $line[self::CSV_NUMERO_INSTALLATION]));
     }
 
-    if(preg_match("/supprimée/", $line[self::CSV_COMMUNE])) {
-        $this->logLignes("WARNING", sprintf("Le lieu de stockage a été supprimée"), array($line));
-        return;
-    }
-
     if(trim($line[self::CSV_CODE_POSTAL])) {
       $code_postal = trim($line[self::CSV_CODE_POSTAL]);
     } else {
       $code_postal = $etablissement->siege->code_postal;
     }
 
-    $commune = trim($line[self::CSV_COMMUNE]);
+    $commune = trim(preg_replace("/\(supprim[ée]?e\)/i", "", $line[self::CSV_COMMUNE]));
     $adresse = strtoupper(trim($line[self::CSV_ADRESSE]));
     $adresse = strtoupper(trim(preg_replace("/".$commune."$/", "", $adresse)));
     $adresse = strtoupper(trim(preg_replace("/".$code_postal."$/", "", $adresse)));

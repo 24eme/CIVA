@@ -17,6 +17,7 @@ SV:
                   '*': { }
       type: { }
       identifiant: {  }
+      id_etablissement: {  }
       campagne: {  }
       periode: {  }
       numero_archive: {  }
