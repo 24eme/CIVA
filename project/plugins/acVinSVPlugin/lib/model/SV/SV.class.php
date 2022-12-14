@@ -184,7 +184,7 @@ class SV extends BaseSV
         $lieux = [];
 
         foreach ($this->stockage as $stockage) {
-            if ($stockage->isPrincipale() || empty($stockage->produits->toArray()) === false) {
+            if ($stockage->isPrincipale() || ($stockage->exist('produits') && empty($stockage->produits->toArray()) === false)) {
                 $lieux[] = $stockage;
             }
         }
