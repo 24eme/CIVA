@@ -98,7 +98,7 @@ class ExportSVPdf extends ExportDocument
         if ($this->declaration->valide->date_saisie) {
 
             $date = new DateTime($this->declaration->valide->date_saisie);
-            $titre .= sprintf(" validée le %s", IntlDateFormatter::formatObject($date, "d MMMM y", 'fr_FR'));
+            $titre .= sprintf(" validée le %s", $date->format("d/m/Y"));
         }
         return $titre;
     }
