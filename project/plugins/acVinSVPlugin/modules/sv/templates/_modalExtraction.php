@@ -5,9 +5,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <a href="<?php echo ($url) ? $url : url_for('sv_apporteurs', $sv) ?>"  class="close"><span aria-hidden="true">&times;</span></a>
-        <h4 class="modal-title" id="gridSystemModalLabel">Paramétrage des taux d'extraction globaux</h4>
+        <h3 class="modal-title" id="gridSystemModalLabel">Paramétrage des taux d'extraction réels</h3>
       </div>
       <div class="modal-body">
+        <p style="margin-bottom: 15px;"> Saisissez ici vos taux d'extraction réels, la conversion se fera alors automatiquemnt pour TOUS vos apports.</p>
         <form action="<?php echo url_for('sv_extraction', ['sf_subject' => $sv, 'url' => $url]) ?>" method="POST" id="form_extraction">
         <?php echo $form->renderHiddenFields() ?>
         <?php echo $form->renderGlobalErrors() ?>
