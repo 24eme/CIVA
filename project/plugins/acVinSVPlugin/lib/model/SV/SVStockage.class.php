@@ -12,7 +12,7 @@ class SVStockage extends BaseSVStockage {
     }
 
     public function getProduits() {
-        if(!$this->isPrincipale()) {
+        if(!$this->isPrincipale() && $this->exist('produits')) {
 
             return $this->_get('produits');
         }
