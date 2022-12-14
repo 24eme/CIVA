@@ -36,7 +36,7 @@
     <!-- fin #application_sv -->
 
     <ul id="btn_etape" class="btn_prev_suiv clearfix">
-      <li class="prec"><a href="<?php echo url_for('mon_espace_civa_production', $etablissement) ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" name="boutons[previous]" /></a></li>
+      <li class="prec"><a href="<?php echo url_for('mon_espace_civa_production', $sv->etablissement) ?>"><img src="/images/boutons/btn_retourner_mon_espace.png" alt="Retourner à mon espace CIVA" name="boutons[previous]" /></a></li>
     </ul>
 
 </form>
