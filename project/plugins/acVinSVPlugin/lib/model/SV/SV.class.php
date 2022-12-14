@@ -168,6 +168,11 @@ class SV extends BaseSV
         return empty($this->produits_rebeches) === false;
     }
 
+    public function hasCremantInProduits()
+    {
+        return count(array_filter($this->getDocument()->getRecapProduits(), function ($v, $k) { return strpos($k, '/CREMANT/') !== false; }, ARRAY_FILTER_USE_BOTH)) > 0;
+    }
+
     public function calculateRebeches()
     {
         $total_rebeches = $this->getDocument()->rebeches ?? null;
@@ -219,10 +224,10 @@ class SV extends BaseSV
     }
 
     public function getRebeches() {
-        if($this->getDocument()->hasRebechesInProduits()) {
-            $this->getDocument()->rebeches = $this->getDocument()->calculateRebeches();
+        if($this->hasRebechesInProduits()) {
+            $this->rebeches = $this->calculateRebeches();
         }
 
-        return $this->getDocument()->_get('rebeches');
+        return $this->_get('rebeches');
     }
 }

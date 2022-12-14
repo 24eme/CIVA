@@ -37,24 +37,14 @@ class SVValidation extends DocumentValidation
             $this->addPoint('erreur', 'lies_vides', 'Saisir les lies et bourbes', $this->generateUrl('sv_autres', $this->document));
         }
 
-        if ($this->document->hasRebechesInProduits()) {
-           // Si rebeches sans crémant: si array_filter ressort 0 produits, alors pas de crémant
-           if (count(array_filter($this->document->getRecapProduits(), function ($k) {
-               // on filtre sur les produit crémant et qui ne sont pas cépage rebeches
-               return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false;
-           }, ARRAY_FILTER_USE_KEY)) === 0) {
-               $this->addPoint('erreur', 'rebeches_cremant_manquant', 'Modifier les rebêches', $this->generateUrl('sv_autres', $this->document));
-           }
+        // si on n'a pas de crémant mais des rebêches
+        if (!$this->document->hasCremantInProduits() && $this->document->rebeches) {
+           $this->addPoint('erreur', 'rebeches_cremant_manquant', 'Modifier les rebêches', $this->generateUrl('sv_autres', $this->document));
         }
 
-        if ($this->document->hasRebechesInProduits() === false) {
-            // si on n'a pas de rebeches mais du crémant
-            if (count(array_filter($this->document->getRecapProduits(), function ($k) {
-                // on filtre sur les produit crémant et qui ne sont pas cépage rebeches
-                return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false;
-            }, ARRAY_FILTER_USE_KEY)) > 0) {
-               $this->addPoint('erreur', 'cremant_rebeches_manquant', 'Saisir les rebêches', $this->generateUrl('sv_autres', $this->document));
-            }
+        // si on n'a pas de rebeches mais du crémant
+        if ($this->document->hasCremantInProduits() && !$this->document->rebeches) {
+           $this->addPoint('erreur', 'cremant_rebeches_manquant', 'Saisir les rebêches', $this->generateUrl('sv_autres', $this->document));
         }
     }
 }

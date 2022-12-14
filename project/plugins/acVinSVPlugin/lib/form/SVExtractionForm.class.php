@@ -19,7 +19,7 @@ class SVExtractionForm extends acCouchdbForm
             }
 
             $formProduitTauxExtraction = new BaseForm();
-            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ['placeholder' => 130]));
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], []));
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
             $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
 
