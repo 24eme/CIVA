@@ -7,11 +7,11 @@
 <?php if ($sv->isValide()): ?>
 <h3>Visualisation de la déclaration de production <?php echo $sv->campagne ?></h3>
 
-<p style="margin-bottom: 15px;">Texte intro</p>
+<p style="margin-bottom: 15px;">Vous avez déjà validé votre déclaration de production. Vous ne pouvez plus la modifier, mais juste la consulter et l'imprimer. En cas de problème, contactez au CIVA Dominique WOLFF ou Marco RIBEIRO.</p>
 <?php else: ?>
 <h3>Validation de la déclaration de production <?php echo $sv->campagne ?></h3>
 
-<p style="margin-bottom: 15px;">Texte intro</p>
+<p style="margin-bottom: 15px;">Veuillez vérifier les informations saisies avant de valider votre déclaration. Vous pouvez à tout moment visualiser votre déclaration de production au format PDF en cliquant sur le bouton "Prévisualiser' en bas de l'écran.</p>
 <?php endif; ?>
 
 <?php include_partial('document_validation/validationBootstrap', ['validation' => $svvalidation]) ?>
