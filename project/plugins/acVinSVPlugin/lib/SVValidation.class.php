@@ -5,6 +5,7 @@ class SVValidation extends DocumentValidation
     public function configure()
     {
         $this->addControle('erreur', 'apporteurs_complet', "Toutes les données des apporteurs n'ont pas été saisies");
+        $this->addControle('erreur', 'apporteurs_coherent_sv11', "Il y a des incohérences entre le volume récolté, revendiqué, détruit et le VCI");
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
         $this->addControle('erreur', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
         $this->addControle('erreur', 'rebeches_cremant_manquant', "Vous avez déclaré des rebêches alors que vous ne produisez pas de Crémant");
@@ -16,6 +17,20 @@ class SVValidation extends DocumentValidation
         foreach($this->document->apporteurs as $apporteur) {
             if(!$apporteur->isComplete()) {
                 $this->addPoint('erreur', 'apporteurs_complet', "Terminer la saisie", $this->generateUrl('sv_apporteurs', $this->document));
+                break;
+            }
+
+            foreach($apporteur->getProduits() as $produit) {
+                if($this->document->type != SVClient::TYPE_SV11) {
+                    continue;
+                }
+                if($produit->isRebeche()) {
+                    continue;
+                }
+                if(round($produit->volume_recolte,  2) == round($produit->volume_revendique + $produit->volume_detruit + $produit->vci, 2)) {
+                    continue;
+                }
+                $this->addPoint('erreur', 'apporteurs_coherent_sv11', $apporteur->getNom().', '.$produit->getLibelle(), $this->generateUrl('sv_saisie', array('sf_subject' => $this->document, 'cvi' => $apporteur->getKey())));
                 break;
             }
         }
