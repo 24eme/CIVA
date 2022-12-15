@@ -9,6 +9,10 @@ class SVClient extends acCouchdbClient {
     const CSV_ERROR_APPORTEUR = "CSV_ERROR_APPORTEUR";
     const CSV_ERROR_PRODUIT   = "CSV_ERROR_PRODUIT";
     const CSV_ERROR_VOLUME    = "CSV_ERROR_VOLUME";
+    const CSV_ERROR_SUPERFICIE  = "CSV_ERROR_SUPERFICIE";
+    const CSV_ERROR_QUANTITE = "CSV_ERROR_QUANTITE";
+    const CSV_ERROR_VOLUME_REVENDIQUE_SV11 = "CSV_ERROR_VOLUME_REVENDIQUE_SV11";
+    const CSV_ERROR_VOLUME_REVENDIQUE_SV12 = "CSV_ERROR_VOLUME_REVENDIQUE_SV12";
 
     public static function getInstance()
     {
@@ -244,7 +248,7 @@ class SVClient extends acCouchdbClient {
         return round(str_replace(",", ".", $value)*1, 2);
     }
 
-    public function checkCSV(CsvFileAcheteur $csv, $identifiant, $campagne)
+    public function checkCSV(CsvFileAcheteur $csv, $identifiant, $campagne, $type)
     {
         $check = [];
         $i = 0;
@@ -272,32 +276,47 @@ class SVClient extends acCouchdbClient {
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
 
             if(! $apporteur) {
-                $check[self::CSV_ERROR_APPORTEUR][] = [$i, $line[CsvFileAcheteur::CSV_RECOLTANT_CVI], 'Apporteur non reconnu : '.$line[CsvFileAcheteur::CSV_RECOLTANT_CVI]];
+                $check[self::CSV_ERROR_APPORTEUR][] = [$i];
                 continue;
             }
 
             $produit = CsvFileAcheteur::identifyProductCSV($line);
 
             if(! $produit) {
-                $check[self::CSV_ERROR_PRODUIT][] = [$i, $line[CsvFileAcheteur::CSV_APPELLATION], "Produit non reconnu : ".$line[CsvFileAcheteur::CSV_APPELLATION]];
+                $check[self::CSV_ERROR_PRODUIT][] = [$i];
                 continue;
             }
 
-            if ($line[CsvFileAcheteur::CSV_VOLUME] <= 0) {
-                $check[self::CSV_ERROR_VOLUME][] = [$i, $line[CsvFileAcheteur::CSV_VOLUME], "Le volume ne peut pas être nul"];
+            if (strpos($produit->getKey(), 'RB') !== 0 && $line[CsvFileAcheteur::CSV_SUPERFICIE] <= 0) {
+                $check[self::CSV_ERROR_SUPERFICIE][] = [$i];
             }
 
-            $volume = $line[CsvFileAcheteur::CSV_VOLUME];
-            if (isset($line[CsvFileAcheteur::CSV_VOLUME_DPLC])) {
-                $volume -= (float) $line[CsvFileAcheteur::CSV_VOLUME_DPLC];
-            }
-            if (isset($line[CsvFileAcheteur::CSV_VOLUME_VCI])) {
-                $volume -= (float) $line[CsvFileAcheteur::CSV_VOLUME_VCI];
+            if($type == SVClient::TYPE_SV11) {
+                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
+                    $check[self::CSV_ERROR_VOLUME][] = [$i];
+                }
+                $volume = $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
+                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
+                    $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC];
+                }
+                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI])) {
+                    $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VCI];
+                }
+                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT])) {
+                    $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT];
+                }
+                if (strpos($produit->getKey(), 'RB') !== 0 && round($volume, 2) != 0) {
+                    $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
+                }
             }
 
-            if ($volume <= 0)
-            {
-                $check[self::CSV_ERROR_VOLUME][] = [$i, $volume, "Le volume revendiqué ne peut pas être nul"];
+            if($type == SVClient::TYPE_SV12) {
+                if ($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0) {
+                    $check[self::CSV_ERROR_QUANTITE][] = [$i];
+                }
+                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0) {
+                    $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV12][] = [$i];
+                }
             }
         }
 
