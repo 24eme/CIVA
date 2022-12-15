@@ -47,8 +47,8 @@
 			</td>
 			<?php endif; ?>
 			<td class="millesime">
-                <?php if($vrac->isPluriannuelCadre()): ?>
-                2022 à 2024
+                <?php if($vrac->isPluriannuelCadre()): $campagnes = VracSoussignesForm::getCampagnesChoices(); ?>
+                <?php echo $campagnes[$vrac->campagne] ?>
                 <?php else: ?>
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
 				<?php echo $embedForm['millesime']->render(array("maxlength" => 4)) ?>
