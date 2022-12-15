@@ -161,7 +161,7 @@ class SVClient extends acCouchdbClient {
     protected function formatDenomination($denomination) {
         $denoms = array();
 
-        if(preg_match('/VIEILLES?[ ]*VIGNES?/i', $denomination)) {
+        if(preg_match('/VIEI?LLES?[ ]*VIGNES?/i', $denomination)) {
             $denoms[] = 'VIEILLES VIGNES';
         }
 
