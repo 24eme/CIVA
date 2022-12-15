@@ -105,6 +105,9 @@ class ExportSVPdf extends ExportDocument
 
     protected function getHeader()
     {
+        if ($this->declaration->isValide() === false) {
+            return 'BROUILLON';
+        }
     }
 
     public function generatePDF()
