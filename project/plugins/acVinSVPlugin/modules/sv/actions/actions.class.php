@@ -249,7 +249,7 @@ class svActions extends sfActions {
 
         $message = "Bonjour,
 
-Vous venez de valider votre déclaration de production pour l'année ".$this->sv->periode." a été validée.
+Vous venez de valider votre déclaration de production pour l'année ".$this->sv->periode.".
 
 Vous trouverez ci-joint votre déclaration au format PDF
 
