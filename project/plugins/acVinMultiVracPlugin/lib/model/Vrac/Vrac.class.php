@@ -517,6 +517,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->updateValideStatut();
     }
 
+	public function signerAutomatiquement($date = null) {
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
+		$this->valide->date_validation_vendeur = $date;
+		$this->valide->date_validation_acheteur = $date;
+        if ($this->mandataire_identifiant) {
+		    $this->valide->date_validation_mandataire = $date;
+        }
+		$this->declaration->cleanAllNodes();
+		$this->updateValideStatut();
+		$this->valide->date_validation = $date;
+    }
+
     public function updateValideStatut()
     {
     	$valide = true;
