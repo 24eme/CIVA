@@ -317,6 +317,10 @@ class SVClient extends acCouchdbClient {
                 if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV12][] = [$i];
                 }
+
+                if (strpos($produit->getHash(), '/cepages/RB') !== false) {
+                    $check[self::CSV_ERROR_PRODUIT] = [$i];
+                }
             }
         }
 
