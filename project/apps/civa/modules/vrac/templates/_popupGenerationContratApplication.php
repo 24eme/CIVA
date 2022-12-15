@@ -9,12 +9,12 @@
             	<thead>
             		<tr>
             			<th class="produit">Produits</th>
-            			<th class="volume"><span>Volume estimé</span></th>
+            			<th class="volume"><span><?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>Surface engagée<?php else: ?>Volume estimé<?php endif; ?></span></th>
             			<th class="prix"><span>Prix</span></th>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<th class="volume"><span>Volume</span></th>
             			<th class="prix"><span>Prix</span></th>
-                        <?php elseif ($form->getObject()->contrat_pluriannuel_mode_surface): ?>
+                        <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
             			<th class="volume"><span>Volume</span></th>
                         <?php endif; ?>
             		</tr>
@@ -32,7 +32,11 @@
                             <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
                         </td>
             			<td class="volume">
-        				    <?php echo $detail->volume_propose; ?>&nbsp;hl
+                            <?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
+                                <?php echo $detail->surface_propose; ?>&nbsp;ares
+                            <?php else: ?>
+                                <?php echo $detail->volume_propose; ?>&nbsp;hl
+                            <?php endif; ?>
             			</td>
             			<td class="prix">
             				<?php echo $detail->prix_unitaire; ?>&nbsp;&euro;/hl
@@ -40,16 +44,16 @@
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<td class="volume">
         				    <span><?php echo $embedForm['volume_propose']->renderError() ?></span>
-        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;hl
+        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null, 'style' => 'width:58px;')) ?>&nbsp;hl
             			</td>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
             				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;&euro;/hl
             			</td>
-                        <?php elseif ($form->getObject()->contrat_pluriannuel_mode_surface): ?>
+                    <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
             			<td class="volume">
         				    <span><?php echo $embedForm['volume_propose']->renderError() ?></span>
-        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;hl
+        				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'value' => null, 'style' => 'width:58px;')) ?>&nbsp;hl
             			</td>
                         <?php endif; ?>
             		</tr>
