@@ -79,7 +79,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1], 'required' => false)));
         $this->getWidgetSchema()->setLabel('contrat_pluriannuel_mode_surface', "Vous contractualisez sur :");
 
-        $campagnes = $this->getCampagnesChoices();
+        $campagnes = self::getCampagnesChoices();
         $this->setWidget('campagne', new sfWidgetFormChoice(array('choices' => $campagnes)));
         $this->setValidator('campagne', new sfValidatorChoice(array('choices' => array_keys($campagnes), 'required' => false)));
         $this->getWidgetSchema()->setLabel('campagne', "Campagnes d'application :");
@@ -88,13 +88,13 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
 
-    public function getCurrentCampagne() {
+    public static function getCurrentCampagne() {
         $campagne_manager = new CampagneManager('12-01');
         return $campagne_manager->getCampagneByDate(date('Y-m-d'));
     }
 
-    protected function getCampagnesChoices() {
-        $campagne = $this->getCurrentCampagne();
+    public static function getCampagnesChoices() {
+        $campagne = self::getCurrentCampagne();
         $millesime = substr($campagne, 0, 4) * 1;
         $campagnes = [];
         for($i=$millesime; $i<=$millesime+1; $i++) {
@@ -117,7 +117,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         }
         if ($this->getObject()->isNew()) {
         	$defaults['contrat_pluriannuel'] = 0;
-            $defaults['campagne'] = $this->getCurrentCampagne();
+            $defaults['campagne'] = self::getCurrentCampagne();
             $defaults['contrat_pluriannuel_mode_surface'] = 0;
         }
         $this->setDefaults($defaults);
