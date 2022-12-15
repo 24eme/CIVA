@@ -272,6 +272,12 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$nextContratApplication = $this->form->save();
+                if ($nextContratApplication->isPremiereApplication() && !$nextContratApplication->getContratPluriannuelCadre()->isInModeSurface()) {
+                    $nextContratApplication->signerAutomatiquement();
+                } else {
+                    $nextContratApplication->signer($nextContratApplication->createur_identifiant);
+                }
+                $nextContratApplication->save();
 				$this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès.');
        			return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
         	}

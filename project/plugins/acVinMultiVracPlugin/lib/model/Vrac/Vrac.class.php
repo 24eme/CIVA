@@ -517,6 +517,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->updateValideStatut();
     }
 
+	public function signerAutomatiquement($date = null) {
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
+		$this->valide->date_validation_vendeur = $date;
+		$this->valide->date_validation_acheteur = $date;
+        if ($this->mandataire_identifiant) {
+		    $this->valide->date_validation_mandataire = $date;
+        }
+		$this->declaration->cleanAllNodes();
+		$this->updateValideStatut();
+		$this->valide->date_validation = $date;
+    }
+
     public function updateValideStatut()
     {
     	$valide = true;
@@ -737,6 +751,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     protected function preSave()
     {
         $this->archivage_document->preSave();
+        $visaChange = false;
         if (!$this->numero_visa && $this->numero_archive) {
     		$this->numero_visa = $this->numero_archive;
     		$prefixe = self::PREFIXE_NUMERO;
@@ -744,6 +759,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     			$prefixe++;
     		}
             $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
+            $visaChange = true;
     	}
         if(!$this->numero_db2 && $this->numero_archive){
                 $this->numero_visa = $this->numero_archive;
@@ -752,8 +768,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	    			$prefixe++;
 	    		}
                 $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
+                $visaChange = true;
         }
-        if ($this->isApplicationPluriannuel()) {
+        if ($this->isApplicationPluriannuel() && $visaChange) {
             $reference = $this->getContratDeReference();
             $this->numero_visa = $reference->numero_visa.'-'.substr($this->campagne, 0, 4);
         }
@@ -921,6 +938,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $vrac->numero_visa = null;
         $vrac->numero_db2 = null;
 		$vrac->contrat_pluriannuel_mode_surface = 0;
+        $vrac->remove('valide');
+        $vrac->add('valide');
+        $vrac->valide->statut = self::STATUT_CREE;
         $vrac->constructId();
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {

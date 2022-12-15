@@ -42,12 +42,21 @@ class vrac_exportActions extends sfActions
     public function executeAnnexe(sfWebRequest $request)
     {
         $type_contrat = $request->getParameter('type_contrat', VracClient::TYPE_VRAC);
-        @$document = new PageablePDF("VERSO DU CONTRAT DE VENTE EN VRAC", "DE VINS AOC PRODUITS EN ALSACE", "verso_contrat_".$type_contrat.".pdf", null, ' de ', 'P', ExportVracPdf::getConfig());
-        $document->addPage($this->getPartial('vrac_export/annexe', array('type_contrat' => $type_contrat, 'clause_reserve_propriete' => $request->getParameter('clause_reserve_propriete', false))));
-        $document->generatePDF();
-        $document->addHeaders($this->getResponse());
-
-        return $this->renderText(@$document->output());
+        if($type_contrat == VracClient::TYPE_VRAC){
+          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_vrac_verso.pdf';
+          $filename = 'contrat_de_vente_annuel_vrac_verso.pdf';
+        }
+        if($type_contrat == VracClient::TYPE_BOUTEILLE){
+          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_bouteille_verso.pdf';
+          $filename = 'contrat_de_vente_annuel_bouteille_verso.pdf';
+        }
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . basename($filename) . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($path_verso));
     }
 
     public function executeMain()

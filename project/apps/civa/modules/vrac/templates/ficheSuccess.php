@@ -144,7 +144,7 @@ td.echeance {display: inline;}
                     </a>
                     <?php else: ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
-						<img alt="Valider le contrat" src="/images/boutons/btn_signer.png">
+                        <button class="btn_majeur btn_vert btn_grand btn_upper_case"><?php if($vrac->isApplicationPluriannuel()): ?>Valider<?php else: ?>Signer<?php endif; ?></button>
 					</a>
                     <?php endif; ?>
 				<?php endif; ?>
