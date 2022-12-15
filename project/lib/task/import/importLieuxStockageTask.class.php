@@ -49,7 +49,8 @@ EOF;
 
     $file = [];
 
-    if ($json = json_decode(file_get_contents($arguments['file'])) && json_last_error() === JSON_ERROR_NONE) {
+    $json = json_decode(file_get_contents($arguments['file']));
+    if (json_last_error() === JSON_ERROR_NONE) {
         // on transforme le json en tableau
         foreach ($json as $operateur) {
             if (empty($operateur->installations)) {
