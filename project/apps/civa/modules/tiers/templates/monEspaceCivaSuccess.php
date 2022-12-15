@@ -48,11 +48,12 @@
                 </div>
             </div>
             <?php $i = $i -1 ?>
+            <?php $sv = SVClient::getInstance()->findByIdentifiantAndCampagne(SVClient::getInstance()->getEtablissement($compte->getSociete())->identifiant, CurrentClient::getCurrent()->campagne); ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Production</div>
                 <div class="bloc_acceuil_content">
-                    <?php if (SVClient::getInstance()->isTeledeclarationOuverte()): ?>
+                    <?php if (SVClient::getInstance()->isTeledeclarationOuverte() && (!$sv || !$sv->isValide())): ?>
                         <p><strong>À valider</strong> avant le 9 janvier 2023 minuit</p>
                     <?php else: ?>
                         <p class="mineure">Aucune information à signaler</p>
