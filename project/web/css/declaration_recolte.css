@@ -561,8 +561,8 @@ input.btn_inactif {
 #main_nav #onglets_majeurs li a { background: #bcbdbc; }
 
 #main_nav #onglets_majeurs li a {
-	padding-left: 11px;
-	padding-right: 11px;
+	padding-left: 9px;
+	padding-right: 9px;
 }
 
 #main_nav #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
