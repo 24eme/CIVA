@@ -15,7 +15,7 @@ class importLieuxStockageTask extends importAbstractTask
   {
     // // add your own arguments here
     $this->addArguments(array(
-       new sfCommandArgument('file', sfCommandArgument::REQUIRED, "Fichier csv pour l'import"),
+       new sfCommandArgument('file', sfCommandArgument::REQUIRED, "Fichier csv ou json pour l'import"),
     ));
 
     $this->addOptions(array(
@@ -46,7 +46,32 @@ EOF;
     $i = 1;
     $cvi = null;
     $lines = array();
-    $file = file($arguments['file']);
+
+    $file = [];
+
+    if ($json = json_decode(file_get_contents($arguments['file'])) && json_last_error() === JSON_ERROR_NONE) {
+        // on transforme le json en tableau
+        foreach ($json as $operateur) {
+            if (empty($operateur->installations)) {
+                continue;
+            }
+
+            foreach ($operateur->installations as $installation) {
+                $file[] = implode(';', [
+                    $operateur->numeroCvi,
+                    $operateur->libelleEvv,
+                    $installation->numeroInstallation,
+                    trim($installation->lieuAdresse1.' '.$installation->lieuAdresse2),
+                    $installation->lieuCodePostal,
+                    $installation->libelleVille,
+                    ''
+                ]);
+            }
+        }
+    } else {
+        $file = file($arguments['file']);
+    }
+
     //$file[] = "7523700100;GARAGE ACTUALYS;7523700100001;1 RUE GARNIER;75000 PARIS;Installation Mixte\n";
     //$file[] = "7523700100;CAVE ACTUALYS;7523700100002;1 RUE DES VIGNES;75000 PARIS;Installation Mixte\n";
 

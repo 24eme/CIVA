@@ -92,7 +92,7 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
         $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
-        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
     }
 
     public function executeExtraction(sfWebRequest $request) {
@@ -100,7 +100,7 @@ class svActions extends sfActions {
 
         $this->url = $request->getParameter('url', null);
 
-        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         $this->form = new SVExtractionForm($this->sv);
 
@@ -130,7 +130,7 @@ class svActions extends sfActions {
         $this->cvi = $request->getParameter('cvi', null);
         $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
-        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         if ($this->cvi && $cvi_index = array_search($this->cvi, array_keys($this->sv->apporteurs->toArray()))) {
             $this->cvi_precedent = $this->sv->apporteurs->get($this->cvi)->getPreviousSister()->getKey();
@@ -187,7 +187,7 @@ class svActions extends sfActions {
     public function executeAutres(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
-        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         $this->form = new SVAutreForm($this->sv);
 
@@ -209,7 +209,7 @@ class svActions extends sfActions {
     {
         $this->sv = $this->getRoute()->getSV();
 
-        if ($this->sv->isValide()) { return $this->redirect('sv_validation', ['id' => $this->sv->_id]); }
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         $this->recapProduits = $this->sv->getRecapProduits();
         $this->form = new SVStockageForm($this->sv);
@@ -233,6 +233,8 @@ class svActions extends sfActions {
     public function executeValidation(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
         $this->svvalidation = new SVValidation($this->sv);
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         if (! $request->isMethod(sfWebRequest::POST)) {
             return sfView::SUCCESS;
@@ -345,6 +347,17 @@ L'application de télédéclaration de production du CIVA
         $this->document->generatePDF();
         $this->document->addHeaders($this->getResponse());
         return $this->renderText($this->document->output());
+    }
+
+    public function executeVisualisation(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide() === false) {
+            return $this->redirect('sv_validation', $this->sv);
+        }
+
+        $this->svvalidation = new SVValidation($this->sv);
     }
 
     public function executeInvaliderCiva(sfWebRequest $request)

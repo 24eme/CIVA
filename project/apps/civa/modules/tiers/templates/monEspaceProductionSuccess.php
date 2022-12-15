@@ -24,7 +24,7 @@
               <?php if ($sv): ?>
                 <?php if ($sv->isValide()): ?>
                     <div class="ligne_form ligne_btn">
-                        <a class="btn btn_petit btn_majeur btn_vert" href="<?php echo url_for('sv_validation', $sv) ?>">Visualiser</a>
+                        <a class="btn btn_petit btn_majeur btn_vert" href="<?php echo url_for('sv_visualisation', $sv) ?>">Visualiser</a>
                         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
                             <a class="btn btn_petit btn_majeur btn_jaune" href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Êtes-vous sur de vouloir dévalider cette déclaration ?')">Dévalider</a>
                         <?php endif; ?>
