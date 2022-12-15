@@ -751,6 +751,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     protected function preSave()
     {
         $this->archivage_document->preSave();
+        $visaChange = false;
         if (!$this->numero_visa && $this->numero_archive) {
     		$this->numero_visa = $this->numero_archive;
     		$prefixe = self::PREFIXE_NUMERO;
@@ -758,6 +759,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     			$prefixe++;
     		}
             $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
+            $visaChange = true;
     	}
         if(!$this->numero_db2 && $this->numero_archive){
                 $this->numero_visa = $this->numero_archive;
@@ -766,8 +768,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	    			$prefixe++;
 	    		}
                 $this->numero_db2 = sprintf('%06d', $prefixe.$this->numero_archive);
+                $visaChange = true;
         }
-        if ($this->isApplicationPluriannuel()) {
+        if ($this->isApplicationPluriannuel() && $visaChange) {
             $reference = $this->getContratDeReference();
             $this->numero_visa = $reference->numero_visa.'-'.substr($this->campagne, 0, 4);
         }
