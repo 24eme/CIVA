@@ -60,24 +60,30 @@ class svActions extends sfActions {
         $filepath = sfConfig::get('sf_data_dir').'/upload/'.$request->getParameter('hash');
         $this->csv = new CsvFileAcheteur($filepath);
 
+        $this->sv = SVClient::getInstance()->createSV(
+            $this->etablissement->identifiant,
+            $request->getParameter('campagne'),
+        );
+
         $this->verify = SVClient::getInstance()->checkCSV(
             $this->csv,
             $this->etablissement->cvi,
-            $request->getParameter('campagne')
+            $request->getParameter('campagne'),
+            SVClient::getTypeByEtablissement($this->etablissement)
         );
 
         if (empty($this->verify)) {
-            $sv = SVClient::getInstance()->createFromCSV(
+            $this->sv = SVClient::getInstance()->createFromCSV(
                 $this->etablissement->identifiant,
                 $request->getParameter('campagne'),
                 $this->csv
             );
 
-            $sv->save();
+            $this->sv->save();
 
             return $this->redirect(
                 SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
-                ['id' => $sv->_id]
+                ['id' => $this->sv->_id]
             );
         }
     }

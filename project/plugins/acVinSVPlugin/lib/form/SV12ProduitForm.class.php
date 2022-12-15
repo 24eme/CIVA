@@ -17,9 +17,6 @@ class SV12ProduitForm extends acCouchdbObjectForm
         $this->setWidget('taux_extraction', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_taux_extraction', 'readonly' => 'readonly', 'tabindex' => -1)));
         $this->setValidator('taux_extraction', new sfValidatorNumber(array('required' => false)));
 
-        $this->setWidget('volume_recolte', new bsWidgetFormInputFloat(array(), array('placeholder' => 'hl', 'class' => 'form-control text-right input-float')));
-        $this->setValidator('volume_recolte', new sfValidatorNumber(array('required' => false)));
-
         $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique', 'disabled' => $this->getObject()->isRebeche()]));
         $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
 
