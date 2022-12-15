@@ -43,7 +43,7 @@ class VracProduitForm extends acCouchdbObjectForm
             $this->setWidget('label', new sfWidgetFormInputHidden());
             if ($this->getObject()->getDocument()->isPremiereApplication()) {
                 $this->setWidget('prix_unitaire', new sfWidgetFormInputHidden());
-                if (!$this->getObject()->getDocument()->isInModeSurface()) {
+                if ($this->getObject()->getDocument()->getContratPluriannuelCadre() && !$this->getObject()->getDocument()->getContratPluriannuelCadre()->isInModeSurface()) {
                     $this->setWidget('volume_propose', new sfWidgetFormInputHidden());
                 }
             }
