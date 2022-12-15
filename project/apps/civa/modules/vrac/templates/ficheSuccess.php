@@ -30,8 +30,8 @@ td.echeance {display: inline;}
 		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
 			<?php if($contratApplication): ?>
                 <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>"><a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>"><?php echo $contratApplication->campagne ?></a></li>
-            <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat): ?>
-                <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="<?php if($user && $user->_id == $vrac->createur_identifiant): ?>generationContratApplication<?php endif; ?>"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
+            <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant)): ?>
+                <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
             <?php else: ?>
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="javascript:void(0)"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
 			<?php endif; ?>
