@@ -48,6 +48,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
         	'interlocuteur_commercial' => new sfValidatorChoice(array('required' => false, 'choices' => array_keys($commerciauxChoices)))
         ));
 
+		if($this->getObject()->mandataire_identifiant != $this->getObject()->createur_identifiant) {
+            unset($this->widgetSchema['interlocuteur_commercial']);
+            unset($this->validatorSchema['interlocuteur_commercial']);
+        }
+
 		if($this->getObject()->isPapier()) {
 			$this->setWidget('vendeur_recoltant_identifiant', new WidgetEtablissementSelect(array('interpro_id' => 'INTERPRO-declaration', 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
 			$this->setValidator('vendeur_recoltant_identifiant', new ValidatorEtablissement(array('required' => false, 'familles' => array(EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))));
