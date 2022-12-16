@@ -171,7 +171,13 @@ class VracClient extends acCouchdbClient {
     }
 
     public function getAtDate($date, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        return $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
+        $items = $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
+		foreach($items as $key => $item) {
+			if (strlen($key) > 16) {
+				unset($items[$key]);
+			}
+		}
+		return $items;
     }
 
 	public function buildCampagneVrac($date) {
