@@ -11,7 +11,7 @@
             <?php echo $form->renderGlobalErrors() ?>
 
             <p class="intro_contrat_vrac">Veuillez valider les volumes et prix pour l'ensemble des produits.</p>
-            <table class="etape_produits produits table_donnees">
+            <table class="validation produits table_donnees">
             	<thead>
             		<tr>
             			<th class="produit">Produits</th>
@@ -19,10 +19,10 @@
             			<th class="volume"><?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>Surface engagée<?php else: ?>Volume estimé<?php endif; ?></th>
             			<th class="prix">Prix</th>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
-            			<th class="volume"><span>Volume</span></th>
-            			<th class="prix"><span>Prix</span></th>
+            			<th class="volume">Volume</th>
+            			<th class="prix">Prix</th>
                         <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
-            			<th class="volume"><span>Volume</span></th>
+            			<th class="volume">Volume</th>
                         <?php endif; ?>
             		</tr>
             	</thead>
