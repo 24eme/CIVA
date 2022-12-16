@@ -34,7 +34,7 @@
 		<?php else: ?>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php echo ($vrac->isInModeSurface())? 'Surface' : 'Volume'; ?> estimé<br/><small>(en <?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>)</small></th>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en hl)</small></th>
-                <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;">Date<br/>de Chargt</th>
+                <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php if($vrac->isPluriannuelCadre()): ?>Période<br />Retiraison<?php else: ?>Date<br/>de Chargt<?php endif; ?></th>
         <?php endif; ?>
 	</tr>
 	<?php
