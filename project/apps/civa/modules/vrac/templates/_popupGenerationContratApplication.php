@@ -58,7 +58,7 @@
             			</td>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null)) ?>&nbsp;&euro;/hl
+            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null, 'style' => 'width:58px;')) ?>&nbsp;&euro;/hl
             			</td>
                     <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
             			<td class="volume">
