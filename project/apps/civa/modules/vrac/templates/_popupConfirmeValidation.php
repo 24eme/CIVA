@@ -6,7 +6,7 @@
             </p>
         <?php else: ?>
             <p>
-                Avant de pouvoir signer le contrat il devra être signer par le vendeur.<br /><br />
+                Avant de pouvoir signer le contrat il devra être signé par le vendeur.<br /><br />
                 Confirmez-vous la validation et l'envoi du projet au vendeur pour signature ? <br />
             </p>
         <?php endif; ?>
