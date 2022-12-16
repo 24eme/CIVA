@@ -77,6 +77,6 @@ class ExportSVCsv
         $apporteur = EtablissementClient::getInstance()->findByCvi($cvi);
         $this->apporteurs[$cvi] = $apporteur;
 
-        return $this->apporteur[$cvi]->raison_sociale;
+        return $this->apporteurs[$cvi]->raison_sociale;
     }
 }
