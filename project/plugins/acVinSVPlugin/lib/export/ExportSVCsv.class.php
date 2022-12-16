@@ -26,11 +26,11 @@ class ExportSVCsv
             $toExport = SVClient::getInstance()->getAll($campagne);
         }
 
-        foreach ($toExport as $sv) {
-            if ($sv->isValide() === false) {
-                continue;
-            }
+        if ($with_header) {
+            fputcsv($stream, $this->getHeader(), ';');
+        }
 
+        foreach ($toExport as $sv) {
             foreach ($sv->getProduits() as $produit) {
                 fputcsv($stream, $this->build($sv, $produit), ';');
             }
@@ -78,5 +78,14 @@ class ExportSVCsv
         $this->apporteurs[$cvi] = $apporteur;
 
         return $this->apporteurs[$cvi]->raison_sociale;
+    }
+
+    public function getHeader()
+    {
+        return [
+            "CVI acheteur", "Nom acheteur", "CVI récoltant", "Nom récoltant", "Appellation", "Lieu", "Cépage", "VTSGN",
+            "Dénomination", "Superficie livrée", "Qté livrée en kg", "Volume livré", "Volume à détruire", "Dont VCI",
+            "Volume revendiqué", "Type", "Date de validation", "Hash produit", "Document ID"
+        ];
     }
 }
