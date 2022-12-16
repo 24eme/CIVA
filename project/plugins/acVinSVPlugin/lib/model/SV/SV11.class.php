@@ -3,7 +3,7 @@
 class SV11 extends SV
 {
     protected $colonnes = [
-        'superficie', 'recolte', 'revendique', 'usages_industriels', 'vci'
+        'superficie', 'recolte', 'revendique', 'volume_detruit', 'vci'
     ];
 
     public function getSum()
@@ -12,7 +12,7 @@ class SV11 extends SV
             $sum['superficie'] += $p->superficie_recolte;
             $sum['recolte'] += $p->volume_recolte;
             $sum['revendique'] += $p->volume_revendique;
-            $sum['usages_industriels'] += $p->usages_industriels;
+            $sum['volume_detruit'] += $p->volume_detruit;
             $sum['vci'] += $p->vci;
 
             return $sum;
