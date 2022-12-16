@@ -31,10 +31,6 @@ class ExportSVCsv
         }
 
         foreach ($toExport as $sv) {
-            if ($sv->isValide() === false) {
-                continue;
-            }
-
             foreach ($sv->getProduits() as $produit) {
                 fputcsv($stream, $this->build($sv, $produit), ';');
             }
