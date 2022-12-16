@@ -134,7 +134,7 @@ class VracContratValidation extends DocumentValidation
         }
 
         if (count($retiraisons_incoherentes) > 0) {
-            $this->addPoint('erreur', ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0')? 'retiraisons_incoherence' : 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
+            $this->addPoint('erreur', ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0' && !$this->document->isPluriannuelCadre())? 'retiraisons_incoherence' : 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
         if ($this->document->exist('vendeur_assujetti_tva') && $this->document->vendeur_assujetti_tva === null) {
