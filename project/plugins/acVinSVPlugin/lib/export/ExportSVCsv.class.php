@@ -52,7 +52,7 @@ class ExportSVCsv
             $produit->getLibelle(),
             $produit->getConfig()->getLieu()->getLibelle(),
             $produit->getConfig()->getCepage()->getLibelle(),
-            '', //VTSGN
+            $produit->getConfig()->getMention()->getLibelle(),
             $produit->denomination_complementaire,
             $produit->superficie_recolte,
             $produit->quantite_recolte,
