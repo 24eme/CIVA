@@ -16,5 +16,10 @@ REDMINE_PREFIX=https://clients.actualys.com
 REDMINE_USER=utilisateur
 REDMINE_PASS=***********
 
+DR_CAMPAGNE="2022"
+DS_PERIODE=$(date '+%Y')"07"
+
 PATH_MISEADISPO_CIVA="web/export/XXXXXXXXXXXXXXXXXXXX"
 METABASE_SQLITE=/home/test/data/database.sqlite
+BASEDIR="/home/test/prod/project"
+GIILDA_BASEDIR="/home/test/giilda/project"
