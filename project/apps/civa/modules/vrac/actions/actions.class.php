@@ -169,6 +169,7 @@ class vracActions extends sfActions
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
+        $this->forward404Unless(!$this->vrac->hasContratApplication());
         $this->secureVrac(VracSecurity::SUPPRESSION, $this->vrac);
 
 		if ($this->vrac->isNew()) {
