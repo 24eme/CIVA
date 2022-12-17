@@ -2,21 +2,18 @@
 
 class SVCreationForm extends BaseForm
 {
-    protected $identifiant = null;
-    protected $millesime = null;
+    protected $cvi = null;
 
-    public function __construct($identifiant, $millesime)
+    public function __construct($cvi)
     {
-        $this->identifiant = $identifiant;
-        $this->millesime = $millesime;
-
+        $this->cvi = $cvi;
         parent::__construct();
     }
 
     public function configure()
     {
         $this->setWidget('file', new sfWidgetFormInputFile(array('label' => 'Fichier')));
-        $this->setValidator('file', new ValidatorImportCsv(array('file_path' => sfConfig::get('sf_data_dir').'/upload', 'required' => false)));
+        $this->setValidator('file', new ValidatorImportSVFile(array('file_path' => sfConfig::get('sf_data_dir').'/upload', 'required' => false, 'cvi' => $this->cvi)));
 
         $this->setWidget('type_creation', new sfWidgetFormChoice([
             'expanded' => true,

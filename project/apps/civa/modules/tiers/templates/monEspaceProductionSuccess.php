@@ -82,9 +82,9 @@
     <?php endif;?>
 </div>
 
-<div style="display: none" id="popup_loader_creation_sv" title="Génération de la SV">
+<div style="display: none" id="popup_loader_creation_sv" title="Génération de la déclaration de production">
     <div class="popup-loading">
-    <p>La génération de votre SV est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
+    <p>La génération de votre declaration de production est en cours.<br />Merci de patienter.<br /><small>La procédure peut prendre 30 secondes</small></p>
     </div>
 </div>
 
