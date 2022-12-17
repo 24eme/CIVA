@@ -1,3 +1,5 @@
+<?php use_helper('Date') ?>
+
 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SUPPRESSION) && !$vrac->hasContratApplication()): ?>
 	<div class="btn_header">
 		<a style="padding-left: 30px; margin-bottom: 10px;" class="btn_majeur btn_noir" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
@@ -59,18 +61,6 @@ td.echeance {display: inline;}
 			<p class="flash_message" style="margin-bottom: 20px;"><?php echo $sf_user->getFlash('notice'); ?></p>
 		<?php endif; ?>
 
-		<?php use_helper('Date') ?>
-
-		<?php if (!$vrac->isValide() && $user->_id && !$vrac->hasValide($user->_id) && !$vrac->isPluriannuelCadre()): ?>
-		<fieldset class="message">
-		    <legend class="message_title">Points de vigilance <a href="#" class="msg_aide_ds" rel="help_popup_validation_log_vigilance_ds" title="Message aide"></a></legend>
-		     <ul class="messages_log">
-		        <li>
-	                En cas d'erreur sur le contrat, veuillez contacter votre interlocuteur, le responsable du contrat.
-		        </li>
-			</ul>
-		</fieldset>
-		<?php endif; ?>
 
 		<?php
             include_partial('vrac/soussignes', array('vrac' => $vrac, 'user' => $user, 'fiche' => true));
