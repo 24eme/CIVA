@@ -239,7 +239,7 @@ class tiersActions extends sfActions {
             $this->formaction = 'mon_espace_civa_production';
         } else {
             // redirigé vers sv_etablissement
-            $this->form = new SVCreationForm($this->etablissement->identifiant, $campagne);
+            $this->form = new SVCreationForm($this->etablissement->cvi);
             $this->formaction = 'sv_etablissement';
         }
 

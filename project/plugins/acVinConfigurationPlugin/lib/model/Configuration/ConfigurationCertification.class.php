@@ -37,6 +37,10 @@ class ConfigurationCertification extends BaseConfigurationCertification {
         return $this->_get('code_douane');
     }
 
+	public function getCodesDouanes($uniq = false) {
+		return explode(',', $this->_get('code_douane'));
+	}
+
     public function getLabels($interpro) {
 
         return $this->getDocument()->labels;

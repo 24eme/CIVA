@@ -10,6 +10,7 @@ class Configuration extends BaseConfiguration {
     const DEFAULT_DENSITE = "1.3";
 
     protected $identifyLibelleProduct = array();
+    protected $identifyCodeDouaneProduct = array();
 
     public function constructId() {
         $this->set('_id', "CONFIGURATION");
@@ -56,6 +57,28 @@ class Configuration extends BaseConfiguration {
 
         return false;
     }
+
+    public function identifyProductByCodeDouane($code) {
+    if(array_key_exists($code, $this->identifyCodeDouaneProduct)) {
+        return $this->identifyCodeDouaneProduct[$code];
+    }
+
+    $codeSlugify = KeyInflector::slugify(preg_replace("/[ ]+/", " ", trim($code)));
+
+    foreach($this->getProduits() as $produit) {
+        foreach($produit->getCodesDouanes() as $codeDouane) {
+            $codeProduitSlugify = KeyInflector::slugify(preg_replace("/[ ]+/", " ", trim($codeDouane)));
+            //echo "identifyProductByCodeDouane : $codeSlugify == $codeProduitSlugify\n";
+            if($codeSlugify == $codeProduitSlugify) {
+                $this->identifyCodeDouaneProduct[$code][] = $produit;
+            }
+        }
+    }
+    if (array_key_exists($code, $this->identifyCodeDouaneProduct)) {
+      return $this->identifyCodeDouaneProduct[$code];
+    }
+    return array();
+}
 
     public function getTemplatesFactures() {
         $factures = array();
