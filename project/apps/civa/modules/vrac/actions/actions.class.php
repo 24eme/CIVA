@@ -379,7 +379,7 @@ class vracActions extends sfActions
                         $this->saveVendeurProjetAttachment($this->vrac);
                         $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur afin qu\'il le valide.');
                     } else {
-                        $this->getUser()->setFlash('notice', 'Le contrat a été créé avec succès et votre signature a bien été prise en compte. Chacun des acteurs du contrat va recevoir un email de demande de signature.');
+                        $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
                     }
 		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 					foreach ($emails as $email) {
