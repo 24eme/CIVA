@@ -133,6 +133,11 @@ td.echeance {display: inline;}
                         <button class="btn_majeur btn_vert btn_grand btn_upper_case">Signer</button>
                     </a>
                     <?php else: ?>
+					<?php if ($vrac->isApplicationPluriannuel()): ?>
+						<a href="" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet de contrat ?')">
+	                        [x] Refuser
+	                    </a>
+					<?php endif; ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
                         <button class="btn_majeur btn_vert btn_grand btn_upper_case"><?php if($vrac->isApplicationPluriannuel()): ?>Valider<?php else: ?>Signer<?php endif; ?></button>
 					</a>
