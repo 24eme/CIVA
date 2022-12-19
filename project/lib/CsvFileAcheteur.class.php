@@ -87,6 +87,14 @@ class CsvFileAcheteur
   }
 
   public static function identifyProductCSV($line) {
+      if(preg_match('/^[0-9]+/', $line[CsvFileAcheteur::CSV_APPELLATION])) {
+          $codeDouane = str_replace(array("1B001M", "1B001D71", "1B001D74", "1S001S", "1R001S"), array("1B001M00", "1B001D21",  "1B001D24", "1S001S 1", "1R001S 1"), $line[CsvFileAcheteur::CSV_APPELLATION]);
+          $produits = ConfigurationClient::getConfiguration()->identifyProductByCodeDouane($codeDouane);
+          if(count($produits)) {
+              return $produits[0];
+          }
+      }
+
       $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
       $appellation = preg_replace("/^0$/", "", $appellation);
       $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);

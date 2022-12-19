@@ -74,7 +74,7 @@ class SV extends BaseSV
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
                     $recap[$key]->volume_recolte = 0;
-                    $recap[$key]->usages_industriels = 0;
+                    $recap[$key]->volume_detruit = 0;
                     $recap[$key]->vci = 0;
                 }
 
@@ -92,12 +92,8 @@ class SV extends BaseSV
 
             if ($this->getType() === SVClient::TYPE_SV11) {
                 $recapProduit->volume_recolte += $produit->volume_recolte;
-                $recapProduit->usages_industriels += (isset($produit->usages_industriels))
-                    ?  $produit->usages_industriels
-                    : 0;
-                $recapProduit->vci += (isset($produit->vci))
-                    ? $produit->vci
-                    : 0;
+                $recapProduit->volume_detruit += $produit->volume_detruit;
+                $recapProduit->vci += $produit->vci;
 
             }
 
@@ -178,7 +174,7 @@ class SV extends BaseSV
         $total_rebeches = $this->getDocument()->rebeches ?? null;
 
         if ($this->hasRebechesInProduits()) {
-            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_recolte; }, 0);
+            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_revendique; }, 0);
         }
 
         return $total_rebeches;

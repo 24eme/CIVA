@@ -16,7 +16,7 @@ class svActions extends sfActions {
             );
         }
 
-        $this->formCreation = new SVCreationForm($this->etablissement->identifiant, $campagne);
+        $this->formCreation = new SVCreationForm($this->etablissement->cvi);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
 

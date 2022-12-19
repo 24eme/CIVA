@@ -268,12 +268,8 @@ class SVClient extends acCouchdbClient {
         foreach ($csv->getCsv() as $line) {
             $i++;
 
-            if(!preg_match('/^[0-9]+/', $line[0])) {
-                continue;
-            }
-
-            if ($line[CsvFileAcheteur::CSV_ACHETEUR_CVI] !== $identifiant) {
-                $check[self::CSV_ERROR_ACHETEUR][] = [$i, $line[CsvFileAcheteur::CSV_ACHETEUR_CVI], "La ligne concerne un autre acheteur."];
+            if ($line[CsvFileAcheteur::CSV_ACHETEUR_CVI] && $line[CsvFileAcheteur::CSV_ACHETEUR_CVI] !== $identifiant) {
+                $check[self::CSV_ERROR_ACHETEUR][] = [$i];
                 continue;
             }
 
