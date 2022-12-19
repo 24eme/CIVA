@@ -7,9 +7,9 @@ class SVValidation extends DocumentValidation
         $this->addControle('erreur', 'apporteurs_complet', "Toutes les données des apporteurs n'ont pas été saisies");
         $this->addControle('erreur', 'apporteurs_coherent_sv11', "Il y a des incohérences entre le volume récolté, revendiqué, détruit et le VCI");
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
-        $this->addControle('erreur', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
         $this->addControle('erreur', 'rebeches_cremant_manquant', "Vous avez déclaré des rebêches alors que vous ne produisez pas de Crémant");
         $this->addControle('erreur', 'cremant_rebeches_manquant', "Vous n'avez pas déclaré de rebêches alors que vous produisez du Crémant");
+        $this->addControle('vigilance', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
     }
 
     public function controle()
@@ -49,7 +49,7 @@ class SVValidation extends DocumentValidation
         }
 
         if (!$this->document->lies && count($this->document->apporteurs) > 0) {
-            $this->addPoint('erreur', 'lies_vides', 'Saisir les lies et bourbes', $this->generateUrl('sv_autres', $this->document));
+            $this->addPoint('vigilance', 'lies_vides', 'Saisir les lies et bourbes', $this->generateUrl('sv_autres', $this->document));
         }
 
         // si on n'a pas de crémant mais des rebêches
