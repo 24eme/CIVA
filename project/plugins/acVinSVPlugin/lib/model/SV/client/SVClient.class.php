@@ -314,13 +314,13 @@ class SVClient extends acCouchdbClient {
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
                     $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC];
                 }
-                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI])) {
-                    $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VCI];
-                }
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT])) {
                     $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT];
                 }
                 if (strpos($produit->getKey(), 'RB') !== 0 && round($volume, 2) != 0) {
+                    $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
+                }
+                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI])) && ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) > ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
                 }
             }
