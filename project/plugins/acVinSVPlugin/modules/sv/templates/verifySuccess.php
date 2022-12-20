@@ -14,10 +14,10 @@
         <?php if ($code_erreur === SVClient::CSV_ERROR_ACHETEUR): echo "La ligne concerne un autre acheteur"; endif ?>
         <?php if ($code_erreur === SVClient::CSV_ERROR_APPORTEUR): echo "L'apporteur n'a pas été reconnu"; endif ?>
         <?php if ($code_erreur === SVClient::CSV_ERROR_PRODUIT): echo "Le produit n'a pas été reconnu"; endif ?>
-        <?php if ($code_erreur === SVClient::CSV_ERROR_SUPERFICIE): echo "La superficie a été oublié"; endif ?>
-        <?php if ($code_erreur === SVClient::CSV_ERROR_VOLUME): echo "La volume livré a été oublié"; endif ?>
-        <?php if ($code_erreur === SVClient::CSV_ERROR_QUANTITE): echo "La quantité a été oublié"; endif ?>
-        <?php if ($code_erreur === SVClient::CSV_ERROR_VOLUME_REVENDIQUE_SV11): echo "La volume revendiqué n'est pas en adéquation avec le volume livrée, détruit et le VCI"; endif ?>
+        <?php if ($code_erreur === SVClient::CSV_ERROR_SUPERFICIE): echo "La superficie a été oubliée"; endif ?>
+        <?php if ($code_erreur === SVClient::CSV_ERROR_VOLUME): echo "Le volume livré a été oublié"; endif ?>
+        <?php if ($code_erreur === SVClient::CSV_ERROR_QUANTITE): echo "La quantité a été oubliée"; endif ?>
+        <?php if ($code_erreur === SVClient::CSV_ERROR_VOLUME_REVENDIQUE_SV11): echo "Le volume revendiqué n'est pas en adéquation avec le volume livrée, détruit et le VCI"; endif ?>
         <?php if ($code_erreur === SVClient::CSV_ERROR_VOLUME_REVENDIQUE_SV12): echo "Le volume revendiqué a été oublié"; endif ?> :
           <?php foreach ($lines as $line): ?>
             <?php $lignes_en_erreur[] = $line[0]; ?>
