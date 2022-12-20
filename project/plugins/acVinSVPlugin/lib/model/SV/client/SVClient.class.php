@@ -218,7 +218,7 @@ class SVClient extends acCouchdbClient {
             }
 
             if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIES') !== false || strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'Bourbes') !== false) {
-                $sv->lies = $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
+                $sv->lies = (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
                 continue;
             }
 
