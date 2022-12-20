@@ -19,13 +19,12 @@ class svActions extends sfActions {
         $this->formCreation = new SVCreationForm($this->etablissement->cvi);
 
         if (! $request->isMethod(sfWebRequest::POST)) {
-
-            return sfView::SUCCESS;
+            throw new sfException('Ne peut pas être appelé en GET');
         }
         $this->formCreation->bind($request->getParameter($this->formCreation->getName()), $request->getFiles($this->formCreation->getName()));
 
         if (! $this->formCreation->isValid()) {
-            return sfView::SUCCESS;
+            throw new sfException('Formulaire SVCreationForm invalide : '.implode(', ', $this->formCreation->getErrors()['_globals']));
         }
 
         $typeCreation = $this->formCreation->process();
