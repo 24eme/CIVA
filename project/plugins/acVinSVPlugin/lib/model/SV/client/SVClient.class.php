@@ -288,7 +288,7 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
-            if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIE') === 0) {
+            if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIES') === 0) {
                 if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
                     $check[self::CSV_ERROR_VOLUME][] = [$i];
                 }
