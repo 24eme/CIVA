@@ -283,8 +283,15 @@ class SVClient extends acCouchdbClient {
 
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
 
-            if(! $apporteur) {
+            if(! $apporteur && strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIE') !== 0) {
                 $check[self::CSV_ERROR_APPORTEUR][] = [$i];
+                continue;
+            }
+
+            if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIE') === 0) {
+                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
+                    $check[self::CSV_ERROR_VOLUME][] = [$i];
+                }
                 continue;
             }
 
