@@ -92,14 +92,14 @@ class SVProduit extends BaseSVProduit {
 
     public function setVolumeRecolte($v) {
         if ($this->isRebeche() && !$this->volume_revendique) {
-            $this->_set('volume_revendique', $v)
+            $this->_set('volume_revendique', $v);
         }
         return $this->_set('volume_recolte', $v);
     }
 
     public function setVolumeRevendique($v) {
         if ($this->isRebeche() && !$this->volume_recolte) {
-            $this->_set('volume_recolte', $v)
+            $this->_set('volume_recolte', $v);
         }
         return $this->_set('volume_revendique', $v);
     }
