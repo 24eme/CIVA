@@ -174,7 +174,7 @@ class SV extends BaseSV
         $total_rebeches = $this->getDocument()->rebeches ?? null;
 
         if ($this->hasRebechesInProduits()) {
-            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_recolte; }, 0);
+            $total_rebeches = array_reduce($this->produits_rebeches, function ($total, $p) { return $total += $p->volume_revendique; }, 0);
         }
 
         return $total_rebeches;
