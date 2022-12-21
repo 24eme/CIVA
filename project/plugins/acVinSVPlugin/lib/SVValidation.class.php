@@ -27,7 +27,10 @@ class SVValidation extends DocumentValidation
                 if($produit->isRebeche()) {
                     continue;
                 }
-                if(round($produit->volume_recolte,  2) == round($produit->volume_revendique + $produit->volume_detruit + $produit->vci, 2)) {
+                if(round($produit->volume_recolte,  2) == round($produit->volume_revendique + $produit->volume_detruit, 2)) {
+                    continue;
+                }
+                if(round($produit->volume_vci, 2) < round($produit->volume_detruit, 2)) {
                     continue;
                 }
                 $this->addPoint('erreur', 'apporteurs_coherent_sv11', $apporteur->getNom().', '.$produit->getLibelle(), $this->generateUrl('sv_saisie', array('sf_subject' => $this->document, 'cvi' => $apporteur->getKey())));
