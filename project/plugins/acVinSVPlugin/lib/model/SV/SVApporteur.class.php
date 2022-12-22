@@ -40,9 +40,10 @@ class SVApporteur extends BaseSVApporteur {
         return array_reduce($this->getProduits(), function ($recap, $p) {
             $recap['superficie'] += $p->superficie_recolte;
             $recap['revendique'] += $p->volume_revendique;
+            $recap['mouts_revendique'] += $p->volume_mouts_revendique;
 
             return $recap;
-        }, ['superficie' => 0, 'revendique' => 0]);
+        }, ['superficie' => 0, 'revendique' => 0, 'mouts_revendique' => 0]);
     }
 
     public function getCvi() {
