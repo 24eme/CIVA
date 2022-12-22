@@ -81,6 +81,7 @@ class SV extends BaseSV
                 if ($this->getType() === SVClient::TYPE_SV12) {
                     $recap[$key]->quantite_recolte = 0;
                     $recap[$key]->volume_mouts = 0;
+                    $recap[$key]->volume_mouts_revendique = 0;
                 }
 
                 $recap[$key]->volume_revendique = 0;
@@ -100,6 +101,7 @@ class SV extends BaseSV
             if ($this->getType() === SVClient::TYPE_SV12) {
                 $recapProduit->quantite_recolte += $produit->quantite_recolte;
                 $recapProduit->volume_mouts += ($produit->exist('volume_mouts')) ? $produit->volume_mouts : 0;
+                $recapProduit->volume_mouts_revendique += ($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0;
             }
 
             $recapProduit->volume_revendique += $produit->volume_revendique;
