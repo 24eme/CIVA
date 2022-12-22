@@ -22,13 +22,13 @@
       <?php $produit = $recapProduits[$hash]; ?>
       <tr>
         <td style="vertical-align: middle"><?php echo $produit->getRawValue()->libelle_html ?></td>
-        <th style="vertical-align: middle" class="col-xs-1 text-right"><span class="total">
-            <?php if (isset($produit->volume_revendique_mout) && $produit->volume_revendique): ?>
-            (R+M) <?php echoFloat($produit->volume_revendique + $produit->volume_revendique_mout) ?></span> <small>hl</span>
-            <?php elseif (isset($produit->volume_revendique_mout) && !$produit->volume_revendique): ?>
-            (M) <?php echoFloat($produit->volume_revendique) ?></span> <small>hl</span>
+        <th style="vertical-align: middle" class="col-xs-1 text-right">
+            <?php if (isset($produit->volume_mouts_revendique) && $produit->volume_mouts_revendique && $produit->volume_revendique): ?>
+            <span class="text-muted">(R+M)</span> <span class="total"><?php echoFloat($produit->volume_revendique + $produit->volume_mouts_revendique) ?></span> <small>hl</span>
+            <?php elseif (isset($produit->volume_mouts_revendique) && $produit->volume_mouts_revendique && !$produit->volume_revendique): ?>
+            <span class="text-muted">(M)</span> <span class="total"><?php echoFloat($produit->volume_mouts_revendique) ?></span> <small>hl</span>
             <?php else: ?>
-            <?php echoFloat($produit->volume_revendique) ?></span> <small>hl</span>
+            <span class="total"><?php echoFloat($produit->volume_revendique) ?></span> <small>hl</span>
             <?php endif; ?>
         </th>
         <?php foreach($formProduit as $num_stockage => $formStockage): ?>
