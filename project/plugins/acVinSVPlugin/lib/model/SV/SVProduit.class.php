@@ -74,6 +74,10 @@ class SVProduit extends BaseSVProduit {
             return !is_null($this->volume_recolte) && !is_null($this->volume_revendique);
         }
 
+        if ($this->isMout()) {
+            return !is_null($this->volume_mouts) && !is_null($this->volume_mouts_revendique);
+        }
+
         if($this->getDocument()->type == SVClient::TYPE_SV11) {
 
             return !is_null($this->superficie_recolte) && !is_null($this->volume_recolte) && !is_null($this->volume_revendique) && !is_null($this->volume_detruit);
@@ -88,6 +92,11 @@ class SVProduit extends BaseSVProduit {
     public function isRebeche()
     {
         return strpos($this->getProduitHash(), '/cepages/RB') !== false;
+    }
+
+    public function isMout()
+    {
+        return !is_null($this->volume_mouts) || !is_null($this->volume_mouts_revendique);
     }
 
     public function setVolumeRecolte($v) {
