@@ -193,6 +193,10 @@ class SVClient extends acCouchdbClient {
             $denoms[] = 'AUXERROIS';
         }
 
+	   if(preg_match('/SAINTE[ -]*HUNE/i', $denomination)) {
+            $denoms[] = 'CLOS SAINTE HUNE';
+        }
+
         return implode(" ", $denoms);
     }
 
