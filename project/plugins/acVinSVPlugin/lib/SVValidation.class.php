@@ -61,7 +61,7 @@ class SVValidation extends DocumentValidation
         }
 
         // si on n'a pas de rebeches mais du crémant
-        if ($this->document->hasCremantInProduits() && !$this->document->rebeches) {
+        if ($this->document->hasVolumeCremantInProduits() && !$this->document->rebeches) {
            $this->addPoint('erreur', 'cremant_rebeches_manquant', 'Saisir les rebêches', $this->generateUrl('sv_autres', $this->document));
         }
     }
