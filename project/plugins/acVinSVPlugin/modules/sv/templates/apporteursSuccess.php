@@ -35,7 +35,7 @@
   <td><?php echo $apporteur->nom ?></td>
   <td><?php echo $apporteur->commune ?></td>
   <td class="text-right">
-      <?php if ((!isset($recap['volume_mouts']) && !$recap['volume_mouts']) || ($recap['superficie'])): ?>
+      <?php if (!$recap['mouts_revendique'] || $recap['superficie']): ?>
       <?php echoFloat($recap['superficie']) ?> <small class="text-muted">ares</small>
       <?php endif; ?>
   </td>
