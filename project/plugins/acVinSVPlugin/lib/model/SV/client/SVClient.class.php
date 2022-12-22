@@ -330,10 +330,10 @@ class SVClient extends acCouchdbClient {
             }
 
             if($type == SVClient::TYPE_SV12) {
-                if (($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0) && (strpos($produit->getHash(), '/cepages/RB') !== false) && (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false)) {
+                if (($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0) && (strpos($produit->getHash(), '/cepages/RB') === false) && (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') === false)) {
                     $check[self::CSV_ERROR_QUANTITE][] = [$i];
                 }
-                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0  && (strpos($produit->getHash(), '/cepages/RB') !== false)) {
+                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0  && (strpos($produit->getHash(), '/cepages/RB') === false)) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV12][] = [$i];
                 }
             }
