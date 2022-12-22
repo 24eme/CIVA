@@ -96,7 +96,7 @@ class SVProduit extends BaseSVProduit {
 
     public function isMout()
     {
-        return !is_null($this->volume_mouts) || !is_null($this->volume_mouts_revendique);
+        return $this->exist('volume_mouts') || $this->exist('volume_mouts_revendique');
     }
 
     public function setVolumeRecolte($v) {
