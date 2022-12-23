@@ -161,8 +161,11 @@ class SVClient extends acCouchdbClient {
 
                 if($cepage->getVolumeAcheteur($cvi_acheteur, 'mouts')) {
                     $svProduit = $sv->addProduit($dr->identifiant, $hash);
-                    $svProduit->add('volume_mouts', $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts'));
-                    $svProduit->add('volume_mouts_revendique');
+                    if (!$svProduit->exist('volume_mouts')) {
+                        $svProduit->add('volume_mouts');
+                        $svProduit->add('volume_mouts_revendique');
+                    }
+                    $svProduit->volume_mouts += $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts');
                 }
             }
         }
