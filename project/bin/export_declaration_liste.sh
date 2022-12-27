@@ -13,10 +13,6 @@ if ! test "$PERIODE"; then
     exit;
 fi
 
-if [[ "$TYPE_DECLARATION" == "DR" ]]; then
-  echo "campagne ; cvi ; date de validation ; date de modification ; date dépot en mairie ; étape"
-  curl -s http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?reduce=false | grep "\-$PERIODE" | sed 's/"//g' | sed 's/{id://' | sed 's/\]//' |sed 's/,value:1}//' | sed 's/key:\[//' |sed 's/DR-//' | sed -r "s/-$PERIODE//" | sed 's/null//g' | sed 's/,/;/g' | sed -r 's/.?$//' | sed -r 's/;$//' | awk -F ';' '{ print $2 ";" $1 ";" $5 ";" $8 ";" $7 ";" $6 }'
-else
-  echo 'campagne;cvi;valide;"date de validation"'
-  curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/SV?reduce=false" | grep "\-$PERIODE"
-fi
+echo "campagne ; cvi ; date de validation ; date de modification ; date dépot en mairie ; étape"
+
+curl -s http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/STATS/_view/DR?reduce=false | grep "\-$PERIODE" | sed 's/"//g' | sed 's/{id://' | sed 's/\]//' |sed 's/,value:1}//' | sed 's/key:\[//' |sed 's/DR-//' | sed -r "s/-$PERIODE//" | sed 's/null//g' | sed 's/,/;/g' | sed -r 's/.?$//' | sed -r 's/;$//' | awk -F ';' '{ print $2 ";" $1 ";" $5 ";" $8 ";" $7 ";" $6 }' 
