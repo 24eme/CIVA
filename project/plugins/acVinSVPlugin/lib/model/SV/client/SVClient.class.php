@@ -9,6 +9,7 @@ class SVClient extends acCouchdbClient {
     const CSV_ERROR_APPORTEUR = "CSV_ERROR_APPORTEUR";
     const CSV_ERROR_PRODUIT   = "CSV_ERROR_PRODUIT";
     const CSV_ERROR_VOLUME    = "CSV_ERROR_VOLUME";
+    const CSV_ERROR_VOLUME_REBECHE = "CSV_ERROR_VOLUME_REBECHE";
     const CSV_ERROR_SUPERFICIE  = "CSV_ERROR_SUPERFICIE";
     const CSV_ERROR_QUANTITE = "CSV_ERROR_QUANTITE";
     const CSV_ERROR_VOLUME_REVENDIQUE_SV11 = "CSV_ERROR_VOLUME_REVENDIQUE_SV11";
@@ -243,6 +244,11 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
+            if (strpos($produit->getHash(), 'cepages/RB') !== false) {
+                $produit->volume_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
+                continue;
+            }
+
             $produit->superficie_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
             if($sv->getType() == SVClient::TYPE_SV12) {
@@ -309,7 +315,15 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
-            if (strpos($produit->getKey(), 'RB') !== 0 && $line[CsvFileAcheteur::CSV_SUPERFICIE] <= 0) {
+            if (strpos($produit->getHash(), 'cepages/RB') !== false && round($line[CsvFileAcheteur::CSV_SV_VOLUME_VF], 2) <= 0) {
+                $check[self::CSV_ERROR_VOLUME_REBECHE][] = [$i];
+            }
+
+            if (strpos($produit->getHash(), 'cepages/RB') !== false) {
+                continue;
+            }
+
+            if ($line[CsvFileAcheteur::CSV_SUPERFICIE] <= 0) {
                 $check[self::CSV_ERROR_SUPERFICIE][] = [$i];
             }
 
@@ -324,7 +338,7 @@ class SVClient extends acCouchdbClient {
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT])) {
                     $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT];
                 }
-                if (strpos($produit->getKey(), 'RB') !== 0 && round($volume, 2) != 0) {
+                if (round($volume, 2) != 0) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
                 }
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) && ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) > ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
@@ -333,10 +347,10 @@ class SVClient extends acCouchdbClient {
             }
 
             if($type == SVClient::TYPE_SV12) {
-                if (($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0) && (strpos($produit->getHash(), '/cepages/RB') === false) && (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') === false)) {
+                if ($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0 && strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') === false) {
                     $check[self::CSV_ERROR_QUANTITE][] = [$i];
                 }
-                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0  && (strpos($produit->getHash(), '/cepages/RB') === false)) {
+                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV12][] = [$i];
                 }
             }
