@@ -213,7 +213,12 @@ class SVClient extends acCouchdbClient {
     public function createFromCSV($identifiantEtablissement, $campagne, CsvFileAcheteur $csv) {
         $sv = $this->createSV($identifiantEtablissement, $campagne);
 
-        foreach ($csv->getCsv() as $line) {
+        $lines = $csv->getCsv();
+        uasort($lines, function ($a, $b) {
+            return $a[CsvFileAcheteur::CSV_RECOLTANT_CVI] > $b[CsvFileAcheteur::CSV_RECOLTANT_CVI];
+        });
+
+        foreach ($lines as $line) {
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
             }
