@@ -233,4 +233,15 @@ class SV extends BaseSV
 
         return $this->_get('rebeches');
     }
+
+    public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV)
+    {
+        $lignes = "";
+
+        foreach ($this->getRecapProduits() as $produit) {
+            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->libelle, "entrees", "recolte", $produit->volume_revendique);
+        }
+
+        return $lignes;
+    }
 }

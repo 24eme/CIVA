@@ -42,6 +42,7 @@ class DRMGenerateCSV {
      const REPRISE_DOC_DR = "DR";
      const REPRISE_DOC_DS = "DS";
      const REPRISE_DOC_VRAC = "VRAC";
+     const REPRISE_DOC_SV = 'SV';
 
      const REPRISE_TYPE_CATALOGUE = "REPRISE_CATALOGUE";
      const REPRISE_TYPE_MOUVEMENT = "REPRISE_MOUVEMENT";
@@ -119,6 +120,15 @@ class DRMGenerateCSV {
             $documents[] = $dsReprise;
           }
         }
+
+        $sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->identifiant, $annee);
+        if ($sv) {
+            $date_validation = new DateTimeImmutable($sv->valide->date_saisie);
+            if ($date_validation->format('Ym') === $this->periode) {
+                $documents[] = $this->createRepriseInfo(self::REPRISE_DOC_SV, self::REPRISE_TYPE_MOUVEMENT, $sv->_id);
+            }
+        }
+
         return $documents;
     }
 
