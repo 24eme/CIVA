@@ -9,6 +9,7 @@ class SVValidation extends DocumentValidation
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
         $this->addControle('erreur', 'rebeches_cremant_manquant', "Vous avez déclaré des rebêches alors que vous ne produisez pas de Crémant");
         $this->addControle('erreur', 'cremant_rebeches_manquant', "Vous n'avez pas déclaré de rebêches alors que vous produisez du Crémant");
+        $this->addControle('erreur', 'superficie_mouts_incoherent', "La superficie des mouts doit être supérieure à zéro");
         $this->addControle('vigilance', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
     }
 
@@ -20,10 +21,19 @@ class SVValidation extends DocumentValidation
                 break;
             }
 
-            foreach($apporteur->getProduits() as $produit) {
-                if($this->document->type != SVClient::TYPE_SV11) {
-                    continue;
+            if($this->document->type == SVClient::TYPE_SV12) {
+                foreach($apporteur->getProduits() as $produit) {
+                    if ($produit->isMout() && $produit->superficie_mouts <= 0) {
+                        $this->addPoint('erreur', 'superficie_mouts_incoherent', "Saisir la superficie", $this->generateUrl(
+                            'sv_saisie', ['sf_subject' => $this->document, 'cvi' => $apporteur->getKey()]
+                        ));
+                    }
                 }
+
+                continue;
+            }
+
+            foreach($apporteur->getProduits() as $produit) {
                 if($produit->isRebeche()) {
                     continue;
                 }
