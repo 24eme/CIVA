@@ -82,6 +82,7 @@ class SV extends BaseSV
                     $recap[$key]->quantite_recolte = 0;
                     $recap[$key]->volume_mouts = 0;
                     $recap[$key]->volume_mouts_revendique = 0;
+                    $recap[$key]->superficie_mouts = 0;
                 }
 
                 $recap[$key]->volume_revendique = 0;
@@ -102,6 +103,7 @@ class SV extends BaseSV
                 $recapProduit->quantite_recolte += $produit->quantite_recolte;
                 $recapProduit->volume_mouts += ($produit->exist('volume_mouts')) ? $produit->volume_mouts : 0;
                 $recapProduit->volume_mouts_revendique += ($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0;
+                $recapProduit->superficie_mouts += ($produit->exist('superficie_mouts')) ? $produit->superficie_mouts : 0;
             }
 
             $recapProduit->volume_revendique += $produit->volume_revendique;
