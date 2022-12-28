@@ -11,13 +11,13 @@ class SV12ProduitForm extends acCouchdbObjectForm
         $this->setWidget('superficie_recolte', new bsWidgetFormInputFloat(array(), ['class' => 'form-control text-right input-float', 'disabled' => $this->getObject()->isRebeche()]));
         $this->setValidator('superficie_recolte', new sfValidatorNumber(array('required' => false)));
 
-        $this->setWidget('quantite_recolte', new bsWidgetFormInputInteger(array(), array('class' => 'form-control text-right input-integer input_quantite')));
+        $this->setWidget('quantite_recolte', new bsWidgetFormInputInteger(array(), array('class' => 'form-control text-right input-integer input_quantite', 'disabled' => $this->getObject()->isRebeche())));
         $this->setValidator('quantite_recolte', new sfValidatorInteger(array('required' => false)));
 
         $this->setWidget('taux_extraction', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_taux_extraction', 'readonly' => 'readonly', 'tabindex' => -1)));
         $this->setValidator('taux_extraction', new sfValidatorNumber(array('required' => false)));
 
-        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique', 'disabled' => $this->getObject()->isRebeche()]));
+        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique']));
         $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
 
         if($this->getObject()->exist('volume_mouts')) {
