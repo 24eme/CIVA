@@ -76,6 +76,7 @@ SV:
                               volume_detruit: { type: float }
                               volume_mouts: { type: float, required: false }
                               volume_mouts_revendique: { type: float, required: false }
+                              superficie_mouts: { type: float, required: false }
                               vci: { type: float }
       lies: { type: float }
       mouts: { type: float, required: false } #deprécié
