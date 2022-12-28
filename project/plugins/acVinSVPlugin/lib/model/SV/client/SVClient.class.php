@@ -165,6 +165,7 @@ class SVClient extends acCouchdbClient {
                     if (!$svProduit->exist('volume_mouts')) {
                         $svProduit->add('volume_mouts');
                         $svProduit->add('volume_mouts_revendique');
+                        $svProduit->add('superficie_mouts');
                     }
                     $svProduit->volume_mouts += $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts');
                 }
@@ -238,6 +239,7 @@ class SVClient extends acCouchdbClient {
             if (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false) {
                 $produit->add('volume_mouts');
                 $produit->add('volume_mouts_revendique');
+                $produit->add('superficie_mouts');
                 $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
                 $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
 
