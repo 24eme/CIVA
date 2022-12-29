@@ -239,7 +239,12 @@ class SVClient extends acCouchdbClient {
             $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
             $produit = CsvFileAcheteur::identifyProductCSV($line);
 
-            $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $line[CsvFileAcheteur::CSV_DENOMINATION]);
+            $denomination = $line[CsvFileAcheteur::CSV_DENOMINATION];
+            if ($produit->hasLieuEditable()) {
+                $denomination = $line[CsvFileAcheteur::CSV_LIEU];
+            }
+
+            $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $denomination);
 
             if (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false) {
                 $produit->add('volume_mouts');
