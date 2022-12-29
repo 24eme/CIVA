@@ -247,6 +247,7 @@ class SVClient extends acCouchdbClient {
                 $produit->add('superficie_mouts');
                 $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
                 $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
+                $produit->superficie_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
                 continue;
             }
