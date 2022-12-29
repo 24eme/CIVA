@@ -23,7 +23,7 @@ class SVStockage extends BaseSVStockage {
 
         $produits = [];
         foreach($this->getDocument()->getRecapProduits() as $hash => $produit) {
-            $produits[$hash] = $produit->volume_revendique;
+            $produits[$hash] = $produit->volume_revendique + $produit->volume_mouts_revendique;
             foreach($this->getDocument()->stockage as $stockage) {
                 if(!$stockage->exist('produits') || !$stockage->_get('produits')->exist($hash)) {
                     continue;
