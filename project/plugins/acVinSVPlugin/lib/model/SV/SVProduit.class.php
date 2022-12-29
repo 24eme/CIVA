@@ -68,6 +68,15 @@ class SVProduit extends BaseSVProduit {
         return $this->getParent();
     }
 
+    public function getSuperficieMouts()
+    {
+        if ($this->exist('superficie_mouts') === false) {
+            return null;
+        }
+
+        return $this->_get('superficie_mouts');
+    }
+
     public function isComplete() {
         if($this->isRebeche()) {
 
