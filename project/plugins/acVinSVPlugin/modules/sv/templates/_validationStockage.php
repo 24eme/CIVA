@@ -24,7 +24,7 @@
             <?php endif ?>
           </td>
         <?php endforeach ?>
-        <th class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique) ?></span> <small class="text-muted">hl</span></th>
+        <th class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique + $produit->volume_mouts_revendique) ?></span> <small class="text-muted">hl</span></th>
       </tr>
     <?php endforeach ?>
     </tbody>
