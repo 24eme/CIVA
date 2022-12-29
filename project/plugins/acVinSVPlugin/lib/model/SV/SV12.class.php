@@ -18,4 +18,11 @@ class SV12 extends SV
             return $sum;
         }, array_fill_keys($this->colonnes, 0));
     }
+
+    public function hasMouts()
+    {
+        $total = $this->getSum();
+
+        return $total['superficie_mouts'] > 0 || $total['mouts'] > 0;
+    }
 }
