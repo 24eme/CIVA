@@ -82,6 +82,7 @@ class SV extends BaseSV
                     $recap[$key]->quantite_recolte = 0;
                     $recap[$key]->volume_mouts = 0;
                     $recap[$key]->volume_mouts_revendique = 0;
+                    $recap[$key]->superficie_mouts = 0;
                 }
 
                 $recap[$key]->volume_revendique = 0;
@@ -102,6 +103,7 @@ class SV extends BaseSV
                 $recapProduit->quantite_recolte += $produit->quantite_recolte;
                 $recapProduit->volume_mouts += ($produit->exist('volume_mouts')) ? $produit->volume_mouts : 0;
                 $recapProduit->volume_mouts_revendique += ($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0;
+                $recapProduit->superficie_mouts += ($produit->exist('superficie_mouts')) ? $produit->superficie_mouts : 0;
             }
 
             $recapProduit->volume_revendique += $produit->volume_revendique;
@@ -139,8 +141,8 @@ class SV extends BaseSV
         $detailKey = self::buildDetailKey($denominationComplementaire, $hidden_denom);
 
         $hashToAdd = str_replace("/declaration/", '', $hash);
-        $exist = $this->exist('apporteurs/'.$identifiant.'/'.$hashToAdd);
-        $produit = $this->apporteurs->add($identifiant)->add($hashToAdd)->add($detailKey);
+        $exist = $this->exist('apporteurs/'.$etablissement->cvi.'/'.$hashToAdd);
+        $produit = $this->apporteurs->add($etablissement->cvi)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;
         if($denominationComplementaire) {
             $produit->denomination_complementaire = $denominationComplementaire;
@@ -151,7 +153,7 @@ class SV extends BaseSV
         $produit->commune = $etablissement->declaration_commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
-            $this->apporteurs->get($identifiant)->reorderByConf();
+            $this->apporteurs->get($etablissement->cvi)->reorderByConf();
         }
         return $this->get($produit->getHash());
     }
@@ -232,5 +234,16 @@ class SV extends BaseSV
         }
 
         return $this->_get('rebeches');
+    }
+
+    public function getDRMEdiMouvementRows(DRMGenerateCSV $drmGenerateCSV)
+    {
+        $lignes = "";
+
+        foreach ($this->getRecapProduits() as $produit) {
+            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->libelle, "entrees", "recolte", $produit->volume_revendique);
+        }
+
+        return $lignes;
     }
 }

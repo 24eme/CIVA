@@ -75,7 +75,7 @@ class SVProduit extends BaseSVProduit {
         }
 
         if ($this->isMout()) {
-            return !is_null($this->volume_mouts) && !is_null($this->volume_mouts_revendique);
+            return !is_null($this->volume_mouts) && !is_null($this->volume_mouts_revendique) && !is_null($this->superficie_mouts);
         }
 
         if($this->getDocument()->type == SVClient::TYPE_SV11) {

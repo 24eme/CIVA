@@ -4,7 +4,7 @@
 <button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction réels</button>
 <?php endif; ?>
 
-<h3><?php echo EtablissementClient::getInstance()->find($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->find($cvi)->commune; ?></small></h3>
+<h3><?php echo EtablissementClient::getInstance()->findByCvi($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->findByCvi($cvi)->commune; ?></small></h3>
 
 <p style="margin-bottom: 15px;">Saisissez ici les données de production de cet apporteur.</p>
 

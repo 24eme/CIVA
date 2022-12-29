@@ -165,6 +165,7 @@ class SVClient extends acCouchdbClient {
                     if (!$svProduit->exist('volume_mouts')) {
                         $svProduit->add('volume_mouts');
                         $svProduit->add('volume_mouts_revendique');
+                        $svProduit->add('superficie_mouts');
                     }
                     $svProduit->volume_mouts += $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts');
                 }
@@ -212,7 +213,12 @@ class SVClient extends acCouchdbClient {
     public function createFromCSV($identifiantEtablissement, $campagne, CsvFileAcheteur $csv) {
         $sv = $this->createSV($identifiantEtablissement, $campagne);
 
-        foreach ($csv->getCsv() as $line) {
+        $lines = $csv->getCsv();
+        uasort($lines, function ($a, $b) {
+            return $a[CsvFileAcheteur::CSV_RECOLTANT_CVI] > $b[CsvFileAcheteur::CSV_RECOLTANT_CVI];
+        });
+
+        foreach ($lines as $line) {
             if(!preg_match('/^[0-9]+/', $line[0])) {
                 continue;
             }
@@ -238,8 +244,17 @@ class SVClient extends acCouchdbClient {
             if (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false) {
                 $produit->add('volume_mouts');
                 $produit->add('volume_mouts_revendique');
+                $produit->add('superficie_mouts');
                 $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
                 $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
+                $produit->superficie_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
+
+                // dans le cas où il n'y a que des moûts, on mets à 0 le volume revendiqué du produit
+                // s'il y a un produit, on rajoute 0 donc ça change rien
+                $produit->superficie_recolte += 0;
+                $produit->quantite_recolte += 0;
+                $produit->volume_recolte += 0;
+                $produit->volume_revendique += 0;
 
                 continue;
             }
