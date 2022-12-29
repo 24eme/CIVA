@@ -35,9 +35,15 @@
   <td><?php echo $apporteur->nom ?></td>
   <td><?php echo $apporteur->commune ?></td>
   <td class="text-right">
-      <?php if (!$recap['mouts_revendique'] || $recap['superficie']): ?>
-      <?php echoFloat($recap['superficie']) ?> <small class="text-muted">ares</small>
-      <?php endif; ?>
+      <?php if ($recap['superficie'] && $recap['mouts_superficie']): ?>
+        (R+M) <?php echoFloat($recap['superficie'] + $recap['mouts_superficie']) ?>
+      <?php elseif ($recap['mouts_superficie']): ?>
+        (M) <?php echoFloat($recap['mouts_superficie']) ?>
+      <?php else : ?>
+        <?php echoFloat($recap['superficie']) ?>
+      <?php endif ?>
+
+      <small class="text-muted">ares</small>
   </td>
   <td class="text-right">
       <?php if($recap['revendique'] || $recap['mouts_revendique']): ?>

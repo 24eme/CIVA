@@ -43,8 +43,11 @@ class SVApporteur extends BaseSVApporteur {
             if ($p->exist('volume_mouts_revendique')) {
                 $recap['mouts_revendique'] += $p->volume_mouts_revendique;
             }
+            if ($p->exist('superficie_mouts')) {
+                $recap['mouts_superficie'] += $p->superficie_mouts;
+            }
             return $recap;
-        }, ['superficie' => 0, 'revendique' => 0, 'mouts_revendique' => 0]);
+        }, ['superficie' => 0, 'revendique' => 0, 'mouts_superficie' => 0, 'mouts_revendique' => 0]);
     }
 
     public function getCvi() {
