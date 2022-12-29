@@ -141,8 +141,8 @@ class SV extends BaseSV
         $detailKey = self::buildDetailKey($denominationComplementaire, $hidden_denom);
 
         $hashToAdd = str_replace("/declaration/", '', $hash);
-        $exist = $this->exist('apporteurs/'.$identifiant.'/'.$hashToAdd);
-        $produit = $this->apporteurs->add($identifiant)->add($hashToAdd)->add($detailKey);
+        $exist = $this->exist('apporteurs/'.$etablissement->cvi.'/'.$hashToAdd);
+        $produit = $this->apporteurs->add($etablissement->cvi)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;
         if($denominationComplementaire) {
             $produit->denomination_complementaire = $denominationComplementaire;
@@ -153,7 +153,7 @@ class SV extends BaseSV
         $produit->commune = $etablissement->declaration_commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
-            $this->apporteurs->get($identifiant)->reorderByConf();
+            $this->apporteurs->get($etablissement->cvi)->reorderByConf();
         }
         return $this->get($produit->getHash());
     }
