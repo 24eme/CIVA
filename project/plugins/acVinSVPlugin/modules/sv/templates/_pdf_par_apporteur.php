@@ -73,8 +73,8 @@
           <?php else: ?>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
-            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
-            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($produit->volume_mouts_revendique) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
+            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(($produit->exist('volume_mouts')) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
+            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>
           <?php endif ?>
         </tr>
       <?php endforeach; ?>
