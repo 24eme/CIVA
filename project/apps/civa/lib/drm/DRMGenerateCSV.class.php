@@ -361,8 +361,7 @@ class DRMGenerateCSV {
             $cepageConfig = ConfigurationClient::getConfiguration($this->periode_date)->identifyProductByLibelle($produitDetail);
         }
 
-        if(!$cepageConfig && !is_string($produitDetail)) {
-            echo $produitDetail."\n";
+        if(!$cepageConfig) {
             $cepageConfig = $produitDetail->getCepage()->getConfig();
         }
         $certification = $cepageConfig->getCertification()->getLibelle();
