@@ -121,7 +121,12 @@ class DRMGenerateCSV {
           }
         }
 
-        $sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->identifiant, $annee);
+        try {
+            $sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->identifiant, $annee);
+        } catch (Exception $e) {
+            $sv = null;
+        }
+
         if ($sv) {
             $date_validation = new DateTimeImmutable($sv->valide->date_saisie);
             if ($date_validation->format('Ym') === $this->periode) {
