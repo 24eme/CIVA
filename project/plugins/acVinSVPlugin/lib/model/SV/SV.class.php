@@ -68,7 +68,9 @@ class SV extends BaseSV
             $key = $produit->getProduitHash().'/'.$produit->getKey();
             if(!isset($recap[$key])) {
                 $recap[$key] = new stdClass();
+                $recap[$key]->produit_hash = $produit->getProduitHash();
                 $recap[$key]->libelle = $produit->getLibelle();
+                $recap[$key]->denominationComplementaire = $produit->denomination_complementaire;
                 $recap[$key]->libelle_html = $produit->getLibelleHtml();
                 $recap[$key]->superficie_recolte = 0;
 
@@ -145,7 +147,7 @@ class SV extends BaseSV
         $produit = $this->apporteurs->add($etablissement->cvi)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;
         if($denominationComplementaire) {
-            $produit->denomination_complementaire = $denominationComplementaire;
+            $produit->denomination_complementaire = $denomination_complementaire;
         }
         $produit->getLibelle();
         $produit->cvi = $etablissement->cvi;
@@ -241,7 +243,7 @@ class SV extends BaseSV
         $lignes = "";
 
         foreach ($this->getRecapProduits() as $produit) {
-            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->libelle, "entrees", "recolte", $produit->volume_revendique);
+            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->produit_hash, "entrees", "recolte", $produit->volume_revendique, null, $produit->denominationComplementaire);
         }
 
         return $lignes;

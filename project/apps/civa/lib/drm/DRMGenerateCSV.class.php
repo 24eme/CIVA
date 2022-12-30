@@ -146,9 +146,9 @@ class DRMGenerateCSV {
         return $documents;
     }
 
-    public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume, $num_contrat = null){
+    public function createRowMouvementProduitDetail($produit, $catMouvement,$typeMouvement,$volume, $num_contrat = null, $lieudit = null){
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
-      $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu') . ";" . $catMouvement.";".$typeMouvement.";".$volume.";";
+      $lignes = $debutLigne . $this->getProduitCSV($produit,'suspendu', null, $lieudit) . ";" . $catMouvement.";".$typeMouvement.";".$volume.";";
       $lignes .= ($num_contrat)? ";".str_replace("VRAC-","",$num_contrat).";" : "";
       $lignes .= "\n";
       return $lignes;
@@ -331,7 +331,7 @@ class DRMGenerateCSV {
     }
 
 
-    public function getProduitCSV($produitDetail, $force_type_drm = null, $mentionVtsgn = null) {
+    public function getProduitCSV($produitDetail, $force_type_drm = null, $mentionVtsgn = null, $lieudit = null) {
         $cepageConfig = null;
 
         if(!is_string($produitDetail)) {
@@ -352,11 +352,12 @@ class DRMGenerateCSV {
            }
        }
 
-        if(is_string($produitDetail) && !$cepageConfig) {
+        if(is_string($produitDetail)) {
             $cepageConfig = ConfigurationClient::getConfiguration($this->periode_date)->identifyProductByLibelle($produitDetail);
         }
 
-        if(!$cepageConfig) {
+        if(!$cepageConfig && !is_string($produitDetail)) {
+            echo $produitDetail."\n";
             $cepageConfig = $produitDetail->getCepage()->getConfig();
         }
         $certification = $cepageConfig->getCertification()->getLibelle();
@@ -389,8 +390,12 @@ class DRMGenerateCSV {
             $libelle .= " ".$mention;
         }
 
-	    if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && $produitDetail->lieu) {
+	    if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && !$produitDetail instanceof ConfigurationCepage && $produitDetail->lieu) {
 	        $complement = $produitDetail->lieu;
+        }
+
+        if($cepageConfig->hasLieuEditable() && $this->isProduitDetailWithLieuDit($produitDetail) && $lieudit) {
+	        $complement = $lieudit;
         }
 
         if($produitDetail instanceof DSDetail){
