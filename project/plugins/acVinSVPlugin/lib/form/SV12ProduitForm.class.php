@@ -23,14 +23,10 @@ class SV12ProduitForm extends acCouchdbObjectForm
         if($this->getObject()->exist('volume_mouts')) {
             $this->setWidget('volume_mouts', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
             $this->setValidator('volume_mouts', new sfValidatorNumber(array('required' => false)));
-        }
 
-        if($this->getObject()->exist('volume_mouts_revendique')) {
             $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
             $this->setValidator('volume_mouts_revendique', new sfValidatorNumber(array('required' => false)));
-        }
 
-        if($this->getObject()->exist('superficie_mouts')) {
             $this->setWidget('superficie_mouts', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float')));
             $this->setValidator('superficie_mouts', new sfValidatorNumber(array('required' => false)));
         }
