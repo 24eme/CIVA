@@ -247,6 +247,7 @@ class SV extends BaseSV
         }
 
         $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail("Lies et bourbes", "entrees", "recolte", $this->lies);
+        $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail("Rebêches", "entrees", "recolte", $this->rebeches);
 
         return $lignes;
     }
