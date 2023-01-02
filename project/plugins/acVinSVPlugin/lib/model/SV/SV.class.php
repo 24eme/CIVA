@@ -147,7 +147,7 @@ class SV extends BaseSV
         $produit = $this->apporteurs->add($etablissement->cvi)->add($hashToAdd)->add($detailKey);
         $produit->denomination_complementaire = null;
         if($denominationComplementaire) {
-            $produit->denomination_complementaire = $denomination_complementaire;
+            $produit->denomination_complementaire = $denominationComplementaire;
         }
         $produit->getLibelle();
         $produit->cvi = $etablissement->cvi;
