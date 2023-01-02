@@ -266,6 +266,7 @@ class SVClient extends acCouchdbClient {
 
             if (strpos($produit->getHash(), 'cepages/RB') !== false) {
                 $produit->volume_recolte += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
+                $produit->volume_revendique = $produit->volume_recolte;
                 continue;
             }
 
