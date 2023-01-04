@@ -62,6 +62,19 @@ class SV extends BaseSV
         return $produits;
     }
 
+    public function getApporteursParProduit()
+    {
+        $produits = [];
+
+        foreach ($this->apporteurs as $apporteur) {
+            foreach ($apporteur->getProduits() as $produit) {
+                $produits[$produit->getProduitHash()][] = $apporteur->getCvi();
+            }
+        }
+
+        return $produits;
+    }
+
     public function getRecapProduits() {
         $recap = array();
         foreach($this->getProduits() as $produit) {
