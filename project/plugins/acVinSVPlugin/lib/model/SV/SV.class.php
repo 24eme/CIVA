@@ -153,6 +153,12 @@ class SV extends BaseSV
 
     public function addProduit($identifiant, $hash, $denominationComplementaire = null, $hidden_denom = null) {
         $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
+        if(!$etablissement && preg_match("/^[0-9]{10}$/", $identifiant)) {
+            $etablissement = new stdClass();
+            $etablissement->cvi = $identifiant;
+            $etablissement->nom = $identifiant;
+        }
+
         $detailKey = self::buildDetailKey($denominationComplementaire, $hidden_denom);
 
         $hashToAdd = str_replace("/declaration/", '', $hash);
