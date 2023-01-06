@@ -256,7 +256,13 @@ class SV extends BaseSV
         $lignes = "";
 
         foreach ($this->getRecapProduits() as $produit) {
-            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->produit_hash, "entrees", "recolte", $produit->volume_revendique, null, $produit->denominationComplementaire);
+            $volume = $produit->volume_revendique;
+
+            if ($this->getType() === SVClient::TYPE_SV12) {
+                $volume += $produit->volume_mouts_revendique;
+            }
+
+            $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail($produit->produit_hash, "entrees", "recolte", $volume, null, $produit->denominationComplementaire);
         }
 
         $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail("Lies et bourbes", "entrees", "recolte", $this->lies);
