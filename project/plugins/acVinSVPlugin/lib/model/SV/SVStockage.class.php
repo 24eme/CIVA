@@ -32,6 +32,10 @@ class SVStockage extends BaseSVStockage {
             }
         }
 
+        foreach($produits as $hash => $volume) {
+            $produits[$hash] = round($volume, 2);
+        }
+
         return $produits;
     }
 }
