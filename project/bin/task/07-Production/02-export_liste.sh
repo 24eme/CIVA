@@ -10,7 +10,7 @@ mkdir -m 777 $TASK_DIR/tmp > /dev/null
 
 EXPORT_FILE=tmp/export_liste_"$DR_CAMPAGNE"_$(date +%Y%m%d%H%M%S).csv
 
-echo "Campagne;CVI;Raison sociale;Statut;Date de validation;Email;Telephone" > "$TASK_DIR/$EXPORT_FILE";
+echo "CVI;Campagne;Raison sociale;Statut;Date de validation;Email;Telephone" > "$TASK_DIR/$EXPORT_FILE";
 
 bash bin/export_svs_csv.sh "$DR_CAMPAGNE" | tail -n +2 | awk -F';' -v CAMPAGNE="$DR_CAMPAGNE" '{v="EN COURS"; if($17) {v="VALIDEE"} ; print CAMPAGNE ";" $1 ";" $2 ";" v ";" $17 }' | uniq | sort > "$TASK_DIR/$EXPORT_FILE.sv"
 
