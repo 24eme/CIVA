@@ -42,7 +42,9 @@ class SVClient extends acCouchdbClient {
     public static function getTypeByEtablissement($etablissement) {
         $type = null;
 
-        if($etablissement->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
+        if($etablissement->exist('acheteur_raisin') && $etablissement->acheteur_raisin == "NegoCave") {
+            $type = 'SV12';
+        } elseif($etablissement->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
             $type = 'SV11';
         } elseif($etablissement->famille == EtablissementFamilles::FAMILLE_NEGOCIANT) {
             $type = 'SV12';
