@@ -142,6 +142,10 @@ class SVClient extends acCouchdbClient {
                         continue;
                     }
 
+                    if(!$detail->superficie) {
+                        continue;
+                    }
+
                     $svDetail->superficie_recolte += $detail->superficie;
                 }
 
@@ -159,6 +163,10 @@ class SVClient extends acCouchdbClient {
 
                     if($cepage->getLieu()->getVolumeAcheteur($cvi_acheteur, $drAcheteurType) == $volumes[$svKey]) {
                         $svDetail->superficie_recolte = $cepage->getLieu()->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
+                    }
+
+                    if(!$svDetail->superficie_recolte) {
+                        $svDetail->superficie_recolte = null;
                     }
                 }
 
