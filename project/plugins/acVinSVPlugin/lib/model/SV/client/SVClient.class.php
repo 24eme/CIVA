@@ -42,7 +42,9 @@ class SVClient extends acCouchdbClient {
     public static function getTypeByEtablissement($etablissement) {
         $type = null;
 
-        if($etablissement->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
+        if($etablissement->exist('acheteur_raisin') && $etablissement->acheteur_raisin == "NegoCave") {
+            $type = 'SV12';
+        } elseif($etablissement->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
             $type = 'SV11';
         } elseif($etablissement->famille == EtablissementFamilles::FAMILLE_NEGOCIANT) {
             $type = 'SV12';
@@ -244,7 +246,7 @@ class SVClient extends acCouchdbClient {
                 $denomination = $line[CsvFileAcheteur::CSV_LIEU];
             }
 
-            $produit = $sv->addProduit($apporteur->identifiant, $produit->getHash(), $denomination);
+            $produit = $sv->addProduit($apporteur->identifiant ? $apporteur->identifiant : trim($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]), $produit->getHash(), $denomination);
 
             if (strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') !== false) {
                 $produit->add('volume_mouts');
@@ -315,13 +317,6 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
-            $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
-
-            if(! $apporteur && strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIE') !== 0) {
-                $check[self::CSV_ERROR_APPORTEUR][] = [$i];
-                continue;
-            }
-
             if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIES') === 0) {
                 if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
                     $check[self::CSV_ERROR_VOLUME][] = [$i];
@@ -333,6 +328,13 @@ class SVClient extends acCouchdbClient {
 
             if(! $produit) {
                 $check[self::CSV_ERROR_PRODUIT][] = [$i];
+                continue;
+            }
+
+            $apporteur = EtablissementClient::getInstance()->findByCvi($line[CsvFileAcheteur::CSV_RECOLTANT_CVI]);
+
+            if(! $apporteur && $produit->getAppellation()->existRendement() && strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIE') !== 0) {
+                $check[self::CSV_ERROR_APPORTEUR][] = [$i];
                 continue;
             }
 
