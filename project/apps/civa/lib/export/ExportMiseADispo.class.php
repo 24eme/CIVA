@@ -78,7 +78,7 @@ abstract class ExportMiseADispo
 
     public function publicationById($id) {
 
-        if(!preg_match("/^[A-Z]+-(67|68)/", $id)) {
+        if(!preg_match("/^[A-Z0-9]+-(67|68)/", $id)) {
             throw new sfException("This document is a test document : ".$id);
         }
 
