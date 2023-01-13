@@ -3,6 +3,7 @@
 class ExportSVCsv
 {
     private $cvi = null;
+    private $apporteurs = [];
 
     public function __construct($cvi = null)
     {
