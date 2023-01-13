@@ -122,7 +122,10 @@ class DRMGenerateCSV {
         }
 
         try {
-            $sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->identifiant, $annee);
+            $sv = SVClient::getInstance()->findByIdentifiantAndCampagne(
+                $this->identifiant,
+                substr(ConfigurationClient::getInstance()->buildCampagneByPeriode($this->periode), 0, 4)
+            );
         } catch (Exception $e) {
             $sv = null;
         }
