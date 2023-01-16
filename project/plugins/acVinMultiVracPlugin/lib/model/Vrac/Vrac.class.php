@@ -1050,4 +1050,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
         return $current_json->diff($other_json);
     }
+
+    public function getPrixUniteLibelle() {
+        $unites = VracClient::$prix_unites;
+        return (isset($unites[$this->prix_unite]))? $unites[$this->prix_unite] : $this->prix_unite;
+    }
 }
