@@ -14,7 +14,8 @@
                         <option value="d'apport global">Apport global</option>
                         <option value="d'engagement surface/volume">Engagement surface / volume</option>
                         <option value="de vendange manuelle">Vendange Manuelle</option>
-                        <option value="en autre prime">Autre</option>
+                        <option value="de bonification/Réfaction TAP">Bonification/Réfaction TAP (pour les moûts)</option>
+                        <option value="en autres prime">Autres</option>
                     </select>
                 </td>
                 <td>
@@ -23,6 +24,7 @@
                 <td>
                     <select style="width:100px;margin:0px;" name="unite">
                         <option value="€ HT/Hl">€ HT/Hl</option>
+                        <option value="€ HT/Kg">€ HT/Kg</option>
                         <option value="%">%</option>
                     </select>
                 </td>
