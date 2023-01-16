@@ -46,6 +46,9 @@ class VracProduitForm extends acCouchdbObjectForm
                 if ($this->getObject()->getDocument()->getContratPluriannuelCadre() && !$this->getObject()->getDocument()->getContratPluriannuelCadre()->isInModeSurface()) {
                     $this->setWidget('volume_propose', new sfWidgetFormInputHidden());
                 }
+                if ($this->getObject()->getDocument()->type_contrat == VracClient::TYPE_RAISIN) {
+                    $this->setWidget('surface_propose', new sfWidgetFormInputHidden());
+                }
             }
         }
 
