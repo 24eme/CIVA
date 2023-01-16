@@ -297,6 +297,11 @@
 	width: 14px;
 }
 
+#contrats_vrac .bloc_infos .form_col_extended
+{
+    width: 743px !important;
+}
+
 #contrats_vrac .bloc_infos .form_col
 {
 	background: #e0dfdf;
