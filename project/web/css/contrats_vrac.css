@@ -249,9 +249,13 @@
 
 #contrats_vrac #type_contrat.bloc_infos .radio_list li input { vertical-align: middle; }
 
-#contrats_vrac #type_contrat.bloc_infos label[for$="VRAC"] { background: url('../images/pictos/pi_vrac.png') 5px 50% no-repeat; }
+#contrats_vrac #type_contrat.bloc_infos label[for$="VRAC"] { background: url('../images/pictos/pi_vrac.png') 3px 50% no-repeat; }
 
-#contrats_vrac #type_contrat.bloc_infos label[for$="BOUTEILLE"] { background: url('../images/pictos/pi_bouteille.png') 8px 50% no-repeat; }
+#contrats_vrac #type_contrat.bloc_infos label[for$="BOUTEILLE"] { background: url('../images/pictos/pi_bouteille.png') 6px 50% no-repeat; }
+
+#contrats_vrac #type_contrat.bloc_infos label[for$="RAISIN"] { background: url('../images/pictos/pi_raisin.png') 4px 50% no-repeat; }
+
+#contrats_vrac #type_contrat.bloc_infos label[for$="MOUT"] { background: url('../images/pictos/pi_mout.png') 3px 50% no-repeat; }
 
 #contrats_vrac .bloc_conditionner
 {
