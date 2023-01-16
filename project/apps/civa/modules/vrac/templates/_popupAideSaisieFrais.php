@@ -14,7 +14,7 @@
                         <option value="de frais de transport">Transport</option>
                         <option value="de cotisation CIVA">Cotisation CIVA</option>
                         <option value="de frais de courtage">Courtage</option>
-                        <option value="en autre frais">Autre</option>
+                        <option value="en autres frais">Autres</option>
                     </select>
                 </td>
                 <td>
@@ -23,6 +23,7 @@
                 <td>
                     <select style="width:100px;margin:0px;" name="unite">
                         <option value="€ HT/Hl">€ HT/Hl</option>
+                        <option value="€ HT/Hl">€ HT/Kg</option>
                         <option value="€ HT">€ HT</option>
                         <option value="%">%</option>
                     </select>
