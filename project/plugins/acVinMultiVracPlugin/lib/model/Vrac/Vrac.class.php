@@ -954,6 +954,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
+		if ($last = $this->getLastContratApplication()) {
+			if (!$last->isValide()) throw new Exception('Un contrat d\'application du contrat '.$this->_id.' est en cours de validation');
+		}
         $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
         $vrac->remove('_attachments');
