@@ -57,6 +57,13 @@ all:
         declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
           position: 11
           supprimable: 0
+      produits_mout_statiques:
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_BL/:
+          position: 1
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
+          position: 2
+          supprimable: 0
       produits_bouteille_statiques:
         declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:
           position: 1
