@@ -75,8 +75,8 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if (!$this->getObject()->isNew()) {
         	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
-        $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ha)"], 'expanded' => true)));
-        $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1], 'required' => false)));
+        $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ha)", "Une quantité (kg)"], 'expanded' => true)));
+        $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1,2], 'required' => false)));
         $this->getWidgetSchema()->setLabel('contrat_pluriannuel_mode_surface', "Vous contractualisez sur :");
 
         $campagnes = self::getCampagnesChoices();
@@ -147,7 +147,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
     	$this->getObject()->storeVendeurInformations($vendeur);
         $this->getObject()->acheteur_assujetti_tva = (isset($values['acheteur_assujetti_tva']) && $values['acheteur_assujetti_tva'])? 1 : 0;
         $this->getObject()->vendeur_assujetti_tva = (isset($values['vendeur_assujetti_tva']) && $values['vendeur_assujetti_tva'])? 1 : 0;
-        $this->getObject()->contrat_pluriannuel_mode_surface = (isset($values['contrat_pluriannuel_mode_surface']) && $values['contrat_pluriannuel_mode_surface'])? 1 : 0;
+        $this->getObject()->contrat_pluriannuel_mode_surface = (isset($values['contrat_pluriannuel_mode_surface']) && $values['contrat_pluriannuel_mode_surface'] == 1)? 1 : 0;
 
         if ($this->getObject()->isNew()) {
     		$this->getObject()->type_contrat = $values['type_contrat'];
