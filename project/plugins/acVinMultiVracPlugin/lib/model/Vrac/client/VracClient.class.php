@@ -5,6 +5,7 @@ class VracClient extends acCouchdbClient {
 	const VRAC_PREFIXE_ID = 'VRAC-';
 	const APP_CONFIGURATION = 'app_configuration_vrac';
 	const APP_CONFIGURATION_VRAC_PRODUITS = 'produits_vrac_statiques';
+    const APP_CONFIGURATION_MOUT_PRODUITS = 'produits_mout_statiques';
 	const APP_CONFIGURATION_BOUTEILLE_PRODUITS = 'produits_bouteille_statiques';
 	const APP_CONFIGURATION_ETAPES = 'etapes';
 	const NB_MAX_CONTRAT_DB2 = 99999;
@@ -66,6 +67,9 @@ class VracClient extends acCouchdbClient {
     {
     	if ($type == self::TYPE_BOUTEILLE) {
     		return self::APP_CONFIGURATION_BOUTEILLE_PRODUITS;
+    	}
+    	if ($type == self::TYPE_MOUT) {
+    		return self::APP_CONFIGURATION_MOUT_PRODUITS;
     	}
     	return self::APP_CONFIGURATION_VRAC_PRODUITS;
     }
