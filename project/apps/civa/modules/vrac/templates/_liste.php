@@ -39,7 +39,7 @@
                       <title>Contrat d'application <?php echo substr($object->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo substr($object->numero_visa, 0, -4) ?></title>
                       <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
                     </svg>
-                <?php elseif($object->contrat_pluriannuel): ?>
+                <?php elseif(isset($object->contrat_pluriannuel) && $object->contrat_pluriannuel): ?>
                     <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
                       <title>Contrat pluriannuel<?php echo ($object->numero_visa)? ' n°'.$object->numero_visa : ''; ?></title>
                       <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
