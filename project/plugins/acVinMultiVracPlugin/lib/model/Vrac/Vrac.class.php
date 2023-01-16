@@ -939,6 +939,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return null;
     }
 
+    public function getLastContratApplication() {
+        $contratsApplication = $this->getContratsApplication();
+		$last = null;
+        if (!$contratsApplication)
+            return null;
+        foreach($contratsApplication as $numContratApplication => $contratApplication) {
+            if ($contratApplication) $last = $contratApplication;
+        }
+        return $last;
+    }
+
 	public function generateNextPluriannuelApplication() {
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
