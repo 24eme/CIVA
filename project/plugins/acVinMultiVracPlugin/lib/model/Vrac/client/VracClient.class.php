@@ -19,6 +19,9 @@ class VracClient extends acCouchdbClient {
 	const LABEL_BIO = 'BIO';
 	const LABEL_HVE = 'HVE';
 	const LABEL_BIO_HVE = 'BIO_HVE';
+	const PRIX_HL = 'EUR_HL';
+	const PRIX_KG = 'EUR_KG';
+	const PRIX_HA = 'EUR_HA';
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
@@ -47,6 +50,12 @@ class VracClient extends acCouchdbClient {
                                  );
 
 	public static $label_libelles = array(self::LABEL_BIO => "BIO", self::LABEL_HVE => "HVE", self::LABEL_BIO_HVE => "BIO & HVE");
+
+	public static $prix_unites = array(
+					self::PRIX_HL => "€/hl",
+					self::PRIX_KG => "€/kg",
+					self::PRIX_HA => "€/are",
+					);
 
     public static function getInstance()
     {
