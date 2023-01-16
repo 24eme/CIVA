@@ -322,6 +322,8 @@
 
 #contrats_vrac .ligne_form { margin: 0 0 25px; }
 
+#contrats_vrac .ligne_form_sm { margin: 0 0 10px; }
+
 #contrats_vrac .bloc_infos .nom_cvi .ligne_form { margin: 0 0 5px; }
 
 #contrats_vrac .radio_list { display: inline-block; }

@@ -5,7 +5,7 @@
 
 		<div class="clearfix">
 			<div id="type_contrat_radio_list" class="form_col form_col_extended selecteur">
-				<div class="ligne_form">
+				<div class="ligne_form<?php if (!$form->getObject()->isNew()): ?>_sm<?php endif; ?>">
 					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Type du contrat :<?php else: ?>Type du contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
 						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
@@ -77,13 +77,13 @@
             </script>
             <?php elseif($vrac->isPluriannuelCadre()): ?>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
-                <div class="ligne_form">
+                <div class="ligne_form_sm">
 					<label for="" class="bold">Campagnes d'application :</label>
                     <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo ($millesime+VracClient::getConfigVar('nb_campagnes_pluriannuel',0)-1) ?></span>
                 </div>
             </div>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
-                <div class="ligne_form">
+                <div class="ligne_form_sm">
 					<label for="" class="bold">Vous contractualisez sur :</label>
                     <span style="margin-left: 5px;"><?php if(!$vrac->isInModeSurface()): ?>Du volume (hl)<?php else: ?>De la surface (ares)<?php endif; ?></span>
                 </div>
