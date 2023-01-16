@@ -244,7 +244,7 @@
 	display: inline-block;
 	height: 25px;
 	line-height: 25px;
-	padding: 0 0 0 30px;
+	padding: 0 0 0 22px;
 }
 
 #contrats_vrac #type_contrat.bloc_infos .radio_list li input { vertical-align: middle; }
@@ -321,7 +321,7 @@
 
 #contrats_vrac .radio_list { display: inline-block; }
 #contrats_vrac .bloc_infos #type_contrat_radio_list ul { margin: 10px 0 0 0; }
-#contrats_vrac #type_contrat.bloc_infos #type_contrat_radio_list ul li { margin: 0 30px 0 10px; }
+#contrats_vrac #type_contrat.bloc_infos #type_contrat_radio_list ul li { margin: 0 20px 0 10px; }
 .ielt9 #contrats_vrac .radio_list { display: inline; }
 
 #contrats_vrac .radio_list li
