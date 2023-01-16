@@ -10,15 +10,21 @@ class VracClient extends acCouchdbClient {
 	const NB_MAX_CONTRAT_DB2 = 99999;
 	const TYPE_VRAC = 'VRAC';
 	const TYPE_BOUTEILLE = 'BOUTEILLE';
+	const TYPE_RAISIN = 'RAISIN';
+	const TYPE_MOUT = 'MOUT';
 	const TYPE_VRAC_LIBELLE = 'Vrac';
 	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
+	const TYPE_RAISIN_LIBELLE = 'Raisin';
+	const TYPE_MOUT_LIBELLE = 'Moût';
 	const LABEL_BIO = 'BIO';
 	const LABEL_HVE = 'HVE';
 	const LABEL_BIO_HVE = 'BIO_HVE';
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
-                                    self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE
+                                    self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE,
+                                    self::TYPE_RAISIN => self::TYPE_RAISIN_LIBELLE,
+                                    self::TYPE_MOUT => self::TYPE_MOUT_LIBELLE
                                  );
 
   protected static $_roles = array(
