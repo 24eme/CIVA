@@ -84,6 +84,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->setValidator('campagne', new sfValidatorChoice(array('choices' => array_keys($campagnes), 'required' => false)));
         $this->getWidgetSchema()->setLabel('campagne', "Campagnes d'application :");
 
+        $unites = VracClient::$prix_unites;
+        $this->setWidget('prix_unite', new sfWidgetFormChoice(array('choices' => $unites)));
+        $this->setValidator('prix_unite', new sfValidatorChoice(array('choices' => array_keys($unites), 'required' => false)));
+        $this->getWidgetSchema()->setLabel('prix_unite', "Unité de prix :");
+
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
@@ -162,6 +167,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         } else {
             if ($values['campagne']) {
                 $this->getObject()->campagne = $values['campagne'];
+            }
+            if ($values['prix_unite']) {
+                $this->getObject()->prix_unite = $values['prix_unite'];
             }
         }
     }
