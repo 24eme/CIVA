@@ -1055,4 +1055,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $unites = VracClient::$prix_unites;
         return (isset($unites[$this->prix_unite]))? $unites[$this->prix_unite] : $this->prix_unite;
     }
+
+    public function isType($type) {
+        return ($this->type_contrat == $type);
+    }
 }
