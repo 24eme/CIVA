@@ -11,6 +11,7 @@ if (count($argv) !== 2) {
 
 $export_dr = fopen($argv[1], 'r');
 $output = fopen('php://output', 'w+');
+$max_rendement = [];
 
 if ($export_dr === false || $output === false) {
     die("Erreur à l'ouverture des fichiers");
@@ -37,6 +38,10 @@ while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
     }
 
     $rendement = round($volume / ($surface / 100), 2);
+
+    if ($rendement > 70) {
+        $max_rendement[$ligne[0]] = [$surface, $rendement, (float) $ligne[10], (float) $ligne[11], (float) $ligne[15], $volume];
+    }
 
     $reserve_calculee = 0;
     $reserve_notifiee = 0;
