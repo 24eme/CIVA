@@ -128,6 +128,27 @@ class VracClient extends acCouchdbClient {
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
 
+	public static function getDelaisPaiement($vrac) {
+        $delais = array();
+
+        $delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+        $delais[] = "Paiement sous 7 jours";
+
+        if($vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_RAISIN) {
+            $delais = array();
+        }
+
+        if($vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_VRAC) {
+            $delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+        }
+        if($vrac->isPluriannuelCadre()) {
+            $delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+            $delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+        }
+
+        return $delais;
+	}
+
 	public function getFirstEtablissement($societe) {
 		foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
 			if($etablissement->hasDroit(Roles::TELEDECLARATION_VRAC_CREATION)) {
