@@ -55,6 +55,7 @@ while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
     }
 
     fputcsv($output, [
+        'DR',
         $ligne[0], // CVI
         $ligne[3], // Raison sociale
         $surface,

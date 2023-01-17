@@ -18,6 +18,7 @@ if ($export_sv === false || $output === false) {
 
 $current_cvi = null;
 $current_rs = null;
+$current_type = null;
 $current_superficie = 0;
 $current_volume = 0;
 
@@ -45,6 +46,7 @@ while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
         }
 
         fputcsv($output, [
+            $current_type, // SV11 / SV12
             $current_cvi, // CVI
             $current_rs, // Raison sociale
             $current_superficie,
@@ -62,6 +64,7 @@ while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
     $current_volume     += $ligne[14];
     $current_cvi = $ligne[0];
     $current_rs = $ligne[1];
+    $current_type = $ligne[15];
 }
 
 fclose($export_sv);
