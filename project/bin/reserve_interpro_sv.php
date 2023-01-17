@@ -22,6 +22,10 @@ $current_type = null;
 $current_superficie = 0;
 $current_volume = 0;
 
+fputcsv($output, [
+    'Type', 'CVI', 'Raison sociale', 'Superficie', 'Volume revendiqué', 'Rendement', 'Réserve calculée', 'Réserve notifiée'
+], ';');
+
 while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
     if ($ligne[4] !== $_APPELLATION.' '.$_CEPAGE) {
         continue;

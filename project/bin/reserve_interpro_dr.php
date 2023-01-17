@@ -17,6 +17,10 @@ if ($export_dr === false || $output === false) {
     die("Erreur à l'ouverture des fichiers");
 }
 
+fputcsv($output, [
+    'Type', 'CVI', 'Raison sociale', 'Superficie', 'Volume revendiqué', 'Rendement', 'Réserve calculée', 'Réserve notifiée'
+], ';');
+
 while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
     if ($ligne[1] !== "SUR PLACE") {
         continue;
