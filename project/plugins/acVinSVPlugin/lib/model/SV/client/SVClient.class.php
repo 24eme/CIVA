@@ -24,7 +24,18 @@ class SVClient extends acCouchdbClient {
     {
         $etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$identifiantEtablissement);
 
-        return SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->cvi.'-'.$campagne);
+        $type = SVClient::getTypeByEtablissement($etablissement);
+        $sv = SVClient::getInstance()->find(SVClient::getTypeByEtablissement($etablissement).'-'.$etablissement->cvi.'-'.$campagne);
+
+        if(!$sv && $type == SVClient::TYPE_SV11) {
+            $sv = SVClient::getInstance()->find(SVClient::TYPE_SV12.'-'.$etablissement->cvi.'-'.$campagne);
+        }
+
+        if(!$sv && $type == SVClient::TYPE_SV12) {
+            $sv = SVClient::getInstance()->find(SVClient::TYPE_SV11.'-'.$etablissement->cvi.'-'.$campagne);
+        }
+
+        return $sv;
     }
 
     public function getAll($campagne = null)
