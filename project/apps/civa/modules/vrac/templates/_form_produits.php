@@ -1,5 +1,8 @@
 <?php use_helper('vrac') ?>
-<?php $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume'; ?>
+<?php
+    $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume';
+    $autreQuantiteType = ($quantiteType == 'volume')? 'surface' : 'volume';
+?>
 <p class="intro_contrat_vrac"><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>Saisissez ici les produits concernés par le contrat et pour chacun le nombre de bouteille, la centilisation et le prix.<br />La saisie des zones "Dénomination", "Millésime" est facultative.<?php else: ?>Saisissez ici les produits concernés par le contrat et pour chacun, le label obligatoire, le prix à l'hectolitre et <?php echo ($vrac->isInModeSurface())? 'la surface engagée' : 'le volume estimé'; ?>.<?php endif; ?></p>
 <table class="etape_produits produits table_donnees">
 	<thead>
@@ -15,6 +18,9 @@
 			<th class="centilisation"><span>Centilisation</span></th>
 			<?php else: ?>
 			<th class="volume"><span><?php echo ucfirst($quantiteType); ?></span></th>
+            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
+            <th class="volume"><span><?php echo ucfirst($autreQuantiteType); ?></span></th>
+            <?php endif; ?>
 			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
 		</tr>
@@ -68,6 +74,12 @@
 				<span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
 				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
 			</td>
+            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
+			<td class="volume">
+				<span><?php echo $embedForm[$autreQuantiteType.'_propose']->renderError() ?></span>
+				<?php echo $embedForm[$autreQuantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo (!$vrac->isInModeSurface())? 'ares' : 'hl'; ?>
+			</td>
+            <?php endif; ?>
 			<?php endif; ?>
 			<td class="prix">
 				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
