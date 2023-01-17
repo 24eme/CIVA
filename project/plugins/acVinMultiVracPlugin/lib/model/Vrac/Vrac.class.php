@@ -939,10 +939,24 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return null;
     }
 
+    public function getLastContratApplication() {
+        $contratsApplication = $this->getContratsApplication();
+		$last = null;
+        if (!$contratsApplication)
+            return null;
+        foreach($contratsApplication as $numContratApplication => $contratApplication) {
+            if ($contratApplication) $last = $contratApplication;
+        }
+        return $last;
+    }
+
 	public function generateNextPluriannuelApplication() {
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
+		if ($last = $this->getLastContratApplication()) {
+			if (!$last->isValide()) throw new Exception('Un contrat d\'application du contrat '.$this->_id.' est en cours de validation');
+		}
         $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
         $vrac->remove('_attachments');
@@ -1035,5 +1049,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $current_json = new acCouchdbJsonNative($this->document->getData());
 
         return $current_json->diff($other_json);
+    }
+
+    public function getPrixUniteLibelle() {
+        $unites = VracClient::$prix_unites;
+        return (isset($unites[$this->prix_unite]))? $unites[$this->prix_unite] : $this->prix_unite;
     }
 }
