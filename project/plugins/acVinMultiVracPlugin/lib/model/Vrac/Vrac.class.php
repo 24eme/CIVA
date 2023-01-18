@@ -198,6 +198,25 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function initProduits()
     {
+        if($this->type_contrat == VracClient::TYPE_RAISIN && $dr = DRClient::getInstance()->findLastByCvi($this->vendeur->cvi)) {
+            $i = 1;
+            foreach ($dr->getProduits() as $cepage) {
+                if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
+                    continue;
+                }
+                $volumeAcheteur = $cepage->getVolumeAcheteur($this->acheteur->cvi, 'negoces');
+                if(!$volumeAcheteur) {
+                    continue;
+                }
+                $this->addDetail($cepage->getHash(), array('supprimable' => 0, 'position' => $i));
+                $i++;
+            }
+        }
+
+        if(count($this->declaration->getProduitsDetailsSorted())) {
+            return;
+        }
+
     	if (isset($this->_config[VracClient::getConfigurationProduits($this->type_contrat)])) {
     		$produits = $this->_config[VracClient::getConfigurationProduits($this->type_contrat)];
     		foreach ($produits as $produit_hash => $produit_config) {

@@ -263,6 +263,17 @@ class DRClient extends acCouchdbClient {
        return $this->startkey('DR-'.$cvi.'-0000')->endkey('DR-'.$cvi.'-9999')->execute($hydrate);
     }
 
+    public function findLastByCvi($cvi, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
+        $ids = $this->getAllByCvi($cvi, acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
+        $id = end($ids);
+        if(!$id) {
+
+            return null;
+        }
+
+        return $this->find($id, $hydrate);
+    }
+
     /*
      *
      * @param string $cvi
