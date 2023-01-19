@@ -567,6 +567,9 @@ class vracActions extends sfActions
 
     protected function getFormRetiraisons($vrac, $user)
     {
+		if(!$vrac->needRetiraison()) {
+			return null;
+		}
 		if($vrac->isPluriannuelCadre()) {
 
 			return null;
