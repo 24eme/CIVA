@@ -51,6 +51,17 @@
             <?php endif; ?>
             </div>
             <script>
+				document.querySelectorAll('input[name="vrac_soussignes[type_contrat]"]').forEach(function(input) {
+					input.addEventListener('change', function(e) {
+						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').checked = true;
+						if(document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').checked) {
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = (input.value == "RAISIN");
+						}
+						if(input.value == "RAISIN") {
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').checked = true;
+						}
+					});
+				});
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
                     document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
                     document.querySelector('#ligne_campagnes_application select').disabled = true;
@@ -70,6 +81,10 @@
                     document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
                       item.disabled = false;
                     });
+					if(document.querySelector('#vrac_soussignes_type_contrat_RAISIN').checked) {
+						console.log('disabled');
+						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = true;
+					}
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
                     document.querySelector('#ligne_prix_unite label').style.opacity = '1';
                     document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';

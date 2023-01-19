@@ -75,8 +75,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         if (!$this->getObject()->isNew()) {
         	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
-        $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ha)", "Une quantité (kg)"], 'expanded' => true)));
-        $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1,2], 'required' => false)));
+
+        $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ha)"], 'expanded' => true)));
+        $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1], 'required' => false)));
         $this->getWidgetSchema()->setLabel('contrat_pluriannuel_mode_surface', "Vous contractualisez sur :");
 
         $campagnes = self::getCampagnesChoices();
