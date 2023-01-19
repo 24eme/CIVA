@@ -46,7 +46,13 @@ while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
         $reserve_notifiee = 0;
 
         if ($rendement > $_RENDEMENT_LIMITE) {
-            $reserve_calculee = $reserve_notifiee = round(($_RENDEMENT_MAX - $_RENDEMENT_LIMITE) * ($current_superficie / 100), 2);
+            $rendement_calcul = $rendement;
+
+            if ($rendement > $_RENDEMENT_MAX) {
+                $rendement_calcul = $_RENDEMENT_MAX;
+            }
+
+            $reserve_calculee = $reserve_notifiee = round(($rendement_calcul - $_RENDEMENT_LIMITE) * ($current_superficie / 100), 2);
         }
 
         if ($reserve_notifiee <= 5.0) {
