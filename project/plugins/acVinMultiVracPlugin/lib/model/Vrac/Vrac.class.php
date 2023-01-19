@@ -251,7 +251,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         if(!$produit) {
             return null;
         }
-        return $produit->addDetail($config);
+        $detail = $produit->addDetail($config);
+        $complement = null;
+        if (strpos($hash, 'mentionVT')) $complement = 'VT';
+        if (strpos($hash, 'mentionSGN')) $complement = 'SGN';
+        $detail->denomination = $complement;
+        return $detail;
     }
 
     public function addDynamiqueDetail($hash, $lieuDit = null, $vtsgn = null, $config = null)
