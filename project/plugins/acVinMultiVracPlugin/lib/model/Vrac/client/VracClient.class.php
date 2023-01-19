@@ -23,6 +23,7 @@ class VracClient extends acCouchdbClient {
 	const PRIX_HL = 'EUR_HL';
 	const PRIX_KG = 'EUR_KG';
 	const PRIX_HA = 'EUR_HA';
+	const PRIX_BOUTEILLE = 'EUR_BOUTEILLE';
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
@@ -56,6 +57,7 @@ class VracClient extends acCouchdbClient {
 					self::PRIX_HL => "€/hl",
 					self::PRIX_KG => "€/kg",
 					self::PRIX_HA => "€/ha",
+					self::PRIX_BOUTEILLE => "€/blle",
 					);
 
     public static function getInstance()
