@@ -16,7 +16,6 @@
             	<thead>
             		<tr>
             			<th class="produit">Produits</th>
-            			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
             			<th class="volume"><?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>Surface engagée<?php else: ?>Volume estimé<?php endif; ?></th>
             			<th class="prix">Prix</th>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
@@ -39,9 +38,6 @@
                 		    <?php echo $detail->getLibelleSansCepage(); ?>
                             <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
                         </td>
-                        <td class="date_retiraison_limite" style="text-align: center;">
-                            <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
-            			</td>
             			<td class="volume">
                             <?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>
                                 <?php echo $detail->surface_propose; ?>&nbsp;ares
