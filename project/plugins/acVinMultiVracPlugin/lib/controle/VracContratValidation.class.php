@@ -28,7 +28,6 @@ class VracContratValidation extends DocumentValidation
 
         $this->addControle('erreur', 'retiraisons_pb', 'La date limite de retiraison ne peut pas être antérieur à la date de début de retiraison');
         $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraison ne peuvent dépasser le 31/07');
-        $this->addControle('erreur', 'retiraisons_incoherence', 'A validation ce jour, la date limite de retiraison ne peut dépasser le '.date('d/m/Y', strtotime('+60 days')).' dans le cadre d\'un contrat sans suivi qualitatif');
         $this->addControle('erreur', 'vendeur_assujetti_tva_required', 'Vous devez préciser si le vendeur est assujetti à la tva ou non');
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
@@ -131,10 +130,6 @@ class VracContratValidation extends DocumentValidation
 
         if (count($retiraisons_pb) > 0) {
             $this->addPoint('erreur', 'retiraisons_pb', implode(",", $retiraisons_pb), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
-        }
-
-        if (count($retiraisons_incoherentes) > 0) {
-            $this->addPoint('erreur', ($this->document->exist('suivi_qualitatif') && $this->document->suivi_qualitatif == '0' && !$this->document->isPluriannuelCadre())? 'retiraisons_incoherence' : 'retiraisons_limite_incoherence', implode(",", $retiraisons_incoherentes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
         if ($this->document->exist('vendeur_assujetti_tva') && $this->document->vendeur_assujetti_tva === null) {
