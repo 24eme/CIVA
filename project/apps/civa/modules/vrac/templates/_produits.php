@@ -21,12 +21,14 @@
             <th class="volume"><?php echo ucfirst($autreQuantiteType); ?> estimé</th>
             <?php endif; ?>
 			<th class="prix">Prix</th>
-			<?php if ($vrac->isCloture() || $form): ?>
+			<?php if ($vrac->needRetiraison() && ($vrac->isCloture() || $form)): ?>
 			<th class="echeance">Date</th>
 			<th class="enleve">Volume réel</th>
-            <?php else: ?>
+            <?php elseif($vrac->needRetiraison()): ?>
             <th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
+            <?php else: ?>
+            <th colspan="2" style=" width: 100px;"></th>
             <?php endif; ?>
 			<?php if ($form): ?>
 			<th class="cloture">Cloture</th>
@@ -104,7 +106,7 @@
 		<?php
 			$counter++; endforeach;
 		?>
-	<?php elseif($vrac->isCloture()): ?>
+	<?php elseif($vrac->isCloture() && $vrac->needRetiraison()): ?>
 		<?php
 			$counter = 0;
             $volumeTotal = 0;
@@ -199,6 +201,7 @@
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?><?php endif; ?>
 			</td>
+            <?php if($vrac->needRetiraison()): ?>
             <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
 				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
                 <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
@@ -213,6 +216,9 @@
 	                <?php echo format_date('1970-'.$detail->retiraison_date_limite, 'dd/MM') ?>
                 <?php endif;  ?>
 			</td>
+            <?php else: ?>
+            <td colspan="2"></td>
+            <?php endif; ?>
 			<?php endif; ?>
 		</tr>
 		<?php

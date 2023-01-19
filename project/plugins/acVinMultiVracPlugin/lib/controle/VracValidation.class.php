@@ -40,9 +40,9 @@ class VracValidation extends DocumentValidation
 				}
 			}
 		}
-	
-	    if (count($null_libelles) > 0) {
-	      $this->addPoint('erreur', 'volume_non_saisi', implode(",", $null_libelles)); 
+
+	    if ($this->document->needRetiraison() && count($null_libelles) > 0) {
+	      $this->addPoint('erreur', 'volume_non_saisi', implode(",", $null_libelles));
 	    }
 
 	    if(count($ecart_libelles) > 0){

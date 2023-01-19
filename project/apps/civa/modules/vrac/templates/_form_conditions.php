@@ -10,6 +10,7 @@
 ?>
 <p class="intro_contrat_vrac">Veuillez saisir ici les conditions applicables au contrat.</p>
 
+<?php if(isset($form['produits_retiraisons'])): ?>
 <table class="validation table_donnees">
 	<thead>
 		<tr>
@@ -64,6 +65,7 @@
         });
     });
 </script>
+<?php endif; ?>
 
 <?php if(!$vrac->isPapier()): ?>
 <?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>

@@ -125,7 +125,7 @@ class VracContratValidation extends DocumentValidation
             $this->addPoint('erreur', 'millesime_non_saisi', implode(",", $millesimes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
         }
 
-        if (count($retiraisons_manquantes) > 0) {
+        if($this->document->needRetiraison() && count($retiraisons_manquantes) > 0) {
             $this->addPoint('erreur', 'retiraisons_non_saisi', implode(",", $retiraisons_manquantes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
