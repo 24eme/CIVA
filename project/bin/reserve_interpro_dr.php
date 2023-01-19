@@ -18,7 +18,7 @@ if ($export_dr === false || $output === false) {
 }
 
 fputcsv($output, [
-    'Type', 'CVI', 'Raison sociale', 'Superficie', 'Volume revendiqué', 'Rendement', 'Réserve calculée', 'Réserve notifiée'
+    'Type', 'CVI', 'Raison sociale', 'Superficie totale', 'Superficie sur place', 'Volume revendiqué total', 'Rendement', 'Réserve calculée', 'Réserve notifiée'
 ], ';');
 
 while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
@@ -34,18 +34,15 @@ while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
         continue;
     }
 
-    $surface = $ligne[9];
-    $volume  = (float) $ligne[10] - (float) $ligne[11] - (float) $ligne[15]; // Volume - à détruire - vci
+    $surface_sur_place = $ligne[9];
+    $surface_total = $ligne[12];
+    $volume_total  = (float) $ligne[13] - (float) $ligne[14] - (float) $ligne[16]; // Volume - à détruire - vci
 
-    if (is_null($surface) || $surface <= 0 || is_null($volume) || $volume <= 0) {
+    if (is_null($surface_sur_place) || $surface_sur_place <= 0 || is_null($volume_total) || $volume_total <= 0) {
         continue;
     }
 
-    $rendement = round($volume / ($surface / 100), 2);
-
-    if ($rendement > 70) {
-        $max_rendement[$ligne[0]] = [$surface, $rendement, (float) $ligne[10], (float) $ligne[11], (float) $ligne[15], $volume];
-    }
+    $rendement = round($volume_total / ($surface_total / 100), 2);
 
     $reserve_calculee = 0;
     $reserve_notifiee = 0;
@@ -57,7 +54,7 @@ while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
             $rendement_calcul = $_RENDEMENT_MAX;
         }
 
-        $reserve_calculee = $reserve_notifiee = round(($rendement_calcul - $_RENDEMENT_LIMITE) * ($surface / 100), 2);
+        $reserve_calculee = $reserve_notifiee = round(($rendement_calcul - $_RENDEMENT_LIMITE) * ($surface_sur_place / 100), 2);
     }
 
     if ($reserve_notifiee <= 5.0) {
@@ -66,10 +63,11 @@ while (($ligne = fgetcsv($export_dr, 1000, ";")) !== false) {
 
     fputcsv($output, [
         'DR',
-        $ligne[0], // CVI
+        $ligne[2], // CVI
         $ligne[3], // Raison sociale
-        $surface,
-        $volume,
+        $surface_total,
+        $surface_sur_place,
+        $volume_total,
         $rendement,
         $reserve_calculee,
         $reserve_notifiee
