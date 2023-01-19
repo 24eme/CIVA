@@ -55,7 +55,7 @@ class VracClient extends acCouchdbClient {
 	public static $prix_unites = array(
 					self::PRIX_HL => "€/hl",
 					self::PRIX_KG => "€/kg",
-					self::PRIX_HA => "€/are",
+					self::PRIX_HA => "€/ha",
 					);
 
     public static function getInstance()
