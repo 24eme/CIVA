@@ -27,11 +27,15 @@ fputcsv($output, [
 ], ';');
 
 while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
-    if ($ligne[4] !== $_APPELLATION.' '.$_CEPAGE) {
+    if (strpos($ligne[4], $_APPELLATION) !== 0) {
         continue;
     }
 
-    if (strpos($ligne[4], 'VT') !== false || strpos($ligne[4], 'SGN') !== false) {
+    if ($ligne[6] !== $_CEPAGE) {
+        continue;
+    }
+
+    if ($ligne[7] === 'VT' || $ligne[7] === 'SGN') {
         continue;
     }
 
