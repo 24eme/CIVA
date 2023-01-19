@@ -184,7 +184,7 @@
 			</td>
 			<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
-				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
 			</td>
 			<td class="volume <?php echo isVersionnerCssClass($detail, 'surface_propose') ?> <?php echo isVersionnerCssClass($detail, 'volume_propose') ?>">
 				<span class="printonly">Volume proposé : </span><?php echoFloat(($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
@@ -199,7 +199,7 @@
             </td>
             <?php endif; ?>
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
-				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;&euro;/<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
+				<span class="printonly">Prix unitaire : </span><?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
 			</td>
             <?php if($vrac->needRetiraison()): ?>
             <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">

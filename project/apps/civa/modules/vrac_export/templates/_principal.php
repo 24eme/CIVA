@@ -25,7 +25,7 @@
 		<th width="<?php echo $widthProduit ?>px" style="font-weight: bold; text-align: center; border: 1px solid black;">Produit</th>
 		<th width="42px" style="font-weight: bold; text-align: center; border: 1px solid black;">Mill.</th>
 		<?php if (!$odg): ?>
-		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small><?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>(en &euro;/blle)<?php else: ?>(en &euro;/hl)<?php endif; ?></small></th>
+		<th width="58px" style="font-weight: bold; text-align: center; border: 1px solid black;">Prix*<br/><small>(en <?php echo $vrac->getPrixUniteLibelle(); ?>)</small></th>
 		<?php endif; ?>
 		<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 		<th width="85px" style="font-weight: bold; text-align: center; border: 1px solid black;">Centilisation</th>
