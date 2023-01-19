@@ -224,7 +224,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	public function addProduit($hash)
 	{
         $hash = preg_replace('/^\/recolte/','declaration', $hash);
-        $hash_config = preg_replace('/^declaration/','recolte', $hash);
+        $hash = preg_replace("/(mentionVT|mentionSGN)/", "mention", $hash);
         $produit = $this->getOrAdd($hash);
         $config = $produit->getConfig();
         $produit->libelle = $config->getLibelle();
