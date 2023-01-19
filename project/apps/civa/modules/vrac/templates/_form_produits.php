@@ -83,7 +83,7 @@
 			<?php endif; ?>
 			<td class="prix">
 				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num')) ?>&nbsp;&euro;/<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>blle<?php else: ?>hl<?php endif; ?>
+				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num')) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?>
 				<a href="#" class="balayette" title="Effacer les champs">Effacer les champs</a>
 			</td>
 		</tr>

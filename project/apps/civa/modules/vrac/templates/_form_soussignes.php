@@ -54,10 +54,12 @@
 				document.querySelectorAll('input[name="vrac_soussignes[type_contrat]"]').forEach(function(input) {
 					input.addEventListener('change', function(e) {
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').checked = true;
+						document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
 						if(document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').checked) {
 							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = (input.value == "RAISIN");
 						}
 						if(input.value == "RAISIN") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_KG";
 							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').checked = true;
 						}
 					});

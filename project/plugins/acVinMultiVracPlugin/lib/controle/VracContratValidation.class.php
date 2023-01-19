@@ -54,9 +54,9 @@ class VracContratValidation extends DocumentValidation
 					$produits[$detail->getCepage()->getHash()] = array();
 				}
 				$produits[$detail->getCepage()->getHash()][] = $detail;
-                if((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL_BLOQUANT) {
+                if($this->document->getPrixUnite() == VracClient::PRIX_HL && $detail->prix_unitaire < self::PRIX_SEUIL_BLOQUANT) {
                     $this->addPoint('erreur', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
-                } elseif((!$detail->exist('nb_bouteille') || !$detail->nb_bouteille) && $detail->prix_unitaire < self::PRIX_SEUIL) {
+                } elseif($this->document->getPrixUnite() == VracClient::PRIX_HL && $detail->prix_unitaire < self::PRIX_SEUIL) {
                     $this->addPoint('vigilance', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
                 }
 				if (!$detail->exist('label') || $detail->label === null || $detail->label === "") {
