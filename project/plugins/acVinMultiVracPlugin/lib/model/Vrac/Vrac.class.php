@@ -204,10 +204,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
                 if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
                     continue;
                 }
-                $volumeAcheteur = $cepage->getVolumeAcheteur($this->acheteur->cvi, 'negoces');
-                if(!$volumeAcheteur) {
-                    continue;
-                }
                 $this->addDetail($cepage->getHash(), array('supprimable' => 0, 'position' => $i));
                 $i++;
             }
