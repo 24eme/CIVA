@@ -46,7 +46,7 @@
                             <?php endif; ?>
             			</td>
             			<td class="prix">
-            				<?php echo $detail->prix_unitaire; ?>&nbsp;&euro;/hl
+            				<?php echo $detail->prix_unitaire; ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
             			</td>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<td class="volume">
@@ -55,7 +55,7 @@
             			</td>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null, 'style' => 'width:58px;')) ?>&nbsp;&euro;/hl
+            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'value' => null, 'style' => 'width:58px;')) ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
             			</td>
                     <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface && $form->getObject()->getContratPluriannuelCadre()->type_contrat != VracClient::TYPE_RAISIN): ?>
             			<td class="volume">
