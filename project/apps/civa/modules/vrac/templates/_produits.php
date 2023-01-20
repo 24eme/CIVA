@@ -16,7 +16,7 @@
 			<th class="prix">Prix</th>
 			<th class="volume">Volume</th>
 			<?php else: ?>
-            <th class="volume"><?php echo ucfirst($quantiteType); ?> estimé</th>
+            <th class="volume"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagée<?php else: ?>estimé<?php endif; ?></th>
             <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
             <th class="volume"><?php echo ucfirst($autreQuantiteType); ?> estimé</th>
             <?php endif; ?>
