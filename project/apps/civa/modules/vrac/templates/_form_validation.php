@@ -85,7 +85,7 @@
 			endforeach;
 		?>
 		<tr<?php if (!$alt): ?> class="alt"<?php endif; ?>>
-			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong><?php echo ucfirst($quantiteType); ?> total</strong></td>
+			<td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="3"<?php endif; ?>><strong>Total</strong></td>
 			<td class="volume">
 				<?php echoFloat($volumeTotal) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl' ?>
 			</td>
