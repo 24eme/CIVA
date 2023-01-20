@@ -227,7 +227,7 @@
 		?>
 	<?php endif; ?>
     <tr<?php if (!$alt): ?> class="alt"<?php endif; ?>>
-        <td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="4"<?php endif; ?>><strong>Volume total</strong></td>
+        <td style="text-align: right;"<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?> colspan="4"<?php endif; ?>><strong>Total</strong></td>
         <td class="volume">
             <?php echoFloat($volumeTotal) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
         </td>
