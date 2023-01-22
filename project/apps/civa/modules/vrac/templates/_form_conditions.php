@@ -143,19 +143,8 @@
             </td>
 		</tr>
 		<?php endif; ?>
-        <?php if(isset($form['suivi_qualitatif'])): ?>
-		<tr>
-			<td>
-				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
-			</td>
-			<td colspan="2">
-            <?php echo $form['suivi_qualitatif']->render() ?>
-            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
-			</td>
-		</tr>
-		<?php endif; ?>
 		<?php if(isset($form['clause_reserve_propriete'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['clause_reserve_propriete']->renderLabel() ?>
 			</td>
@@ -166,7 +155,7 @@
 		</tr>
 		<?php endif; ?>
 		<?php if(isset($form['clause_mandat_facturation'])): ?>
-		<tr>
+		<tr class="alt">
 			<td>
 				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
 			</td>
@@ -176,7 +165,7 @@
 		</tr>
 		<?php endif; ?>
 		<?php if(isset($form['clause_evolution_prix'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['clause_evolution_prix']->renderLabel() ?>
 			</td>
@@ -191,7 +180,7 @@
             </td>
 		</tr>
 		<?php endif; ?>
-		<tr>
+		<tr class="alt">
 			<td>
 				<?php echo $form['conditions_particulieres']->renderLabel() ?>
 			</td>
@@ -201,6 +190,17 @@
 			</td>
 			<td></td>
 		</tr>
+        <?php if(isset($form['suivi_qualitatif'])): ?>
+		<tr>
+			<td>
+				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
+			</td>
+			<td colspan="2">
+            <?php echo $form['suivi_qualitatif']->render() ?>
+            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
+			</td>
+		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>

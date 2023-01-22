@@ -28,8 +28,16 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-        <?php if($vrac->exist('clause_resiliation')): ?>
         <tr>
+			<td>
+				Délais de paiement
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'conditions_paiement') ?>">
+				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucun'; ?>
+			</td>
+		</tr>
+        <?php if($vrac->exist('clause_resiliation')): ?>
+        <tr class="alt">
 			<td>
 				Résiliation hors cas de force majeur
 			</td>
@@ -38,26 +46,8 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-        <tr class="alt">
-			<td>
-				Délais de paiement
-			</td>
-			<td class="<?php echo isVersionnerCssClass($vrac, 'conditions_paiement') ?>">
-				<?php echo ($vrac->conditions_paiement)? $vrac->conditions_paiement : 'Aucun'; ?>
-			</td>
-		</tr>
-        <?php if($vrac->exist('suivi_qualitatif')): ?>
-		<tr>
-			<td>
-				<label>Suivi qualitatif</label>
-			</td>
-			<td class="<?php echo isVersionnerCssClass($vrac, 'suivi_qualitatif') ?>">
-				<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?>
-			</td>
-		</tr>
-		<?php endif; ?>
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<label>Clause de réserve de propriété</label>
 			</td>
@@ -68,7 +58,7 @@
 		</tr>
 		<?php endif; ?>
         <?php if($vrac->exist('clause_mandat_facturation')): ?>
-		<tr>
+		<tr class="alt">
 			<td>
 				<label>Mandat de facturation</label>
 			</td>
@@ -77,24 +67,6 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-		<?php if($vrac->isInterne()): ?>
-                <tr class="alt">
-                        <td>
-                                <label>Interne</label>
-                        </td>
-                        <td>
-                                <strong>Oui</strong>
-                        </td>
-                </tr>
-                <?php endif; ?>
-        <tr class="alt">
-			<td>
-				Autres clauses particulières
-			</td>
-			<td class="<?php echo isVersionnerCssClass($vrac, 'conditions_particulieres') ?>">
-				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
-			</td>
-		</tr>
         <?php if($vrac->exist('clause_evolution_prix') && $vrac->isPluriannuelCadre()): ?>
         <tr>
 			<td>
@@ -105,5 +77,33 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+        <tr class="alt">
+			<td>
+				Autres clauses particulières
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'conditions_particulieres') ?>">
+				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
+			</td>
+		</tr>
+		<?php if($vrac->exist('suivi_qualitatif')): ?>
+		<tr>
+			<td>
+				<label>Suivi qualitatif</label>
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'suivi_qualitatif') ?>">
+				<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
+		<?php if($vrac->isInterne()): ?>
+        <tr class="alt">
+                <td>
+                        <label>Interne</label>
+                </td>
+                <td>
+                        <strong>Oui</strong>
+                </td>
+        </tr>
+        <?php endif; ?>
 	</tbody>
 </table>
