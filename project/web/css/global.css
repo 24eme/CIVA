@@ -681,5 +681,10 @@ input[type="text"].ui-autocomplete-input
 }
 
 .versionner {
-    outline: 1px dotted #ff0000 !important;
+    outline: 2px dotted #ff0000 !important;
+}
+
+td.versionner {
+    outline: none !important;
+    border: 2px dotted #ff0000 !important;
 }
