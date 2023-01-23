@@ -78,6 +78,15 @@ class VracProduitForm extends acCouchdbObjectForm
         if($this->getObject()->exist('label') && ($this->getObject()->label === false || $this->getObject()->label === "0")) {
             $this->setDefault('label', 'AUCUN');
         }
+
+
+        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['volume_propose'])) {
+            $this->setDefault('volume_propose', null);
+        }
+
+        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['prix_unitaire'])) {
+            $this->setDefault('prix_unitaire', null);
+        }
     }
 
     public function doUpdateObject($values) {
