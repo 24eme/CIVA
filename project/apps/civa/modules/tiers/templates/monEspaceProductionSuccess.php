@@ -12,6 +12,12 @@
           <div class="contenu_section">
               <?php if($sv && $sv->isValide()): ?>
                  <p class="intro">Vous avez déjà validé votre déclaration. Vous ne pouvez plus la modifier. Vous pouvez uniquement la visualiser et l'imprimer. En cas de problème contactez au CIVA Dominique WOLFF ou Marco RIBEIRO.</p>
+                 <div class="ligne_form ligne_btn">
+                     <a class="btn btn_petit btn_majeur btn_vert" href="<?php echo url_for('sv_visualisation', $sv) ?>">Visualiser</a>
+                     <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
+                         <a class="btn btn_petit btn_majeur btn_jaune" href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Êtes-vous sur de vouloir dévalider cette déclaration ?')">Dévalider</a>
+                     <?php endif; ?>
+                 </div>
               <?php elseif(SVClient::getInstance()->isTeledeclarationOuverte()): ?>
                   <p class="intro">Vous souhaitez :</p>
               <?php else: ?>
@@ -21,23 +27,15 @@
               <form action="<?= url_for($formaction, ['identifiant' => $etablissement->identifiant]) ?>" method="POST" enctype="multipart/form-data" id="form_sv">
               <?php echo $form->renderHiddenFields() ?>
               <?php echo $form->renderGlobalErrors() ?>
-              <?php if ($sv): ?>
-                <?php if ($sv->isValide()): ?>
-                    <div class="ligne_form ligne_btn">
-                        <a class="btn btn_petit btn_majeur btn_vert" href="<?php echo url_for('sv_visualisation', $sv) ?>">Visualiser</a>
-                        <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
-                            <a class="btn btn_petit btn_majeur btn_jaune" href="<?php echo url_for('sv_invalider_civa', $sv) ?>" onclick="return confirm('Êtes-vous sur de vouloir dévalider cette déclaration ?')">Dévalider</a>
-                        <?php endif; ?>
-                    </div>
-                <?php else: ?>
+              <?php if($sv && !$sv->isValide()): ?>
                   <div class="ligne_form">
                       <label for="sv_startup_action_reprendre" class="radio-inline"><input name="sv_startup[action]" type="radio" checked="checked" value="reprendre" id="sv_startup_action_reprendre">&nbsp;Continuer ma déclaration</label>
                   </div>
                   <div class="ligne_form">
                       <label for="sv_startup_action_supprimer" class="radio-inline"><input name="sv_startup[action]" type="radio" value="supprimer" id="sv_startup_action_supprimer">&nbsp;Supprimer ma déclaration</label>
                   </div>
-                <?php endif ?>
-              <?php else: ?>
+              <?php endif; ?>
+              <?php if(!$sv): ?>
               <div class="ligne_form">
                     <input name="sv_creation[type_creation]" type="radio" value="DR" id="sv_creation_type_creation_DR" checked>
                     <label for="sv_creation_type_creation_DR">Démarrer depuis les données des DR Apporteurs</label>
