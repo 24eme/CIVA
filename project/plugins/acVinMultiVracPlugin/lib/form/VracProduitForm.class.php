@@ -69,7 +69,7 @@ class VracProduitForm extends acCouchdbObjectForm
 
     public function getBioChoices()
     {
-      return array('' => '', 'AUCUN' => 'Conventionnel', VracClient::LABEL_BIO => 'Bio', VracClient::LABEL_HVE => 'HVE', VracClient::LABEL_BIO_HVE => 'Bio & HVE');
+      return array('' => '', 'AUCUN' => 'Aucun', VracClient::LABEL_BIO => 'Bio', VracClient::LABEL_HVE => 'HVE3', VracClient::LABEL_BIO_HVE => 'Bio & HVE3');
     }
 
     protected function updateDefaultsFromObject() {
