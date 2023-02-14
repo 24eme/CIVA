@@ -19,9 +19,6 @@
 			<th class="centilisation" style="text-align: center">Centilisation</th>
 			<?php endif; ?>
 			<th class="volume" style="text-align: center"><?php echo ucfirst($quantiteType); ?></th>
-            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
-            <th class="volume" style="text-align: center"><?php echo ucfirst($autreQuantiteType); ?></th>
-            <?php endif; ?>
 			<th class="prix" style="text-align: center">Prix</th>
             <?php if($vrac->needRetiraison()): ?>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
@@ -53,11 +50,6 @@
 			<td class="volume <?php echo isVersionnerCssClass($detail, $quantiteType.'_propose') ?>">
 				<?php echoFloat($detail->get($quantiteType.'_propose')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl' ?>
 			</td>
-            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
-			<td class="volume <?php echo isVersionnerCssClass($detail, $autreQuantiteType.'_propose') ?>">
-				<?php echoFloat($detail->get($autreQuantiteType.'_propose')) ?>&nbsp;<?php echo (!$vrac->isInModeSurface())? 'ares' : 'hl' ?>
-			</td>
-            <?php endif; ?>
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
 			</td>
@@ -89,14 +81,7 @@
 			<td class="volume">
 				<?php echoFloat($volumeTotal) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl' ?>
 			</td>
-            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
-                <td class="volume">
-    				<?php echoFloat($autreVolumeTotal) ?>&nbsp;<?php echo (!$vrac->isInModeSurface())? 'ares' : 'hl' ?>
-    			</td>
-                <td colspan="3"></td>
-            <?php else: ?>
-                <td colspan="3"></td>
-            <?php endif; ?>
+            <td colspan="3"></td>
 		</tr>
 	</tbody>
 </table>
