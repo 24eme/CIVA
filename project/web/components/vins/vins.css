@@ -30,7 +30,9 @@
 .icon-drm:before,
 .icon-etablissement:before,
 .icon-mouts:before,
+.icon-mout:before,
 .icon-raisins:before,
+.icon-raisin:before,
 .icon-stock:before,
 .icon-vrac:before {
   display: inline-block;
@@ -54,6 +56,8 @@
 .icon-drm:before { content: "\f104"; }
 .icon-etablissement:before { content: "\f105"; }
 .icon-mouts:before { content: "\f106"; }
+.icon-mout:before { content: "\f106"; }
 .icon-raisins:before { content: "\f107"; }
+.icon-raisin:before { content: "\f107"; }
 .icon-stock:before { content: "\f108"; }
-.icon-vrac:before { content: "\f109"; }
+.icon-vrac:before { content: "\f108"; }

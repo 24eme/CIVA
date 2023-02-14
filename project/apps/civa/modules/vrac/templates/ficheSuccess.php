@@ -19,19 +19,22 @@ td.echeance {display: inline;}
 </style>
 <div id="contrat_onglet">
 <ul id="onglets_majeurs" class="clearfix">
-	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>">
-		<a style="height: 18px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
+	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
+		<a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
+            <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
 		<?php if ($vrac->isValide()): ?>
-			Contrat <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?> <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> <?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
+			Contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>pluriannuel <?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
-			Validation de votre contrat <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
+			Validation du contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
+
     <?php if (count($contratsApplication)>0): ?>
 		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
 			<?php if($contratApplication): ?>
-                <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>"><a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>"><?php echo $contratApplication->campagne ?></a></li>
+                <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
+                <a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>" style="position: relative;"><?php echo $contratApplication->campagne ?></a></li>
             <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant)): ?>
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
             <?php else: ?>
@@ -158,7 +161,7 @@ td.echeance {display: inline;}
                     <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider vos enlèvements</button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
-					<p>Contrat vrac numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
+					<p>Contrat vrac <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 			</td>
 		</tr>
