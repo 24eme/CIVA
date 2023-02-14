@@ -52,13 +52,6 @@ class VracProduitForm extends acCouchdbObjectForm
             }
         }
 
-        if ($this->getObject()->getDocument()->isType(VracClient::TYPE_MOUT)) {
-            $autreQuantiteType = ($quantiteType == 'volume')? 'surface' : 'volume';
-            $this->setWidget($autreQuantiteType.'_propose', new sfWidgetFormInputFloat());
-            $this->setValidator($autreQuantiteType.'_propose', new sfValidatorNumber(array('required' => false)));
-            $this->widgetSchema->setLabel($autreQuantiteType.'_propose', ucfirst($autreQuantiteType).' estimé:');
-        }
-
   		$this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 
