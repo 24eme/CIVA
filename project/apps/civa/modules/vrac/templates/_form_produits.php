@@ -18,9 +18,6 @@
 			<th class="centilisation"><span>Centilisation</span></th>
 			<?php else: ?>
 			<th class="volume"><span><?php echo ucfirst($quantiteType); ?></span></th>
-            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
-            <th class="volume"><span><?php echo ucfirst($autreQuantiteType); ?></span></th>
-            <?php endif; ?>
 			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
 		</tr>
@@ -74,12 +71,6 @@
 				<span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
 				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
 			</td>
-            <?php if($vrac->isType(VracClient::TYPE_MOUT)): ?>
-			<td class="volume">
-				<span><?php echo $embedForm[$autreQuantiteType.'_propose']->renderError() ?></span>
-				<?php echo $embedForm[$autreQuantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo (!$vrac->isInModeSurface())? 'ares' : 'hl'; ?>
-			</td>
-            <?php endif; ?>
 			<?php endif; ?>
 			<td class="prix">
 				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>

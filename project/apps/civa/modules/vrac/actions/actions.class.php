@@ -506,6 +506,9 @@ class vracActions extends sfActions
                         if (($appellation == 'appellation_'.Vrac::APPELLATION_PINOTNOIRROUGE) &&  ($key == Vrac::CEPAGE_PR)) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_PR_LIBELLE_COMPLEMENT;
 			}
+            if ($cepage->getAppellation()->getKey() == Vrac::APPELLATION_CREMANT && in_array($cepage->getKey(), Vrac::$cepages_exclus_cremant)) {
+                unset($result[str_replace('/recolte/', 'declaration/', $cepage->getHash())]);
+            }
 		}
     	return $this->renderText(json_encode($result));
     }

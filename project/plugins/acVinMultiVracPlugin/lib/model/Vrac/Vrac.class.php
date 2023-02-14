@@ -24,6 +24,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const CEPAGE_MUSCAT_LIBELLE = "Muscat";
     const CAMPAGNE_ARCHIVE = 'UNIQUE';
     const APPELLATION_PINOTNOIRROUGE = "PINOTNOIRROUGE";
+	const APPELLATION_CREMANT = "CREMANT";
     const CEPAGE_PR = "cepage_PR";
 	const CEPAGE_PR_LIBELLE_COMPLEMENT = " (rouge)";
 
@@ -88,6 +89,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::ROLE_VENDEUR,
 		self::ROLE_ACHETEUR,
 		self::ROLE_MANDATAIRE,
+	);
+
+	public static $cepages_exclus_cremant = array(
+		'RB',
+		'BL',
+		'RS',
 	);
 
   	public static function getStatutsLibellesActions()
