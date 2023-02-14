@@ -1,8 +1,8 @@
 <?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
 
 <ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected">
-		<a href="#" style="height: 18px;"><?php echo $etapes->getLibelle($etape) ?></a>
+	<li class="ui-tabs-selected" style="position: relative;">
+		<a href="#" style="height: 18px; padding-left: 25px;"><span title="Contrat de <?php echo ucfirst(strtolower($vrac->type_contrat)) ?>" style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span> <?php echo $etapes->getLibelle($etape) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?><small style="font-size: 80%; opacity: 0.8;">&nbsp;Contrat pluriannuel</small><?php endif; ?></a>
 	</li>
 </ul>
 <div id="contrats_vrac">
