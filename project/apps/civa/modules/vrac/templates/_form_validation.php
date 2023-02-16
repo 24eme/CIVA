@@ -119,4 +119,7 @@
 	</tbody>
 </table>
 <?php endif; ?>
+
+<?php include_partial('vrac/chronologie_contrat', array('vrac' => $vrac)); ?>
+
 <?php include_partial('vrac/popupConfirmeValidation', array('vrac' => $vrac)); ?>
