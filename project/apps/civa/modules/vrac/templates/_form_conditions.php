@@ -8,7 +8,7 @@
         $header = 'Date';
     }
 ?>
-<p class="intro_contrat_vrac">Veuillez saisir ici les conditions applicables au contrat.</p>
+<p class="intro_contrat_vrac">Veuillez saisir ici les <strong>conditions applicables</strong> au contrat.</p>
 
 <?php if(isset($form['produits_retiraisons'])): ?>
 <table class="validation table_donnees">
