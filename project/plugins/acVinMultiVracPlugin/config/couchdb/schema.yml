@@ -246,5 +246,6 @@ Vrac:
       clause_resiliation: { required: false }
       clause_evolution_prix: { required: false }
       suivi_qualitatif: { required: false }
+      nb_jour_apres_recolte_retiraison: { required: false }
       papier: { required: false }
       interne: { required: false }

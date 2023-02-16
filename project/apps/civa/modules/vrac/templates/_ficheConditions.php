@@ -95,8 +95,18 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?>
+		<tr class="alt">
+			<td>
+				<label>Délai de retiraison</label>
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'nb_jour_apres_recolte_retiraison') ?>">
+				<?php echo ($vrac->nb_jour_apres_recolte_retiraison) ?> jours après la récolte
+			</td>
+		</tr>
+		<?php endif; ?>
 		<?php if($vrac->isInterne()): ?>
-        <tr class="alt">
+        <tr>
                 <td>
                         <label>Interne</label>
                 </td>

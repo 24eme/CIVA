@@ -61,6 +61,12 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_evolution_prix', "Critères et modalités d'évolution des prix pour les années N+1 et N+2");
 		}
 
+		if($this->getObject()->exist('nb_jour_apres_recolte_retiraison')) {
+			$this->setWidget('nb_jour_apres_recolte_retiraison', new sfWidgetFormInputFloat());
+			$this->setValidator('nb_jour_apres_recolte_retiraison', new sfValidatorNumber(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('nb_jour_apres_recolte_retiraison', "Délai de retiraison");
+		}
+
         if($this->getObject()->needRetiraison()) {
             $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
             $this->embedForm('produits_retiraisons', $produitsRetiraisons);
