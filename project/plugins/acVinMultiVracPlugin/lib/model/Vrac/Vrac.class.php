@@ -686,6 +686,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return (bool) $this->valide->date_validation_vendeur;
     }
 
+    public function hasAcheteurSigne()
+    {
+    	return (bool) $this->valide->date_validation_acheteur;
+    }
+
+    public function hasCourtierSigne()
+    {
+    	return (bool) $this->valide->date_validation_mandataire;
+    }
+
     public function hasCourtier() {
         return ($this->mandataire_identifiant)? true : false;
     }
