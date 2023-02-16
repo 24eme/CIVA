@@ -1058,7 +1058,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
     public function hasVersion() {
-        return file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME)) !== false;
+        return @file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME)) !== false;
     }
 
     public function getMother() {
