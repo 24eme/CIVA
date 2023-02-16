@@ -201,6 +201,17 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
+		<tr class="alt">
+			<td>
+				<?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
+			</td>
+            <td colspan="2">
+			<?php echo $form['nb_jour_apres_recolte_retiraison']->render(array('style' => 'width: 100px;')) ?>
+            <span>jours après la récolte</span>
+			</td>
+		</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>
