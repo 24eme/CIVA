@@ -8,7 +8,7 @@
         $header = 'Date';
     }
 ?>
-<p class="intro_contrat_vrac">Veuillez saisir ici les conditions applicables au contrat.</p>
+<p class="intro_contrat_vrac">Veuillez saisir ici les <strong>conditions applicables</strong> au contrat.</p>
 
 <?php if(isset($form['produits_retiraisons'])): ?>
 <table class="validation table_donnees">
@@ -198,6 +198,17 @@
 			<td colspan="2">
             <?php echo $form['suivi_qualitatif']->render() ?>
             <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
+			</td>
+		</tr>
+		<?php endif; ?>
+		<?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
+		<tr class="alt">
+			<td>
+				<?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
+			</td>
+            <td colspan="2">
+			<?php echo $form['nb_jour_apres_recolte_retiraison']->render(array('style' => 'width: 100px;')) ?>
+            <span>jours après la récolte</span>
 			</td>
 		</tr>
 		<?php endif; ?>

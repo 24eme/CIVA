@@ -86,6 +86,8 @@ td.echeance {display: inline;}
 <?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => true)); ?>
 <?php endif; ?>
 
+<?php include_partial('vrac/chronologie_contrat', array('vrac' => $vrac)); ?>
+
 <?php if ($vrac->isPluriannuelCadre() && count($contratsApplication)>0): ?>
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>

@@ -705,3 +705,7 @@ table.table_donnees td .radio_list label {
 #contrats_vrac .btn_grand {
     padding: 6px 8px;
 }
+
+#contrats_vrac .picto_signer { background-image: url('../images/pictos/pi_signer.png'); background-repeat: no-repeat; background-size: contain; padding-left: 15px; }
+#contrats_vrac .picto_check { background-image: url('../images/pictos/pi_check_2.png'); background-repeat: no-repeat; padding-left: 10px; }
+#contrats_vrac .text-muted { opacity: 60%; }
