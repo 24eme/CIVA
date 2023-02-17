@@ -190,19 +190,8 @@
 			</td>
 			<td></td>
 		</tr>
-        <?php if(isset($form['suivi_qualitatif'])): ?>
-		<tr>
-			<td>
-				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
-			</td>
-			<td colspan="2">
-            <?php echo $form['suivi_qualitatif']->render() ?>
-            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
-			</td>
-		</tr>
-		<?php endif; ?>
 		<?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
 			</td>
