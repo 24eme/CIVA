@@ -94,7 +94,7 @@
 			<td>
 				CVO à la charge du vendeur (50%)
 			</td>
-			<td colspan="2" class="<?php echo isVersionnerCssClass($vrac, 'vendeur_frais_annexes') ?>">
+			<td colspan="2">
 				3,76 € HT / hl
 			</td>
 		</tr>
