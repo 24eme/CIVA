@@ -201,6 +201,16 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+        <?php if($vrac->isPonctuel() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+        <tr>
+			<td>
+				<label>Délai de retiraison</label>
+			</td>
+            <td colspan="2">
+			60 jours après la validation du contrat
+			</td>
+		</tr>
+        <?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>
