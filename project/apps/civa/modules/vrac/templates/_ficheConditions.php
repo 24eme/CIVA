@@ -19,10 +19,10 @@
 		</tr>
         <tr>
 			<td>
-				Cotisation CIVA
+				CVO à la charge du vendeur (50%)
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'vendeur_frais_annexes') ?>">
-				CVO 100% Vendeur
+				3,76 € HT / hl
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -96,7 +96,7 @@
 		<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?>
 		<tr>
 			<td>
-				<label>Délai de retiraison</label>
+				<label>Délai maximum de retiraison</label>
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'nb_jour_apres_recolte_retiraison') ?>">
 				<?php echo ($vrac->nb_jour_apres_recolte_retiraison) ?> jours après la récolte
