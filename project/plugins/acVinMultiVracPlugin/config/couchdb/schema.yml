@@ -184,6 +184,7 @@ Vrac:
                                                                   surface_propose: { type: float }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
+                                                                  dont_volume_bloque: { type: float, required: false }
                                                                   centilisation: { type: float, required: false }
                                                                   nb_bouteille: { type: integer, required: false }
                                                                   label: { required: false }
