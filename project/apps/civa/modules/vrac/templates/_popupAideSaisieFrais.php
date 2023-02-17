@@ -12,7 +12,6 @@
                 <td>
                     <select style="width:120px;margin:0px;" name="type">
                         <option value="de frais de transport">Transport</option>
-                        <option value="de cotisation CIVA">Cotisation CIVA</option>
                         <option value="de frais de courtage">Courtage</option>
                         <option value="en autres frais">Autres</option>
                     </select>
