@@ -19,12 +19,6 @@ class VracConditionsForm extends acCouchdbObjectForm
         	'conditions_particulieres' => new sfValidatorString(array('required' => false)),
         ));
 
-        if($this->getObject()->exist('suivi_qualitatif')) {
-			$this->setWidget('suivi_qualitatif', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true), array('required' => 'required')));
-			$this->setValidator('suivi_qualitatif', new sfValidatorChoice(array('choices' => [1,0])));
-			$this->getWidgetSchema()->setLabel('suivi_qualitatif', "Suivi qualitatif");
-		}
-
 		if($this->getObject()->exist('clause_reserve_propriete')) {
 			$this->setWidget('clause_reserve_propriete', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
 			$this->setValidator('clause_reserve_propriete', new sfValidatorChoice(array('choices' => [1,0], 'required' => false)));

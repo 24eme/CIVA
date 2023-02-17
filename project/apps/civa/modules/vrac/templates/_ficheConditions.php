@@ -93,18 +93,8 @@
 				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
 			</td>
 		</tr>
-		<?php if($vrac->exist('suivi_qualitatif')): ?>
-		<tr>
-			<td>
-				<label>Suivi qualitatif</label>
-			</td>
-			<td class="<?php echo isVersionnerCssClass($vrac, 'suivi_qualitatif') ?>">
-				<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?>
-			</td>
-		</tr>
-		<?php endif; ?>
 		<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<label>Délai de retiraison</label>
 			</td>
