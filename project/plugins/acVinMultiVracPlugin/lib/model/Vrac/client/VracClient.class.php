@@ -133,20 +133,33 @@ class VracClient extends acCouchdbClient {
 	public static function getDelaisPaiement($vrac) {
         $delais = array();
 
-        $delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
-        $delais[] = "Paiement sous 7 jours";
+		if($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPluriannuelCadre()) {
+			$delais[] = "maxium 150 jours";
+			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+			$delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
 
-        if($vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_RAISIN) {
-            $delais = array();
-        }
+		if($vrac->type_contrat == VracClient::TYPE_VRAC && !$vrac->isPluriannuelCadre()) {
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
 
-        if($vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_VRAC) {
-            $delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
-        }
-        if($vrac->isPluriannuelCadre()) {
-            $delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+		if($vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
+
+		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuelCadre()) {
+			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
             $delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
-        }
+		}
+
+		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
+			$delais[] = "Délai légal : 30 jours après la date de livraison";
+	        $delais[] = "Paiement sous 7 jours";
+		}
 
         return $delais;
 	}
