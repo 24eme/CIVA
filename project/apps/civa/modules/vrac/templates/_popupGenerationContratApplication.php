@@ -18,13 +18,13 @@
             			<th class="produit">Produits</th>
             			<th class="volume"><?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>Surface engagée<?php else: ?>Volume estimé<?php endif; ?></th>
                         <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && $form->getObject()->isPremiereApplication()): ?>
-                        <th class="volume">Dont volume<br />bloqué</th>
+                        <th class="volume">Dont volume<br />en réserve</th>
                         <?php endif; ?>
             			<th class="prix">Prix</th>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<th class="volume"><?php echo ucfirst($quantiteType); ?></th>
                         <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && !$form->getObject()->isPremiereApplication()): ?>
-                        <th class="volume">Dont volume<br />bloqué</th>
+                        <th class="volume">Dont volume<br />en réserve</th>
                         <?php endif; ?>
             			<th class="prix">Prix</th>
                         <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface && $form->getObject()->getContratPluriannuelCadre()->type_contrat != VracClient::TYPE_RAISIN): ?>
