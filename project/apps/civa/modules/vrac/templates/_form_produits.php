@@ -19,7 +19,7 @@
 			<?php else: ?>
 			<th class="volume"><span><?php echo ucfirst($quantiteType); ?></span></th>
             <?php if(!$vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
-			<th class="volume_bloque"><span>Dont&nbsp;volume<br />&nbsp;bloqué</span></th>
+			<th class="volume_bloque"><span>Dont&nbsp;volume<br />&nbsp;en réserve</span></th>
             <?php endif; ?>
 			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
