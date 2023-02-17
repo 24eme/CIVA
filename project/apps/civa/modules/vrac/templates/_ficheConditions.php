@@ -17,6 +17,14 @@
 				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
+        <tr>
+			<td>
+				Cotisation CIVA
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'vendeur_frais_annexes') ?>">
+				CVO 100% Vendeur
+			</td>
+		</tr>
 		<?php endif; ?>
         <?php if($vrac->exist('acheteur_primes_diverses')): ?>
         <tr class="alt">
