@@ -17,12 +17,21 @@
             		<tr>
             			<th class="produit">Produits</th>
             			<th class="volume"><?php if ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface): ?>Surface engagée<?php else: ?>Volume estimé<?php endif; ?></th>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && $form->getObject()->isPremiereApplication()): ?>
+                        <th class="volume">Dont volume<br />bloqué</th>
+                        <?php endif; ?>
             			<th class="prix">Prix</th>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<th class="volume"><?php echo ucfirst($quantiteType); ?></th>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && !$form->getObject()->isPremiereApplication()): ?>
+                        <th class="volume">Dont volume<br />bloqué</th>
+                        <?php endif; ?>
             			<th class="prix">Prix</th>
                         <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface && $form->getObject()->getContratPluriannuelCadre()->type_contrat != VracClient::TYPE_RAISIN): ?>
             			<th class="volume">Volume</th>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && !$form->getObject()->isPremiereApplication()): ?>
+                        <th class="volume">Dont volume<br />bloqué</th>
+                        <?php endif; ?>
                         <?php endif; ?>
             		</tr>
             	</thead>
@@ -45,6 +54,14 @@
                                 <?php echo $detail->volume_propose; ?>&nbsp;hl
                             <?php endif; ?>
             			</td>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC && $form->getObject()->isPremiereApplication()): ?>
+                        <td class="volume">
+                            <?php if(isset($embedForm['dont_volume_bloque'])): ?>
+            				<span><?php echo $embedForm['dont_volume_bloque']->renderError() ?></span>
+            				<?php echo $embedForm['dont_volume_bloque']->render(array('class' => 'num', 'style' => 'width:58px;')) ?>&nbsp;hl
+                            <?php endif; ?>
+            			</td>
+                        <?php endif; ?>
             			<td class="prix">
             				<?php echo $detail->prix_unitaire; ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
             			</td>
@@ -53,6 +70,14 @@
         				    <span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
         				    <?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num', 'required' => 'required', 'style' => 'width:58px;')) ?>&nbsp;<?php echo ($quantiteType == 'surface')? 'ares' : 'hl'; ?>
             			</td>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+                        <td class="volume">
+                            <?php if(isset($embedForm['dont_volume_bloque'])): ?>
+                            <span><?php echo $embedForm['dont_volume_bloque']->renderError() ?></span>
+                            <?php echo $embedForm['dont_volume_bloque']->render(array('class' => 'num', 'style' => 'width:58px;')) ?>&nbsp;hl
+                            <?php endif; ?>
+                        </td>
+                        <?php endif; ?>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
             				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'style' => 'width:58px;')) ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
@@ -62,6 +87,14 @@
         				    <span><?php echo $embedForm['volume_propose']->renderError() ?></span>
         				    <?php echo $embedForm['volume_propose']->render(array('class' => 'num', 'required' => 'required', 'style' => 'width:58px;')) ?>&nbsp;hl
             			</td>
+                        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+                        <td class="volume">
+                            <?php if(isset($embedForm['dont_volume_bloque'])): ?>
+                            <span><?php echo $embedForm['dont_volume_bloque']->renderError() ?></span>
+                            <?php echo $embedForm['dont_volume_bloque']->render(array('class' => 'num', 'style' => 'width:58px;')) ?>&nbsp;hl
+                            <?php endif; ?>
+                        </td>
+                        <?php endif; ?>
                         <?php endif; ?>
             		</tr>
             	<?php $counter++; endforeach; ?>
