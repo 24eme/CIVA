@@ -47,7 +47,7 @@
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
 		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
-			<?php include_partial('vrac/produitsLigne', array('vrac' => $vrac, 'detail' => $detail, 'form' => $form, 'quantiteType' => $quantiteType, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : null, 'formProduit' => isset($formProduit) ? $formProduit : null)) ?>
+			<?php include_partial('vrac/produitsLigne', array('vrac' => $vrac, 'detail' => $detail, 'form' => $form, 'quantiteType' => $quantiteType, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : null, 'formProduit' => isset($formProduit) ? $formProduit : null, 'key' => $key)) ?>
 		</tr>
 			<?php
 				foreach ($formProduit['enlevements'] as $keySub => $formEnlevement):
