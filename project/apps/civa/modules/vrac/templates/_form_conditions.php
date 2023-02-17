@@ -90,7 +90,16 @@
                 <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Ajouter des frais</a>
             </td>
 		</tr>
+        <tr>
+			<td>
+				CVO à la charge du vendeur (50%)
+			</td>
+			<td colspan="2" class="<?php echo isVersionnerCssClass($vrac, 'vendeur_frais_annexes') ?>">
+				3,76 € HT / hl
+			</td>
+		</tr>
 		<?php endif; ?>
+
 		<?php
             if(isset($form['acheteur_primes_diverses'])):
          ?>
@@ -204,7 +213,7 @@
         <?php if($vrac->isPonctuel() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
         <tr>
 			<td>
-				<label>Délai de retiraison</label>
+				<label>Délai maximum de retiraison</label>
 			</td>
             <td colspan="2">
 			60 jours après la validation du contrat

@@ -58,7 +58,7 @@ class VracConditionsForm extends acCouchdbObjectForm
 		if($this->getObject()->exist('nb_jour_apres_recolte_retiraison')) {
 			$this->setWidget('nb_jour_apres_recolte_retiraison', new sfWidgetFormInputFloat());
 			$this->setValidator('nb_jour_apres_recolte_retiraison', new sfValidatorNumber(array('required' => false)));
-			$this->getWidgetSchema()->setLabel('nb_jour_apres_recolte_retiraison', "Délai de retiraison");
+			$this->getWidgetSchema()->setLabel('nb_jour_apres_recolte_retiraison', "Délai maximum de retiraison");
 		}
 
         if($this->getObject()->needRetiraison()) {
