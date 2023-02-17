@@ -686,6 +686,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return (bool) $this->valide->date_validation_vendeur;
     }
 
+    public function hasAcheteurSigne()
+    {
+    	return (bool) $this->valide->date_validation_acheteur;
+    }
+
+    public function hasCourtierSigne()
+    {
+    	return (bool) $this->valide->date_validation_mandataire;
+    }
+
     public function hasCourtier() {
         return ($this->mandataire_identifiant)? true : false;
     }
@@ -822,6 +832,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$this->add('clause_resiliation');
 			if($this->type_contrat == VracClient::TYPE_VRAC) {
 				$this->add('suivi_qualitatif');
+			}
+			if($this->type_contrat == VracClient::TYPE_RAISIN || $this->type_contrat == VracClient::TYPE_MOUT) {
+				$this->add('nb_jour_apres_recolte_retiraison');
 			}
             if ($this->isPluriannuelCadre()) {
 			    $this->add('clause_evolution_prix');
@@ -1048,7 +1061,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
     public function hasVersion() {
-        return file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME)) !== false;
+        return @file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME)) !== false;
     }
 
     public function getMother() {
