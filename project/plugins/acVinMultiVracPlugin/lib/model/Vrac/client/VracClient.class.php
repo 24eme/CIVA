@@ -134,7 +134,7 @@ class VracClient extends acCouchdbClient {
         $delais = array();
 
 		if($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPluriannuelCadre()) {
-			$delais[] = "maxium 150 jours";
+			$delais[] = "Dans un délai maximum de 150 jours après l’enlèvement et au plus tard le 15 septembre de l’année suivant la récolte";
 			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
 			$delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
 			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
