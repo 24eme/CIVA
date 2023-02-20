@@ -11,6 +11,7 @@ class VracSecurity implements SecurityInterface {
     const ENLEVEMENT = 'ENLEVEMENT';
     const CLOTURE = 'CLOTURE';
     const FORCE_CLOTURE = 'FORCE_CLOTURE';
+    const FORCE_VALIDATION = 'FORCE_VALIDATION';
 
     protected $vrac;
     protected $compte;
@@ -205,6 +206,16 @@ class VracSecurity implements SecurityInterface {
         }
 
         if(in_array(self::FORCE_CLOTURE, $droits) && !$this->vrac->canForceClotureContrat()) {
+
+            return false;
+        }
+
+        if(in_array(self::FORCE_VALIDATION, $droits) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+
+            return false;
+        }
+
+        if(in_array(self::FORCE_VALIDATION, $droits) && $this->vrac->isValide()) {
 
             return false;
         }

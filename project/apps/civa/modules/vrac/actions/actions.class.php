@@ -165,6 +165,19 @@ class vracActions extends sfActions
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
 
+	public function executeForcerValidation(sfWebRequest $request)
+	{
+        $this->vrac = $this->getRoute()->getVrac();
+
+        $this->secureVrac(VracSecurity::FORCE_VALIDATION, $this->vrac);
+
+		$this->vrac->signerAutomatiquement();
+		$this->vrac->save();
+		$this->getUser()->setFlash('notice', 'Contrat validé avec succès, aucun mail ne sera envoyé');
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+	}
+
 	public function executeSupprimer(sfWebRequest $request)
 	{
 		$this->cleanSessions();
