@@ -55,7 +55,8 @@
             			</td>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-            				<?php echo $embedForm['prix_unitaire']->render(array('class' => 'num', 'required' => 'required', 'style' => 'width:58px;')) ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
+                            <?php $attr = ($form->getObject()->hasDoubleValidation())? ['class' => 'num', 'style' => 'width:58px;'] : ['class' => 'num', 'required' => 'required', 'style' => 'width:58px;']; ?>
+            				<?php echo $embedForm['prix_unitaire']->render($attr) ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
             			</td>
                     <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface && $form->getObject()->getContratPluriannuelCadre()->type_contrat != VracClient::TYPE_RAISIN): ?>
             			<td class="volume">

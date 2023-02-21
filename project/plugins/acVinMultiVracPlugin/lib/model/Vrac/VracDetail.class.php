@@ -71,7 +71,9 @@ class VracDetail extends BaseVracDetail {
 	    		$this->actif = 1;
 	    	}
     	} else {
-	    	if (($this->volume_propose||$this->surface_propose) && $this->prix_unitaire) {
+            if ($this->getDocument()->hasDoubleValidation() && ($this->volume_propose||$this->surface_propose)) {
+                $this->actif = 1;
+            } elseif (($this->volume_propose||$this->surface_propose) && $this->prix_unitaire) {
 	    		$this->actif = 1;
 	    	}
     	}
