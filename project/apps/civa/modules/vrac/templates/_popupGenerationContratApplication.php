@@ -1,9 +1,9 @@
 <?php use_helper('Date') ?>
 <?php $quantiteType = ($form->getObject()->isInModeSurface())? 'surface' : 'volume'; ?>
-<div id="popup_generation_contratApplication" class="popup_ajout" data-size-popup="900" style="display:none;" title="Générer le contrat d'application <?php echo $form->getObject()->campagne; ?>">
-    <form id="contrats_vrac" class="ui-tabs" method="post" action="<?php echo url_for('vrac_generer_contrat_application', array('numero_contrat' => substr($form->getObject()->numero_contrat, 0, -4), 'campagne' => substr($form->getObject()->campagne, 0, 4))); ?>">
+<div id="<?php echo $id ?>" class="popup_ajout" data-size-popup="900" style="display:none;" title="Générer le contrat d'application <?php echo $form->getObject()->campagne; ?>">
+    <form id="contrats_vrac" class="ui-tabs" method="post" action="<?php echo ($form->getObject()->hasDoubleValidation() && $form->getObject()->needSaisiePrix())? url_for('vrac_revalidation_contrat_application', $form->getObject()) : url_for('vrac_generer_contrat_application', array('numero_contrat' => substr($form->getObject()->numero_contrat, 0, -4), 'campagne' => substr($form->getObject()->campagne, 0, 4))); ?>">
         <?php
-            if($validation->hasPoints()) {
+            if($validation && $validation->hasPoints()) {
                 include_partial('global/validation', array('validation' => $validation, 'afficheLiens' => false));
             }
         ?>
@@ -67,9 +67,10 @@
             			</td>
                         <?php if (!$form->getObject()->isPremiereApplication()): ?>
             			<td class="volume">
+                            <?php $attr = ($form->getObject()->hasDoubleValidation() && $form->getObject()->needSaisiePrix())? ['class' => 'num', 'readonly' => 'readonly', 'required' => 'required', 'style' => 'visibility: hidden; width:58px;'] : ['class' => 'num', 'required' => 'required', 'style' => 'width:58px;'] ?>
         				    <span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
-        				    <?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num', 'required' => 'required', 'style' => 'width:58px;')) ?>&nbsp;<?php echo ($quantiteType == 'surface')? 'ares' : 'hl'; ?>
-            			</td>
+        				    <?php echo $embedForm[$quantiteType.'_propose']->render($attr) ?>&nbsp;<?php if (!$form->getObject()->hasDoubleValidation()||!$form->getObject()->needSaisiePrix()): ?><?php echo ($quantiteType == 'surface')? 'ares' : 'hl'; ?><?php endif; ?>
+                        </td>
                         <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
                         <td class="volume">
                             <?php if(isset($embedForm['dont_volume_bloque'])): ?>
@@ -80,7 +81,7 @@
                         <?php endif; ?>
             			<td class="prix">
             				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>
-                            <?php $attr = ($form->getObject()->hasDoubleValidation())? ['class' => 'num', 'style' => 'width:58px;'] : ['class' => 'num', 'required' => 'required', 'style' => 'width:58px;']; ?>
+                            <?php $attr = ($form->getObject()->hasDoubleValidation() && !$form->getObject()->needSaisiePrix())? ['class' => 'num', 'style' => 'width:58px;'] : ['class' => 'num', 'required' => 'required', 'style' => 'width:58px;']; ?>
             				<?php echo $embedForm['prix_unitaire']->render($attr) ?>&nbsp;<?php echo $form->getObject()->getPrixUniteLibelle(); ?>
             			</td>
                     <?php elseif ($form->getObject()->getContratPluriannuelCadre() && $form->getObject()->getContratPluriannuelCadre()->contrat_pluriannuel_mode_surface && $form->getObject()->getContratPluriannuelCadre()->type_contrat != VracClient::TYPE_RAISIN): ?>
@@ -104,7 +105,7 @@
         </div>
 
         <div id="btns" class="clearfix" style="text-align: center; margin-top: 8px;">
-            <?php if(!$validation->hasPoints()): ?>
+            <?php if(!$validation||!$validation->hasPoints()): ?>
                 <input type="image" src="/images/boutons/btn_valider.png" alt="Générer le contrat" name="boutons[next]" id="genereContratApplication_OK" class="valideDS_OK" />
             <?php endif; ?>
             <a class="close_popup" href=""><img alt="Annuler" src="/images/boutons/btn_annuler.png"></a>
