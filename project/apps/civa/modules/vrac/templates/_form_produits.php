@@ -18,6 +18,9 @@
 			<th class="centilisation"><span>Centilisation</span></th>
 			<?php else: ?>
 			<th class="volume"><span><?php echo ucfirst($quantiteType); ?></span></th>
+            <?php if(!$vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+			<th class="volume_bloque"><span>Dont&nbsp;volume<br />&nbsp;en réserve</span></th>
+            <?php endif; ?>
 			<?php endif; ?>
 			<th class="prix"><span>Prix</span></th>
 		</tr>
@@ -71,6 +74,14 @@
 				<span><?php echo $embedForm[$quantiteType.'_propose']->renderError() ?></span>
 				<?php echo $embedForm[$quantiteType.'_propose']->render(array('class' => 'num')) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>
 			</td>
+            <?php if(!$vrac->isPluriannuelCadre() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+            <td class="volume_bloque" style="width: 60px">
+                <?php if(isset($embedForm['dont_volume_bloque'])): ?>
+				<span><?php echo $embedForm['dont_volume_bloque']->renderError() ?></span>
+				<?php echo $embedForm['dont_volume_bloque']->render(array('class' => 'num', 'style' => 'width: 40px;')) ?>&nbsp;hl
+                <?php endif; ?>
+			</td>
+            <?php endif; ?>
 			<?php endif; ?>
 			<td class="prix">
 				<span><?php echo $embedForm['prix_unitaire']->renderError() ?></span>

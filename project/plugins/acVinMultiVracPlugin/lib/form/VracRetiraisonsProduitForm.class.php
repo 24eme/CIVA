@@ -41,6 +41,11 @@ class VracRetiraisonsProduitForm extends acCouchdbObjectForm
         		$defaults[$field] = $this->getFormattedPeriode($defaults[$field]);
         	}
         }
+
+        if($this->getObject()->getDocument()->isPluriannuelCadre() && !isset($defaults['retiraison_date_debut']) && ! isset($defaults['retiraison_date_limite'])) {
+            $defaults['retiraison_date_debut'] = '01/12';
+            $defaults['retiraison_date_limite'] = '31/07';
+        }
         $this->setDefaults($defaults);
     }
 

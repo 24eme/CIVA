@@ -1,0 +1,1 @@
+<td class="volume"><strong><span class="printonly"><?php echo ucfirst($quantiteType) ?> enlevé<?php if ($quantiteType == 'surface') echo 'e'; ?> : </span><?php echoFloat($detail->volume_enleve) ?>&nbsp;<?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?></strong></td>

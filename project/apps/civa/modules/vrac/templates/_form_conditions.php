@@ -90,7 +90,16 @@
                 <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Ajouter des frais</a>
             </td>
 		</tr>
+        <tr>
+			<td>
+				CVO à la charge du vendeur (50%)
+			</td>
+			<td colspan="2">
+				3,76 € HT / hl
+			</td>
+		</tr>
 		<?php endif; ?>
+
 		<?php
             if(isset($form['acheteur_primes_diverses'])):
          ?>
@@ -190,19 +199,8 @@
 			</td>
 			<td></td>
 		</tr>
-        <?php if(isset($form['suivi_qualitatif'])): ?>
-		<tr>
-			<td>
-				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
-			</td>
-			<td colspan="2">
-            <?php echo $form['suivi_qualitatif']->render() ?>
-            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours</small>
-			</td>
-		</tr>
-		<?php endif; ?>
 		<?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
 			</td>
@@ -212,6 +210,16 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+        <?php if($vrac->isPonctuel() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+        <tr>
+			<td>
+				<label>Délai maximum de retiraison</label>
+			</td>
+            <td colspan="2">
+			60 jours après la validation du contrat
+			</td>
+		</tr>
+        <?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>
