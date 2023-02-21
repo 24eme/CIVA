@@ -335,7 +335,7 @@ class vracActions extends sfActions
         	}
         }
         $this->getUser()->setFlash('notice', 'Une erreur est survenue lors de la génération du contrat d\'application');
-        return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+        return $this->redirect('vrac_fiche', array('sf_subject' => $contratPluriannuel));
 	}
 
     protected function getTiersOfVrac($vrac) {
