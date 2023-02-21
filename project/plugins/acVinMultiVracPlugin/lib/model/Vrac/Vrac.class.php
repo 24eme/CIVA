@@ -1126,4 +1126,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
         return in_array($this->type_contrat, array(VracClient::TYPE_VRAC, VracClient::TYPE_BOUTEILLE));
     }
+
+    public function hasDoubleValidation() {
+		if (!$this->isApplicationPluriannuel()) return false;
+        if ($this->isPremiereApplication()) return false;
+        return in_array($this->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT));
+    }
+
+    public function needSaisiePrix() {
+        foreach($this->declaration->getProduitsDetails() as $detail) {
+            if (!$detail->prix_unitaire) return true;
+        }
+        return false;
+    }
 }
