@@ -36,7 +36,7 @@ td.echeance {display: inline;}
                 <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
                 <a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>" style="position: relative;"><?php echo $contratApplication->campagne ?></a></li>
             <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant)): ?>
-                <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
+                <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
             <?php else: ?>
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="javascript:void(0)"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
 			<?php endif; ?>
@@ -108,7 +108,7 @@ td.echeance {display: inline;}
 					<?php if($contratApplication): ?>
 						<a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>">Voir le contrat</a>
 					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant)): ?>
-						<a href="" class="generationContratApplication">Générer le contrat</a>
+						<a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication">Générer le contrat</a>
 					<?php else: ?>
 						<i class="text-muted">Non disponible</i>
 					<?php endif; ?>
