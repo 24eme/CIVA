@@ -214,6 +214,10 @@ Vrac:
             date_validation_mandataire: {  }
             date_validation: {  }
             date_proposition: { required: false }
+            date_prevalidation_vendeur: { required: false }
+            date_prevalidation_acheteur: { required: false }
+            date_prevalidation_mandataire: { required: false }
+            date_prevalidation: { required: false }
             date_cloture: {  }
             email_cloture: { }
             email_relance: { }

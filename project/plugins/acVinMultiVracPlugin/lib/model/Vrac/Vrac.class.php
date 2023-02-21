@@ -1136,4 +1136,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         return false;
     }
+
+    public function archivePrevalidation() {
+        $this->valide->add('date_prevalidation_vendeur', $this->valide->date_validation_vendeur);
+        $this->valide->add('date_prevalidation_acheteur', $this->valide->date_validation_acheteur);
+        $this->valide->add('date_prevalidation_mandataire', $this->valide->date_validation_mandataire);
+        $this->valide->add('date_prevalidation', $this->valide->date_validation);
+        $this->valide->date_validation_vendeur = null;
+        $this->valide->date_validation_acheteur = null;
+        $this->valide->date_validation_mandataire = null;
+        $this->valide->date_validation = null;
+    }
 }
