@@ -1,0 +1,1 @@
+<td class="centilisation <?php echo isVersionnerCssClass($detail, 'centilisation') ?>"><span class="printonly">Centilisation : </span><?php echo VracClient::getLibelleCentilisation($detail->centilisation) ?></td>

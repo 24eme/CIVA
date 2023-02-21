@@ -184,6 +184,7 @@ Vrac:
                                                                   surface_propose: { type: float }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
+                                                                  dont_volume_bloque: { type: float, required: false }
                                                                   centilisation: { type: float, required: false }
                                                                   nb_bouteille: { type: integer, required: false }
                                                                   label: { required: false }
@@ -245,7 +246,7 @@ Vrac:
       clause_mandat_facturation: { required: false }
       clause_resiliation: { required: false }
       clause_evolution_prix: { required: false }
-      suivi_qualitatif: { required: false }
+      suivi_qualitatif: { required: false } #déprecié peut être supprimé après mise en prod
       nb_jour_apres_recolte_retiraison: { required: false }
       papier: { required: false }
       interne: { required: false }

@@ -832,9 +832,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$this->add('vendeur_frais_annexes');
 			$this->add('acheteur_primes_diverses');
 			$this->add('clause_resiliation');
-			if($this->type_contrat == VracClient::TYPE_VRAC) {
-				$this->add('suivi_qualitatif');
-			}
 			if($this->type_contrat == VracClient::TYPE_RAISIN || $this->type_contrat == VracClient::TYPE_MOUT) {
 				$this->add('nb_jour_apres_recolte_retiraison');
 			}
@@ -1124,7 +1121,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function needRetiraison() {
 
-        return in_array($this->type_contrat, array(VracClient::TYPE_VRAC, VracClient::TYPE_BOUTEILLE));
+        return !$this->isPonctuel() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
     }
 
     public function hasDoubleValidation() {
