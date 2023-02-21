@@ -1131,6 +1131,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function needSaisiePrix() {
+        if (!$this->isValide()) return false;
         foreach($this->declaration->getProduitsDetails() as $detail) {
             if (!$detail->prix_unitaire) return true;
         }
