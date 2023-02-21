@@ -248,6 +248,11 @@ class vracActions extends sfActions
             $this->validationApplication = null;
         }
 
+		$this->formSaisiePrix = null;
+		if ($this->vrac->needSaisiePrix()) {
+			$this->formSaisiePrix = $this->getForm($this->vrac, VracEtapes::ETAPE_PRODUITS);
+		}
+
     }
 
 
