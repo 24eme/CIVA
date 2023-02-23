@@ -40,16 +40,16 @@
                 </div>
             </div>
             <?php endif; ?>
+            </div>
             <?php if(isset($form['prix_unite'])): ?>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
                 <div id="ligne_prix_unite" class="ligne_form">
                     <?php echo $form['prix_unite']->renderError() ?>
-				    <?php echo $form['prix_unite']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
-					<?php echo $form['prix_unite']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 120px;")) ?>
+				    <?php echo $form['prix_unite']->renderLabel(null, array("class" => "bold")) ?>
+					<?php echo $form['prix_unite']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
                 </div>
             </div>
             <?php endif; ?>
-            </div>
             <script>
 				document.querySelectorAll('input[name="vrac_soussignes[type_contrat]"]').forEach(function(input) {
 					input.addEventListener('change', function(e) {
@@ -67,19 +67,16 @@
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
                     document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
                     document.querySelector('#ligne_campagnes_application select').disabled = true;
-                    document.querySelector('#ligne_prix_unite select').disabled = true;
                     document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').disabled = true;
                     document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
                       item.disabled = true;
                     });
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '0.25';
-                    document.querySelector('#ligne_prix_unite label').style.opacity = '0.25';
                     document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '0.25';
                 });
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').addEventListener('change', function(e) {
                     document.getElementById('contrat_pluriannuel_inputs').style.display = 'block';
                     document.querySelector('#ligne_campagnes_application select').disabled = false;
-                    document.querySelector('#ligne_prix_unite select').disabled = false;
                     document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
                       item.disabled = false;
                     });
@@ -88,7 +85,6 @@
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = true;
 					}
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
-                    document.querySelector('#ligne_prix_unite label').style.opacity = '1';
                     document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';
                 });
             </script>
