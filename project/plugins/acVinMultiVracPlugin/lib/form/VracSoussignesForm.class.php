@@ -169,10 +169,10 @@ class VracSoussignesForm extends acCouchdbObjectForm
             if ($values['campagne']) {
                 $this->getObject()->campagne = $values['campagne'];
             }
-            if ($values['prix_unite']) {
-                $this->getObject()->prix_unite = $values['prix_unite'];
-            }
         }
+		if ($values['prix_unite']) {
+			$this->getObject()->prix_unite = $values['prix_unite'];
+		}
     }
 
     protected function getContratTypes()
