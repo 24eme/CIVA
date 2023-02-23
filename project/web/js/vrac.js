@@ -371,8 +371,9 @@ var sumContrat = function(brothers, cible)
 					var champ_volume = ligne_courante.find('.volume input'),
 						champ_prix = ligne_courante.find('.prix input'),
 						champ_centilisation = ligne_courante.find('.centilisation select'),
-						champ_bouteille = ligne_courante.find('.bouteille input');
-						champ_bio = ligne_courante.find('.bio select');
+						champ_bouteille = ligne_courante.find('.bouteille input'),
+						champ_bio = ligne_courante.find('.bio select'),
+						champ_millesime = ligne_courante.find('.millesime input');
 					var class_red = [];
 				  var empty = true;
 					champs.each(function(){
@@ -392,6 +393,9 @@ var sumContrat = function(brothers, cible)
 					}
 					if(champ_bouteille.length > 0 && !$.trim(champ_bouteille.val())){
 						class_red.push(champ_bouteille);
+					}
+					if(champ_millesime.length > 0 && !$.trim(champ_millesime.val())){
+						class_red.push(champ_millesime);
 					}
 					if(!class_red.length)
 					{
