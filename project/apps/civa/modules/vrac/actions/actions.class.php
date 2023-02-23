@@ -326,7 +326,9 @@ class vracActions extends sfActions
         		$nextContratApplication = $this->form->save();
                 if ($nextContratApplication->isPremiereApplication() && !$nextContratApplication->getContratPluriannuelCadre()->isInModeSurface()) {
                     $nextContratApplication->signerAutomatiquement();
-                } else {
+                } elseif($nextContratApplication->isPremiereApplication() && $nextContratApplication->type_contrat == VracClient::TYPE_RAISIN) {
+					$nextContratApplication->signerAutomatiquement();
+				} else {
                     $nextContratApplication->signer($nextContratApplication->createur_identifiant);
                 }
                 $nextContratApplication->save();
