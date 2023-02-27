@@ -112,8 +112,9 @@ class tiersActions extends sfActions {
             $blocs[Roles::TELEDECLARATION_DR] = $this->generateUrl('mon_espace_civa_dr_compte', $compte);
         }
         $url_drm = sfConfig::get("app_giilda_url_drm");
+        $societe = $compte->getSociete();
         if($compte->hasDroit(Roles::TELEDECLARATION_DRM) && $url_drm) {
-            foreach($compte->getSociete()->getEtablissementsObject(true, true) as $etablissement) {
+            foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
                 if($etablissement->hasDroit(Roles::TELEDECLARATION_DRM)) {
                     $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $etablissement->identifiant);
                     break;
@@ -121,20 +122,20 @@ class tiersActions extends sfActions {
             }
 
         }
-        $etablissement = $compte->getSociete()->getEtablissementPrincipal();
+        $etablissement = $societe->getEtablissementPrincipal();
 
         $url_compte = sfConfig::get("app_giilda_url_compte");
         if($isAdmin && $url_compte && preg_match('/(societe|etablissement|compte)/', $this->getRequest()->getParameter('active'))) {
             $blocs[Roles::CONTACT] = sfConfig::get("app_giilda_url_compte_admin");
         } elseif($isAdmin && $url_compte) {
-            $blocs[Roles::CONTACT] = sprintf($url_compte, $etablissement->identifiant);
+            $blocs[Roles::CONTACT] = sprintf($url_compte, $societe->identifiant);
         }
 
         $url_facture = sfConfig::get("app_giilda_url_facture");
         if($url_facture && $this->getRequest()->getParameter('active') == 'facture' && $isAdmin) {
             $blocs[Roles::FACTURE] = sfConfig::get("app_giilda_url_facture_admin");
         } elseif($url_facture) {
-            $blocs[Roles::FACTURE] = sprintf($url_facture, $compte->getSociete()->identifiant);
+            $blocs[Roles::FACTURE] = sprintf($url_facture, $societe->identifiant);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)) {
@@ -151,7 +152,7 @@ class tiersActions extends sfActions {
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_VRAC) && !isset($blocs[$compte->hasDroit(Roles::TELEDECLARATION_VRAC)])) {
-            $tiersVrac = VracClient::getInstance()->getEtablissements($compte->getSociete());
+            $tiersVrac = VracClient::getInstance()->getEtablissements($societe);
 
             if($tiersVrac instanceof sfOutputEscaperArrayDecorator) {
                 $tiersVrac = $tiersVrac->getRawValue();
