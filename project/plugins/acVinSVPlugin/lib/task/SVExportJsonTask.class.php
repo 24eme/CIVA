@@ -1,6 +1,6 @@
 <?php
 
-class ExportSVJsonTask extends sfBaseTask
+class SVExportJsonTask extends sfBaseTask
 {
     public function configure()
     {

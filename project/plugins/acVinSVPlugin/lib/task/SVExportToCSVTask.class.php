@@ -1,6 +1,6 @@
 <?php
 
-class ExportToCSVTask extends sfBaseTask
+class SVExportToCSVTask extends sfBaseTask
 {
     public function configure()
     {
