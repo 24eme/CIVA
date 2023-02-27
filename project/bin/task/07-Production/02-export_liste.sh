@@ -18,7 +18,7 @@ curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Achats
 
 join -a 1 -a 2 -1 2 -2 1 -t ";" "$TASK_DIR/$EXPORT_FILE.sv" "$TASK_DIR/$EXPORT_FILE.drachat" | grep -E "^6(7|8)" | sed -r "s/^([0-9]+)$/\1;$DR_CAMPAGNE;;;MANQUANTE;/" > "$TASK_DIR/$EXPORT_FILE.join"
 
-curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/etablissement/_view/all?reduce=false" | cut -d ',' -f 9,17,18 | sed 's/"//g' |  grep -E "^[0-9]+" | sed 's/,null/,/g' | sed 's/,/;/g' | sort -t ";" -k 1,1 | uniq > "$TASK_DIR/$EXPORT_FILE.etablissement"
+curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/etablissement/_view/all?reduce=false" | cut -d ',' -f 9,17,18 | sed 's/"//g' |  grep -E "^[0-9]+" | sed 's/,null/,/g' | sed 's/,/;/g' | sort -t ";" -k 1,1 | uniq -w 11 > "$TASK_DIR/$EXPORT_FILE.etablissement"
 
 join -t ";" -1 1 -2 1 "$TASK_DIR/$EXPORT_FILE.join" "$TASK_DIR/$EXPORT_FILE.etablissement" >> "$TASK_DIR/$EXPORT_FILE"
 
