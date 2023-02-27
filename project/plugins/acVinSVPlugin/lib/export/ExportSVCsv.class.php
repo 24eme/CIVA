@@ -32,6 +32,10 @@ class ExportSVCsv
         }
 
         foreach ($toExport as $sv) {
+            if(!count($sv->getProduits())) {
+                fputcsv($stream, [
+                    $sv->declarant->cvi,$sv->declarant->raison_sociale,null,null,null,null,null,null,null,null,null,null,null,null,null,$sv->type,$sv->valide->date_saisie,null,$sv->_id], ';');
+            }
             foreach ($sv->getProduits() as $produit) {
                 fputcsv($stream, $this->build($sv, $produit), ';');
             }
