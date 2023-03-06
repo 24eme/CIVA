@@ -77,18 +77,11 @@ class drmActions extends sfActions {
         }
       }else{
         $viewresult = $documentRepriseInfo->viewResult;
-        $produitHash = $viewresult->value[DRMRepriseMvtsView::VALUE_PRODUIT_HASH];
+        $produitHash = HashMapper::convert($viewresult->value[DRMRepriseMvtsView::VALUE_PRODUIT_HASH]);
         $catMouvement = $viewresult->value[DRMRepriseMvtsView::VALUE_CAT_MVT];
         $typeMouvement = $viewresult->value[DRMRepriseMvtsView::VALUE_TYPE_MVT];
         $volume = $viewresult->value[DRMRepriseMvtsView::VALUE_VOLUME];
-        $cepageNode = $doc->getOrAdd($produitHash);
-        foreach ($cepageNode->getProduitsDetails()  as $key => $produitsDetail) {
-          foreach ($produitsDetail->getRetiraisons() as $retiraison) {
-            if(substr(str_replace("-",'',$retiraison->getDate()),0,6) == $drmGenerateCSV->getPeriode()){
-              $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitsDetail->getConfig()->getHash(), $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
-            }
-          }
-        }
+        $ediFileUpdate .= $drmGenerateCSV->createRowMouvementProduitDetail($produitHash, $catMouvement,$typeMouvement,$volume,$documentRepriseInfo->idDoc);
       }
       return $ediFileUpdate;
     }
