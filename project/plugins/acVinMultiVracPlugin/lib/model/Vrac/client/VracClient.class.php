@@ -25,6 +25,12 @@ class VracClient extends acCouchdbClient {
 	const PRIX_HA = 'EUR_HA';
 	const PRIX_BOUTEILLE = 'EUR_BOUTEILLE';
 
+    const TEMPORALITE_ANNUEL = 'ANNUEL';
+    const TEMPORALITE_PLURIANNUEL_CADRE = 'PLURIANNUEL_CADRE';
+    const TEMPORALITE_PLURIANNUEL_APPLICATION = 'PLURIANNUEL_APPLICATION';
+
+    public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
+
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
                                     self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE,
