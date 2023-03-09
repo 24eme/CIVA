@@ -21,7 +21,7 @@ class vracComponents extends sfComponents {
                 $this->hasDoubt = false;
             }
         }
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarantsAndCleanPluriannuel($etablissements);
         $this->etapes = VracEtapes::getInstance();
     }
 
