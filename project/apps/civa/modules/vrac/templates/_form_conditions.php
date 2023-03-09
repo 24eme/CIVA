@@ -90,14 +90,16 @@
                 <a class="btn_minus action_aidesaisie aideSaisieFraisPopup" href="">Ajouter des frais</a>
             </td>
 		</tr>
+        <?php if($vrac->getTauxCvo()) : ?>
         <tr>
 			<td>
 				CVO à la charge du vendeur (50%)
 			</td>
 			<td colspan="2">
-				3,76 € HT / hl
+				<?php echo $vrac->getTauxCvo(); ?> € HT / hl
 			</td>
 		</tr>
+        <?php endif; ?>
 		<?php endif; ?>
 
 		<?php

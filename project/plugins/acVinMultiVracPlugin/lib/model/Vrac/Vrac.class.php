@@ -1147,4 +1147,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->valide->date_validation_mandataire = null;
         $this->valide->date_validation = null;
     }
+
+    public function getTauxCvo() {
+        foreach($this->declaration->getProduitsDetails() as $detail) {
+            $date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
+            $conf = ConfigurationClient::getConfiguration($date)->get(HashMapper::convert($detail->getCepage()->getHash()));
+            return round($conf->getTauxCvo($this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d')) / 2, 2);
+        }
+
+        return null;
+    }
+
 }
