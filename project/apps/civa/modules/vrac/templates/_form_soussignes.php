@@ -51,6 +51,7 @@
             </div>
             <?php endif; ?>
             <script>
+				document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
 				document.querySelectorAll('input[name="vrac_soussignes[type_contrat]"]').forEach(function(input) {
 					input.addEventListener('change', function(e) {
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').checked = true;
@@ -62,6 +63,21 @@
                             document.querySelector('#vrac_soussignes_campagne').value = '<?php $campagnes = array_keys(VracSoussignesForm::getCampagnesChoices()); echo $campagnes[count($campagnes) - 1]; ?>';
 							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_KG";
 							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').checked = true;
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
+							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
+						}
+						if(input.value == "BOUTEILLE") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_BOUTEILLE";
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
+							document.querySelector('#ligne_contrat_pluriannuel_mode_surface').style.display = 'none';
+						}
+						if(input.value == "VRAC") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
+						}
+						if(input.value == "MOUT") {
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
+							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
 						}
 					});
 				});
@@ -87,6 +103,12 @@
 					}
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
                     document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';
+                });
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').addEventListener('change', function(e) {
+					document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
+                });
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').addEventListener('change', function(e) {
+					document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_KG";
                 });
             </script>
             <?php elseif($vrac->isPluriannuelCadre()): ?>
