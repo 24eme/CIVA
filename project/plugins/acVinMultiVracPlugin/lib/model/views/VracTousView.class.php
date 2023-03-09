@@ -80,4 +80,20 @@ class VracTousView extends acCouchdbView
         krsort($result);
         return $result;
     }
+
+    public function findSortedByDeclarantsAndCleanPluriannuel(array $tiers, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null, $temporalite = null) {
+        $result = $this->findSortedByDeclarants($tiers, $campagne, $statut, $type, $role, $commercial, $temporalite);
+        $pluriannuelsCadresASupprimer = [];
+        foreach($result as $key => $item) {
+            if ($item->value->reference_pluriannuel && !in_array($item->value->statut, [Vrac::STATUT_CLOTURE, Vrac::STATUT_ANNULE])) {
+                $pluriannuelsCadresASupprimer[$item->value->reference_pluriannuel] = $item->value->reference_pluriannuel;
+            }
+        }
+        foreach($pluriannuelsCadresASupprimer as $pluriannuelCadreASupprimer) {
+            if (isset($result[$pluriannuelCadreASupprimer])) {
+                unset($result[$pluriannuelCadreASupprimer]);
+            }
+        }
+        return $result;
+    }
 }
