@@ -42,7 +42,7 @@ class VracTousView extends acCouchdbView
     	return $result;
     }
 
-    public function findSortedBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null) {
+    public function findSortedBy($identifiant, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null, $temporalite = null) {
     	$items = $this->findBy($identifiant, $campagne, $statut, $type, $role);
     	$result = array();
     	foreach ($items as $item) {
@@ -52,16 +52,25 @@ class VracTousView extends acCouchdbView
             if($commercial && $item->value->commercial != $commercial) {
                 continue;
             }
+            if($temporalite == VracClient::TEMPORALITE_PLURIANNUEL_CADRE && (!$item->value->pluriannuel||$item->value->reference_pluriannuel)) {
+                continue;
+            }
+            if($temporalite == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION && !$item->value->reference_pluriannuel) {
+                continue;
+            }
+            if($temporalite == VracClient::TEMPORALITE_ANNUEL && ($item->value->reference_pluriannuel||$item->value->pluriannuel)) {
+                continue;
+            }
     		$result[$item->id] = $item;
     	}
     	krsort($result);
     	return $result;
     }
 
-    public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null) {
+    public function findSortedByDeclarants(array $tiers, $campagne = null, $statut = null, $type = null, $role = null, $commercial = null, $temporalite = null) {
         $result = array();
         foreach($tiers as $t) {
-            foreach($this->findSortedBy($t->_id, $campagne, $statut, $type, $role, $commercial) as $key => $item) {
+            foreach($this->findSortedBy($t->_id, $campagne, $statut, $type, $role, $commercial, $temporalite) as $key => $item) {
                 if(isset($result[$key])) {
                     continue;
                 }
