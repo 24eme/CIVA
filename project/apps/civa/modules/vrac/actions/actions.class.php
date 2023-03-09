@@ -32,6 +32,7 @@ class vracActions extends sfActions
 		$this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
+        $this->temporalite = $request->getParameter('temporalite');
 		$this->role = $request->getParameter('role');
         $this->commercial = $request->getParameter('commercial');
 
@@ -39,10 +40,11 @@ class vracActions extends sfActions
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
 		$etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
+        $this->temporalites = VracClient::$_contrat_temporalites;
         $this->roles = $this->findRoles();
         $annuaire = $this->getAnnuaire();
         $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
