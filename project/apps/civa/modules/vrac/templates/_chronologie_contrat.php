@@ -6,6 +6,16 @@
 		</tr>
 	</thead>
 	<tbody>
+        <?php if ($vrac->isPremiereApplication() && (!$vrac->getContratPluriannuelCadre()->isInModeSurface()||$vrac->type_contrat == VracClient::TYPE_RAISIN)): ?>
+        <tr class="<?php if (($vrac->hasCourtier() && !$vrac->hasVersion())||(!$vrac->hasCourtier() && $vrac->hasVersion())): ?>alt<?php endif; ?><?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
+			<td style="text-align: center;">
+				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
+			</td>
+			<td>
+				<span class="picto_check" style="padding-left:15px;">&nbsp;Contrat d'application généré à partir du contrat cadre</span>
+			</td>
+		</tr>
+        <?php else: ?>
         <tr>
 			<td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?>
@@ -64,5 +74,6 @@
 				<span class="picto_check" style="padding-left:15px;">&nbsp;Contrat de vente visé</span>
 			</td>
 		</tr>
+    <?php endif; ?>
 	</tbody>
 </table>
