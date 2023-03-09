@@ -1121,7 +1121,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function needRetiraison() {
 
-        return !$this->isPonctuel() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
+        return !$this->isPluriannuelCadre() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
     }
 
     public function hasDoubleValidation() {
