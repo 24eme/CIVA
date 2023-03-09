@@ -110,9 +110,10 @@
 
 	var initCollectionDeleteTemplate = function()
 	{
-		var btn_supprimer_ligne_template = $('.btn_supprimer_ligne_template');
-		if(btn_supprimer_ligne_template.length){
-			btn_supprimer_ligne_template.live('click',function()
+    if(!$('.btn_supprimer_ligne_template').length && !$('.btn_ajouter_ligne_template').length) {
+        return;
+    }
+			$('.btn_supprimer_ligne_template').live('click',function()
 			{
 				var element = $(this).attr('data-container');
 				$(this).parents(element).remove();
@@ -122,7 +123,6 @@
 
 				return false;
 			});
-		}
 	}
 
 
