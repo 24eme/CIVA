@@ -312,6 +312,9 @@ table.table_donnees tbody tr.alt td,
 ol li.alt,
 ul li.alt { background: #DDD; }
 
+table.table_donnees tfoot td {
+	padding: 3px;
+}
 /* Messages logs */
 
 .message {

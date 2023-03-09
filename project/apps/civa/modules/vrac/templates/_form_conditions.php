@@ -96,7 +96,7 @@
 				CVO à la charge du vendeur (50%)
 			</td>
 			<td colspan="2">
-				<?php echo $vrac->getTauxCvo(); ?> € HT / hl
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl
 			</td>
 		</tr>
         <?php endif; ?>
