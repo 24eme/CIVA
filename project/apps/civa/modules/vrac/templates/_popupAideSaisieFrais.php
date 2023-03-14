@@ -41,6 +41,7 @@
             $(".aideSaisieFraisPopup").trigger("click");
         }
     });
+    $("#popup_vendeur_frais_annexes").keypress(function(e) {if(e.which == 13) $("#popup_vendeur_frais_annexes .ajouter").trigger("click");});
     $("#popup_vendeur_frais_annexes .ajouter").click(function() {
         var type = $('#popup_vendeur_frais_annexes select[name="type"]').val();
         var montant = $('#popup_vendeur_frais_annexes input[name="montant"]').val();

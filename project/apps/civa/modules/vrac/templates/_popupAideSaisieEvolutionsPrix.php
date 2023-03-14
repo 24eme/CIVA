@@ -44,6 +44,7 @@
             $(".aideSaisieEvolutionsPrixPopup").trigger("click");
         }
     });
+    $("#popup_clause_evolution_prix").keypress(function(e) {if(e.which == 13) $("#popup_clause_evolution_prix .ajouter").trigger("click");});
     $("#popup_clause_evolution_prix .ajouter").click(function() {
         if(!$('#popup_clause_evolution_prix input[name="part"]').val()) {
             $('#popup_clause_evolution_prix input[name="part"]').val("100");
