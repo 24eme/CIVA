@@ -1119,6 +1119,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->type_contrat == $type);
     }
 
+	public function needDateRetiraison() {
+
+		return !$this->isPonctuel() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
+	}
+
     public function needRetiraison() {
 
         return !$this->isPluriannuelCadre() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
