@@ -27,7 +27,7 @@
 		</tr>
 		<?php endif; ?>
         <?php if($vrac->exist('acheteur_primes_diverses')): ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Primes diverses à la charge de l'acheteur
 			</td>
@@ -45,7 +45,7 @@
 			</td>
 		</tr>
         <?php if($vrac->exist('clause_resiliation')): ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Résiliation hors cas de force majeur
 			</td>
@@ -66,7 +66,7 @@
 		</tr>
 		<?php endif; ?>
         <?php if($vrac->exist('clause_mandat_facturation')): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<label>Mandat de facturation</label>
 			</td>
@@ -85,7 +85,7 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-        <tr class="alt">
+        <tr>
 			<td>
 				Autres clauses particulières
 			</td>

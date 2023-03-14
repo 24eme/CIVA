@@ -1,7 +1,7 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Text') ?>
 <?php use_helper('vrac') ?>
-<tr class="retiraisons<?php if (isset($alt) && $alt): ?> alt<?php endif; ?>">
+<tr class="retiraisons">
 	<td colspan="3"></td>
 	<td class="echeance">
 		<span><?php echo $form['date']->renderError() ?></span>

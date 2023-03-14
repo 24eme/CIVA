@@ -40,9 +40,8 @@
             		$counter = 0;
             		foreach ($form['produits'] as $key => $embedForm) :
             			$detail = $form->getObject()->get($key);
-            			$alt = ($counter%2);
             	?>
-            		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+            		<tr>
             			<td class="produit">
                 		    <?php echo $detail->getLibelleSansCepage(); ?>
                             <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>

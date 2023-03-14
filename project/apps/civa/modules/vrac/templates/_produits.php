@@ -42,11 +42,10 @@
             $autreVolumeTotal = 0;
 			foreach ($form['produits'] as $key => $formProduit):
 				$detail = $vrac->get($key);
-				$alt = ($counter%2);
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
-		<tr class="produits<?php if ($alt): ?> alt<?php endif; ?>">
+		<tr class="produits">
 			<?php include_partial('vrac/produitsLigne', array('vrac' => $vrac, 'detail' => $detail, 'form' => $form, 'quantiteType' => $quantiteType, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : null, 'formProduit' => isset($formProduit) ? $formProduit : null, 'key' => $key)) ?>
 		</tr>
 			<?php
@@ -54,7 +53,7 @@
 					if ($vrac->get($key)->retiraisons->exist($keySub)) {
 					$enlevement = $vrac->get($key)->retiraisons->get($keySub);
 			?>
-				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement, 'alt' => $alt)) ?>
+				<?php include_partial('vrac/form_retiraisons_item', array('detail' => $detail, 'form' => $formEnlevement)) ?>
 			<?php 	}
 				endforeach; ?>
 		<?php
@@ -67,15 +66,14 @@
             $autreVolumeTotal = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
-				$alt = ($counter%2);
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<?php include_partial('vrac/produitsLigne', array('vrac' => $vrac, 'detail' => $detail, 'form' => $form, 'quantiteType' => $quantiteType, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : nul)) ?>
 		</tr>
 		<?php foreach ($detail->retiraisons as $retiraison): ?>
-		<tr class="<?php if ($alt): ?> alt<?php endif; ?>">
+		<tr>
 		<td><strong class="printonly"><br/><br/>Enlèvement :</strong></td>
 			<td></td>
 			<td></td>
@@ -95,11 +93,10 @@
             $autreVolumeTotal = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
-				$alt = ($counter%2);
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<?php include_partial('vrac/produitsLigne', array('vrac' => $vrac, 'detail' => $detail, 'form' => $form, 'quantiteType' => $quantiteType, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : nul)) ?>
 		</tr>
 		<?php

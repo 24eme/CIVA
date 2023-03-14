@@ -30,9 +30,8 @@
 		$counter = 0;
 		foreach ($form['produits'] as $key => $embedForm) :
 			$detail = $vrac->get($key);
-			$alt = ($counter%2);
 	?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<td class="produit"><?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?></td>
 			<td class="denomination<?php echo ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE)? 'Bouteille' : '' ?>">
 				<span><?php echo $embedForm['denomination']->renderError() ?></span>

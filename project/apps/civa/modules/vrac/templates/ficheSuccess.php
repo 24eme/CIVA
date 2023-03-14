@@ -93,7 +93,7 @@ td.echeance {display: inline;}
     	</thead>
     	<tbody>
 			<?php $i=0;foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
-            <tr<?php if($i%2): ?> class="alt"<?php endif; ?>>
+            <tr>
     			<td>
     				Campagne <?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?>
     			</td>

@@ -25,10 +25,9 @@
 				if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 					continue;
 				}
-				$alt = ($counter%2);
 				$hasValidated = false;
 		?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
 					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
