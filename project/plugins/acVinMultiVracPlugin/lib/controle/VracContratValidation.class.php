@@ -35,6 +35,7 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('erreur', 'clause_evolution_prix_required', 'Vous devez préciser les critères et modalités d’évolution des prix');
         $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne totalisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
         $this->addControle('erreur', 'conditions_paiement_required', 'Vous devez préciser les délais de paiement');
+        $this->addControle('erreur', 'vtsgn_denomination', "La mention VT/SGN doit être précisée en ajoutant un nouveau produit et non en dénomination des produits de la liste");
 
   	}
 
@@ -45,6 +46,7 @@ class VracContratValidation extends DocumentValidation
 		$label_libelles = array();
 		$millesimes = array();
 		$produits = array();
+        $vtsgn = [];
         $retiraisons_manquantes = array();
         $retiraisons_incoherentes = array();
         $retiraisons_pb  = array();
@@ -80,6 +82,9 @@ class VracContratValidation extends DocumentValidation
 				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
 				    $millesimes[] = $detail->getLibelle();
 				}
+                if ($detail->denomination && Configuration::hasRefVtSgnInLibelle($detail->denomination)) {
+                    $vtsgn[] = $detail->getLibelle();
+                }
 
 			}
 			foreach ($produits as $produit) {
@@ -156,6 +161,9 @@ class VracContratValidation extends DocumentValidation
         if ($totalPourcentage != 100) {
             $this->addPoint('erreur', 'clause_evolution_prix_incomplete', 'clause evolution prix répartie à '.$totalPourcentage.'%', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
+	    if (count($vtsgn) > 0) {
+	      $this->addPoint('erreur', 'vtsgn_denomination', implode(",", $vtsgn), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
+	    }
   	}
 
   	public function getProduitsHashInError() {
