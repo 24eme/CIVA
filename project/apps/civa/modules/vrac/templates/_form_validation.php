@@ -21,7 +21,7 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center"><?php echo ucfirst($quantiteType); ?></th>
 			<th class="prix" style="text-align: center">Prix</th>
-            <?php if($vrac->needRetiraison()): ?>
+            <?php if($vrac->needDateRetiraison()): ?>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
             <?php else :?>
@@ -49,7 +49,7 @@
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
 			</td>
-            <?php if($vrac->needRetiraison()): ?>
+            <?php if($vrac->needDateRetiraison()): ?>
             <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
 				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
                 <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>

@@ -21,7 +21,7 @@
 			<?php if ($vrac->needRetiraison() && ($vrac->isCloture() || $form)): ?>
 			<th class="echeance">Date</th>
 			<th class="enleve">Volume réel</th>
-            <?php elseif($vrac->needRetiraison()): ?>
+            <?php elseif($vrac->needDateRetiraison()): ?>
             <th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
 			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
             <?php else: ?>
