@@ -92,7 +92,7 @@
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th style="width: 212px;">Contrat papier</th>
+			<th style="width: 230px;">Contrat papier</th>
 		</tr>
 	</thead>
 	<tbody>
