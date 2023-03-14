@@ -2,7 +2,7 @@
     <form id="cloture_contrat_form" method="post" action="<?php echo url_for('vrac_cloture', $vrac) ?>">
         <p>
             Tous les produits du contrat sont cloturés.<br /><br />
-            Confirmez-vous la cloture général de votre contrat ?<br />
+            Confirmez-vous la cloture général de votre contrat<?php if($vrac->isApplicationPluriannuel()): ?> d'application <?php echo $vrac->campagne ?><?php endif; ?> ?<br />
         </p>
         <br />
         <?php 
