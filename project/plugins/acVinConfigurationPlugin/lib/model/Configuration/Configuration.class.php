@@ -257,4 +257,13 @@ class Configuration extends BaseConfiguration {
         return false;
     }
 
+    public static function hasRefVtSgnInLibelle($libelle) {
+        $libelleUpper = strtoupper($libelle);
+        if ((strpos($libelleUpper, 'VT') !== false)||(strpos($libelleUpper, 'VENDANGE TARDIVE') !== false)||(strpos($libelleUpper, 'VENDANGES TARDIVES') !== false))
+            return true;
+        if ((strpos($libelleUpper, 'SGN') !== false)||(strpos($libelleUpper, 'GRAIN NOBLE') !== false)||(strpos($libelleUpper, 'GRAINS NOBLES') !== false))
+            return true;
+        return false;
+    }
+
 }
