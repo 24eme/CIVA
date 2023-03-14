@@ -36,11 +36,10 @@
             $autreVolumeTotal = 0;
 			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
-			$alt = ($counter%2);
 			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
             $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
 		?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<?php include_partial('vrac/produitsProduit', array('detail' => $detail, 'produits_hash_in_error' => isset($produits_hash_in_error) ? $produits_hash_in_error : null)) ?>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
 			    <?php include_partial('vrac/produitsNombreBouteilles', array('detail' => $detail)) ?>

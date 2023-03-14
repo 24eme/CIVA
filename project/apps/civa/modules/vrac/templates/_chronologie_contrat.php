@@ -7,7 +7,7 @@
 	</thead>
 	<tbody>
         <?php if ($vrac->isPremiereApplication() && (!$vrac->getContratPluriannuelCadre()->isInModeSurface()||$vrac->type_contrat == VracClient::TYPE_RAISIN)): ?>
-        <tr class="<?php if (($vrac->hasCourtier() && !$vrac->hasVersion())||(!$vrac->hasCourtier() && $vrac->hasVersion())): ?>alt<?php endif; ?><?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
 			</td>
@@ -25,7 +25,7 @@
 			</td>
 		</tr>
         <?php if ($vrac->hasCourtier()): ?>
-        <tr class="<?php if ($vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasCourtierSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasCourtierSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasCourtierSigne())? format_date($vrac->valide->date_validation_mandataire, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -34,7 +34,7 @@
 			</td>
 		</tr>
         <?php endif; ?>
-        <tr class="<?php if (!$vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -42,7 +42,7 @@
 				<span class="picto_signer" style="padding-left:15px;">&nbsp;Signature du vendeur</span>
 			</td>
 		</tr>
-        <tr class="<?php if (!$vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasAcheteurSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasAcheteurSigne()): ?> text-muted<?php endif; ?>">
             <td style="text-align: center;">
                 <?php echo ($vrac->hasAcheteurSigne())? format_date($vrac->valide->date_validation_acheteur, 'dd/MM/yyyy') : ''; ?>
             </td>
@@ -50,7 +50,7 @@
                 <span class="picto_signer" style="padding-left:15px;">&nbsp;Signature de l'acheteur</span>
             </td>
         </tr>
-        <tr class="<?php if (($vrac->hasCourtier() && !$vrac->hasVersion())||(!$vrac->hasCourtier() && $vrac->hasVersion())): ?>alt<?php endif; ?><?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
             <td style="text-align: center;">
                 <?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
             </td>
@@ -68,7 +68,7 @@
 			</td>
 		</tr>
         <?php if ($vrac->hasVersion()): ?>
-        <tr class="alt">
+        <tr>
 			<td style="text-align: center;"></td>
 			<td>
 				<span class="no_picto" style="padding-left:15px;">&nbsp;Projet validé par l'acheteur</span>
@@ -76,7 +76,7 @@
 		</tr>
         <?php endif; ?>
         <?php if ($vrac->hasCourtier()): ?>
-        <tr class="<?php if ($vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasCourtierSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasCourtierSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasCourtierSigne())? format_date($vrac->valide->date_validation_mandataire, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -85,7 +85,7 @@
 			</td>
 		</tr>
         <?php endif; ?>
-        <tr class="<?php if (!$vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -93,7 +93,7 @@
 				<span class="picto_signer" style="padding-left:15px;">&nbsp;Signature du vendeur</span>
 			</td>
 		</tr>
-        <tr class="<?php if ($vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -101,7 +101,7 @@
 				<span class="no_picto" style="padding-left:15px;">&nbsp;Proposition de contrat soumis à l'acheteur</span>
 			</td>
 		</tr>
-        <tr class="<?php if (!$vrac->hasVersion()): ?>alt<?php endif; ?><?php if (!$vrac->hasAcheteurSigne()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->hasAcheteurSigne()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo ($vrac->hasAcheteurSigne())? format_date($vrac->valide->date_validation_acheteur, 'dd/MM/yyyy') : ''; ?>
 			</td>
@@ -109,7 +109,7 @@
 				<span class="picto_signer" style="padding-left:15px;">&nbsp;Signature de l'acheteur</span>
 			</td>
 		</tr>
-        <tr class="<?php if (($vrac->hasCourtier() && !$vrac->hasVersion())||(!$vrac->hasCourtier() && $vrac->hasVersion())): ?>alt<?php endif; ?><?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
+        <tr class="<?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
 			<td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
 			</td>

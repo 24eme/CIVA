@@ -25,9 +25,8 @@
 			$counter = 0;
     		foreach ($form['produits_retiraisons'] as $key => $embedForm) :
     			$detail = $vrac->get($key);
-			    $alt = ($counter%2);
 		?>
-		<tr<?php if ($alt): ?> class="alt"<?php endif; ?>>
+		<tr>
 			<td>
 				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
 			</td>
@@ -105,7 +104,7 @@
 		<?php
             if(isset($form['acheteur_primes_diverses'])):
          ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['acheteur_primes_diverses']->renderLabel() ?>
 			</td>
@@ -142,7 +141,7 @@
 		<?php
             if(isset($form['clause_resiliation'])):
         ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['clause_resiliation']->renderLabel() ?>
 			</td>
@@ -166,7 +165,7 @@
 		</tr>
 		<?php endif; ?>
 		<?php if(isset($form['clause_mandat_facturation'])): ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['clause_mandat_facturation']->renderLabel() ?>
 			</td>
@@ -191,7 +190,7 @@
             </td>
 		</tr>
 		<?php endif; ?>
-		<tr class="alt">
+		<tr>
 			<td>
 				<?php echo $form['conditions_particulieres']->renderLabel() ?>
 			</td>
