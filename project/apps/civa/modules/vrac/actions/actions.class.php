@@ -576,8 +576,7 @@ class vracActions extends sfActions
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
     	$cepage = $this->config->get($hash);
-    	$vtsgn = ($cepage->exist('no_vtsgn') && $cepage->no_vtsgn)? 0 : 1;
-    	return $this->renderText($vtsgn);
+    	return $this->renderText($cepage->hasVtsgn());
     }
 
     public function executeDownloadNotice() {
