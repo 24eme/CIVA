@@ -42,6 +42,7 @@
             $(".aideSaisiePrimesPopup").trigger("click");
         }
     });
+    $("#popup_acheteur_primes_diverses").keypress(function(e) {if(e.which == 13) $("#popup_acheteur_primes_diverses .ajouter").trigger("click");});
     $("#popup_acheteur_primes_diverses .ajouter").click(function() {
         var type = $('#popup_acheteur_primes_diverses select[name="type"]').val();
         var montant = $('#popup_acheteur_primes_diverses input[name="montant"]').val();

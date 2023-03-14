@@ -34,6 +34,7 @@
             $('#ligneEscompte').show();
         }
     });
+    $("#popup_conditions_paiement").keypress(function(e) {if(e.which == 13) $("#popup_conditions_paiement .ajouter").trigger("click");});
     $("#popup_conditions_paiement .ajouter").click(function() {
         var delai = $('#popup_conditions_paiement select[name="delai"]').val();
         var escompte = $('#popup_conditions_paiement input[name="escompte"]').val();

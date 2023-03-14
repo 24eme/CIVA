@@ -30,6 +30,7 @@
             $(".aideSaisieResiliationPopup").trigger("click");
         }
     });
+    $("#popup_clause_resiliation").keypress(function(e) {if(e.which == 13) $("#popup_clause_resiliation .ajouter").trigger("click");});
     $("#popup_clause_resiliation .ajouter").click(function() {
         var resiliation = $('#popup_clause_resiliation input[name="resiliation"]').val();
         var preavis = $('#popup_clause_resiliation input[name="preavis"]').val();
