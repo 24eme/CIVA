@@ -129,7 +129,7 @@
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Délai de retiraison</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?><?php echo $vrac->nb_jour_apres_recolte_retiraison; ?> jours après la récolte</td>
+        <td class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?><?php echo $vrac->nb_jour_apres_recolte_retiraison; ?> jours après la récolte<?php endif; ?></td>
     </tr>
     <tr>
         <th class="td-large" style="border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
