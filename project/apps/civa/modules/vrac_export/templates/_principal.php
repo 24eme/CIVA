@@ -10,7 +10,7 @@
                 border-bottom: 0.5px solid #eee; text-align: left; width: 230px; font-weight: bold;
             }
             .td-conditions {
-                border-bottom: 0.5px solid #eee; text-align: left;
+                border-bottom: 0.5px solid #eee; width: 408px; text-align: left;
             }
 		</style>
 	</head>
@@ -116,7 +116,11 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
-        <td class="td-large" style="border-bottom: 0.5px solid #eee; width: 408px; text-align:left;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
+    </tr>
+    <tr>
+        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO à la charge du vendeur</th>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo $vrac->getTauxCvo(); ?> € HT/hl</td>
     </tr>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
@@ -134,21 +138,23 @@
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_paiement)? str_replace("\n", '<br />&nbsp;', $vrac->conditions_paiement) : 'Aucun' ?></td>
     </tr>
     <tr>
-        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Délai de retiraison</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?><?php echo $vrac->nb_jour_apres_recolte_retiraison; ?> jours après la récolte<?php endif; ?></td>
+        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Résiliation hors cas de force majeur</th>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->clause_resiliation) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) : "Aucune" ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
     </tr>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Les modalités sont indiquées au verso de ce formulaire</i></small></td>
     </tr>
     <tr>
-        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Résiliation hors cas de force majeur</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->clause_resiliation) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) : "Aucune" ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
-    </tr>
-    <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Mandat de facturation</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_mandat_facturation): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux<br />&nbsp;récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</i></small></td>
     </tr>
+    <?php if($vrac->getDelaisRetiraison()): ?>
+    <tr>
+        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Délai maximum de retiraison</th>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo $vrac->getDelaisRetiraison(); ?></td>
+    </tr>
+<?php endif; ?>
     <tr>
         <th class="td-large th-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>Autres clauses particulières</th>
         <td class="td-large td-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_particulieres) ? str_replace("\n", '<br />&nbsp;', $vrac->conditions_particulieres) : "Aucune" ?></td>

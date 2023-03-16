@@ -92,7 +92,7 @@
         <?php if($vrac->getTauxCvo()) : ?>
         <tr>
 			<td>
-				CVO à la charge du vendeur (50%)
+				CVO à la charge du vendeur
 			</td>
 			<td colspan="2">
 				<?php echo $vrac->getTauxCvo(); ?> € HT/hl
@@ -190,6 +190,27 @@
             </td>
 		</tr>
 		<?php endif; ?>
+        <?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
+        <tr>
+            <td>
+                <?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
+            </td>
+            <td colspan="2">
+            <?php echo $form['nb_jour_apres_recolte_retiraison']->render(array('style' => 'width: 100px;')) ?>
+            <span>jours après la récolte</span>
+            </td>
+        </tr>
+        <?php endif; ?>
+        <?php if($vrac->getDelaisRetiraison()): ?>
+        <tr>
+            <td>
+                <label>Délai maximum de retiraison</label>
+            </td>
+            <td colspan="2">
+            60 jours après la validation du contrat
+            </td>
+        </tr>
+        <?php endif; ?>
 		<tr>
 			<td>
 				<?php echo $form['conditions_particulieres']->renderLabel() ?>
@@ -200,27 +221,6 @@
 			</td>
 			<td></td>
 		</tr>
-		<?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
-		<tr>
-			<td>
-				<?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
-			</td>
-            <td colspan="2">
-			<?php echo $form['nb_jour_apres_recolte_retiraison']->render(array('style' => 'width: 100px;')) ?>
-            <span>jours après la récolte</span>
-			</td>
-		</tr>
-		<?php endif; ?>
-        <?php if($vrac->isPonctuel() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
-        <tr>
-			<td>
-				<label>Délai maximum de retiraison</label>
-			</td>
-            <td colspan="2">
-			60 jours après la validation du contrat
-			</td>
-		</tr>
-        <?php endif; ?>
 	</tbody>
 </table>
 <?php endif; ?>

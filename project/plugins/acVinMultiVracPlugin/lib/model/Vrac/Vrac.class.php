@@ -1153,6 +1153,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->valide->date_validation = null;
     }
 
+    public function getDelaisRetiraison() {
+        if($this->exist('nb_jour_apres_recolte_retiraison')) {
+
+            return $this->nb_jour_apres_recolte_retiraison." jours après la récolte";
+        }
+
+        if($this->isPonctuel() && $this->type_contrat == VracClient::TYPE_VRAC) {
+
+            return "60 jours après la validation du contrat";
+        }
+
+        return null;
+    }
+
     public function getTauxCvo() {
         foreach($this->declaration->getProduitsDetails() as $detail) {
             $date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
