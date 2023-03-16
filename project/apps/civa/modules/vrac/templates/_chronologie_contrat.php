@@ -2,7 +2,7 @@
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th style="width: 230px;">Chronologie du contrat</th>
+			<th style="width: 240px;">Chronologie du contrat</th>
 		</tr>
 	</thead>
 	<tbody>
