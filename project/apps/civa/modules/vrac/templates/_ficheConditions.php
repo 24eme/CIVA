@@ -19,10 +19,10 @@
 		</tr>
         <tr>
 			<td>
-				CVO à la charge du vendeur (50%)
+				CVO à la charge du vendeur
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'vendeur_frais_annexes') ?>">
-				3,76 € HT / hl
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl
 			</td>
 		</tr>
 		<?php endif; ?>
@@ -57,7 +57,7 @@
 		<?php if($vrac->exist('clause_reserve_propriete')): ?>
 		<tr>
 			<td>
-				<label>Clause de réserve de propriété</label>
+				Clause de réserve de propriété
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'clause_reserve_propriete') ?>">
 				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
@@ -68,7 +68,7 @@
         <?php if($vrac->exist('clause_mandat_facturation')): ?>
 		<tr>
 			<td>
-				<label>Mandat de facturation</label>
+				Mandat de facturation
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'clause_mandat_facturation') ?>">
 				<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?><?php if($vrac->clause_mandat_facturation): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat).</small><?php endif; ?>
@@ -85,6 +85,16 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+        <?php if($vrac->getDelaisRetiraison()): ?>
+        <tr>
+			<td>
+				<label>Délai maximum de retiraison</label>
+			</td>
+			<td>
+				<?php echo $vrac->getDelaisRetiraison(); ?>
+			</td>
+		</tr>
+        <?php endif; ?>
         <tr>
 			<td>
 				Autres clauses particulières
@@ -93,26 +103,6 @@
 				<?php echo ($vrac->conditions_particulieres)? $vrac->conditions_particulieres : 'Aucune'; ?>
 			</td>
 		</tr>
-		<?php if($vrac->exist('nb_jour_apres_recolte_retiraison')): ?>
-		<tr>
-			<td>
-				<label>Délai maximum de retiraison</label>
-			</td>
-			<td class="<?php echo isVersionnerCssClass($vrac, 'nb_jour_apres_recolte_retiraison') ?>">
-				<?php echo ($vrac->nb_jour_apres_recolte_retiraison) ?> jours après la récolte
-			</td>
-		</tr>
-		<?php endif; ?>
-        <?php if($vrac->isPonctuel() && $vrac->type_contrat == VracClient::TYPE_VRAC): ?>
-        <tr>
-			<td>
-				<label>Délai de retiraison</label>
-			</td>
-			<td>
-				60 jours après la validation du contrat
-			</td>
-		</tr>
-        <?php endif; ?>
 		<?php if($vrac->isInterne()): ?>
         <tr>
                 <td>

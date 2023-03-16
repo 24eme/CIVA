@@ -10,8 +10,8 @@ class VracConditionsForm extends acCouchdbObjectForm
     	));
 
         $this->widgetSchema->setLabels(array(
-        	'conditions_paiement' => 'Délais de paiement :',
-        	'conditions_particulieres' => 'Autres clauses particulières :',
+        	'conditions_paiement' => 'Délais de paiement',
+        	'conditions_particulieres' => 'Autres clauses particulières',
         ));
 
 		$this->setValidators(array(
