@@ -3,7 +3,6 @@ class VracContratValidation extends DocumentValidation
 {
     const PRIX_SEUIL = 50;
     const PRIX_SEUIL_BLOQUANT = 10;
-    const MAX_PRODUIT = 9;
 
 	protected $produits_controle = array();
 	protected $annuaire = null;
@@ -17,7 +16,6 @@ class VracContratValidation extends DocumentValidation
 
   	public function configure()
   	{
-        $this->addControle('erreur', 'nb_produits', 'Vous ne pouvez pas saisir plus de '.self::MAX_PRODUIT.' produits par contrat.');
   		$this->addControle('erreur', 'doublon_produits', 'Vous ne pouvez pas déclarer des produits identiques.');
         $this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
@@ -104,9 +102,6 @@ class VracContratValidation extends DocumentValidation
 		}
 	    if (count($doublon_libelles) > 0) {
 	      $this->addPoint('erreur', 'doublon_produits', implode(",", $doublon_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
-	    }
-	    if (count($produits) > self::MAX_PRODUIT) {
-	    	$this->addPoint('erreur', 'nb_produits', '', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
 	    }
 
         if(!$this->document->isAcheteurProprietaire() && $this->annuaire && !$this->annuaire->exist($this->document->acheteur_type."/".$this->document->acheteur_identifiant)) {
