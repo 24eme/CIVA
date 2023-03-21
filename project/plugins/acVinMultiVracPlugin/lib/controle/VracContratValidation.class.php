@@ -20,7 +20,7 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('vigilance', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('erreur', 'prix_litre', 'Le prix doit être exprimé en €/HL et non en €/L');
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
-    	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les labels de vos produits.');
+    	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les certifications de vos produits.');
         $this->addControle('erreur', 'millesime_non_saisi', 'Vous devez préciser les millésimes de vos produits.');
         $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraison pour l\'ensemble de vos produits.');
 
