@@ -56,6 +56,7 @@
 					input.addEventListener('change', function(e) {
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').checked = true;
 						document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
+						document.getElementById('contrat_pluriannuel_radio_list').style.display = 'block';
 						if(document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').checked) {
 							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = (input.value == "RAISIN");
 						}
@@ -69,7 +70,9 @@
 						if(input.value == "BOUTEILLE") {
 							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_BOUTEILLE";
 		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
-							document.querySelector('#ligne_contrat_pluriannuel_mode_surface').style.display = 'none';
+							document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
+							document.getElementById('contrat_pluriannuel_radio_list').style.display = 'none';
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').checked = true;
 						}
 						if(input.value == "VRAC") {
 							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
