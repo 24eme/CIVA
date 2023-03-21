@@ -112,7 +112,7 @@ class VracContratValidation extends DocumentValidation
             $this->addPoint('vigilance', 'presence_annuaire', $this->document->vendeur->raison_sociale, $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'soussignes')));
         }
 
-        if (count($label_libelles) > 0) {
+        if (count($label_libelles) > 0 && $this->document->type_contrat != VracClient::TYPE_BOUTEILLE) {
             $this->addPoint('erreur', 'label_non_saisi', implode(",", $label_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
         }
 
