@@ -80,6 +80,7 @@
 						}
 						if(input.value == "MOUT") {
 		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HA"]').disabled = true;
 							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
 						}
 					});
