@@ -395,7 +395,13 @@ var sumContrat = function(brothers, cible)
 						class_red.push(champ_bouteille);
 					}
 					if(champ_millesime.length > 0 && !$.trim(champ_millesime.val())){
-						class_red.push(champ_millesime);
+              if (champ_millesime.attr('checkproduits') == '1'||champ_millesime.attr('checkproduits') == 'true') {
+                if ((champ_millesime.attr('id')).indexOf('appellation_CREMANT') == -1 && (champ_millesime.attr('id')).indexOf('cepage_ED') == -1) {
+                  class_red.push(champ_millesime);
+                }
+              } else {
+                  class_red.push(champ_millesime);
+              }
 					}
 					if(!class_red.length)
 					{
