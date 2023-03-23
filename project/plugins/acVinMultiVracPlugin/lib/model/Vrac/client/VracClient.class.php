@@ -29,6 +29,11 @@ class VracClient extends acCouchdbClient {
     const TEMPORALITE_PLURIANNUEL_CADRE = 'PLURIANNUEL_CADRE';
     const TEMPORALITE_PLURIANNUEL_APPLICATION = 'PLURIANNUEL_APPLICATION';
 
+	const DELAIS_RETIRAISON_AVEC_SUIVI_QUALITATIF_PLURIANNUEL = "Jusqu'au 31/07";
+	const DELAIS_RETIRAISON_SANS_SUIVI_QUALITATIF = "60 jours après la validation du contrat";
+    const DELAIS_RETIRAISON_AUCUN = "Aucun";
+    const DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE = "%NB_JOURS% jours après la récolte";
+
     public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
 
 	protected static $_contrat_types = array(
