@@ -10,62 +10,6 @@
 ?>
 <p class="intro_contrat_vrac">Veuillez saisir ici les <strong>conditions applicables</strong> au contrat.</p>
 
-<?php if(isset($form['produits_retiraisons'])): ?>
-<table class="validation table_donnees">
-	<thead>
-		<tr>
-			<th>Produits</th>
-			<th class="date_retiraison" style="text-align: center"><?php echo $header?> début retiraison</th>
-			<th class="date_retiraison" style="text-align: center"><?php echo $header?> limite retiraison</th>
-            <th  style="width: 60px">Dupliquer</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-			$counter = 0;
-    		foreach ($form['produits_retiraisons'] as $key => $embedForm) :
-    			$detail = $vrac->get($key);
-		?>
-		<tr>
-			<td>
-				<?php echo $detail->getLibelleSansCepage(); ?> <strong><?php echo $detail->getLieuLibelle(); ?> <?php echo $detail->getCepage()->getLibelle(); ?> <?php echo $detail->getComplementPartielLibelle(); ?>  <?php echo $detail->millesime; ?> <?php echo $detail->denomination; ?></strong><?php echo ($detail->exist('label') && $detail->get("label"))? " ".VracClient::$label_libelles[$detail->get("label")] : ""; ?>
-			</td>
-			<td class="date_retiraison">
-    			<span><?php echo $embedForm['retiraison_date_debut']->renderError() ?></span>
-    			<?php echo $embedForm['retiraison_date_debut']->render(array('class' => 'input_date '.$datepickerClass)) ?>
-			</td>
-			<td class="date_retiraison">
-    			<span><?php echo $embedForm['retiraison_date_limite']->renderError() ?></span>
-    			<?php echo $embedForm['retiraison_date_limite']->render(array('class' => 'input_date '.$datepickerClass)) ?>
-
-			</td>
-            <td style="text-align: center;">
-                <button <?php if($counter >= count($form['produits_retiraisons']) - 1): ?>disabled="disabled" style="opacity: 0.3;"<?php endif; ?> type="button" title="Dupliquer les dates sur la ligne du dessous"  class="btn_majeur btn_petit btn_copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.364 12.5a.5.5 0 0 0 .5.5H14.5a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 14.5 0h-10A1.5 1.5 0 0 0 3 1.5v6.636a.5.5 0 1 0 1 0V1.5a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5H7.864a.5.5 0 0 0-.5.5z"/><path fill-rule="evenodd" d="M0 15.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1H1.707l8.147-8.146a.5.5 0 0 0-.708-.708L1 14.293V10.5a.5.5 0 0 0-1 0v5z"/></svg></button>
-            </td>
-		</tr>
-		<?php
-			$counter++;
-			endforeach;
-		?>
-
-	</tbody>
-</table>
-
-<script>
-    document.querySelectorAll('.btn_copy').forEach(function(btnCopy) {
-        btnCopy.addEventListener('click', function() {
-            let ligne = this.parentNode.parentNode;
-            let ligneSuivante = ligne.nextSibling.nextSibling;
-            if(!ligneSuivante) {
-                return;
-            }
-            ligneSuivante.querySelector("input[name*='debut']").value = ligne.querySelector("input[name*='debut']").value;
-            ligneSuivante.querySelector("input[name*='limite']").value = ligne.querySelector("input[name*='limite']").value;
-        });
-    });
-</script>
-<?php endif; ?>
-
 <?php if(!$vrac->isPapier()): ?>
 <?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>
 <table class="validation table_donnees">

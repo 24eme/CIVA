@@ -22,10 +22,6 @@ class VracContratValidation extends DocumentValidation
     	$this->addControle('vigilance', 'presence_annuaire', "Ce soussigné n'est pas présent dans l'annuaire de l'initiateur du contrat, il le sera une fois ce contrat validé");
     	$this->addControle('erreur', 'label_non_saisi', 'Vous devez préciser les certifications de vos produits.');
         $this->addControle('erreur', 'millesime_non_saisi', 'Vous devez préciser les millésimes de vos produits.');
-        $this->addControle('erreur', 'retiraisons_non_saisi', 'Vous devez préciser les dates début et limite de retiraison pour l\'ensemble de vos produits.');
-
-        $this->addControle('erreur', 'retiraisons_pb', 'La date limite de retiraison ne peut pas être antérieur à la date de début de retiraison');
-        $this->addControle('erreur', 'retiraisons_limite_incoherence', 'Les dates limite de retiraison ne peuvent dépasser le 31/07');
         $this->addControle('erreur', 'vendeur_assujetti_tva_required', 'Vous devez préciser si le vendeur est assujetti à la tva ou non');
         $this->addControle('erreur', 'acheteur_assujetti_tva_required', 'Vous devez préciser si l\'acheteur est assujetti à la tva ou non ');
         $this->addControle('erreur', 'clause_reserve_propriete_required', 'Vous devez préciser la présence ou non d\'une clause de réserve de propriété');
@@ -45,9 +41,6 @@ class VracContratValidation extends DocumentValidation
 		$millesimes = array();
 		$produits = array();
         $vtsgn = [];
-        $retiraisons_manquantes = array();
-        $retiraisons_incoherentes = array();
-        $retiraisons_pb  = array();
 	  	foreach ($this->document->declaration->getActifProduitsDetailsSorted() as $details) {
 			foreach ($details as $detail) {
 				if (!isset($produits[$detail->getCepage()->getHash()])) {
@@ -62,21 +55,6 @@ class VracContratValidation extends DocumentValidation
 				if (!$detail->exist('label') || $detail->label === null || $detail->label === "") {
 				    $label_libelles[] = $detail->getLibelle();
 				}
-				if (
-                    ($detail->exist('retiraison_date_debut') && ($detail->retiraison_date_debut === null || $detail->retiraison_date_debut === "")) ||
-                    ($detail->exist('retiraison_date_limite') && ($detail->retiraison_date_limite === null || $detail->retiraison_date_limite === "")))
-                 {
-				    $retiraisons_manquantes[] = $detail->getLibelle();
-				}
-
-                $dateDebutRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_debut)? Vrac::getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_debut) : $detail->retiraison_date_debut;
-                $dateLimiteRetiraison = ($this->document->isPluriannuelCadre() && $detail->retiraison_date_limite)? Vrac::getDateRetiraisonByCampagne($this->document->campagne, $detail->retiraison_date_limite) : $detail->retiraison_date_limite;
-                if ($dateDebutRetiraison && $dateLimiteRetiraison && $dateDebutRetiraison >  $dateLimiteRetiraison) {
-                    $retiraisons_pb[] = $detail->getLibelle();
-                }
-                if ($dateLimiteRetiraison && ($dateLimiteRetiraison > substr($this->document->campagne, -4).'-07-31')) {
-                    $retiraisons_incoherentes[] = $detail->getLibelle();
-                }
 				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
                     if ($this->document->isPonctuel() && $this->document->type_contrat == VracClient::TYPE_VRAC) {
                         if ($detail->getAppellation()->getKey() != 'appellation_CREMANT' && $detail->getCepage()->getKey() != 'cepage_ED') {
@@ -124,14 +102,6 @@ class VracContratValidation extends DocumentValidation
 
         if (count($millesimes) > 0) {
             $this->addPoint('erreur', 'millesime_non_saisi', implode(",", $millesimes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
-        }
-
-        if($this->document->needDateRetiraison() && count($retiraisons_manquantes) > 0) {
-            $this->addPoint('erreur', 'retiraisons_non_saisi', implode(",", $retiraisons_manquantes), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
-        }
-
-        if (count($retiraisons_pb) > 0) {
-            $this->addPoint('erreur', 'retiraisons_pb', implode(",", $retiraisons_pb), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
         if ($this->document->exist('vendeur_assujetti_tva') && $this->document->vendeur_assujetti_tva === null) {

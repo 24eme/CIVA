@@ -61,11 +61,6 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('nb_jour_apres_recolte_retiraison', "Délai maximum de retiraison");
 		}
 
-        if($this->getObject()->needDateRetiraison()) {
-            $produitsRetiraisons = new VracRetiraisonsCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted());
-            $this->embedForm('produits_retiraisons', $produitsRetiraisons);
-        }
-
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 

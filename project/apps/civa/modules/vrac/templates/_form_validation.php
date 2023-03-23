@@ -21,12 +21,7 @@
 			<?php endif; ?>
 			<th class="volume" style="text-align: center"><?php echo ucfirst($quantiteType); ?></th>
 			<th class="prix" style="text-align: center">Prix</th>
-            <?php if($vrac->needDateRetiraison()): ?>
-			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Début de retiraison</th>
-			<th class="date_retiraison_limite" style="text-align: center; width: 100px;">Limite de retiraison</th>
-            <?php else :?>
             <th style=" width: 200px;"></th>
-            <?php endif; ?>
 		</tr>
 	</thead>
 	<tbody>
@@ -49,24 +44,7 @@
 			<td class="prix <?php echo isVersionnerCssClass($detail, 'prix_unitaire') ?>">
 				<?php if ($detail->prix_unitaire): ?><?php echoFloat($detail->prix_unitaire) ?>&nbsp;<?php echo $vrac->getPrixUniteLibelle(); ?><?php endif; ?>
 			</td>
-            <?php if($vrac->needDateRetiraison()): ?>
-            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
-				<?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
-                <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
-				<?php elseif($detail->retiraison_date_debut): ?>
-					<?php echo format_date('1970-'.$detail->retiraison_date_debut, 'dd/MM') ?>
-                <?php endif; ?>
-			</td>
-            <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_limite') ?>" style="text-align: center;">
-                <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
-                    <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
-                <?php elseif($detail->retiraison_date_limite): ?>
-	                <?php echo format_date('1970-'.$detail->retiraison_date_limite, 'dd/MM') ?>
-                <?php endif;  ?>
-			</td>
-            <?php else : ?>
             <td colspan="2"></td>
-            <?php endif; ?>
 		</tr>
 		<?php
 			$counter++;  endforeach;
