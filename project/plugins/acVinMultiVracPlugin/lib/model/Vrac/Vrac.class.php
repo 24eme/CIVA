@@ -581,7 +581,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		$this->valide->statut = self::STATUT_VALIDE;
     		$this->valide->date_validation = date('Y-m-d');
     	}
-    	if ($valide && in_array($this->type_contrat, [VracClient::TYPE_BOUTEILLE, VracClient::TYPE_RAISIN]) {
+    	if ($valide && in_array($this->type_contrat, [VracClient::TYPE_BOUTEILLE, VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT]) {
     		$this->valide->email_validation = date('Y-m-d');
     		$this->clotureContrat();
     	}
