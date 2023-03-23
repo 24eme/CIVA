@@ -134,24 +134,25 @@
             </td>
 		</tr>
 		<?php endif; ?>
-        <?php if(isset($form['nb_jour_apres_recolte_retiraison'])): ?>
+        <?php if(isset($form['suivi_qualitatif'])): ?>
+		<tr>
+			<td>
+				<?php echo $form['suivi_qualitatif']->renderLabel() ?>
+			</td>
+			<td colspan="2">
+            <?php echo $form['suivi_qualitatif']->render() ?>
+            <small style="font-size: 12px; color: #666; margin-left: 10px;">Sans suivi qualitatif, la date limite de retiraison ne doit pas dépasser 60 jours après la validation du contrat</small>
+			</td>
+		</tr>
+		<?php endif; ?>
+        <?php if(isset($form['delais_retiraison'])): ?>
         <tr>
             <td>
-                <?php echo $form['nb_jour_apres_recolte_retiraison']->renderLabel() ?>
+                <?php echo $form['delais_retiraison']->renderLabel() ?>
             </td>
             <td colspan="2">
-            <?php echo $form['nb_jour_apres_recolte_retiraison']->render(array('style' => 'width: 100px;')) ?>
+            <?php echo $form['delais_retiraison']->render(array('style' => 'width: 60px;')) ?>
             <span>jours après la récolte</span>
-            </td>
-        </tr>
-        <?php endif; ?>
-        <?php if($vrac->getDelaisRetiraison()): ?>
-        <tr>
-            <td>
-                <label>Délai maximum de retiraison</label>
-            </td>
-            <td colspan="2">
-            60 jours après la validation du contrat
             </td>
         </tr>
         <?php endif; ?>
