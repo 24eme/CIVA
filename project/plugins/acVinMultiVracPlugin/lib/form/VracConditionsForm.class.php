@@ -19,6 +19,12 @@ class VracConditionsForm extends acCouchdbObjectForm
         	'conditions_particulieres' => new sfValidatorString(array('required' => false)),
         ));
 
+        if($this->getObject()->exist('suivi_qualitatif')) {
+			$this->setWidget('suivi_qualitatif', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true), array('required' => 'required')));
+			$this->setValidator('suivi_qualitatif', new sfValidatorChoice(array('choices' => [1,0])));
+			$this->getWidgetSchema()->setLabel('suivi_qualitatif', "Suivi qualitatif");
+		}
+
 		if($this->getObject()->exist('clause_reserve_propriete')) {
 			$this->setWidget('clause_reserve_propriete', new sfWidgetFormChoice(array('choices' => ["1" => "Oui", "0" => "Non"], 'expanded' => true)));
 			$this->setValidator('clause_reserve_propriete', new sfValidatorChoice(array('choices' => [1,0], 'required' => false)));
@@ -55,13 +61,25 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('clause_evolution_prix', "Critères et modalités d'évolution des prix pour les années N+1 et N+2");
 		}
 
-		if($this->getObject()->exist('nb_jour_apres_recolte_retiraison')) {
-			$this->setWidget('nb_jour_apres_recolte_retiraison', new sfWidgetFormInputFloat());
-			$this->setValidator('nb_jour_apres_recolte_retiraison', new sfValidatorNumber(array('required' => false)));
-			$this->getWidgetSchema()->setLabel('nb_jour_apres_recolte_retiraison', "Délai maximum de retiraison");
+		if($this->getObject()->type_contrat == VracClient::TYPE_MOUT) {
+			$this->setWidget('delais_retiraison', new sfWidgetFormInputFloat());
+			$this->setValidator('delais_retiraison', new sfValidatorNumber(array('required' => false)));
+			$this->getWidgetSchema()->setLabel('delais_retiraison', "Délai maximum de retiraison");
 		}
 
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
+    }
+
+	protected function updateDefaultsFromObject() {
+        parent::updateDefaultsFromObject();
+        $defaults = $this->getDefaults();
+        if ($this->getObject()->exist('delais_retiraison') && !$this->getObject()->delais_retiraison) {
+            $nbJours = str_replace(str_replace('%NB_JOURS%', '', VracClient::DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE), '', $this->getObject()->delais_retiraison);
+            if ($nbJours) {
+        	    $defaults['delais_retiraison'] = ($nbJours)? $nbJours : null;
+            }
+        }
+        $this->setDefaults($defaults);
     }
 
     public function doUpdateObject($values) {
@@ -70,6 +88,18 @@ class VracConditionsForm extends acCouchdbObjectForm
             $this->getObject()->clause_reserve_propriete = (isset($values['clause_reserve_propriete']) && $values['clause_reserve_propriete'])? 1 : 0;
         if ($this->getObject()->exist('clause_mandat_facturation'))
             $this->getObject()->clause_mandat_facturation = (isset($values['clause_mandat_facturation']) && $values['clause_mandat_facturation'])? 1 : 0;
+        if (isset($values['suivi_qualitatif']) && $values['suivi_qualitatif'] == "1" && $this->getObject()->isPluriannuelCadre()) {
+            $this->getObject()->delais_retiraison = VracClient::DELAIS_RETIRAISON_AVEC_SUIVI_QUALITATIF_PLURIANNUEL;
+        } elseif(isset($values['suivi_qualitatif']) && $values['suivi_qualitatif'] == "0") {
+            $this->getObject()->delais_retiraison = VracClient::DELAIS_RETIRAISON_SANS_SUIVI_QUALITATIF;
+        } elseif($this->getObject()->exist('delais_retiraison')) {exit;
+            $this->getObject()->delais_retiraison = null;
+        }
+        if (isset($values['delais_retiraison']) && $values['delais_retiraison']) {
+            $this->getObject()->delais_retiraison = str_replace('%NB_JOURS%', $values['delais_retiraison'], VracClient::DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE);
+        } elseif(!isset($values['suivi_qualitatif']) && $this->getObject()->exist('delais_retiraison')) {
+            $this->getObject()->delais_retiraison = null;
+        }
         foreach ($this->getEmbeddedForms() as $key => $embedForm) {
             $embedForm->doUpdateObject($values[$key]);
         }
