@@ -28,21 +28,6 @@
     <?php elseif ($vrac->needRetiraison() && ($vrac->isCloture() || $form)): ?>
 		<td></td>
 		<?php include_partial('vrac/produitsVolumeEnleve', array('vrac' => $vrac, 'detail' => $detail, 'quantiteType' => $quantiteType)) ?>
-    <?php elseif($vrac->needDateRetiraison()): ?>
-        <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_debut') ?>" style="text-align: center;">
-            <?php if($detail->retiraison_date_debut && !$vrac->isPluriannuelCadre()): ?>
-            <?php echo format_date($detail->retiraison_date_debut, 'dd/MM/yyyy') ?>
-            <?php else: ?>
-                <?php echo format_date('1970-'.$detail->retiraison_date_debut, 'dd/MM') ?>
-            <?php endif; ?>
-        </td>
-        <td class="date_retiraison_limite <?php echo isVersionnerCssClass($detail, 'retiraison_date_limite') ?>" style="text-align: center;">
-            <?php if($detail->retiraison_date_limite && !$vrac->isPluriannuelCadre()): ?>
-                <?php echo format_date($detail->retiraison_date_limite, 'dd/MM/yyyy') ?>
-            <?php else: ?>
-                <?php echo format_date('1970-'.$detail->retiraison_date_limite, 'dd/MM') ?>
-            <?php endif;  ?>
-        </td>
     <?php else: ?>
         <td colspan="2"></td>
 	<?php endif; ?>

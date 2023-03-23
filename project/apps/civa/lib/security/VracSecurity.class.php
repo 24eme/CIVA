@@ -82,7 +82,7 @@ class VracSecurity implements SecurityInterface {
 
         if(in_array(self::CREATION, $droits) && !$this->compte->hasDroit(Roles::TELEDECLARATION_VRAC_CREATION)) {
 
-            return false;
+            //return false;
         }
 
         if(in_array(self::CREATION, $droits)) {

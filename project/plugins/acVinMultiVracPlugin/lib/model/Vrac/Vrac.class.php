@@ -1020,18 +1020,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
             $detail->millesime = $millesime;
-            $detail->retiraison_date_debut = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_debut);
-            $detail->retiraison_date_limite = self::getDateRetiraisonByCampagne($vrac->campagne, $detail->retiraison_date_limite);
         }
         return $vrac;
 	}
-
-    public static function getDateRetiraisonByCampagne($campagne, $periode) {
-        if (substr($periode, 0, 2) == 12) {
-            return substr($campagne, 0, 4)."-".$periode;
-        }
-        return substr($campagne, -4)."-".$periode;
-    }
 
 	public function getPourcentageTotalDesClausesEvolutionPrix() {
 		if ($this->exist('clause_evolution_prix') && $this->clause_evolution_prix) {
@@ -1118,11 +1109,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isType($type) {
         return ($this->type_contrat == $type);
     }
-
-	public function needDateRetiraison() {
-
-		return !$this->isPonctuel() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
-	}
 
     public function needRetiraison() {
 
