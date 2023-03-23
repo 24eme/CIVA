@@ -78,7 +78,13 @@ class VracContratValidation extends DocumentValidation
                     $retiraisons_incoherentes[] = $detail->getLibelle();
                 }
 				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
-				    $millesimes[] = $detail->getLibelle();
+                    if ($this->document->isPonctuel() && $this->document->type_contrat == VracClient::TYPE_VRAC) {
+                        if ($detail->getAppellation()->getKey() != 'appellation_CREMANT' && $detail->getCepage()->getKey() != 'cepage_ED') {
+                            $millesimes[] = $detail->getLibelle();
+                        }
+                    } else {
+				        $millesimes[] = $detail->getLibelle();
+                    }
 				}
                 if ($detail->denomination && Configuration::hasRefVtSgnInLibelle($detail->denomination)) {
                     $vtsgn[] = $detail->getLibelle();
