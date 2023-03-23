@@ -75,7 +75,7 @@ td.echeance {display: inline;}
 			}
 		?>
 <hr class="printonly"/>
-		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form, 'produits_hash_in_error' => $validation->getProduitsHashInError(), 'user' => $user, 'popup_saisie_prix' => $formSaisiePrix)) ?>
+		<?php include_partial('vrac/produits', array('vrac' => $vrac, 'form' => $form, 'produits_hash_in_error' => $validation->getProduitsHashInError())) ?>
 
 <?php if(!$vrac->isPapier()): ?>
 <hr class="printonly"/>
@@ -177,8 +177,7 @@ td.echeance {display: inline;}
 	</form>
 	<?php endif; ?>
 	<?php include_partial('vrac/generationPdf', array('vrac' => $vrac)); ?>
-    <?php if ($formApplication) include_partial('popupGenerationContratApplication', array('form' => $formApplication, 'validation' => $validationApplication, 'vrac' => $vrac, 'id' => "popup_generation_contratApplication")); ?>
-    <?php if ($formSaisiePrix) include_partial('popupGenerationContratApplication', array('form' => $formSaisiePrix, 'validation' => null, 'vrac' => $vrac, 'id' => "popup_saisieprix_contratApplication")); ?>
+    <?php if ($formApplication) include_partial('popupGenerationContratApplication', array('form' => $formApplication, 'validation' => $validationApplication, 'vrac' => $vrac)); ?>
 </div>
 <script type="text/javascript">
 $(document).ready(function()

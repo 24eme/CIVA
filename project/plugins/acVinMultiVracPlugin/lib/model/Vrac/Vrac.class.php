@@ -1108,30 +1108,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return !$this->isPluriannuelCadre() && in_array($this->type_contrat, array(VracClient::TYPE_VRAC));
     }
 
-    public function hasDoubleValidation() {
-		if (!$this->isApplicationPluriannuel()) return false;
-        if ($this->isPremiereApplication()) return false;
-        return in_array($this->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT));
-    }
-
-    public function needSaisiePrix() {
-        foreach($this->declaration->getProduitsDetails() as $detail) {
-            if (!$detail->prix_unitaire) return true;
-        }
-        return false;
-    }
-
-    public function archivePrevalidation() {
-        $this->valide->add('date_prevalidation_vendeur', $this->valide->date_validation_vendeur);
-        $this->valide->add('date_prevalidation_acheteur', $this->valide->date_validation_acheteur);
-        $this->valide->add('date_prevalidation_mandataire', $this->valide->date_validation_mandataire);
-        $this->valide->add('date_prevalidation', $this->valide->date_validation);
-        $this->valide->date_validation_vendeur = null;
-        $this->valide->date_validation_acheteur = null;
-        $this->valide->date_validation_mandataire = null;
-        $this->valide->date_validation = null;
-    }
-
     public function getDelaisRetiraison() {
         if($this->exist('nb_jour_apres_recolte_retiraison')) {
 

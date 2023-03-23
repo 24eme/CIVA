@@ -249,12 +249,6 @@ class vracActions extends sfActions
 		    $this->formApplication = null;
             $this->validationApplication = null;
         }
-
-		$this->formSaisiePrix = null;
-		if ($this->vrac->needSaisiePrix()) {
-			$this->formSaisiePrix = $this->getForm($this->vrac, VracEtapes::ETAPE_PRODUITS);
-		}
-
     }
 
 
@@ -273,34 +267,6 @@ class vracActions extends sfActions
             }
         }
 	}
-
-    public function executeRevalidationApplication(sfWebRequest $request)
-	{
-        $contrat = $this->getRoute()->getVrac();
-        $this->forward404Unless($contrat);
-        $user = $this->getTiersOfVrac($contrat);
-        $this->forward404Unless($user);
-        $this->forward404Unless($user->_id == $contrat->createur_identifiant);
-
-        $this->form = $this->getForm($contrat, VracEtapes::ETAPE_PRODUITS);
-        $this->validation = new VracContratValidation($contrat);
-        $this->forward404Unless(!$this->validation->hasPoints());
-
-    	if ($request->isMethod(sfWebRequest::POST)) {
-    		$this->form->bind($request->getParameter($this->form->getName()));
-        	if ($this->form->isValid()) {
-        		$contrat = $this->form->save();
-                $contrat->archivePrevalidation();
-                $contrat->signer($contrat->createur_identifiant);
-                $contrat->save();
-				$this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été mis à jour avec succès.');
-       			return $this->redirect('vrac_fiche', array('sf_subject' => $contrat));
-        	}
-        }
-        $this->getUser()->setFlash('notice', 'Une erreur est survenue lors de la mise à jour du contrat d\'application');
-        return $this->redirect('vrac_fiche', array('sf_subject' => $contrat));
-	}
-
 
 	public function executeGenererContratApplication(sfWebRequest $request)
 	{
