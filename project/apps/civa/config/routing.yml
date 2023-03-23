@@ -241,15 +241,6 @@ vrac_mercuriale:
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_revalidation_contrat_application:
-  url: /vrac/:numero_contrat/revalidation
-  param: { module: vrac, action: revalidationApplication }
-  class: VracRoute
-  options:
-    model:    Vrac
-    type:     object
-  requirements:
-    sf_method: [get, post]
 vrac_generer_contrat_application:
   url: /vrac/:numero_contrat/generer-application/:campagne
   param: { module: vrac, action: genererContratApplication }

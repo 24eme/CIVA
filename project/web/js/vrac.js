@@ -229,7 +229,7 @@ var initAideALaSaisie = function()
 var initGenerationContratApplication = function()
 {
     $('.generationContratApplication').click(function() {
-        openPopup($($(this).attr('data-target')));
+        openPopup($("#popup_generation_contratApplication"));
         return false;
     });
 };
