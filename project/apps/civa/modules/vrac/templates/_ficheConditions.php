@@ -85,16 +85,24 @@
 			</td>
 		</tr>
 		<?php endif; ?>
-        <?php if($vrac->getDelaisRetiraison()): ?>
+		<?php if($vrac->exist('suivi_qualitatif')): ?>
+		<tr>
+			<td>
+				<label>Suivi qualitatif</label>
+			</td>
+			<td class="<?php echo isVersionnerCssClass($vrac, 'suivi_qualitatif') ?>">
+				<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?>
+			</td>
+		</tr>
+		<?php endif; ?>
         <tr>
 			<td>
 				<label>Délai maximum de retiraison</label>
 			</td>
 			<td>
-				<?php echo $vrac->getDelaisRetiraison(); ?>
+				<?php echo ($delais = $vrac->getDelaisRetiraison())? $delais : VracClient::DELAIS_RETIRAISON_AUCUN; ?>
 			</td>
 		</tr>
-        <?php endif; ?>
         <tr>
 			<td>
 				Autres clauses particulières
