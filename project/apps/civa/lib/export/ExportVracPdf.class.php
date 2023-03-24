@@ -66,7 +66,8 @@ class ExportVracPdf extends ExportDocument {
         $headerBlankToBottom = "\n\n";
 
         if($this->vrac->isPluriannuelCadre()) {
-            $header .= "\nCAMPAGNES D'APPLICATION 2022 à 2025";
+            $campagnes = VracSoussignesForm::getCampagnesChoices();
+            $header .= "\nCAMPAGNES D'APPLICATION ".$campagnes[$this->vrac->campagne];;
             $headerBlankToBottom = "\n";
         }
 
