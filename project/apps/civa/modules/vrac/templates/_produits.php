@@ -22,6 +22,7 @@
 			<th class="echeance">Date</th>
 			<th class="enleve">Volume réel</th>
             <th colspan="2" style=" width: 100px;"></th>
+			<?php endif; ?>
 			<?php if ($form): ?>
 			<th class="cloture">Cloture</th>
 			<th class="actions"></th>
