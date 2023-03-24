@@ -92,7 +92,7 @@ class VracConditionsForm extends acCouchdbObjectForm
             $this->getObject()->delais_retiraison = VracClient::DELAIS_RETIRAISON_AVEC_SUIVI_QUALITATIF_PLURIANNUEL;
         } elseif(isset($values['suivi_qualitatif']) && $values['suivi_qualitatif'] == "0") {
             $this->getObject()->delais_retiraison = VracClient::DELAIS_RETIRAISON_SANS_SUIVI_QUALITATIF;
-        } elseif($this->getObject()->exist('delais_retiraison')) {exit;
+        } elseif($this->getObject()->exist('delais_retiraison')) {
             $this->getObject()->delais_retiraison = null;
         }
         if (isset($values['delais_retiraison']) && $values['delais_retiraison']) {
