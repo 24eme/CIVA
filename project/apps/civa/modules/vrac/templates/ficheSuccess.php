@@ -150,7 +150,7 @@ td.echeance {display: inline;}
 	                    </a>
 					<?php endif; ?>
 					<a href="<?php echo url_for('vrac_validation', array('sf_subject' => $vrac)) ?>" id="signatureVrac">
-                        <button class="btn_majeur btn_vert btn_grand btn_upper_case"><?php if($vrac->isApplicationPluriannuel()): ?>Valider<?php else: ?>Signer<?php endif; ?></button>
+                        <button class="btn_majeur btn_vert btn_grand btn_upper_case">Signer</button>
 					</a>
                     <?php endif; ?>
 				<?php endif; ?>
@@ -159,11 +159,8 @@ td.echeance {display: inline;}
                 <?php elseif(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjetAcheteur()): ?>
                     <p>En attente de signature par le vendeur</p>
                 <?php endif; ?>
-				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id) && !$vrac->isApplicationPluriannuel()): ?>
+				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
-				<?php endif; ?>
-                <?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id) && $vrac->isApplicationPluriannuel()): ?>
-					<p>Vous avez validé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
                     <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider vos enlèvements</button>
