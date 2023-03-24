@@ -50,7 +50,14 @@ class ExportVracPdf extends ExportDocument {
         	$title .= " DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
     	} else {
-        	$title .= " DE VENTE EN VRAC";
+        	$title .= " DE VENTE";
+            if ($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
+                $title .= " DE RAISIN";
+            } elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
+                $title .= " DE MOÛT";
+            } else {
+                $title .= " EN VRAC";
+            }
             $title = str_pad($title, $leftLength, " ", STR_PAD_RIGHT);
             $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
         	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
