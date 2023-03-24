@@ -612,6 +612,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     {
     	$this->valide->statut = self::STATUT_CLOTURE;
     	$this->valide->date_cloture = date('Y-m-d');
+        if ($contratCadre = $this->getContratPluriannuelCadre()) {
+            $applications = $contratCadre->getContratsApplication();
+            if (!$applications) return;
+            foreach($applications as $millesime => $application) {
+                if (!$application) return;
+                if (!$application->isCloture() && $application->_id != $this->_id) return;
+            }
+            $contratCadre->valide->statut = self::STATUT_CLOTURE;
+            $contratCadre->valide->date_cloture = date('Y-m-d');
+        }
     }
 
     public function clotureProduits()
