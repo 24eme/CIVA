@@ -232,6 +232,9 @@ var initGenerationContratApplication = function()
         openPopup($("#popup_generation_contratApplication"));
         return false;
     });
+    $('.generationContratApplication[data-open="1"]').each(function() {
+      $(this).click();
+    });
 };
 
 var initClotureContrat = function()
