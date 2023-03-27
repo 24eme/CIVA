@@ -5,7 +5,7 @@
 	<td colspan="3"></td>
 	<td class="echeance">
 		<span><?php echo $form['date']->renderError() ?></span>
-		<?php echo (!$detail->cloture)? $form['date']->render(array('class' => 'input_date datepicker')) : $form['date']->render(array('class' => 'input_date', 'readonly' => 'readonly')); ?>
+		<?php echo (!$detail->cloture)? $form['date']->render(array('class' => 'input_date datepicker', 'required' => 'required')) : $form['date']->render(array('class' => 'input_date', 'readonly' => 'readonly')); ?>
 	</td>
 	<td class="enleve">
 		<span><?php echo $form['volume']->renderError() ?></span>
