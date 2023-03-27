@@ -108,7 +108,7 @@ td.echeance {display: inline;}
 					<?php if($contratApplication): ?>
 						<a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>">Voir le contrat</a>
 					<?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant) && $canGenerateNextApplication): ?>
-						<a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication">Générer le contrat</a>
+						<a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication"<?php if(!$vrac->hasContratApplication()): ?> data-open="1"<?php endif; ?>>Générer le contrat</a>
 					<?php else: ?>
 						<i class="text-muted">Non disponible</i>
 					<?php endif; ?>
