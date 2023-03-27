@@ -39,7 +39,7 @@
 				CVO à la charge du vendeur
 			</td>
 			<td colspan="2">
-				<?php echo $vrac->getTauxCvo(); ?> € HT/hl
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a href="/drm/doc/docs/Organisation_du_marche_2022_2023.pdf">Organisation du marché 2022/2023</a>)</small>
 			</td>
 		</tr>
         <?php endif; ?>
