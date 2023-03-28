@@ -145,7 +145,7 @@ class ExportVracPdf extends ExportDocument {
         $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         file_put_contents($tmpPdfPath,$content);
 
-        $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_'.strtolower($this->vrac->type_contrat).'_verso.pdf';
+        $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_annuel_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
 
         $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);
