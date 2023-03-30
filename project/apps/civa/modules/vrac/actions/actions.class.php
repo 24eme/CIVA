@@ -148,6 +148,11 @@ class vracActions extends sfActions
 			$this->vrac->clotureContrat();
 			$this->vrac->save();
 			$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès');
+            if ($this->vrac->declaration->hashProduitsWithVolumeBloque()) {
+				foreach(sfConfig::get('app_email_notifications', array()) as $email) {
+					VracMailer::getInstance()->clotureContratAvecVolumeBloque($this->vrac, $email);
+				}
+            }
 			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 		}
 		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
