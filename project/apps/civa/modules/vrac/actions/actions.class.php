@@ -398,11 +398,11 @@ class vracActions extends sfActions
                     }
 		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
 					foreach ($emails as $email) {
-						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
+						VracMailer::getInstance()->confirmationCreationProposition($this->vrac, $email);
 					}
 					$emails = $this->vrac->getEmails(false);
 					foreach ($emails as $email) {
-						VracMailer::getInstance()->demandeSignature($this->vrac, $email);
+						VracMailer::getInstance()->demandeValidation($this->vrac, $email);
 					}
        				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
        			}
