@@ -124,6 +124,22 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
+    public function clotureContratAvecVolumeBloque($vrac, $destinataire)
+    {
+        $from = self::getFrom();
+        $to = array($destinataire);
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Cloture du contrat n° '.$vrac->numero_visa.' contenant du volume bloqué ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_cloture_contrat_volume_bloque', array('vrac' => $vrac));
+		$message = Swift_Message::newInstance()
+  					->setFrom($from)
+  					->setTo($to)
+  					->setSubject($subject)
+  					->setBody($body);
+        return self::getMailer()->send($message);
+    }
+
     protected static function getFrom()
     {
     	return array("ne_pas_repondre_contrat@vinsalsace.pro" => "Contrats CIVA");
