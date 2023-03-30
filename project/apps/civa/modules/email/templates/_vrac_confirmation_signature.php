@@ -3,10 +3,10 @@
 
 Votre signature a bien été prise en compte pour ce contrat.
 
-Pour consulter le contrat, cliquez sur le lien suivant : <?php echo url_for('vrac_fiche', array('sf_subject' => $vrac), true); ?>
+Pour consulter la proposition, cliquez sur le lien suivant : <?php echo url_for('vrac_fiche', array('sf_subject' => $vrac), true); ?>
 
 
-Le contrat validé en pdf vous sera envoyé après validation de toutes les parties.
+Le contrat validé en pdf vous sera envoyé après signature de toutes les parties.
 
 Attention ! Entrée en vigueur de la réforme sur des délais de paiement !
 
