@@ -1,7 +1,7 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
 
-Ce contrat attend votre signature. Pour le visualiser et le signer cliquez sur le lien suivant : <?php echo ProjectConfiguration::getAppRouting()->generate('vrac_fiche', array('sf_subject' => $vrac), true); ?>
+Cette proposition attend votre validation. Pour la visualiser et la valider cliquez sur le lien suivant : <?php echo ProjectConfiguration::getAppRouting()->generate('vrac_fiche', array('sf_subject' => $vrac), true); ?>
 
 
 Pour être valable, le contrat doit être signé par toutes les parties et visé par le CIVA. Le PDF correspondant avec le numéro de visa CIVA vous sera alors envoyé par courriel.
