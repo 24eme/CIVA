@@ -27,14 +27,14 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
-    public function demandeSignature($vrac, $destinataire)
+    public function demandeValidation($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
+        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Demande de validation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_demande_validation', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
