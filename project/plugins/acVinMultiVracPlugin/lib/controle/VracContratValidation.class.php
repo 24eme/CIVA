@@ -30,6 +30,7 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('erreur', 'clause_evolution_prix_incomplete', ' vous ne totalisez pas 100% de répartition des indicateurs des critères et modalités d\'évolution des prix');
         $this->addControle('erreur', 'conditions_paiement_required', 'Vous devez préciser les délais de paiement');
         $this->addControle('erreur', 'vtsgn_denomination', "La mention VT/SGN doit être précisée en ajoutant un nouveau produit et non en dénomination des produits de la liste");
+        $this->addControle('vigilance', 'volume_bloque', 'Ce contrat contient des produits dont une partie du volume est en réserve');
 
   	}
 
@@ -135,6 +136,11 @@ class VracContratValidation extends DocumentValidation
 	    if (count($vtsgn) > 0) {
 	      $this->addPoint('erreur', 'vtsgn_denomination', implode(",", $vtsgn), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
 	    }
+
+        if($produitsVolumeBloque = $this->document->declaration->getProduitsWithVolumeBloque()) {
+            $produits = array_map(function($val) { return $val->getLibelleComplet(); }, $produitsVolumeBloque);
+            $this->addPoint('vigilance', 'volume_bloque', implode(", ", $produits), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
+        }
   	}
 
   	public function getProduitsHashInError() {
