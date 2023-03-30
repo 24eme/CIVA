@@ -3,6 +3,10 @@
 
 Tous les enlèvements ayant été effectués, ce contrat a été cloturé.
 
+<?php if ($vrac->declaration->hashProduitsWithVolumeBloque()): ?>
+Attention ! Ce contrat contient des produits dont une partie du volume est en réserve.
+
+<?php endif; ?>
 Vous trouverez ci-joint la version pdf avec les volumes rééls.
 
 Nous vous invitons à bien conserver ce document, preuve de la transaction passée entre les différentes parties.
