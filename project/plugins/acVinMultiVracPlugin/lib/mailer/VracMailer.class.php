@@ -53,7 +53,7 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
-    public function validationContrat($vrac, $destinataire, $document)
+    public function validationContrat($vrac, $destinataire, $document, $bcc = null)
     {
 		if($vrac->isPapier()) {
 
@@ -71,6 +71,9 @@ class VracMailer {
   					->setSubject($subject)
   					->setBody($body)
   					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
+        if ($bcc) {
+            $message->setBcc($bcc);
+        }
 
         return self::getMailer()->send($message);
     }
@@ -106,7 +109,7 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
-    public function clotureContrat($vrac, $destinataire, $document)
+    public function clotureContrat($vrac, $destinataire, $document, $bcc = null)
     {
         $from = self::getFrom();
         $to = array($destinataire);
@@ -120,6 +123,9 @@ class VracMailer {
   					->setSubject($subject)
   					->setBody($body)
   					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
+        if ($bcc) {
+            $message->setBcc($bcc);
+        }
 
         return self::getMailer()->send($message);
     }

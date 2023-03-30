@@ -49,8 +49,12 @@ EOF;
     	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
         $document->generatePDF();
     	$emails = $contrat->getEmails();
+        $bcc = null;
+        if ($contrat->declaration->hashProduitsWithVolumeBloque()) {
+            $bcc = sfConfig::get('app_email_notifications', array());
+        }
                     foreach($emails as $email) {
-                    	VracMailer::getInstance()->validationContrat($contrat, $email, $document);
+                    	VracMailer::getInstance()->validationContrat($contrat, $email, $document, $bcc);
           				$this->logSection('sended', $contrat->_id . ' => ' . $email);
                     }
 
