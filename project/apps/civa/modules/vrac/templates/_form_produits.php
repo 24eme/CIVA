@@ -56,7 +56,7 @@
                 <?php echo $campagnes[$vrac->campagne] ?>
                 <?php else: ?>
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
-				<?php echo $embedForm['millesime']->render(array("maxlength" => 4, 'checkproduits' => ($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPonctuel())? 1 : 0)) ?>
+				<?php echo $embedForm['millesime']->render(array("maxlength" => 4, 'checkproduits' => (in_array($vrac->type_contrat,[VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE]) && $vrac->isPonctuel())? 1 : 0)) ?>
                 <?php endif; ?>
             </td>
 			<?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>
