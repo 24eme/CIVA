@@ -189,7 +189,7 @@
 					</table>
 				</div>
                 <div class="ligne_form">
-                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujeti à la TVA</label>
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujetti à la TVA</label>
                     <?php echo $form['vendeur_assujetti_tva']->render(array('required' => 'required')); ?>
                 </div>
 			</div>
@@ -219,7 +219,7 @@
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
                 <div class="ligne_form">
-                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujeti à la TVA</label>
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujetti à la TVA</label>
                     <?php echo $form['vendeur_assujetti_tva']->render(array('required' => 'required')); ?>
                 </div>
 			</div>
@@ -287,7 +287,7 @@
 					</table>
 				</div>
                 <div class="ligne_form">
-                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujeti à la TVA</label>
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujetti à la TVA</label>
                     <?php echo $form['acheteur_assujetti_tva']->render(array('required' => 'required')); ?>
                 </div>
 			</div>
@@ -347,7 +347,7 @@
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
                 <div class="ligne_form">
-                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujeti à la TVA</label>
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujetti à la TVA</label>
                     <?php echo $form['acheteur_assujetti_tva']->render(array('required' => 'required')); ?>
                 </div>
 			</div>
