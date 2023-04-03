@@ -107,7 +107,6 @@
                       item.disabled = false;
                     });
 					if(document.querySelector('#vrac_soussignes_type_contrat_RAISIN').checked) {
-						console.log('disabled');
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = true;
 					}
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
