@@ -96,9 +96,11 @@
 			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
-					<?php if (in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?>
+					<?php if ($item->statut == Vrac::STATUT_CREE||($item->statut == Vrac::STATUT_PROJET_VENDEUR && $item->is_proprietaire)): ?>
 					<li class="action_<?php echo strtolower(VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire))?>"><a href="<?php echo url_for('vrac_etape', array('numero_contrat' => $item->numero, 'etape' => $item->etape)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a></li>
-					<?php else: ?>
+                    <?php elseif ($item->statut == Vrac::STATUT_PROJET_VENDEUR && !$item->is_proprietaire): ?>
+                    <li class="action_<?php echo strtolower(VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire))?>"><a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire) ?></a></li>
+                    <?php else: ?>
 					<li class="action_<?php echo strtolower(VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated))?>"><a href="<?php echo url_for('vrac_fiche', array('numero_contrat' => $item->numero)) ?>"><?php echo VracClient::getInstance()->getStatutLibelleAction($item->statut, (boolean)$item->is_proprietaire, $hasValidated) ?></a></li>
 					<?php endif; ?>
 				</ul>
