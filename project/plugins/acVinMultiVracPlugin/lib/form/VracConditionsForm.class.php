@@ -5,7 +5,7 @@ class VracConditionsForm extends acCouchdbObjectForm
 	public function configure()
     {
 		$this->setWidgets(array(
-        	'conditions_paiement' => new sfWidgetFormInputText(),
+            'conditions_paiement' => new sfWidgetFormInputText(array(), array('readonly' => 'readonly')),
         	'conditions_particulieres' => new sfWidgetFormInputText(),
     	));
 
