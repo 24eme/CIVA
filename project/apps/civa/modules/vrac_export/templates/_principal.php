@@ -17,7 +17,7 @@
 	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Transactions <?php if ($vrac->type_contrat == VracClient::TYPE_BOUTEILLE): ?>bouteilles<?php else: ?>vrac<?php endif; ?>&nbsp;</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">Produits</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
 <?php      $nb_ligne = 23;
