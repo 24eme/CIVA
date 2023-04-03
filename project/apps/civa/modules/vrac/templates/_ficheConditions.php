@@ -95,6 +95,7 @@
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php if($vrac->exist('delais_retiraison')): ?>
         <tr>
 			<td>
 				<label>Délai maximum de retiraison</label>
@@ -103,6 +104,7 @@
 				<?php echo ($delais = $vrac->getDelaisRetiraison())? $delais : VracClient::DELAIS_RETIRAISON_AUCUN; ?>
 			</td>
 		</tr>
+        <?php endif; ?>
         <tr>
 			<td>
 				Autres clauses particulières

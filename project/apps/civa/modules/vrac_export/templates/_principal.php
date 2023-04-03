@@ -149,14 +149,18 @@
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Mandat de facturation</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_mandat_facturation): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux<br />&nbsp;récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</i></small></td>
     </tr>
+	<?php if($vrac->exist('suivi_qualitatif')): ?>
 	<tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Suivi qualitatif</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->exist('suivi_qualitatif') && $vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->exist('suivi_qualitatif') && $vrac->suivi_qualitatif): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if($vrac->exist('suivi_qualitatif') && !$vrac->suivi_qualitatif): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->exist('suivi_qualitatif') && !$vrac->suivi_qualitatif): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->suivi_qualitatif): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->suivi_qualitatif): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->suivi_qualitatif): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->suivi_qualitatif): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
     </tr>
+	<?php endif; ?>
+    <?php if($vrac->exist('delais_retiraison')): ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Délai maximum de retiraison</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($delais = $vrac->getDelaisRetiraison())? $delais : VracClient::DELAIS_RETIRAISON_AUCUN; ?></td>
     </tr>
+    <?php endif; ?>
     <tr>
         <th class="td-large th-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>Autres clauses particulières</th>
         <td class="td-large td-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_particulieres) ? str_replace("\n", '<br />&nbsp;', $vrac->conditions_particulieres) : "Aucune" ?></td>
