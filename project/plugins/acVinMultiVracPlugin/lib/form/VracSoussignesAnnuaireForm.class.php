@@ -43,6 +43,21 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         if (!$this->getObject()->isNew()) {
         	unset($this['type_contrat'], $this['contrat_pluriannuel']);
         }
+
+        $this->setWidget('contrat_pluriannuel_mode_surface', new sfWidgetFormChoice(array('choices' => ["Du volume (hl)", "De la surface (ares)"], 'expanded' => true)));
+        $this->setValidator('contrat_pluriannuel_mode_surface', new sfValidatorChoice(array('choices' => [0,1], 'required' => false)));
+        $this->getWidgetSchema()->setLabel('contrat_pluriannuel_mode_surface', "Vous contractualisez sur :");
+
+        $campagnes = self::getCampagnesChoices();
+        $this->setWidget('campagne', new sfWidgetFormChoice(array('choices' => $campagnes)));
+        $this->setValidator('campagne', new sfValidatorChoice(array('choices' => array_keys($campagnes), 'required' => false)));
+        $this->getWidgetSchema()->setLabel('campagne', "Campagnes d'application :");
+
+        $unites = VracClient::$prix_unites;
+        $this->setWidget('prix_unite', new sfWidgetFormChoice(array('choices' => $unites)));
+        $this->setValidator('prix_unite', new sfValidatorChoice(array('choices' => array_keys($unites), 'required' => false)));
+        $this->getWidgetSchema()->setLabel('prix_unite', "Unité de prix :");
+
         $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
@@ -78,6 +93,19 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
     		$this->getObject()->type_contrat = $values['type_contrat'];
             $this->getObject()->contrat_pluriannuel = (isset($values['contrat_pluriannuel']) && $values['contrat_pluriannuel'])? 1 : 0;
     	}
+
+        $this->getObject()->contrat_pluriannuel_mode_surface = (isset($values['contrat_pluriannuel_mode_surface']) && $values['contrat_pluriannuel_mode_surface'] == 1)? 1 : 0;
+
+        if (!$this->getObject()->contrat_pluriannuel) {
+            $this->getObject()->contrat_pluriannuel_mode_surface = 0;
+        } else {
+            if ($values['campagne']) {
+                $this->getObject()->campagne = $values['campagne'];
+            }
+        }
+		if ($values['prix_unite']) {
+			$this->getObject()->prix_unite = $values['prix_unite'];
+		}
     }
 
     protected function getContratTypes()
