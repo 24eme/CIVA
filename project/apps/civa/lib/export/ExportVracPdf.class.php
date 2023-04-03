@@ -41,33 +41,38 @@ class ExportVracPdf extends ExportDocument {
 
     protected function init($filename = null) {
         $title = "CONTRAT";
-        $leftLength = 81;
-        if($this->vrac->isPluriannuelCadre()) {
+        if($this->vrac->isPluriannuel()) {
             $title .= " PLURIANNUEL";
-            $leftLength = 67;
+        } else {
+            $title .= " ANNUEL";
         }
-    	if ($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
-        	$title .= " DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
-        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
-    	} else {
-        	$title .= " DE VENTE";
-            if ($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
-                $title .= " DE RAISIN";
-            } elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
-                $title .= " DE MOÛT";
-            } else {
-                $title .= " EN VRAC";
-            }
-            $title = str_pad($title, $leftLength, " ", STR_PAD_RIGHT);
-            $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
-        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
-    	}
+        $title .= " DE VENTE";
+        $title = str_pad($title, 104 - strlen($title), " ", STR_PAD_RIGHT);
+        $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
+
+        $header = "DE ";
+    	if ($this->vrac->type_contrat == VracClient::TYPE_VRAC) {
+            $header .= "VINS EN VRAC";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+            $header .= "BOUTEILLES";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
+            $header .= "RAISINS";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
+            $header .= "MOÛTS";
+        }
+
+        $header .= " - AOC PRODUITS EN ALSACE";
+        $header = str_pad($header, 120 - strlen($header), " ", STR_PAD_RIGHT);
+        $header .= "du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
         $headerBlankToBottom = "\n\n";
 
         if($this->vrac->isPluriannuelCadre()) {
-            $campagnes = VracSoussignesForm::getCampagnesChoices();
-            $header .= "\nCAMPAGNES D'APPLICATION ".$campagnes[$this->vrac->campagne];;
+            $header .= "\nCAMPAGNES D'APPLICATION DE ".VracSoussignesForm::getCampagnesChoices()[$this->vrac->campagne];
+            $headerBlankToBottom = "\n";
+        }
+        if($this->vrac->isApplicationPluriannuel()) {
+            $header .= "\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
             $headerBlankToBottom = "\n";
         }
 
