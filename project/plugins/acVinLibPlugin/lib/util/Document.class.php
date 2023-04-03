@@ -2,18 +2,18 @@
 class Document {
 
     public static function getLastByFilename($directory, $filenameUndated) {
-        return self::getByDatedFilename($directory, $filenameUndated, date('Ymd'));
+        return self::getByDatedFilename($directory, $filenameUndated, date('Y-m-d'));
     }
 
     public static function getByDatedFilename($directory, $filenameUndated, $date, $withUndated = true) {
-        if (!($dt = DateTime::createFromFormat('Ymd', $date))) throw new Exception ('Date argument must be to Ymd format');
+        if (!($dt = DateTime::createFromFormat('Y-m-d', $date))) throw new Exception ('Date argument must be to Ymd format');
         $result = null;
         if ($files = self::getFilesInDirectory($directory, true)) {
             foreach($files as $filename => $target) {
                 $filenameSlugified = KeyInflector::slugify(trim($filename));
                 if (strpos($filenameSlugified, KeyInflector::slugify(trim($filenameUndated))) !== false) {
                     $extract = self::extractPrefixedDate($filenameSlugified);
-                    if ($extract && $date >= $extract) return $target;
+                    if ($extract && $dt->format('Ymd') >= $extract) return $target;
                     if (!$extract && $withUndated && !$result) $result = $target;
                 }
             }
