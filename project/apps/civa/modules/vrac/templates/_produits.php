@@ -23,7 +23,7 @@
 			<th class="enleve">Volume réel</th>
 			<?php endif; ?>
 			<?php if ($form): ?>
-			<th class="cloture">Cloture</th>
+			<th class="cloture">Clotûre</th>
 			<th class="actions"></th>
             <?php else: ?>
             <th colspan="2" style=" width: 100px;"></th>
