@@ -452,6 +452,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return ($this->valide->statut == self::STATUT_ANNULE);
     }
 
+    public function getTypeDocumentLibelle() {
+        if(in_array($this->valide->statut, array(self::STATUT_CREE, self::STATUT_PROJET_VENDEUR, self::STATUT_PROJET_ACHETEUR))) {
+
+            return "Projet de contrat";
+        }
+
+        if(in_array($this->valide->statut, array(self::STATUT_PROPOSITION))) {
+
+            return "Proposition de contrat";
+        }
+
+        return "Contrat";
+    }
+
     public function getTypeTiers($userId)
     {
     	$types = self::getTypesTiers();
