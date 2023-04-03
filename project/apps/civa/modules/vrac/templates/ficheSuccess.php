@@ -29,11 +29,7 @@ td.echeance {display: inline;}
 	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
 		<a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
             <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
-		<?php if ($vrac->isValide()): ?>
-			Contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>pluriannuel <?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
-		<?php else: ?>
-			Validation du projet de contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
-		<?php endif; ?>
+			<?php echo $vrac->getTypeDocumentLibelle(); ?> <?php echo strtolower($vrac->type_contrat) ?><?php if($vrac->isPluriannuelCadre()): ?> pluriannuel<?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		</a>
 	</li>
 
