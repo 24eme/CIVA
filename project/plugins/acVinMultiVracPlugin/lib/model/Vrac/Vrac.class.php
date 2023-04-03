@@ -940,6 +940,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		return !$this->contrat_pluriannuel;
 	}
 
+	public function isPluriannuel() {
+		return !$this->isPonctuel();
+	}
+
     public function hasReferencePluriannuel() {
         return ($this->exist('reference_contrat_pluriannuel') && $this->reference_contrat_pluriannuel);
     }
