@@ -163,8 +163,8 @@
     </tr>
     <?php endif; ?>
     <tr>
-        <th class="td-large th-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>Autres clauses particulières</th>
-        <td class="td-large td-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_particulieres) ? str_replace("\n", '<br />&nbsp;', $vrac->conditions_particulieres) : "Aucune" ?></td>
+        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Autres clauses particulières</th>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_particulieres) ? str_replace("\n", '<br />&nbsp;', $vrac->conditions_particulieres) : "Aucune" ?></td>
     </tr>
 </table>
 <?php $nb_ligne -= 9 ?>
