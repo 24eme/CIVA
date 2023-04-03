@@ -40,14 +40,20 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function init($filename = null) {
+        $nbCharTitle = 104;
+        $nbCharHeader = 120;
         $title = "CONTRAT";
         if($this->vrac->isPluriannuel()) {
             $title .= " PLURIANNUEL";
         } else {
             $title .= " ANNUEL";
         }
+        if($this->vrac->isApplicationPluriannuel()) {
+            $nbCharTitle -= 8;
+            $nbCharHeader -= 8;
+        }
         $title .= " DE VENTE";
-        $title = str_pad($title, 104 - strlen($title), " ", STR_PAD_RIGHT);
+        $title = str_pad($title, $nbCharTitle - strlen($title), " ", STR_PAD_RIGHT);
         $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
 
         $header = "DE ";
@@ -62,7 +68,7 @@ class ExportVracPdf extends ExportDocument {
         }
 
         $header .= " - AOC PRODUITS EN ALSACE";
-        $header = str_pad($header, 120 - strlen($header), " ", STR_PAD_RIGHT);
+        $header = str_pad($header, $nbCharHeader - strlen($header), " ", STR_PAD_RIGHT);
         $header .= "du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
         $headerBlankToBottom = "\n\n";
