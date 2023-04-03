@@ -32,7 +32,7 @@ td.echeance {display: inline;}
 		<?php if ($vrac->isValide()): ?>
 			Contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?>pluriannuel <?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?>(visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		<?php else: ?>
-			Validation du contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
+			Validation du projet de contrat de <?php echo strtolower($vrac->type_contrat) ?> <?php if($vrac->isPluriannuelCadre()): ?>pluriannuel<?php endif; ?>
 		<?php endif; ?>
 		</a>
 	</li>
