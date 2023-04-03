@@ -57,7 +57,7 @@ class VracContratValidation extends DocumentValidation
 				    $label_libelles[] = $detail->getLibelle();
 				}
 				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
-                    if ($this->document->isPonctuel() && $this->document->type_contrat == VracClient::TYPE_VRAC) {
+                    if ($this->document->isPonctuel() && in_array($this->document->type_contrat, [VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE])) {
                         if ($detail->getAppellation()->getKey() != 'appellation_CREMANT' && $detail->getCepage()->getKey() != 'cepage_ED') {
                             $millesimes[] = $detail->getLibelle();
                         }
