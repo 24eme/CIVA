@@ -17,7 +17,7 @@
 	<body>
 <?php  include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
 <small><br /></small>
-<span style="background-color: black; color: white; font-weight: bold;">Produits</span><br/>
+<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Produits&nbsp;</span><br/>
 <?php $widthProduit = 260; ?>
 <?php $widthProduit = (!$odg)? $widthProduit : ($widthProduit + 70); ?>
 <?php      $nb_ligne = 23;
@@ -112,11 +112,12 @@
 </table>
 <br />
 <small><br /></small>
-<!--<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Conditions&nbsp;</span><br/>-->
+
+<span style="background-color: black; color: white; font-weight: bold;">&nbsp;Conditions&nbsp;</span><br/>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
-        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
+        <th class="td-large th-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
+        <td class="td-large td-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
     </tr>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO à la charge du vendeur</th>
@@ -166,7 +167,7 @@
         <td class="td-large td-conditions" style="border-bottom: 0;"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->conditions_particulieres) ? str_replace("\n", '<br />&nbsp;', $vrac->conditions_particulieres) : "Aucune" ?></td>
     </tr>
 </table>
-<?php $nb_ligne -= 8?>
+<?php $nb_ligne -= 9 ?>
 
 <?php for($i=0;$i<$nb_ligne;$i++): ?>
 <br />&nbsp;
