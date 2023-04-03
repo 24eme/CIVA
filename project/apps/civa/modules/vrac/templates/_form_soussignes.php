@@ -111,12 +111,6 @@
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
                     document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';
                 });
-                document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').addEventListener('change', function(e) {
-					document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
-                });
-                document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').addEventListener('change', function(e) {
-					document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_KG";
-                });
             </script>
             <?php elseif($vrac->isPluriannuelCadre()): ?>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
