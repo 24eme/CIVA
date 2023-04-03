@@ -50,7 +50,7 @@ td.echeance {display: inline;}
 		<?php endforeach; ?>
     <?php endif; ?>
 	<li style="float: right; opacity: 0.2;">
-			<span><a href="<?php echo url_for('vrac_mercuriale', $vrac); ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
+			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
 			</span>
 		</span>
 	</li>
