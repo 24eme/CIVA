@@ -66,6 +66,9 @@
 							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').checked = true;
 		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
 							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HL"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HA"]').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_KG"]').disabled = false;
 						}
 						if(input.value == "BOUTEILLE") {
 							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_BOUTEILLE";
@@ -82,6 +85,8 @@
 		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
                             document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HA"]').disabled = true;
 							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HL"]').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_KG"]').disabled = false;
 						}
 					});
 				});
@@ -102,7 +107,6 @@
                       item.disabled = false;
                     });
 					if(document.querySelector('#vrac_soussignes_type_contrat_RAISIN').checked) {
-						console.log('disabled');
 						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = true;
 					}
                     document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
