@@ -52,38 +52,34 @@ class ExportVracPdf extends ExportDocument {
             $nbCharTitle -= 8;
             $nbCharHeader -= 8;
         }
-        $title .= " DE VENTE";
+        $title .= " DE VENTE DE ";
+
+    	if ($this->vrac->type_contrat == VracClient::TYPE_VRAC) {
+            $title .= "VINS EN VRAC";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+            $title .= "BOUTEILLES";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
+            $title .= "RAISINS";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
+            $title .= "MOÛTS";
+        }
+
         $title = str_pad($title, $nbCharTitle - strlen($title), " ", STR_PAD_RIGHT);
         $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
 
-        $header = "DE ";
-    	if ($this->vrac->type_contrat == VracClient::TYPE_VRAC) {
-            $header .= "VINS EN VRAC";
-    	} elseif($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
-            $header .= "BOUTEILLES";
-    	} elseif($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
-            $header .= "RAISINS";
-    	} elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
-            $header .= "MOÛTS";
-        }
-
-        $header .= " - AOC PRODUITS EN ALSACE";
+        $header = "AOC PRODUITS EN ALSACE";
         $header = str_pad($header, $nbCharHeader - strlen($header), " ", STR_PAD_RIGHT);
         $header .= "du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
-        $headerBlankToBottom = "\n\n";
-
         if($this->vrac->isPluriannuelCadre()) {
-            $header .= "\nCAMPAGNES D'APPLICATION DE ".VracSoussignesForm::getCampagnesChoices()[$this->vrac->campagne];
-            $headerBlankToBottom = "\n";
+            $header .= "\n\nCAMPAGNES D'APPLICATION DE ".VracSoussignesForm::getCampagnesChoices()[$this->vrac->campagne];
         }
         if($this->vrac->isApplicationPluriannuel()) {
-            $header .= "\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
-            $headerBlankToBottom = "\n";
+            $header .= "\n\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
         }
 
         if ($this->vrac->isAnnule()) {
-            $header .= $headerBlankToBottom."ANNULÉ";
+            $header .= "\nCONTRAT ANNULÉ";
         }
 
         if (!$filename) {
