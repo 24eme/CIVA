@@ -198,6 +198,11 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
+		if ($this->vrac->isApplicationPluriannuel() && $this->vrac->valide->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
+			$this->vrac->delete();
+            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
+        }
+
 		$this->form = new VracSuppressionForm($this->vrac);
 
 		if ($request->isMethod(sfWebRequest::POST)) {
