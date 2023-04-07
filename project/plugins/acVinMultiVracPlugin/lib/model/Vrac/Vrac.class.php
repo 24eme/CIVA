@@ -1145,7 +1145,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         foreach($this->declaration->getProduitsDetails() as $detail) {
             $date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
             $conf = ConfigurationClient::getConfiguration($date)->get(HashMapper::convert($detail->getCepage()->getHash()));
-            return round($conf->getTauxCvo($this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d')) / 2, 2);
+            $tx = round($conf->getTauxCvo($this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d')) / 2, 2);
+            return ($tx >= 0)? $tx : null;
         }
 
         return null;
