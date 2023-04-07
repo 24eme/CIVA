@@ -10,8 +10,11 @@
         <div class="fond">
             <?php echo $form->renderHiddenFields() ?>
             <?php echo $form->renderGlobalErrors() ?>
-
-            <p class="intro_contrat_vrac">Veuillez valider les volumes et prix pour l'ensemble des produits.</p>
+            <?php if ($vrac->type_contrat == VracClient::TYPE_VRAC && $form->getObject()->isInModeSurface() && $form->getObject()->isPremiereApplication()): ?>
+                <p class="intro_contrat_vrac">Veuillez valider les volumes pour l'ensemble des produits.</p>
+            <?php else: ?>
+                <p class="intro_contrat_vrac">Veuillez valider les volumes et prix pour l'ensemble des produits.</p>
+            <?php endif; ?>
             <table class="validation produits table_donnees">
             	<thead>
             		<tr>
