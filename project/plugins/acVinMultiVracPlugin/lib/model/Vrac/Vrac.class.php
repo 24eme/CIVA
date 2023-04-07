@@ -635,6 +635,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             }
             $contratCadre->valide->statut = self::STATUT_CLOTURE;
             $contratCadre->valide->date_cloture = date('Y-m-d');
+            $contratCadre->save();
         }
     }
 
