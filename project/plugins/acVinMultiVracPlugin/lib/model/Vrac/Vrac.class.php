@@ -854,7 +854,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
                 $this->add('delais_retiraison');
 			}
             if($this->type_contrat == VracClient::TYPE_MOUT) {
-				$this->add('suivi_qualitatif');
                 $this->add('delais_retiraison');
 			}
             if ($this->isPluriannuelCadre()) {
