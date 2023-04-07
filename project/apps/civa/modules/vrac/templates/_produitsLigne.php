@@ -28,7 +28,8 @@
     <?php elseif ($vrac->needRetiraison() && ($vrac->isCloture() || $form)): ?>
 		<td></td>
 		<?php include_partial('vrac/produitsVolumeEnleve', array('vrac' => $vrac, 'detail' => $detail, 'quantiteType' => $quantiteType)) ?>
-    <?php else: ?>
         <td colspan="2"></td>
+    <?php else: ?>
+        <td colspan="4"></td>
 	<?php endif; ?>
 <?php endif; ?>

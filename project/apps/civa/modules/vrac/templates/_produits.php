@@ -76,6 +76,7 @@
 			<td></td>
 			<td class="echeance"><?php echo format_date($retiraison->date, 'p', 'fr'); ?></td>
 			<td class="volume"><?php echoFloat($retiraison->volume) ?>&nbsp;hl</td>
+            <td colspan="2"></td>
 		</tr>
 		<?php endforeach; ?>
 		<?php
