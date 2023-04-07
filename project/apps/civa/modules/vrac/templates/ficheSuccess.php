@@ -141,7 +141,7 @@ td.echeance {display: inline;}
                     </a>
                     <?php else: ?>
 					<?php if ($vrac->isApplicationPluriannuel()): ?>
-						<a href="" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet de contrat ?')">
+						<a href="<?php echo url_for('vrac_supprimer', $vrac) ?>" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce contrat ?')">
 	                        [x] Refuser
 	                    </a>
 					<?php endif; ?>
