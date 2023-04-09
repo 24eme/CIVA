@@ -93,28 +93,29 @@ $hasCourtier = $vrac->hasCourtier();
 		</td>
 	</tr>
 </table>
+
 <br/>
 <small><br/></small>
 <span style="background-color: grey; color: white; font-weight: bold;">&nbsp;Courtier&nbsp;</span><br/>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>
-		<td width="100%">
+		<td style="background-color: #eaeaea;" width="100%">
 			<table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #000;">
 				<tr>
 					<td>&nbsp;<?php if($hasCourtier): ?><i><?php if($vrac->mandataire->intitule): ?><?php echo $vrac->mandataire->intitule ?>&nbsp;<?php endif; ?><?php echo truncate_text($vrac->mandataire->raison_sociale, 35); ?></i><?php endif; ?></td>
-					<td>N° d'inscription au registre national : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td>
+					<td><?php if($hasCourtier): ?>N° d'inscription au registre national : <i><?php echo $vrac->mandataire->carte_pro; ?></i><?php endif; ?></td>
 				</tr>
 				<tr>
 					<td>&nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->adresse ?></i><?php endif; ?></td>
 
-					<td>SIRET : <?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->siret ?></i><?php endif; ?></td>
+					<td><?php if($hasCourtier): ?>SIRET : <i><?php echo $vrac->mandataire->siret ?></i><?php endif; ?></td>
 				</tr>
                 <tr>
                     <td>&nbsp;<?php if($hasCourtier): ?><i><?php echo $vrac->mandataire->code_postal; ?></i>&nbsp;<i><?php echo $vrac->mandataire->commune; ?></i><?php endif; ?></td>
                     <td><?php if($hasCourtier && $vrac->interlocuteur_commercial->email && $vrac->interlocuteur_commercial->telephone): ?><i><?php echo $vrac->interlocuteur_commercial->nom; ?></i><?php endif; ?></td>
                 </tr>
 				<tr>
-					<td>&nbsp;Tel. : <?php if($hasCourtier): ?><i><?php echo formatPhone($vrac->mandataire->telephone); ?></i><?php endif; ?></td>
+					<td>&nbsp;<?php if($hasCourtier): ?>Tel. : <i><?php echo formatPhone($vrac->mandataire->telephone); ?></i><?php endif; ?></td>
                     <td><?php if($hasCourtier && $vrac->interlocuteur_commercial->email && $vrac->interlocuteur_commercial->telephone): ?><i>(<?php echo $vrac->interlocuteur_commercial->email ?>, Tel. : <?php echo formatPhone($vrac->interlocuteur_commercial->telephone) ?>)</i><?php elseif($hasCourtier && $vrac->interlocuteur_commercial->email && !$vrac->interlocuteur_commercial->telephone): ?><i><?php echo $vrac->interlocuteur_commercial->nom; ?> (<?php echo $vrac->interlocuteur_commercial->email ?>)</i><?php elseif($hasCourtier && !$vrac->interlocuteur_commercial->email && $vrac->interlocuteur_commercial->telephone): ?><i><?php echo $vrac->interlocuteur_commercial->nom; ?> (Tel. <?php echo formatPhone($vrac->interlocuteur_commercial->telephone) ?>)</i><?php elseif($hasCourtier && $vrac->interlocuteur_commercial->nom): ?><i><?php echo $vrac->interlocuteur_commercial->nom; ?></i><?php endif; ?></td>
 				</tr>
 			</table>
