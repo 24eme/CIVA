@@ -94,7 +94,7 @@ $hasCourtier = $vrac->hasCourtier();
 	</tr>
 </table>
 <br/>
-<br/>
+<small><br/></small>
 <span style="background-color: grey; color: white; font-weight: bold;">&nbsp;Courtier&nbsp;</span><br/>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr>
