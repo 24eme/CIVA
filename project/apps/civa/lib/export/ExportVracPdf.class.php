@@ -42,17 +42,11 @@ class ExportVracPdf extends ExportDocument {
     protected function init($filename = null) {
         $nbCharTitle = 104;
         $nbCharHeader = 120;
-        $title = "CONTRAT";
-        if($this->vrac->isPluriannuel()) {
-            $title .= " PLURIANNUEL";
-        } else {
-            $title .= " ANNUEL";
-        }
+        $title = "CONTRAT ".strtoupper($this->vrac->getTypeDureeLibelle())." DE VENTE DE ";
         if($this->vrac->isApplicationPluriannuel()) {
             $nbCharTitle -= 8;
             $nbCharHeader -= 8;
         }
-        $title .= " DE VENTE DE ";
 
     	if ($this->vrac->type_contrat == VracClient::TYPE_VRAC) {
             $title .= "VINS EN VRAC";
@@ -152,7 +146,7 @@ class ExportVracPdf extends ExportDocument {
         $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         file_put_contents($tmpPdfPath,$content);
 
-        $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_annuel_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
+        $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_'.strtolower($this->vrac->getTypeDureeLibelle()).'_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
 
         $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);

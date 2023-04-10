@@ -10,7 +10,7 @@
 					<?php if ($form->getObject()->isNew()): ?>
 						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
-						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?>&nbsp;<?php echo ($form->getObject()->contrat_pluriannuel)? 'pluriannuel' : 'ponctuel'; ?></label></li></ul>
+						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?>&nbsp;<?php echo $form->getObject()->getTypeDureeLibelle() ?></label></li></ul>
 					<?php endif; ?>
 				</div>
 			</div>
