@@ -21,8 +21,8 @@
                 </td>
                 <td>
                     <select style="width:100px;margin:0px;" name="unite">
-                        <option value="€ HT/Hl">€ HT/Hl</option>
-                        <option value="€ HT/Hl">€ HT/Kg</option>
+                        <option value="€ HT/hl">€ HT/hl</option>
+                        <option value="€ HT/kg">€ HT/kg</option>
                         <option value="€ HT">€ HT</option>
                         <option value="%">%</option>
                     </select>
