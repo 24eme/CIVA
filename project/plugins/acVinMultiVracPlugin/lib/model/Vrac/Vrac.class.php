@@ -452,6 +452,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return ($this->valide->statut == self::STATUT_ANNULE);
     }
 
+    public function getTypeDureeLibelle() {
+        if($this->isPluriannuel()) {
+
+            return 'Pluriannuel';
+        }
+
+        return 'Annuel';
+    }
+
     public function getTypeDocumentLibelle() {
         if(in_array($this->valide->statut, array(self::STATUT_CREE, self::STATUT_PROJET_VENDEUR, self::STATUT_PROJET_ACHETEUR))) {
 
