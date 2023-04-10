@@ -110,16 +110,24 @@
 	</tr>
 	<?php endif; ?>
 </table>
+
+<?php if($nb_ligne < 14): ?>
+    <div style="page-break-before:always"></div>
+    <?php $nb_ligne = 29; ?>
+    <?php include_partial("vrac_export/soussignes", array('vrac' => $vrac));  ?>
+<?php endif; ?>
+
 <br />
 <small><br /></small>
-<?php $nb_ligne -= 2 ?>
+<?php $nb_ligne -= 1.5 ?>
+
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Conditions&nbsp;</span><br/>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
         <th class="td-large th-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
         <td class="td-large td-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
     </tr>
-    <?php $nb_ligne -= 1 ?>
+        <?php $nb_ligne -= (count(explode("\n", $vrac->vendeur_frais_annexes))); ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO à la charge du vendeur</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo $vrac->getTauxCvo(); ?> € HT/hl</td>
@@ -129,7 +137,7 @@
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->acheteur_primes_diverses) ? str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) : "Aucune" ?></td>
     </tr>
-    <?php $nb_ligne -= 1 ?>
+    <?php $nb_ligne -= (count(explode("\n", $vrac->acheteur_primes_diverses))); ?>
 	<?php if($vrac->isPluriannuelCadre()):  ?>
 	<tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Critères et modalités d’évolution des prix</th>
@@ -147,7 +155,7 @@
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Résiliation hors cas de force majeur</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->clause_resiliation) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) : "Aucune" ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
     </tr>
-    <?php $nb_ligne -= 1.5 ?>
+    <?php $nb_ligne -= 1.5 + (count(explode("\n", $vrac->clause_resiliation))); ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Les modalités sont indiquées au verso de ce formulaire</i></small></td>
