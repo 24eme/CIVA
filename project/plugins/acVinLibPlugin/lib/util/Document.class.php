@@ -6,7 +6,7 @@ class Document {
     }
 
     public static function getByDatedFilename($directory, $filenameUndated, $date, $withUndated = true) {
-        if (!($dt = DateTime::createFromFormat('Y-m-d', $date))) throw new Exception ('Date argument must be to Ymd format');
+        if (!($dt = DateTime::createFromFormat('Y-m-d', $date))) throw new Exception ('Date argument must be to Y-m-d format');
         $result = null;
         if ($files = self::getFilesInDirectory($directory, true)) {
             foreach($files as $filename => $target) {
