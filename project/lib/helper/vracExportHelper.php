@@ -15,7 +15,7 @@ function printCepageKey($detailLine) {
 }
 
 function getColorRowDetail($detailLine) {
-    return (is_null($detailLine->surface_propose) && is_null($detailLine->volume_propose))? "background-color: lightgray;" : "";
+    return (is_null($detailLine->surface_propose) && is_null($detailLine->volume_propose))? "background-color: #eaeaea;" : "";
 }
 
 function getExplicationEtoile(){
