@@ -16,7 +16,7 @@
 			<th class="prix">Prix</th>
 			<th class="volume">Volume</th>
 			<?php else: ?>
-            <th class="volume"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagé<?php else: ?>estimé<?php endif; ?></th>
+            <th class="volume"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagé<?php else: ?>estimé<?php endif; ?><?php if ($vrac->isInModeSurface()): ?>e<?php endif; ?></th>
 			<th class="prix">Prix</th>
 			<?php if ($vrac->needRetiraison() && ($vrac->isCloture() || $form)): ?>
 			<th class="echeance">Date</th>

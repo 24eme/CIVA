@@ -23,7 +23,7 @@
 <?php      $nb_ligne = 23;
            $nb_ligne -= (!$odg)? 0 : 2;
 ?>
-
+<?php $quantiteType = ($vrac->isInModeSurface())? 'surface' : 'volume'; ?>
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
 		<th width="65px" style="font-weight: bold; text-align: center; border: 1px solid black;">AOC
@@ -38,9 +38,9 @@
 		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nb bouteilles</th>
                 <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en hl)</small></th>
 		<?php else: ?>
-		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php echo ($vrac->isInModeSurface())? 'Surface' : 'Volume'; ?> estimé<br/><small>(en <?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>)</small></th>
-		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume réel<br/><small>(en hl)</small></th>
-                <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php if($vrac->isPluriannuelCadre()): ?>Période<br />Retiraison<?php else: ?>Date<br/>de Chargt<?php endif; ?></th>
+		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagé<?php else: ?>estimé<?php endif; ?><?php if ($vrac->isInModeSurface()): ?>e<?php endif; ?><br/><small>(en <?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>)</small></th>
+		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black; <?php if (!$vrac->needRetiraison()): ?>background-color: lightgray;<?php endif; ?>"><?php if($vrac->needRetiraison()): ?>Volume réel<br/><small>(en hl)</small><?php endif; ?></th>
+        <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black; <?php if (!$vrac->needRetiraison()): ?>background-color: lightgray;<?php endif; ?>"><?php if($vrac->needRetiraison()): ?>Date<br/>de Chargt<?php endif; ?></th>
         <?php endif; ?>
 	</tr>
 	<?php
@@ -73,7 +73,7 @@
             <td class="td-large" width="57px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php ($vrac->isInModeSurface()? echoSurface($detailLine->surface_propose) : echoVolume($detailLine->volume_propose)); ?></td>
 			<?php else: ?>
 			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;"><?php echo pdfTdLargeStart() ?><?php ($vrac->isInModeSurface()? echoSurface($detailLine->surface_propose) : echoVolume($detailLine->volume_propose)); ?></td>
-			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
+			<td class="td-large" width="75px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: right;<?php if (!$vrac->isCloture() || !$vrac->needRetiraison()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($detailLine->volume_enleve); ?><?php endif; ?></td>
             <td class="td-large" width="62px" style="border: 1px solid black; <?php echo $backgroundColor ?> text-align: center;<?php if (!$isOnlyOneRetiraison): ?> background-color: lightgray;<?php endif; ?><?php if (!$dateRetiraison): ?> font-size: 7pt;<?php endif; ?>"><?php if ($dateRetiraison): ?><?php echo pdfTdLargeStart() ?><?php echo $dateRetiraison; ?><?php endif; ?></td>
 			<?php endif; ?>
         </tr>
@@ -106,7 +106,9 @@
 	<tr>
 			<td class="td-large" style="text-align: left;" colspan="<?php if (!$odg): ?>4<?php else: ?>3<?php endif; ?>" >&nbsp;</td>
 			<td class="td-large" style="border: 1px solid black;"><?php echo pdfTdLargeStart() ?><?php ($vrac->isInModeSurface())? echoSurface($vrac->getTotalSurfacePropose(),true) : echoVolume($vrac->getTotalVolumePropose(),true); ?></td>
-                        <td class="td-large" style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+            <?php if($vrac->needRetiraison()): ?>
+            <td class="td-large" style="border: 1px solid black; <?php if (!$vrac->isCloture()): ?> background-color: lightgray;<?php endif; ?>"><?php echo pdfTdLargeStart() ?><?php if ($vrac->isCloture()): ?><?php echoVolume($vrac->getTotalVolumeEnleve(),true); ?><?php endif; ?></td>
+            <?php endif; ?>
 	</tr>
 	<?php endif; ?>
 </table>
