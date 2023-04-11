@@ -127,9 +127,9 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
 	<tr>
         <th class="td-large th-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>Frais annexes à la charge du vendeur</th>
-        <td class="td-large td-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
+        <td class="td-large td-conditions" style="border-top: 0.5px solid #eee; "><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->exist('vendeur_frais_annexes') && $vrac->vendeur_frais_annexes) ? str_replace("\n", '<br />&nbsp;', $vrac->vendeur_frais_annexes) : "Aucun" ?></td>
     </tr>
-        <?php $nb_ligne -= (count(explode("\n", $vrac->vendeur_frais_annexes))); ?>
+        <?php $nb_ligne -= ($vrac->exist('vendeur_frais_annexes'))? (count(explode("\n", $vrac->vendeur_frais_annexes))) : 1; ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO à la charge du vendeur</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo $vrac->getTauxCvo(); ?> € HT/hl</td>
@@ -137,13 +137,13 @@
     <?php $nb_ligne -= 1 ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Primes diverses à la charge de l’acheteur</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->acheteur_primes_diverses) ? str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) : "Aucune" ?></td>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->exist('acheteur_primes_diverses') && $vrac->acheteur_primes_diverses) ? str_replace("\n", '<br />&nbsp;', $vrac->acheteur_primes_diverses) : "Aucune" ?></td>
     </tr>
-    <?php $nb_ligne -= (count(explode("\n", $vrac->acheteur_primes_diverses))); ?>
+    <?php $nb_ligne -= ($vrac->exist('acheteur_primes_diverses'))? (count(explode("\n", $vrac->acheteur_primes_diverses))) : 1; ?>
 	<?php if($vrac->isPluriannuelCadre()):  ?>
 	<tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Critères et modalités d’évolution des prix</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo str_replace("\n", '<br />&nbsp;', $vrac->clause_evolution_prix) ?>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->exist('clause_evolution_prix') && $vrac->clause_evolution_prix) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_evolution_prix) : "Aucune" ?>
 		<br /><small><i>&nbsp;Les indicateurs ainsi que la méthode de calcul du prix, basé sur ces indicateurs resteront les mêmes sur l’ensemble de la période contractualisée (Année N, N+1 et N+2).</i></small></td>
     </tr>
     <?php $nb_ligne -= 1.5 + (count(explode("\n", $vrac->clause_evolution_prix))); ?>
@@ -155,19 +155,23 @@
     <?php $nb_ligne -= 1.5 ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Résiliation hors cas de force majeur</th>
-        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->clause_resiliation) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) : "Aucune" ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
+        <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo ($vrac->exist('clause_resiliation') && $vrac->clause_resiliation) ? str_replace("\n", '<br />&nbsp;', $vrac->clause_resiliation) : "Aucune" ?><small><br /><i>&nbsp;La résiliation est signifiée par la partie demanderesse par lettre recommandée avec AR.</i></small></td>
     </tr>
-    <?php $nb_ligne -= 1.5 + (count(explode("\n", $vrac->clause_resiliation))); ?>
+    <?php $nb_ligne -= ($vrac->exist('clause_resiliation'))? 1.5 + (count(explode("\n", $vrac->clause_resiliation))) : 1.5; ?>
+    <?php if ($vrac->exist('clause_reserve_propriete')): ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Clause de réserve de propriété</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_reserve_propriete): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_reserve_propriete): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Les modalités sont indiquées au verso de ce formulaire</i></small></td>
     </tr>
     <?php $nb_ligne -= 1 ?>
+    <?php endif; ?>
+    <?php if ($vrac->exist('clause_mandat_facturation')): ?>
     <tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Mandat de facturation</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php if($vrac->clause_mandat_facturation): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->clause_mandat_facturation): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->clause_mandat_facturation): ?>☑<?php else: ?>☐<?php endif; ?></span><small><i>&nbsp;&nbsp;&nbsp;Le vendeur donne mandat à l’acheteur d’établir en son nom et pour son compte, les bordereaux<br />&nbsp;récapitulatifs de règlement ou factures suivant les modalités convenues entre les parties dans le mandat.</i></small></td>
     </tr>
     <?php $nb_ligne -= 1.5 ?>
+    <?php endif; ?>
 	<?php if($vrac->exist('suivi_qualitatif')): ?>
 	<tr>
         <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>Suivi qualitatif</th>
