@@ -32,27 +32,40 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
-    public function demandeValidation($vrac, $destinataire)
+    public function demandeValidationAcheteur($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($vrac->vendeur->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = $this->getPrefixSubject($vrac).' Demande de validation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_demande_validation', array('vrac' => $vrac));
+        $body = self::getBodyFromPartial('vrac_demande_validation_acheteur', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
     }
 
-    public function confirmationCreationProposition($vrac, $destinataire)
+    public function demandeSignatureVendeur($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = $this->getPrefixSubject($vrac).' Confirmation de création ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_confirmation_creation_projet', array('vrac' => $vrac));
+        $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_demande_signature_vendeur', array('vrac' => $vrac));
+        $message = self::getMailer()->compose($from, $to, $subject, $body);
+
+        return self::getMailer()->send($message);
+    }
+
+    public function demandeSignature($vrac, $destinataire)
+    {
+        $from = self::getFrom();
+        $to = array($destinataire);
+        $proprietaire = $vrac->getCreateurInformations();
+        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
         return self::getMailer()->send($message);
