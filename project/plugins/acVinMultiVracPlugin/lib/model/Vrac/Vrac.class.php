@@ -778,4 +778,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $pdf->generatePDF();
 		$this->storeAttachment($pdf->getPdfFilePath(), 'application/pdf', $pdf->getFileName());
 	}
+
+    public function getPDFhistoriseContent() {
+        if (!$this->exist("_attachments")||!count($this->get("_attachments"))) return false;
+        return @file_get_contents($this->getAttachmentUri(ExportVracPdf::buildFileName($this)));
+    }
 }
