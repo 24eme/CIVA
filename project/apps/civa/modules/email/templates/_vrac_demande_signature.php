@@ -1,6 +1,6 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
-Votre signature a bien été prise en compte.
+Une proposition de contrat est en attente de votre signature.
 
 Pour consulter la proposition, cliquez sur le lien suivant : <?php echo url_for('vrac_fiche', array('sf_subject' => $vrac), true); ?>
 

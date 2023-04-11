@@ -356,6 +356,15 @@ class vracActions extends sfActions
 		foreach ($emails as $email) {
 			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
 		}
+        if ($this->user->_id == $this->vrac->vendeur_identifiant) {
+            $emails = $this->vrac->getEmailsActeur($this->vrac->acheteur_identifiant);
+            if($this->vrac->mandataire_identifiant) {
+                $emails = array_merge($emails, $this->vrac->getEmailsActeur($this->vrac->mandataire_identifiant));
+            }
+    		foreach ($emails as $email) {
+    			VracMailer::getInstance()->demandeSignature($this->vrac, $email);
+    		}
+        }
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
@@ -393,24 +402,22 @@ class vracActions extends sfActions
        			} elseif($this->vrac->isPapier()) {
 					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
 
-					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-			    } else {
-                    if ($this->user->_id == $this->vrac->vendeur_identifiant) {
-                        $this->saveVendeurProjetAttachment($this->vrac);
-                        $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur afin qu\'il le valide.');
-                    } else {
-                        $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-                    }
-		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
+			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
+                    $this->saveVendeurProjetAttachment($this->vrac);
+                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur afin qu\'il le valide.');
+                    $emails = $this->vrac->getEmails();
 					foreach ($emails as $email) {
-						VracMailer::getInstance()->confirmationCreationProposition($this->vrac, $email);
+						VracMailer::getInstance()->demandeValidationAcheteur($this->vrac, $email);
 					}
-					$emails = $this->vrac->getEmails(false);
+                } else {
+                    $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
+                    $emails = $this->vrac->getEmails();
 					foreach ($emails as $email) {
-						VracMailer::getInstance()->demandeValidation($this->vrac, $email);
+						VracMailer::getInstance()->demandeSignatureVendeur($this->vrac, $email);
 					}
-       				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-       			}
+                }
+
+   				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
     }
