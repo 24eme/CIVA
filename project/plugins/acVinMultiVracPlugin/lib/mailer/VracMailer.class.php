@@ -37,7 +37,7 @@ class VracMailer {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($vrac->vendeur->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+        $proprietaireLibelle = ($vrac->vendeur->intitule)? $vrac->vendeur->intitule.' '.$vrac->vendeur->raison_sociale : $vrac->vendeur->raison_sociale;
         $subject = $this->getPrefixSubject($vrac).' Demande de validation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_validation_acheteur', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
