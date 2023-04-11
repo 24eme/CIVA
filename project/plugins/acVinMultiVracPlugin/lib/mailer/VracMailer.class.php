@@ -14,13 +14,18 @@ class VracMailer {
 		return self::$_instance;
     }
 
+    public function getPrefixSubject($vrac) {
+
+        return '['.$vrac->getTypeDocumentLibelle().' '.strtolower($vrac->getTypeDureeLibelle()).' '.strtolower($vrac->type_contrat).']';
+    }
+
     public function refusProjet($vrac, $destinataire)
     {
         $from = self::getFrom();
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Refus du vendeur ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Refus du vendeur ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_refus_projet', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -33,7 +38,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Demande de validation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Demande de validation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_validation', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -46,7 +51,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Confirmation de création du projet ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Confirmation de création ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_creation_projet', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -59,7 +64,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Proposition '.strtolower($vrac->type_contrat).'] Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
@@ -76,7 +81,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
@@ -96,7 +101,7 @@ class VracMailer {
         $from = self::getFrom();
         $to = array($destinataire);
         $body = self::getBodyFromPartial('vrac_validation_contrat_papier', array('vrac' => $vrac));
-	    $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Validation de votre contrat papier n° '.$vrac->numero_papier;
+	    $subject = $this->getPrefixSubject($vrac).' Validation de votre contrat papier n° '.$vrac->numero_papier;
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
   					->setTo($to)
@@ -112,7 +117,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
@@ -128,7 +133,7 @@ class VracMailer {
         $to = array($destinataire);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = '[Contrat '.strtolower($vrac->type_contrat).'] Clôture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $subject = $this->getPrefixSubject($vrac).' Clôture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_cloture_contrat_'.strtolower($vrac->type_contrat), array('vrac' => $vrac));
 		$message = Swift_Message::newInstance()
   					->setFrom($from)
