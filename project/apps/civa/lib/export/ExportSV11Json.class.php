@@ -10,6 +10,7 @@ class ExportSV11Json extends ExportSVJson
     {
         $this->raw[self::ROOT_NODE] = $this->getRootInfos();
         $this->raw[self::ROOT_NODE][self::APPORT_NODE]['produits'] = $this->getProduits();
+        $this->raw[self::ROOT_NODE][self::SITE_NODE]['sites'] = $this->getSites();
     }
 
     public function getRootInfos()
@@ -30,6 +31,10 @@ class ExportSV11Json extends ExportSVJson
         $apporteursParProduit = $this->sv->getApporteursParProduit();
 
         foreach ($apporteursParProduit as $hash_produit => $apporteurs_du_produit) {
+            if (strpos($hash_produit, '/cepages/RB') !== false) {
+                continue; // pas les rebêches dans la boucle principale
+            }
+
             $apporteurs = [];
 
             // pour le code_douane
@@ -54,13 +59,98 @@ class ExportSV11Json extends ExportSVJson
         $apporteur = $this->sv->apporteurs->get($cvi);
         $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
 
-        /* echo $apporteur->cvi . ':' . $produit->getHash() . ':' . $produit->volume_recolte.PHP_EOL; */
-
-        return [
+        // infos globales
+        $infosApporteur = [
             "numeroCVIApporteur" => $cvi,
             "zoneRecolte" => "B",
             "superficieRecolte" => $produit->superficie_recolte,
-            "volumeApportRaisins" => $produit->volume_recolte
+            "volumeApportRaisins" => $produit->volume_recolte,
+            "volumeIssuRaisins" => $produit->volume_revendique,
         ];
+
+        // volume à éliminer
+        if ($produit->vci || $produit->volume_detruit) {
+            $volumeAEliminer = [];
+
+            if ($produit->volume_detruit) {
+                $volumeAEliminer['volumeAEliminer'] = $produit->volume_detruit;
+            }
+
+            if ($produit->vci) {
+                $volumeAEliminer['volumeComplementaireIndividuel'] = $produit->vci;
+            }
+
+            $infosApporteur['volumeAEliminer'] = $volumeAEliminer;
+        }
+
+        // rebêches
+        if (strpos($hash_produit, '/CREMANT/') !== false) {
+            $produitsAssocies = ['typeAssociation' => 'REB'];
+            $hash_rebeche = str_replace(['/declaration/', '/cepages/PN', '/cepages/BL'], ['', '/cepages/RBRS', '/cepages/RB'], $hash_produit);
+            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get("/declaration/".$hash_rebeche)->code_douane;
+
+            if ($this->sv->hasRebechesInProduits()) {
+                // rebeches en détail
+                $rebeches = $apporteur->get($hash_rebeche)->getFirst();
+
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $rebeches->volume_revendique;
+            } else {
+                // % des rebeches totales
+                if (strpos($hash_produit, '/cepages/BL') !== false) {
+                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $produit->volume_revendique * 100 / $this->sv->rebeches;
+                }
+            }
+
+            $infosApporteur['produitsAssocies'] = $produitsAssocies;
+        }
+
+        return $infosApporteur;
+    }
+
+    public function getSites()
+    {
+        $sites = [];
+        foreach ($this->sv->stockage as $stockage) {
+            $site = [];
+            $site['codeSite'] = $stockage->numero;
+            $sites[] = $site;
+        }
+
+        foreach ($this->sv->getRecapProduits() as $hash => $produit) {
+            $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
+            $mention = $produit->denominationComplementaire;
+
+            $sites_avec_produit = array_filter($this->sv->stockage->toArray(true, false), function ($v, $k) use ($hash) {
+                if (array_key_exists('produits', $v) === false) {
+                    return true; // Site principal
+                }
+
+                return array_key_exists($hash, $v['produits']); // Sites secondaires
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $total = $produit->volume_revendique;
+
+            foreach ($sites_avec_produit as $s) {
+                foreach ($sites as $stockage) {
+                    if ($s['numero'] == $stockage) {
+
+                    }
+                }
+            }
+
+            foreach ($sites as $s) {
+                if (array_key_exists($s['codeSite'], $sites_avec_produit)) {
+                    $add = [
+                        'codeProduit' => $code_produit,
+                        'mentionValorisante' => $mention,
+                    ];
+
+
+                }
+            }
+
+            var_dump($hash);
+            var_dump($sites_avec_produit);
+        }
     }
 }
