@@ -72,11 +72,15 @@
 			<td>
 				<span class="picto_sablier" style="padding-left:15px; margin-left: 2px;">&nbsp;Projet soumis à l'acheteur pour validation</span>
 			</td>
-            <td style="text-align: center;"><?php if(!$vrac->isVendeurProprietaire()): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?></td>
+            <td style="text-align: center;"><?php if(!$vrac->isVendeurProprietaire()): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?>
+            <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeValidationAcheteurCourtier($vrac)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+            <?php endif; ?>
+            </td>
 		</tr>
         <tr>
 			<td>
-				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Projet validé par l'acheteur et soumis au vendeur</span>
+				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Projet validé par l'acheteur</span>
 			</td>
             <td style="text-align: center;"><?php if(!in_array($vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?></td>
 		</tr>
@@ -85,7 +89,11 @@
 			<td>
 				<span class="picto_sablier" style="padding-left:15px; margin-left: 2px;">&nbsp;Projet soumis au vendeur pour signature</span>
 			</td>
-            <td style="text-align: center;"><?php if(!in_array($vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?></td>
+            <td style="text-align: center;"><?php if(!in_array($vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?>
+            <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeSignatureVendeur($vrac)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+            <?php endif; ?>
+            </td>
 		</tr>
         <tr class="<?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
 			<td>
@@ -132,3 +140,5 @@
     <?php endif; ?>
 	</tbody>
 </table>
+<pre style="border: 1px solid #555; background: white; padding: 5px; display: none;" id="contenu_mail">
+</pre>
