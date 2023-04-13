@@ -354,7 +354,7 @@ class vracActions extends sfActions
 
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous êtes envoyé.');
 
-		$this->getMailer()->send(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id)à;
+		$this->getMailer()->send(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id));
 
         if ($this->user->_id == $this->vrac->vendeur_identifiant) {
 			foreach(VracMailer::getInstance()->demandeSignature($this->vrac) as $message) {
