@@ -54,6 +54,7 @@ class ExportSV11Json extends ExportSVJson
         $apporteur = $this->sv->apporteurs->get($cvi);
         $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
 
+        // infos globales
         $infosApporteur = [
             "numeroCVIApporteur" => $cvi,
             "zoneRecolte" => "B",
@@ -62,6 +63,7 @@ class ExportSV11Json extends ExportSVJson
             "volumeIssuRaisins" => $produit->volume_revendique,
         ];
 
+        // volume à éliminer
         if ($produit->vci || $produit->volume_detruit) {
             $volumeAEliminer = [];
 
