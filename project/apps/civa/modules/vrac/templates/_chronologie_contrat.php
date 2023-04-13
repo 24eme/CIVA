@@ -74,7 +74,7 @@
 			</td>
             <td style="text-align: center;"><?php if(!$vrac->isVendeurProprietaire()): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?>
             <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeValidationAcheteurCourtier($vrac)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeValidationAcheteurCourtier($vrac->getRawValue())); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
             <?php endif; ?>
             </td>
 		</tr>
@@ -91,7 +91,7 @@
 			</td>
             <td style="text-align: center;"><?php if(!in_array($vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR))): ?><?php echo format_date($vrac->valide->date_saisie, 'dd/MM/yyyy'); ?><?php endif; ?>
             <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeSignatureVendeur($vrac)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->demandeSignatureVendeur($vrac->getRawValue())); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
             <?php endif; ?>
             </td>
 		</tr>
@@ -102,7 +102,7 @@
             <td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
                 <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac, $vrac->vendeur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac->getRawValue(), $vrac->vendeur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
                 <?php endif; ?>
             </td>
 		</tr>
@@ -113,7 +113,7 @@
             <td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
                 <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', implode("\n\n--------------\n\n", VracMailer::getInstance()->demandeSignature($vrac, $vrac->vendeur_identifiant))); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', implode("\n\n--------------\n\n", VracMailer::getInstance()->demandeSignature($vrac->getRawValue(), $vrac->vendeur_identifiant))); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
                 <?php endif; ?>
             </td>
 		</tr>
@@ -124,7 +124,7 @@
             <td style="text-align: center;">
 				<?php echo ($vrac->hasAcheteurSigne())? format_date($vrac->valide->date_validation_acheteur, 'dd/MM/yyyy') : ''; ?>
                 <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac, $vrac->acheteur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac->getRawValue(), $vrac->acheteur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
                 <?php endif; ?>
             </td>
 		</tr>
@@ -135,6 +135,9 @@
             </td>
             <td style="text-align: center;">
                 <?php echo ($vrac->hasCourtierSigne())? format_date($vrac->valide->date_validation_mandataire, 'dd/MM/yyyy') : ''; ?>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac->getRawValue(), $vrac->mandataire_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endif; ?>
@@ -144,7 +147,10 @@
 			</td>
             <td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
-			</td>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', implode("\n\n--------------\n\n", VracMailer::getInstance()->validationContrat($vrac->getRawValue(), false))); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu des mails]</a>
+                <?php endif; ?>
+            </td>
 		</tr>
     <?php endif; ?>
 	</tbody>
