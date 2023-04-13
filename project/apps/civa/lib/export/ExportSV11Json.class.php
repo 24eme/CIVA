@@ -10,6 +10,7 @@ class ExportSV11Json extends ExportSVJson
     {
         $this->raw[self::ROOT_NODE] = $this->getRootInfos();
         $this->raw[self::ROOT_NODE][self::APPORT_NODE]['produits'] = $this->getProduits();
+        $this->raw[self::ROOT_NODE][self::SITE_NODE]['sites'] = $this->getSites();
     }
 
     public function getRootInfos()
@@ -104,5 +105,52 @@ class ExportSV11Json extends ExportSVJson
         }
 
         return $infosApporteur;
+    }
+
+    public function getSites()
+    {
+        $sites = [];
+        foreach ($this->sv->stockage as $stockage) {
+            $site = [];
+            $site['codeSite'] = $stockage->numero;
+            $sites[] = $site;
+        }
+
+        foreach ($this->sv->getRecapProduits() as $hash => $produit) {
+            $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
+            $mention = $produit->denominationComplementaire;
+
+            $sites_avec_produit = array_filter($this->sv->stockage->toArray(true, false), function ($v, $k) use ($hash) {
+                if (array_key_exists('produits', $v) === false) {
+                    return true; // Site principal
+                }
+
+                return array_key_exists($hash, $v['produits']); // Sites secondaires
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $total = $produit->volume_revendique;
+
+            foreach ($sites_avec_produit as $s) {
+                foreach ($sites as $stockage) {
+                    if ($s['numero'] == $stockage) {
+
+                    }
+                }
+            }
+
+            foreach ($sites as $s) {
+                if (array_key_exists($s['codeSite'], $sites_avec_produit)) {
+                    $add = [
+                        'codeProduit' => $code_produit,
+                        'mentionValorisante' => $mention,
+                    ];
+
+
+                }
+            }
+
+            var_dump($hash);
+            var_dump($sites_avec_produit);
+        }
     }
 }
