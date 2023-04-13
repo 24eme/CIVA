@@ -348,22 +348,20 @@ class vracActions extends sfActions
 
 		$this->user = $this->getTiersNoSigneOfVrac($this->vrac);
 
+
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 
-		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');
-		$emails = $this->vrac->getEmailsActeur($this->user->_id);
-		foreach ($emails as $email) {
-			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
-		}
+		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous êtes envoyé.');
+
+		$this->getMailer()->send(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id)à;
+
         if ($this->user->_id == $this->vrac->vendeur_identifiant) {
-            $emails = $this->vrac->getEmailsActeur($this->vrac->acheteur_identifiant);
-            if($this->vrac->mandataire_identifiant) {
-                $emails = array_merge($emails, $this->vrac->getEmailsActeur($this->vrac->mandataire_identifiant));
+			foreach(VracMailer::getInstance()->demandeSignature($this->vrac) as $message) {
+                $this->getMailer()->send($message);
+
             }
-    		foreach ($emails as $email) {
-    			VracMailer::getInstance()->demandeSignature($this->vrac, $email);
-    		}
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'ils signent la proposition.');
         }
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));

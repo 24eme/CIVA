@@ -66,30 +66,45 @@ class VracMailer {
         return $message;
     }
 
-    public function demandeSignature($vrac, $destinataire)
+    public function demandeSignature($vrac)
     {
-        $from = self::getFrom();
-        $to = array($destinataire);
-        $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
-        $message = self::getMailer()->compose($from, $to, $subject, $body);
+        $acteurs = [$vrac->acheteur_identifiant];
+        if($vrac->hasCourtier()) {
+            $acteurs[] = $vrac->mandataire_identifiant;
+        }
+        $messages = array();
+        foreach($acteurs as $acteur_id) {
+            $from = self::getFrom();
+            $emails = $vrac->getEmailsActeur($acteur_id);
+            if($emails instanceof sfOutputEscaperArrayDecorator) {
+                $emails = $emails->getRawValue();
+            }
+            $to = $emails;
+            $proprietaire = $vrac->getCreateurInformations();
+            $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+            $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            $body = self::getBodyFromPartial('vrac_demande_signature', array('vrac' => $vrac));
+            $messages[] = self::getMailer()->compose($from, $to, $subject, $body);
+        }
 
-        return self::getMailer()->send($message);
+        return $messages;
     }
 
-    public function confirmationSignature($vrac, $destinataire)
+    public function confirmationSignature($vrac, $acteur_id)
     {
         $from = self::getFrom();
-        $to = array($destinataire);
+        $emails = $vrac->getEmailsActeur($acteur_id);
+        if($emails instanceof sfOutputEscaperArrayDecorator) {
+            $emails = $emails->getRawValue();
+        }
+        $to = $emails;
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = $this->getPrefixSubject($vrac).' Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
-        return self::getMailer()->send($message);
+        return $message;
     }
 
     public function validationContrat($vrac, $destinataire, $document, $bcc = null)
