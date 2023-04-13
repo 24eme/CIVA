@@ -123,7 +123,10 @@
 			</td>
             <td style="text-align: center;">
 				<?php echo ($vrac->hasAcheteurSigne())? format_date($vrac->valide->date_validation_acheteur, 'dd/MM/yyyy') : ''; ?>
-			</td>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac, $vrac->acheteur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
+                <?php endif; ?>
+            </td>
 		</tr>
         <?php if ($vrac->hasCourtier()): ?>
         <tr class="<?php if (!$vrac->hasCourtierSigne()): ?> text-muted<?php endif; ?>">
