@@ -86,7 +86,7 @@ class ExportSV11Json extends ExportSVJson
         if (strpos($hash_produit, '/CREMANT/') !== false) {
             $produitsAssocies = ['typeAssociation' => 'REB'];
             $hash_rebeche = str_replace(['/declaration/', '/cepages/PN', '/cepages/BL'], ['', '/cepages/RBRS', '/cepages/RB'], $hash_produit);
-            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get($hash_rebeche);
+            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get("/declaration/".$hash_rebeche)->code_douane;
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
