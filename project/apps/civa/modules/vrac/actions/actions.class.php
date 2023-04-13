@@ -404,17 +404,11 @@ class vracActions extends sfActions
 
 			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
                     $this->saveVendeurProjetAttachment($this->vrac);
-                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur afin qu\'il le valide.');
-                    $emails = $this->vrac->getEmails();
-					foreach ($emails as $email) {
-						VracMailer::getInstance()->demandeValidationAcheteur($this->vrac, $email);
-					}
+                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
+					$this->getMailer()->send(VracMailer::getInstance()->demandeValidationAcheteurCourtier($this->vrac));
                 } else {
                     $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-                    $emails = $this->vrac->getEmails();
-					foreach ($emails as $email) {
-						VracMailer::getInstance()->demandeSignatureVendeur($this->vrac, $email);
-					}
+					$this->getMailer()->send(VracMailer::getInstance()->demandeSignatureVendeur($this->vrac));
                 }
 
    				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
