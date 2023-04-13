@@ -54,13 +54,28 @@ class ExportSV11Json extends ExportSVJson
         $apporteur = $this->sv->apporteurs->get($cvi);
         $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
 
-        /* echo $apporteur->cvi . ':' . $produit->getHash() . ':' . $produit->volume_recolte.PHP_EOL; */
-
-        return [
+        $infosApporteur = [
             "numeroCVIApporteur" => $cvi,
             "zoneRecolte" => "B",
             "superficieRecolte" => $produit->superficie_recolte,
-            "volumeApportRaisins" => $produit->volume_recolte
+            "volumeApportRaisins" => $produit->volume_recolte,
+            "volumeIssuRaisins" => $produit->volume_revendique,
         ];
+
+        if ($produit->vci || $produit->volume_detruit) {
+            $volumeAEliminer = [];
+
+            if ($produit->volume_detruit) {
+                $volumeAEliminer['volumeAEliminer'] = $produit->volume_detruit;
+            }
+
+            if ($produit->vci) {
+                $volumeAEliminer['volumeComplementaireIndividuel'] = $produit->vci;
+            }
+
+            $infosApporteur['volumeAEliminer'] = $volumeAEliminer;
+        }
+
+        return $infosApporteur;
     }
 }
