@@ -36,12 +36,7 @@ class VracMailer {
     {
         $from = self::getFrom();
 
-        $emails = $vrac->getEmailsActeur($vrac->createur_identifiant);
-        if($emails instanceof sfOutputEscaperArrayDecorator) {
-            $emails = $emails->getRawValue();
-        }
-
-        $to = $vrac->getEmailsActeur($vrac->createur_identifiant)->getRawValue();
+        $to = $vrac->getEmailsActeur($vrac->createur_identifiant);
         $subject = $this->getPrefixSubject($vrac).' Demande de validation ('.trim($vrac->vendeur->intitule.' '.$vrac->vendeur->raison_sociale).' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_demande_validation_acheteur_courtier', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
@@ -52,11 +47,7 @@ class VracMailer {
     public function demandeSignatureVendeur($vrac)
     {
         $from = self::getFrom();
-        $emails = $vrac->getEmailsActeur($vrac->vendeur_identifiant);
-        if($emails instanceof sfOutputEscaperArrayDecorator) {
-            $emails = $emails->getRawValue();
-        }
-        $to = $emails;
+        $to = $vrac->getEmailsActeur($vrac->vendeur_identifiant);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
@@ -75,11 +66,7 @@ class VracMailer {
         $messages = array();
         foreach($acteurs as $acteur_id) {
             $from = self::getFrom();
-            $emails = $vrac->getEmailsActeur($acteur_id);
-            if($emails instanceof sfOutputEscaperArrayDecorator) {
-                $emails = $emails->getRawValue();
-            }
-            $to = $emails;
+            $to = $vrac->getEmailsActeur($acteur_id);
             $proprietaire = $vrac->getCreateurInformations();
             $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
             $subject = $this->getPrefixSubject($vrac).' Demande de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
@@ -93,11 +80,7 @@ class VracMailer {
     public function confirmationSignature($vrac, $acteur_id)
     {
         $from = self::getFrom();
-        $emails = $vrac->getEmailsActeur($acteur_id);
-        if($emails instanceof sfOutputEscaperArrayDecorator) {
-            $emails = $emails->getRawValue();
-        }
-        $to = $emails;
+        $to = $vrac->getEmailsActeur($acteur_id);
         $proprietaire = $vrac->getCreateurInformations();
         $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
         $subject = $this->getPrefixSubject($vrac).' Confirmation de signature ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
@@ -107,29 +90,49 @@ class VracMailer {
         return $message;
     }
 
-    public function validationContrat($vrac, $destinataire, $document, $bcc = null)
+    public function validationContrat($vrac, $pdf = true)
     {
 		if($vrac->isPapier()) {
 
 			return $this->validationContratPapier($vrac, $destinataire);
 		}
-        $from = self::getFrom();
-        $to = array($destinataire);
-        $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = $this->getPrefixSubject($vrac).' Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));
-		$message = Swift_Message::newInstance()
-  					->setFrom($from)
-  					->setTo($to)
-  					->setSubject($subject)
-  					->setBody($body)
-  					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
-        if ($bcc) {
-            $message->setBcc($bcc);
+
+        if($pdf) {
+            $pdf = new ExportVracPdf($vrac, false, array(sfContext::getInstance()->getController()->getAction('vrac_export', 'main'), 'getPartial'));
+            $pdf->generatePDF();
+        }
+        $acteurs = [$vrac->vendeur_identifiant, $vrac->acheteur_identifiant];
+        if($vrac->hasCourtier()) {
+            $acteurs[] = $vrac->mandataire_identifiant;
         }
 
-        return self::getMailer()->send($message);
+        $messages = array();
+        foreach($acteurs as $acteur_id) {
+            $from = self::getFrom();
+            $to = $vrac->getEmailsActeur($acteur_id);
+            $proprietaire = $vrac->getCreateurInformations();
+            $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+            $subject = $this->getPrefixSubject($vrac).' Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));
+    		$message = Swift_Message::newInstance()
+      					->setFrom($from)
+      					->setTo($to)
+      					->setSubject($subject)
+      					->setBody($body);
+
+            if($pdf) {
+      			$message->attach(new Swift_Attachment($pdf->output(), $pdf->getFileName(), 'application/pdf'));
+            }
+
+            $messages[] = $message;
+        }
+        if ($vrac->declaration->hashProduitsWithVolumeBloque() && count($messages)) {
+            $message = clone $messages[0];
+            $message->setTo(sfConfig::get('app_email_notifications', array()));
+            $messages[] = $message;
+        }
+
+        return $messages;
     }
 
 	public function validationContratPapier($vrac, $destinataire)
