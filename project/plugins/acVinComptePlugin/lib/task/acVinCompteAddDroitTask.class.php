@@ -12,6 +12,7 @@ class acVinCompteAddDroitTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('force-add-node', null, sfCommandOption::PARAMETER_REQUIRED, 'forcing node creation', true),
         ));
 
         $this->namespace        = 'compte';
@@ -38,7 +39,7 @@ class acVinCompteAddDroitTask extends sfBaseTask
             $droitsAdded = true;
         }
 
-        if($compte->hasDroit($droit) && !$droitsAdded) {
+        if($compte->hasDroit($droit) && (!$droitsAdded||!(bool)$options['force-add-node'])) {
             return;
         }
 
