@@ -99,7 +99,7 @@ class ExportSV11Json extends ExportSVJson
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
-                $rebeches = $apporteur->get($hash_rebeche)->getFirst();
+                $rebeches = $apporteur->get(str_replace('/declaration/', '', $hash_rebeche))->getFirst();
 
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
