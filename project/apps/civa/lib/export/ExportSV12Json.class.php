@@ -70,10 +70,18 @@ class ExportSV12Json extends ExportSVJson
         ];
 
         // rebêches
-        if (strpos($hash_produit, '/CREMANT/') !== false) {
+        if (strpos($hash_produit, '/CREMANT/') !== false && $produit->volume_revendique) {
             $produitsAssocies = ['typeAssociation' => 'REB'];
-            $hash_rebeche = str_replace(['/declaration/', '/cepages/PN', '/cepages/BL'], ['', '/cepages/RBRS', '/cepages/RB'], $hash_produit);
-            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get("/declaration/".$hash_rebeche)->code_douane;
+            $cepage = strrchr($hash_produit, '/');
+
+            if (in_array($cepage, ['/RS', '/PN'])) {
+                //si crémant rosé, on cherche les rebeches rosées
+                $hash_rebeche = str_replace($cepage, '/RBRS', $hash_produit);
+            } else {
+                $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
+            }
+
+            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get($hash_rebeche)->code_douane;
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
@@ -82,9 +90,7 @@ class ExportSV12Json extends ExportSVJson
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
-                if (strpos($hash_produit, '/cepages/BL') !== false) {
-                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
-                }
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
             }
 
             $infosApporteur['produitsAssocies'][] = $produitsAssocies;
