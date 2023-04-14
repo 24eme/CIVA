@@ -19,17 +19,15 @@ class VracMailer {
         return '['.$vrac->getTypeDocumentLibelle().' '.strtolower($vrac->getTypeDureeLibelle()).' '.strtolower($vrac->type_contrat).']';
     }
 
-    public function refusProjet($vrac, $destinataire)
+    public function refusProjet($vrac)
     {
         $from = self::getFrom();
-        $to = array($destinataire);
-        $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = $this->getPrefixSubject($vrac).' Refus du vendeur ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+        $to = $vrac->getEmailsActeur($vrac->createur_identifiant);
+        $subject = $this->getPrefixSubject($vrac).' Refus du vendeur ('.trim($vrac->vendeur->intitule.' '.$vrac->vendeur->raison_sociale).' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
         $body = self::getBodyFromPartial('vrac_refus_projet', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
-        return self::getMailer()->send($message);
+        return $message;
     }
 
     public function demandeValidationAcheteurCourtier($vrac)

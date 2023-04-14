@@ -714,11 +714,10 @@ class vracActions extends sfActions
 		$vrac = $this->getRoute()->getVrac();
         $vrac->valide->statut = Vrac::STATUT_PROJET_VENDEUR;
         $vrac->save();
-        $emails = $vrac->getEmailsActeur($vrac->acheteur_identifiant);
-        foreach ($emails as $email) {
-            VracMailer::getInstance()->refusProjet($vrac, $email);
-        }
-        $this->getUser()->setFlash('notice', 'Le refus du projet a été notifié à l\'acheteur.');
+
+        $this->getMailer()->send(VracMailer::getInstance()->refusProjet($vrac, $email));
+
+        $this->getUser()->setFlash('notice', 'Le refus du projet a été notifié à l\'acheteur par mail.');
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
     }
 

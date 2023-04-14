@@ -102,8 +102,14 @@
             <td style="text-align: center;">
 				<?php echo ($vrac->hasVendeurSigne())? format_date($vrac->valide->date_validation_vendeur, 'dd/MM/yyyy') : ''; ?>
                 <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac->getRawValue(), $vrac->vendeur_identifiant)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu du mail]</a>
-                <?php endif; ?>
+				<span style="position: absolute; left: 430px; opacity: 0.5;">
+				[voir le contenu du mail de
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->confirmationSignature($vrac->getRawValue(), $vrac->vendeur_identifiant)); ?>">signature</a>
+				/
+	            <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', VracMailer::getInstance()->refusProjet($vrac->getRawValue())); ?>">refus</a>
+				]
+				</span>
+	            <?php endif; ?>
             </td>
 		</tr>
         <tr class="<?php if (!$vrac->hasVendeurSigne()): ?> text-muted<?php endif; ?>">
