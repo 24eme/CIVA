@@ -22,3 +22,20 @@ function isVersionnerCssClass($object, $key) {
 function isVersionner($object, $key) {
     return !$object->getDocument()->isValide() && $object->getDocument()->isModifiedMother($object->getHash(), $key);
 }
+
+function displayMail($messages) {
+    if(!is_array($messages)) {
+        $messages = [$messages];
+    }
+
+    $content = "";
+    foreach($messages as $message) {
+        $content .= "De : ".implode(",", array_keys($message->getFrom()))."\n";
+        $content .= "À : ".implode(",", array_keys($message->getTo()))."\n";
+        $content .= "Sujet : ".$message->getSubject()."\n\n";
+        $content .= $message->getBody();
+        $content .= "\n\n";
+    }
+
+    return $content;
+}
