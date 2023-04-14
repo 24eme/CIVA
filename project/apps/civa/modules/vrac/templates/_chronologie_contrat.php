@@ -152,9 +152,10 @@
                 <?php endif; ?>
             </td>
 		</tr>
+        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
 		<tr class="<?php if (!$vrac->isCloture()): ?> text-muted<?php endif; ?>">
 			<td>
-				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat de vente cloturé</span>
+				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat de vente clôturé</span>
 			</td>
             <td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
@@ -163,6 +164,7 @@
                 <?php endif; ?>
             </td>
 		</tr>
+        <?php endif; ?>
     <?php endif; ?>
 	</tbody>
 </table>
