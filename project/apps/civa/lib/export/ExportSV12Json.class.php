@@ -18,9 +18,9 @@ class ExportSV12Json extends ExportSVJson
         return [
             'campagne' => $this->sv->campagne,
             'numeroCVINegociant' => $this->sv->declarant->cvi,
-            'dateDepot' => $this->sv->valide->date_saisie,
-            'motifModification' => [],
-            'volumeLies' => $this->sv->lies,
+            'dateDepot' => DateTimeImmutable::createFromFormat('Y-m-d', $this->sv->valide->date_saisie)
+                                            ->format('d/m/Y 00:00:00'),
+            'volumeLies' => "".$this->sv->lies,
             self::APPORT_NODE => ['produits' => []],
             self::SITE_NODE => ['sites' => []]
         ];
@@ -47,7 +47,7 @@ class ExportSV12Json extends ExportSVJson
 
             $produits[] = [
                 "codeProduit" => $produitFromConf->code_douane,
-                "mentionValorisante" => $produit->denomination_complementaire,
+                "mentionValorisante" => $produit->denomination_complementaire ?: "",
                 "fournisseurs" => $fournisseurs
             ];
         }
@@ -64,9 +64,9 @@ class ExportSV12Json extends ExportSVJson
         $infosApporteur = [
             "numeroEvvFournisseur" => $cvi,
             "zoneRecolte" => "B",
-            "superficieRecolte" => $produit->superficie_recolte,
-            "quantiteAchatRaisins" => $produit->quantite_recolte,
-            "volumeIssuRaisins" => $produit->volume_revendique,
+            "superficieRecolte" => "".$produit->superficie_recolte,
+            "quantiteAchatRaisins" => "".$produit->quantite_recolte,
+            "volumeIssuRaisins" => "".$produit->volume_revendique,
         ];
 
         // rebêches
@@ -112,12 +112,9 @@ class ExportSV12Json extends ExportSVJson
                 if (array_key_exists($hash, $produitsLieu)) {
                     $add = [
                         'codeProduit' => $code_produit,
-                        'volumeObtenu' => $produitsLieu[$hash]
+                        'mentionValorisante' => $mention ?: "",
+                        'volumeObtenu' => "".$produitsLieu[$hash]
                     ];
-
-                    if ($mention) {
-                        $add['mentionValorisante'] = $mention;
-                    }
 
                     $sites[$lieu->numero]['produits'][] = $add;
                 }
