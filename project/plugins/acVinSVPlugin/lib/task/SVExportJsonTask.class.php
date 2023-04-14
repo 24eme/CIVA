@@ -5,7 +5,8 @@ class SVExportJsonTask extends sfBaseTask
     public function configure()
     {
         $this->addArguments([
-            new sfCommandArgument('declaration', sfCommandArgument::REQUIRED, "Document de production")
+            new sfCommandArgument('declaration', sfCommandArgument::REQUIRED, "Type de Document de production"),
+            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, "Campagne")
         ]);
 
         $this->addOptions([
@@ -31,15 +32,31 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $declaration = $arguments['declaration'];
+        $campagne = $arguments['campagne'];
 
-        $sv = SVClient::getInstance()->find($declaration);
+        $svs = [];
+        $allSV = SVClient::getInstance()->getAll($campagne);
+        foreach ($allSV as $sv) {
+            if ($sv->type !== $declaration) {
+                continue;
+            }
 
-        if ($sv) {
-            $class = "Export".$sv->getType()."Json";
+            if (strpos($sv->_id, '-75') !== false) {
+                continue;
+            }
 
+            $svs[] = $sv;
+        }
+
+        $class = "Export".$declaration."Json";
+        $json = [$class::ROOT_NODE => []];
+
+        foreach ($svs as $sv) {
             $export = new $class($sv);
             $export->build();
-            echo $export->export();
+            $json[$class::ROOT_NODE][] = json_decode($export->export());
         }
+
+        echo json_encode($json).PHP_EOL;
     }
 }

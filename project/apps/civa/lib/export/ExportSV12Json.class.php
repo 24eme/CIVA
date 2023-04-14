@@ -8,9 +8,11 @@ class ExportSV12Json extends ExportSVJson
 
     public function build()
     {
-        $this->raw[self::ROOT_NODE][] = $this->getRootInfos();
-        $this->raw[self::ROOT_NODE][0][self::APPORT_NODE]['produits'] = $this->getProduits();
-        $this->raw[self::ROOT_NODE][0][self::SITE_NODE]['sites'] = $this->getSites();
+        $root = $this->getRootInfos();
+        $root[self::APPORT_NODE]['produits'] = $this->getProduits();
+        $root[self::SITE_NODE]['sites'] = $this->getSites();
+
+        $this->raw = $root;
     }
 
     public function getRootInfos()
