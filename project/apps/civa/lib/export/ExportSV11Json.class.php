@@ -18,8 +18,8 @@ class ExportSV11Json extends ExportSVJson
         return [
             'campagne' => $this->sv->campagne,
             'numeroCVICave' => $this->sv->declarant->cvi,
-            'dateDepot' => $this->sv->valide->date_saisie,
-            'motifModification' => [],
+            'dateDepot' => DateTimeImmutable::createFromFormat('Y-m-d', $this->sv->valide->date_saisie)
+                                            ->format('d/m/Y 00:00:00'),
             self::APPORT_NODE => ['produits' => []],
             self::SITE_NODE => ['sites' => []]
         ];
@@ -46,7 +46,7 @@ class ExportSV11Json extends ExportSVJson
 
             $produits[] = [
                 "codeProduit" => $produitFromConf->code_douane,
-                "mentionValorisante" => $produit->denomination_complementaire,
+                "mentionValorisante" => $produit->denomination_complementaire ?: "",
                 "apports" => $apporteurs
             ];
         }
@@ -63,9 +63,9 @@ class ExportSV11Json extends ExportSVJson
         $infosApporteur = [
             "numeroCVIApporteur" => $cvi,
             "zoneRecolte" => "B",
-            "superficieRecolte" => $produit->superficie_recolte,
-            "volumeApportRaisins" => $produit->volume_recolte,
-            "volumeIssuRaisins" => $produit->volume_revendique,
+            "superficieRecolte" => "".$produit->superficie_recolte,
+            "volumeApportRaisins" => "".$produit->volume_recolte,
+            "volumeIssuRaisins" => "".$produit->volume_revendique,
         ];
 
         // volume à éliminer
@@ -73,14 +73,14 @@ class ExportSV11Json extends ExportSVJson
             $volumeAEliminer = [];
 
             if ($produit->volume_detruit) {
-                $volumeAEliminer['volumeAEliminer'] = $produit->volume_detruit;
+                $volumeAEliminer['volumeAEliminer'] = "".$produit->volume_detruit;
             }
 
             if ($produit->vci) {
-                $volumeAEliminer['volumeComplementaireIndividuel'] = $produit->vci;
+                $volumeAEliminer['volumeComplementaireIndividuel'] = "".$produit->vci;
             }
 
-            $infosApporteur['volumeAEliminer'] = $volumeAEliminer;
+            $infosApporteur['volumesAEliminer'] = $volumeAEliminer;
         }
 
         // rebêches
@@ -93,15 +93,15 @@ class ExportSV11Json extends ExportSVJson
                 // rebeches en détail
                 $rebeches = $apporteur->get($hash_rebeche)->getFirst();
 
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $rebeches->volume_revendique;
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = "".$rebeches->volume_revendique;
             } else {
                 // % des rebeches totales
                 if (strpos($hash_produit, '/cepages/BL') !== false) {
-                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $produit->volume_revendique * 100 / $this->sv->rebeches;
+                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = (string) ($produit->volume_revendique * 100 / $this->sv->rebeches);
                 }
             }
 
-            $infosApporteur['produitsAssocies'] = $produitsAssocies;
+            $infosApporteur['produitsAssocies'][] = $produitsAssocies;
         }
 
         return $infosApporteur;
@@ -126,12 +126,9 @@ class ExportSV11Json extends ExportSVJson
                 if (array_key_exists($hash, $produitsLieu)) {
                     $add = [
                         'codeProduit' => $code_produit,
-                        'volumeObtenu' => $produitsLieu[$hash]
+                        'mentionValorisante' => $mention ?: "",
+                        'volumeObtenu' => "".$produitsLieu[$hash]
                     ];
-
-                    if ($mention) {
-                        $add['mentionValorisante'] = $mention;
-                    }
 
                     $sites[$lieu->numero]['produits'][] = $add;
                 }
