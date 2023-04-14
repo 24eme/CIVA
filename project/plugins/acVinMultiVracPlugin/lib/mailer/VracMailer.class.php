@@ -92,7 +92,7 @@ class VracMailer {
     {
 		if($vrac->isPapier()) {
 
-			return $this->validationContratPapier($vrac, $destinataire);
+			return $this->validationContratPapier($vrac);
 		}
 
         if($pdf) {
@@ -135,17 +135,26 @@ class VracMailer {
 
 	public function validationContratPapier($vrac, $destinataire)
     {
-        $from = self::getFrom();
-        $to = array($destinataire);
-        $body = self::getBodyFromPartial('vrac_validation_contrat_papier', array('vrac' => $vrac));
-	    $subject = $this->getPrefixSubject($vrac).' Validation de votre contrat papier n° '.$vrac->numero_papier;
-		$message = Swift_Message::newInstance()
-  					->setFrom($from)
-  					->setTo($to)
-  					->setSubject($subject)
-  					->setBody($body);
+        $acteurs = [$vrac->vendeur_identifiant, $vrac->acheteur_identifiant];
+        if($vrac->hasCourtier()) {
+            $acteurs[] = $vrac->mandataire_identifiant;
+        }
 
-        return self::getMailer()->send($message);
+        $messages = array();
+        foreach($acteurs as $acteur_id) {
+            $from = self::getFrom();
+            $to = $vrac->getEmailsActeur($acteur_id);
+            $body = self::getBodyFromPartial('vrac_validation_contrat_papier', array('vrac' => $vrac));
+    	    $subject = $this->getPrefixSubject($vrac).' Validation de votre contrat papier n° '.$vrac->numero_papier;
+    		$message = Swift_Message::newInstance()
+      					->setFrom($from)
+      					->setTo($to)
+      					->setSubject($subject)
+      					->setBody($body);
+            $messages[] = $message;
+        }
+
+        return $messages;
     }
 
     public function annulationContrat($vrac, $destinataire)
