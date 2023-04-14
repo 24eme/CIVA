@@ -110,47 +110,34 @@ class ExportSV11Json extends ExportSVJson
     public function getSites()
     {
         $sites = [];
-        foreach ($this->sv->stockage as $stockage) {
+        foreach ($this->sv->getNotEmptyLieuxStockage() as $stockage) {
             $site = [];
             $site['codeSite'] = $stockage->numero;
-            $sites[] = $site;
+            $sites[$stockage->numero] = $site;
         }
 
         foreach ($this->sv->getRecapProduits() as $hash => $produit) {
             $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
             $mention = $produit->denominationComplementaire;
 
-            $sites_avec_produit = array_filter($this->sv->stockage->toArray(true, false), function ($v, $k) use ($hash) {
-                if (array_key_exists('produits', $v) === false) {
-                    return true; // Site principal
-                }
-
-                return array_key_exists($hash, $v['produits']); // Sites secondaires
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $total = $produit->volume_revendique;
-
-            foreach ($sites_avec_produit as $s) {
-                foreach ($sites as $stockage) {
-                    if ($s['numero'] == $stockage) {
-
-                    }
-                }
-            }
-
-            foreach ($sites as $s) {
-                if (array_key_exists($s['codeSite'], $sites_avec_produit)) {
+            foreach ($this->sv->getNotEmptyLieuxStockage() as $id => $lieu) {
+                $produitsLieu = $lieu->produits;
+                $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
+                if (array_key_exists($hash, $produitsLieu)) {
                     $add = [
                         'codeProduit' => $code_produit,
-                        'mentionValorisante' => $mention,
+                        'volumeObtenu' => $produitsLieu[$hash]
                     ];
 
+                    if ($mention) {
+                        $add['mentionValorisante'] = $mention;
+                    }
 
+                    $sites[$lieu->numero]['produits'][] = $add;
                 }
             }
-
-            var_dump($hash);
-            var_dump($sites_avec_produit);
         }
+
+        return array_values($sites);
     }
 }
