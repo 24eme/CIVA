@@ -144,13 +144,24 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::CLOTURE, $this->vrac);
 
 		$this->validation = new VracValidation($this->vrac);
-		if ($this->vrac->allProduitsClotures() && !$this->validation->hasErreurs()) {
-			$this->vrac->clotureContrat();
-			$this->vrac->save();
-			$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès');
-			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-		}
-		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
+		if (!$this->vrac->allProduitsClotures() || $this->validation->hasErreurs()) {
+            throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
+        }
+
+		$this->vrac->clotureContrat();
+		$this->vrac->save();
+		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email va être envoyé à tous les parties.');
+
+        if(!$this->vrac->valide->email_cloture) {
+            foreach(VracMailer::getInstance()->clotureContrat($contrat) as $message) {
+                sfContext::getInstance()->getMailer()->send($message);
+            }
+
+            $this->vrac->valide->email_cloture = date('Y-m-d');
+            $this->vrac->save();
+        }
+
+        return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
 
 	public function executeForcerCloture(sfWebRequest $request)
@@ -363,11 +374,11 @@ class vracActions extends sfActions
             $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'ils signent la proposition.');
         }
 
-        if($this->vrac->isValide() && !$this->vrac->email_validation) {
+        if($this->vrac->isValide() && !$this->vrac->valide->email_validation) {
             foreach(VracMailer::getInstance()->validationContrat($contrat) as $message) {
                 $this->getMailer()->send($message);
             }
-            $this->vrac->email_validation = date('Y-m-d');
+            $this->vrac->valide->email_validation = date('Y-m-d');
     		$this->vrac->save();
             $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par tous les parties. Un email va être envoyé à tous.');
         }
