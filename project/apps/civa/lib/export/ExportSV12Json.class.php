@@ -42,7 +42,22 @@ class ExportSV12Json extends ExportSVJson
             $produitFromConf = $this->sv->getConfiguration()->get($hash_produit);
 
             foreach ($fournisseurs_du_produit as $cvi) {
-                $fournisseurs[] = $this->buildInfoFournisseur($cvi, $hash_produit);
+                $apporteur = $this->sv->apporteurs->get($cvi);
+                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
+
+                $fournisseurs[] = $this->buildInfoFournisseur($produit, $hash_produit);
+
+                if ($produit->exist('volume_mouts')) {
+                    $lastFournisseur = $fournisseurs[array_key_last($fournisseurs)];
+                    unset($lastFournisseur['quantiteAchatRaisins']);
+                    unset($lastFournisseur['volumeIssuRaisins']);
+                    unset($lastFournisseur['produitsAssocies']);
+
+                    $lastFournisseur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
+                    $lastFournisseur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
+
+                    $fournisseurs[] = $lastFournisseur;
+                }
             }
 
             $produits[] = [
@@ -55,14 +70,11 @@ class ExportSV12Json extends ExportSVJson
         return $produits;
     }
 
-    public function buildInfoFournisseur($cvi, $hash_produit)
+    public function buildInfoFournisseur($produit, $hash_produit)
     {
-        $apporteur = $this->sv->apporteurs->get($cvi);
-        $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
-
         // infos globales
         $infosApporteur = [
-            "numeroEvvFournisseur" => $cvi,
+            "numeroEvvFournisseur" => $produit->cvi,
             "zoneRecolte" => "B",
             "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
             "quantiteAchatRaisins" => number_format($produit->quantite_recolte, 0, ".", ""),
@@ -85,6 +97,7 @@ class ExportSV12Json extends ExportSVJson
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
+                $apporteur = $this->sv->apporteurs->get($produit->cvi);
                 $rebeches = $apporteur->get(str_replace('/declaration/', '', $hash_rebeche))->getFirst();
 
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");

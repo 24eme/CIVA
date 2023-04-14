@@ -41,7 +41,10 @@ class ExportSV11Json extends ExportSVJson
             $produitFromConf = $this->sv->getConfiguration()->get($hash_produit);
 
             foreach ($apporteurs_du_produit as $cvi) {
-                $apporteurs[] = $this->buildInfoApporteur($cvi, $hash_produit);
+                $apporteur = $this->sv->apporteurs->get($cvi);
+                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
+
+                $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
             }
 
             $produits[] = [
@@ -54,14 +57,11 @@ class ExportSV11Json extends ExportSVJson
         return $produits;
     }
 
-    public function buildInfoApporteur($cvi, $hash_produit)
+    public function buildInfoApporteur($produit, $hash_produit)
     {
-        $apporteur = $this->sv->apporteurs->get($cvi);
-        $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
-
         // infos globales
         $infosApporteur = [
-            "numeroCVIApporteur" => $cvi,
+            "numeroCVIApporteur" => $produit->cvi,
             "zoneRecolte" => "B",
             "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
             "volumeApportRaisins" => number_format($produit->volume_recolte, 2, ".", ""),
@@ -99,6 +99,7 @@ class ExportSV11Json extends ExportSVJson
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
+                $apporteur = $this->sv->apporteurs->get($produit->cvi);
                 $rebeches = $apporteur->get(str_replace('/declaration/', '', $hash_rebeche))->getFirst();
 
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
