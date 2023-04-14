@@ -64,9 +64,9 @@ class ExportSV12Json extends ExportSVJson
         $infosApporteur = [
             "numeroEvvFournisseur" => $cvi,
             "zoneRecolte" => "B",
-            "superficieRecolte" => "".$produit->superficie_recolte,
-            "quantiteAchatRaisins" => "".$produit->quantite_recolte,
-            "volumeIssuRaisins" => "".$produit->volume_revendique,
+            "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
+            "quantiteAchatRaisins" => number_format($produit->quantite_recolte, 0, ".", ""),
+            "volumeIssuRaisins" => number_format($produit->volume_revendique, 2, ".", "")
         ];
 
         // rebêches
@@ -79,15 +79,15 @@ class ExportSV12Json extends ExportSVJson
                 // rebeches en détail
                 $rebeches = $apporteur->get($hash_rebeche)->getFirst();
 
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $rebeches->volume_revendique;
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
                 if (strpos($hash_produit, '/cepages/BL') !== false) {
-                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = $produit->volume_revendique * 100 / $this->sv->rebeches;
+                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
                 }
             }
 
-            $infosApporteur['produitsAssocies'] = $produitsAssocies;
+            $infosApporteur['produitsAssocies'][] = $produitsAssocies;
         }
 
         return $infosApporteur;
@@ -113,7 +113,7 @@ class ExportSV12Json extends ExportSVJson
                     $add = [
                         'codeProduit' => $code_produit,
                         'mentionValorisante' => $mention ?: "",
-                        'volumeObtenu' => "".$produitsLieu[$hash]
+                        'volumeObtenu' => number_format($produitsLieu[$hash], 2, ".", "")
                     ];
 
                     $sites[$lieu->numero]['produits'][] = $add;

@@ -63,9 +63,9 @@ class ExportSV11Json extends ExportSVJson
         $infosApporteur = [
             "numeroCVIApporteur" => $cvi,
             "zoneRecolte" => "B",
-            "superficieRecolte" => "".$produit->superficie_recolte,
-            "volumeApportRaisins" => "".$produit->volume_recolte,
-            "volumeIssuRaisins" => "".$produit->volume_revendique,
+            "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
+            "volumeApportRaisins" => number_format($produit->volume_recolte, 2, ".", ""),
+            "volumeIssuRaisins" => number_format($produit->volume_revendique, 2, ".", "")
         ];
 
         // volume à éliminer
@@ -93,11 +93,11 @@ class ExportSV11Json extends ExportSVJson
                 // rebeches en détail
                 $rebeches = $apporteur->get($hash_rebeche)->getFirst();
 
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = "".$rebeches->volume_revendique;
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
                 if (strpos($hash_produit, '/cepages/BL') !== false) {
-                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = (string) ($produit->volume_revendique * 100 / $this->sv->rebeches);
+                    $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
                 }
             }
 
@@ -127,7 +127,7 @@ class ExportSV11Json extends ExportSVJson
                     $add = [
                         'codeProduit' => $code_produit,
                         'mentionValorisante' => $mention ?: "",
-                        'volumeObtenu' => "".$produitsLieu[$hash]
+                        'volumeObtenu' => number_format($produitsLieu[$hash], 2, ".", "")
                     ];
 
                     $sites[$lieu->numero]['produits'][] = $add;
