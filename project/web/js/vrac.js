@@ -330,7 +330,6 @@ var sumContrat = function(brothers, cible)
 	cible.text(sum);
 	if (sum >= compare) {
 		cb.attr('checked', true);
-                cb.checkboxesBehaviour();
 
 	}
 };
