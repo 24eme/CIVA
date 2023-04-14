@@ -153,7 +153,7 @@ class vracActions extends sfActions
 		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email va être envoyé à tous les parties.');
 
         if(!$this->vrac->valide->email_cloture) {
-            foreach(VracMailer::getInstance()->clotureContrat($contrat) as $message) {
+            foreach(VracMailer::getInstance()->clotureContrat($this->vrac) as $message) {
                 sfContext::getInstance()->getMailer()->send($message);
             }
 
@@ -375,7 +375,7 @@ class vracActions extends sfActions
         }
 
         if($this->vrac->isValide() && !$this->vrac->valide->email_validation) {
-            foreach(VracMailer::getInstance()->validationContrat($contrat) as $message) {
+            foreach(VracMailer::getInstance()->validationContrat($this->vrac) as $message) {
                 $this->getMailer()->send($message);
             }
             $this->vrac->valide->email_validation = date('Y-m-d');
@@ -417,8 +417,13 @@ class vracActions extends sfActions
        			if ($nextEtape) {
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} elseif($this->vrac->isPapier()) {
-					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+                    foreach(VracMailer::getInstance()->validationContratPapier($this->vrac) as $message) {
+                        $this->getMailer()->send($message);
+                    }
+                    $this->vrac->valide->email_validation = date('Y-m-d');
+            		$this->vrac->save();
 
+					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
 			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
                     $this->saveVendeurProjetAttachment($this->vrac);
                     $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
