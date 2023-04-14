@@ -152,6 +152,17 @@
                 <?php endif; ?>
             </td>
 		</tr>
+		<tr class="<?php if (!$vrac->isCloture()): ?> text-muted<?php endif; ?>">
+			<td>
+				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat de vente cloturé</span>
+			</td>
+            <td style="text-align: center;">
+				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo str_replace('"', '\"', implode("\n\n--------------\n\n", VracMailer::getInstance()->clotureContrat($vrac->getRawValue(), false))); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le contenu des mails]</a>
+                <?php endif; ?>
+            </td>
+		</tr>
     <?php endif; ?>
 	</tbody>
 </table>

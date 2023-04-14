@@ -166,25 +166,39 @@ class VracMailer {
         return self::getMailer()->send($message);
     }
 
-    public function clotureContrat($vrac, $destinataire, $document, $bcc = null)
+    public function clotureContrat($vrac, $pdf = true)
     {
-        $from = self::getFrom();
-        $to = array($destinataire);
-        $proprietaire = $vrac->getCreateurInformations();
-        $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-        $subject = $this->getPrefixSubject($vrac).' Clôture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-        $body = self::getBodyFromPartial('vrac_cloture_contrat_'.strtolower($vrac->type_contrat), array('vrac' => $vrac));
-		$message = Swift_Message::newInstance()
-  					->setFrom($from)
-  					->setTo($to)
-  					->setSubject($subject)
-  					->setBody($body)
-  					->attach(new Swift_Attachment($document->output(), $document->getFileName(), 'application/pdf'));
-        if ($bcc) {
-            $message->setBcc($bcc);
+        if($pdf) {
+            $pdf = new ExportVracPdf($vrac, false, array(sfContext::getInstance()->getController()->getAction('vrac_export', 'main'), 'getPartial'));
+            $pdf->generatePDF();
+        }
+        $acteurs = [$vrac->vendeur_identifiant, $vrac->acheteur_identifiant];
+        if($vrac->hasCourtier()) {
+            $acteurs[] = $vrac->mandataire_identifiant;
         }
 
-        return self::getMailer()->send($message);
+        $messages = array();
+        foreach($acteurs as $acteur_id) {
+            $from = self::getFrom();
+            $to = $vrac->getEmailsActeur($acteur_id);
+            $proprietaire = $vrac->getCreateurInformations();
+            $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
+            $subject = $this->getPrefixSubject($vrac).' Clôture du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            $body = self::getBodyFromPartial('vrac_cloture_contrat', array('vrac' => $vrac));
+    		$message = Swift_Message::newInstance()
+      					->setFrom($from)
+      					->setTo($to)
+      					->setSubject($subject)
+      					->setBody($body);
+
+            if($pdf) {
+      			$message->attach(new Swift_Attachment($pdf->output(), $pdf->getFileName(), 'application/pdf'));
+            }
+
+            $messages[] = $message;
+        }
+
+        return $messages;
     }
 
     protected static function getFrom()

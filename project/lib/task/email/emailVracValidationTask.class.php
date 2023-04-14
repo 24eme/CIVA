@@ -46,9 +46,7 @@ EOF;
 
   	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
     foreach ($contrats as $contrat) {
-
-        $messages = VracMailer::getInstance()->validationContrat($contrat);
-        foreach($messages as $message) {
+        foreach(VracMailer::getInstance()->validationContrat($contrat) as $message) {
             sfContext::getInstance()->getMailer()->send($message);
         }
 
