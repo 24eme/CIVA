@@ -133,7 +133,7 @@ class VracMailer {
         return $messages;
     }
 
-	public function validationContratPapier($vrac, $destinataire)
+	public function validationContratPapier($vrac)
     {
         $acteurs = [$vrac->vendeur_identifiant, $vrac->acheteur_identifiant];
         if($vrac->hasCourtier()) {
