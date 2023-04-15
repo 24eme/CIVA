@@ -111,6 +111,9 @@ class VracMailer {
             $proprietaire = $vrac->getCreateurInformations();
             $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
             $subject = $this->getPrefixSubject($vrac).' Validation du contrat n° '.$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            if($vrac->isApplicationPluriannuel()) {
+                $subject = $this->getPrefixSubject($vrac)." Validation du contrat d'application ".$vrac->campagne." n° ".$vrac->numero_visa.' ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            }
             $body = self::getBodyFromPartial('vrac_validation_contrat', array('vrac' => $vrac));
     		$message = Swift_Message::newInstance()
       					->setFrom($from)

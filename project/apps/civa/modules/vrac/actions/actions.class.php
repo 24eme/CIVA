@@ -316,7 +316,19 @@ class vracActions extends sfActions
                     $nextContratApplication->signer($nextContratApplication->createur_identifiant);
                 }
                 $nextContratApplication->save();
-				$this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès.');
+
+                if($nextContratApplication->isValide() && !$nextContratApplication->valide->email_validation) {
+                    foreach(VracMailer::getInstance()->validationContrat($nextContratApplication) as $message) {
+                        $this->getMailer()->send($message);
+                    }
+                    $nextContratApplication->valide->email_validation = date('Y-m-d');
+                    $nextContratApplication->save();
+
+                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à tous les parties.');
+                } else {
+                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de sigature du vendeur. Un email va lui être envoyé.');
+                }
+
        			return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
         	}
         }
