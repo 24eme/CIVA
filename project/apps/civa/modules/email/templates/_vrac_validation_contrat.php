@@ -1,6 +1,10 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
+<?php if($vrac->isApplicationPluriannuel()): ?>
+Le contrat d'application a été validé pour la campagne <?php echo $vrac->campagne ?>.
+<?php else: ?>
 Ce contrat, ayant été signé par toutes les parties, a été visé par le CIVA.
+<?php endif; ?>
 
 <?php if ($vrac->declaration->hashProduitsWithVolumeBloque()): ?>
 Attention ! Ce contrat contient des produits dont une partie du volume est en réserve.

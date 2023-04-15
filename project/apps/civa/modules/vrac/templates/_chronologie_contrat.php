@@ -1,10 +1,9 @@
 <?php use_helper('Date') ?>
 <?php use_helper('vrac') ?>
-<pre style="background: #000; color: white; padding: 5px; left:550px; width: 700px; height : 250px; overflow: scroll; display: none; position: absolute; opacity: 0.90;" id="contenu_mail"></pre>
 <table class="validation table_donnees" style="width: 400px;">
 	<thead>
 		<tr>
-			<th style="width: 260px;">Chronologie du contrat</th>
+			<th style="width: 280px;">Chronologie du contrat</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -15,7 +14,10 @@
 			</td>
             <td style="text-align: center;">
 				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
-			</td>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->validationContrat($vrac->getRawValue(), false)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
 		</tr>
         <?php elseif($vrac->isApplicationPluriannuel()): ?>
         <tr>
@@ -176,3 +178,4 @@
     <?php endif; ?>
 	</tbody>
 </table>
+<pre style="background: #000; color: white; padding: 5px; overflow: scroll; display: none; opacity: 0.90;" id="contenu_mail"></pre>

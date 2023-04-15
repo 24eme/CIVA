@@ -2,7 +2,7 @@
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th style="width: 260px;">Conditions
+			<th style="width: 280px;">Conditions
 				<?php if (!$fiche): ?><a href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_CONDITIONS)) ?>" style="float:right;text-decoration: none;font-size:13px;padding-top:1px;">Modifier</a><?php endif; ?>
 			</th>
 		</tr>
