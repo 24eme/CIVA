@@ -1,6 +1,10 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
+<?php if($vrac->isApplicationPluriannuel()): ?>
+Tous les enlèvements ayant été effectués, ce contrat d'application a été clôturé.
+<?php else: ?>
 Tous les enlèvements ayant été effectués, ce contrat a été cloturé.
+<?php endif; ?>
 
 Vous trouverez ci-joint la version pdf avec les volumes rééls.
 
