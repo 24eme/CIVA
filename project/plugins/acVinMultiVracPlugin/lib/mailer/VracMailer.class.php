@@ -61,6 +61,12 @@ class VracMailer {
         if($vrac->hasCourtier()) {
             $acteurs[] = $vrac->mandataire_identifiant;
         }
+        if($vrac->isApplicationPluriannuel()) {
+            $acteurs = [$vrac->vendeur_identifiant];
+        }
+        if($vrac->isApplicationPluriannuel() && $vrac->hasCourtier()) {
+            $acteurs[] = $vrac->acheteur_identifiant;
+        }
         $messages = array();
         foreach($acteurs as $acteur_id) {
             $from = self::getFrom();
