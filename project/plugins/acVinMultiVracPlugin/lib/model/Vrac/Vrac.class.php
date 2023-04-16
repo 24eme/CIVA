@@ -1053,6 +1053,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $vrac->remove('valide');
         $vrac->add('valide');
         $vrac->valide->statut = self::STATUT_CREE;
+		$vrac->valide->date_saisie = date('Y-m-d');
         $vrac->constructId();
 		$vrac->add('reference_contrat_pluriannuel', $this->_id);
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
