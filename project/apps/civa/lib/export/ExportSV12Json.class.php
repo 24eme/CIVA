@@ -2,17 +2,16 @@
 
 class ExportSV12Json extends ExportSVJson
 {
-    const HAS_MOUTS = true;
-    const HAS_VOLUME_A_ELIMINER = false;
-
     const ROOT_NODE = "declarationsProductionsNegociants";
     const APPORT_NODE = "declarationAchats";
-    const PRODUITS_APPORTEUR_NODE = "fournisseurs";
-
-    const NUMERO_APPORTEUR = "numeroEvvFournisseur";
-    const APPORT_RAISIN = "quantiteAchatRaisins";
-
     const SITE_NODE = "declarationVolumesObtenusParSite";
+
+    public $HAS_MOUTS = true;
+    public $HAS_VOLUME_A_ELIMINER = false;
+
+    public $PRODUITS_APPORTEUR_NODE = "fournisseurs";
+    public $NUMERO_APPORTEUR = "numeroEvvFournisseur";
+    public $APPORT_RAISIN = "quantiteAchatRaisins";
 
     public function build()
     {

@@ -48,7 +48,7 @@ class ExportSVJson
 
                 $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
 
-                if (self::HAS_MOUTS && $produit->exist('volume_mouts')) {
+                if ($this->HAS_MOUTS && $produit->exist('volume_mouts')) {
                     $lastFournisseur = $apporteurs[array_key_last($apporteurs)];
                     unset($lastFournisseur['quantiteAchatRaisins']);
                     unset($lastFournisseur['volumeIssuRaisins']);
@@ -64,7 +64,7 @@ class ExportSVJson
             $produits[] = [
                 "codeProduit" => $produitFromConf->code_douane,
                 "mentionValorisante" => $produit->denomination_complementaire ?: "",
-                self::PRODUITS_APPORTEUR_NODE => $apporteurs
+                $this->PRODUITS_APPORTEUR_NODE => $apporteurs
             ];
         }
 
@@ -75,15 +75,15 @@ class ExportSVJson
     {
         // infos globales
         $infosApporteur = [
-            self::NUMERO_APPORTEUR => $produit->cvi,
+            $this->NUMERO_APPORTEUR => $produit->cvi,
             "zoneRecolte" => "B",
             "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
-            self::APPORT_RAISIN => $this->getApportRaisin(),
+            $this->APPORT_RAISIN => $this->getApportRaisin($produit),
             "volumeIssuRaisins" => number_format($produit->volume_revendique, 2, ".", "")
         ];
 
         // volume à éliminer
-        if (self::HAS_VOLUME_A_ELIMINER && ($produit->vci || $produit->volume_detruit)) {
+        if ($this->HAS_VOLUME_A_ELIMINER && ($produit->vci || $produit->volume_detruit)) {
             $volumeAEliminer = [];
 
             if ($produit->volume_detruit) {
