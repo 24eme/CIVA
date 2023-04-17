@@ -206,14 +206,31 @@ class vracActions extends sfActions
 
 		$this->user = $this->getEtablissementCreateur();
 
-		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_ACHETEUR, Vrac::STATUT_PROJET_VENDEUR))) {
+		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE))) {
+
+			$this->vrac->delete();
+            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
+		}
+
+        if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_PROJET_ACHETEUR, Vrac::STATUT_PROJET_VENDEUR))) {
+            $this->vrac->motif_suppression = "Le projet a été supprimé par son créateur";
+            foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
+                $this->getMailer()->send($message);
+            }
+
 			$this->vrac->delete();
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
 		if ($this->vrac->isApplicationPluriannuel() && $this->vrac->valide->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
+            $vracCadre = $this->vrac->getContratPluriannuelCadre();
+            foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
+                $this->getMailer()->send($message);
+            }
+
 			$this->vrac->delete();
-            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
+
+            return $this->redirect('vrac_fiche', array('sf_subject' => $vracCadre));
         }
 
 		$this->form = new VracSuppressionForm($this->vrac);
@@ -222,13 +239,10 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$this->vrac = $this->form->save();
-	        	$emails = $this->vrac->getEmails();
-                foreach($emails as $email) {
-                	VracMailer::getInstance()->annulationContrat($this->vrac, $email);
+
+                foreach(VracMailer::getInstance()->annulationContrat($this->vrac) as $message) {
+                    $this->getMailer()->send($message);
                 }
-				foreach(sfConfig::get('app_email_notifications', array()) as $email) {
-					VracMailer::getInstance()->annulationContrat($this->vrac, $email);
-				}
 				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
@@ -739,7 +753,7 @@ class vracActions extends sfActions
 
         $this->getMailer()->send(VracMailer::getInstance()->refusProjet($vrac, $email));
 
-        $this->getUser()->setFlash('notice', 'Le refus du projet a été notifié à l\'acheteur par mail.');
+        $this->getUser()->setFlash('notice', "Le refus du projet a été notifié par mail à l'autre partie.");
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
     }
 

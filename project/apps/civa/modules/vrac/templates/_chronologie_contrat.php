@@ -19,6 +19,30 @@
                 <?php endif; ?>
             </td>
 		</tr>
+        <tr class="<?php if (!$vrac->isValide()): ?> text-muted<?php endif; ?>">
+            <td>
+                <span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat d'application validé</span>
+            </td>
+            <td style="text-align: center;">
+                <?php echo ($vrac->valide->date_validation) ? format_date($vrac->valide->date_validation, 'dd/MM/yyyy') : '&nbsp;'; ?>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->validationContrat($vrac->getRawValue(), false)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+		<tr class="<?php if (!$vrac->isCloture()): ?> text-muted<?php endif; ?>">
+			<td>
+				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat d'application clôturé</span>
+			</td>
+            <td style="text-align: center;">
+				<?php echo format_date($vrac->valide->date_cloture, 'dd/MM/yyyy'); ?>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->clotureContrat($vrac->getRawValue(), false)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
+		</tr>
+        <?php endif; ?>
         <?php elseif($vrac->isApplicationPluriannuel()): ?>
         <tr>
 			<td>
@@ -80,6 +104,32 @@
                 <?php endif; ?>
             </td>
         </tr>
+        <?php if($vrac->type_contrat == VracClient::TYPE_VRAC): ?>
+		<tr class="<?php if (!$vrac->isCloture()): ?> text-muted<?php endif; ?>">
+			<td>
+				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat d'application clôturé</span>
+			</td>
+            <td style="text-align: center;">
+				<?php echo format_date($vrac->valide->date_cloture, 'dd/MM/yyyy'); ?>
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->clotureContrat($vrac->getRawValue(), false)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
+		</tr>
+        <?php endif; ?>
+        <?php if($vrac->motif_suppression): ?>
+		<tr class="<?php if (!$vrac->motif_suppression): ?> text-muted<?php endif; ?>">
+            <td>
+                <span class="no_picto" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat annulé : <?php echo $vrac->motif_suppression ?></span>
+            </td>
+            <td style="text-align: center;">
+                &nbsp;
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->annulationContrat($vrac->getRawValue())); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endif; ?>
         <?php else: ?>
         <tr>
 			<td>
@@ -186,12 +236,25 @@
 				<span class="picto_check" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat de vente clôturé</span>
 			</td>
             <td style="text-align: center;">
-				<?php echo format_date($vrac->valide->date_validation, 'dd/MM/yyyy'); ?>
+				<?php echo format_date($vrac->valide->date_cloture, 'dd/MM/yyyy'); ?>
                 <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
                 <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->clotureContrat($vrac->getRawValue(), false)); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
                 <?php endif; ?>
             </td>
 		</tr>
+        <?php endif; ?>
+        <?php if($vrac->motif_suppression): ?>
+		<tr class="<?php if (!$vrac->motif_suppression): ?> text-muted<?php endif; ?>">
+            <td>
+                <span class="no_picto" style="padding-left:15px; margin-left: 2px;">&nbsp;Contrat annulé : <?php echo $vrac->motif_suppression ?></span>
+            </td>
+            <td style="text-align: center;">
+                &nbsp;
+                <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail(VracMailer::getInstance()->annulationContrat($vrac->getRawValue())); ?>" style="position: absolute; left: 430px; opacity: 0.5;">[voir le mail]</a>
+                <?php endif; ?>
+            </td>
+        </tr>
         <?php endif; ?>
     <?php endif; ?>
 	</tbody>
