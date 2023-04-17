@@ -2,8 +2,11 @@
 
 class ExportSV11Json extends ExportSVJson
 {
+    const HAS_MOUTS = false;
+
     const ROOT_NODE = "declarationsProductionCaves";
     const APPORT_NODE = "declarationApports";
+    const PRODUITS_APPORTEUR_NODE = "apporteurs";
     const SITE_NODE = "declarationVolumesObtenusParSite";
 
     public function build()
@@ -25,38 +28,6 @@ class ExportSV11Json extends ExportSVJson
             self::APPORT_NODE => ['produits' => []],
             self::SITE_NODE => ['sites' => []]
         ];
-    }
-
-    public function getProduits()
-    {
-        $produits = [];
-        $apporteursParProduit = $this->sv->getApporteursParProduit();
-
-        foreach ($apporteursParProduit as $hash_produit => $apporteurs_du_produit) {
-            if (strpos($hash_produit, '/cepages/RB') !== false) {
-                continue; // pas les rebêches dans la boucle principale
-            }
-
-            $apporteurs = [];
-
-            // pour le code_douane
-            $produitFromConf = $this->sv->getConfiguration()->get($hash_produit);
-
-            foreach ($apporteurs_du_produit as $cvi) {
-                $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
-
-                $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
-            }
-
-            $produits[] = [
-                "codeProduit" => $produitFromConf->code_douane,
-                "mentionValorisante" => $produit->denomination_complementaire ?: "",
-                "apports" => $apporteurs
-            ];
-        }
-
-        return $produits;
     }
 
     public function buildInfoApporteur($produit, $hash_produit)

@@ -2,8 +2,11 @@
 
 class ExportSV12Json extends ExportSVJson
 {
+    const HAS_MOUTS = true;
+
     const ROOT_NODE = "declarationsProductionsNegociants";
     const APPORT_NODE = "declarationAchats";
+    const PRODUITS_APPORTEUR_NODE = "fournisseurs";
     const SITE_NODE = "declarationVolumesObtenusParSite";
 
     public function build()
@@ -28,51 +31,7 @@ class ExportSV12Json extends ExportSVJson
         ];
     }
 
-    public function getProduits()
-    {
-        $produits = [];
-        $fournisseursParProduit = $this->sv->getApporteursParProduit();
-
-        foreach ($fournisseursParProduit as $hash_produit => $fournisseurs_du_produit) {
-            if (strpos($hash_produit, '/cepages/RB') !== false) {
-                continue; // pas les rebêches dans la boucle principale
-            }
-
-            $fournisseurs = [];
-
-            // pour le code_douane
-            $produitFromConf = $this->sv->getConfiguration()->get($hash_produit);
-
-            foreach ($fournisseurs_du_produit as $cvi) {
-                $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
-
-                $fournisseurs[] = $this->buildInfoFournisseur($produit, $hash_produit);
-
-                if ($produit->exist('volume_mouts')) {
-                    $lastFournisseur = $fournisseurs[array_key_last($fournisseurs)];
-                    unset($lastFournisseur['quantiteAchatRaisins']);
-                    unset($lastFournisseur['volumeIssuRaisins']);
-                    unset($lastFournisseur['produitsAssocies']);
-
-                    $lastFournisseur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
-                    $lastFournisseur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
-
-                    $fournisseurs[] = $lastFournisseur;
-                }
-            }
-
-            $produits[] = [
-                "codeProduit" => $produitFromConf->code_douane,
-                "mentionValorisante" => $produit->denomination_complementaire ?: "",
-                "fournisseurs" => $fournisseurs
-            ];
-        }
-
-        return $produits;
-    }
-
-    public function buildInfoFournisseur($produit, $hash_produit)
+    public function buildInfoApporteur($produit, $hash_produit)
     {
         // infos globales
         $infosApporteur = [
