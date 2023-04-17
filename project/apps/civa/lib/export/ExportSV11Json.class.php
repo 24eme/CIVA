@@ -3,10 +3,15 @@
 class ExportSV11Json extends ExportSVJson
 {
     const HAS_MOUTS = false;
+    const HAS_VOLUME_A_ELIMINER = true;
 
     const ROOT_NODE = "declarationsProductionCaves";
     const APPORT_NODE = "declarationApports";
     const PRODUITS_APPORTEUR_NODE = "apporteurs";
+
+    const NUMERO_APPORTEUR = "numeroCVIApporteur";
+    const APPORT_RAISIN = "volumeApportRaisins";
+
     const SITE_NODE = "declarationVolumesObtenusParSite";
 
     public function build()
@@ -30,60 +35,8 @@ class ExportSV11Json extends ExportSVJson
         ];
     }
 
-    public function buildInfoApporteur($produit, $hash_produit)
+    public function getApportRaisin($produit)
     {
-        // infos globales
-        $infosApporteur = [
-            "numeroCVIApporteur" => $produit->cvi,
-            "zoneRecolte" => "B",
-            "superficieRecolte" => number_format($produit->superficie_recolte, 2, ".", ""),
-            "volumeApportRaisins" => number_format($produit->volume_recolte, 2, ".", ""),
-            "volumeIssuRaisins" => number_format($produit->volume_revendique, 2, ".", "")
-        ];
-
-        // volume à éliminer
-        if ($produit->vci || $produit->volume_detruit) {
-            $volumeAEliminer = [];
-
-            if ($produit->volume_detruit) {
-                $volumeAEliminer['volumeAEliminer'] = "".$produit->volume_detruit;
-            }
-
-            if ($produit->vci) {
-                $volumeAEliminer['volumeComplementaireIndividuel'] = "".$produit->vci;
-            }
-
-            $infosApporteur['volumesAEliminer'] = $volumeAEliminer;
-        }
-
-        // rebêches
-        if (strpos($hash_produit, '/CREMANT/') !== false && $produit->volume_revendique) {
-            $produitsAssocies = ['typeAssociation' => 'REB'];
-            $cepage = strrchr($hash_produit, '/');
-
-            if (in_array($cepage, ['/RS', '/PN'])) {
-                //si crémant rosé, on cherche les rebeches rosées
-                $hash_rebeche = str_replace($cepage, '/RBRS', $hash_produit);
-            } else {
-                $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
-            }
-
-            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get($hash_rebeche)->code_douane;
-
-            if ($this->sv->hasRebechesInProduits()) {
-                // rebeches en détail
-                $apporteur = $this->sv->apporteurs->get($produit->cvi);
-                $rebeches = $apporteur->get(str_replace('/declaration/', '', $hash_rebeche))->getFirst();
-
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
-            } else {
-                // % des rebeches totales
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
-            }
-
-            $infosApporteur['produitsAssocies'][] = $produitsAssocies;
-        }
-
-        return $infosApporteur;
+        return number_format($produit->volume_recolte, 2, ".", "");
     }
 }
