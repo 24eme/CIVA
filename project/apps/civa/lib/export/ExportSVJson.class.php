@@ -62,7 +62,7 @@ class ExportSVJson
             }
 
             $produits[] = [
-                "codeProduit" => strstr($produitFromConf->code_douane, ",", true),
+                "codeProduit" => $this->processCodeDouane($produitFromConf->code_douane),
                 "mentionValorisante" => $produit->denomination_complementaire ?: "",
                 $this->PRODUITS_APPORTEUR_NODE => $apporteurs
             ];
@@ -109,7 +109,7 @@ class ExportSVJson
                 $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
             }
 
-            $produitsAssocies['codeProduitAssocie'] = strstr($this->sv->getConfiguration()->get($hash_rebeche)->code_douane, ',', true);
+            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($this->sv->getConfiguration()->get($hash_rebeche)->code_douane);
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
@@ -157,5 +157,10 @@ class ExportSVJson
         }
 
         return array_values($sites);
+    }
+
+    public function processCodeDouane($code_produit)
+    {
+        return (strpos($code_produit, ',') === false) ? $code_produit : strstr($code_produit, ',', true);
     }
 }
