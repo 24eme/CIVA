@@ -144,15 +144,16 @@ class ExportSVJson
             foreach ($this->sv->getNotEmptyLieuxStockage() as $id => $lieu) {
                 $produitsLieu = $lieu->produits;
                 $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
-                if (array_key_exists($hash, $produitsLieu)) {
-                    $add = [
-                        'codeProduit' => strstr($code_produit, ',', true),
-                        'mentionValorisante' => $mention ?: "",
-                        'volumeObtenu' => number_format($produitsLieu[$hash], 2, ".", "")
-                    ];
 
-                    $sites[$lieu->numero]['produits'][] = $add;
-                }
+                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : 0;
+
+                $add = [
+                    'codeProduit' => $this->processCodeDouane($code_produit),
+                    'mentionValorisante' => $mention ?: "",
+                    'volumeObtenu' => $volume
+                ];
+
+                $sites[$lieu->numero]['produits'][] = $add;
             }
         }
 
