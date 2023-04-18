@@ -52,6 +52,10 @@ EOF;
         $json = [$class::ROOT_NODE => []];
 
         foreach ($svs as $sv) {
+            if (empty($sv->apporteurs->toArray())) {
+                continue;
+            }
+
             $export = new $class($sv);
             $export->build();
             $json[$class::ROOT_NODE][] = json_decode($export->export());
