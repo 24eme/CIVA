@@ -145,7 +145,7 @@ class ExportSVJson
                 $produitsLieu = $lieu->produits;
                 $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
 
-                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : 0;
+                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : "0";
 
                 $add = [
                     'codeProduit' => $this->processCodeDouane($code_produit),
