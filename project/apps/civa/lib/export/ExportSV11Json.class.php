@@ -9,7 +9,7 @@ class ExportSV11Json extends ExportSVJson
     public $HAS_MOUTS = false;
     public $HAS_VOLUME_A_ELIMINER = true;
 
-    public $PRODUITS_APPORTEUR_NODE = "apporteurs";
+    public $PRODUITS_APPORTEUR_NODE = "apports";
     public $NUMERO_APPORTEUR = "numeroCVIApporteur";
     public $APPORT_RAISIN = "volumeApportRaisins";
 
