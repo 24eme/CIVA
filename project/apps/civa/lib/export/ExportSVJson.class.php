@@ -62,7 +62,7 @@ class ExportSVJson
             }
 
             $produits[] = [
-                "codeProduit" => $produitFromConf->code_douane,
+                "codeProduit" => strstr($produitFromConf->code_douane, ",", true),
                 "mentionValorisante" => $produit->denomination_complementaire ?: "",
                 $this->PRODUITS_APPORTEUR_NODE => $apporteurs
             ];
@@ -109,7 +109,7 @@ class ExportSVJson
                 $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
             }
 
-            $produitsAssocies['codeProduitAssocie'] = $this->sv->getConfiguration()->get($hash_rebeche)->code_douane;
+            $produitsAssocies['codeProduitAssocie'] = strstr($this->sv->getConfiguration()->get($hash_rebeche)->code_douane, ',', true);
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
@@ -146,7 +146,7 @@ class ExportSVJson
                 $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
                 if (array_key_exists($hash, $produitsLieu)) {
                     $add = [
-                        'codeProduit' => $code_produit,
+                        'codeProduit' => strstr($code_produit, ',', true),
                         'mentionValorisante' => $mention ?: "",
                         'volumeObtenu' => number_format($produitsLieu[$hash], 2, ".", "")
                     ];
