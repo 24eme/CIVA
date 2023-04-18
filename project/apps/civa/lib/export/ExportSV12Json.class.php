@@ -19,6 +19,10 @@ class ExportSV12Json extends ExportSVJson
         $root[self::APPORT_NODE]['produits'] = $this->getProduits();
         $root[self::SITE_NODE]['sites'] = $this->getSites();
 
+        if (empty($root[self::SITE_NODE]['sites'])) {
+            unset($root[self::SITE_NODE]);
+        }
+
         $this->raw = $root;
     }
 
