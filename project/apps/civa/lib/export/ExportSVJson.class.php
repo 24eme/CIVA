@@ -163,6 +163,24 @@ class ExportSVJson
 
     public function processCodeDouane($code_produit)
     {
-        return (strpos($code_produit, ',') === false) ? $code_produit : strstr($code_produit, ',', true);
+        $code_produit = (strpos($code_produit, ',') === false) ? $code_produit : strstr($code_produit, ',', true);
+        return $this->convertCodeDouane($code_produit);
+    }
+
+    public function convertCodeDouane($code_produit)
+    {
+        if ($code_produit === "1S001S 1") {
+            return "1S001S";
+        }
+
+        if ($code_produit === "1R001S 1") {
+            return "1R001S";
+        }
+
+        if ($code_produit === "1S001M00") {
+            return "1S001M";
+        }
+
+        return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_douane);
     }
 }
