@@ -42,8 +42,15 @@ done;
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
 
-cat $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | sort | uniq | awk -F ';' 'BEGIN { } { if($2 != "date") { dates[$2]=$2 }; if($15 == "LIGNE") { montants_ht[$2]=montants_ht[$2]+$11 } if($15 == "TVA") { montants_tva[$2]=montants_tva[$2]+$11 } if($15 == "ECHEANCE") { montants_ttc[$2]=montants_ttc[$2]+$11 } volumes[$2]=volumes[$2]+$21; if($25 == "2") { prelevements_montant[$2] = prelevements_montant[$2] + $11; prelevements_nb[$2] = prelevements_nb[$2] + 1;}} END { print "date;montant ht;tva;montant_ttc;volume;prelevements_montant"; for( date in dates ) { print sprintf("%s;%0.2f;%0.2f;%0.2f;%0.2f;%d;%0.2f", date, montants_ht[date], montants_tva[date], montants_ttc[date], volumes[date], prelevements_nb[date], prelevements_montant[date]) } }' | sort -rt ";" -k 1,1 > $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.utf8.csv
+cat $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | sort | uniq | awk -F ';' 'BEGIN { } { if($2 != "date") { dates[$2]=$2 }; if($15 == "LIGNE") { montants_ht[$2]=montants_ht[$2]+$11 } if($15 == "TVA") { montants_tva[$2]=montants_tva[$2]+$11 } if($15 == "ECHEANCE") { montants_ttc[$2]=montants_ttc[$2]+$11 } volumes[$2]=volumes[$2]+$21; if($25 == "2") { prelevements_montant[$2] = prelevements_montant[$2] + $11; prelevements_nb[$2] = prelevements_nb[$2] + 1;}} END { print "date;montant ht;tva;montant_ttc;volume;nb_prelevements;prelevements_montant"; for( date in dates ) { print sprintf("%s;%0.2f;%0.2f;%0.2f;%0.2f;%d;%0.2f", date, montants_ht[date], montants_tva[date], montants_ttc[date], volumes[date], prelevements_nb[date], prelevements_montant[date]) } }' | sort -rt ";" -k 1,1 > $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.utf8.csv
 iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.csv
+
+cat $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | grep -v "date" | cut -d ";" -f 2 | cut -d "-" -f 1 | sort | uniq | while read annee; do
+    grep -E "^([^;]+;$annee|code journal)" $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | sort | uniq > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.utf8.csv;
+    iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.csv;
+    grep -E "^($annee|date)" $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.utf8.csv | sort | uniq | sort -r > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.utf8.csv;
+    iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.csv;
+done;
 
 cd $GIILDA_BASEDIR
 php symfony export:comptes $SYMFONYTASKOPTIONS > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv
