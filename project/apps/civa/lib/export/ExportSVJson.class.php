@@ -186,6 +186,6 @@ class ExportSVJson
             return "1S001M";
         }
 
-        return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_douane);
+        return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_produit);
     }
 }
