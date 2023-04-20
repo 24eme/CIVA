@@ -18,9 +18,20 @@ class vrac_exportActions extends sfActions
       $this->vrac = $this->getRoute()->getVrac();
       $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
-      $odg = $request->getParameter('odg');
+      if ($request->isXmlHttpRequest()) {
+
+          return $this->ajaxPdf();
+      }
 
       $this->setLayout(false);
+
+      if (($pdfHistorise = $this->vrac->getPDFhistoriseContent()) && !$request->getParameter('force')) {
+          $pdf = new PageablePDF('', '');
+          $pdf->addHeaders($this->getResponse());
+          return $this->renderText($pdfHistorise);
+      }
+
+      $odg = $request->getParameter('odg');
 
       $this->document = @new ExportVracPdf($this->vrac, $odg, array($this, 'getPartial'), $this->getRequestParameter('output', 'pdf'));
 
@@ -28,11 +39,6 @@ class vrac_exportActions extends sfActions
         $this->document->removeCache();
       }
       $this->document->generatePDF();
-
-      if ($request->isXmlHttpRequest()) {
-
-          return $this->ajaxPdf();
-      }
 
       $this->document->addHeaders($this->getResponse());
 
