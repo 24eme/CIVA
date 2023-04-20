@@ -138,6 +138,10 @@ class ExportSVJson
         }
 
         foreach ($this->sv->getRecapProduits() as $hash => $produit) {
+            if (strpos($hash, '/cepages/RB') !== false) {
+                continue; // pas les rebêches dans les sites
+            }
+
             $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
             $mention = $produit->denominationComplementaire;
 
