@@ -44,7 +44,7 @@ class ExportSVJson
 
             foreach ($apporteurs_du_produit as $cvi) {
                 $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit))->getFirst();
+                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit));
 
                 $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
 
