@@ -39,12 +39,9 @@ class ExportSVJson
 
             $apporteurs = [];
 
-            // pour le code_douane
-            $produitFromConf = $this->sv->getConfiguration()->get($hash_produit);
-
             foreach ($apporteurs_du_produit as $cvi) {
                 $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $apporteur->get(str_replace('/declaration/', '', $hash_produit));
+                $produit = $this->sv->get(str_replace('/declaration/', '', $hash_produit));
 
                 $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
 
@@ -62,7 +59,7 @@ class ExportSVJson
             }
 
             $produits[] = [
-                "codeProduit" => $this->processCodeDouane($produitFromConf->code_douane),
+                "codeProduit" => $this->processCodeDouane($produit->getConfig()->getCodeDouane()),
                 "mentionValorisante" => $produit->denomination_complementaire ?: "",
                 $this->PRODUITS_APPORTEUR_NODE => $apporteurs
             ];
