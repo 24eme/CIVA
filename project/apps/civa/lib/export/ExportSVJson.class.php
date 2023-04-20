@@ -97,7 +97,7 @@ class ExportSVJson
         // rebêches
         if (strpos($hash_produit, '/CREMANT/') !== false && $produit->volume_revendique) {
             $produitsAssocies = ['typeAssociation' => 'REB'];
-            $cepage = strrchr($hash_produit, '/');
+            $cepage = strrchr($this->sv->get($hash_produit)->getCepage()->getHash(), '/');
 
             if (in_array($cepage, ['/RS', '/PN'])) {
                 //si crémant rosé, on cherche les rebeches rosées
@@ -106,7 +106,12 @@ class ExportSVJson
                 $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
             }
 
-            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($this->sv->getConfiguration()->get($hash_rebeche)->code_douane);
+            if (($denom = strrchr($hash_rebeche, '/')) !== '/DEFAUT') {
+                $hash_rebeche = str_replace($denom, '/DEFAUT', $hash_rebeche);
+            }
+
+            $rebeche = $this->sv->get($hash_rebeche);
+            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeche->getConfig()->getCodeDouane());
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
