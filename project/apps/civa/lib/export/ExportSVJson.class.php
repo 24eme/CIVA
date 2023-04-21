@@ -110,14 +110,15 @@ class ExportSVJson
                 $hash_rebeche = str_replace($denom, '/DEFAUT', $hash_rebeche);
             }
 
-            $rebeche = $this->sv->get($hash_rebeche);
-            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeche->getConfig()->getCodeDouane());
+            if ($this->sv->exist($hash_rebeche) === false) {
+                $hash_rebeche = str_replace(['/RBBL', '/RBRS'], '/RB', $hash_rebeche);
+            }
+
+            $rebeches = $this->sv->get($hash_rebeche);
+            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
-                $apporteur = $this->sv->apporteurs->get($produit->cvi);
-                $rebeches = $apporteur->get(str_replace('/declaration/', '', $hash_rebeche))->getFirst();
-
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
