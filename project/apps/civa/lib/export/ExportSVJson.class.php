@@ -107,22 +107,30 @@ class ExportSVJson
             }
 
             if (($denom = strrchr($hash_rebeche, '/')) !== '/DEFAUT') {
-                $hash_rebeche = str_replace($denom, '/DEFAUT', $hash_rebeche);
+                if ($this->sv->exist($hash_rebeche) === false) {
+                    $hash_rebeche = str_replace($denom, '/DEFAUT', $hash_rebeche);
+                }
             }
-
-            if ($this->sv->exist($hash_rebeche) === false) {
-                $hash_rebeche = str_replace(['/RBBL', '/RBRS'], '/RB', $hash_rebeche);
-            }
-
-            $rebeches = $this->sv->get($hash_rebeche);
-            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
 
             if ($this->sv->hasRebechesInProduits()) {
                 // rebeches en détail
+                if ($this->sv->exist($hash_rebeche) === false) {
+                    $hash_rebeche = str_replace(['/RBBL', '/RBRS'], '/RB', $hash_rebeche);
+
+                    // cas Crémant rosé, mais rebeche blanc ????
+                    if ($this->sv->exist($hash_rebeche) === false) {
+                        $hash_rebeche = str_replace('/RB', '/RBBL', $hash_rebeche);
+                    }
+                }
+
+                $rebeches = $this->sv->get($hash_rebeche);
+                $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
+
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
+                $produitsAssocies['codeProduitAssocie'] = "4B999B";
             }
 
             $infosApporteur['produitsAssocies'][] = $produitsAssocies;
