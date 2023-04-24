@@ -1164,4 +1164,19 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return null;
     }
 
+	public function storeAnnexe($file, $filename) {
+        if (!is_file($file)) {
+            throw new Exception($file." n'est pas un fichier valide");
+        }
+        $pathinfos = pathinfo($file);
+        $extension = (isset($pathinfos['extension']) && $pathinfos['extension'])? strtolower($pathinfos['extension']): null;
+        if ($extension) {
+            $filename .= '.'.$extension;
+        }
+        if ($this->deleteAnnexe($filename)) {
+            $this->save();
+        }
+        $this->storeAttachment($file, mime_content_type($file), $filename);
+    }
+
 }
