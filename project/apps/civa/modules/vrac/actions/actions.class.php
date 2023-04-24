@@ -438,7 +438,7 @@ class vracActions extends sfActions
     	}
 		$this->validation = new VracContratValidation($this->vrac, $this->annuaire);
     	if ($request->isMethod(sfWebRequest::POST)) {
-    		$this->form->bind($request->getParameter($this->form->getName()));
+    		$this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
         	if ($this->form->isValid()) {
        			$this->form->save();
        			if ($request->isXmlHttpRequest()) {
