@@ -67,6 +67,10 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('delais_retiraison', "Délai maximum de retiraison");
 		}
 
+        foreach(VracClient::getAnnexesByTypeContrat($this->getObject()->type_contrat) as $annexe => $annexeLibelle) {
+            $this->embedForm($annexe, new VracAnnexeForm($this->getObject(), $annexe));
+        }
+
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 
