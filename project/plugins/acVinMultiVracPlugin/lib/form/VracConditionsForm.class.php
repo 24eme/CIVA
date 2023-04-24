@@ -104,4 +104,8 @@ class VracConditionsForm extends acCouchdbObjectForm
             $embedForm->doUpdateObject($values[$key]);
         }
     }
+
+    public function hasAnnexes() {
+        return (VracClient::getAnnexesByTypeContrat($this->getObject()->type_contrat));
+    }
 }
