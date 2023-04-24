@@ -7,7 +7,7 @@
 </ul>
 <div id="contrats_vrac">
 
-    <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
+    <form id="principal" class="ui-tabs"<?php if(method_exists($form, 'hasAnnexes') && $form->hasAnnexes()): ?> enctype="multipart/form-data"<?php endif; ?> method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
 
 
         <div class="fond">
