@@ -199,6 +199,15 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_annexe:
+  url: /vrac/:numero_contrat/annexe/:operation/:annexe
+  param: { module: vrac, action: annexe }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get]
 
 vrac_pdf_annexe:
   url: /vrac-pdf-annexe

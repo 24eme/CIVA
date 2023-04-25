@@ -757,4 +757,27 @@ class vracActions extends sfActions
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
     }
 
+	public function executeAnnexe(sfWebRequest $request)
+	{
+		$vrac = $this->getRoute()->getVrac();
+    	$annexe = $request->getParameter('annexe', null);
+    	if (!$annexe) {
+    		throw new sfException('annexe obligatoire.');
+    	}
+    	$operation = $request->getParameter('operation', null);
+    	if (!$operation) {
+    		throw new sfException('operation obligatoire.');
+    	}
+		if ($operation == 'supprimer') {
+            if ($vrac->deleteAnnexe($annexe)) {
+                $vrac->save();
+            }
+		}
+		if (($filename = $vrac->getAnnexeFilename($annexe)) && $operation == 'visualiser') {
+            $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+            return $this->renderText(file_get_contents($vrac->getAttachmentUri($filename)));exit;
+		}
+        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_CONDITIONS));
+    }
+
 }
