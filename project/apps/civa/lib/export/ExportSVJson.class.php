@@ -142,7 +142,7 @@ class ExportSVJson
     protected function getSites()
     {
         $sites = [];
-        foreach ($this->sv->getNotEmptyLieuxStockage() as $stockage) {
+        foreach ($this->sv->stockage as $stockage) {
             $site = [];
             $site['codeSite'] = $stockage->numero;
             $sites[$stockage->numero] = $site;
@@ -156,7 +156,7 @@ class ExportSVJson
             $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
             $mention = $produit->denominationComplementaire;
 
-            foreach ($this->sv->getNotEmptyLieuxStockage() as $id => $lieu) {
+            foreach ($this->sv->stockage as $id => $lieu) {
                 $produitsLieu = $lieu->produits;
                 $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
 
