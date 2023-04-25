@@ -43,6 +43,10 @@ class ExportSVJson
                 $apporteur = $this->sv->apporteurs->get($cvi);
                 $produit = $this->sv->get(str_replace('/declaration/', '', $hash_produit));
 
+                if (! $this->getApportRaisin($produit)) {
+                    continue;
+                }
+
                 $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
 
                 if ($this->HAS_MOUTS && $produit->exist('volume_mouts')) {
