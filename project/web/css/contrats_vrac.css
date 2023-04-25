@@ -690,6 +690,8 @@ table.table_donnees td .radio_list label {
 
 #contrats_vrac table .action_aidesaisie { background-image: url('../images/pictos/pi_crayon.png'); background-repeat:no-repeat; padding: 2px 0 0 18px; }
 
+#contrats_vrac table .action_visualiser { background-image: url('../images/pictos/pi_visualiser.png'); background-repeat:no-repeat; padding: 0px 0 0 20px; }
+
 .dpHideYear .ui-datepicker-year { display: none; }
 /* =================================================== */
 /* Ajout produit */
