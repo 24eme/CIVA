@@ -68,7 +68,7 @@ class SV extends BaseSV
 
         foreach ($this->apporteurs as $apporteur) {
             foreach ($apporteur->getProduits() as $produit) {
-                $produits[$produit->getHash()][] = $apporteur->getCvi();
+                $produits[substr($produit->getHash(), 23)][] = $apporteur->getCvi();
             }
         }
 

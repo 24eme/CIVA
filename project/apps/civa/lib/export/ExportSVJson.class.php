@@ -41,13 +41,13 @@ class ExportSVJson
 
             foreach ($apporteurs_du_produit as $cvi) {
                 $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $this->sv->get(str_replace('/declaration/', '', $hash_produit));
+                $produit = $this->sv->get('/apporteurs/'.$cvi.'/'.$hash_produit);
 
                 if (! $this->getApportRaisin($produit)) {
                     continue;
                 }
 
-                $apporteurs[] = $this->buildInfoApporteur($produit, $hash_produit);
+                $apporteurs[] = $this->buildInfoApporteur($produit);
 
                 if ($this->HAS_MOUTS && $produit->exist('volume_mouts')) {
                     $lastFournisseur = $apporteurs[array_key_last($apporteurs)];
@@ -76,7 +76,7 @@ class ExportSVJson
         return $produits;
     }
 
-    public function buildInfoApporteur($produit, $hash_produit)
+    public function buildInfoApporteur($produit)
     {
         // infos globales
         $infosApporteur = [
@@ -103,15 +103,15 @@ class ExportSVJson
         }
 
         // rebêches
-        if (strpos($hash_produit, '/CREMANT/') !== false && $produit->volume_revendique) {
+        if (strpos($produit->getHash(), '/CREMANT/') !== false && $produit->volume_revendique) {
             $produitsAssocies = ['typeAssociation' => 'REB'];
-            $cepage = strrchr($this->sv->get($hash_produit)->getCepage()->getHash(), '/');
+            $cepage = strrchr($this->sv->get($produit->getHash())->getCepage()->getHash(), '/');
 
             if (in_array($cepage, ['/RS', '/PN'])) {
                 //si crémant rosé, on cherche les rebeches rosées
-                $hash_rebeche = str_replace($cepage, '/RBRS', $hash_produit);
+                $hash_rebeche = str_replace($cepage, '/RBRS', $produit->getHash());
             } else {
-                $hash_rebeche = str_replace($cepage, '/RBBL', $hash_produit);
+                $hash_rebeche = str_replace($cepage, '/RBBL', $produit->getHash());
             }
 
             if (($denom = strrchr($hash_rebeche, '/')) !== '/DEFAUT') {
