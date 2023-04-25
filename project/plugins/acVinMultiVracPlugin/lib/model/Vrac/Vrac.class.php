@@ -1179,8 +1179,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->storeAttachment($file, mime_content_type($file), $filename);
     }
 
-    public function deleteAnnexe($filename) {
-        if ($this->_attachments->exist($filename)) {
+    public function deleteAnnexe($annexe) {
+        if ($filename = $this->getAnnexeFilename($annexe)) {
             $this->_attachments->remove($filename);
             return true;
         }
