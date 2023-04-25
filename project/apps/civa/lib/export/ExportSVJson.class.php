@@ -137,7 +137,10 @@ class ExportSVJson
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
             } else {
                 // % des rebeches totales
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
+                $total_cremant = $this->sv->getVolumeCremantTotal();
+                $pourcentage_cremant = ($produit->volume_revendique * 100) / $total_cremant;
+
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format(($pourcentage_cremant * $this->sv->getRebeches()) / 100, 2, ".", "");
                 $produitsAssocies['codeProduitAssocie'] = (in_array($cepage, ['/RS', '/PN'])) ? "4S999B" : "4B999B";
             }
 

@@ -199,6 +199,15 @@ class SV extends BaseSV
         return count(array_filter($this->getRecapProduits(), function ($v, $k) { return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false && $v->volume_revendique; }, ARRAY_FILTER_USE_BOTH)) > 0;
     }
 
+    public function getVolumeCremantTotal()
+    {
+        return array_reduce($this->getRecapProduits(), function ($total, $produit) {
+            if (strpos($produit->produit_hash, '/CREMANT/') !== false) {
+                return $total += $produit->volume_revendique;
+            }
+        }, 0);
+    }
+
     public function calculateRebeches()
     {
         $total_rebeches = $this->getDocument()->rebeches ?? null;
