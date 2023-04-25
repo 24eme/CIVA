@@ -130,7 +130,7 @@ class ExportSVJson
             } else {
                 // % des rebeches totales
                 $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($produit->volume_revendique * 100 / $this->sv->rebeches, 2, ".", "");
-                $produitsAssocies['codeProduitAssocie'] = "4B999B";
+                $produitsAssocies['codeProduitAssocie'] = (in_array($cepage, ['/RS', '/PN'])) ? "4S999B" : "4B999B";
             }
 
             $infosApporteur['produitsAssocies'][] = $produitsAssocies;
