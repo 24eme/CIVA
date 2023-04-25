@@ -195,6 +195,10 @@ class ExportSVJson
             return "1S001M";
         }
 
+        if ($code_produit === "1B001M00") {
+            return "1B001M";
+        }
+
         return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_produit);
     }
 }
