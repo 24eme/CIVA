@@ -1187,4 +1187,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return false;
     }
 
+    public function getAnnexeFilename($annexe) {
+        foreach ($this->_attachments as $filename => $fileinfos) {
+            if (strpos($filename, $annexe) !== false) return $filename;
+        }
+        return null;
+    }
+
 }
