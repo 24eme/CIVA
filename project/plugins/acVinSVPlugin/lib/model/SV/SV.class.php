@@ -204,7 +204,7 @@ class SV extends BaseSV
         return array_reduce($this->getRecapProduits(), function ($total, $produit) {
             if (strpos($produit->produit_hash, '/CREMANT/') !== false) {
                 return $total += $produit->volume_revendique;
-            }
+            } else { return $total; }
         }, 0);
     }
 
