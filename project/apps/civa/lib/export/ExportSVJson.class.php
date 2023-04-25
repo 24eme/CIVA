@@ -62,6 +62,10 @@ class ExportSVJson
                 }
             }
 
+            if (empty($apporteurs)) {
+                continue;
+            }
+
             $produits[] = [
                 "codeProduit" => $this->processCodeDouane($produit->getConfig()->getCodeDouane()),
                 "mentionValorisante" => $produit->denomination_complementaire ?: "",
