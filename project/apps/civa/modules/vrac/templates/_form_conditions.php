@@ -187,9 +187,15 @@
 			<td>
 				<?php echo $form[$annexe]->renderLabel() ?>
 			</td>
-			<td>
+			<td width="465">
 				<span><?php echo $form[$annexe]->renderError() ?></span>
 				<?php echo $form[$annexe]->render() ?>
+			</td>
+			<td>
+                <?php if($filename = $vrac->getAnnexeFilename($annexe)): ?>
+				<a class="btn_minus action_visualiser" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>"><?php echo $filename ?></a>
+                <a href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'supprimer', 'annexe' => $annexe]) ?>" style="float: right;">[x]</a>
+                <?php endif; ?>
 			</td>
 		</tr>
         <?php
