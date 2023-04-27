@@ -134,7 +134,10 @@ class ExportSVJson
                 $rebeches = $this->sv->get($hash_rebeche);
                 $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
 
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
+                $total_cremant_operateur = $this->sv->getVolumeCremantApporteur($produit->cvi, $cepage);
+                $pourcentage_cremant_operateur = ($produit->volume_revendique * 100) / $total_cremant_operateur;
+
+                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format(($pourcentage_cremant_operateur * $rebeches->volume_revendique) / 100, 2, ".", "");
             } else {
                 // % des rebeches totales
                 $total_cremant = $this->sv->getVolumeCremantTotal();

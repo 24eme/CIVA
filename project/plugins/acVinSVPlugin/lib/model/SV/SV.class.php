@@ -199,12 +199,54 @@ class SV extends BaseSV
         return count(array_filter($this->getRecapProduits(), function ($v, $k) { return strpos($k, '/CREMANT/') !== false && strpos($k, '/cepages/RB') === false && $v->volume_revendique; }, ARRAY_FILTER_USE_BOTH)) > 0;
     }
 
+    public function getVolumeCremantApporteur($identifiant, $cepage)
+    {
+        return array_reduce($this->apporteurs->get($identifiant)->toArray(), function ($total, $produit) use ($cepage) {
+            // si pas cremant
+            if (strpos($produit->getHash(), '/CREMANT/') === false) {
+                return $total;
+            }
+
+            // si rebeche
+            if (strpos($produit->getHash(), '/cepages/RB') !== false) {
+                return $total;
+            }
+
+            // si addition crémant rosé, et que le produit n'est pas du rosé
+            if (in_array($cepage, ['/RS', '/PN'])
+                && strpos($produit->getHash(), '/cepages/RS') === false && strpos($produit->getHash(), '/cepages/PN') === false) {
+                return $total;
+            }
+
+            // si addition blanc, et que le produit est du rosé
+            if (in_array($cepage, ['/RS', '/PN']) === false
+                && (strpos($produit->getHash(), '/cepages/RS') !== false || strpos($produit->getHash(), '/cepages/PN') !== false)) {
+                return $total;
+            }
+
+            // defaut + denom
+            foreach ($produit as $denom) {
+                $total += $denom->volume_revendique;
+            }
+
+            return $total;
+        }, 0);
+    }
+
     public function getVolumeCremantTotal()
     {
         return array_reduce($this->getRecapProduits(), function ($total, $produit) {
-            if (strpos($produit->produit_hash, '/CREMANT/') !== false) {
-                return $total += $produit->volume_revendique;
-            } else { return $total; }
+            // si pas cremant
+            if (strpos($produit->produit_hash, '/CREMANT/') === false) {
+                return $total;
+            }
+
+            // si rebeche
+            if (strpos($produit->produit_hash, '/cepages/RB') !== false) {
+                return $total;
+            }
+
+            return $total += $produit->volume_revendique;
         }, 0);
     }
 
