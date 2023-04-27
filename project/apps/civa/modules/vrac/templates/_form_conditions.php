@@ -188,8 +188,8 @@
 				<?php echo $form[$annexe]->renderLabel() ?>
 			</td>
 			<td width="465">
-				<span><?php echo $form[$annexe]->renderError() ?></span>
-				<?php echo $form[$annexe]->render() ?>
+				<span><?php echo $form[$annexe]['fichier']->renderError() ?></span>
+				<?php echo $form[$annexe]['fichier']->render() ?>
 			</td>
 			<td>
                 <?php if($filename = $vrac->getAnnexeFilename($annexe)): ?>
