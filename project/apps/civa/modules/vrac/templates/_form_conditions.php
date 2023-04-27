@@ -175,7 +175,7 @@
 <table class="validation table_donnees">
 	<thead>
 		<tr>
-			<th style="width: 212px;">Clauses</th>
+			<th style="width: 212px;">Annexes</th>
 		</tr>
 	</thead>
 	<tbody>
