@@ -43,22 +43,21 @@ class ExportSVJson
                 $apporteur = $this->sv->apporteurs->get($cvi);
                 $produit = $this->sv->get('/apporteurs/'.$cvi.'/'.$hash_produit);
 
-                if (! $this->getApportRaisin($produit)) {
-                    continue;
+                $apporteur = $this->buildInfoApporteur($produit);
+
+                if ($this->getApportRaisin($produit)) {
+                    $apporteurs[] = $apporteur;
                 }
 
-                $apporteurs[] = $this->buildInfoApporteur($produit);
-
                 if ($this->HAS_MOUTS && $produit->exist('volume_mouts')) {
-                    $lastFournisseur = $apporteurs[array_key_last($apporteurs)];
-                    unset($lastFournisseur['quantiteAchatRaisins']);
-                    unset($lastFournisseur['volumeIssuRaisins']);
-                    unset($lastFournisseur['produitsAssocies']);
+                    unset($apporteur['quantiteAchatRaisins']);
+                    unset($apporteur['volumeIssuRaisins']);
+                    unset($apporteur['produitsAssocies']);
 
-                    $lastFournisseur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
-                    $lastFournisseur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
+                    $apporteur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
+                    $apporteur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
 
-                    $apporteurs[] = $lastFournisseur;
+                    $apporteurs[] = $apporteur;
                 }
             }
 
