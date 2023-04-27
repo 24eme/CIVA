@@ -167,6 +167,10 @@ class ExportSVJson
                 continue; // pas les rebêches dans les sites
             }
 
+            if (! $this->getApportRaisin($produit)) {
+                continue;
+            }
+
             $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
             $mention = $produit->denominationComplementaire;
 
