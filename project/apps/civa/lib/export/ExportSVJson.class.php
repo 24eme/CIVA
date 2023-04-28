@@ -56,6 +56,7 @@ class ExportSVJson
 
                     $apporteur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
                     $apporteur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
+                    $apporteur['superficieRecolte'] = number_format($produit->superficie_mouts, 2, ".", "");
 
                     $apporteurs[] = $apporteur;
                 }
