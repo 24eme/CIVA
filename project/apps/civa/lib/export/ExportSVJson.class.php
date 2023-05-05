@@ -167,7 +167,13 @@ class ExportSVJson
                 continue; // pas les rebêches dans les sites
             }
 
-            if (! $this->getApportRaisin($produit)) {
+            $has_volume = $this->getApportRaisin($produit);
+
+            if ($this->HAS_MOUTS) {
+                $has_volume += $produit->volume_mouts;
+            }
+
+            if (! $has_volume) {
                 continue;
             }
 
