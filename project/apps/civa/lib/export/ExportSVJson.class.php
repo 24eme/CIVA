@@ -56,7 +56,7 @@ class ExportSVJson
 
                     $apporteur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
                     $apporteur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
-                    $apporteur['superficieRecolte'] = number_format($produit->superficie_mouts / 100, 2, ".", "");
+                    $apporteur['superficieRecolte'] = number_format($produit->superficie_mouts / 100, 4, ".", "");
 
                     $apporteurs[] = $apporteur;
                 }
@@ -82,7 +82,7 @@ class ExportSVJson
         $infosApporteur = [
             $this->NUMERO_APPORTEUR => $produit->cvi,
             "zoneRecolte" => "B",
-            "superficieRecolte" => number_format($produit->superficie_recolte / 100, 2, ".", ""),
+            "superficieRecolte" => number_format($produit->superficie_recolte / 100, 4, ".", ""),
             $this->APPORT_RAISIN => $this->getApportRaisin($produit),
             "volumeIssuRaisins" => number_format($produit->volume_revendique, 2, ".", "")
         ];
@@ -167,7 +167,13 @@ class ExportSVJson
                 continue; // pas les rebêches dans les sites
             }
 
-            if (! $this->getApportRaisin($produit)) {
+            $has_volume = $this->getApportRaisin($produit);
+
+            if ($this->HAS_MOUTS) {
+                $has_volume += $produit->volume_mouts;
+            }
+
+            if (! $has_volume) {
                 continue;
             }
 
