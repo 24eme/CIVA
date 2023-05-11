@@ -92,14 +92,16 @@ class ExportSVJson
             $volumeAEliminer = [];
 
             if ($produit->volume_detruit) {
-                $volumeAEliminer['volumeAEliminer'] = "".$produit->volume_detruit;
+                $volumeAEliminer['volumeAEliminer'] = number_format($produit->volume_detruit, 2, ".", "");
             }
 
             if ($produit->vci) {
-                $volumeAEliminer['volumeComplementaireIndividuel'] = "".$produit->vci;
+                $volumeAEliminer['volumeComplementaireIndividuel'] = number_format($produit->vci, 2, ".", "");
             }
 
-            $infosApporteur['volumesAEliminer'] = $volumeAEliminer;
+            if (empty($volumeAEliminer) === false) {
+                $infosApporteur['volumesAEliminer'] = $volumeAEliminer;
+            }
         }
 
         // rebêches
