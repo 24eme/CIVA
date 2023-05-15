@@ -109,7 +109,7 @@ all:
           supprimable: 0
       annexes:
         VRAC:
-          declaration_production: "Déclaration de production (DR, SV11, SV12)"
+          declaration_production: "Déclaration de production"
         RAISIN:
           parcellaire: "Parcellaire"
   etapes:
