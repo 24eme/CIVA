@@ -185,7 +185,7 @@
         ?>
 		<tr>
 			<td>
-				<?php echo $form[$annexe]->renderLabel() ?>
+				<label><?php echo $annexeLibelle ?></label>
 			</td>
 			<td width="465">
                 <?php if($filename = $vrac->getAnnexeFilename($annexe)): ?>
