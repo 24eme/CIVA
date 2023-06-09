@@ -1,19 +1,13 @@
 <?php
 class VracAnnexeForm extends acCouchdbObjectForm {
 
-    protected $annexeid;
-
-    public function __construct(acCouchdbJson $object, $annexeid, $options = array(), $CSRFSecret = null)
-    {
-        $this->annexeid = $annexeid;
-        parent::__construct($object, $options, $CSRFSecret);
-    }
-
 	public function configure()
 	{
-        $this->setWidget('fichier', new sfWidgetFormInputFile(array('label' => 'Document')));
+        $this->setWidget('libelle', new sfWidgetFormInputText());
+        $this->setValidator('libelle', new sfValidatorString(array('required' => false)));
+        $this->setWidget('fichier', new sfWidgetFormInputFile(array('label' => 'Annexe applicable')));
         $this->setValidator('fichier', new sfValidatorFile(array('required' => false, 'path' => sfConfig::get('sf_cache_dir'))));
-		$this->widgetSchema->setNameFormat('[%s]');
+		$this->widgetSchema->setNameFormat('annexe[%s]');
 	}
 
     protected function doUpdateObject($values)
@@ -24,8 +18,17 @@ class VracAnnexeForm extends acCouchdbObjectForm {
            $file->save();
        }
        if ($file) {
+           if ($values['libelle']) {
+               $libelle = $values['libelle'];
+           } else {
+               $libelle = $file->getOriginalName();
+               $pointPos = strpos($libelle, '.');
+               if (strpos($libelle, '.') !== false) {
+                   $libelle = substr($libelle, 0, $pointPos);
+               }
+           }
            try {
-               $this->getObject()->storeAnnexe($file->getSavedName(), $this->annexeid);
+               $this->getObject()->storeAnnexe($file->getSavedName(), VracClient::VRAC_PREFIX_ANNEXE.strtolower(KeyInflector::slugify($libelle)));
            } catch (sfException $e) {
                throw new sfException($e);
            }
