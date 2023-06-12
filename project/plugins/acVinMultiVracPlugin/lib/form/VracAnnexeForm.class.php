@@ -14,7 +14,20 @@ class VracAnnexeForm extends BaseForm {
         $this->setWidget('libelle', new sfWidgetFormInputText());
         $this->setValidator('libelle', new sfValidatorString(array('required' => false)));
         $this->setWidget('fichier', new sfWidgetFormInputFile(array('label' => 'Annexe applicable')));
-        $this->setValidator('fichier', new sfValidatorFile(array('required' => false, 'path' => sfConfig::get('sf_cache_dir'))));
+        $this->setValidator('fichier', new sfValidatorFile(array(
+                'required' => false,
+                'mime_types' => [
+                    'web_images',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.oasis.opendocument.text',
+                    'application/msword',
+                    'application/x-msword',
+                    'application/pdf',
+                    'application/x-pdf'
+                ],
+                'path' => sfConfig::get('sf_cache_dir')
+        ), ['mime_types' => 'Seuls les fichiers au format doc, docx, pdf et images sont autorisés.']
+        ));
 		$this->widgetSchema->setNameFormat('annexe[%s]');
 	}
 
