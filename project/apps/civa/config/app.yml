@@ -22,7 +22,8 @@ all:
         soussignes: 1
         produits: 2
         conditions: 3
-        validation: 4
+        annexes: 4
+        validation: 5
       produits_vrac_statiques:
         declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:
           position: 1
