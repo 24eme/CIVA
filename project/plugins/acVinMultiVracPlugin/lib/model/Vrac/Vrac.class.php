@@ -10,7 +10,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const STATUT_CREE = 'CREE';
 	const STATUT_PROJET_VENDEUR = 'PROJET_VENDEUR';
 	const STATUT_PROJET_ACHETEUR = 'PROJET_ACHETEUR';
+	const STATUT_REFUS_PROJET = 'REFUS_PROJET';
 	const STATUT_PROPOSITION = 'PROPOSITION';
+	const STATUT_SIGNE = 'SIGNE';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
 	const STATUT_VALIDE = 'VALIDE';
 	const STATUT_VALIDE_CADRE = 'VALIDE_CADRE';
@@ -74,6 +76,31 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_VALIDE_CADRE => 'Gérer',
 		self::STATUT_ENLEVEMENT => 'Enlever',
 	);
+
+    static $statuts_libelles_historique = array(
+		self::STATUT_CREE => "Projet de contrat initié",
+		self::STATUT_PROJET_VENDEUR => "Projet soumis à l'acheteur ou au courtier pour validation",
+		self::STATUT_PROJET_ACHETEUR => "Projet de contrat validé et soumis au vendeur pour signature",
+		self::STATUT_REFUS_PROJET => "Projet de contrat refusé",
+		self::STATUT_SIGNE => "Signature",
+		self::STATUT_PROPOSITION => "Proposition de contrat soumise aux autres soussignés pour signature",
+		self::STATUT_VALIDE_PARTIELLEMENT => null,
+		self::STATUT_VALIDE => "Contrat de vente visé",
+		self::STATUT_VALIDE_CADRE => "Contrat de vente pluriannuel visé",
+		self::STATUT_ANNULE => "Contrat annulé",
+		self::STATUT_ENLEVEMENT => null,
+		self::STATUT_CLOTURE => "Contrat clôturé",
+	);
+
+    static $statuts_template_historique = array(
+        "Projet de contrat initié" => self::STATUT_CREE,
+        "Projet soumis à l'acheteur ou au courtier pour validation (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR,
+        "Projet de contrat validé et soumis au vendeur pour signature" => self::STATUT_PROJET_ACHETEUR,
+        "Proposition de contrat soumise aux autres soussignés pour signature" => self::STATUT_PROPOSITION,
+        "Signature des soussignés" => self::STATUT_SIGNE,
+        "Contrat de vente visé" => self::STATUT_VALIDE,
+        "Contrat clôturé" => self::STATUT_CLOTURE
+    );
 
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
@@ -157,7 +184,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->type_archive = $this->getTypeForArchive();
         $this->numero_contrat = $numeroContrat;
         $this->valide->date_saisie = $date;
-        $this->valide->statut = self::STATUT_CREE;
+        $this->setStatut(self::STATUT_CREE, $createurIdentifiant);
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
         $this->vendeur_type = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
         $this->createur_identifiant = $createurIdentifiant;
@@ -415,6 +442,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->interlocuteur_commercial->telephone = ($telephone) ? $telephone : null;
     }
 
+    public function setStatut($statut, $auteur = null) {
+        if($statut != $this->valide->_get('statut')) {
+            $this->addHistorique($statut, $auteur);
+        }
+
+        return $this->valide->_set('statut', $statut);
+    }
+
     public function isSupprimable()
     {
 
@@ -528,12 +563,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
 
 		if($this->isVendeurProprietaire()) {
+            $this->setStatut(self::STATUT_PROJET_VENDEUR, $this->createur_identifiant);
             $this->createur_identifiant = $this->acheteur_identifiant;
-            $this->valide->statut = self::STATUT_PROJET_VENDEUR;
             return;
         }
 
-        $this->valide->statut = self::STATUT_PROJET_ACHETEUR;
+        $this->setStatut(self::STATUT_PROJET_ACHETEUR, $this->createur_identifiant);
     }
 
 	public function signerPapier($date) {
@@ -548,6 +583,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$this->valide->email_cloture = true;
 	}
 
+    public function refusProjet($tiers_id) {
+
+        $this->setStatut(self::STATUT_REFUS_PROJET, $tiers_id);
+        $this->setStatut(self::STATUT_PROJET_VENDEUR);
+    }
+
     public function signer($tiers_id)
     {
     	$type = $this->getTypeTiers($tiers_id);
@@ -556,10 +597,13 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	}
 
         $this->declaration->cleanAllNodes();
-        $this->valide->statut = Vrac::STATUT_PROPOSITION;
 
-        if($this->isProprietaire($tiers_id)) {
-            $this->valide->statut = Vrac::STATUT_VALIDE_PARTIELLEMENT;
+        $this->setStatut(self::STATUT_SIGNE, $tiers_id);
+
+        if($type == 'vendeur') {
+            $this->setStatut(self::STATUT_PROPOSITION);
+        } else {
+            $this->setStatut(self::STATUT_VALIDE_PARTIELLEMENT);
         }
 
     	$this->valide->set('date_validation_'.$type, date('Y-m-d'));
@@ -634,7 +678,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function clotureContrat()
     {
-    	$this->valide->statut = self::STATUT_CLOTURE;
+    	$this->setStatut(self::STATUT_CLOTURE, $this->createur_identifiant);
     	$this->valide->date_cloture = date('Y-m-d');
         if ($contratCadre = $this->getContratPluriannuelCadre()) {
             $applications = $contratCadre->getContratsApplication();
@@ -1059,6 +1103,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		foreach($vrac->declaration->getProduitsDetails() as $key => $detail) {
             $detail->millesime = $millesime;
         }
+        $vrac->remove('historique');
         return $vrac;
 	}
 
@@ -1188,10 +1233,24 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function getAnnexeFilename($annexe) {
+        if(!$this->exist('_attachments')) {
+            return null;
+        }
         foreach ($this->_attachments as $filename => $fileinfos) {
             if (strpos($filename, $annexe) !== false) return $filename;
         }
         return null;
+    }
+
+    public function addHistorique($statut, $auteur = null) {
+        if(!isset(self::$statuts_libelles_historique[$statut]) || !self::$statuts_libelles_historique[$statut]) {
+            return;
+        }
+        $histo = $this->add('historique')->add(null);
+        $histo->date = date('Y-m-d H:i:s');
+        $histo->statut = $statut;
+        $histo->auteur = $auteur;
+        $histo->description = self::$statuts_libelles_historique[$statut];
     }
 
 }
