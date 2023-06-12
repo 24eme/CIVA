@@ -238,6 +238,8 @@ class vracActions extends sfActions
 		if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
+                $user = $this->getTiersNoSigneOfVrac($this->vrac);
+                $this->vrac->setStatut(Vrac::STATUT_ANNULE, $user->_id);
         		$this->vrac = $this->form->save();
 
                 foreach(VracMailer::getInstance()->annulationContrat($this->vrac) as $message) {
@@ -330,6 +332,7 @@ class vracActions extends sfActions
 					$nextContratApplication->signerAutomatiquement();
 				} else {
                     $nextContratApplication->signer($nextContratApplication->createur_identifiant);
+                    $nextContratApplication->statut = Vrac::STATUT_PROPOSITION;
                 }
                 $nextContratApplication->save();
 
@@ -748,10 +751,13 @@ class vracActions extends sfActions
 	{
 		$this->cleanSessions();
 		$vrac = $this->getRoute()->getVrac();
-        $vrac->valide->statut = Vrac::STATUT_PROJET_VENDEUR;
+        $user = $this->getTiersNoSigneOfVrac($vrac);
+        $vrac->refusProjet($user->_id);
         $vrac->save();
 
-        $this->getMailer()->send(VracMailer::getInstance()->refusProjet($vrac, $email));
+        foreach(VracMailer::getInstance()->refusProjet($vrac) as $message) {
+            $this->getMailer()->send($message);
+        }
 
         $this->getUser()->setFlash('notice', "Le refus du projet a été notifié par mail à l'autre partie.");
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));

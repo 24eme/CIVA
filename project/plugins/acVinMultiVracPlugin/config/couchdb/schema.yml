@@ -247,3 +247,17 @@ Vrac:
       delais_retiraison: { required: false }
       papier: { required: false }
       interne: { required: false }
+      historique:
+        type: array_collection
+        required: false
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  date: { }
+                  auteur: {  }
+                  description: {  }
+                  commentaire: {  }
+                  statut: { }
