@@ -168,43 +168,6 @@
 		</tr>
 	</tbody>
 </table>
-<?php
-    $annexes = VracClient::getAnnexesByTypeContrat($form->getObject()->type_contrat);
-    if ($annexes):
-?>
-<table class="validation table_donnees">
-	<thead>
-		<tr>
-			<th style="width: 212px;">Annexes</th>
-		</tr>
-	</thead>
-	<tbody>
-        <?php
-            foreach($annexes as $annexe => $annexeLibelle):
-                if (isset($form[$annexe])):
-        ?>
-		<tr>
-			<td>
-				<label><?php echo $annexeLibelle ?></label>
-			</td>
-			<td width="465">
-                <?php if($filename = $vrac->getAnnexeFilename($annexe)): ?>
-				<a class="btn_minus action_visualiser" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>"><?php echo $filename ?></a>
-                <a href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'supprimer', 'annexe' => $annexe]) ?>" style="float: right;">[x]</a>
-                <?php else: ?>
-				<span><?php echo $form[$annexe]['fichier']->renderError() ?></span>
-				<?php echo $form[$annexe]['fichier']->render() ?>
-                <?php endif; ?>
-			</td>
-            <td></td>
-		</tr>
-        <?php
-                endif;
-            endforeach;
-        ?>
-	</tbody>
-</table>
-<?php endif; ?>
 <?php endif; ?>
 <?php include_partial('vrac/popupAideSaisieFrais', array('target' => $form['vendeur_frais_annexes']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>

@@ -313,12 +313,4 @@ class VracClient extends acCouchdbClient {
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}
 
-    public static function getAnnexesByTypeContrat($type)
-    {
-        $config = self::getConfig();
-        if (!isset($config['annexes'])) return [];
-        if (!isset($config['annexes'][$type])) return [];
-        return $config['annexes'][$type];
-    }
-
 }

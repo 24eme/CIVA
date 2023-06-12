@@ -123,23 +123,5 @@
                 </td>
         </tr>
         <?php endif; ?>
-        <?php
-            $annexes = VracClient::getAnnexesByTypeContrat($vrac->type_contrat);
-            if ($annexes):
-                foreach($annexes as $annexe => $annexeLibelle):
-                    if($filename = $vrac->getAnnexeFilename($annexe)): ?>
-        <tr>
-                <td>
-                        <label>Annexe</label>
-                </td>
-                <td>
-                        <a class="btn_minus action_visualiser" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>"><?php echo $filename ?></a>
-                </td>
-        </tr>
-        <?php
-                    endif;
-                endforeach;
-            endif;
-        ?>
 	</tbody>
 </table>
