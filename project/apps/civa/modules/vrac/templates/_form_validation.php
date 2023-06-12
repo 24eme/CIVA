@@ -64,6 +64,7 @@
 
 <?php if(!$vrac->isPapier()): ?>
 <?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => false)); ?>
+<?php include_partial('vrac/ficheAnnexes', array('vrac' => $vrac, 'fiche' => false, 'edit' => false)); ?>
 <?php endif; ?>
 
 <?php if($vrac->isPapier()): ?>

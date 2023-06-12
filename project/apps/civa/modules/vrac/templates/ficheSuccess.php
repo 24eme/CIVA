@@ -83,6 +83,8 @@ td.echeance {display: inline;}
 <?php if(!$vrac->isPapier()): ?>
 <hr class="printonly"/>
 <?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => true)); ?>
+<hr class="printonly"/>
+<?php include_partial('vrac/ficheAnnexes', array('vrac' => $vrac, 'fiche' => true, 'edit' => false)); ?>
 <?php endif; ?>
 
 <?php include_partial('vrac/chronologie_contrat', array('vrac' => $vrac)); ?>
