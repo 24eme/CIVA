@@ -31,7 +31,6 @@ class VracContratValidation extends DocumentValidation
         $this->addControle('erreur', 'conditions_paiement_required', 'Vous devez préciser les délais de paiement');
         $this->addControle('erreur', 'vtsgn_denomination', "La mention VT/SGN doit être précisée en ajoutant un nouveau produit et non en dénomination des produits de la liste");
         $this->addControle('vigilance', 'volume_bloque', 'Ce contrat contient des produits dont une partie du volume est en réserve');
-        $this->addControle('erreur', 'annexe_required', 'Vous devez jointre en annexe');
 
   	}
 
@@ -141,14 +140,6 @@ class VracContratValidation extends DocumentValidation
         if($produitsVolumeBloque = $this->document->declaration->getProduitsWithVolumeBloque()) {
             $produits = array_map(function($val) { return $val->getLibelleComplet(); }, $produitsVolumeBloque);
             $this->addPoint('vigilance', 'volume_bloque', implode(", ", $produits), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
-        }
-
-        if ($annexes = VracClient::getAnnexesByTypeContrat($this->document->type_contrat)) {
-            foreach($annexes as $annexe => $annexeLibelle) {
-                if(!$this->document->getAnnexeFilename($annexe)) {
-                    $this->addPoint('erreur', 'annexe_required', $annexeLibelle ,$this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
-                }
-            }
         }
   	}
 
