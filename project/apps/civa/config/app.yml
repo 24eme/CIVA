@@ -108,11 +108,6 @@ all:
         declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
           position: 10
           supprimable: 0
-      annexes:
-        VRAC:
-          declaration_production: "Déclaration de production"
-        RAISIN:
-          parcellaire: "Parcellaire"
   etapes:
     items:
       mon_espace_civa:

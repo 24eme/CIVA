@@ -67,10 +67,6 @@ class VracConditionsForm extends acCouchdbObjectForm
 			$this->getWidgetSchema()->setLabel('delais_retiraison', "Délai maximum de retiraison");
 		}
 
-        foreach(VracClient::getAnnexesByTypeContrat($this->getObject()->type_contrat) as $annexe => $annexeLibelle) {
-            $this->embedForm($annexe, new VracAnnexeForm($this->getObject(), $annexe));
-        }
-
         $this->widgetSchema->setNameFormat('vrac_conditions[%s]');
     }
 
@@ -104,12 +100,5 @@ class VracConditionsForm extends acCouchdbObjectForm
         } elseif(!isset($values['suivi_qualitatif']) && $this->getObject()->exist('delais_retiraison')) {
             $this->getObject()->delais_retiraison = null;
         }
-        foreach ($this->getEmbeddedForms() as $key => $embedForm) {
-            $embedForm->doUpdateObject($values[$key]);
-        }
-    }
-
-    public function hasAnnexes() {
-        return (VracClient::getAnnexesByTypeContrat($this->getObject()->type_contrat));
     }
 }
