@@ -446,6 +446,9 @@ class vracActions extends sfActions
        			}
 				$this->cleanSessions();
        			if ($nextEtape) {
+                    if ($request->hasParameter('submitAndReload')) {
+                        return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->etape));
+                    }
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} elseif($this->vrac->isPapier()) {
                     foreach(VracMailer::getInstance()->validationContratPapier($this->vrac) as $message) {
