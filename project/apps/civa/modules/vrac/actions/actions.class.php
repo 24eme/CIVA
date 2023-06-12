@@ -780,7 +780,7 @@ class vracActions extends sfActions
             $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
             return $this->renderText(file_get_contents($vrac->getAttachmentUri($filename)));exit;
 		}
-        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_CONDITIONS));
+        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
 
 }
