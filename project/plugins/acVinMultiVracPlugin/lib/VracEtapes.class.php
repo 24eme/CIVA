@@ -7,12 +7,14 @@ class VracEtapes
 	const ETAPE_SOUSSIGNES = 'soussignes';
 	const ETAPE_PRODUITS = 'produits';
 	const ETAPE_CONDITIONS = 'conditions';
+	const ETAPE_ANNEXES = 'annexes';
 	const ETAPE_VALIDATION = 'validation';
 
 	static $libelles = array(
 		self::ETAPE_SOUSSIGNES => 'Soussignés',
 		self::ETAPE_PRODUITS => 'Produits',
 		self::ETAPE_CONDITIONS => 'Conditions',
+		self::ETAPE_ANNEXES => 'Annexes',
 		self::ETAPE_VALIDATION => 'Validation'
 	);
 

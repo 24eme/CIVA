@@ -1251,6 +1251,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $histo->statut = $statut;
         $histo->auteur = $auteur;
         $histo->description = self::$statuts_libelles_historique[$statut];
+	}
+
+    public function getAllAnnexesFilename() {
+        $annexes = [];
+        foreach ($this->_attachments as $filename => $fileinfos) {
+            if (strpos($filename, VracClient::VRAC_PREFIX_ANNEXE) !== false) $annexes[] = $filename;
+        }
+        return $annexes;
     }
 
 }
