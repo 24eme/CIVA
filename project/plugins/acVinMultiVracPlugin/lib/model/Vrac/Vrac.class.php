@@ -40,6 +40,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	protected $_config;
 	protected $archivage_document;
     protected $diff_with_mother = null;
+    protected $statutsChanged = [];
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Créé',
@@ -445,8 +446,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->interlocuteur_commercial->telephone = ($telephone) ? $telephone : null;
     }
 
+    public function getStatutsChanged() {
+
+        return $this->statutsChanged;
+    }
+
     public function setStatut($statut, $auteur = null) {
         if($statut != $this->valide->_get('statut')) {
+            $this->statutsChanged[$statut] = $auteur;
             $this->addHistorique($statut, $auteur);
         }
 
@@ -691,7 +698,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
                 if (!$application) return;
                 if (!$application->isCloture() && $application->_id != $this->_id) return;
             }
-            $contratCadre->valide->statut = self::STATUT_CLOTURE;
+            $contratCadre->setStatut(self::STATUT_CLOTURE);
             $contratCadre->valide->date_cloture = date('Y-m-d');
             $contratCadre->save();
         }
