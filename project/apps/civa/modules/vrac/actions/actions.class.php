@@ -238,8 +238,7 @@ class vracActions extends sfActions
 		if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
-                $user = $this->getTiersNoSigneOfVrac($this->vrac);
-                $this->vrac->setStatut(Vrac::STATUT_ANNULE, $user->_id);
+                $this->vrac->setStatut(Vrac::STATUT_ANNULE, $this->vrac->createur_identifiant);
         		$this->vrac = $this->form->save();
 
                 foreach(VracMailer::getInstance()->annulationContrat($this->vrac) as $message) {
@@ -399,7 +398,9 @@ class vracActions extends sfActions
 
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous être envoyé.');
 
-		$this->getMailer()->send(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id));
+		foreach(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id) as $message) {
+            $this->getMailer()->send($message);
+        }
 
         if (!$this->vrac->isValide() && $this->user->_id == $this->vrac->vendeur_identifiant) {
 			foreach(VracMailer::getInstance()->demandeSignature($this->vrac) as $message) {
@@ -464,10 +465,14 @@ class vracActions extends sfActions
 			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
                     $this->saveVendeurProjetAttachment($this->vrac);
                     $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
-					$this->getMailer()->send(VracMailer::getInstance()->demandeValidationAcheteurCourtier($this->vrac));
+					foreach(VracMailer::getInstance()->demandeValidationAcheteurCourtier($this->vrac) as $message) {
+                        $this->getMailer()->send($message);
+                    }
                 } else {
                     $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-					$this->getMailer()->send(VracMailer::getInstance()->demandeSignatureVendeur($this->vrac));
+					foreach(VracMailer::getInstance()->demandeSignatureVendeur($this->vrac) as $message) {
+                        $this->getMailer()->send($message);
+                    }
                 }
 
    				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));

@@ -19,21 +19,67 @@ class VracMailer {
         return '['.$vrac->getTypeDocumentLibelle().' '.strtolower($vrac->getTypeDureeLibelle()).' '.strtolower($vrac->type_contrat).']';
     }
 
-    public function refusProjet($vrac)
-    {
-        $acteurs = [$vrac->vendeur_identifiant, $vrac->acheteur_identifiant];
-        if($vrac->hasCourtier()) {
-            $acteurs[] = $vrac->mandataire_identifiant;
+	public function getMessagesByStatut($vrac, $statut, $auteur, $pdf = true) {
+        if($statut == Vrac::STATUT_PROJET_VENDEUR_TRANSMIS) {
+
+            return $this->demandeValidationAcheteurCourtier($vrac);
         }
 
-        $messages = array();
+        if($statut == Vrac::STATUT_PROJET_ACHETEUR) {
+
+            return $this->demandeSignatureVendeur($vrac);
+        }
+
+        if($statut == Vrac::STATUT_REFUS_PROJET) {
+
+            return $this->refusProjet($vrac);
+        }
+
+        if($statut == Vrac::STATUT_PROPOSITION) {
+
+            return $this->demandeSignature($vrac);
+        }
+
+        if($statut == Vrac::STATUT_PROPOSITION) {
+
+            return $this->demandeSignature($vrac);
+        }
+
+        if($statut == Vrac::STATUT_SIGNE) {
+
+            return $this->confirmationSignature($vrac, $auteur);
+        }
+
+        if($statut == Vrac::STATUT_VALIDE) {
+
+            return $this->validationContrat($vrac, $pdf);
+        }
+
+        if($statut == Vrac::STATUT_CLOTURE) {
+
+            return $this->clotureContrat($vrac, $pdf);
+        }
+
+        if($statut == Vrac::STATUT_ANNULE) {
+
+            return $this->annulationContrat($vrac, $pdf);
+        }
+
+		return [];
+	}
+
+        public function refusProjet($vrac)
+    {
+        $acteurs = [$vrac->createur_identifiant];
+
+        $messages = [];
         foreach($acteurs as $acteur_id) {
             $from = self::getFrom();
             $to = $vrac->getEmailsActeur($acteur_id);
             $proprietaire = $vrac->getCreateurInformations();
             $proprietaireLibelle = ($proprietaire->intitule)? $proprietaire->intitule.' '.$proprietaire->raison_sociale : $proprietaire->raison_sociale;
-            $subject = $this->getPrefixSubject($vrac).' Annulation ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
-            $body = self::getBodyFromPartial('vrac_annulation_contrat', array('vrac' => $vrac));
+            $subject = $this->getPrefixSubject($vrac).' Refus du projet ('.$proprietaireLibelle.' – créé le '.strftime('%d/%m', strtotime($vrac->valide->date_saisie)).')';
+            $body = self::getBodyFromPartial('vrac_refus_projet', array('vrac' => $vrac));
     		$message = Swift_Message::newInstance()
       					->setFrom($from)
       					->setTo($to)
@@ -86,7 +132,7 @@ class VracMailer {
         $body = self::getBodyFromPartial('vrac_demande_validation_acheteur_courtier', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
-        return $message;
+        return [$message];
     }
 
     public function demandeSignatureVendeur($vrac)
@@ -99,7 +145,7 @@ class VracMailer {
         $body = self::getBodyFromPartial('vrac_demande_signature_vendeur', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
-        return $message;
+        return [$message];
     }
 
     public function demandeSignature($vrac)
@@ -138,7 +184,7 @@ class VracMailer {
         $body = self::getBodyFromPartial('vrac_confirmation_signature', array('vrac' => $vrac));
         $message = self::getMailer()->compose($from, $to, $subject, $body);
 
-        return $message;
+        return [$message];
     }
 
     public function validationContrat($vrac, $pdf = true)
