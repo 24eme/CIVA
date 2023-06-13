@@ -8,6 +8,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 
 	const STATUT_CREE = 'CREE';
+	const STATUT_PROJET_VENDEUR_TRANSMIS = 'PROJET_VENDEUR_TRANSMIS';
 	const STATUT_PROJET_VENDEUR = 'PROJET_VENDEUR';
 	const STATUT_PROJET_ACHETEUR = 'PROJET_ACHETEUR';
 	const STATUT_REFUS_PROJET = 'REFUS_PROJET';
@@ -79,7 +80,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     static $statuts_libelles_historique = array(
 		self::STATUT_CREE => "Projet de contrat initié",
-		self::STATUT_PROJET_VENDEUR => "Projet soumis à l'acheteur ou au courtier pour validation",
+        self::STATUT_PROJET_VENDEUR_TRANSMIS => "Projet de contrat soumis à l'acheteur ou au courtier",
+		self::STATUT_PROJET_VENDEUR => "Projet de contrat en attente de validation par l'acheteur ou le courtier",
 		self::STATUT_PROJET_ACHETEUR => "Projet de contrat validé et soumis au vendeur pour signature",
 		self::STATUT_REFUS_PROJET => "Projet de contrat refusé",
 		self::STATUT_SIGNE => "Signature",
@@ -94,8 +96,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     static $statuts_template_historique = array(
         "Projet de contrat initié" => self::STATUT_CREE,
+        "Projet soumis à l'acheteur ou au courtier (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR_TRANSMIS,
         "Projet soumis à l'acheteur ou au courtier pour validation (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR,
-        "Projet de contrat validé et soumis au vendeur pour signature" => self::STATUT_PROJET_ACHETEUR,
+        "Projet en attente de validation par l'acheteur ou le courtier" => self::STATUT_PROJET_ACHETEUR,
         "Proposition de contrat soumise aux autres soussignés pour signature" => self::STATUT_PROPOSITION,
         "Signature des soussignés" => self::STATUT_SIGNE,
         "Contrat de vente visé" => self::STATUT_VALIDE,
@@ -563,7 +566,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
 
 		if($this->isVendeurProprietaire()) {
-            $this->setStatut(self::STATUT_PROJET_VENDEUR, $this->createur_identifiant);
+            $this->setStatut(self::STATUT_PROJET_VENDEUR_TRANSMIS, $this->createur_identifiant);
+            $this->setStatut(self::STATUT_PROJET_VENDEUR);
             $this->createur_identifiant = $this->acheteur_identifiant;
             return;
         }
