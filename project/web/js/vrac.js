@@ -166,9 +166,22 @@ var initConfirmeValidationVrac = function()
 
 var initConfirmeSignatureVrac = function()
 {
+    if ($('#confirmation_annexe').length > 0) {
+      $("#confirmation_annexe").change(function() {
+        if ($(this).is(":checked")) {
+          $("#signatureVrac").css("opacity", "1");
+        } else {
+          $("#signatureVrac").css("opacity", "0.3");
+        }
+      });
+      $("#confirmation_annexe").change();
+    }
     $('#signatureVrac').click(function() {
+        if ($('#confirmation_annexe').length > 0 && !$('#confirmation_annexe').is(":checked")) {
+          return false;
+        }
         openPopup($("#popup_confirme_signatureVrac"));
-		$("#popup_confirme_signatureVrac #signatureVrac_OK").focus();
+		    $("#popup_confirme_signatureVrac #signatureVrac_OK").focus();
         return false;
     });
     $('#signatureVrac_OK').click(function() {
