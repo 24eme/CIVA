@@ -126,6 +126,11 @@ td.echeance {display: inline;}
 <p>Document non contractuel. Le document original télésigné est disponible sur votre espace VinsAlsace.pro</p>
 </div>
 <?php endif; ?>
+    <?php if($vrac->hasAnnexes() && VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
+        <p style="text-align: right; padding:5px;">
+            <input type="checkbox" name="confirmation_annexe" id="confirmation_annexe" /><label for="confirmation_annexe" style="color:#666;">&nbsp;Je confirme avoir pris connaissance de l'ensemble des annexes applicables au contrat.</label>
+        </p>
+    <?php endif; ?>
 	<table id="actions_fiche">
 		<tr>
 			<td style="width: 40%"><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></td>

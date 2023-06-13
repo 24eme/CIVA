@@ -17,8 +17,16 @@ class VracAnnexeForm extends BaseForm {
         $this->setValidator('fichier', new sfValidatorFile(array(
                 'required' => false,
                 'mime_types' => [
-                    'web_images',
+                    'image/jpeg',
+                    'image/pjpeg',
+                    'image/png',
+                    'image/x-png',
+                    'application/vnd.oasis.opendocument.spreadsheet',
+                    'application/excel',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/x-msexcel',
                     'application/vnd.oasis.opendocument.text',
                     'application/msword',
                     'application/x-msword',
