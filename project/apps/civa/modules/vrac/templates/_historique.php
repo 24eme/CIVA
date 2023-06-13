@@ -32,3 +32,4 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<pre style="background: #000; color: white; padding: 5px; overflow: scroll; display: none; opacity: 0.90;" id="contenu_mail"></pre>
