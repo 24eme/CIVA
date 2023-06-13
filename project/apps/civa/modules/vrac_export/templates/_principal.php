@@ -196,9 +196,7 @@
 <?php if($vrac->hasAnnexes()): ?>
 <br /><small><br />&nbsp;<br />&nbsp;</small>
 <span style="background-color: black; color: white; font-weight: bold;">&nbsp;Annexes&nbsp;</span><br/>
-<table border="0" cellspacing="0" cellpadding="0" width="100%" style="text-align: right; border-collapse: collapse;">
-	<tr><td>Des annexes ont été jointes à ce contrat, elles sont consultables dans la version dématérialisée sur le portail du CIVA.</td></tr>
-</table>
+<span>&nbsp;&nbsp;Des annexes ont été jointes à ce contrat, elles sont consultables dans la version dématérialisée sur le portail du CIVA.</span>
 <?php $nb_ligne -= 2 ?>
 <?php endif; ?>
 
