@@ -19,6 +19,27 @@ class VracMailer {
         return '['.$vrac->getTypeDocumentLibelle().' '.strtolower($vrac->getTypeDureeLibelle()).' '.strtolower($vrac->type_contrat).']';
     }
 
+    public function sendMailsByStatutsChanged($vrac) {
+        $messages = [];
+        foreach($vrac->getStatutsChanged() as $statut => $auteur) {
+            $messages = array_merge($messages, $this->getMessagesByStatut($vrac, $statut, $auteur));
+        }
+
+        foreach($messages as $message) {
+            $this->getMailer()->send($message);
+        }
+
+        if($vrac->isValide() && !$vrac->valide->email_validation) {
+            $vrac->valide->email_validation = date('Y-m-d');
+            $vrac->save();
+        }
+
+        if($vrac->isCloture() && !$vrac->valide->email_cloture) {
+            $vrac->valide->email_cloture = date('Y-m-d');
+            $vrac->save();
+        }
+    }
+
 	public function getMessagesByStatut($vrac, $statut, $auteur, $pdf = true) {
         if($statut == Vrac::STATUT_PROJET_VENDEUR_TRANSMIS) {
 

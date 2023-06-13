@@ -152,14 +152,7 @@ class vracActions extends sfActions
 		$this->vrac->save();
 		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email va être envoyé à tous les parties.');
 
-        if(!$this->vrac->valide->email_cloture) {
-            foreach(VracMailer::getInstance()->clotureContrat($this->vrac) as $message) {
-                sfContext::getInstance()->getMailer()->send($message);
-            }
-
-            $this->vrac->valide->email_cloture = date('Y-m-d');
-            $this->vrac->save();
-        }
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
 
         return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
@@ -241,9 +234,8 @@ class vracActions extends sfActions
                 $this->vrac->setStatut(Vrac::STATUT_ANNULE, $this->vrac->createur_identifiant);
         		$this->vrac = $this->form->save();
 
-                foreach(VracMailer::getInstance()->annulationContrat($this->vrac) as $message) {
-                    $this->getMailer()->send($message);
-                }
+                VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
 				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
@@ -347,7 +339,7 @@ class vracActions extends sfActions
                     foreach(VracMailer::getInstance()->demandeSignature($nextContratApplication) as $message) {
                         $this->getMailer()->send($message);
                     }
-                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de sigature des autres parties. Un email va leur être envoyé.');
+                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de signature des autres parties. Un email va leur être envoyé.');
                 }
 
        			return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
@@ -398,25 +390,15 @@ class vracActions extends sfActions
 
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous être envoyé.');
 
-		foreach(VracMailer::getInstance()->confirmationSignature($this->vrac, $this->user->_id) as $message) {
-            $this->getMailer()->send($message);
-        }
-
         if (!$this->vrac->isValide() && $this->user->_id == $this->vrac->vendeur_identifiant) {
-			foreach(VracMailer::getInstance()->demandeSignature($this->vrac) as $message) {
-                $this->getMailer()->send($message);
-            }
             $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'ils signent la proposition.');
         }
 
         if($this->vrac->isValide() && !$this->vrac->valide->email_validation) {
-            foreach(VracMailer::getInstance()->validationContrat($this->vrac) as $message) {
-                $this->getMailer()->send($message);
-            }
-            $this->vrac->valide->email_validation = date('Y-m-d');
-    		$this->vrac->save();
             $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par tous les parties. Un email va être envoyé à tous.');
         }
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
@@ -455,9 +437,6 @@ class vracActions extends sfActions
                     }
        				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
        			} elseif($this->vrac->isPapier()) {
-                    foreach(VracMailer::getInstance()->validationContratPapier($this->vrac) as $message) {
-                        $this->getMailer()->send($message);
-                    }
                     $this->vrac->valide->email_validation = date('Y-m-d');
             		$this->vrac->save();
 
@@ -465,15 +444,11 @@ class vracActions extends sfActions
 			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
                     $this->saveVendeurProjetAttachment($this->vrac);
                     $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
-					foreach(VracMailer::getInstance()->demandeValidationAcheteurCourtier($this->vrac) as $message) {
-                        $this->getMailer()->send($message);
-                    }
                 } else {
                     $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-					foreach(VracMailer::getInstance()->demandeSignatureVendeur($this->vrac) as $message) {
-                        $this->getMailer()->send($message);
-                    }
                 }
+
+                VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
 
    				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
@@ -763,9 +738,7 @@ class vracActions extends sfActions
         $vrac->refusProjet($user->_id);
         $vrac->save();
 
-        foreach(VracMailer::getInstance()->refusProjet($vrac) as $message) {
-            $this->getMailer()->send($message);
-        }
+        VracMailer::getInstance()->sendMailsByStatutsChanged($vrac);
 
         $this->getUser()->setFlash('notice', "Le refus du projet a été notifié par mail à l'autre partie.");
 		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
