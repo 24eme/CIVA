@@ -1,6 +1,6 @@
 <?php
-$annexes = $vrac->getAllAnnexesFilename(false);
-if ($annexes):
+if ($vrac->hasAnnexes()):
+$annexes = $vrac->getAllAnnexesFilename();
 ?>
 <table class="validation table_donnees">
     <thead>
