@@ -89,7 +89,7 @@ class VracMailer {
 		return [];
 	}
 
-        public function refusProjet($vrac)
+    public function refusProjet($vrac)
     {
         $acteurs = [$vrac->createur_identifiant];
 
@@ -110,7 +110,7 @@ class VracMailer {
         }
 
         if (count($messages)) {
-            $message = clone $messages[0];
+            $message = $messages[0]->copy();
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
@@ -248,7 +248,7 @@ class VracMailer {
             $messages[] = $message;
         }
         if ($vrac->declaration->hashProduitsWithVolumeBloque() && count($messages)) {
-            $message = clone $messages[0];
+            $message = $messages[0]->copy();
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
@@ -304,7 +304,7 @@ class VracMailer {
         }
 
         if (count($messages)) {
-            $message = clone $messages[0];
+            $message = $messages[0]->copy();
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
