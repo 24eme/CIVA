@@ -1265,6 +1265,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function getAllAnnexesFilename() {
+        if(!$this->exist('_attachments')) {
+
+            return [];
+        }
         $annexes = [];
         foreach ($this->_attachments as $filename => $fileinfos) {
             if (strpos($filename, VracClient::VRAC_PREFIX_ANNEXE) !== false) {
