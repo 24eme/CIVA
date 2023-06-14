@@ -420,7 +420,7 @@ table.table_donnees td .radio_list label {
 #contrats_vrac .validation.table_donnees,
 #contrats_vrac .conditions { color: #3b3b3b; }
 
-#contrats_vrac .soussignes { margin: 0 0 40px; }
+#contrats_vrac .soussignes { margin: 0 0 20px; }
 
 #contrats_vrac .statut_contrat
 {
@@ -493,7 +493,7 @@ table.table_donnees td .radio_list label {
 /* Tableau de la page de validation */
 #contrats_vrac .validation.table_donnees
 {
-	margin: 0 0 40px;
+	margin: 0 0 20px;
 	width: 100%;
 }
 
