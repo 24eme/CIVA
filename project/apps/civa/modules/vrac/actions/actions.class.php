@@ -180,6 +180,7 @@ class vracActions extends sfActions
 
 		$this->vrac->signerAutomatiquement();
 		$this->vrac->save();
+
 		$this->getUser()->setFlash('notice', 'Contrat validé avec succès, aucun mail ne sera envoyé');
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
@@ -423,37 +424,42 @@ class vracActions extends sfActions
     		$this->next_etape = $this->vrac->etape = $nextEtape;
     	}
 		$this->validation = new VracContratValidation($this->vrac, $this->annuaire);
-    	if ($request->isMethod(sfWebRequest::POST)) {
-    		$this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
-        	if ($this->form->isValid()) {
-       			$this->form->save();
-       			if ($request->isXmlHttpRequest()) {
-       				return sfView::NONE;
-       			}
-				$this->cleanSessions();
+    	if (!$request->isMethod(sfWebRequest::POST)) {
 
-       			if ($nextEtape) {
-
-                    return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
-       			}
-
-                VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
-
-                if($this->vrac->isPapier()) {
-					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
-			    }
-
-                if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_VENDEUR) {
-                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
-                }
-
-                if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_ACHETEUR) {
-                    $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-                }
-
-   				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-        	}
+            return sfView::SUCCESS;
         }
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+		$this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+		$this->form->save();
+		if ($request->isXmlHttpRequest()) {
+			return sfView::NONE;
+		}
+    	$this->cleanSessions();
+
+		if ($nextEtape) {
+
+            return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
+		}
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+        if($this->vrac->isPapier()) {
+            $this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+        }
+
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_VENDEUR) {
+            $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
+        }
+
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_ACHETEUR) {
+            $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
+        }
+
+    	return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
 
     public function executeAjouterProduit(sfWebRequest $request)
