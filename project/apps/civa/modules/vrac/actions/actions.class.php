@@ -385,18 +385,17 @@ class vracActions extends sfActions
 
 		$this->user = $this->getTiersNoSigneOfVrac($this->vrac);
 
-
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous être envoyé.');
 
-        if (!$this->vrac->isValide() && $this->user->_id == $this->vrac->vendeur_identifiant) {
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROPOSITION) {
             $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'ils signent la proposition.');
         }
 
-        if($this->vrac->isValide() && !$this->vrac->valide->email_validation) {
-            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tous.');
+        if($this->vrac->isValide()) {
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tous le monde.');
         }
 
         VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
@@ -432,35 +431,29 @@ class vracActions extends sfActions
        				return sfView::NONE;
        			}
 				$this->cleanSessions();
-       			if ($nextEtape) {
-                    if ($request->hasParameter('submitAndReload')) {
-                        return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->etape));
-                    }
-       				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
-       			} elseif($this->vrac->isPapier()) {
-                    $this->vrac->valide->email_validation = date('Y-m-d');
-            		$this->vrac->save();
 
-					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
-			    } elseif ($this->user->_id == $this->vrac->vendeur_identifiant) {
-                    $this->saveVendeurProjetAttachment($this->vrac);
-                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
-                } else {
-                    $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
-                }
+       			if ($nextEtape) {
+
+                    return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
+       			}
 
                 VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+                if($this->vrac->isPapier()) {
+					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+			    }
+
+                if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_VENDEUR) {
+                    $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
+                }
+
+                if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_ACHETEUR) {
+                    $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
+                }
 
    				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
-    }
-
-    protected function saveVendeurProjetAttachment($vrac) {
-        $file = tmpfile();
-        fwrite($file, json_encode($vrac->getData()));
-        $vrac->storeAttachment(stream_get_meta_data($file)['uri'], 'application/json', Vrac::VENDEUR_PROJET_FILENAME);
-        fclose($file);
     }
 
     public function executeAjouterProduit(sfWebRequest $request)
