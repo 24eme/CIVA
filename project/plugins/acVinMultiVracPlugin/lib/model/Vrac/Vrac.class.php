@@ -576,10 +576,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             $this->setStatut(self::STATUT_PROJET_VENDEUR_TRANSMIS, $this->createur_identifiant);
             $this->setStatut(self::STATUT_PROJET_VENDEUR);
             $this->createur_identifiant = $this->acheteur_identifiant;
+            $this->saveVendeurProjetAttachment();
             return;
         }
 
         $this->setStatut(self::STATUT_PROJET_ACHETEUR, $this->createur_identifiant);
+    }
+
+    protected function saveVendeurProjetAttachment() {
+        $file = tmpfile();
+        fwrite($file, json_encode($this->getData()));
+        $this->storeAttachment(stream_get_meta_data($file)['uri'], 'application/json', Vrac::VENDEUR_PROJET_FILENAME);
+        fclose($file);
     }
 
 	public function signerPapier($date) {
