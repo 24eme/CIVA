@@ -335,7 +335,7 @@ class vracActions extends sfActions
                     $nextContratApplication->valide->email_validation = date('Y-m-d');
                     $nextContratApplication->save();
 
-                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à tous les parties.');
+                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à toutes les parties.');
                 } else {
                     foreach(VracMailer::getInstance()->demandeSignature($nextContratApplication) as $message) {
                         $this->getMailer()->send($message);
@@ -396,7 +396,7 @@ class vracActions extends sfActions
         }
 
         if($this->vrac->isValide() && !$this->vrac->valide->email_validation) {
-            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par tous les parties. Un email va être envoyé à tous.');
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tous.');
         }
 
         VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
