@@ -97,7 +97,8 @@
 </table>
 <?php endif; ?>
 
-<?php //include_partial('vrac/chronologie_contrat', array('vrac' => $vrac)); ?>
+<?php if($vrac->exist('historique')): ?>
 <?php include_partial('vrac/historique', array('vrac' => $vrac)); ?>
+<?php endif; ?>
 
 <?php include_partial('vrac/popupConfirmeValidation', array('vrac' => $vrac)); ?>
