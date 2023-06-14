@@ -150,9 +150,10 @@ class vracActions extends sfActions
 
 		$this->vrac->clotureContrat();
 		$this->vrac->save();
-		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email va être envoyé à tous les parties.');
 
         VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+        $this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email a été envoyé à toutes les parties.');
 
         return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
