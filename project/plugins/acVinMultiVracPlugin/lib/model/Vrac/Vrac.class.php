@@ -75,7 +75,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_PROJET_VENDEUR => 'Valider le projet',
 		self::STATUT_PROJET_ACHETEUR => 'Visualiser',
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
-		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser',
+		self::STATUT_VALIDE_PARTIELLEMENT => 'Visualiser pour signer',
 		self::STATUT_VALIDE => 'Enlever',
 		self::STATUT_VALIDE_CADRE => 'Gérer',
 		self::STATUT_ENLEVEMENT => 'Enlever',
