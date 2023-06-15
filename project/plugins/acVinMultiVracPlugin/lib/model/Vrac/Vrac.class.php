@@ -1133,6 +1133,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
 	public function generateNextPluriannuelApplication() {
+        if($this->isAnnule()) {
+            throw new Exception('Le contrat cadre a été annulé.');
+        }
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
