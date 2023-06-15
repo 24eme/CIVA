@@ -71,7 +71,7 @@ class VracMailer {
             return $this->confirmationSignature($vrac, $auteur);
         }
 
-        if($statut == Vrac::STATUT_VALIDE) {
+        if(in_array($statut, [Vrac::STATUT_VALIDE, Vrac::STATUT_VALIDE_CADRE])) {
 
             return $this->validationContrat($vrac, $pdf);
         }
