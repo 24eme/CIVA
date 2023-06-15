@@ -56,14 +56,8 @@ class VracContratValidation extends DocumentValidation
 				if (!$detail->exist('label') || $detail->label === null || $detail->label === "") {
 				    $label_libelles[] = $detail->getLibelle();
 				}
-				if (!$detail->millesime && !$this->document->isPluriannuelCadre()) {
-                    if ($this->document->isPonctuel() && in_array($this->document->type_contrat, [VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE])) {
-                        if ($detail->getAppellation()->getKey() != 'appellation_CREMANT' && $detail->getCepage()->getKey() != 'cepage_ED') {
-                            $millesimes[] = $detail->getLibelle();
-                        }
-                    } else {
-				        $millesimes[] = $detail->getLibelle();
-                    }
+				if (!$detail->millesime && !$this->document->isPluriannuelCadre() && !in_array($this->document->type_contrat, [VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE])) {
+				    $millesimes[] = $detail->getLibelle();
 				}
                 if ($detail->denomination && Configuration::hasRefVtSgnInLibelle($detail->denomination)) {
                     $vtsgn[] = $detail->getLibelle();
