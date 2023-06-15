@@ -318,31 +318,14 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$nextContratApplication = $this->form->save();
-                if ($nextContratApplication->isPremiereApplication() && !$nextContratApplication->getContratPluriannuelCadre()->isInModeSurface()) {
-                    $nextContratApplication->setStatut(Vrac::STATUT_GENERE_AUTOMATIQUEMENT_APPLICATION, $nextContratApplication->createur_identifiant);
-                    $nextContratApplication->signerAutomatiquement();
-                } elseif($nextContratApplication->isPremiereApplication() && $nextContratApplication->type_contrat == VracClient::TYPE_RAISIN) {
-                    $nextContratApplication->setStatut(Vrac::STATUT_GENERE_AUTOMATIQUEMENT_APPLICATION, $nextContratApplication->createur_identifiant);
-					$nextContratApplication->signerAutomatiquement();
-				} else {
-                    $nextContratApplication->setStatut(Vrac::STATUT_CREE_APPLICATION, $nextContratApplication->createur_identifiant);
-                    $nextContratApplication->signer($nextContratApplication->createur_identifiant);
-                    $nextContratApplication->statut = Vrac::STATUT_PROPOSITION;
-                }
+                $nextContratApplication->createApplication($nextContratApplication->createur_identifiant);
                 $nextContratApplication->save();
 
-                if($nextContratApplication->isValide() && !$nextContratApplication->valide->email_validation) {
-                    foreach(VracMailer::getInstance()->validationContrat($nextContratApplication) as $message) {
-                        $this->getMailer()->send($message);
-                    }
-                    $nextContratApplication->valide->email_validation = date('Y-m-d');
-                    $nextContratApplication->save();
+                VracMailer::getInstance()->sendMailsByStatutsChanged($nextContratApplication);
 
+                if($nextContratApplication->isValide()) {
                     $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à toutes les parties.');
                 } else {
-                    foreach(VracMailer::getInstance()->demandeSignature($nextContratApplication) as $message) {
-                        $this->getMailer()->send($message);
-                    }
                     $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de signature des autres parties. Un email va leur être envoyé.');
                 }
 
