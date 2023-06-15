@@ -10,8 +10,8 @@
         <?php foreach($vrac->historique as $histo): ?>
         <tr>
             <td style="text-align: left; width: 100px;"><?php echo format_date($histo->date, 'dd/MM/yyyy HH:mm'); ?></td>
-            <td><?php echo ($histo->auteur) ? ucfirst($vrac->getTypeTiers($histo->auteur)) : "Automatique"; ?></td>
-            <td><?php echo $histo->description; ?><?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+            <td><?php echo ($histo->auteur) ? $vrac->getTypeTiersLibelle($histo->auteur) : "Automatique"; ?></td>
+            <td><?php echo $histo->description; ?><?php if($histo->commentaire): ?> : <?php echo $histo->commentaire; ?><?php endif; ?><?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
             <?php $mails = VracMailer::getInstance()->getMessagesByStatut($vrac->getRawValue(), $histo->statut, $histo->auteur, false); ?>
             <?php if (count($mails)): ?>
                 <a href="" onclick="document.getElementById('contenu_mail').innerHTML = this.title; document.getElementById('contenu_mail').style.display = 'block'; return false;" title="<?php echo displayMail($mails); ?>" style="position: absolute; left: 630px; opacity: 0.5;">[voir le mail]</a>
