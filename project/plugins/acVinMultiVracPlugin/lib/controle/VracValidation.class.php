@@ -52,7 +52,7 @@ class VracValidation extends DocumentValidation
 
         if($produitsVolumeBloque = $this->document->declaration->getProduitsWithVolumeBloque()) {
             $produits = array_map(function($val) { return $val->getLibelleComplet(); }, $produitsVolumeBloque);
-            $this->addPoint('vigilance', 'volume_bloque', implode(", ", $produits), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
+            $this->addPoint('vigilance', 'volume_bloque', implode(", ", $produits));
         }
   	}
 
