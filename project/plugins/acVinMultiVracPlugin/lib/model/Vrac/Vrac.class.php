@@ -467,7 +467,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isSupprimable()
     {
-
+        if($this->isPluriannuelCadre() && $this->hasContratApplication()) {
+            return false;
+        }
+        if($this->isApplicationPluriannuel() && $this->isValide()) {
+            return false;
+        }
         return in_array($this->valide->statut, self::getStatutsSupprimable());
     }
 
