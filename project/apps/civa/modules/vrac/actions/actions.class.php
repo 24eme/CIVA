@@ -395,7 +395,7 @@ class vracActions extends sfActions
         }
 
         if($this->vrac->isValide()) {
-            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tous le monde.');
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tout le monde.');
         }
 
         VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
@@ -455,7 +455,7 @@ class vracActions extends sfActions
         }
 
         if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_ACHETEUR) {
-            $this->getUser()->setFlash('notice', 'Le projet été transmis au vendeur afin qu\'il le signe.');
+            $this->getUser()->setFlash('notice', 'Le projet a été transmis au vendeur afin qu\'il le signe.');
         }
 
     	return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
