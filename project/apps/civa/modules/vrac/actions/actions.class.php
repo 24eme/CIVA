@@ -314,26 +314,32 @@ class vracActions extends sfActions
         $this->validation = new VracContratValidation($nextContratApplication);
         $this->forward404Unless(!$this->validation->hasPoints());
 
-    	if ($request->isMethod(sfWebRequest::POST)) {
-    		$this->form->bind($request->getParameter($this->form->getName()));
-        	if ($this->form->isValid()) {
-        		$nextContratApplication = $this->form->save();
-                $nextContratApplication->createApplication($nextContratApplication->createur_identifiant);
-                $nextContratApplication->save();
+    	if (!$request->isMethod(sfWebRequest::POST)) {
 
-                VracMailer::getInstance()->sendMailsByStatutsChanged($nextContratApplication);
-
-                if($nextContratApplication->isValide()) {
-                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à toutes les parties.');
-                } else {
-                    $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de signature des autres parties. Un email va leur être envoyé.');
-                }
-
-       			return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
-        	}
+            throw new sfError404Exception();
         }
-        $this->getUser()->setFlash('notice', 'Une erreur est survenue lors de la génération du contrat d\'application');
-        return $this->redirect('vrac_fiche', array('sf_subject' => $contratPluriannuel));
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            $this->getUser()->setFlash('notice', 'Une erreur est survenue lors de la génération du contrat d\'application');
+            return $this->redirect('vrac_fiche', array('sf_subject' => $contratPluriannuel));
+        }
+
+		$nextContratApplication = $this->form->save();
+        $nextContratApplication->createApplication($nextContratApplication->createur_identifiant);
+        $nextContratApplication->save();
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($nextContratApplication);
+
+        if($nextContratApplication->isValide()) {
+            $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à toutes les parties.');
+        } else {
+            $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de signature des autres parties. Un email va leur être envoyé.');
+        }
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
 	}
 
     protected function getTiersOfVrac($vrac) {
