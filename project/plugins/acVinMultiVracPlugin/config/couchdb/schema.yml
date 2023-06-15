@@ -17,6 +17,8 @@ Vrac:
       createur_identifiant: {  }
       acheteur_type: {  }
       acheteur_identifiant: {  }
+      acheteur_assujetti_tva: {  }
+      acheteur_primes_diverses: { required: false }
       acheteur:
         type: collection
         class: VracAcheteur
@@ -42,6 +44,8 @@ Vrac:
             identifiant: {  }
       vendeur_type: {  }
       vendeur_identifiant: {  }
+      vendeur_assujetti_tva: {  }
+      vendeur_frais_annexes: { required: false }
       vendeur:
         type: collection
         class: VracVendeur
@@ -177,8 +181,10 @@ Vrac:
                                                                   prix_unitaire: { type: float }
                                                                   denomination: { }
                                                                   cloture: { type: integer }
+                                                                  surface_propose: { type: float }
                                                                   volume_propose: { type: float }
                                                                   volume_enleve: { type: float }
+                                                                  dont_volume_bloque: { type: float, required: false }
                                                                   centilisation: { type: float, required: false }
                                                                   nb_bouteille: { type: integer, required: false }
                                                                   label: { required: false }
@@ -220,14 +226,38 @@ Vrac:
       numero_papier: {  }
       prix_total: { type: float }
       prix_reel_total: { type: float }
+      surface_propose_total: { type: float }
       volume_propose_total: { type: float }
       volume_enleve_total: { type: float }
       etape: {  }
       type: {  }
       type_contrat: {  }
+      contrat_pluriannuel: {  }
+      reference_contrat_pluriannuel: { required: false }
+      contrat_pluriannuel_mode_surface: { }
+      prix_unite: { }
       date_modification: {  }
       date_export_creation: {  }
       motif_suppression: {  }
       clause_reserve_propriete: { required: false }
+      clause_mandat_facturation: { required: false }
+      clause_resiliation: { required: false }
+      clause_evolution_prix: { required: false }
+      suivi_qualitatif: { required: false }
+      delais_retiraison: { required: false }
       papier: { required: false }
       interne: { required: false }
+      historique:
+        type: array_collection
+        required: false
+        definition:
+          fields:
+            '*':
+              type: collection
+              definition:
+                fields:
+                  date: { }
+                  auteur: {  }
+                  description: {  }
+                  commentaire: {  }
+                  statut: { }

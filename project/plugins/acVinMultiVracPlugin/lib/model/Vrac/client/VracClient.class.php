@@ -3,20 +3,45 @@
 class VracClient extends acCouchdbClient {
 
 	const VRAC_PREFIXE_ID = 'VRAC-';
+    const VRAC_PREFIX_ANNEXE = 'annexe_';
 	const APP_CONFIGURATION = 'app_configuration_vrac';
 	const APP_CONFIGURATION_VRAC_PRODUITS = 'produits_vrac_statiques';
+    const APP_CONFIGURATION_MOUT_PRODUITS = 'produits_mout_statiques';
 	const APP_CONFIGURATION_BOUTEILLE_PRODUITS = 'produits_bouteille_statiques';
 	const APP_CONFIGURATION_ETAPES = 'etapes';
 	const NB_MAX_CONTRAT_DB2 = 99999;
 	const TYPE_VRAC = 'VRAC';
 	const TYPE_BOUTEILLE = 'BOUTEILLE';
+	const TYPE_RAISIN = 'RAISIN';
+	const TYPE_MOUT = 'MOUT';
 	const TYPE_VRAC_LIBELLE = 'Vrac';
 	const TYPE_BOUTEILLE_LIBELLE = 'Bouteille';
+	const TYPE_RAISIN_LIBELLE = 'Raisin';
+	const TYPE_MOUT_LIBELLE = 'Moût';
 	const LABEL_BIO = 'BIO';
+	const LABEL_HVE = 'HVE';
+	const LABEL_BIO_HVE = 'BIO_HVE';
+	const PRIX_HL = 'EUR_HL';
+	const PRIX_KG = 'EUR_KG';
+	const PRIX_HA = 'EUR_HA';
+	const PRIX_BOUTEILLE = 'EUR_BOUTEILLE';
+
+    const TEMPORALITE_ANNUEL = 'ANNUEL';
+    const TEMPORALITE_PLURIANNUEL_CADRE = 'PLURIANNUEL_CADRE';
+    const TEMPORALITE_PLURIANNUEL_APPLICATION = 'PLURIANNUEL_APPLICATION';
+
+	const DELAIS_RETIRAISON_AVEC_SUIVI_QUALITATIF_PLURIANNUEL = "Jusqu'au 31/07";
+	const DELAIS_RETIRAISON_SANS_SUIVI_QUALITATIF = "60 jours après la validation du contrat";
+    const DELAIS_RETIRAISON_AUCUN = "Aucun";
+    const DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE = "%NB_JOURS% jours après la récolte";
+
+    public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
 
 	protected static $_contrat_types = array(
 									self::TYPE_VRAC => self::TYPE_VRAC_LIBELLE,
-                                    self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE
+                                    self::TYPE_BOUTEILLE => self::TYPE_BOUTEILLE_LIBELLE,
+                                    self::TYPE_RAISIN => self::TYPE_RAISIN_LIBELLE,
+                                    self::TYPE_MOUT => self::TYPE_MOUT_LIBELLE
                                  );
 
   protected static $_roles = array(
@@ -38,7 +63,14 @@ class VracClient extends acCouchdbClient {
 									'600' => '600 cl'
                                  );
 
-	public static $label_libelles = array(self::LABEL_BIO => "BIO");
+	public static $label_libelles = array(self::LABEL_BIO => "BIO", self::LABEL_HVE => "HVE", self::LABEL_BIO_HVE => "BIO & HVE");
+
+	public static $prix_unites = array(
+					self::PRIX_HL => "€/hl",
+					self::PRIX_KG => "€/kg",
+					self::PRIX_HA => "€/ha",
+					self::PRIX_BOUTEILLE => "€/blle",
+					);
 
     public static function getInstance()
     {
@@ -49,6 +81,9 @@ class VracClient extends acCouchdbClient {
     {
     	if ($type == self::TYPE_BOUTEILLE) {
     		return self::APP_CONFIGURATION_BOUTEILLE_PRODUITS;
+    	}
+    	if ($type == self::TYPE_MOUT) {
+    		return self::APP_CONFIGURATION_MOUT_PRODUITS;
     	}
     	return self::APP_CONFIGURATION_VRAC_PRODUITS;
     }
@@ -93,10 +128,53 @@ class VracClient extends acCouchdbClient {
     	throw new sfException('Aucune configuration vrac définie dans l\'app!');
     }
 
+    public static function getConfigVar($var)
+    {
+        $config = self::getConfig();
+        if (!isset($config[$var])) {
+            throw new sfException('La variable '.$var.' n\'est pas défini dans la configuration vrac');
+        }
+        return $config[$var];
+    }
+
 	  public function buildId($numero_contrat) {
 
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
+
+	public static function getDelaisPaiement($vrac) {
+        $delais = array();
+
+		if($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPluriannuelCadre()) {
+			$delais[] = "Dans un délai maximum de 150 jours après l’enlèvement et au plus tard le 15 septembre de l’année suivant la récolte";
+			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+			$delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
+
+		if($vrac->type_contrat == VracClient::TYPE_VRAC && !$vrac->isPluriannuelCadre()) {
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
+
+		if($vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais[] = "Paiement sous 7 jours";
+		}
+
+		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuelCadre()) {
+			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+            $delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+		}
+
+		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
+			$delais[] = "Délai légal : 30 jours après la date de livraison";
+	        $delais[] = "Paiement sous 7 jours";
+		}
+
+        return $delais;
+	}
 
 	public function getFirstEtablissement($societe) {
 		foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
@@ -160,7 +238,13 @@ class VracClient extends acCouchdbClient {
     }
 
     public function getAtDate($date, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT) {
-        return $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
+        $items = $this->startkey(self::VRAC_PREFIXE_ID.$date.'000')->endkey(self::VRAC_PREFIXE_ID.$date.'999')->execute($hydrate);
+		foreach($items as $key => $item) {
+			if (strlen($key) > 16) {
+				unset($items[$key]);
+			}
+		}
+		return $items;
     }
 
 	public function buildCampagneVrac($date) {
@@ -223,8 +307,8 @@ class VracClient extends acCouchdbClient {
   		if ($proprietaire) {
   			$libelles = Vrac::getStatutsLibellesActionsProprietaire();
   		}
-  		if ($statut == Vrac::STATUT_VALIDE_PARTIELLEMENT && $hasValidated) {
-  			return $libelles[Vrac::STATUT_CLOTURE];
+  		if (in_array($statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION)) && $hasValidated) {
+        	return $libelles[Vrac::STATUT_CLOTURE];
   		}
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}

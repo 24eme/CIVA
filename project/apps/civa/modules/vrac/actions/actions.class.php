@@ -32,6 +32,7 @@ class vracActions extends sfActions
 		$this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
+        $this->temporalite = $request->getParameter('temporalite');
 		$this->role = $request->getParameter('role');
         $this->commercial = $request->getParameter('commercial');
 
@@ -39,10 +40,11 @@ class vracActions extends sfActions
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
 		$etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
         $this->statuts = $this->getStatuts();
         $this->types = VracClient::getContratTypes();
+        $this->temporalites = VracClient::$_contrat_temporalites;
         $this->roles = $this->findRoles();
         $annuaire = $this->getAnnuaire();
         $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
@@ -142,13 +144,18 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::CLOTURE, $this->vrac);
 
 		$this->validation = new VracValidation($this->vrac);
-		if ($this->vrac->allProduitsClotures() && !$this->validation->hasErreurs()) {
-			$this->vrac->clotureContrat();
-			$this->vrac->save();
-			$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès');
-			return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-		}
-		throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
+		if (!$this->vrac->allProduitsClotures() || $this->validation->hasErreurs()) {
+            throw new sfError404Exception('Contrat vrac '.$this->vrac->_id.' n\'est pas cloturable.');
+        }
+
+		$this->vrac->clotureContrat();
+		$this->vrac->save();
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+        $this->getUser()->setFlash('notice', 'Contrat cloturé avec succès. Un email a été envoyé à toutes les parties.');
+
+        return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
 
 	public function executeForcerCloture(sfWebRequest $request)
@@ -158,9 +165,22 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::FORCE_CLOTURE, $this->vrac);
 
 		$this->vrac->forceClotureContrat();
-		$this->vrac->valide->email_cloture = true;
 		$this->vrac->save();
 		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès, aucun mail ne sera envoyé');
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
+	}
+
+	public function executeForcerValidation(sfWebRequest $request)
+	{
+        $this->vrac = $this->getRoute()->getVrac();
+
+        $this->secureVrac(VracSecurity::FORCE_VALIDATION, $this->vrac);
+
+		$this->vrac->signerAutomatiquement();
+		$this->vrac->save();
+
+		$this->getUser()->setFlash('notice', 'Contrat validé avec succès, aucun mail ne sera envoyé');
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
 	}
@@ -169,7 +189,10 @@ class vracActions extends sfActions
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
-        $this->secureVrac(VracSecurity::SUPPRESSION, $this->vrac);
+        $this->forward404Unless(!$this->vrac->hasContratApplication());
+        if (!$this->vrac->isApplicationPluriannuel()) {
+            $this->secureVrac(VracSecurity::SUPPRESSION, $this->vrac);
+        }
 
 		if ($this->vrac->isNew()) {
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
@@ -177,10 +200,32 @@ class vracActions extends sfActions
 
 		$this->user = $this->getEtablissementCreateur();
 
-		if ($this->vrac->valide->statut == Vrac::STATUT_CREE) {
+		if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_CREE))) {
+
 			$this->vrac->delete();
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
+
+        if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_PROJET_ACHETEUR, Vrac::STATUT_PROJET_VENDEUR))) {
+            $this->vrac->motif_suppression = "Le projet a été supprimé par son créateur";
+            foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
+                $this->getMailer()->send($message);
+            }
+
+			$this->vrac->delete();
+            return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
+		}
+
+		if ($this->vrac->isApplicationPluriannuel() && !$this->vrac->isValide()) {
+            $vracCadre = $this->vrac->getContratPluriannuelCadre();
+            foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
+                $this->getMailer()->send($message);
+            }
+
+			$this->vrac->delete();
+
+            return $this->redirect('vrac_fiche', array('sf_subject' => $vracCadre));
+        }
 
 		$this->form = new VracSuppressionForm($this->vrac);
 
@@ -188,13 +233,9 @@ class vracActions extends sfActions
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
         		$this->vrac = $this->form->save();
-	        	$emails = $this->vrac->getEmails();
-                foreach($emails as $email) {
-                	VracMailer::getInstance()->annulationContrat($this->vrac, $email);
-                }
-				foreach(sfConfig::get('app_email_notifications', array()) as $email) {
-					VracMailer::getInstance()->annulationContrat($this->vrac, $email);
-				}
+
+                VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
 				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
         	}
         }
@@ -210,6 +251,9 @@ class vracActions extends sfActions
 
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
 		$this->validation = new VracValidation($this->vrac);
+
+        $this->contratsApplication = $this->vrac->getContratDeReference()->getContratsApplication();
+
     	if ($request->isMethod(sfWebRequest::POST)) {
 
             $this->secureVrac(VracSecurity::ENLEVEMENT, $this->vrac);
@@ -220,6 +264,15 @@ class vracActions extends sfActions
 				$this->getUser()->setFlash('notice', 'Le contrat a été mis à jour avec succès.');
        			return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
         	}
+        }
+
+        try {
+            $application = $this->vrac->getContratDeReference()->generateNextPluriannuelApplication();
+            $this->formApplication = $this->getForm($application, VracEtapes::ETAPE_PRODUITS);
+			$this->validationApplication = new VracContratValidation($application);
+        } catch (Exception $e) {
+		    $this->formApplication = null;
+            $this->validationApplication = null;
         }
     }
 
@@ -238,6 +291,54 @@ class vracActions extends sfActions
                 return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
             }
         }
+	}
+
+	public function executeGenererContratApplication(sfWebRequest $request)
+	{
+        $contratPluriannuel = $this->getRoute()->getVrac();
+        $this->forward404Unless($contratPluriannuel);
+        $user = $this->getTiersOfVrac($contratPluriannuel);
+        $this->forward404Unless($user);
+        $this->forward404Unless($user->_id == $contratPluriannuel->createur_identifiant);
+        $campagne = $request->getParameter('campagne');
+        try {
+            $nextContratApplication = $contratPluriannuel->generateNextPluriannuelApplication();
+        } catch (Exception $e) {
+		    $nextContratApplication = null;
+        }
+        $this->forward404Unless($nextContratApplication);
+        $this->forward404Unless($nextContratApplication->numero_contrat == $contratPluriannuel->numero_contrat.$campagne);
+
+        $this->form = $this->getForm($nextContratApplication, VracEtapes::ETAPE_PRODUITS);
+        $this->validation = new VracContratValidation($nextContratApplication);
+        $this->forward404Unless(!$this->validation->hasPoints());
+
+    	if (!$request->isMethod(sfWebRequest::POST)) {
+
+            throw new sfError404Exception();
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            $this->getUser()->setFlash('notice', 'Une erreur est survenue lors de la génération du contrat d\'application');
+            return $this->redirect('vrac_fiche', array('sf_subject' => $contratPluriannuel));
+        }
+
+		$nextContratApplication = $this->form->save();
+        $nextContratApplication->createApplication($nextContratApplication->createur_identifiant);
+        $nextContratApplication->save();
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($nextContratApplication);
+
+        if($nextContratApplication->isValide()) {
+            $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est validé. Un email va être envoyé à toutes les parties.');
+        } else {
+            $this->getUser()->setFlash('notice', 'Le contrat d\'application '.$campagne.' adossé au contrat pluriannuel visa n° '.$contratPluriannuel->numero_contrat.' a été généré avec succès. Il est en attente de signature des autres parties. Un email va leur être envoyé.');
+        }
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $nextContratApplication));
 	}
 
     protected function getTiersOfVrac($vrac) {
@@ -267,7 +368,7 @@ class vracActions extends sfActions
         return $user;
     }
 
-	public function executeValidation(sfWebRequest $request)
+	public function executeSigner(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();
@@ -278,11 +379,17 @@ class vracActions extends sfActions
 		$this->vrac->signer($this->user->_id);
 		$this->vrac->save();
 
-		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte.');
-		$emails = $this->vrac->getEmailsActeur($this->user->_id);
-		foreach ($emails as $email) {
-			VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
-		}
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous être envoyé.');
+
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROPOSITION) {
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'elles signent la proposition.');
+        }
+
+        if($this->vrac->isValide()) {
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Le contrat est maintenant validé, il a été signé par toutes les parties. Un email va être envoyé à tout le monde.');
+        }
 
 		return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
@@ -307,34 +414,42 @@ class vracActions extends sfActions
     		$this->next_etape = $this->vrac->etape = $nextEtape;
     	}
 		$this->validation = new VracContratValidation($this->vrac, $this->annuaire);
-    	if ($request->isMethod(sfWebRequest::POST)) {
-    		$this->form->bind($request->getParameter($this->form->getName()));
-        	if ($this->form->isValid()) {
-       			$this->form->save();
-       			if ($request->isXmlHttpRequest()) {
-       				return sfView::NONE;
-       			}
-				$this->cleanSessions();
-       			if ($nextEtape) {
-       				return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
-       			} elseif($this->vrac->isPapier()) {
-					$this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+    	if (!$request->isMethod(sfWebRequest::POST)) {
 
-					return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-			    } else {
-		       		$emails = $this->vrac->getEmailsActeur($this->user->_id);
-					foreach ($emails as $email) {
-						VracMailer::getInstance()->confirmationSignature($this->vrac, $email);
-					}
-					$emails = $this->vrac->getEmails(false);
-					foreach ($emails as $email) {
-						VracMailer::getInstance()->demandeSignature($this->vrac, $email);
-					}
-					$this->getUser()->setFlash('notice', 'Le contrat a été créé avec succès et votre signature a bien été prise en compte. Chacun des acteurs du contrat va recevoir un email de demande de signature.');
-       				return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
-       			}
-        	}
+            return sfView::SUCCESS;
         }
+        $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+		$this->form->save();
+		if ($request->isXmlHttpRequest()) {
+			return sfView::NONE;
+		}
+    	$this->cleanSessions();
+
+		if ($nextEtape) {
+
+            return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
+		}
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+
+        if($this->vrac->isPapier()) {
+            $this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
+        }
+
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_VENDEUR) {
+            $this->getUser()->setFlash('notice', 'Le projet a été créé avec succès. Celui-ci a été transmis à l\'acheteur ou au courtier afin qu\'il le valide.');
+        }
+
+        if ($this->vrac->valide->statut == Vrac::STATUT_PROJET_ACHETEUR) {
+            $this->getUser()->setFlash('notice', 'Le projet a été transmis au vendeur afin qu\'il le signe.');
+        }
+
+    	return $this->redirect('vrac_fiche', array('sf_subject' => $this->vrac));
     }
 
     public function executeAjouterProduit(sfWebRequest $request)
@@ -441,6 +556,9 @@ class vracActions extends sfActions
                         if (($appellation == 'appellation_'.Vrac::APPELLATION_PINOTNOIRROUGE) &&  ($key == Vrac::CEPAGE_PR)) {
 				$result[str_replace('/recolte/', 'declaration/', $cepage->getHash())] = $result[str_replace('/recolte/', 'declaration/', $cepage->getHash())].Vrac::CEPAGE_PR_LIBELLE_COMPLEMENT;
 			}
+            if ($cepage->getAppellation()->getKey() == Vrac::APPELLATION_CREMANT && in_array($cepage->getKey(), Vrac::$cepages_exclus_cremant)) {
+                unset($result[str_replace('/recolte/', 'declaration/', $cepage->getHash())]);
+            }
 		}
     	return $this->renderText(json_encode($result));
     }
@@ -459,8 +577,7 @@ class vracActions extends sfActions
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
     	$cepage = $this->config->get($hash);
-    	$vtsgn = ($cepage->exist('no_vtsgn') && $cepage->no_vtsgn)? 0 : 1;
-    	return $this->renderText($vtsgn);
+    	return $this->renderText($cepage->hasVtsgn());
     }
 
     public function executeDownloadNotice() {
@@ -502,6 +619,14 @@ class vracActions extends sfActions
 
     protected function getFormRetiraisons($vrac, $user)
     {
+		if(!$vrac->needRetiraison()) {
+			return null;
+		}
+		if($vrac->isPluriannuelCadre()) {
+
+			return null;
+		}
+
     	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule()) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
@@ -569,18 +694,67 @@ class vracActions extends sfActions
 		$declarant = $this->getEtablissementCreateur();
 
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
-    	if ($vrac->isNew() && $typeTiers) {
-			if ($typeTiers == 'vendeur') {
-				$vrac->vendeur_identifiant = $declarant->_id;
-	            $vrac->storeVendeurInformations($declarant);
-	            $vrac->setVendeurQualite($declarant->getFamille());
-			} else {
-				$vrac->acheteur_identifiant = $declarant->_id;
-	            $vrac->storeAcheteurInformations($declarant);
-	            $vrac->setAcheteurQualite($declarant->getFamille());
-			}
+
+        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+            $typeTiers = 'vendeur';
+        }
+
+        if(in_array($declarant->getFamille(), array(EtablissementFamilles::FAMILLE_COURTIER))) {
+            $typeTiers = 'mandataire';
+        }
+
+        if(!$typeTiers) {
+            $typeTiers = 'acheteur';
+        }
+
+    	if ($vrac->isNew() && $typeTiers == 'vendeur') {
+    		$vrac->vendeur_identifiant = $declarant->_id;
+            $vrac->storeVendeurInformations($declarant);
+            $vrac->setVendeurQualite($declarant->getFamille());
+    	} elseif($vrac->isNew() && $typeTiers == 'acheteur') {
+    		$vrac->acheteur_identifiant = $declarant->_id;
+            $vrac->storeAcheteurInformations($declarant);
+            $vrac->setAcheteurQualite($declarant->getFamille());
 		}
+
 		return $vrac;
+    }
+
+	public function executeRefuserProjet(sfWebRequest $request)
+	{
+		$this->cleanSessions();
+		$vrac = $this->getRoute()->getVrac();
+        $user = $this->getTiersNoSigneOfVrac($vrac);
+        $vrac->refusProjet($user->_id);
+        $vrac->save();
+
+        VracMailer::getInstance()->sendMailsByStatutsChanged($vrac);
+
+        $this->getUser()->setFlash('notice', "Le refus du projet a été notifié par mail à l'autre partie.");
+		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
+    }
+
+	public function executeAnnexe(sfWebRequest $request)
+	{
+		$vrac = $this->getRoute()->getVrac();
+    	$annexe = $request->getParameter('annexe', null);
+    	if (!$annexe) {
+    		throw new sfException('annexe obligatoire.');
+    	}
+    	$operation = $request->getParameter('operation', null);
+    	if (!$operation) {
+    		throw new sfException('operation obligatoire.');
+    	}
+		if ($operation == 'supprimer') {
+            if ($vrac->deleteAnnexe($annexe)) {
+                $vrac->save();
+            }
+		}
+		if (($filename = $vrac->getAnnexeFilename($annexe)) && $operation == 'visualiser') {
+            $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
+            return $this->renderText(file_get_contents($vrac->getAttachmentUri($filename)));exit;
+		}
+        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
 
 }

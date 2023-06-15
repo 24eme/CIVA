@@ -20,9 +20,9 @@ $(document).ready( function()
 });
 
 var initFlashMessage = function() {
-	$('p.flash_message').delay(5000).animate({
+	$('p.flash_message').delay(14000).animate({
 opacity: 0
-}, 600);
+}, 1500);
 }
 
 var initJSTitle = function() {

@@ -4,16 +4,134 @@
 		<legend class="titre_section">Type de contrat</legend>
 
 		<div class="clearfix">
-			<div id="type_contrat_radio_list" class="form_col selecteur">
-				<div class="ligne_form">
-					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Veuillez selectionner le type de votre contrat :<?php else: ?>Vous avez selectionner le type de contrat : <?php endif; ?></label>
+			<div id="type_contrat_radio_list" class="form_col form_col_extended selecteur">
+				<div class="ligne_form<?php if (!$form->getObject()->isNew()): ?>_sm<?php endif; ?>">
+					<label for="vrac_soussignes_vendeur_type_recoltants" class="bold"><?php if ($form->getObject()->isNew()): ?>Type du contrat :<?php else: ?>Type du contrat : <?php endif; ?></label>
 					<?php if ($form->getObject()->isNew()): ?>
 						<?php echo $form['type_contrat']->render(array('autofocus' => 'autofocus')); ?>
 					<?php else: ?>
-						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?></label></li></ul>
+						<ul class="radio_list"><li><label for="vrac_soussignes_type_contrat_<?php echo $form->getObject()->type_contrat ?>"><?php echo ucfirst(strtolower($form->getObject()->type_contrat)); ?>&nbsp;<?php echo $form->getObject()->getTypeDureeLibelle() ?></label></li></ul>
 					<?php endif; ?>
 				</div>
 			</div>
+            <?php if ($form->getObject()->isNew()): ?>
+            <div id="contrat_pluriannuel_radio_list" class="form_col form_col_extended selecteur">
+                <div class="ligne_form">
+					<label for="" class="bold">Durée du contrat :</label>
+                    <?php echo $form['contrat_pluriannuel']->render(); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+			<?php if ($form->getObject()->isNew()): ?>
+            <div id="contrat_pluriannuel_inputs" style="display: none;">
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div id="ligne_campagnes_application" class="ligne_form">
+                    <?php echo $form['campagne']->renderError() ?>
+    				<?php echo $form['campagne']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
+    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 120px;")) ?>
+                </div>
+            </div>
+            <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div id="ligne_contrat_pluriannuel_mode_surface" class="ligne_form">
+                    <?php echo $form['contrat_pluriannuel_mode_surface']->renderError() ?>
+				    <?php echo $form['contrat_pluriannuel_mode_surface']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
+					<?php echo $form['contrat_pluriannuel_mode_surface']->render(array("disabled" => "disabled")) ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            </div>
+            <?php if(isset($form['prix_unite'])): ?>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div id="ligne_prix_unite" class="ligne_form">
+                    <?php echo $form['prix_unite']->renderError() ?>
+				    <?php echo $form['prix_unite']->renderLabel(null, array("class" => "bold")) ?>
+					<?php echo $form['prix_unite']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            <script>
+				document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
+				document.querySelectorAll('input[name="vrac_soussignes[type_contrat]"]').forEach(function(input) {
+					input.addEventListener('change', function(e) {
+						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').checked = true;
+						document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
+						document.getElementById('contrat_pluriannuel_radio_list').style.display = 'block';
+						if(document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').checked) {
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = (input.value == "RAISIN");
+						}
+						if(input.value == "RAISIN") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_KG";
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_1').checked = true;
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
+							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HL"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HA"]').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_KG"]').disabled = false;
+						}
+						if(input.value == "BOUTEILLE") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_BOUTEILLE";
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
+							document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
+							document.getElementById('contrat_pluriannuel_radio_list').style.display = 'none';
+							document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').checked = true;
+						}
+						if(input.value == "VRAC") {
+							document.querySelector('#vrac_soussignes_prix_unite').value = "EUR_HL";
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = true;
+						}
+						if(input.value == "MOUT") {
+		                    document.querySelector('#vrac_soussignes_prix_unite').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HA"]').disabled = true;
+							document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_BOUTEILLE"]').disabled = true;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_HL"]').disabled = false;
+                            document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_KG"]').disabled = false;
+						}
+					});
+				});
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
+                    document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
+                    document.querySelector('#ligne_campagnes_application select').disabled = true;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').disabled = true;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
+                      item.disabled = true;
+                    });
+                    document.querySelector('#ligne_campagnes_application label').style.opacity = '0.25';
+                    document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '0.25';
+                });
+                document.querySelector('#vrac_soussignes_contrat_pluriannuel_1').addEventListener('change', function(e) {
+                    document.getElementById('contrat_pluriannuel_inputs').style.display = 'block';
+                    document.querySelector('#ligne_campagnes_application select').disabled = false;
+                    document.querySelectorAll('#ligne_contrat_pluriannuel_mode_surface input').forEach(function(item) {
+                      item.disabled = false;
+                    });
+					if(document.querySelector('#vrac_soussignes_type_contrat_RAISIN').checked) {
+						document.querySelector('#vrac_soussignes_contrat_pluriannuel_mode_surface_0').disabled = true;
+					}
+                    document.querySelector('#ligne_campagnes_application label').style.opacity = '1';
+                    document.querySelector('#ligne_contrat_pluriannuel_mode_surface label').style.opacity = '1';
+                });
+            </script>
+            <?php elseif($vrac->isPluriannuelCadre()): ?>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div class="ligne_form_sm">
+					<label for="" class="bold">Campagnes d'application :</label>
+                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo ($millesime+VracClient::getConfigVar('nb_campagnes_pluriannuel',0)-1) ?></span>
+                </div>
+            </div>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div class="ligne_form_sm">
+					<label for="" class="bold">Vous contractualisez sur :</label>
+                    <span style="margin-left: 5px;"><?php if(!$vrac->isInModeSurface()): ?>Du volume (hl)<?php else: ?>De la surface (ares)<?php endif; ?></span>
+                </div>
+            </div>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div class="ligne_form_sm">
+					<label for="" class="bold">Unité de prix :</label>
+                    <span style="margin-left: 5px;"><?php echo $vrac->getPrixUniteLibelle(); ?></span>
+                </div>
+            </div>
+            <?php endif; ?>
 		</div>
 	</fieldset>
 
@@ -67,6 +185,10 @@
 						</tr>
 					</table>
 				</div>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujetti à la TVA</label>
+                    <?php echo $form['vendeur_assujetti_tva']->render(array('required' => 'required')); ?>
+                </div>
 			</div>
 
 			<div id="vendeur_infos" class="cible">
@@ -93,6 +215,10 @@
 				<?php else: ?>
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">Le vendeur est assujetti à la TVA</label>
+                    <?php echo $form['vendeur_assujetti_tva']->render(array('required' => 'required')); ?>
+                </div>
 			</div>
 
 
@@ -157,6 +283,10 @@
 						</tr>
 					</table>
 				</div>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujetti à la TVA</label>
+                    <?php echo $form['acheteur_assujetti_tva']->render(array('required' => 'required')); ?>
+                </div>
 			</div>
 			<div id="acheteur_infos" class="cible">
 			<?php if($vrac->acheteur_identifiant): ?>
@@ -213,6 +343,10 @@
 				<?php else: ?>
 					<p class="ligne_form">Ce soussigné est à l'origine du contrat.</p>
 				<?php endif; ?>
+                <div class="ligne_form">
+                    <label for="vrac_soussignes_acheteur_assujetti_tva" class="bold">L'acheteur est assujetti à la TVA</label>
+                    <?php echo $form['acheteur_assujetti_tva']->render(array('required' => 'required')); ?>
+                </div>
 			</div>
 
 

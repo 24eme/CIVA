@@ -1,7 +1,6 @@
 <?php include_partial('email/header', array('vrac' => $vrac)); ?>
 
-
-Ce contrat a été annulé pour le motif suivant :
+Le <?php echo strtolower($vrac->getTypeDocumentLibelle()) ?> a été annulé pour le motif suivant :
 
 <?php echo htmlspecialchars_decode($vrac->motif_suppression, ENT_QUOTES) ?>
 

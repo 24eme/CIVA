@@ -11,6 +11,12 @@ class VracFormFactory
 			case VracEtapes::ETAPE_PRODUITS :
 				$form = new VracProduitsForm($vrac);
 				break;
+			case VracEtapes::ETAPE_CONDITIONS :
+				$form = new VracConditionsForm($vrac);
+				break;
+			case VracEtapes::ETAPE_ANNEXES :
+				$form = new VracAnnexeForm($vrac);
+				break;
 			case VracEtapes::ETAPE_VALIDATION :
 				$form = new VracValidationForm($vrac, $annuaire);
 				break;

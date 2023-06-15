@@ -71,7 +71,7 @@ class VracDetail extends BaseVracDetail {
 	    		$this->actif = 1;
 	    	}
     	} else {
-	    	if ($this->volume_propose && $this->prix_unitaire) {
+            if (($this->volume_propose||$this->surface_propose) && $this->prix_unitaire) {
 	    		$this->actif = 1;
 	    	}
     	}
@@ -118,6 +118,11 @@ class VracDetail extends BaseVracDetail {
     public function getTotalVolumePropose()
     {
     	return ($this->volume_propose && $this->actif)? $this->volume_propose : 0;
+    }
+
+    public function getTotalSurfacePropose()
+    {
+    	return ($this->surface_propose && $this->actif)? $this->surface_propose : 0;
     }
 
     public function getTotalPrixPropose()
@@ -182,6 +187,7 @@ class VracDetail extends BaseVracDetail {
     	$this->prix_unitaire = null;
     	$this->denomination = null;
     	$this->cloture = null;
+        $this->surface_propose = null;
     	$this->volume_propose = null;
     	$this->volume_enleve = null;
 	$this->remove('label');

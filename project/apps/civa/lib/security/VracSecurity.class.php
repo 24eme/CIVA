@@ -11,6 +11,7 @@ class VracSecurity implements SecurityInterface {
     const ENLEVEMENT = 'ENLEVEMENT';
     const CLOTURE = 'CLOTURE';
     const FORCE_CLOTURE = 'FORCE_CLOTURE';
+    const FORCE_VALIDATION = 'FORCE_VALIDATION';
 
     protected $vrac;
     protected $compte;
@@ -123,6 +124,25 @@ class VracSecurity implements SecurityInterface {
             return false;
         }
 
+        if (in_array(self::SIGNATURE, $droits) && $this->vrac->isBrouillon() && $this->vrac->vendeur_identifiant == $etablissement->_id) {
+
+            return false;
+        }
+
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isProjetVendeur() && $this->vrac->vendeur_identifiant == $etablissement->_id) {
+            return false;
+        }
+
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isProjetAcheteur() && $this->vrac->vendeur_identifiant != $etablissement->_id) {
+
+            return false;
+        }
+
+        if(in_array(self::SIGNATURE, $droits) && $this->vrac->isAnnule()) {
+
+            return false;
+        }
+
         if(in_array(self::SIGNATURE, $droits) && $this->vrac->isValide()) {
 
             return false;
@@ -186,6 +206,16 @@ class VracSecurity implements SecurityInterface {
         }
 
         if(in_array(self::FORCE_CLOTURE, $droits) && !$this->vrac->canForceClotureContrat()) {
+
+            return false;
+        }
+
+        if(in_array(self::FORCE_VALIDATION, $droits) && !$this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+
+            return false;
+        }
+
+        if(in_array(self::FORCE_VALIDATION, $droits) && $this->vrac->isValide()) {
 
             return false;
         }
