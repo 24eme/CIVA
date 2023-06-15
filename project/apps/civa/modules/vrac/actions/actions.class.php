@@ -394,7 +394,7 @@ class vracActions extends sfActions
 		$this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email de confirmation va vous être envoyé.');
 
         if ($this->vrac->valide->statut == Vrac::STATUT_PROPOSITION) {
-            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'ils signent la proposition.');
+            $this->getUser()->setFlash('notice', 'Votre signature a bien été prise en compte. Un email va être envoyé aux autres parties pour qu\'elles signent la proposition.');
         }
 
         if($this->vrac->isValide()) {
