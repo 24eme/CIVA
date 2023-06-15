@@ -59,7 +59,7 @@ class tiersActions extends sfActions {
                 continue;
             }
 
-            if($item->statut == Vrac::STATUT_CREE && $item->is_proprietaire) {
+            if(in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR, Vrac::STATUT_PROJET_ACHETEUR)) && $item->is_proprietaire) {
                $this->vracs['CONTRAT_A_TERMINER'] += 1;
             }
 

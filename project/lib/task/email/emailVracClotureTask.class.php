@@ -46,16 +46,11 @@ EOF;
 
   	$contrats = VracMailingView::getInstance()->getContratsForEmailCloture();
     foreach ($contrats as $contrat) {
-        if($contrat->isPapier()) {
-            continue;
+        foreach(VracMailer::getInstance()->clotureContrat($contrat) as $message) {
+            sfContext::getInstance()->getMailer()->send($message);
         }
-    	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
-    	$document->generatePDF();
-    	$emails = $contrat->getEmails();
-                    foreach($emails as $email) {
-                    	VracMailer::getInstance()->clotureContrat($contrat, $email, $document);
-          				$this->logSection('sended', $contrat->_id . ' => ' . $email);
-                    }
+
+		$this->logSection('sended', $contrat->_id);
 
 		$contrat->valide->email_cloture = date('Y-m-d');
 		$contrat->save();

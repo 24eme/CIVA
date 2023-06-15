@@ -467,7 +467,8 @@ table.table_donnees tbody tr:last-child td {
 	border-bottom: 1px solid #c6c8c7;
 }
 
-table.table_donnees tbody td input[type=text] {
+table.table_donnees tbody td input[type=text],
+table.table_donnees tbody td textarea {
 	background: #f6f6f6;
 	border: 1px solid #c2c1ba;
 	color: #7a7a7a;

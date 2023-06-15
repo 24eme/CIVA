@@ -53,7 +53,7 @@
 	<?php endif; ?>
 	<li>Siret : <strong><?php echo $tiers->siret ?></strong></li>
 	<?php if ($tiers->exist('carte_pro')): ?>
-	<li class="noprint">N° Carte pro. : <strong><?php echo $tiers->carte_pro ?></strong></li>
+	<li class="noprint">N° d'inscription au registre national : <strong><?php echo $tiers->carte_pro ?></strong></li>
 	<?php endif; ?>
 	<?php if ($tiers->exist('num_accise')): ?>
 	<li class="noprint">N°Accises : <strong><?php echo $tiers->num_accise ?></strong></li>
@@ -63,7 +63,12 @@
 	<li class="noprint">Commune : <strong><?php echo $tiers->commune ?></strong></li>
 	<li class="noprint">Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
 	<li class="noprint">E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
-	<?php if ($fiche): ?>
+    <?php if($vrac->exist($tiers->getKey().'_assujetti_tva')&&$fiche): ?>
+    <li class="noprint">
+        Assujeti à la TVA : <strong><?php if($vrac->get($tiers->getKey().'_assujetti_tva')): ?>Oui<?php else: ?>Non<?php endif; ?></strong>
+    </li>
+    <?php endif; ?>
+    <?php if ($fiche): ?>
 	<?php if (isset($date_validation) && $date_validation): ?>
 	<li class="noprint">Signé le <strong><?php echo format_date($date_validation, 'p', 'fr') ?></strong></li>
 	<?php else: ?>

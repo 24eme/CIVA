@@ -78,10 +78,23 @@ class Swift_Message extends Swift_Mime_SimpleMessage
       $body, $contentType, $charset
       ));
   }
-  
+
   public function __wakeup()
   {
     Swift_DependencyContainer::getInstance()->createDependenciesFor('mime.message');
   }
-  
+
+  public function copy() {
+      $message = self::newInstance($this->getSubject(), $this->getBody(), $this->getContentType(), $this->getCharset());
+      $message->setFrom($this->getFrom());
+      $message->setTo($this->getTo());
+      $message->setCc($this->getCc());
+      $message->setBcc($this->getBcc());
+      $message->setReplyTo($this->getReplyTo());
+      $message->setSender($this->getSender());
+      $message->setChildren($this->getChildren());
+
+      return $message;
+  }
+
 }

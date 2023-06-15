@@ -1,5 +1,7 @@
-Contrat <?php echo strtolower($vrac->type_contrat)?> du <?php echo strftime('%d/%m/%Y', strtotime($vrac->valide->date_saisie)) ?>
+<?php echo $vrac->getTypeDocumentLibelle() ?> <?php echo strtolower($vrac->getTypeDureeLibelle()) ?> <?php echo strtolower($vrac->type_contrat)?> du <?php echo strftime('%d/%m/%Y', strtotime($vrac->valide->date_saisie)) ?>
 
+<?php if($vrac->isPluriannuelCadre()): ?>Campagnes d'application : <?php echo VracSoussignesForm::getCampagnesChoices()[$vrac->campagne]; ?><?php endif; ?>
+<?php if($vrac->isApplicationPluriannuel()): ?>Contrat d'application : <?php echo $vrac->campagne; ?><?php endif; ?>
 
 Vendeur : <?php echo ($vrac->vendeur->intitule)? $vrac->vendeur->intitule.' '.$vrac->vendeur->raison_sociale : $vrac->vendeur->raison_sociale ?>
 

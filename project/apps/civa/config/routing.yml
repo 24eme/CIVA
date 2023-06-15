@@ -158,6 +158,16 @@ vrac_forcer_cloture:
   requirements:
     sf_method: [get, post]
 
+vrac_forcer_validation:
+  url: /vrac/:numero_contrat/forcer-validation
+  param: { module: vrac, action: forcerValidation }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
 vrac_cloture:
   url: /vrac/:numero_contrat/cloture
   param: { module: vrac, action: cloture }
@@ -178,7 +188,16 @@ vrac_fiche:
     sf_method: [get, post]
 vrac_validation:
   url: /vrac/:numero_contrat/fiche/validation
-  param: { module: vrac, action: validation }
+  param: { module: vrac, action: signer }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_refuser_projet:
+  url: /vrac/:numero_contrat/fiche/refuser-projet
+  param: { module: vrac, action: refuserProjet }
   class: VracRoute
   options:
     model:    Vrac
@@ -194,6 +213,15 @@ vrac_export_pdf:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_annexe:
+  url: /vrac/:numero_contrat/annexe/:operation/:annexe
+  param: { module: vrac, action: annexe }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get]
 
 vrac_pdf_annexe:
   url: /vrac-pdf-annexe
@@ -230,6 +258,15 @@ vrac_annuaire:
 vrac_mercuriale:
   url: /vrac/:numero_contrat/mercuriale
   param: { module: vrac, action: mercurialeEdit }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
+vrac_generer_contrat_application:
+  url: /vrac/:numero_contrat/generer-application/:campagne
+  param: { module: vrac, action: genererContratApplication }
   class: VracRoute
   options:
     model:    Vrac

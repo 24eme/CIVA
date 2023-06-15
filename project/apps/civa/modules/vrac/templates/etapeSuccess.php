@@ -1,13 +1,13 @@
 <?php include_partial('vrac/etapes', array('vrac' => $vrac, 'etapes' => $etapes, 'current' => $etape)) ?>
 
 <ul id="onglets_majeurs" class="clearfix">
-	<li class="ui-tabs-selected">
-		<a href="#" style="height: 18px;"><?php echo $etapes->getLibelle($etape) ?></a>
+	<li class="ui-tabs-selected" style="position: relative;">
+		<a href="#" style="height: 18px; padding-left: 25px;"><span title="Contrat de <?php echo ucfirst(strtolower($vrac->type_contrat)) ?>" style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span> <?php echo $etapes->getLibelle($etape) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?><small style="font-size: 80%; opacity: 0.8;">&nbsp;Contrat pluriannuel</small><?php endif; ?></a>
 	</li>
 </ul>
 <div id="contrats_vrac">
 
-    <form id="principal" class="ui-tabs" method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
+    <form id="principal" class="ui-tabs"<?php if(method_exists($form, 'hasUpload') && $form->hasUpload()): ?> enctype="multipart/form-data"<?php endif; ?> method="post" action="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => $etape)) ?>">
 
 
         <div class="fond">
@@ -31,10 +31,12 @@
             </li>
             <?php if(!$validation->hasErreurs() || $next_etape): ?>
             <li class="suiv">
-                <?php if ($etapes->getLast() == $etape): ?>
-                 <input type="image" src="/images/boutons/btn_valider_final.png" alt="Valider votre contrat" id="valideVrac" />
+                <?php if ($etapes->getLast() == $etape && $vrac->isVendeurProprietaire()): ?>
+                 <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac"> Envoyer le projet<small style="font-size: 12px; display: block; font-weight: normal;">à l'acheteur</small></button>
+                <?php elseif ($etapes->getLast() == $etape): ?>
+                    <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac">Valider et envoyer<small style="font-size: 12px; display: block; font-weight: normal;">le projet au vendeur</small></button>
                 <?php else: ?>
-                <button type="submit" name="valider" style="cursor: pointer;">
+                <button class="btn_image" type="submit" name="valider" style="cursor: pointer;">
                     <img alt="Continuer à l'étape suivante" src="/images/boutons/btn_passer_etape_suiv.png" />
                 </button>
                 <?php endif; ?>

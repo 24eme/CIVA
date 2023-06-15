@@ -1438,13 +1438,16 @@ var deleteRecolteAcheteurFromAutocompletion = function(cvi, champ_autocompletion
      * Initialise une popup
      ******************************************/
 var openPopup = function(popup, fn_open_if) {
-
+    let popupSize = popup.attr('data-size-popup') * 1;
+    if (typeof popupSize === 'undefined' || isNaN(popupSize)) {
+      popupSize = 375;
+    }
     popup.dialog
     ({
         autoOpen: false,
         draggable: false,
         resizable: false,
-        width: 375,
+        width: popupSize,
         modal: true,
         buttons:{
             '': function() {

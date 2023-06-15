@@ -9,11 +9,6 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
 
     abstract public function getChildrenNode();
 
-    /*public function test()
-    {
-    	echo "Tu prends tes cliques, tu niques ta mère!";exit;
-    }*/
-
     public function getChildrenNodeSorted() {
         $items = $this->getChildrenNode();
         $items_config = $this->getConfig()->getChildrenNode();
@@ -162,6 +157,15 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         return $total;
     }
 
+    public function getTotalSurfacePropose()
+    {
+    	$total = 0;
+        foreach($this->getChildrenNode() as $key => $item) {
+            $total += $item->getTotalSurfacePropose();
+        }
+        return $total;
+    }
+
     public function getTotalPrixEnleve()
     {
     	$total = 0;
@@ -202,14 +206,6 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
         	}
         }
         return $result;
-    }
-
-    public function clotureProduits()
-    {
-        foreach($this->getChildrenNode() as $key => $item) {
-        	$item->clotureProduits();
-        }
-        return null;
     }
 
     public function autoFillRetiraisons($fillDate = true)

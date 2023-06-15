@@ -190,6 +190,16 @@ input[type=radio]
     background-image: linear-gradient(to top, #BBCC00, #e4e4b5);
 }
 
+.btn_gris
+{
+    background: #5b5b5b;
+    background-image: -webkit-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: -moz-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: -o-linear-gradient(bottom, #5b5b5b, #dedede);
+    background-image: linear-gradient(to top, #5b5b5b, #dedede);
+    color: #000;
+}
+
 .btn_jaune
 {
     background: #FF8500;
@@ -197,7 +207,7 @@ input[type=radio]
     background-image: -moz-linear-gradient(98deg, #FF8500, #ffe0a5);
     background-image: -o-linear-gradient(98deg, #FF8500, #ffe0a5);
     background-image: linear-gradient(-8deg, #FF8500, #ffe0a5);
-    color: #2a2a2a;
+    color: #fff !important;
 }
 
 .btn_rouge
@@ -207,7 +217,17 @@ input[type=radio]
     background-image: -moz-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: -o-linear-gradient(98deg, #b70101, #fdafaf);
     background-image: linear-gradient(-8deg, #b70101, #fdafaf);
-    color: #000;
+    color: #fff;
+}
+
+.btn_noir
+{
+    background: #5b5b5b;
+    background-image: -webkit-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: -moz-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: -o-linear-gradient(98deg, #5b5b5b, #dddddd);
+    background-image: linear-gradient(-8deg, #5b5b5b, #dddddd);
+    color: white;
 }
 
 /* Tailles */
@@ -228,6 +248,10 @@ input[type=radio]
     font-size: 16px;
     font-weight: bold;
     padding: 10px;
+}
+
+.btn_upper_case {
+    text-transform: uppercase;
 }
 
 /* Boutons fleche */
@@ -288,6 +312,9 @@ table.table_donnees tbody tr.alt td,
 ol li.alt,
 ul li.alt { background: #DDD; }
 
+table.table_donnees tfoot td {
+	padding: 3px;
+}
 /* Messages logs */
 
 .message {
@@ -654,4 +681,13 @@ input[type="text"].ui-autocomplete-input
     text-indent: 100%;
     white-space: nowrap;
     width: 14px;
+}
+
+.versionner {
+    outline: 2px dotted #ff0000 !important;
+}
+
+td.versionner {
+    outline: none !important;
+    border: 2px dotted #ff0000 !important;
 }

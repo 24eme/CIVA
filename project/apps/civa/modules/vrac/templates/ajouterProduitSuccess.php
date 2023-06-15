@@ -19,6 +19,7 @@
 						<select id="choix_appellation" name="appellation">
 							<option value="">--</option>
 							<?php foreach ($config->declaration->getArrayAppellations() as $key => $appellation): ?>
+                            <?php if ($vrac->type_contrat == VracClient::TYPE_MOUT && $appellation->getKey() != 'CREMANT') continue; ?>
 							<option value="<?php echo $key ?>"><?php echo $appellation->libelle ?></option>
 							<?php endforeach; ?>
 						</select>
@@ -59,7 +60,7 @@
 	            </a>
 		    </li>
 		    <li class="suiv">
-		    	<button id="valide_form" type="submit" name="valider" style="cursor: pointer;">
+		    	<button id="valide_form" type="submit" name="valider" class="btn_image" style="cursor: pointer;">
 		    		<img alt="Continuer à l'étape suivante" src="/images/boutons/btn_valider_2.png" />
 		    	</button>
 		    </li>

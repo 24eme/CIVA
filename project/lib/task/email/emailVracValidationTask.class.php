@@ -46,13 +46,11 @@ EOF;
 
   	$contrats = VracMailingView::getInstance()->getContratsForEmailValide();
     foreach ($contrats as $contrat) {
-    	$document = new ExportVracPdf($contrat, false, array($contextInstance->getController()->getAction('vrac_export', 'main'), 'getPartial'));
-        $document->generatePDF();
-    	$emails = $contrat->getEmails();
-                    foreach($emails as $email) {
-                    	VracMailer::getInstance()->validationContrat($contrat, $email, $document);
-          				$this->logSection('sended', $contrat->_id . ' => ' . $email);
-                    }
+        foreach(VracMailer::getInstance()->validationContrat($contrat) as $message) {
+            sfContext::getInstance()->getMailer()->send($message);
+        }
+
+		$this->logSection('sended', $contrat->_id);
 
 		$contrat->valide->email_validation = date('Y-m-d');
 		$contrat->save();

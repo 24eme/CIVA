@@ -12,12 +12,16 @@ class vracComponents extends sfComponents {
 		$this->tiers = $this->getUser()->getDeclarantsVrac();
         $this->hasDoubt = true;
         $etablissements = VracClient::getInstance()->getEtablissements($this->getUser()->getCompte()->getSociete());
+
         foreach($etablissements as $etablissement) {
-            if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
+            if($etablissement->getFamille() != EtablissementFamilles::FAMILLE_COURTIER) {
+                $this->hasDoubt = false;
+            }
+            if(count($etablissements) == 1 && !in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
                 $this->hasDoubt = false;
             }
         }
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarantsAndCleanPluriannuel($etablissements);
         $this->etapes = VracEtapes::getInstance();
     }
 

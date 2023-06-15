@@ -16,11 +16,14 @@ all:
       "VF": "Vigne en friche"
   configuration:
     vrac:
+      nb_campagnes_pluriannuel: 3
       delai_suppression: 5
       etapes:
         soussignes: 1
         produits: 2
-        validation: 3
+        conditions: 3
+        annexes: 4
+        validation: 5
       produits_vrac_statiques:
         declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:
           position: 1
@@ -54,6 +57,25 @@ all:
           supprimable: 0
         declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RS/:
           position: 11
+          supprimable: 0
+      produits_mout_statiques:
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_PB/:
+          position: 1
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_CD/:
+          position: 2
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_BN/:
+          position: 3
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_RI/:
+          position: 4
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_PG/:
+          position: 5
+          supprimable: 0
+        declaration/certification/genre/appellation_CREMANT/mention/lieu/couleur/cepage_PN/:
+          position: 6
           supprimable: 0
       produits_bouteille_statiques:
         declaration/certification/genre/appellation_ALSACEBLANC/mention/lieu/couleur/cepage_SY/:

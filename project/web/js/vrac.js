@@ -110,9 +110,10 @@
 
 	var initCollectionDeleteTemplate = function()
 	{
-		var btn_supprimer_ligne_template = $('.btn_supprimer_ligne_template');
-		if(btn_supprimer_ligne_template.length){
-			btn_supprimer_ligne_template.live('click',function()
+    if(!$('.btn_supprimer_ligne_template').length && !$('.btn_ajouter_ligne_template').length) {
+        return;
+    }
+			$('.btn_supprimer_ligne_template').live('click',function()
 			{
 				var element = $(this).attr('data-container');
 				$(this).parents(element).remove();
@@ -122,7 +123,6 @@
 
 				return false;
 			});
-		}
 	}
 
 
@@ -166,9 +166,22 @@ var initConfirmeValidationVrac = function()
 
 var initConfirmeSignatureVrac = function()
 {
+    if ($('#confirmation_annexe').length > 0) {
+      $("#confirmation_annexe").change(function() {
+        if ($(this).is(":checked")) {
+          $("#signatureVrac").css("opacity", "1");
+        } else {
+          $("#signatureVrac").css("opacity", "0.3");
+        }
+      });
+      $("#confirmation_annexe").change();
+    }
     $('#signatureVrac').click(function() {
+        if ($('#confirmation_annexe').length > 0 && !$('#confirmation_annexe').is(":checked")) {
+          return false;
+        }
         openPopup($("#popup_confirme_signatureVrac"));
-		$("#popup_confirme_signatureVrac #signatureVrac_OK").focus();
+		    $("#popup_confirme_signatureVrac #signatureVrac_OK").focus();
         return false;
     });
     $('#signatureVrac_OK').click(function() {
@@ -188,6 +201,52 @@ var initChoixTypeVrac = function()
 	$('.choixTypeVracPopupPapier').click(function() {
         openPopup($("#popup_choix_typeVracPapier"));
         return false;
+    });
+};
+
+var initAideALaSaisie = function()
+{
+    $('.aideSaisieFraisPopup').click(function() {
+        openPopup($("#popup_vendeur_frais_annexes"));
+        return false;
+    });
+
+	$('.aideSaisiePrimesPopup').click(function() {
+        openPopup($("#popup_acheteur_primes_diverses"));
+        return false;
+    });
+
+	$('.aideSaisieDelaiPaiementPopup').click(function() {
+        openPopup($("#popup_conditions_paiement"));
+        return false;
+    });
+
+	$('.aideSaisieResiliationPopup').click(function() {
+        openPopup($("#popup_clause_resiliation"));
+        return false;
+    });
+
+	$('.aideSaisieEvolutionsPrixPopup').click(function() {
+        openPopup($("#popup_clause_evolution_prix"));
+        return false;
+    });
+
+	$('.inputCleaner').click(function() {
+        let target=$('#'+$(this).attr('data-target'));
+        target.val('');
+        return false;
+    });
+
+};
+
+var initGenerationContratApplication = function()
+{
+    $('.generationContratApplication').click(function() {
+        openPopup($("#popup_generation_contratApplication"));
+        return false;
+    });
+    $('.generationContratApplication[data-open="1"]').each(function() {
+      $(this).click();
     });
 };
 
@@ -284,7 +343,6 @@ var sumContrat = function(brothers, cible)
 	cible.text(sum);
 	if (sum >= compare) {
 		cb.attr('checked', true);
-                cb.checkboxesBehaviour();
 
 	}
 };
@@ -328,8 +386,9 @@ var sumContrat = function(brothers, cible)
 					var champ_volume = ligne_courante.find('.volume input'),
 						champ_prix = ligne_courante.find('.prix input'),
 						champ_centilisation = ligne_courante.find('.centilisation select'),
-						champ_bouteille = ligne_courante.find('.bouteille input');
-						champ_bio = ligne_courante.find('.bio select');
+						champ_bouteille = ligne_courante.find('.bouteille input'),
+						champ_bio = ligne_courante.find('.bio select'),
+						champ_millesime = ligne_courante.find('.millesime input');
 					var class_red = [];
 				  var empty = true;
 					champs.each(function(){
@@ -349,6 +408,11 @@ var sumContrat = function(brothers, cible)
 					}
 					if(champ_bouteille.length > 0 && !$.trim(champ_bouteille.val())){
 						class_red.push(champ_bouteille);
+					}
+					if(champ_millesime.length > 0 && !$.trim(champ_millesime.val())){
+              if (champ_millesime.attr('checkmillesime') == '1'||champ_millesime.attr('checkmillesime') == 'true') {
+                  class_red.push(champ_millesime);
+              }
 					}
 					if(!class_red.length)
 					{
@@ -481,10 +545,25 @@ var sumContrat = function(brothers, cible)
          $.hauteurListesAnnuaire();
          initConfirmeSignatureVrac();
          initChoixTypeVrac();
+         initAideALaSaisie();
          initConfirmeValidationVrac();
          initClotureContrat();
          initSummableContrat();
          initClotureContratCheckboxes();
+         initGenerationContratApplication();
+
+
+         $('.smalldatepicker').datepicker(
+         {
+             changeMonth: true,
+             beforeShow: function (input, object) { object.dpDiv.get(0).setAttribute('class', object.dpDiv.get(0).getAttribute('class')+' dpHideYear'); },
+             dateFormat: 'dd/mm',
+             dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+             dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+             firstDay: 1,
+             monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+             monthNamesShort: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+         });
 	});
 
 })(jQuery);

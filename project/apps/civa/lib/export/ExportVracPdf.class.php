@@ -40,15 +40,40 @@ class ExportVracPdf extends ExportDocument {
     }
 
     protected function init($filename = null) {
-    	if ($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
-        	$title = "CONTRAT DE VENTE EN BOUTEILLES                                                Visa du CIVA N° ".$this->vrac->numero_visa;
-        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                               du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
-    	} else {
-        	$title = "CONTRAT DE VENTE EN VRAC                                                          Visa du CIVA N° ".$this->vrac->numero_visa;
-        	$header = "DE VINS AOC PRODUITS EN ALSACE                                                            du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
-    	}
+        $nbCharTitle = 104;
+        $nbCharHeader = 120;
+        $title = "CONTRAT ".strtoupper($this->vrac->getTypeDureeLibelle())." DE VENTE DE ";
+        if($this->vrac->isApplicationPluriannuel()) {
+            $nbCharTitle -= 8;
+            $nbCharHeader -= 8;
+        }
+
+    	if ($this->vrac->type_contrat == VracClient::TYPE_VRAC) {
+            $title .= "VINS EN VRAC";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+            $title .= "BOUTEILLES";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_RAISIN) {
+            $title .= "RAISINS";
+    	} elseif($this->vrac->type_contrat == VracClient::TYPE_MOUT) {
+            $title .= "MOÛTS";
+        }
+
+        $title = str_pad($title, $nbCharTitle - strlen($title), " ", STR_PAD_RIGHT);
+        $title .= "Visa du CIVA N° ".$this->vrac->numero_visa;
+
+        $header = "AOC PRODUITS EN ALSACE";
+        $header = str_pad($header, $nbCharHeader - strlen($header), " ", STR_PAD_RIGHT);
+        $header .= "du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
+
+        if($this->vrac->isPluriannuelCadre()) {
+            $header .= "\n\nCAMPAGNES D'APPLICATION DE ".VracSoussignesForm::getCampagnesChoices()[$this->vrac->campagne];
+        }
+        if($this->vrac->isApplicationPluriannuel()) {
+            $header .= "\n\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
+        }
+
         if ($this->vrac->isAnnule()) {
-        	$header .= "\n\nANNULÉ";
+            $header .= "\nCONTRAT ANNULÉ";
         }
 
         if (!$filename) {
@@ -121,13 +146,7 @@ class ExportVracPdf extends ExportDocument {
         $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         file_put_contents($tmpPdfPath,$content);
 
-        if($this->vrac->type_contrat == VracClient::TYPE_VRAC){
-          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_vrac_verso.pdf';
-        }
-
-        if($this->vrac->type_contrat == VracClient::TYPE_BOUTEILLE){
-          $path_verso = sfConfig::get('sf_web_dir').'/helpPdf/contrat_de_vente_annuel_bouteille_verso.pdf';
-        }
+        $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_'.strtolower($this->vrac->getTypeDureeLibelle()).'_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
 
         $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
         shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);

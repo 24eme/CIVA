@@ -51,10 +51,25 @@ class VracDeclaration extends BaseVracDeclaration {
     	ksort($result);
     	return $result;
     }
-    
+
     public function hasProduits()
     {
     	return (count($this->getActifProduitsDetailsSorted()) > 0)? true : false;
+    }
+
+    public function getProduitsWithVolumeBloque()
+    {
+        $result = [];
+        foreach($this->getProduitsDetails() as $hash => $values) {
+            if ($values->actif && $values->exist('dont_volume_bloque') && $values->dont_volume_bloque > 0) {
+                $result[$hash] = $values;
+            }
+        }
+        return $result;
+    }
+
+    public function hashProduitsWithVolumeBloque() {
+        return (count($this->getProduitsWithVolumeBloque()) > 0);
     }
 
 }
