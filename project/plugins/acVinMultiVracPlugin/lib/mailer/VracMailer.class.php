@@ -210,7 +210,7 @@ class VracMailer {
 
     public function validationContrat($vrac, $pdf = true)
     {
-        if($vrac->valide->email_validation) {
+        if($pdf && $vrac->valide->email_validation) {
             return [];
         }
 
@@ -318,7 +318,7 @@ class VracMailer {
 
     public function clotureContrat($vrac, $pdf = true)
     {
-        if($vrac->valide->email_cloture) {
+        if($pdf && $vrac->valide->email_cloture) {
             return [];
         }
 
