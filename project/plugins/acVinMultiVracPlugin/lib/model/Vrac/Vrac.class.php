@@ -671,19 +671,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->acheteur_identifiant && !$this->valide->date_validation_acheteur) {
     		$valide = false;
     	}
-    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
-    		if (!$this->isAcheteurProprietaire()) {
-    			$valide = false;
-    		}
+    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire && !$this->isAcheteurProprietaire()) {
+    		$valide = false;
     	}
         if ($valide && $this->isPluriannuelCadre()) {
-    		$this->valide->statut = self::STATUT_VALIDE_CADRE;
+            $this->setStatut(self::STATUT_VALIDE_CADRE);
             $this->valide->email_cloture = date('Y-m-d');
     		$this->valide->date_validation = date('Y-m-d');
     	    return;
         }
     	if ($valide) {
-    		$this->valide->statut = self::STATUT_VALIDE;
+    		$this->setStatut(self::STATUT_VALIDE);
     		$this->valide->date_validation = date('Y-m-d');
     	}
     	if ($valide && !$this->needRetiraison()) {
