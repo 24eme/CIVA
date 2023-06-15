@@ -1324,5 +1324,4 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->getAllAnnexesFilename())? true : false;
     }
 
->>>>>>> evolutionscontrat
 }
