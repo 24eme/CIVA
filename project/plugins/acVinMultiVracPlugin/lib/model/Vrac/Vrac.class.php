@@ -621,7 +621,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$this->forceClotureContrat(false);
 		$this->valide->date_validation = $date;
 		$this->valide->date_cloture = $date;
-		$this->valide->email_cloture = true;
 	}
 
     public function refusProjet($tiers_id) {
@@ -726,6 +725,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		$this->updateTotaux();
         $this->updateEnlevementStatut();
 		$this->clotureContrat();
+        $this->valide->email_cloture = true;
     }
 
     public function clotureContrat()
@@ -743,13 +743,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             $contratCadre->valide->date_cloture = date('Y-m-d');
             $contratCadre->save();
         }
-    }
-
-    public function clotureProduits()
-    {
-    	$this->declaration->clotureProduits();
-    	$this->valide->statut = self::STATUT_CLOTURE;
-    	$this->valide->date_cloture = date('Y-m-d');
     }
 
     public function getTotalVolumeEnleve()
