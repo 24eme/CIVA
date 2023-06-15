@@ -630,6 +630,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->setStatut(self::STATUT_PROJET_VENDEUR);
     }
 
+    public function createApplication($tiers_id) {
+        if($this->isPremiereApplication() && (!$this->getContratPluriannuelCadre()->isInModeSurface()) || $this->type_contrat == VracClient::TYPE_RAISIN) {
+            $this->setStatut(self::STATUT_GENERE_AUTOMATIQUEMENT_APPLICATION, $this->createur_identifiant);
+
+			return $this->signerAutomatiquement();
+		}
+
+        $this->setStatut(Vrac::STATUT_CREE_APPLICATION, $this->createur_identifiant);
+        return $this->signer($this->createur_identifiant);
+    }
+
     public function signer($tiers_id)
     {
     	$type = $this->getTypeTiers($tiers_id);
