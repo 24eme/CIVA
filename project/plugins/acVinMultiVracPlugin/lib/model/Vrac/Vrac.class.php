@@ -451,10 +451,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $this->statutsChanged;
     }
 
-    public function setStatut($statut, $auteur = null) {
+    public function setStatut($statut, $auteur = null, $commentaire = null) {
         if($statut != $this->valide->_get('statut')) {
             $this->statutsChanged[$statut] = $auteur;
-            $this->addHistorique($statut, $auteur);
+
+            $this->addHistorique($statut, $auteur, $commentaire);
         }
 
         return $this->valide->_set('statut', $statut);
@@ -533,6 +534,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return $type;
     }
 
+    public function getTypeTiersLibelle($userId)
+    {
+        $type = $this->getTypeTiers($userId);
+
+        if($type == self::ROLE_MANDATAIRE) {
+
+            return "Courtier";
+        }
+
+        return ucfirst($type);
+    }
+
     public function isActeur($userId) {
         if(!$this->getTypeTiers($userId)) {
             return false;
@@ -581,6 +594,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
 
         $this->setStatut(self::STATUT_PROJET_ACHETEUR, $this->createur_identifiant);
+    }
+
+    public function annuler()
+    {
+        $this->setStatut(Vrac::STATUT_ANNULE, $this->createur_identifiant, $this->motif_suppression);
     }
 
     protected function saveVendeurProjetAttachment() {
@@ -653,19 +671,17 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	if ($this->acheteur_identifiant && !$this->valide->date_validation_acheteur) {
     		$valide = false;
     	}
-    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
-    		if (!$this->isAcheteurProprietaire()) {
-    			$valide = false;
-    		}
+    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire && !$this->isAcheteurProprietaire()) {
+    		$valide = false;
     	}
         if ($valide && $this->isPluriannuelCadre()) {
-    		$this->valide->statut = self::STATUT_VALIDE_CADRE;
+            $this->setStatut(self::STATUT_VALIDE_CADRE);
             $this->valide->email_cloture = date('Y-m-d');
     		$this->valide->date_validation = date('Y-m-d');
     	    return;
         }
     	if ($valide) {
-    		$this->valide->statut = self::STATUT_VALIDE;
+    		$this->setStatut(self::STATUT_VALIDE);
     		$this->valide->date_validation = date('Y-m-d');
     	}
     	if ($valide && !$this->needRetiraison()) {
@@ -1261,7 +1277,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return null;
     }
 
-    public function addHistorique($statut, $auteur = null) {
+    public function addHistorique($statut, $auteur = null, $commentaire = null) {
         if(!isset(self::$statuts_libelles_historique[$statut]) || !self::$statuts_libelles_historique[$statut]) {
             return;
         }
@@ -1270,7 +1286,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $histo->statut = $statut;
         $histo->auteur = $auteur;
         $histo->description = self::$statuts_libelles_historique[$statut];
-	}
+        $histo->commentaire = $commentaire;
+    }
 
     public function getAllAnnexesFilename() {
         if(!$this->exist('_attachments')) {

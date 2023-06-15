@@ -233,7 +233,6 @@ class vracActions extends sfActions
 		if ($request->isMethod(sfWebRequest::POST)) {
     		$this->form->bind($request->getParameter($this->form->getName()));
         	if ($this->form->isValid()) {
-                $this->vrac->setStatut(Vrac::STATUT_ANNULE, $this->vrac->createur_identifiant);
         		$this->vrac = $this->form->save();
 
                 VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
