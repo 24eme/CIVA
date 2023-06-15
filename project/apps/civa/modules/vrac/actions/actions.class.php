@@ -368,7 +368,7 @@ class vracActions extends sfActions
         return $user;
     }
 
-	public function executeValidation(sfWebRequest $request)
+	public function executeSigner(sfWebRequest $request)
 	{
 		$this->cleanSessions();
 		$this->vrac = $this->getRoute()->getVrac();

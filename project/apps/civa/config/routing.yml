@@ -174,7 +174,7 @@ vrac_fiche:
     sf_method: [get, post]
 vrac_validation:
   url: /vrac/:numero_contrat/fiche/validation
-  param: { module: vrac, action: validation }
+  param: { module: vrac, action: signer }
   class: VracRoute
   options:
     model:    Vrac
