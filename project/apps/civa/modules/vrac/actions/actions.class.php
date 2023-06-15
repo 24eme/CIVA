@@ -165,7 +165,6 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::FORCE_CLOTURE, $this->vrac);
 
 		$this->vrac->forceClotureContrat();
-		$this->vrac->valide->email_cloture = true;
 		$this->vrac->save();
 		$this->getUser()->setFlash('notice', 'Contrat cloturé avec succès, aucun mail ne sera envoyé');
 

@@ -210,6 +210,10 @@ class VracMailer {
 
     public function validationContrat($vrac, $pdf = true)
     {
+        if($vrac->valide->email_validation) {
+            return [];
+        }
+
 		if($vrac->isPapier()) {
 
 			return $this->validationContratPapier($vrac);
@@ -314,6 +318,10 @@ class VracMailer {
 
     public function clotureContrat($vrac, $pdf = true)
     {
+        if($vrac->valide->email_cloture) {
+            return [];
+        }
+
         if($pdf) {
             $pdf = new ExportVracPdf($vrac, false, array(sfContext::getInstance()->getController()->getAction('vrac_export', 'main'), 'getPartial'));
             $pdf->generatePDF();
