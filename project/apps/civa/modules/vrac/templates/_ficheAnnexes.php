@@ -1,3 +1,4 @@
+<?php use_helper('vrac') ?>
 <?php
 if ($vrac->hasAnnexes()):
 $annexes = $vrac->getAllAnnexesFilename();
