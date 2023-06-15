@@ -451,10 +451,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $this->statutsChanged;
     }
 
-    public function setStatut($statut, $auteur = null) {
+    public function setStatut($statut, $auteur = null, $commentaire = null) {
         if($statut != $this->valide->_get('statut')) {
             $this->statutsChanged[$statut] = $auteur;
-            $this->addHistorique($statut, $auteur);
+
+            $this->addHistorique($statut, $auteur, $commentaire);
         }
 
         return $this->valide->_set('statut', $statut);
@@ -581,6 +582,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
 
         $this->setStatut(self::STATUT_PROJET_ACHETEUR, $this->createur_identifiant);
+    }
+
+    public function annuler()
+    {
+        $this->setStatut(Vrac::STATUT_ANNULE, $this->createur_identifiant, $this->motif_suppression);
     }
 
     protected function saveVendeurProjetAttachment() {
@@ -1261,7 +1267,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return null;
     }
 
-    public function addHistorique($statut, $auteur = null) {
+    public function addHistorique($statut, $auteur = null, $commentaire = null) {
         if(!isset(self::$statuts_libelles_historique[$statut]) || !self::$statuts_libelles_historique[$statut]) {
             return;
         }
@@ -1270,6 +1276,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $histo->statut = $statut;
         $histo->auteur = $auteur;
         $histo->description = self::$statuts_libelles_historique[$statut];
+        $histo->commentaire = $commentaire;
     }
 
     public function getAllAnnexesFilename() {

@@ -21,5 +21,7 @@ class VracSuppressionForm extends acCouchdbObjectForm
     public function doUpdateObject($values) 
     {
     	parent::doUpdateObject($values);
+
+        $this->getObject()->annuler();
     }
 }
