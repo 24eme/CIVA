@@ -428,12 +428,12 @@ class vracActions extends sfActions
 
             return sfView::SUCCESS;
         }
+        $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
         if (!$this->form->isValid()) {
 
             return sfView::SUCCESS;
         }
 
-		$this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
 		$this->form->save();
 		if ($request->isXmlHttpRequest()) {
 			return sfView::NONE;
