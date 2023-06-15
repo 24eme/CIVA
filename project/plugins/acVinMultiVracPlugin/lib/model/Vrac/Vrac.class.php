@@ -534,6 +534,18 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	return $type;
     }
 
+    public function getTypeTiersLibelle($userId)
+    {
+        $type = $this->getTypeTiers($userId);
+
+        if($type == self::ROLE_MANDATAIRE) {
+
+            return "Courtier";
+        }
+
+        return ucfirst($type);
+    }
+
     public function isActeur($userId) {
         if(!$this->getTypeTiers($userId)) {
             return false;
