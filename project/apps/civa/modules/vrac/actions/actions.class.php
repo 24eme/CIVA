@@ -216,7 +216,7 @@ class vracActions extends sfActions
             return $this->redirect('mon_espace_civa_vrac', $this->getUser()->getCompte());
 		}
 
-		if ($this->vrac->isApplicationPluriannuel() && $this->vrac->valide->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
+		if ($this->vrac->isApplicationPluriannuel() && !$this->vrac->isValide()) {
             $vracCadre = $this->vrac->getContratPluriannuelCadre();
             foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
                 $this->getMailer()->send($message);
