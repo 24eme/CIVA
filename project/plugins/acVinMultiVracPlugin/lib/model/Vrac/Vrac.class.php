@@ -8,6 +8,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 
 	const STATUT_CREE = 'CREE';
+    const STATUT_CREE_APPLICATION = 'CREE_APPLICATION';
 	const STATUT_PROJET_VENDEUR_TRANSMIS = 'PROJET_VENDEUR_TRANSMIS';
 	const STATUT_PROJET_VENDEUR = 'PROJET_VENDEUR';
 	const STATUT_PROJET_ACHETEUR = 'PROJET_ACHETEUR';
@@ -15,6 +16,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	const STATUT_PROPOSITION = 'PROPOSITION';
 	const STATUT_SIGNE = 'SIGNE';
 	const STATUT_VALIDE_PARTIELLEMENT = 'VALIDE_PARTIELLEMENT';
+    const STATUT_GENERE_AUTOMATIQUEMENT_APPLICATION = 'GENERE_AUTOMATIQUEMENT_APPLICATION';
 	const STATUT_VALIDE = 'VALIDE';
 	const STATUT_VALIDE_CADRE = 'VALIDE_CADRE';
 	const STATUT_ANNULE = 'ANNULE';
@@ -81,6 +83,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     static $statuts_libelles_historique = array(
 		self::STATUT_CREE => "Projet de contrat initié",
+		self::STATUT_CREE_APPLICATION => " Proposition de contrat d'application initiée",
         self::STATUT_PROJET_VENDEUR_TRANSMIS => "Projet de contrat soumis à l'acheteur ou au courtier",
 		self::STATUT_PROJET_VENDEUR => "Projet de contrat en attente de validation par l'acheteur ou le courtier",
 		self::STATUT_PROJET_ACHETEUR => "Projet de contrat validé et soumis au vendeur pour signature",
@@ -88,6 +91,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_SIGNE => "Signature",
 		self::STATUT_PROPOSITION => "Proposition de contrat soumise aux autres soussignés pour signature",
 		self::STATUT_VALIDE_PARTIELLEMENT => null,
+        self::STATUT_GENERE_AUTOMATIQUEMENT_APPLICATION => "Contrat d'application généré à partir du contrat cadre",
 		self::STATUT_VALIDE => "Contrat de vente visé",
 		self::STATUT_VALIDE_CADRE => "Contrat de vente pluriannuel visé",
 		self::STATUT_ANNULE => "Contrat annulé",
@@ -637,7 +641,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
         $this->setStatut(self::STATUT_SIGNE, $tiers_id);
 
-        if($type == 'vendeur') {
+        if($type == 'vendeur' && !$this->isApplicationPluriannuel()) {
+            $this->setStatut(self::STATUT_PROPOSITION);
+        } else if($tiers_id == $this->createur_identifiant && $this->isApplicationPluriannuel()) {
             $this->setStatut(self::STATUT_PROPOSITION);
         } else {
             $this->setStatut(self::STATUT_VALIDE_PARTIELLEMENT);
