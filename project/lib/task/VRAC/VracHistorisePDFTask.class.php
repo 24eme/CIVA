@@ -14,6 +14,10 @@ class VracHistorisePDFTask extends sfBaseTask {
   protected function configure()
   {
 
+    $this->addArguments(array(
+        new sfCommandArgument('id', sfCommandArgument::REQUIRED, 'id'),
+    ));
+
     $this->addOptions(array(
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
@@ -39,13 +43,9 @@ EOF;
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
     sfContext::createInstance($this->configuration);
 
-    $contrats = VracTousView::getInstance()->findAll();
-    foreach ($contrats as $contrat) {
-    	if ($contratObject = VracClient::getInstance()->find($contrat->id)) {
-    		$contratObject->historisePDF();
-    		$contratObject->save();
-    		$this->logSection('update', $contratObject->_id . ' historisation du PDF avec succès');
-    	}
-    }
+    $vrac = VracClient::getInstance()->find($arguments['id']);
+    $vrac->historisePDF();
+    $vrac->save();
+    $this->logSection('update', $arguments['id'] . ' historisation du PDF avec succès');
   }
 }
