@@ -467,7 +467,12 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isSupprimable()
     {
-
+        if($this->isPluriannuelCadre() && $this->hasContratApplication()) {
+            return false;
+        }
+        if($this->isApplicationPluriannuel() && $this->isValide()) {
+            return false;
+        }
         return in_array($this->valide->statut, self::getStatutsSupprimable());
     }
 
@@ -960,6 +965,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			    $this->add('clause_evolution_prix');
             }
 		}
+
+		if(count($this->getStatutsChanged())) {
+            $this->removePDFHistorise();
+		}
     }
 
     public function forceSave()
@@ -1042,9 +1051,24 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
     public function getPDFhistoriseContent() {
-        if (!$this->exist("_attachments")||!count($this->get("_attachments"))) return false;
-        return @file_get_contents($this->getAttachmentUri(ExportVracPdf::buildFileName($this)));
+        $key = ExportVracPdf::buildFileName($this);
+
+        if (!$this->exist("_attachments") || !$this->_attachments->exist($key)) {
+            return false;
+        }
+
+        return @file_get_contents($this->getAttachmentUri($key));
     }
+
+	public function removePDFHistorise() {
+        $key = ExportVracPdf::buildFileName($this);
+
+        if (!$this->exist("_attachments") || !$this->_attachments->exist($key)) {
+            return;
+        }
+
+        $this->_attachments->remove($key);
+	}
 
 	public function isPonctuel() {
 		return !$this->contrat_pluriannuel;
@@ -1133,6 +1157,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
 	public function generateNextPluriannuelApplication() {
+        if($this->isAnnule()) {
+            throw new Exception('Le contrat cadre a été annulé.');
+        }
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)
             throw new Exception('L\'ensemble des campagnes d\'application du contrat '.$this->_id.' ont été générées');
