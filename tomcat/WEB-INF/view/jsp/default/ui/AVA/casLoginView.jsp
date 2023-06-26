@@ -119,25 +119,30 @@ String host = "";
                 <h2>Sur ce site, l'AVA met à la disposition de ses adhérents une multiplicité de services :</h2>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-xs-4">
+                <a href="https://declaration.ava-aoc.fr/">
                 <div class="module module-declarations">
                     <h3>Un module <br />de saisie des déclarations</h3>
-                    
                 </div>
+                </a>
             </div>
             <div class="col-xs-4">
+                <a href="https://declaration.ava-aoc.fr/habilitation/consultation">
                 <div class="module module-cartographique">
                     <h3>Consultation<br/>des habilitations<br/>du vignoble</h3>
                 </div>
-            </div>            
+                </a>
+            </div>
             <div class="col-xs-4" style="position:relative;">
+                <a href="https://ava-aoc.fr/espace-documentaire">
                 <div class="module module-bibliotheque">
                     <h3>Une bibliothèque de documents téléchargables</h3>
-                    
                 </div>
+                </a>
             </div>
+
         </div>
     </div>
 
