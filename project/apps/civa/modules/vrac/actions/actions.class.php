@@ -208,7 +208,7 @@ class vracActions extends sfActions
 
         if (in_array($this->vrac->valide->statut, array(Vrac::STATUT_PROJET_ACHETEUR, Vrac::STATUT_PROJET_VENDEUR))) {
             $this->vrac->motif_suppression = "Le projet a été supprimé par son créateur";
-            foreach(VracMailer::getInstance()->refusApplication($this->vrac) as $message) {
+            foreach(VracMailer::getInstance()->refusProjet($this->vrac) as $message) {
                 $this->getMailer()->send($message);
             }
 
