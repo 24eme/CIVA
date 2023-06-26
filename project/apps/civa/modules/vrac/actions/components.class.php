@@ -14,10 +14,10 @@ class vracComponents extends sfComponents {
         $etablissements = VracClient::getInstance()->getEtablissements($this->getUser()->getCompte()->getSociete());
 
         foreach($etablissements as $etablissement) {
-            if($etablissement->getFamille() != EtablissementFamilles::FAMILLE_COURTIER) {
+            if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
                 $this->hasDoubt = false;
             }
-            if(count($etablissements) == 1 && !in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
+            if(count($etablissements) == 1 && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
                 $this->hasDoubt = false;
             }
         }
