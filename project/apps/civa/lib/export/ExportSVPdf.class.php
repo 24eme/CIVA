@@ -15,7 +15,7 @@ class ExportSVPdf extends ExportDocument
         $this->etablissement = $declaration->getEtablissementObject();
 
         if (! $filename) {
-            $filename = $this->getFileName(true);
+            $filename = $this->getFileName(true, true);
         }
 
         $title = $this->getTitle();
@@ -76,13 +76,18 @@ class ExportSVPdf extends ExportDocument
         return sfConfig::get('sf_cache_dir').'/pdf/'.$this->getFileName(true);
     }
 
-    public function getFileName($with_rev = false) {
+    public function getFileName($with_name = true, $with_rev = false) {
 
-        return self::buildFileName($this->declaration, true);
+        return self::buildFileName($this->declaration, $with_name, $with_rev);
     }
 
-    public static function buildFileName($declaration, $with_rev = false) {
+    public static function buildFileName($declaration, $with_name = true, $with_rev = false) {
         $filename = sprintf("%s", $declaration->_id);
+
+        if($with_name) {
+            $declarant_nom = strtoupper(KeyInflector::slugify($declaration->declarant->nom));
+            $filename .= '_'.$declarant_nom;
+        }
 
         if ($with_rev) {
             $filename .= '_' . $declaration->_rev;
