@@ -145,11 +145,11 @@ class DSSendBrouillonTask extends sfBaseTask
 
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique.
 
-Comme les années précédentes, vous pourrez accéder à ce télé-service dès le 22 juillet sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
+Comme les années précédentes, vous pourrez accéder à ce télé-service dès le 24 juillet sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Attention la date limite de la télé-déclaration est fixée par la Douane au 10 septembre 2022 MINUIT.
+Attention la date limite de la télé-déclaration est fixée par la Douane au 10 septembre 2023 MINUIT.
 
-Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2022, qui reprend les produits théoriquement détenus en stocks, vous pouvez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
+Pour vous aider dans votre démarche vous trouverez ci-joint un brouillon personnalisé de votre DS 2023, qui reprend les produits théoriquement détenus en stocks, vous pouvez également télécharger la Notice d'Aide au format PDF ou consulter l'aide en ligne.
 
 Ce document constitue une aide à la télé-déclaration et n'est en aucun cas à retourner au CIVA.
 
@@ -176,7 +176,7 @@ Le CIVA");
 
 Depuis 2017 la souscription de votre Déclaration de Stocks doit obligatoirement se faire par voie électronique sur le Portail du CIVA <https://declaration.vinsalsace.pro>.
 
-Le téléservice \"Alsace Stocks\" sera accessible dès le 22 juillet, et jusqu'au 10 septembre 2022 inclus.
+Le téléservice \"Alsace Stocks\" sera accessible dès le 24 juillet, et jusqu'au 10 septembre 2023 inclus.
 
 Pour vous aider dans votre démarche vous pourrez télécharger la Notice d'Aide au format PDF
 ou consulter l'aide en ligne.
