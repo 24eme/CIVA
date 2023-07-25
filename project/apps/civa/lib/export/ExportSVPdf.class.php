@@ -73,7 +73,7 @@ class ExportSVPdf extends ExportDocument
             return parent::getFile();
         }
 
-        return sfConfig::get('sf_cache_dir').'/pdf/'.$this->getFileName(true);
+        return sfConfig::get('sf_cache_dir').'/pdf/'.$this->getFileName(true, true);
     }
 
     public function getFileName($with_name = true, $with_rev = false) {
