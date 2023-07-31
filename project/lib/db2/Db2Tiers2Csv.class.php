@@ -126,7 +126,7 @@ class Db2Tiers2Csv
                 continue;
             }
 
-            if($suspendu && !$this->isCloture($tiers)) {
+            if($suspendu && !$this->hasOneCloture($tiers)) {
                 unset($etablissements[$num]);
                 continue;
             }
@@ -245,7 +245,7 @@ class Db2Tiers2Csv
                 if(!$tiersMaisonMere) {
                     $tiersMaisonMere = $tiers;
                 }
-                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere);
+                $etablissement = $this->importEtablissement($societeId, $tiers, $tiers, $tiersMaisonMere, $suspendu);
             }
         }
     }
@@ -322,16 +322,23 @@ class Db2Tiers2Csv
         return "SOCIETE-".$identifiantSociete;
     }
 
-    protected function importEtablissement($societe, $tiers, $societes, $tiersMaisonMere)
+    protected function importEtablissement($societe, $tiers, $societes, $tiersMaisonMere, $importSuspenduMode)
     {
         $famille = $this->getFamille($tiers);
-        $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
 
         $statut = EtablissementClient::STATUT_ACTIF;
+
+        foreach($tiers as $num => $t) {
+            if($importSuspenduMode && !$t->isCloture()) {
+                unset($tiers[$num]);
+            }
+        }
 
         if($this->isCloture($tiers)) {
             $statut = EtablissementClient::STATUT_SUSPENDU;
         }
+
+        $identifiantEtablissement = $this->buildIdentifiantEtablissement($tiers);
 
         if(!str_replace("C", "", $identifiantEtablissement)) {
             return null;
@@ -528,6 +535,17 @@ class Db2Tiers2Csv
         }
 
         return true;
+    }
+
+    protected function hasOneCloture($tiers) {
+        foreach($tiers as $t) {
+            if($t->isCloture()) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getFamille($tiers) {
