@@ -15,6 +15,14 @@
                     <p>Vous pouvez retrouver tous les éléments renseignés dans votre espace CIVA.</p>
                 </div>
                 <div id="div-btn-email"><a href="" id="btn-email"></a></div>
+                <?php if($ds_principale->isTypeDsNegoce()): ?>
+                <div style="margin-top: 50px; background: #ffdabf;" class="bloc_vert">
+                    <p class="important" style="color: #a20000;">Saisie de la déclaration des stocks de vins et de moûts sur Prodouane</p>
+                    <p>
+                        Nous vous encourageons maintenant à aller saisir la <strong>Déclaration des Stocks de Vins et de Moûts</strong> sur <a style="text-decoration: underline;" target="_blank" href="https://www.douane.gouv.fr/">le portail des Douanes « Prodouane »</a>.
+                    </p>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
         <div id="confirmation_feed_back">

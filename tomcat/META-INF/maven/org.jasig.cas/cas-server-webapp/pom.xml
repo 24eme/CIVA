@@ -91,6 +91,13 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <warName>cas</warName>
+                    <webappDirectory>/home/civa/tomcat7/webapp</webappDirectory>
+                    <overlays>
+                         <overlay>
+                             <groupId>org.jasig.cas</groupId>
+                             <artifactId>cas-server-webapp</artifactId>
+                         </overlay>
+                    </overlays>
                 </configuration>
             </plugin>
         </plugins>
