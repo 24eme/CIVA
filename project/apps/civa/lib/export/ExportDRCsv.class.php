@@ -35,7 +35,7 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => "validateur",
         "hash" => "hash_produit",
         "type" => "type_ligne",
-        "famille" => "Famille calculée"
+        "famille" => "famille calculée"
     );
     protected $_validation_ligne = array(
         "cvi_acheteur" => array("type" => "string"),
