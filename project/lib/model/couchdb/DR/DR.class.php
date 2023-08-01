@@ -1028,4 +1028,53 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         return DRClient::getInstance()->getConfigAppellationsAvecVtsgn($this->getConfig());
     }
+
+
+    public function getFamilleCalculee() {
+
+        return $this->store('famille_calculee', array($this, 'calculFamille'));
+    }
+
+    public function calculFamille() {
+        $totalCaveParticuliere = $this->getTotalCaveParticuliere();
+        $totalNegoce = $this->recolte->getTotalVolumeAcheteurs('negoces|mouts');
+        $totalCooperative = $this->recolte->getTotalVolumeAcheteurs('cooperatives');
+
+        if($totalCaveParticuliere > 0 && $totalNegoce > 0 && $totalCooperative > 0) {
+
+            return 'CAVE_PARTICULIERE_ET_APPORTEUR_COOP_ET_NEGOCE';
+        }
+
+        if($totalCaveParticuliere > 0 && $totalNegoce > 0) {
+
+            return 'CAVE_PARTICULIERE_ET_APPORTEUR_NEGOCE';
+        }
+
+        if($totalCaveParticuliere > 0 && $totalCooperative > 0) {
+
+            return 'CAVE_PARTICULIERE_ET_APPORTEUR_COOP';
+        }
+
+        if($totalCaveParticuliere > 0) {
+
+            return 'CAVE_PARTICULIERE_TOTAL';
+        }
+
+        if($totalNegoce > 0 && $totalCooperative > 0) {
+
+            return 'APPORTEUR_COOP_ET_NEGOCE';
+        }
+
+        if($totalNegoce > 0 ) {
+
+            return 'APPORTEUR_NEGOCE_TOTAL';
+        }
+
+        if($totalCooperative > 0 ) {
+
+            return 'APPORTEUR_COOP_TOTAL';
+        }
+
+        return 'SANS_VOLUME';
+    }
 }
