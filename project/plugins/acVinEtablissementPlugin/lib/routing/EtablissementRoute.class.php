@@ -7,12 +7,16 @@ class EtablissementRoute extends sfObjectRoute implements InterfaceEtablissement
     protected function getObjectForParameters($parameters = null) {
         $this->etablissement = EtablissementClient::getInstance()->find($parameters['identifiant']);
         $myUser = sfContext::getInstance()->getUser();
+        if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+			CompteRoute::autoSignin($this->getEtablissement()->getSociete()->getMasterCompte());
+		}
         if ($myUser->hasTeledeclaration() &&
                 $myUser->getCompte()->identifiant != $this->getEtablissement()->getSociete()->getMasterCompte()->identifiant) {
             throw new sfError404Exception("Vous n'avez pas le droit d'accéder à cette page");
         }
         $module = sfContext::getInstance()->getRequest()->getParameterHolder()->get('module');
         //sfContext::getInstance()->getResponse()->setTitle(strtoupper($module).' - '.$this->etablissement->nom);
+
         return $this->etablissement;
     }
 
@@ -23,10 +27,14 @@ class EtablissementRoute extends sfObjectRoute implements InterfaceEtablissement
 
     public function getEtablissement() {
 
-	if (!$this->etablissement) {
+	    if (!$this->etablissement) {
            $this->etablissement = $this->getObject();
       	}
 
-	return $this->etablissement;
+        if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+			CompteRoute::autoSignin($this->etablissement->getSociete()->getMasterCompte());
+		}
+
+	    return $this->etablissement;
     }
 }

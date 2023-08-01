@@ -7,7 +7,6 @@ class CompteRoute extends sfObjectRoute implements InterfaceCompteRoute {
     protected function getObjectForParameters($parameters = null) {
       $this->compte = CompteClient::getInstance()->find("COMPTE-".$parameters['identifiant']);
 
-      self::autoSignin($this->compte);
       return $this->compte;
     }
 
@@ -36,6 +35,9 @@ class CompteRoute extends sfObjectRoute implements InterfaceCompteRoute {
       if (!$this->compte) {
            $this->compte = $this->getObject();
       }
+
+      self::autoSignin($this->compte);
+
       return $this->compte;
     }
 }
