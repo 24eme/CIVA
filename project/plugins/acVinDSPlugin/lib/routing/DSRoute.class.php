@@ -33,8 +33,13 @@ class DSRoute extends sfObjectRoute implements InterfaceTiersRoute {
     }
 
 	public function getEtablissement() {
+        $etablissement = $this->getDS()->getEtablissement();
 
-        return $this->getDS()->getEtablissement();
+        if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+			CompteRoute::autoSignin($etablissement->getSociete()->getMasterCompte());
+		}
+
+        return $etablissement;
     }
 
     public function getTiers() {

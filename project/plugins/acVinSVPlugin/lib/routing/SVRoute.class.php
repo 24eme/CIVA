@@ -18,6 +18,16 @@ class SVRoute extends EtablissementRoute {
         return $parameters;
     }
 
+    public function getEtablissement() {
+        $etablissement = $this->getSV()->getEtablissement();
+
+        if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+            CompteRoute::autoSignin($etablissement->getSociete()->getMasterCompte());
+        }
+
+        return $etablissement;
+    }
+
     public function getSV() {
         if (!$this->sv) {
             $this->getObject();
