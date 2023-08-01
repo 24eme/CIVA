@@ -4,7 +4,9 @@
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Récolte</a></li>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Achat Récolte</a></li>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Production</a></li>
-	<li><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">DRM</a></li>
+    <?php if(sfConfig::get("app_giilda_url_drm_admin")): ?>
+	<li><a class="<?php if(preg_match('/(drm)/', $active)): ?>ui-tabs-selected<?php endif; ?>" href="<?php echo sfConfig::get("app_giilda_url_drm_admin") ?>">DRM</a></li>
+    <?php endif; ?>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Contrats</a></li>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Gamm@</a></li>
 	<li class="ui-tabs-disabled"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Stocks Propriété</a></li>
