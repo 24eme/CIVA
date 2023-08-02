@@ -16,7 +16,7 @@ class EtablissementChoiceForm extends baseForm {
 
     public function configure()
     {
-        $this->setWidget('identifiant', new WidgetEtablissement(array('interpro_id' => $this->interpro_id)));
+        $this->setWidget('identifiant', new WidgetEtablissementSelect(array('interpro_id' => $this->interpro_id)));
 
         $this->widgetSchema->setLabel('identifiant', 'Sélectionner un établissement&nbsp;:');
         
