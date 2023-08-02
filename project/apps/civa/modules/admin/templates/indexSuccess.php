@@ -44,13 +44,7 @@
     $(document).ready(function () {
         $("select.combobox").combobox();
         $("select.combobox").live('change', function() {
-            $(this).parents('form').submit();
-        });
-        $('#form_admin_login').live('submit', function() {
-            if(!$('select.combobox').val() || $('select.combobox').find(':selected').html() != $("input.ui-autocomplete-input").val()) {
-                $('select.combobox').find(':selected').removeAttr('selected');
-                $('select.combobox option.new_value').attr('selected','selected').val($("input.ui-autocomplete-input").val());
-            }
+            $('#form_admin_login').submit();
         });
     });
     </script>
