@@ -16,14 +16,14 @@ class adminActions extends sfActions {
      */
     public function executeIndex(sfWebRequest $request) {
         $this->getUser()->signOutCompteUsed();
-        $this->form = new AdminCompteLoginForm(null, array('autocomplete' => true), false);
+        $this->form = new EtablissementChoiceForm('INTERPRO-declaration');
         $this->form_back_future = new AdminBackToTheFutureForm();
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $this->getUser()->signInCompteUsed($this->form->process());
+                $this->getUser()->signInCompteUsed($this->form->getEtablissement()->getMasterCompte());
 
-                return $this->redirect('tiers', array('identifiant' => $this->form->getValue('login')));
+                return $this->redirect('tiers', array('identifiant' => $this->form->getEtablissement()->getMasterCompte()->identifiant));
             }
         }
     }
