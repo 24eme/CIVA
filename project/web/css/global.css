@@ -668,7 +668,7 @@ input[type="text"].ui-autocomplete-input
 
 #form_admin_login input[type="text"].ui-autocomplete-input
 {
-    width: 100%;
+    width: 98%;
     font-size: 14px;
     padding: 5px 3px;
 }
