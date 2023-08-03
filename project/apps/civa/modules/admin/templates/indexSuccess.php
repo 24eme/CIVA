@@ -2,7 +2,14 @@
 <style>
 .ui-autocomplete .ui-menu-item a {
     font-size: 14px;
+    padding: 5px 8px;
 }
+
+.ui-autocomplete .ui-menu-item:nth-child(even) a {
+    background-color: #f5f5f5 !important;
+}
+
+
 </style>
     <!-- #application_dr -->
     <div class="clearfix" id="application_dr">
