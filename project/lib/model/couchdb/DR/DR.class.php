@@ -395,6 +395,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function save() {
+        $this->famille_calculee = $this->calculFamille();
         parent::save();
     }
 
@@ -1031,8 +1032,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
 
     public function getFamilleCalculee() {
+        if(is_null($this->_get('famille_calculee'))) {
+            $this->famille_calculee = $this->calculFamille;
+        }
 
-        return $this->store('famille_calculee', array($this, 'calculFamille'));
+        return $this->_get('famille_calculee');
     }
 
     public function calculFamille() {
