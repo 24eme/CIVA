@@ -6,7 +6,7 @@
 }
 
 .ui-autocomplete .ui-menu-item:nth-child(even) a {
-    background-color: #f5f5f5 !important;
+    background-color: #f2f2f2 !important;
 }
 
 

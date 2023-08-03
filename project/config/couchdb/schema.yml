@@ -106,6 +106,7 @@ DR:
       jus_raisin_superficie: {type: float, required: false}
       declaration_commune: {}
       declaration_insee: {}
+      famille_calculee: {}
       lies_saisis_cepage: {type: float, required: false}
       etape: {type: string, required: false}
       recolte:
