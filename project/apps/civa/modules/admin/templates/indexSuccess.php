@@ -1,20 +1,30 @@
 <?php include_partial('tiers/ongletsAdmin', array('active' => 'accueil')) ?>
+<style>
+.ui-autocomplete .ui-menu-item a {
+    font-size: 14px;
+    padding: 5px 8px;
+}
 
+.ui-autocomplete .ui-menu-item:nth-child(even) a {
+    background-color: #f2f2f2 !important;
+}
+
+
+</style>
     <!-- #application_dr -->
     <div class="clearfix" id="application_dr">
 
         <!-- #nouvelle_declaration -->
         <div id="nouvelle_declaration" style="width: 504px;">
             <form id="form_admin_login" action="<?php echo url_for('admin') ?>" method="post" id="principal">
-            <h3 class="titre_section">Connexion à un compte</h3>
+            <h3 class="titre_section">Séléctionner un établissement</h3>
             <div class="contenu_section">
-                <p class="intro">Pour vous connecter, merci d'indiquer le login :</p>
+                <p class="intro">Rechercher un établissement (par nom, cvi, civaba, n°accisses, famille, commune) :</p>
                 <?php echo $form->renderHiddenFields(); ?>
                 <?php echo $form->renderGlobalErrors(); ?>
-                <div class="ligne_form ligne_form_label">
-                    <?php echo $form['login']->renderError() ?>
-                    <?php echo $form['login']->renderLabel() ?>
-		    <?php echo $form['login']->render(array("autofocus" => "autofocus", "class" => "combobox")) ?>
+                <div class="">
+                    <?php echo $form['identifiant']->renderError() ?>
+		            <?php echo $form['identifiant']->render(array("autofocus" => "autofocus", "class" => "combobox")) ?>
                 </div>
                 <div class="ligne_form ligne_btn">
                     <input type="image" alt="Valider" src="/images/boutons/btn_valider.png" name="boutons[valider]" class="btn">
@@ -41,13 +51,7 @@
     $(document).ready(function () {
         $("select.combobox").combobox();
         $("select.combobox").live('change', function() {
-            $(this).parents('form').submit();
-        });
-        $('#form_admin_login').live('submit', function() {
-            if(!$('select.combobox').val() || $('select.combobox').find(':selected').html() != $("input.ui-autocomplete-input").val()) {
-                $('select.combobox').find(':selected').removeAttr('selected');
-                $('select.combobox option.new_value').attr('selected','selected').val($("input.ui-autocomplete-input").val());
-            }
+            $('#form_admin_login').submit();
         });
     });
     </script>

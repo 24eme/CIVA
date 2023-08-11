@@ -120,7 +120,9 @@ class tiersActions extends sfActions {
                     break;
                 }
             }
-
+        }
+        if($isAdmin && $url_drm && preg_match('/(drm)/', $this->getRequest()->getParameter('active'))) {
+            $blocs[Roles::TELEDECLARATION_DRM] = sfConfig::get("app_giilda_url_drm_admin");
         }
         $etablissement = $societe->getEtablissementPrincipal();
 

@@ -1,5 +1,5 @@
 default:
-  credentials: [tiers]
+  credentials: []
 
 login:
   credentials: [compte_tiers]

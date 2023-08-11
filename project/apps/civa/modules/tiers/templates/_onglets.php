@@ -4,10 +4,10 @@
 ?>
 <nav id="main_nav">
 <ul id="onglets_majeurs" class="clearfix">
-	<?php if($active== 'recolte'): ?>
-	<li class="<?php if($active== 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa", array("identifiant" => $compte->getIdentifiant()), isset($absolute)) ?>">Accueil</a></li>
-	<?php else: ?>
-	<li class="<?php if($active== 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Accueil</a></li>
+	<?php if(!$isAdmin || $active != 'accueil'): ?>
+	<li class="<?php if($active == 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa", array("identifiant" => $compte->getIdentifiant()), isset($absolute)) ?>">Accueil</a></li>
+    <?php elseif($isAdmin): ?>
+	<li class="<?php if($active == 'accueil'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("admin", array(), isset($absolute)) ?>">Accueil</a></li>
 	<?php endif ?>
 	<?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR)): ?>
 	<li class="<?php if($active== 'recolte'): ?>ui-tabs-selected<?php endif; ?>"><a href="<?php echo url_for("mon_espace_civa_dr_compte", $compte, isset($absolute)) ?>">Récolte</a></li>

@@ -74,8 +74,8 @@ class CompteAllView extends acCouchdbView {
       foreach ($results->getResults() as $er) {
 	$r = $er->getData();
 	$e = new stdClass();
-	$e->id = $r['_id'];
-	$e->key = array($r['interpro'], $r['statut'], $r['_id'], $r['nom_a_afficher'], $r['identifiant'], $r['adresse'], $r['commune'], $r['code_postal'], $r['compte_type']);
+	$e->id = $r['doc']['_id'];
+	$e->key = array($r['doc']['interpro'], $r['doc']['statut'], $r['doc']['_id'], $r['doc']['nom_a_afficher'], $r['doc']['identifiant'], $r['doc']['adresse'], $r['doc']['commune'], $r['doc']['code_postal'], $r['doc']['compte_type']);
 	$e->value = null;
 	$res[] = $e;
       }

@@ -35,6 +35,7 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => "validateur",
         "hash" => "hash_produit",
         "type" => "type_ligne",
+        "famille" => "famille calculée"
     );
     protected $_validation_ligne = array(
         "cvi_acheteur" => array("type" => "string"),
@@ -59,6 +60,7 @@ class ExportDRCsv extends ExportCsv {
         "validation_user" => array("type" => "string"),
         "hash" => array("type" => "string"),
         "type" => array("type" => "string"),
+        "famille" => array("type" => "string")
     );
 
     protected $_acheteur = null;
@@ -195,6 +197,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
             "detail_vente_".$acheteur->getParent()->getKey(),
+            "famille" => $detail->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -224,7 +227,8 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
-            "type" => "detail_motif"
+            "type" => "detail_motif",
+            "famille" => $detail->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -254,7 +258,8 @@ class ExportDRCsv extends ExportCsv {
             "modification_date" => $this->getModificationDate($detail->getCouchdbDocument()),
             "validation_user" => $this->getValidationUser($detail->getCouchdbDocument()),
             "hash" => $detail->getHash(),
-            "type" => "detail_cave_particuliere"
+            "type" => "detail_cave_particuliere",
+            "famille" => $detail->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -303,6 +308,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($acheteur->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
             "type" => "total_vente_".$acheteur->getParent()->getKey(),
+            "famille" => $noeud->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -360,6 +366,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($noeud->getCouchdbDocument()),
             "hash" => $noeud->getHash(),
             "type" => "total_cave_particuliere",
+            "famille" => $noeud->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -387,6 +394,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jeunes_vignes",
             "type" => "annexe",
+            "famille" => $dr->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
@@ -422,6 +430,7 @@ class ExportDRCsv extends ExportCsv {
             "validation_user" => $this->getValidationUser($dr),
             "hash" => "/jus_raisin",
             "type" => "annexe",
+            "famille" => $dr->getCouchdbDocument()->getFamilleCalculee()
                 ), $this->_validation_ligne);
     }
 
