@@ -54,7 +54,7 @@ done;
 
 cd $GIILDA_BASEDIR
 
-php symfony export:comptes $SYMFONYTASKOPTIONS > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv
+php symfony export:comptes-csv $SYMFONYTASKOPTIONS > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv
 iconv -f UTF8 -t ISO88591//TRANSLIT $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.csv
 
 cat $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv | grep -E ';("ETABLISSEMENT"|type);' > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes_etablissements.utf8.csv
