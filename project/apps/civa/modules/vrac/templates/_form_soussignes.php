@@ -88,6 +88,7 @@
                             document.querySelector('#vrac_soussignes_prix_unite option[value="EUR_KG"]').disabled = false;
 						}
 					});
+                    if (input.checked) { input.dispatchEvent(new Event("change")) }
 				});
                 document.querySelector('#vrac_soussignes_contrat_pluriannuel_0').addEventListener('change', function(e) {
                     document.getElementById('contrat_pluriannuel_inputs').style.display = 'none';
