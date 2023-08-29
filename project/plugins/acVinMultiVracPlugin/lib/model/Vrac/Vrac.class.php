@@ -230,11 +230,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	{
         $campagne = substr($this->campagne,0,4);
 
-        $conf_2012 = ConfigurationClient::getConfiguration('2012');
-        if($campagne > '2012'){
-            return $conf_2012;
-        }
-        $conf = acCouchdbManager::getClient('Configuration')->retrieveConfiguration($campagne);
+        $conf = ConfigurationClient::getConfiguration($campagne);
         return $conf;
      }
 
