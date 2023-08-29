@@ -46,15 +46,24 @@ class AnnuaireClient extends acCouchdbClient
     	return $annuaire;
     }
 
-    public function findOrCreateAnnuaire($cvi)
+    public function findOrCreateAnnuaire($compte)
     {
+        $cvi = $compte->login;
+
         if(preg_match("/^(C?[0-9]{10})[0-9]{2}$/", $cvi, $matches)) {
             $cvi = $matches[1];
         }
 
-    	if ($annuaire = $this->find(self::ANNUAIRE_PREFIXE_ID.$cvi)) {
-    		return $annuaire;
-    	}
+        $annuaire = $this->find(self::ANNUAIRE_PREFIXE_ID.$cvi);
+
+        if ($annuaire) {
+            return $annuaire;
+        }
+
+        if ($compte->_id != $compte->getMasterCompte()->_id) {
+            return $this->findOrCreateAnnuaire($compte->getMasterCompte());
+        }
+
     	return $this->createAnnuaire($cvi);
     }
 

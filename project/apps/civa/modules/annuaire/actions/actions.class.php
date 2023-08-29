@@ -4,7 +4,7 @@ class annuaireActions extends sfActions {
 	public function executeIndex(sfWebRequest $request)
 	{
 		$this->compte = $this->getUser()->getCompte();
-		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte);
 		echo $this->annuaire."\n";
     }
 
@@ -12,7 +12,7 @@ class annuaireActions extends sfActions {
 	{
 		$this->type = $request->getParameter('type');
 		$this->compte = $this->getUser()->getCompte();
-		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte);
 		$this->form = new AnnuaireAjoutForm($this->annuaire);
 		$this->form->setDefault('type', $this->type);
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -31,7 +31,7 @@ class annuaireActions extends sfActions {
 		$this->identifiant = $request->getParameter('identifiant');
 		if ($this->type && $this->identifiant) {
 			$this->compte = $this->getUser()->getCompte();
-			$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+			$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte);
 			$this->form = new AnnuaireAjoutForm($this->annuaire);
 			$this->form->setDefault('type', $this->type);
 			$this->form->setDefault('identifiant', $this->identifiant);
@@ -64,7 +64,7 @@ class annuaireActions extends sfActions {
 	public function executeAjouterCommercial(sfWebRequest $request)
 	{
 		$this->compte = $this->getUser()->getCompte();
-		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte->login);
+		$this->annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($this->compte);
 		$this->form = new AnnuaireAjoutCommercialForm($this->annuaire);
         if ($request->isMethod(sfWebRequest::POST)) {
         	$this->form->bind($request->getParameter($this->form->getName()));
@@ -99,7 +99,7 @@ class annuaireActions extends sfActions {
 		$id = $request->getParameter('id');
 		if ($type !== null && $id !== null) {
 			$compte = $this->getUser()->getCompte();
-			$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
+			$annuaire = AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte);
 			if ($annuaire && $annuaire->exist($type)) {
 				if ($annuaire->get($type)->exist($id)) {
 					$annuaire->get($type)->remove($id);
