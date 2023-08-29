@@ -19,7 +19,7 @@
             <form id="form_admin_login" action="<?php echo url_for('admin') ?>" method="post" id="principal">
             <h3 class="titre_section">Séléctionner un établissement</h3>
             <div class="contenu_section">
-                <p class="intro">Rechercher un établissement (par nom, cvi, civaba, n°accisses, famille, commune) :</p>
+                <p class="intro">Rechercher un établissement (par nom, cvi, civaba, n°accises, famille, commune) :</p>
                 <?php echo $form->renderHiddenFields(); ?>
                 <?php echo $form->renderGlobalErrors(); ?>
                 <div class="">

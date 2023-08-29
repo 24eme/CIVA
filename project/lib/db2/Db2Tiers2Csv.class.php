@@ -8,6 +8,7 @@ class Db2Tiers2Csv
     protected $_sous_region_viticole = null;
     protected $_cooperative = null;
     protected $societesMeres = array();
+    protected $societesExportees = array();
 
     public function __construct($file) {
         $this->file = $file;
@@ -264,7 +265,13 @@ class Db2Tiers2Csv
     }
 
     protected function importSociete($tiers, $etablissements, $societes_liees_id) {
+
         $identifiantSociete = $this->buildIdentifiantSociete($tiers);
+
+        if(isset($this->societesExportees[$identifiantSociete])) {
+
+            return "SOCIETE-".$identifiantSociete;
+        }
 
         if(!str_replace("C", "", $identifiantSociete)) {
             return;
@@ -313,6 +320,8 @@ class Db2Tiers2Csv
             null,
             implode('|', $societes_liees_id)
         );
+
+        $this->societesExportees[$identifiantSociete] = $identifiantSociete;
 
         return "SOCIETE-".$identifiantSociete;
     }

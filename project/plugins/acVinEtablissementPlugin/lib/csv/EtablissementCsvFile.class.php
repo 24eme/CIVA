@@ -164,6 +164,9 @@ class EtablissementCsvFile extends CompteCsvFile
                     echo $e->_id." (".trim($modifications).")\n";
                 }
 
+                if($e->isSuspendu()) {
+                    continue;
+                }
                 $compteExploitant = CompteClient::getInstance()->find($s->getMasterCompte()->_id.'00');
                 if(!$compteExploitant) {
                     $compteExploitant = CompteClient::getInstance()->createCompteFromSociete($s);
