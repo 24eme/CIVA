@@ -614,7 +614,7 @@ class vracActions extends sfActions
     protected function getAnnuaire()
     {
     	$compte = $this->getUser()->getCompte();
-		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte->login);
+		return AnnuaireClient::getInstance()->findOrCreateAnnuaire($compte);
     }
 
     protected function getFormRetiraisons($vrac, $user)
