@@ -122,9 +122,9 @@ class drActions extends _DRActions {
         $this->dr = $this->getRoute()->getDR();
         $this->etablissement = $this->getRoute()->getEtablissement();
 
-        $this->form_gest = new TiersExploitantForm($this->etablissement->getExploitant());
+        $this->form_gest = new TiersExploitantForm($this->dr->declarant->exploitant);
         $this->form_gest_err = 0;
-        $this->form_expl = new TiersExploitationForm($this->etablissement);
+        $this->form_expl = new TiersExploitationForm($this->dr->declarant);
         $this->form_expl_err = 0;
 
         if ($request->isMethod(sfWebRequest::POST)) {
@@ -145,8 +145,6 @@ class drActions extends _DRActions {
                 }
             }
             if (!$this->form_gest_err && !$this->form_expl_err) {
-                $this->dr->storeDeclarant();
-                $this->dr->save();
                 $this->redirectByBoutonsEtapes(null, $this->dr);
             }
         }
