@@ -56,7 +56,7 @@ class DeclarantDocument
         $declarant->cvi = $etablissement->cvi;
         $declarant->no_accises = $etablissement->getNoAccises();
         $declarant->adresse = $etablissement->siege->adresse;
-        if ($etablissement->siege->exist("adresse_complementaire")) {
+        if ($etablissement->siege->exist("adresse_complementaire") && $etablissement->siege->adresse_complementaire) {
             $declarant->adresse .= ' ; '.$etablissement->siege->adresse_complementaire;
         }
         $declarant->commune = $etablissement->siege->commune;
