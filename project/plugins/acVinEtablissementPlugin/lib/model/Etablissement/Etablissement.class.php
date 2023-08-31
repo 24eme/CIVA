@@ -150,6 +150,16 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
         return $societe->no_tva_intracommunautaire;
     }
 
+    public function setIntitule($intitule) {
+        $oldIntitule = $this->intitule:
+
+        $this->_set('nom', preg_replace('/^'.$this->intitule.' /', ''));
+        $this->_set('intitule', $intitule);
+        if($intitule) {
+            $this->_set('nom', $intitule.' '.$this->nom);
+        }
+    }
+
     public function getDenomination() {
 
         return ($this->nom) ? $this->nom : $this->raison_sociale;
