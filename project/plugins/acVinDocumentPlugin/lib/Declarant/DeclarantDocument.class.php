@@ -47,16 +47,16 @@ class DeclarantDocument
         }
         $declarant = $this->getDeclarant();
 
-        $declarant->nom = null;
+        $declarant->intitule = null;
         if ($etablissement->exist("intitule") && $etablissement->get("intitule")) {
-            $declarant->nom = $etablissement->intitule . " ";
+            $declarant->intitule = $etablissement->intitule;
         }
-        $declarant->nom .= $etablissement->nom;
+        $declarant->nom = preg_replace('/^'.$etablissement->intitule.' /', '', $etablissement->nom);
         $declarant->raison_sociale = $etablissement->getRaisonSociale();
         $declarant->cvi = $etablissement->cvi;
         $declarant->no_accises = $etablissement->getNoAccises();
         $declarant->adresse = $etablissement->siege->adresse;
-        if ($etablissement->siege->exist("adresse_complementaire")) {
+        if ($etablissement->siege->exist("adresse_complementaire") && $etablissement->siege->adresse_complementaire) {
             $declarant->adresse .= ' ; '.$etablissement->siege->adresse_complementaire;
         }
         $declarant->commune = $etablissement->siege->commune;
