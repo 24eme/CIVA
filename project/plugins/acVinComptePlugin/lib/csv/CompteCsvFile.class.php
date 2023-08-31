@@ -64,8 +64,8 @@ class CompteCsvFile extends CsvFile
                     $c->mot_de_passe = "{TEXT}" . sprintf("%04d", rand(1000, 9999));
                 }
 
-                $c->civilite = $e->getIntitule();
-                $c->nom = $e->getNomWithoutIntitule();
+                $c->civilite = null;
+                $c->nom = $e->nom;
                 $c->updateNomAAfficher();
                 $email = $c->email;
                 $e->pushContactAndAdresseTo($c);
