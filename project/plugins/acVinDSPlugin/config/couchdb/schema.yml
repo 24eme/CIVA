@@ -35,6 +35,7 @@ DS:
         type: collection
         definition:
           fields:
+            intitule: {  }
             nom: {  }
             raison_sociale: {  }
             cvi: {  }

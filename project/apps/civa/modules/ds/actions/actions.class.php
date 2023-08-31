@@ -95,10 +95,10 @@ class dsActions extends sfActions {
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
         $this->form_gest = null;
         $this->form_gest_err = 0;
-        $this->form_gest = new TiersExploitantForm($this->tiers->getExploitant());
+        $this->form_gest = new TiersExploitantForm($this->ds->declarant->exploitant);
         $this->form_gest_err = 0;
 
-        $this->form_expl = new TiersExploitationForm($this->tiers);
+        $this->form_expl = new TiersExploitationForm($this->ds->declarant);
         $this->form_expl_err = 0;
         if ($request->isMethod(sfWebRequest::POST)) {
             if($request->isXmlHttpRequest())
@@ -124,7 +124,6 @@ class dsActions extends sfActions {
                 }
             }
             if (!$this->form_gest_err && !$this->form_expl_err) {
-                DSClient::getInstance()->storeInfos($this->ds);
                 $this->redirect('ds_exploitation', $this->ds);
             }
         }

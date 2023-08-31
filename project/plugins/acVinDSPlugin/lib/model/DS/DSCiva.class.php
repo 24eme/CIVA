@@ -64,7 +64,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
         $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
         $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
         $this->declarant->exploitant->commune = $tiers->exploitant->commune;
-        //$this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
+        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
         $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
     }
 
