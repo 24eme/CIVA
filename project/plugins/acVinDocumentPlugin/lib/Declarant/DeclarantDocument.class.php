@@ -51,7 +51,7 @@ class DeclarantDocument
         if ($etablissement->exist("intitule") && $etablissement->get("intitule")) {
             $declarant->intitule = $etablissement->intitule;
         }
-        $declarant->nom = preg_replace('/^'.$etablissement->intitule.' /', '', $etablissement->nom);
+        $declarant->nom = $etablissement->getNomWithoutIntitule();
         $declarant->raison_sociale = $etablissement->getRaisonSociale();
         $declarant->cvi = $etablissement->cvi;
         $declarant->no_accises = $etablissement->getNoAccises();

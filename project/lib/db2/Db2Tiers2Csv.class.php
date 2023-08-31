@@ -291,7 +291,7 @@ class Db2Tiers2Csv
             SocieteClient::TYPE_OPERATEUR,
             $statut,
             null,
-            preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_INTITULE). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
+            preg_replace('/ +/', ' ', trim(str_replace('M.', 'M', $this->getInfos($tiers, Db2Tiers::COL_INTITULE)). ' '.$this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
             ($this->allTiersHasDrm($tiers))? $this->getInfos($tiers, Db2Tiers::COL_NUM) : $this->getInfos($tiers, Db2Tiers::COL_NO_STOCK),
             $this->getInfos($tiers, Db2Tiers::COL_CIVABA),
@@ -373,7 +373,7 @@ class Db2Tiers2Csv
 
         $insee_declaration = ($this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION)) ? $this->getInfos($tiers, Db2Tiers::COL_INSEE_DECLARATION) : $this->getInfos($tiers, Db2Tiers::COL_INSEE_SIEGE);
 
-        $intituleExploitant = $this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR);
+        $intituleExploitant = str_replace("M.", "M", $this->getInfos($tiers, Db2Tiers::COL_SEXE_CHEF_ENTR));
         $nomExploitant = trim(preg_replace('/ +/', ' ', $this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM_CHEF_ENTR)));
         if(!$nomExploitant) {
             $nomExploitant = preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM)));
@@ -438,7 +438,7 @@ class Db2Tiers2Csv
             $this->getInfos($tiers, Db2Tiers::COL_NUM),
             $famille,
             $statut,
-            $this->getInfos($tiers, Db2Tiers::COL_INTITULE),
+            trim(str_replace('M.', 'M', $this->getInfos($tiers, Db2Tiers::COL_INTITULE)),
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
             $this->getInfos($tiers, Db2Tiers::COL_CVI),

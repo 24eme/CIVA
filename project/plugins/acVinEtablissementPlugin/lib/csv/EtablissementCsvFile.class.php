@@ -235,7 +235,7 @@ class EtablissementCsvFile extends CompteCsvFile
             $etablissement->famille,
             $etablissement->statut,
             $etablissement->intitule,
-            preg_replace('/^'.$etablissement->intitule.' /', '', $etablissement->nom),
+            Etablissement::transformNomWithoutIntitule($etablissement->nom, $etablissement->intitule),
             null,
             $etablissement->cvi,
             $etablissement->num_interne,

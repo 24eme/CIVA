@@ -151,8 +151,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function setIntitule($intitule) {
-        $this->_set('nom', preg_replace('/^'.$this->intitule.' /', '', $this->nom));
-	$intitule = str_replace('M.', 'M', $intitule);
+        $this->_set('nom', $this->getNomWithoutIntitule());
         $this->_set('intitule', $intitule);
         if($intitule) {
             $this->_set('nom', $intitule.' '.$this->nom);
@@ -161,6 +160,16 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public function setNom($nom) {
 	$this->_set('nom', trim($this->intitule.' '.$nom));
+    }
+
+    public function getNomWithoutIntitule() {
+
+        return self::transformNomWithoutIntitule($this->nom, $this->intitule);
+    }
+
+    public static function transformNomWithoutIntitule($nom, $intitule) {
+
+        return preg_replace('/^'.str_replace('.', '\.', $nom).' /', '', $intitule);
     }
 
 
