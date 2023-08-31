@@ -65,7 +65,7 @@ class CompteCsvFile extends CsvFile
                 }
 
                 $c->civilite = $e->getIntitule();
-                $c->nom = $e->getNom();
+                $c->nom = $e->getNomWithoutIntitule();
                 $c->updateNomAAfficher();
                 $email = $c->email;
                 $e->pushContactAndAdresseTo($c);
