@@ -169,7 +169,7 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
 
     public static function transformNomWithoutIntitule($nom, $intitule) {
 
-        return preg_replace('/^'.str_replace('.', '\.', $nom).' /', '', $intitule);
+        return preg_replace('|^'.str_replace('.', '\.', $nom).' |', '', $intitule);
     }
 
 
