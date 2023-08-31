@@ -438,7 +438,7 @@ class Db2Tiers2Csv
             $this->getInfos($tiers, Db2Tiers::COL_NUM),
             $famille,
             $statut,
-            trim(str_replace('M.', 'M', $this->getInfos($tiers, Db2Tiers::COL_INTITULE)),
+            trim(str_replace('M.', 'M', $this->getInfos($tiers, Db2Tiers::COL_INTITULE))),
             preg_replace('/ +/', ' ', trim($this->getInfos($tiers, Db2Tiers::COL_NOM_PRENOM))),
             null,
             $this->getInfos($tiers, Db2Tiers::COL_CVI),
