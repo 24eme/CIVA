@@ -53,8 +53,15 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         if (!$this->nom) {
             return;
         }
-
-        $this->nom_a_afficher = preg_replace("/ +/", " ", trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom)));
+        if($this->isSocieteContact()){
+            $this->nom_a_afficher = trim(sprintf('%s', $this->nom));
+            return;
+        }
+        if($this->isEtablissementContact()){
+            $this->nom_a_afficher = trim(sprintf('%s', $this->nom));
+            return;
+        }
+        $this->nom_a_afficher = trim(sprintf('%s %s %s', $this->civilite, $this->prenom, $this->nom));
     }
 
     public static function transformTag($tag) {

@@ -151,14 +151,18 @@ class Etablissement extends BaseEtablissement implements InterfaceCompteGeneriqu
     }
 
     public function setIntitule($intitule) {
-        $oldIntitule = $this->intitule:
-
-        $this->_set('nom', preg_replace('/^'.$this->intitule.' /', ''));
+        $this->_set('nom', preg_replace('/^'.$this->intitule.' /', '', $this->nom));
+	$intitule = str_replace('M.', 'M', $intitule);
         $this->_set('intitule', $intitule);
         if($intitule) {
             $this->_set('nom', $intitule.' '.$this->nom);
         }
     }
+
+    public function setNom($nom) {
+	$this->_set('nom', trim($this->intitule.' '.$nom));
+    }
+
 
     public function getDenomination() {
 
