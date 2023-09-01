@@ -40,7 +40,7 @@ DR:
         definition:
           fields:
             nom: {  }
-            intitule: {  }
+            intitule: { required: false }
             raison_sociale: {  }
             cvi: {  }
             no_accises: {   }
