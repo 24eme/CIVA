@@ -47,11 +47,7 @@ class DeclarantDocument
         }
         $declarant = $this->getDeclarant();
 
-        $declarant->intitule = null;
-        if ($etablissement->exist("intitule") && $etablissement->get("intitule")) {
-            $declarant->intitule = $etablissement->intitule;
-        }
-        $declarant->nom = $etablissement->getNomWithoutIntitule();
+        $declarant->nom = $etablissement->nom;
         $declarant->raison_sociale = $etablissement->getRaisonSociale();
         $declarant->cvi = $etablissement->cvi;
         $declarant->no_accises = $etablissement->getNoAccises();

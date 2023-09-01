@@ -33,9 +33,10 @@ DS:
       date_depot_mairie: {required: false}
       declarant:
         type: collection
+        class: DSDeclarant
         definition:
           fields:
-            intitule: {  }
+            intitule: { required: false }
             nom: {  }
             raison_sociale: {  }
             cvi: {  }

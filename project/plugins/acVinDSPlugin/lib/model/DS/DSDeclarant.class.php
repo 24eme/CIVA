@@ -1,6 +1,6 @@
 <?php
 
-class DRDeclarant extends BaseDRDeclarant {
+class DSDeclarant extends BaseDSDeclarant {
     public function getIntitule() {
 
         return CompteGenerique::extractIntitule($this->nom)[0];

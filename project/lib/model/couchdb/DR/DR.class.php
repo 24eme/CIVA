@@ -25,6 +25,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function __clone() {
         parent::__clone();
         $this->identifiant = $this->cvi;
+        $this->declarant->remove('intitule');
         $this->initDocuments();
     }
 
