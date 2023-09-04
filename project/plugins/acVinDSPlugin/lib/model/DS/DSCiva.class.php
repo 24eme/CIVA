@@ -835,25 +835,24 @@ class DSCiva extends DS implements IUtilisateursDocument {
           if($drmGenerateCSV->isProduitDetailWithLieuDit($produit)) {
              foreach($produit->getProduitsDetails() as $detail) {
                  $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($detail,$isFirstDRMCampagne);
-             } 
+             }
              continue;
           }
           $lignesEdi.= $drmGenerateCSV->createRowStockProduitFromDS($produit,$isFirstDRMCampagne);
       }
 
-      if($this->exist('lies') && $this->getLies()) {
+      if($this->exist('lies') && $this->getLies() && $isFirstDRMCampagne) {
          $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("Lies et Bourbes", $this->getLies());
       }
-
-      if($this->exist('rebeches') && $this->getRebeches()) {
+      if($this->exist('rebeches') && $this->getRebeches() && $isFirstDRMCampagne) {
           $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("Rebêches ", $this->getRebeches());
       }
 
-     if($this->exist('dplc') && $this->getDplc()) {
+     if($this->exist('dplc') && $this->getDplc() && $isFirstDRMCampagne) {
        $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("DRA/DPLC Blanc", $this->getDplc());
      }
 
-     if($this->exist('dplc_rouge') && $this->getDplcRouge()) {
+     if($this->exist('dplc_rouge') && $this->getDplcRouge() && $isFirstDRMCampagne) {
        $lignesEdi.= $drmGenerateCSV->createRowStockProduitAutreFromDS("DRA/DPLC Rouge", $this->getDplcRouge());
      }
 
