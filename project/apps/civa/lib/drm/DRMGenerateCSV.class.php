@@ -331,10 +331,6 @@ class DRMGenerateCSV {
     }
 
     public function createRowStockProduitAutreFromDS($produitDetail,$volume){
-        if(!$this->firstDrm) {
-            return;
-        }
-
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = "";
       $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$volume.";\n";
