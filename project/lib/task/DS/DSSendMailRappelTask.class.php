@@ -104,7 +104,7 @@ EOF;
         $email = $ds->declarant->get('email');
         $message = Swift_Message::newInstance()
             ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
-            ->setReplyTo(array(sfConfig::get('app_email_reply_to')))
+            ->setReplyTo(sfConfig::get('app_email_reply_to'))
             ->setTo($email)
             ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
             ->setBody("Bonjour,
@@ -141,7 +141,7 @@ Dominique WOLFF");
         $email = $etablissement->getEmailTeledeclaration();
         $message = Swift_Message::newInstance()
         ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
-        ->setReplyTo(array(sfConfig::get('app_email_reply_to')))
+        ->setReplyTo(sfConfig::get('app_email_reply_to'))
         ->setTo($email)
         ->setSubject("RAPPEL DS au 31 juillet ".date('Y'))
         ->setBody("Bonjour,

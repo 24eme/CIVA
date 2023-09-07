@@ -70,7 +70,7 @@ EOF;
             try {
             	$message = $this->getMailer()->compose()
                       ->setFrom(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')))
-                      ->setReplyTo(array(sfConfig::get('app_email_reply_to')))
+                      ->setReplyTo(sfConfig::get('app_email_reply_to'))
                       ->setTo($etablissement->getEmailTeledeclaration())
                       ->setSubject('RAPPEL DR '.$arguments['campagne'])
                       ->setBody($this->getMessageBody($compte, $arguments['campagne']));
