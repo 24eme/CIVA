@@ -58,12 +58,13 @@ EOF;
         if(!preg_match("/^[C]*(67|68)/", $etablissement->identifiant)) {
             return;
         }
-        
+
         $drm = acCouchdbManager::getClient()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
 
         if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && (!$drm || !$drm->declaration->total_debut_mois)) {
 
             echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet ou un stock début de mois à 0\n";
+            return;
         }
 
         if(!$drm) {
