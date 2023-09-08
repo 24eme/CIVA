@@ -60,12 +60,12 @@ EOF;
         }
         
         $drm = acCouchdbManager::getClient()->find("DRM-".$etablissement->identifiant."-".$arguments['periode'], acCouchdbClient::HYDRATE_JSON);
-        
-        if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && !$drm) {
-            
-            echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet\n";
-        }   
-        
+
+        if($etablissement->isActif() && $etablissement->hasDroit('teledeclaration_ds_'.$arguments['type_ds']) && (!$drm || !$drm->declaration->total_debut_mois)) {
+
+            echo $etablissement->_id.";Cette établissement à le droit DS mais pas de DRM en juillet ou un stock début de mois à 0\n";
+        }
+
         if(!$drm) {
             return;
         }
