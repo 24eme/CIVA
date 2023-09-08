@@ -124,7 +124,9 @@ class tiersActions extends sfActions {
         if($isAdmin && $url_drm && preg_match('/(drm)/', $this->getRequest()->getParameter('active'))) {
             $blocs[Roles::TELEDECLARATION_DRM] = sfConfig::get("app_giilda_url_drm_admin");
         }
-        $etablissement = $societe->getEtablissementPrincipal();
+        if ($societe) {
+            $etablissement = $societe->getEtablissementPrincipal();
+        }
 
         $url_compte = sfConfig::get("app_giilda_url_compte");
         if($isAdmin && $url_compte && preg_match('/(societe|etablissement|compte)/', $this->getRequest()->getParameter('active'))) {
