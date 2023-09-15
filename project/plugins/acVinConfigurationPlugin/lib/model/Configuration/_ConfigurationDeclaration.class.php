@@ -220,8 +220,10 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
         $codeDouane = $this->_get('code_douane');
 
-        if($mention) {
+        if($mention && substr($codeDouane, 7, 1)) {
             $codeDouane = substr($codeDouane, 0, 5).$mention.substr($codeDouane, 7, 1);
+        } elseif($vtsgn) {
+            $codeDouane = substr($codeDouane, 0, 5).$mention.substr($this->getDocument()->get(str_replace("/mentions/DEFAUT/", "/mentions/".$vtsgn."/", $this->getHash()))->getCodeDouane(), 7, 1);
         }
 
         return $codeDouane;
