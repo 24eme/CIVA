@@ -32,7 +32,14 @@
             </div>
             <?php $i = $i -1 ?>
             <?php endif; ?>
-            <?php if ($compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)): ?>
+            <?php
+                $sv_etablissement = SVClient::getInstance()->getEtablissement($compte->getSociete());
+                $sv = null;
+                if ($sv_etablissement) {
+                    $sv = SVClient::getInstance()->findByIdentifiantAndCampagne($sv_etablissement->identifiant, CurrentClient::getCurrent()->campagne);
+                }
+            ?>
+            <?php if ($sv_etablissement && $compte->hasDroit(Roles::TELEDECLARATION_DR_ACHETEUR)): ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Achat Récolte</div>
@@ -48,7 +55,6 @@
                 </div>
             </div>
             <?php $i = $i -1 ?>
-            <?php $sv = SVClient::getInstance()->findByIdentifiantAndCampagne(SVClient::getInstance()->getEtablissement($compte->getSociete())->identifiant, CurrentClient::getCurrent()->campagne); ?>
             <div class="bloc_acceuil <?php if($i == $nb_blocs): ?>bloc_acceuil_first<?php endif ?> <?php if($i == 1): ?>bloc_acceuil_last<?php endif; ?> <?php if(($nb_blocs - $i) % 2 == 1): ?>alt<?php endif ?> recolte">
                 <div class="bloc_acceuil_icon icon-raisins"></div>
                 <div class="bloc_acceuil_header">Production</div>
