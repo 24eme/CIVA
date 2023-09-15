@@ -6,7 +6,8 @@ class SVExportJsonTask extends sfBaseTask
     {
         $this->addArguments([
             new sfCommandArgument('declaration', sfCommandArgument::REQUIRED, "Type de Document de production"),
-            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, "Campagne")
+            new sfCommandArgument('campagne', sfCommandArgument::REQUIRED, "Campagne"),
+            new sfCommandArgument('id', sfCommandArgument::OPTIONAL, "SV spécifique")
         ]);
 
         $this->addOptions([
@@ -34,6 +35,8 @@ EOF;
         $declaration = $arguments['declaration'];
         $campagne = $arguments['campagne'];
 
+        $filtre = $arguments['id'] ?? null;
+
         $svs = [];
         $allSV = SVClient::getInstance()->getAll($campagne);
         foreach ($allSV as $sv) {
@@ -42,6 +45,10 @@ EOF;
             }
 
             if (strpos($sv->_id, '-75') !== false) {
+                continue;
+            }
+
+            if ($filtre && $filtre !== $sv->_id) {
                 continue;
             }
 
