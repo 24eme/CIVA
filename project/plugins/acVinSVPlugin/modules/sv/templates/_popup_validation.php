@@ -12,7 +12,16 @@
                 <div class="row">
                     <div class="col-xs-6 text-left"><button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button></div>
                     <form action="" method="POST">
-                      <div class="col-xs-6 text-right"><button type="submit" data-loading-text="Validation en cours ..." class="btn btn-success btn-loading" id="signature_sv_popup_confirm">Valider la déclaration</button></div>
+                      <div class="col-xs-6 text-right">
+                        <button type="submit" data-loading-text="Validation en cours ..."
+                                class="btn btn-success btn-loading"
+                                <?php if ($sv->getModifiee()): ?>
+                                  form="form_sv_motif_modification"
+                                <?php endif ?>
+                                id="signature_sv_popup_confirm">
+                          Valider la déclaration
+                        </button>
+                      </div>
                     </form>
                 </div>
             </div>
