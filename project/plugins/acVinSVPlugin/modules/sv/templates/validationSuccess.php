@@ -10,10 +10,6 @@
 
 <?php include_partial('sv/recap', ['sv' => $sv]); ?>
 
-<?php if ($sv->getModifiee()): ?>
-  <?php include_partial('sv/motifModificationForm', ['sv' => $sv, 'form' => $motifModificationForm]); ?>
-<?php endif ?>
-
 <div class="row" style="margin-top: 10px;">
     <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_stockage', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
     <div class="col-xs-4 text-center"><a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a></div>
