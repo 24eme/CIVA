@@ -15,7 +15,7 @@
     <div class="col-xs-4 text-center">
       <div class="btn-group dropup">
         <a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a>
-        <?php if (true): ?>
+        <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
           <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
               <span class="sr-only">Toggle Dropdown</span>
