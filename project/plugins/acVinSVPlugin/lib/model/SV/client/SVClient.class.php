@@ -55,6 +55,15 @@ class SVClient extends acCouchdbClient {
         return $idsCampagne;
     }
 
+    public function getAll($campagne)
+    {
+        $ids = $this->getAllIdsByCampagne($campagne);
+
+        return array_map(function ($id) {
+            return $this->find($id);
+        }, $ids);
+    }
+
     public static function getTypeByEtablissement($etablissement) {
         $type = null;
 
