@@ -55,18 +55,6 @@ class SVClient extends acCouchdbClient {
         return $idsCampagne;
     }
 
-    public function getAllByCampagne($campagne, $hydrate = acCouchdbClient::HYDRATE_ON_DEMAND) {
-        $docs = $this->getAll($hydrate);
-        $i = 0;
-        $keys = array_keys($docs->getDocs());
-        foreach($keys as $key) {
-            if (substr($key, strlen($key) - 4, 4) != $campagne) {
-                unset($docs[$key]);
-            }
-        }
-        return $docs;
-    }
-
     public static function getTypeByEtablissement($etablissement) {
         $type = null;
 
