@@ -233,6 +233,10 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
         $this->svvalidation = new SVValidation($this->sv);
 
+        if ($this->sv->getModifiee()) {
+            $this->motifModificationForm = new SVMotifModificationForm($this->sv);
+        }
+
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         if (! $request->isMethod(sfWebRequest::POST)) {
@@ -241,6 +245,12 @@ class svActions extends sfActions {
 
         if ($this->svvalidation->isValide() === false) {
             return sfView::SUCCESS;
+        }
+
+        if ($this->sv->getModifiee() && $this->motifModificationForm->isValid() === false) {
+            return sfView::SUCCESS;
+        } elseif ($this->sv->getModifiee()) {
+            $this->motifModificationForm->save();
         }
 
         $this->sv->validate();
