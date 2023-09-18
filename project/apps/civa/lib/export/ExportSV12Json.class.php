@@ -28,7 +28,7 @@ class ExportSV12Json extends ExportSVJson
 
     public function getRootInfos()
     {
-        return [
+        $infos = [
             'campagne' => $this->sv->campagne,
             'numeroCVINegociant' => $this->sv->declarant->cvi,
             'dateDepot' => DateTimeImmutable::createFromFormat('Y-m-d', $this->sv->valide->date_saisie)
@@ -37,6 +37,18 @@ class ExportSV12Json extends ExportSVJson
             self::APPORT_NODE => ['produits' => []],
             self::SITE_NODE => ['sites' => []]
         ];
+
+        if ($this->sv->exist('motif_modification') && $this->sv->motif_modification) {
+            $motif = ['code' => $this->sv->motif_modification->motif];
+
+            if ($motif['code'] === SV::SV_MOTIF_MODIFICATION_AUTRE) {
+                $motif['libelleAutre'] = $this->sv->motif_modification->libelle;
+            }
+
+            $infos['motifModification'] = $motif;
+        }
+
+        return $infos;
     }
 
     public function getApportRaisin($produit)

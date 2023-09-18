@@ -363,7 +363,7 @@ L'application de télédéclaration de production du CIVA
     public function executeJSON(sfWebRequest $request)
     {
         $sv = $this->getRoute()->getSV();
-        $has_motif = $request->getParameter('has_motif', 0);
+        $has_motif = $request->getParameter('has_motif', 1);
 
         if ($sv->isValide() === false || $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) === false) {
             return $this->redirect('sv_visualisation', $sv);
@@ -372,11 +372,13 @@ L'application de télédéclaration de production du CIVA
         if ($has_motif) {
             $motifModificationForm = new SVMotifModificationForm($sv);
 
+            $motifModificationForm->bind($request->getParameter($motifModificationForm->getName()));
+
             if ($motifModificationForm->isValid() === false) {
                 return $this->redirect('sv_visualisation', $sv);
             }
 
-            $this->motifModificationForm->save();
+            $motifModificationForm->save();
         }
 
         $class = "Export".$sv->getType()."Json";
