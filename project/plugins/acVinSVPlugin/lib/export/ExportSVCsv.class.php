@@ -24,7 +24,7 @@ class ExportSVCsv
             $etablissement = EtablissementClient::getInstance()->findByCvi($this->cvi);
             $toExport[] = SVClient::getInstance()->findByIdentifiantAndCampagne($etablissement->identifiant, $campagne);
         } else {
-            $toExport = SVClient::getInstance()->getAll($campagne);
+            $toExport = SVClient::getInstance()->getAllIdsByCampagne($campagne);
         }
 
         if ($with_header) {
@@ -32,6 +32,9 @@ class ExportSVCsv
         }
 
         foreach ($toExport as $sv) {
+            if(is_string($sv)) {
+                $sv = SVClient::getInstance()->find($sv);
+            }
             if(!count($sv->getProduits())) {
                 fputcsv($stream, [
                     $sv->declarant->cvi,$sv->declarant->raison_sociale,null,null,null,null,null,null,null,null,null,null,null,null,null,$sv->type,$sv->valide->date_saisie,null,$sv->_id], ';');

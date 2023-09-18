@@ -39,6 +39,15 @@ cat data/dr_mouvements.utf8.csv | cut -d ";" -f 2 | sort | uniq | grep -E "[0-9]
     iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_dr_mouvements.csv;
 done;
 
+echo 'type;annee;"CVI acheteur";"Nom acheteur";"CVI récoltant";"Nom récoltant";Appellation;Lieu;Cépage;VTSGN;Dénomination;"Superficie livrée";"Qté livrée en kg";"Volume livré";"Volume à détruire";"Dont VCI";"Volume revendiqué";Type;"Date de validation";"Hash produit";"Document ID"' > data/sv.utf8.csv
+for (( i=2017; i <= $(date +"%Y"); i++ ));
+do
+    bash bin/export_svs_csv.sh $i | grep -v "Hash produit" | awk -v campagne="$i" -F ";" '{ print "SV;" campagne ";" $0}' >> data/sv.utf8.csv
+done
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/sv.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv.csv
+cp data/sv.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv.utf8.csv
+
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
 
