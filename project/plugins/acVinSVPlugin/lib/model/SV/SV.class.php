@@ -366,4 +366,13 @@ class SV extends BaseSV
 
         return $lignes;
     }
+
+    public function getFamilleCalculee() {
+        if($this->getType() == 'TYPE_SV11') {
+
+            return "COOPERATIVE";
+        }
+
+        return "NEGOCIANT";
+    }
 }

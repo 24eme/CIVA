@@ -18,20 +18,11 @@ class ExportSVCsv
             throw new Exception("Impossible d'ouvrir le flux");
         }
 
-        $toExport = [];
-
-        if ($this->cvi) {
-            $etablissement = EtablissementClient::getInstance()->findByCvi($this->cvi);
-            $toExport[] = SVClient::getInstance()->findByIdentifiantAndCampagne($etablissement->identifiant, $campagne);
-        } else {
-            $toExport = SVClient::getInstance()->getAllIdsByCampagne($campagne);
-        }
-
         if ($with_header) {
             fputcsv($stream, $this->getHeader(), ';');
         }
 
-        foreach ($toExport as $sv) {
+        foreach ($this->getDocs($campagne) as $sv) {
             if(is_string($sv)) {
                 $sv = SVClient::getInstance()->find($sv);
             }
@@ -74,6 +65,19 @@ class ExportSVCsv
             substr($hashproduit, 22),
             $sv->_id,
         ];
+    }
+
+    public function getDocs($campagne) {
+        $docs = [];
+
+        if ($this->cvi) {
+            $etablissement = EtablissementClient::getInstance()->findByCvi($this->cvi);
+            $docs[] = SVClient::getInstance()->findByIdentifiantAndCampagne($etablissement->identifiant, $campagne);
+        } else {
+            $docs = SVClient::getInstance()->getAllIdsByCampagne($campagne);
+        }
+
+        return $docs;
     }
 
     public function getApporteur($cvi)
