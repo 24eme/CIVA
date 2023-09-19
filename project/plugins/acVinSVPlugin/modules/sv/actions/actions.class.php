@@ -233,10 +233,6 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
         $this->svvalidation = new SVValidation($this->sv);
 
-        if ($this->sv->getModifiee()) {
-            $this->motifModificationForm = new SVMotifModificationForm($this->sv);
-        }
-
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
         if (! $request->isMethod(sfWebRequest::POST)) {
@@ -245,12 +241,6 @@ class svActions extends sfActions {
 
         if ($this->svvalidation->isValide() === false) {
             return sfView::SUCCESS;
-        }
-
-        if ($this->sv->getModifiee() && $this->motifModificationForm->isValid() === false) {
-            return sfView::SUCCESS;
-        } elseif ($this->sv->getModifiee()) {
-            $this->motifModificationForm->save();
         }
 
         $this->sv->validate();
@@ -367,6 +357,39 @@ L'application de télédéclaration de production du CIVA
         }
 
         $this->svvalidation = new SVValidation($this->sv);
+        $this->motifModificationForm = new SVMotifModificationForm($this->sv);
+    }
+
+    public function executeJSON(sfWebRequest $request)
+    {
+        $sv = $this->getRoute()->getSV();
+        $has_motif = $request->getParameter('has_motif', 1);
+
+        if ($sv->isValide() === false || $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) === false) {
+            return $this->redirect('sv_visualisation', $sv);
+        }
+
+        if ($has_motif) {
+            $motifModificationForm = new SVMotifModificationForm($sv);
+
+            $motifModificationForm->bind($request->getParameter($motifModificationForm->getName()));
+
+            if ($motifModificationForm->isValid() === false) {
+                return $this->redirect('sv_visualisation', $sv);
+            }
+
+            $motifModificationForm->save();
+        }
+
+        $class = "Export".$sv->getType()."Json";
+        $json = [$class::ROOT_NODE => []];
+
+        $export = new $class($sv);
+        $export->build();
+        $json[$class::ROOT_NODE][] = json_decode($export->export());
+
+        $export->addHeaders($this->getResponse());
+        return $this->renderText(json_encode($json).PHP_EOL);
     }
 
     public function executeInvaliderCiva(sfWebRequest $request)

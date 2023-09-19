@@ -111,6 +111,16 @@ sv_pdf:
   requirements:
     sf_method: [get]
 
+sv_json:
+  url: /sv/json/:id
+  param: { module: sv, action: JSON }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [get, post]
+
 sv_feed_back:
   url: /sv/feedback/:id
   param: { module: sv, action: feedBack }

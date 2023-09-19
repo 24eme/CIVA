@@ -231,4 +231,14 @@ class ExportSVJson
 
         return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_produit);
     }
+
+    public function addHeaders($response)
+    {
+        $response->setHttpHeader('Content-Type', 'application/json');
+        $response->setHttpHeader('Content-Disposition', 'attachment; filename="' . $this->sv->_id . '_douane.json"');
+        $response->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $response->setHttpHeader('Pragma', '');
+        $response->setHttpHeader('Cache-Control', 'public');
+        $response->setHttpHeader('Expires', '0');
+    }
 }
