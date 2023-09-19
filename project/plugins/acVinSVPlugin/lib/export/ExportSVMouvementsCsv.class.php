@@ -48,8 +48,9 @@ class ExportSVMouvementsCsv extends ExportSVCsv
             $produit->denomination_complementaire,
             $type_mouvement,
             $quantite,
+            $this->getApporteur($cvi_apporteur)->identifiant,
             $cvi_apporteur,
-            $this->getApporteur($cvi_apporteur),
+            $this->getApporteur($cvi_apporteur)->raison_sociale,
             substr($hashproduit, 22),
             $sv->_id,
             $sv->getFamilleCalculee(),
@@ -63,7 +64,8 @@ class ExportSVMouvementsCsv extends ExportSVCsv
         $this->buildLine($sv, $produit, "quantite", $produit->quantite_recolte),
         $this->buildLine($sv, $produit, "volume", $produit->volume_recolte),
         $this->buildLine($sv, $produit, "vci", $produit->vci),
-        $this->buildLine($sv, $produit, "volume_revendique", $produit->vci),
+        $this->buildLine($sv, $produit, "volume_detruit", $produit->volume_detruit),
+        $this->buildLine($sv, $produit, "volume_revendique", $produit->volume_revendique),
         ];
     }
 

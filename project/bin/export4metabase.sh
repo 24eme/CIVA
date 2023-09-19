@@ -48,6 +48,15 @@ done
 iconv -f UTF8 -t ISO88591//TRANSLIT data/sv.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv.csv
 cp data/sv.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv.utf8.csv
 
+php symfony sv:export-mouvements-csv 0 --onlyheaders=1 > data/sv_mouvements.utf8.csv
+for (( i=2017; i <= $(date +"%Y"); i++ ));
+do
+    php symfony sv:export-mouvements-csv $i --noheaders=1 >> data/sv_mouvements.utf8.csv
+done
+
+iconv -f UTF8 -t ISO88591//TRANSLIT data/sv_mouvements.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv_mouvements.csv
+cp data/sv_mouvements.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_sv_mouvements.utf8.csv
+
 iconv -f UTF8 -t ISO88591//TRANSLIT data/mercuriales/datas_mercuriale.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.csv
 cp data/mercuriales/datas_mercuriale.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_multicontrats.utf8.csv
 

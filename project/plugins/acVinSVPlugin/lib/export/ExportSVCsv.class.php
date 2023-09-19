@@ -47,7 +47,7 @@ class ExportSVCsv
             $sv->declarant->cvi,
             $sv->declarant->raison_sociale,
             $cvi_apporteur,
-            $this->getApporteur($cvi_apporteur),
+            $this->getApporteur($cvi_apporteur)->raison_sociale,
             $produit->getLibelle(),
             $produit->getConfig()->getLieu()->getLibelle(),
             $produit->getConfig()->getCepage()->getLibelle(),
@@ -83,13 +83,13 @@ class ExportSVCsv
     public function getApporteur($cvi)
     {
         if (array_key_exists($cvi, $this->apporteurs)) {
-            return $this->apporteurs[$cvi]->raison_sociale;
+            return $this->apporteurs[$cvi];
         }
 
         $apporteur = EtablissementClient::getInstance()->findByCvi($cvi);
         $this->apporteurs[$cvi] = $apporteur;
 
-        return $this->apporteurs[$cvi]->raison_sociale;
+        return $this->apporteurs[$cvi];
     }
 
     public function getHeader()

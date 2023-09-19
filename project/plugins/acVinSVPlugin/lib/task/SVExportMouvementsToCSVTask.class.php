@@ -13,6 +13,8 @@ class SVExportMouvementsToCSVTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('onlyheaders', null, sfCommandOption::PARAMETER_REQUIRED, 'Exporte seulement les headers du csv', false),
+            new sfCommandOption('noheaders', null, sfCommandOption::PARAMETER_REQUIRED, "N'exporte pas les headers du csv", false),
             // add your own options here
             //new sfCommandOption('campagne', null, sfCommandOption::PARAMETER_REQUIRED, "Année de déclaration", '2010'),
         ));
@@ -36,6 +38,14 @@ EOF;
         $cvi = (isset($arguments['cvi'])) ? $arguments['cvi'] : null;
 
         $export = new ExportSVMouvementsCsv($cvi);
-        $export->generate($campagne);
+
+        if($options['onlyheaders']) {
+            $stream = fopen('php://output', 'w');
+            fputcsv($stream, $export->getHeader(), ';');
+            fclose($stream);
+            return;
+        }
+
+        $export->generate($campagne, ! $options['noheaders']);
     }
 }
