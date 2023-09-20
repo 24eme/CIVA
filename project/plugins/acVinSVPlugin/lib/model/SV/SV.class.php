@@ -11,6 +11,16 @@ class SV extends BaseSV
     const DEFAULT_KEY = 'DEFAUT';
     const STATUT_VALIDE = 'VALIDE';
 
+    const SV_MOTIF_MODIFICATION_ERREUR = 'ER';
+    const SV_MOTIF_MODIFICATION_REVENDICATION = 'RV';
+    const SV_MOTIF_MODIFICATION_AUTRE = 'AU';
+
+    protected $motifs_modification = [
+        self::SV_MOTIF_MODIFICATION_ERREUR => "Erreur de saisie",
+        self::SV_MOTIF_MODIFICATION_REVENDICATION => "Modification pour des besoins de revendication",
+        self::SV_MOTIF_MODIFICATION_AUTRE => "Autre"
+    ];
+
     protected $produits_rebeches = null;
 
     public function getConfiguration() {
@@ -274,6 +284,25 @@ class SV extends BaseSV
         return $lieux;
     }
 
+    public function setMotifModification($type, $autre = null)
+    {
+        $this->add('motif_modification')->date_modification = (new DateTimeImmutable())->format('Y-m-d');
+        $this->add('motif_modification')->motif = $type;
+
+        if ($type === self::SV_MOTIF_MODIFICATION_AUTRE) {
+            if ($autre == null) {
+                throw new sfException('Le motif ne peut être vide quand Autre est sélectionné');
+            }
+
+            $this->add('motif_modification')->libelle = $autre;
+        }
+    }
+
+    public function getMotifsModification()
+    {
+        return $this->motifs_modification;
+    }
+
     public function validate()
     {
         $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
@@ -300,9 +329,9 @@ class SV extends BaseSV
         return $this->isValide();
     }
 
-    public function getModifiee() {
-
-        return $this->isValide();
+    public function getModifiee()
+    {
+        return $this->isValide() === false && $this->valide->date_saisie;
     }
 
     public function devalidate()
@@ -336,5 +365,14 @@ class SV extends BaseSV
         $lignes .= $drmGenerateCSV->createRowMouvementProduitDetail("Rebêches", "entrees", "recolte", $this->rebeches);
 
         return $lignes;
+    }
+
+    public function getFamilleCalculee() {
+        if($this->getType() == 'TYPE_SV11') {
+
+            return "COOPERATIVE";
+        }
+
+        return "NEGOCIANT";
     }
 }

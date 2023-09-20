@@ -18,20 +18,14 @@ class ExportSVCsv
             throw new Exception("Impossible d'ouvrir le flux");
         }
 
-        $toExport = [];
-
-        if ($this->cvi) {
-            $etablissement = EtablissementClient::getInstance()->findByCvi($this->cvi);
-            $toExport[] = SVClient::getInstance()->findByIdentifiantAndCampagne($etablissement->identifiant, $campagne);
-        } else {
-            $toExport = SVClient::getInstance()->getAll($campagne);
-        }
-
         if ($with_header) {
             fputcsv($stream, $this->getHeader(), ';');
         }
 
-        foreach ($toExport as $sv) {
+        foreach ($this->getDocs($campagne) as $sv) {
+            if(is_string($sv)) {
+                $sv = SVClient::getInstance()->find($sv);
+            }
             if(!count($sv->getProduits())) {
                 fputcsv($stream, [
                     $sv->declarant->cvi,$sv->declarant->raison_sociale,null,null,null,null,null,null,null,null,null,null,null,null,null,$sv->type,$sv->valide->date_saisie,null,$sv->_id], ';');
@@ -53,7 +47,7 @@ class ExportSVCsv
             $sv->declarant->cvi,
             $sv->declarant->raison_sociale,
             $cvi_apporteur,
-            $this->getApporteur($cvi_apporteur),
+            $this->getApporteur($cvi_apporteur)->raison_sociale,
             $produit->getLibelle(),
             $produit->getConfig()->getLieu()->getLibelle(),
             $produit->getConfig()->getCepage()->getLibelle(),
@@ -73,16 +67,29 @@ class ExportSVCsv
         ];
     }
 
+    public function getDocs($campagne) {
+        $docs = [];
+
+        if ($this->cvi) {
+            $etablissement = EtablissementClient::getInstance()->findByCvi($this->cvi);
+            $docs[] = SVClient::getInstance()->findByIdentifiantAndCampagne($etablissement->identifiant, $campagne);
+        } else {
+            $docs = SVClient::getInstance()->getAllIdsByCampagne($campagne);
+        }
+
+        return $docs;
+    }
+
     public function getApporteur($cvi)
     {
         if (array_key_exists($cvi, $this->apporteurs)) {
-            return $this->apporteurs[$cvi]->raison_sociale;
+            return $this->apporteurs[$cvi];
         }
 
         $apporteur = EtablissementClient::getInstance()->findByCvi($cvi);
         $this->apporteurs[$cvi] = $apporteur;
 
-        return $this->apporteurs[$cvi]->raison_sociale;
+        return $this->apporteurs[$cvi];
     }
 
     public function getHeader()

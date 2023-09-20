@@ -101,6 +101,14 @@ SV:
                     definition:
                       fields:
                         '*': { type: float }
+      motif_modification:
+        type: collection
+        required: false
+        definition:
+          fields:
+            date_modification: { }
+            motif: { }
+            libelle: { }
       valide:
         type: collection
         definition:

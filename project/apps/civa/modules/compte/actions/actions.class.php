@@ -196,6 +196,11 @@ class compteActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeModification(sfWebRequest $request) {
+        if(sfConfig::get('app_giilda_url_mon_compte') && $request->getParameter('identifiant')) {
+
+            return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mon_compte'), $request->getParameter('identifiant')));
+        }
+
         $this->compte = $this->getUser()->getCompte();
         $this->forward404Unless(in_array($this->compte->getStatutTeledeclarant(), array(CompteClient::STATUT_TELEDECLARANT_OUBLIE, CompteClient::STATUT_TELEDECLARANT_INSCRIT)));
 

@@ -41,16 +41,27 @@ class SVClient extends acCouchdbClient {
         return $sv;
     }
 
-    public function getAll($campagne = null)
+    public function getAllIdsByCampagne($campagne)
     {
-        $start = "0000";
-        $end   = "9999";
+        $ids = $this->startkey('SV11-0000000000-0000')->endkey('SV12-9999999999-9999')->execute(acCouchdbClient::HYDRATE_ON_DEMAND)->getIds();
 
-        if ($campagne) {
-            $start = $end = $campagne;
+        $idsCampagne = [];
+        foreach($ids as $id) {
+            if (substr($id, strlen($id) - 4, 4) == $campagne) {
+                $idsCampagne[] = $id;
+            }
         }
 
-        return $this->startkey("SV11-0000000000-".$start)->endkey("SV12-9999999999-".$end)->execute();
+        return $idsCampagne;
+    }
+
+    public function getAll($campagne)
+    {
+        $ids = $this->getAllIdsByCampagne($campagne);
+
+        return array_map(function ($id) {
+            return $this->find($id);
+        }, $ids);
     }
 
     public static function getTypeByEtablissement($etablissement) {
