@@ -103,6 +103,7 @@ SV:
                         '*': { type: float }
       motif_modification:
         type: collection
+        required: false
         definition:
           fields:
             date_modification: { }
