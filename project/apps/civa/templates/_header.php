@@ -35,10 +35,8 @@
             <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
             <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
 
-            <?php if ($compte && $compte->getStatus() == CompteClient::STATUT_TELEDECLARANT_INSCRIT) : ?>
-                <li><a href="<?php echo url_for('compte_modification', array(), isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
-            <?php elseif($compte && $compte->getStatus() == CompteClient::STATUT_TELEDECLARANT_OUBLIE): ?>
-                <li><a href="<?php echo url_for('compte_modification_oublie', array(), isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
+            <?php if ($compte) : ?>
+                <li><a href="<?php echo url_for('compte_modification', ['identifiant' => $compte->identifiant], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php endif; ?>
 
             <?php if($compte): ?>
