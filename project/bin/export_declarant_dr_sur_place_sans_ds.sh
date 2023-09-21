@@ -17,7 +17,7 @@ fi
 
 bash bin/export_drs_csv.sh $ANNEE_DR | grep "SUR PLACE" | grep -v "Jeunes Vignes" |grep -v "Vins sans IG" | cut -d ";" -f 2,3,4,11 | awk -F ';' '{ if($4 == 0 || !$4) { next;} print $2 ";" $3; }' | sed 's/"//g' | sort | uniq  > /tmp/declarants_dr_volume_sur_place.csv
 
-bash bin/export_ds_csv.sh "propriete" "$PERIODE_DS" | awk -F ';' '{ print $4 }' | sort | uniq > /tmp/declarants_ds_propriete.csv
+bash bin/export_ds_csv.sh "$PERIODE_DS" | grep "propriete" | awk -F ';' '{ print $4 }' | sort | uniq > /tmp/declarants_ds_propriete.csv
 
 join -v 1 -t ";" -1 1 -2 1 /tmp/declarants_dr_volume_sur_place.csv /tmp/declarants_ds_propriete.csv
 

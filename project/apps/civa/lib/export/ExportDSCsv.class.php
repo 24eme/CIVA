@@ -23,6 +23,11 @@ class ExportDSCsv {
         return $output;
     }
 
+    public static function getHeader() {
+
+        return "campagne;periode;type_ds;identifiant;nom;cvi;civaba;famille;numero_stokage;principale;appellation;lieu;couleur;cepage;denomination;volume_total;volume_normal;volume_vt;volume_sgn;statut;date_validation_tiers;date_validation_civa;date_depot_mairie;editeur;validateur;id_doc\n";
+    }
+
     protected function outputDS($ds) {
         $output = null;
         $validee = (isset($this->ds_principale->validee) && $this->ds_principale->validee) ? $this->ds_principale->validee : null;
@@ -33,8 +38,12 @@ class ExportDSCsv {
         $userEditeur = str_replace("COMPTE-", "", key($this->ds_principale->utilisateurs->edition));
         $userValideur = str_replace("COMPTE-", "", key($this->ds_principale->utilisateurs->validation));
 
-
-        $ligneStart = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ds->periode, $ds->_id, $ds->declarant->nom, $ds->identifiant, $ds->stockage->numero, $principale, $statut, $validee, $modifiee, $date_depot_mairie, $userEditeur, $userValideur);
+        $etablissement = EtablissementClient::getInstance()->find($ds->identifiant, acCouchdbClient::HYDRATE_JSON);
+        if(!$etablissement) {
+            $etablissement = EtablissementClient::getInstance()->find("ETABLISSEMENT-C".$ds->civaba, acCouchdbClient::HYDRATE_JSON);
+        }
+        $ligneStart = sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", substr($ds->periode, 0, 4), $ds->periode, $ds->type_ds, $etablissement->identifiant, $ds->declarant->nom, $ds->declarant->cvi, (isset($ds->civaba) ? $ds->civaba : null), $etablissement->famille, $ds->stockage->numero, $principale);
+        $ligneEnd = sprintf("%s;%s;%s;%s;%s;%s;%s\n", $statut, $validee, $modifiee, $date_depot_mairie, $userEditeur, $userValideur, $ds->_id);
 
         foreach($ds->declaration as $certification_key => $certification) {
             if(!preg_match("/certification/", $certification_key)) {
@@ -74,10 +83,11 @@ class ExportDSCsv {
                                 foreach($cepage->detail as $detail) {
                                     $total = $detail->volume_normal + $detail->volume_vt + $detail->volume_sgn;
                                     $hasLieuDit = !$lieu->libelle && $detail->lieu;
-                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", $ligneStart, trim($genre->libelle." ".$appellation->libelle), $lieu->libelle, $couleur->libelle,$cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null, $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0);
+                                    if(!isset($genre->libelle)) {
+                                        $genre->libelle = null;
+                                    }
+                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ligneStart, trim($genre->libelle." ".$appellation->libelle), $lieu->libelle, $couleur->libelle,$cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null,  $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0, $ligneEnd);
                                 }
-
-                                //$output .= sprintf("%s;%s;%s;%s;%s;TOTAL;%s;%s;%s;%s\n", $ligneStart, $appellation->libelle, $lieu->libelle, $couleur->libelle, $cepage->libelle, $cepage->total_stock, $cepage->total_normal, $cepage->total_vt, $cepage->total_sgn);
                             }
                         }
                     }
@@ -85,20 +95,20 @@ class ExportDSCsv {
             }
         }
         if($ds->mouts) {
-            $output .= sprintf("%s;mouts;;;;;%s;;;\n", $ligneStart, $ds->mouts);
+            $output .= sprintf("%s;mouts;;;;;%s;;;%s", $ligneStart, $ds->mouts, $ligneEnd);
         }
         if($ds->rebeches) {
-            $output .= sprintf("%s;rebeches;;;;;%s;;;\n", $ligneStart, $ds->rebeches);
+            $output .= sprintf("%s;rebeches;;;;;%s;;;%s", $ligneStart, $ds->rebeches, $ligneEnd);
         }
         if($ds->dplc) {
-            $output .= sprintf("%s;dplc;;;;;%s;;;\n", $ligneStart, $ds->dplc);
+            $output .= sprintf("%s;dplc;;;;;%s;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
         }
         if($ds->lies) {
-            $output .= sprintf("%s;lies;;;;;%s;;;\n", $ligneStart, $ds->lies);
+            $output .= sprintf("%s;lies;;;;;%s;;;%s", $ligneStart, $ds->lies, $ligneEnd);
         }
 
         if(!$output) {
-            $output .= sprintf("%s;;;;;;;;;\n", $ligneStart);
+            $output .= sprintf("%s;;;;;;;;;%s", $ligneStart, $ligneEnd);
         }
 
         return $output;

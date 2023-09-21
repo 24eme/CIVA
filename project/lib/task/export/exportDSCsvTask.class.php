@@ -14,6 +14,8 @@ class ExportDSCsvTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('noheader', null, sfCommandOption::PARAMETER_REQUIRED, "N'affiche pas les header", true),
+            new sfCommandOption('onlyheader', null, sfCommandOption::PARAMETER_REQUIRED, 'Affiche seulement les headers', false),
         ));
 
         $this->namespace = 'export';
@@ -28,10 +30,18 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
+        if(!$options['noheader'] || $options['onlyheader']) {
+            echo ExportDSCsv::getHeader();
+        }
+
+        if($options['onlyheader']) {
+            return;
+        }
+
         preg_match('/^DS-(C?[0-9]{10})-([0-9]{6})-([0-9]{3})$/', $arguments["id"], $matches);
 
-        $export = new ExportDSCsv($matches[1], $matches[2]);         
-        
+        $export = new ExportDSCsv($matches[1], $matches[2]);
+
         echo $export->output();
     }
 }
