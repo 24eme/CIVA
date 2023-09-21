@@ -5,6 +5,8 @@ cd $GIILDA_BASEDIR
 bash bin/export_bi_to_zip
 cd -
 
+bash bin/export_bi_ds.sh $DS_PERIODE
+
 cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.utf8.csv
 for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
     tail -n +2 $csv
