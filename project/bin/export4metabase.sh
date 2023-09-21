@@ -5,10 +5,11 @@ cd $GIILDA_BASEDIR
 bash bin/export_bi_to_zip
 cd -
 
-cat $PATH_MISEADISPO_CIVA/ds/*csv | head -n 1 > data/ds.utf8.csv
-for csv in $PATH_MISEADISPO_CIVA/ds/*csv ; do
-    tail -n +2 $csv
-done >> data/ds.utf8.csv
+php symfony export:ds-csv --onlyheader=1 0 > data/ds.utf8.csv
+for (( i=2017; i <= $(date +"%Y"); i++ ));
+do
+    bash bin/export_ds_csv.sh "$i"07 | grep -v ";id_doc" >> data/ds.utf8.csv
+done
 
 iconv -f UTF8 -t ISO88591//TRANSLIT data/ds.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.csv
 cp data/ds.utf8.csv $PATH_MISEADISPO_CIVA/export/bi/export_bi_ds.utf8.csv
