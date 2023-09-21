@@ -37,8 +37,8 @@ class ExportSVMouvementsCsv extends ExportSVCsv
         return [
             $sv->type,
             $sv->periode,
-            $sv->declarant->cvi,
             $sv->identifiant,
+            $sv->declarant->cvi,
             $sv->declarant->raison_sociale,
             $produit->getConfig()->getAppellation()->getLibelle(),
             $produit->getConfig()->getLieu()->getLibelle(),
@@ -72,9 +72,9 @@ class ExportSVMouvementsCsv extends ExportSVCsv
     public function getHeader()
     {
         return [
-            "type", "année", "cvi", "identifiant", "nom", "appellation", "lieu", "cepage",
-            "vtsgn", "lieudit", "denomination", "type mouvement", "quantite", "identifiant acheteur", "cvi acheteur",
-            "nom acheteur", "hash produit", "doc id", "famille calculee",
+            "type", "année", "identifiant", "cvi", "nom", "appellation", "lieu", "cepage",
+            "vtsgn", "lieudit", "denomination", "type mouvement", "quantite", "identifiant vendeur", "cvi vendeur",
+            "nom vendeur", "hash produit", "doc id", "famille calculee",
         ];
     }
 }
