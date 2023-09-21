@@ -95,16 +95,16 @@ class ExportDSCsv {
             }
         }
         if($ds->mouts) {
-            $output .= sprintf("%s;mouts;;;;;%s;;;%s", $ligneStart, $ds->mouts, $ligneEnd);
+            $output .= sprintf("%s;mouts;;;;;%s;;;;%s", $ligneStart, $ds->mouts, $ligneEnd);
         }
         if($ds->rebeches) {
-            $output .= sprintf("%s;rebeches;;;;;%s;;;%s", $ligneStart, $ds->rebeches, $ligneEnd);
+            $output .= sprintf("%s;rebeches;;;;;%s;;;;%s", $ligneStart, $ds->rebeches, $ligneEnd);
         }
         if($ds->dplc) {
-            $output .= sprintf("%s;dplc;;;;;%s;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
+            $output .= sprintf("%s;dplc;;;;;%s;;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
         }
         if($ds->lies) {
-            $output .= sprintf("%s;lies;;;;;%s;;;%s", $ligneStart, $ds->lies, $ligneEnd);
+            $output .= sprintf("%s;lies;;;;;%s;;;;%s", $ligneStart, $ds->lies, $ligneEnd);
         }
 
         if(!$output) {
