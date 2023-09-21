@@ -108,7 +108,7 @@ class ExportDSCsv {
         }
 
         if(!$output) {
-            $output .= sprintf("%s;;;;;;;;;%s", $ligneStart, $ligneEnd);
+            $output .= sprintf("%s;;;;;;;;;;%s", $ligneStart, $ligneEnd);
         }
 
         return $output;
