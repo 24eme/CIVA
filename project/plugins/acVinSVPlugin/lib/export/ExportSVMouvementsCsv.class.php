@@ -6,7 +6,7 @@ class ExportSVMouvementsCsv extends ExportSVCsv
     public function exportOne($sv, $with_header = true) {
         $csv = "";
         if ($with_header) {
-            $csv .= implode(';', $this->getHeader());
+            $csv .= implode(';', $this->getHeader())."\n";
         }
         if(is_string($sv)) {
             $sv = SVClient::getInstance()->find($sv);
@@ -14,7 +14,7 @@ class ExportSVMouvementsCsv extends ExportSVCsv
         foreach ($sv->getProduits() as $produit) {
             $lines = $this->build($sv, $produit);
             foreach($lines as $line) {
-                $csv .= implode(';', $line);
+                $csv .= implode(';', $line)."\n";
             }
         }
         return $csv;
