@@ -633,12 +633,28 @@ Le CIVA';*/
             throw new sfException("L'id passé en paramètre est nul");
         }
 
-        if(!DRClient::getInstance()->find($this->id)) {
+        if (strpos($this->id,'DR-') === 0) {
+            if(DRClient::getInstance()->find($this->id)) {
 
-            return $this->redirect($this->url);
+                return $this->redirect('dr_transmission', array('id' => $this->id, 'url' => $this->url));
+            }
+
         }
+        if (strpos($this->id,'SV') === 0) {
+            $id = $this->id;
+            $doc = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+            if (!$doc) {
+                $id = str_replace('SV-', 'SV11-', $this->id);
+                $doc = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+                if (!$doc) {
+                    $id = str_replace('SV-', 'SV12-', $this->id);
+                    $doc = acCouchdbManager::getClient()->find($id, acCouchdbClient::HYDRATE_JSON);
+                }
+            }
+            return $this->redirect('sv_transmission', array('id' => $id, 'url' => $this->url));
+        }
+        return $this->redirect($this->url);
 
-        return $this->redirect('dr_transmission', array('id' => $this->id, 'url' => $this->url));
     }
 
     public function executeTransmission(sfWebRequest $request) {
