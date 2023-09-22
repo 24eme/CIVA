@@ -405,4 +405,25 @@ L'application de télédéclaration de production du CIVA
 
         return $this->redirect('sv_validation', $this->sv);
     }
+
+    public function executeTransmission(sfWebRequest $request) {
+        $sv = $this->getRoute()->getSV();
+        set_time_limit(180);
+        $this->url = $request->getParameter('url');
+
+        if ($sv->isValide() === false) {
+
+            return $this->redirect($this->url);
+        }
+
+        $this->setLayout(false);
+
+        //$this->document = new ExportSVPdf($sv, 'pdf');
+        //$this->document->generatePDF();
+        $this->pdf = base64_encode("blabla");//$this->document->output());
+
+        $csvContruct = new ExportSVMouvementsCsv();
+        $this->csv = base64_encode($csvContruct->exportOne($sv));
+    }
+
 }
