@@ -418,9 +418,9 @@ L'application de télédéclaration de production du CIVA
 
         $this->setLayout(false);
 
-        //$this->document = new ExportSVPdf($sv, 'pdf');
-        //$this->document->generatePDF();
-        $this->pdf = base64_encode("blabla");//$this->document->output());
+        $this->document = new ExportSVPdf($sv, 'pdf');
+        $this->document->generatePDF();
+        $this->pdf = base64_encode($this->document->output());
 
         $csvContruct = new ExportSVMouvementsCsv();
         $this->csv = base64_encode($csvContruct->exportOne($sv));
