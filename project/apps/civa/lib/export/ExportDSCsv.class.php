@@ -25,7 +25,7 @@ class ExportDSCsv {
 
     public static function getHeader() {
 
-        return "campagne;periode;type_ds;identifiant;nom;cvi;civaba;famille;numero_stokage;principale;appellation;lieu;couleur;cepage;denomination;volume_total;volume_normal;volume_vt;volume_sgn;statut;date_validation_tiers;date_validation_civa;date_depot_mairie;editeur;validateur;id_doc\n";
+        return "campagne;periode;type_ds;identifiant;nom;cvi;civaba;famille;numero_stokage;principale;appellation;lieu;cepage;denomination;volume_total;volume_normal;volume_vt;volume_sgn;statut;date_validation_tiers;date_validation_civa;date_depot_mairie;editeur;validateur;id_doc\n";
     }
 
     protected function outputDS($ds) {
@@ -86,7 +86,11 @@ class ExportDSCsv {
                                     if(!isset($genre->libelle)) {
                                         $genre->libelle = null;
                                     }
-                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ligneStart, trim($genre->libelle." ".$appellation->libelle), $lieu->libelle, $couleur->libelle,$cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null,  $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0, $ligneEnd);
+                                    $appellationLibelle = trim(trim($genre->libelle." ".$appellation->libelle) .' '.$couleur->libelle);
+                                    if(preg_match("/alsace/i", $appellationLibelle) && !preg_match("/aoc/i", $appellationLibelle)) {
+                                        $appellationLibelle = "AOC ".$appellationLibelle;
+                                    }
+                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ligneStart, $appellationLibelle, $lieu->libelle, $cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null,  $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0, $ligneEnd);
                                 }
                             }
                         }
@@ -95,20 +99,20 @@ class ExportDSCsv {
             }
         }
         if($ds->mouts) {
-            $output .= sprintf("%s;mouts;;;;;%s;;;;%s", $ligneStart, $ds->mouts, $ligneEnd);
+            $output .= sprintf("%s;mouts;;;;%s;;;;%s", $ligneStart, $ds->mouts, $ligneEnd);
         }
         if($ds->rebeches) {
-            $output .= sprintf("%s;rebeches;;;;;%s;;;;%s", $ligneStart, $ds->rebeches, $ligneEnd);
+            $output .= sprintf("%s;rebeches;;;;%s;;;;%s", $ligneStart, $ds->rebeches, $ligneEnd);
         }
         if($ds->dplc) {
-            $output .= sprintf("%s;dplc;;;;;%s;;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
+            $output .= sprintf("%s;dplc;;;;%s;;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
         }
         if($ds->lies) {
-            $output .= sprintf("%s;lies;;;;;%s;;;;%s", $ligneStart, $ds->lies, $ligneEnd);
+            $output .= sprintf("%s;lies;;;;%s;;;;%s", $ligneStart, $ds->lies, $ligneEnd);
         }
 
         if(!$output) {
-            $output .= sprintf("%s;;;;;;;;;;%s", $ligneStart, $ligneEnd);
+            $output .= sprintf("%s;;;;;;;;;%s", $ligneStart, $ligneEnd);
         }
 
         return $output;
