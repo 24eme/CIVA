@@ -3,6 +3,23 @@
 class ExportSVMouvementsCsv extends ExportSVCsv
 {
 
+    public function exportOne($sv, $with_header = true) {
+        $csv = "";
+        if ($with_header) {
+            $csv .= implode(';', $this->getHeader())."\n";
+        }
+        if(is_string($sv)) {
+            $sv = SVClient::getInstance()->find($sv);
+        }
+        foreach ($sv->getProduits() as $produit) {
+            $lines = $this->build($sv, $produit);
+            foreach($lines as $line) {
+                $csv .= implode(';', $line)."\n";
+            }
+        }
+        return $csv;
+    }
+
     public function generate($campagne, $with_header = true)
     {
         $stream = fopen('php://output', 'w');

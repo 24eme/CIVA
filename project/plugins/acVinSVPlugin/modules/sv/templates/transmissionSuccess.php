@@ -9,13 +9,13 @@
     </head>
     <body style="font-family: Calibri,Arial,Verdana,Helvetica,sans-serif;">
         <div style="width: 758px; margin: 200px auto;">
-            <h2 style="text-align: center; font-size: 24px; color: #848C03; font-weight: normal;">Le transfert de votre Déclaration de Production est en cours
+            <h2 style="text-align: center; font-size: 24px; color: #848C03; font-weight: normal;">Le transfert de votre Déclaration de production est en cours
             </h2>
             <img style="height: 162px;" src="/images/loader/civa2ava.gif" title="Transmission vers l'ava en cours..." />
             <form id="form_transmission" method="post" action="<?php echo $url ?>">
                 <input type="hidden" name="csv" value="<?php echo $csv ?>" />
                 <input type="hidden" name="pdf" value="<?php echo $pdf ?>" />
-                <input type="hidden" name="typedoc" value="DR" />
+                <input type="hidden" name="typedoc" value="SV" />
             </form>
             <p style="text-align: center; color: #848C03;">Veuillez patientez...</p>
         </div>
