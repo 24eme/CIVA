@@ -38,7 +38,7 @@
 		<th width="70px" style="font-weight: bold; text-align: center; border: 1px solid black;">Nb bouteilles</th>
                 <th width="57px" style="font-weight: bold; text-align: center; border: 1px solid black;">Volume expédié<br/><small>(en hl)</small></th>
 		<?php else: ?>
-		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagé<?php else: ?>estimé<?php endif; ?><?php if ($vrac->isInModeSurface()): ?>e<?php endif; ?><br/><small>(en <?php echo ($vrac->isInModeSurface())? 'ha' : 'hl'; ?>)</small></th>
+		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black;"><?php echo ucfirst($quantiteType); ?> <?php if(!$vrac->needRetiraison()): ?>engagé<?php else: ?>estimé<?php endif; ?><?php if ($vrac->isInModeSurface()): ?>e<?php endif; ?><br/><small>(en <?php echo ($vrac->isInModeSurface())? 'ares' : 'hl'; ?>)</small></th>
 		<th width="75px" style="font-weight: bold; text-align: center; border: 1px solid black; <?php if (!$vrac->needRetiraison()): ?>background-color: #eaeaea;<?php endif; ?>"><?php if($vrac->needRetiraison()): ?>Volume réel<br/><small>(en hl)</small><?php endif; ?></th>
         <th width="62px" style="font-weight: bold; text-align: center; border: 1px solid black; <?php if (!$vrac->needRetiraison()): ?>background-color: #eaeaea;<?php endif; ?>"><?php if($vrac->needRetiraison()): ?>Date<br/>de Chargt<?php endif; ?></th>
         <?php endif; ?>
