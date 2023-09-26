@@ -90,7 +90,7 @@ class ExportDSCsv {
                                     if(preg_match("/alsace/i", $appellationLibelle) && !preg_match("/aoc/i", $appellationLibelle)) {
                                         $appellationLibelle = "AOC ".$appellationLibelle;
                                     }
-                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ligneStart, $appellationLibelle, $lieu->libelle, $cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null,  $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0, $ligneEnd);
+                                    $output .= sprintf("%s;%s;%s;%s;%s;%s;%s;%s;%s;%s", $ligneStart, $appellationLibelle, KeyInflector::unaccent($lieu->libelle), $cepage->libelle,($detail->lieu) ? "\"".$detail->lieu."\"" : null,  $total, ($detail->volume_normal) ? $detail->volume_normal : 0, ($detail->volume_vt) ? $detail->volume_vt : 0, ($detail->volume_sgn) ? $detail->volume_sgn : 0, $ligneEnd);
                                 }
                             }
                         }
