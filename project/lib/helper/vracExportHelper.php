@@ -86,7 +86,7 @@ function echoVolume($volume, $bold = false) {
 }
 
 function echoSurface($surface, $bold = false) {
-    echoQuantite($surface, $bold, 'ha');
+    echoQuantite($surface, $bold, 'a');
 }
 
 function echoPrix($prix, $bold = false) {
