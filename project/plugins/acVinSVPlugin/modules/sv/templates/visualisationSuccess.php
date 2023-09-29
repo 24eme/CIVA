@@ -21,6 +21,7 @@
               <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu">
+            <li><a href="<?php echo url_for('sv_pdf', $sv) ?>"> Télécharger le PDF</a></li>
             <li><a href="<?php echo url_for('sv_json', $sv) ?>?has_motif=0"> Télécharger le JSON <strong>sans</strong> motif de modification</a></li>
             <li><a href="#" data-toggle="modal" data-target="#sv-json-modal"> Télécharger le JSON <strong>avec</strong> motif de modification</a></li>
           </ul>

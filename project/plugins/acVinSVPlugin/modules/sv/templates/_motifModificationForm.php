@@ -10,10 +10,10 @@
           <?php echo $form->renderHiddenFields() ?>
           <?php echo $form->renderGlobalErrors() ?>
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
               <?php echo $form['type']->render() ?>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12">
               <?php echo $form['motif']->renderLabel() ?>
               <?php echo $form['motif']->render(['class' => 'form-control']); ?>
             </div>
