@@ -41,6 +41,16 @@ sv_apporteurs:
   requirements:
     sf_method: [get, post]
 
+sv_ajout_apporteur:
+  url: /sv/apporteurs/:id/ajout
+  param: { module: sv, action: ajoutApporteur }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [post]
+
 sv_saisie:
   url: /sv/saisie/:id/:cvi
   param: { module: sv, action: saisie }
