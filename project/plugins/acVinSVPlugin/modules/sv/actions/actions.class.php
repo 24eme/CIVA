@@ -89,9 +89,25 @@ class svActions extends sfActions {
 
     public function executeApporteurs(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
-        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
+        $this->form = new SVAjoutApporteurForm($this->sv);
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+    }
+
+    public function executeAjoutApporteur(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+        $this->form = new SVAjoutApporteurForm($this->sv);
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (! $this->form->isValid()) {
+            return $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
+        }
+
+        $this->form->save();
+
+        $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }
 
     public function executeExtraction(sfWebRequest $request) {

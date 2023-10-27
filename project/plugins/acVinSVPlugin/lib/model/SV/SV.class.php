@@ -51,6 +51,110 @@ class SV extends BaseSV
         }
     }
 
+    public function addProduitsFromDR($id)
+    {
+        $dr = DRClient::getInstance()->find($id);
+
+        if (! $dr) {
+            throw new sfException('DR inconnue : '.$id);
+        }
+
+        $cvi_acheteur = $this->identifiant;
+        if (! $cvi_acheteur) {
+            return;
+        }
+
+        $drAcheteurType = 'negoces';
+        if($this->getType() == SVClient::TYPE_SV11) {
+            $drAcheteurType = 'cooperatives';
+        }
+
+        foreach ($dr->getProduits() as $cepage) {
+            if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
+                continue;
+            }
+            $hasRebeches = $cepage->getCouleur()->exist('cepage_RB') && $cepage->getCouleur()->get('cepage_RB')->getVolumeAcheteur($cvi_acheteur, $drAcheteurType, false);
+
+            $hash = HashMapper::convert($cepage->getHash());
+            if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && $cepage->getKey() == "cepage_PN") {
+                $hash = HashMapper::convert($cepage->getCouleur()->getHash()).'/cepages/RS';
+            } elseif($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getKey(), "cepage_RB") === false) {
+                $hash = HashMapper::convert($cepage->getCouleur()->getHash()).'/cepages/BL';
+            }
+
+            $svDetails = [];
+            $volumes = [];
+            foreach ($cepage->getProduitsDetails() as $detail) {
+                $volumeAcheteur = $detail->getVolumeByAcheteur($cvi_acheteur, $drAcheteurType);
+                if(!$volumeAcheteur) {
+                    continue;
+                }
+                $denomination = SVClient::getInstance()->formatDenomination($detail->denomination);
+                if($detail->lieu) {
+                    $denomination = strtoupper(trim(preg_replace('/[ ]+/', ' ', $detail->lieu)));
+                }
+
+                $svDetail = $this->addProduit($dr->identifiant, $hash, $denomination);
+
+                $svDetails[$svDetail->getHash()] = $svDetail;
+                if(!isset($volumes[$svDetail->getHash()])) {
+                    $volumes[$svDetail->getHash()] = 0;
+                }
+                $volumes[$svDetail->getHash()] += $volumeAcheteur;
+
+                if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/RS") !== false && $hasRebeches) {
+                    $this->addProduit($dr->identifiant, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
+                }
+
+                if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/BL") !== false && $hasRebeches) {
+                    $this->addProduit($dr->identifiant, str_replace("/cepages/BL", "/cepages/RBBL", $hash));
+                }
+
+                if($volumeAcheteur != $detail->volume) {
+                    $svDetail->superficie_recolte = null;
+                    continue;
+                }
+
+                if(!$detail->superficie) {
+                    continue;
+                }
+
+                $svDetail->superficie_recolte += $detail->superficie;
+            }
+
+            foreach($svDetails as $svKey => $svDetail) {
+                if(!is_null($svDetail->superficie_recolte)) {
+                    continue;
+                }
+                if($cepage->getVolumeAcheteur($cvi_acheteur, $drAcheteurType) == $volumes[$svKey]) {
+                    $svDetail->superficie_recolte = $cepage->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
+                }
+
+                if($cepage->getCouleur()->getVolumeAcheteur($cvi_acheteur, $drAcheteurType) == $volumes[$svKey]) {
+                    $svDetail->superficie_recolte = $cepage->getCouleur()->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
+                }
+
+                if($cepage->getLieu()->getVolumeAcheteur($cvi_acheteur, $drAcheteurType) == $volumes[$svKey]) {
+                    $svDetail->superficie_recolte = $cepage->getLieu()->getTotalSuperficieVendusByCvi($drAcheteurType, $cvi_acheteur);
+                }
+
+                if(!$svDetail->superficie_recolte) {
+                    $svDetail->superficie_recolte = null;
+                }
+            }
+
+            if($cepage->getVolumeAcheteur($cvi_acheteur, 'mouts')) {
+                $svProduit = $this->addProduit($dr->identifiant, $hash);
+                if (!$svProduit->exist('volume_mouts')) {
+                    $svProduit->add('volume_mouts');
+                    $svProduit->add('volume_mouts_revendique');
+                    $svProduit->add('superficie_mouts');
+                }
+                $svProduit->volume_mouts += $cepage->getVolumeAcheteur($cvi_acheteur, 'mouts');
+            }
+        }
+    }
+
     public function getDeclarantObject() {
 
         return $this->getEtablissement();

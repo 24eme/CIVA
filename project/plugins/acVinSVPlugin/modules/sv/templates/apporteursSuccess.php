@@ -64,10 +64,9 @@
 </table>
 
 <div class="row" style="margin-top: 30px;">
-  <div class="col-xs-6 text-left"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
-  <div class="col-xs-6 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
+  <div class="col-xs-4 text-left"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
+  <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter un apporteur</a></div>
+  <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
 
-<?php if(isset($showModalExtraction) && $showModalExtraction): ?>
-  <?php include_component('sv', 'modalExtraction', array('sv' => $sv)); ?>
-<?php endif; ?>
+<?php include_partial("sv/modalAjoutApporteur", ['sv' => $sv, 'form' => $form]) ?>

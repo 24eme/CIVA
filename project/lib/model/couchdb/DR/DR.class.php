@@ -150,6 +150,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      */
     public function getTotalCaveParticuliere() {
         $v = 0;
+        if(!$this->exist('/recolte/certification/genre')) {
+            return $v;
+        }
         foreach($this->recolte->certification->genre->filter('^appellation_') as $appellation) {
             $v += $appellation->getTotalCaveParticuliere();
         }
