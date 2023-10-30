@@ -110,6 +110,21 @@ class svActions extends sfActions {
         $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }
 
+    public function executeAjoutProduitApporteur(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+        $this->cvi = $request->getParameter('cvi');
+        $this->form = new SVAjoutProduitApporteurForm($this->sv, $this->cvi);
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if ($this->form->isValid()) {
+            $this->form->save();
+        }
+
+        return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
+    }
+
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
@@ -152,6 +167,7 @@ class svActions extends sfActions {
         }
 
         $this->form = new SVSaisieForm($this->sv, $this->cvi);
+        $this->formAjoutProduit = new SVAjoutProduitApporteurForm($this->sv, $this->cvi);
 
         if (!$request->isMethod(sfWebRequest::POST)) {
         	return sfView::SUCCESS;

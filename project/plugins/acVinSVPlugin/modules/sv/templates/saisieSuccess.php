@@ -1,8 +1,6 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<?php if($sv->getType() === SVClient::TYPE_SV12): ?>
-<button type="submit" form="form_saisie" name="parametrage_extraction" value="1" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction réels</button>
-<?php endif; ?>
+<button type="button" data-toggle="modal" data-target="#modal_ajout_produit" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Ajouter un produit</button>
 
 <h3><?php echo EtablissementClient::getInstance()->findByCvi($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->findByCvi($cvi)->commune; ?></small></h3>
 
@@ -31,6 +29,4 @@
   </div>
 </form>
 
-<?php if(isset($showModalExtraction) && $showModalExtraction): ?>
-  <?php include_component('sv', 'modalExtraction', array('sv' => $sv, 'url' => url_for('sv_saisie', ['sf_subject' => $sv, 'cvi' => $cvi]))); ?>
-<?php endif; ?>
+<?php include_partial('sv/modalAjoutProduit', ['sv' => $sv, 'cvi' => $cvi, 'form' => $formAjoutProduit]); ?>
