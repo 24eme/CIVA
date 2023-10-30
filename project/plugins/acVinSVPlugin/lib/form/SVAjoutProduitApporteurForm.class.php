@@ -25,11 +25,11 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
         $this->getDocument()->addProduit($this->cvi, $hash);
 
         if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/RS") !== false) {
-            $this->addProduit($cvi, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
+            $this->getDocument()->addProduit($this->cvi, str_replace("/cepages/RS", "/cepages/RBRS", $hash));
         }
 
         if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/BL") !== false) {
-            $this->addProduit($cvi, str_replace("/cepages/BL", "/cepages/RBBL", $hash));
+            $this->getDocument()->addProduit($this->cvi, str_replace("/cepages/BL", "/cepages/RBBL", $hash));
         }
 
         $this->getDocument()->save();
