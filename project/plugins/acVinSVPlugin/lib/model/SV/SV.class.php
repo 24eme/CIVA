@@ -51,14 +51,8 @@ class SV extends BaseSV
         }
     }
 
-    public function addProduitsFromDR($id)
+    public function addProduitsFromDR(DR $dr)
     {
-        $dr = DRClient::getInstance()->find($id);
-
-        if (! $dr) {
-            throw new sfException('DR inconnue : '.$id);
-        }
-
         $cvi_acheteur = $this->identifiant;
         if (! $cvi_acheteur) {
             return;
