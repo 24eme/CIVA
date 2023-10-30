@@ -53,3 +53,4 @@
         <tr><td class="vide">&nbsp;</td></tr>
         <?php endforeach; ?>
     </table>
+    <p style="color: white;"><?php echo $configuration_id; ?></p>
