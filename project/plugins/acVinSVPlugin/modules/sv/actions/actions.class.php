@@ -266,6 +266,17 @@ class svActions extends sfActions {
         );
     }
 
+    public function executeRecalculeVolumesRevendiques(sfWebRequest $request) {
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        $this->sv->recalculeVolumesRevendiques(true);
+        $this->sv->save();
+
+        return $this->redirect('sv_revendication', $this->sv);
+    }
+
     public function executeAutres(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
