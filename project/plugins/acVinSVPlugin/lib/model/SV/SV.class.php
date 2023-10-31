@@ -499,4 +499,14 @@ class SV extends BaseSV
 
         return "NEGOCIANT";
     }
+
+    public function recalculeVolumesRevendiques($force = false) {
+        foreach($this->getProduits() as $produit) {
+            if ($tx = $produit->getTauxExtraction()) {
+                if (!$produit->volume_revendique || $force) {
+                    $produit->volume_revendique = round($produit->quantite_recolte / $tx, 2);
+                }
+            }
+        }
+    }
 }
