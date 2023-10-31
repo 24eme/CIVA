@@ -77,7 +77,7 @@ class SVProduit extends BaseSVProduit {
         return $this->_get('superficie_mouts');
     }
 
-    public function isComplete() {
+    public function isComplete($squeezeRevendique = false) {
         if($this->isRebeche()) {
 
             return !is_null($this->volume_recolte) && !is_null($this->volume_revendique);
@@ -93,7 +93,9 @@ class SVProduit extends BaseSVProduit {
         }
 
         if($this->getDocument()->type == SVClient::TYPE_SV12) {
-
+            if ($squeezeRevendique) {
+                return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte);
+            }
             return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte) && !is_null($this->volume_revendique);
         }
     }
