@@ -5,8 +5,6 @@
       <th class="col-xs-3">Produit</th>
       <th class="col-xs-2 text-center">Superficie déclarée<br /><small>(ares)</small></th>
       <th class="col-xs-2 text-center">Quantité récolté<br /><small>(kg)</small></th>
-      <th class="col-xs-2 text-center">Volume revendiqué<br /><small>(hl)</small></th>
-      <th class="col-xs-1 text-center">Taux d'extraction<br /><small>(kg/hl)</small></th>
     </tr>
   </thead>
   <tbody>
@@ -17,8 +15,6 @@
       <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
       <td><div class="input-group"><?php echo $formProduit['superficie_recolte']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">ares</small></span></div></td>
       <td><div class="input-group"><?php echo $formProduit['quantite_recolte']->render() ?><input class="form-control text-right input-float input-sm input_quantite_pre hidden" type="text" autocomplete="off" data-decimal-auto="2" data-decimal="2" readonly="readonly" /><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">kg</small></span></div></td>
-      <td><div class="input-group"><?php echo $formProduit['volume_revendique']->render() ?><input class="form-control text-right input-float input-sm input_volume_revendique_pre hidden" type="text" autocomplete="off" data-decimal-auto="2" data-decimal="2" readonly="readonly" /><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
-      <td style="position: relative;" class="text-center"><button  title="Paramètrer les taux d'extraction globaux" type="submit" form="form_saisie" name="parametrage_extraction" value="1" style="position: absolute; right: 50%; top: 50%; transform: translate(50%,-50%); opacity: 0.4;" tabindex="-1" class="lien_parametrage btn btn-link <?php if($formProduit['taux_extraction']->getValue()): ?>hidden<?php endif; ?>"><span class="glyphicon glyphicon-cog"></span></button><?php echo $formProduit['taux_extraction']->render(array('style' => "background: transparent; border: none; box-shadow: none;", 'data-config' => $produit->getTauxExtractionDefault())) ?></td>
     </tr>
   <?php endforeach ?>
   </tbody>

@@ -1,20 +1,9 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<?php if(count($sv->extraction)): ?>
-<a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Paramètrer les taux d'extraction réels</a>
-<?php endif; ?>
-
 <h3>Liste de vos apporteurs</h3>
 
 <p style="margin-bottom: 15px;">Saisissez ici les données de production de tous vos apporteurs.</p>
-
-<?php if(!count($sv->extraction) && $sv->getType() === SVClient::TYPE_SV12): ?>
-<div class="alert alert-warning pointer">
-  <a href="<?php echo url_for('sv_apporteurs', array('sf_subject' => $sv, 'parametrage_extraction' => 1)) ?>" class="pull-right"><span class="glyphicon glyphicon-cog"></span> Paramétrer les taux d'extraction réels</a>
-  <span class="glyphicon glyphicon-info-sign"></span> Afin de faciliter et accélerer votre saisie vous pouvez configurer vos taux d'extraction réels par cépage.
-</div>
-<?php endif; ?>
 
 <table style="margin-top: 15px;" class="table table-bordered table-striped">
   <thead>
@@ -23,7 +12,7 @@
       <th class="col-xs-3">Nom de l'apporteur</th>
       <th class="col-xs-2 text-center">Commune</th>
       <th class="col-xs-2 text-center">Superficie<br/>par apporteur</th>
-      <th class="col-xs-2 text-center">Revendiqué<br/>par apporteur</th>
+      <th class="col-xs-2 text-center"><?php if($sv->type == SVClient::TYPE_SV12): ?>Quantité<?php else: ?>Revendiqué<?php endif; ?><br/>par apporteur</th>
       <th class="col-xs-2 text-center"></th>
       <th></th>
     </tr>
@@ -46,7 +35,9 @@
       <small class="text-muted">ares</small>
   </td>
   <td class="text-right">
-      <?php if($recap['revendique'] || $recap['mouts_revendique']): ?>
+      <?php if($sv->type == SVClient::TYPE_SV12): ?>
+        <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
+      <?php elseif($recap['revendique'] || $recap['mouts_revendique']): ?>
         <?php if($recap['revendique'] && $recap['mouts_revendique']): ?>
         (R+M) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
         <?php elseif($recap['mouts_revendique']): ?>
