@@ -128,9 +128,9 @@ class svActions extends sfActions {
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
-        $this->url = $request->getParameter('url', null);
-
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        if(!count($this->sv->extraction) || $this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
 
         $this->form = new SVExtractionForm($this->sv);
 
@@ -146,7 +146,8 @@ class svActions extends sfActions {
 
         $this->form->save();
 
-        if($this->url) {
+        $this->redirect('sv_revendication', ['id' => $this->sv->_id]);
+    }
 
             return $this->redirect($this->url);
         }
