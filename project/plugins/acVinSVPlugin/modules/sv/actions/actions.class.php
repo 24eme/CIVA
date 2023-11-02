@@ -149,7 +149,7 @@ class svActions extends sfActions {
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
-        if(!count($this->sv->extraction) || $this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
+        if($this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
 
         $this->form = new SVExtractionForm($this->sv);
 
@@ -290,7 +290,7 @@ class svActions extends sfActions {
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
-        $this->sv->recalculeVolumesRevendiques(true);
+        $this->sv->recalculeVolumesRevendiques();
         $this->sv->save();
 
         return $this->redirect('sv_revendication', $this->sv);
