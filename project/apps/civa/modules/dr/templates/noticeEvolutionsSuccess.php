@@ -1,12 +1,12 @@
 <form id="principal" action="" method="post">
 	<h2 class="titre_principal">Important</h2>
 	<div id="notice_evolutions">
-		<h2>Rendements 2022</h2>
+		<h2>Rendements 2023</h2>
 		<p style="font-size: 14px; margin-top: 15px;">Depuis la Récolte 2020 les rendements de l'AOC Alsace blanc sont calculés <strong>PAR CÉPAGE</strong>, avec cette année encore, un rendement différencié entre les cépages. (pour plus de détails vous pouvez consulter la Notice d'aide en ligne).</p>
         <p style="font-size: 14px; margin-top: 15px;">Par conséquent pour déclarer de l'Assemblage (Edel), il est <strong>OBLIGATOIRE</strong> de déclarer une surface prise en déduction des surfaces des autres cépages blancs.</p>
         <p style="font-size: 14px; margin-top: 15px;">Les  rendements des AOC Communale et Lieu-dit sont également calculés <strong>PAR CÉPAGE</strong>.</p>
 		<br />
-		<h2>Constitution de VCI pour la Récolte 2022</h2>
+		<h2>Constitution de VCI pour la Récolte 2023</h2>
 		<p style="font-size: 14px; margin-top: 15px;">Appellations :<br />
 			<ul style="font-size: 14px; padding-left: 20px; list-style-type: initial;">
 			    <li style="padding-top: 5px;">
