@@ -466,7 +466,8 @@ class dr_recolteActions extends _DRActions {
 
     	return $this->renderPartial('dr_recolte/popupRendementsMax', array('rendement'=> $this->rendement,
                                                                         'min_quantite'=> $this->min_quantite,
-                                                                        'max_quantite'=> $this->max_quantite));
+                                                                        'max_quantite'=> $this->max_quantite,
+                                                                        'configuration_id' => $appellation->getConfig()->getDocument()->_id));
     }
 
     protected function processFormDetail($form, $request) {

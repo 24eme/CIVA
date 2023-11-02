@@ -44,6 +44,7 @@ class SVExtractionForm extends acCouchdbForm
             $this->getDocument()->extraction->add($hash)->taux_extraction = $value['taux_extraction'];
         }
 
+        $this->getDocument()->recalculeVolumesRevendiques();
         $this->getDocument()->save();
     }
 }

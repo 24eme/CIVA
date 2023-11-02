@@ -51,14 +51,8 @@ class SV extends BaseSV
         }
     }
 
-    public function addProduitsFromDR($id)
+    public function addProduitsFromDR(DR $dr)
     {
-        $dr = DRClient::getInstance()->find($id);
-
-        if (! $dr) {
-            throw new sfException('DR inconnue : '.$id);
-        }
-
         $cvi_acheteur = $this->identifiant;
         if (! $cvi_acheteur) {
             return;
@@ -174,6 +168,32 @@ class SV extends BaseSV
         }
 
         return $produits;
+    }
+
+    public function addApporteurHorsRegion($cvi)
+    {
+        if (array_key_exists($cvi, $this->apporteurs->toArray())) {
+            return;
+        }
+
+        foreach ($this->listeProduitsHorsRegion() as $hash => $produit) {
+            $this->addProduit($cvi, $hash);
+        }
+    }
+
+    public function listeProduitsHorsRegion()
+    {
+        return array_filter(ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll(), function ($produit) {
+            if ($produit->getAppellation()->getCode() !== 'VINTABLE') {
+                return false;
+            }
+
+            if (in_array($produit->getCepage()->getCode(), ['BL', 'RG', 'RS']) === false) {
+                return false;
+            }
+
+            return true;
+        });
     }
 
     public function getApporteursParProduit()
@@ -478,5 +498,15 @@ class SV extends BaseSV
         }
 
         return "NEGOCIANT";
+    }
+
+    public function recalculeVolumesRevendiques($force = false) {
+        foreach($this->getProduits() as $produit) {
+            if ($tx = $produit->getTauxExtraction()) {
+                if (!$produit->volume_revendique || $force) {
+                    $produit->volume_revendique = round($produit->quantite_recolte / $tx, 2);
+                }
+            }
+        }
     }
 }

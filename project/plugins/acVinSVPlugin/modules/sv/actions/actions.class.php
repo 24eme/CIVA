@@ -110,12 +110,27 @@ class svActions extends sfActions {
         $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }
 
+    public function executeAjoutProduitApporteur(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+        $this->cvi = $request->getParameter('cvi');
+        $this->form = new SVAjoutProduitApporteurForm($this->sv, $this->cvi);
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if ($this->form->isValid()) {
+            $this->form->save();
+        }
+
+        return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
+    }
+
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
-        $this->url = $request->getParameter('url', null);
-
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        if(!count($this->sv->extraction) || $this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
 
         $this->form = new SVExtractionForm($this->sv);
 
@@ -131,19 +146,22 @@ class svActions extends sfActions {
 
         $this->form->save();
 
-        if($this->url) {
+        $this->redirect('sv_revendication', ['id' => $this->sv->_id]);
+    }
 
-            return $this->redirect($this->url);
-        }
+    public function executeRevendication(sfWebRequest $request) {
+        $this->sv = $this->getRoute()->getSV();
 
-        $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
+        if(!count($this->sv->extraction) || $this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
     }
 
 
     public function executeSaisie(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
-        $this->showModalExtraction = (bool) $request->getParameter('parametrage_extraction');
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
@@ -152,6 +170,7 @@ class svActions extends sfActions {
         }
 
         $this->form = new SVSaisieForm($this->sv, $this->cvi);
+        $this->formAjoutProduit = new SVAjoutProduitApporteurForm($this->sv, $this->cvi);
 
         if (!$request->isMethod(sfWebRequest::POST)) {
         	return sfView::SUCCESS;
@@ -166,18 +185,12 @@ class svActions extends sfActions {
 
         $this->form->save();
 
-        if($request->getParameter('parametrage_extraction')) {
-
-            return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $this->cvi, 'parametrage_extraction' => 1));
-        }
-
         if($request->getParameter('precedent_cvi')) {
 
             return $this->redirect('sv_saisie', array('sf_subject' => $this->sv, 'cvi' => $request->getParameter('precedent_cvi')));
         }
 
         if($request->getParameter('retour_liste')) {
-
             return $this->redirect(
                 SVEtapes::$links[SVEtapes::ETAPE_APPORTEURS],
                 ['id' => $this->sv->_id]
@@ -197,6 +210,71 @@ class svActions extends sfActions {
             SVEtapes::$links[SVEtapes::ETAPE_APPORTEURS],
             ['id' => $this->sv->_id]
         );
+    }
+
+
+    public function executeSaisieRevendication(sfWebRequest $request) {
+        $this->sv = $this->getRoute()->getSV();
+        $this->cvi = $request->getParameter('cvi', null);
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        if ($this->cvi && $cvi_index = array_search($this->cvi, array_keys($this->sv->apporteurs->toArray()))) {
+            $this->cvi_precedent = $this->sv->apporteurs->get($this->cvi)->getPreviousSister()->getKey();
+        }
+
+        $this->form = new SVSaisieRevendicationForm($this->sv, $this->cvi);
+        $this->formAjoutProduit = new SVAjoutProduitApporteurForm($this->sv, $this->cvi);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+        	return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+	    }
+
+        $this->form->save();
+
+        if($request->getParameter('precedent_cvi')) {
+
+            return $this->redirect('sv_saisie_revendication', array('sf_subject' => $this->sv, 'cvi' => $request->getParameter('precedent_cvi')));
+        }
+
+        if($request->getParameter('retour_liste')) {
+            return $this->redirect(
+                SVEtapes::$links[SVEtapes::ETAPE_REVENDICATION],
+                ['id' => $this->sv->_id]
+            );
+        }
+
+        $finded = false;
+        foreach($this->sv->apporteurs as $cvi => $apporteur) {
+            if($finded) {
+
+                return $this->redirect('sv_saisie_revendication', array('sf_subject' => $this->sv, 'cvi' => $cvi));
+            }
+            $finded = ($cvi == $this->cvi);
+        }
+
+        return $this->redirect(
+            SVEtapes::$links[SVEtapes::ETAPE_REVENDICATION],
+            ['id' => $this->sv->_id]
+        );
+    }
+
+    public function executeRecalculeVolumesRevendiques(sfWebRequest $request) {
+        $this->sv = $this->getRoute()->getSV();
+
+        if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        $this->sv->recalculeVolumesRevendiques(true);
+        $this->sv->save();
+
+        return $this->redirect('sv_revendication', $this->sv);
     }
 
     public function executeAutres(sfWebRequest $request) {

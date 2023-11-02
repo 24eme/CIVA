@@ -18,15 +18,15 @@ class SVApporteur extends BaseSVApporteur {
         return $produits;
     }
 
-    public function isComplete() {
+    public function isComplete($squeezeRevendique = false) {
 
-        return $this->getNbSaisies() >= count($this->produits);
+        return $this->getNbSaisies($squeezeRevendique) >= count($this->produits);
     }
 
-    public function getNbSaisies() {
+    public function getNbSaisies($squeezeRevendique = false) {
         $nbSaisies = 0;
         foreach($this->getProduits() as $produit) {
-            if(!$produit->isComplete()) {
+            if(!$produit->isComplete($squeezeRevendique)) {
                 continue;
             }
             $nbSaisies++;
@@ -39,6 +39,7 @@ class SVApporteur extends BaseSVApporteur {
     {
         return array_reduce($this->getProduits(), function ($recap, $p) {
             $recap['superficie'] += $p->superficie_recolte;
+            $recap['quantite'] += $p->quantite_recolte;
             $recap['revendique'] += $p->volume_revendique;
             if ($p->exist('volume_mouts_revendique')) {
                 $recap['mouts_revendique'] += $p->volume_mouts_revendique;
@@ -47,7 +48,7 @@ class SVApporteur extends BaseSVApporteur {
                 $recap['mouts_superficie'] += $p->superficie_mouts;
             }
             return $recap;
-        }, ['superficie' => 0, 'revendique' => 0, 'mouts_superficie' => 0, 'mouts_revendique' => 0]);
+        }, ['superficie' => 0, 'quantite' => 0, 'revendique' => 0, 'mouts_superficie' => 0, 'mouts_revendique' => 0]);
     }
 
     public function getCvi() {

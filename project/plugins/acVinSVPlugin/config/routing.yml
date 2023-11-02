@@ -31,6 +31,26 @@ sv_extraction:
   requirements:
     sf_method: [get, post]
 
+sv_revendication:
+  url: /sv/revendication/:id
+  param: { module: sv, action: revendication }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_recalcule_volumes_revendiques:
+  url: /sv/recalcule-volumes-revendiques/:id
+  param: { module: sv, action: recalculeVolumesRevendiques }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
 sv_apporteurs:
   url: /sv/apporteurs/:id
   param: { module: sv, action: apporteurs }
@@ -42,8 +62,18 @@ sv_apporteurs:
     sf_method: [get, post]
 
 sv_ajout_apporteur:
-  url: /sv/apporteurs/:id/ajout
+  url: /sv/apporteurs/:id/ajout/apporteur
   param: { module: sv, action: ajoutApporteur }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [post]
+
+sv_ajout_produit_apporteur:
+  url: /sv/apporteurs/:id/ajout/produit/:cvi
+  param: { module: sv, action: ajoutProduitApporteur }
   class: SVRoute
   options:
     model: SV
@@ -54,6 +84,16 @@ sv_ajout_apporteur:
 sv_saisie:
   url: /sv/saisie/:id/:cvi
   param: { module: sv, action: saisie }
+  class: SVRoute
+  options:
+    model:    SV
+    type:     object
+  requirements:
+    sf_method: [get, post]
+
+sv_saisie_revendication:
+  url: /sv/saisie-revendication/:id/:cvi
+  param: { module: sv, action: saisieRevendication }
   class: SVRoute
   options:
     model:    SV
