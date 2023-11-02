@@ -37,9 +37,8 @@
     <tr>
       <th class="col-xs-2">Apporteur</th>
       <th class="col-xs-3">Produit</th>
-      <th class="col-xs-1 text-center"></th>
-      <th class="col-xs-2 text-center">Volume de moûts<br /><small>(hl)</small></th>
       <th class="col-xs-2 text-center">Superficie de moûts <small>(ares)</small></th>
+      <th class="col-xs-2 text-center">Volume de moûts<br /><small>(hl)</small></th>
     </tr>
   </thead>
   <tbody>
@@ -49,9 +48,8 @@
     <tr class="vertical-center">
       <td><?php echo $produit->nom ?></td>
       <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
-      <td></td>
-      <td><div class="input-group"><?php echo $formProduit['volume_mouts']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
       <td><div class="input-group"><?php echo $formProduit['superficie_mouts']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">ares</small></span></div></td>
+      <td><div class="input-group"><?php echo $formProduit['volume_mouts']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
     </tr>
   <?php endforeach ?>
   </tbody>

@@ -173,7 +173,7 @@ class svActions extends sfActions {
     public function executeRevendication(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
-        if(!count($this->sv->extraction) || $this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
+        if($this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
