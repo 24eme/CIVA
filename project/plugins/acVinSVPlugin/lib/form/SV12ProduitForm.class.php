@@ -17,15 +17,9 @@ class SV12ProduitForm extends acCouchdbObjectForm
         $this->setWidget('taux_extraction', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_taux_extraction', 'readonly' => 'readonly', 'tabindex' => -1)));
         $this->setValidator('taux_extraction', new sfValidatorNumber(array('required' => false)));
 
-        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique']));
-        $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
-
         if($this->getObject()->exist('volume_mouts')) {
             $this->setWidget('volume_mouts', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
             $this->setValidator('volume_mouts', new sfValidatorNumber(array('required' => false)));
-
-            $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
-            $this->setValidator('volume_mouts_revendique', new sfValidatorNumber(array('required' => false)));
 
             $this->setWidget('superficie_mouts', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float')));
             $this->setValidator('superficie_mouts', new sfValidatorNumber(array('required' => false)));

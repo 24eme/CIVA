@@ -115,7 +115,12 @@ class SVClient extends acCouchdbClient {
 
         $drs = DRClient::getInstance()->findAllByCampagneAndCviAcheteur($campagne, $cvi_acheteur, acCouchdbClient::HYDRATE_ON_DEMAND);
         foreach ($drs as $id => $doc) {
-            $sv->addProduitsFromDR($id);
+            $dr = DRClient::getInstance()->find($id);
+            if (! $dr) {
+                throw new sfException('DR inconnue : '.$id);
+            }
+
+            $sv->addProduitsFromDR($dr);
         }
 
         return $sv;

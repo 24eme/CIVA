@@ -1,6 +1,5 @@
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
-
-<button type="button" data-toggle="modal" data-target="#modal_ajout_produit" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Ajouter un produit</button>
+<?php use_helper('Float'); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_REVENDICATION)); ?>
 
 <h3><?php echo EtablissementClient::getInstance()->findByCvi($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->findByCvi($cvi)->commune; ?></small></h3>
 
@@ -10,11 +9,7 @@
   <?php echo $form->renderHiddenFields(); ?>
   <?php echo $form->renderGlobalErrors(); ?>
 
-  <?php if($sv->getType() === SVClient::TYPE_SV11): ?>
-    <?php include_partial('sv/saisieSV11', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
-  <?php else: ?>
-    <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
-  <?php endif ?>
+  <?php include_partial('sv/saisieRevendicationSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
 
   <div class="row" style="margin-top: 30px;">
     <?php if (isset($cvi_precedent)): ?>
@@ -28,5 +23,3 @@
     <div class="col-xs-4 text-right"><button type="submit" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
   </div>
 </form>
-
-<?php include_partial('sv/modalAjoutProduit', ['sv' => $sv, 'cvi' => $cvi, 'form' => $formAjoutProduit]); ?>

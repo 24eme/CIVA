@@ -18,13 +18,16 @@ class SVExtractionForm extends acCouchdbForm
                 continue;
             }
 
-            $formProduitTauxExtraction = new BaseForm();
-            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], []));
-            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
-            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
+            $produitRecap = $this->getDocument()->extraction->add($noeud);
 
-            $default_taux = $produit->taux_extraction;
-            $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);
+            $formProduitTauxExtraction = new BaseForm();
+            $formProduitTauxExtraction->setWidget('volume_extrait', new bsWidgetFormInputFloat([], []));
+            $formProduitTauxExtraction->setValidator('volume_extrait', new sfValidatorNumber(['required' => false]));
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["readonly" => "readonly", "tabindex" => -1]));
+            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
+
+            $formProduitTauxExtraction->setDefault('taux_extraction', $produitRecap->taux_extraction);
+            $formProduitTauxExtraction->setDefault('volume_extrait', $produitRecap->volume_extrait);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
 
@@ -41,9 +44,11 @@ class SVExtractionForm extends acCouchdbForm
             if(is_null($value['taux_extraction'])) {
                 continue;
             }
-            $this->getDocument()->extraction->add($hash)->taux_extraction = $value['taux_extraction'];
+            $produitExtraction = $this->getDocument()->extraction->add($hash);
+            $produitExtraction->add('volume_extrait', $value['volume_extrait']);
         }
 
+        $this->getDocument()->recalculeVolumesRevendiques();
         $this->getDocument()->save();
     }
 }
