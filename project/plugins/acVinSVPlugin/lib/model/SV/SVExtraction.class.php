@@ -18,8 +18,8 @@ class SVExtraction extends BaseSVExtraction {
         return $this->getRecapProduit()->libelle_html;
     }
 
-    public function setVolumeRevendiqueTotal($volume) {
-        $this->_set('volume_revendique_total', $volume);
+    public function setVolumeExtrait($volume) {
+        $this->_set('volume_extrait', $volume);
         echo $this->getQuantiteRecolte() / $volume."\n";
         $this->taux_extraction = round($this->getQuantiteRecolte() / $volume, 2);
     }

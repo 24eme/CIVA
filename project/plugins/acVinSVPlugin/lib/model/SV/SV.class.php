@@ -503,6 +503,9 @@ class SV extends BaseSV
     public function recalculeVolumesRevendiques() {
         foreach($this->getProduits() as $produit) {
             $produit->volume_revendique = null;
+            if(!$produit->getTauxExtraction()) {
+                continue;
+            }
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
         }
     }

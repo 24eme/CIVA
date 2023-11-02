@@ -21,13 +21,13 @@ class SVExtractionForm extends acCouchdbForm
             $produitRecap = $this->getDocument()->extraction->add($noeud);
 
             $formProduitTauxExtraction = new BaseForm();
-            $formProduitTauxExtraction->setWidget('volume_revendique_total', new bsWidgetFormInputFloat([], []));
-            $formProduitTauxExtraction->setValidator('volume_revendique_total', new sfValidatorNumber(['required' => false]));
-            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["readonly" => "readonly"]));
+            $formProduitTauxExtraction->setWidget('volume_extrait', new bsWidgetFormInputFloat([], []));
+            $formProduitTauxExtraction->setValidator('volume_extrait', new sfValidatorNumber(['required' => false]));
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["readonly" => "readonly", "tabindex" => -1]));
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
 
             $formProduitTauxExtraction->setDefault('taux_extraction', $produitRecap->taux_extraction);
-            $formProduitTauxExtraction->setDefault('volume_revendique_total', $produitRecap->volume_revendique_total);
+            $formProduitTauxExtraction->setDefault('volume_extrait', $produitRecap->volume_extrait);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
 
@@ -45,7 +45,7 @@ class SVExtractionForm extends acCouchdbForm
                 continue;
             }
             $produitExtraction = $this->getDocument()->extraction->add($hash);
-            $produitExtraction->add('volume_revendique_total', $value['volume_revendique_total']);
+            $produitExtraction->add('volume_extrait', $value['volume_extrait']);
         }
 
         $this->getDocument()->recalculeVolumesRevendiques();
