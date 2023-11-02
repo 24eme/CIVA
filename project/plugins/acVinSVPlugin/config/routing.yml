@@ -81,6 +81,16 @@ sv_ajout_produit_apporteur:
   requirements:
     sf_method: [post]
 
+sv_ajout_mouts_apporteur:
+  url: /sv/apporteurs/:id/ajout/mouts/:cvi/:hash
+  param: { module: sv, action: ajoutMoutsApporteur }
+  class: SVRoute
+  options:
+    model: SV
+    type:  object
+  requirements:
+    sf_method: [get]
+
 sv_saisie:
   url: /sv/saisie/:id/:cvi
   param: { module: sv, action: saisie }
