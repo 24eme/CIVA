@@ -1,4 +1,4 @@
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
 <button type="button" data-toggle="modal" data-target="#modal_ajout_produit" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Ajouter un produit</button>
 

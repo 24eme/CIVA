@@ -11,7 +11,7 @@ class svActions extends sfActions {
 
         if ($sv = SVClient::getInstance()->findByIdentifiantAndCampagne($this->etablissement->identifiant, $campagne)) {
             $this->redirect(
-                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                SVEtapes::$links[SVEtapes::getInstance($sv->type)->getFirst()],
                 ['id' => $sv->_id]
             );
         }
@@ -34,7 +34,7 @@ class svActions extends sfActions {
             $sv->save();
 
             return $this->redirect(
-                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                SVEtapes::$links[SVEtapes::getInstance($sv->type)->getFirst()],
                 ['id' => $sv->_id]
             );
         }
@@ -81,7 +81,7 @@ class svActions extends sfActions {
             $this->sv->save();
 
             return $this->redirect(
-                SVEtapes::$links[SVEtapes::getInstance()->getFirst()],
+                SVEtapes::$links[SVEtapes::getInstance($sv->type)->getFirst()],
                 ['id' => $this->sv->_id]
             );
         }
@@ -148,6 +148,8 @@ class svActions extends sfActions {
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
+
+        if($this->sv->isFromCSV()) { return $this->redirect('sv_revendication', ['id' => $this->sv->_id]); }
 
         if($this->sv->type != SVClient::TYPE_SV12) { return $this->redirect('sv_autres', ['id' => $this->sv->_id]); }
 

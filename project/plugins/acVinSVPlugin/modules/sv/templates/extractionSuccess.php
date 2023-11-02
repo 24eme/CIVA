@@ -1,5 +1,5 @@
 <?php use_helper('Float'); ?>
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_EXTRACTION)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_EXTRACTION)); ?>
 
 <h3>Extraction du volume à revendiquer</h3>
 

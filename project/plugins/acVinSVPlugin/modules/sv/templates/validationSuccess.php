@@ -1,6 +1,6 @@
 <?php use_helper('Float'); ?>
 
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
 
 <h2>Validation de la déclaration de production <?php echo $sv->campagne ?></h2>
 

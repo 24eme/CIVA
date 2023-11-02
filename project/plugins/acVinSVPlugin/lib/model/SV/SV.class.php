@@ -509,4 +509,9 @@ class SV extends BaseSV
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
         }
     }
+
+    public function isFromCSV() {
+
+        return $this->exist('_attachments') && count($this->_attachments);
+    }
 }

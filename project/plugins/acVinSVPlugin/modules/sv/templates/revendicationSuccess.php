@@ -1,5 +1,5 @@
 <?php use_helper('Float'); ?>
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_REVENDICATION)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_REVENDICATION)); ?>
 
 <a href="<?php echo url_for('sv_recalcule_volumes_revendiques', $sv) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-refresh"></span> Recalculer les volumes revendiqués</a>
 

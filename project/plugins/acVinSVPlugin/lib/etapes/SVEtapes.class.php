@@ -37,10 +37,11 @@ class SVEtapes extends Etapes
 
 	private static $_instance = null;
 
-	public static function getInstance()
+	public static function getInstance($type)
 	{
 		if(is_null(self::$_instance)) {
-			self::$_instance = new SVEtapes();
+            $className = $type."Etapes";
+			self::$_instance = new $className();
 		}
 		return self::$_instance;
 	}

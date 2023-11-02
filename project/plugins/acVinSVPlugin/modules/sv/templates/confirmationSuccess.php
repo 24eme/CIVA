@@ -1,4 +1,4 @@
-<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
+<?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_VALIDATION)); ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post">
@@ -41,4 +41,3 @@
 
 </form>
 <!-- fin #principal -->
-

@@ -1,5 +1,5 @@
 <?php use_helper('Float'); ?>
-<?php include_partial('sv/step', ['object' => $sv, 'etapes' => SVEtapes::getInstance(), 'step' => SVEtapes::ETAPE_LIEU_STOCKAGE]) ?>
+<?php include_partial('sv/step', ['object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_LIEU_STOCKAGE]) ?>
 
 <h3>Lieux de stockage</h3>
 
