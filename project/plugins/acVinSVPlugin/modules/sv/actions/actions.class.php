@@ -81,7 +81,7 @@ class svActions extends sfActions {
             $this->sv->save();
 
             return $this->redirect(
-                SVEtapes::$links[SVEtapes::getInstance($sv->type)->getFirst()],
+                SVEtapes::$links[SVEtapes::getInstance($this->sv->type)->getFirst()],
                 ['id' => $this->sv->_id]
             );
         }
