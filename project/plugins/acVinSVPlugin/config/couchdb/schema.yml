@@ -40,9 +40,11 @@ SV:
           fields:
             '*':
               type: collection
+              class: SVExtraction
               definition:
                 fields:
-                  taux_extraction: {}
+                  volume_revendique_total: { }
+                  taux_extraction: { }
       apporteurs:
         type: collection
         class: SVApporteurs

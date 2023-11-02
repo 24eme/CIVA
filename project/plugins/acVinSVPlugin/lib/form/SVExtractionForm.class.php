@@ -18,13 +18,16 @@ class SVExtractionForm extends acCouchdbForm
                 continue;
             }
 
-            $formProduitTauxExtraction = new BaseForm();
-            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], []));
-            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
-            $formProduitTauxExtraction->widgetSchema->setLabel('taux_extraction', $produit->libelle_html);
+            $produitRecap = $this->getDocument()->extraction->add($noeud);
 
-            $default_taux = $produit->taux_extraction;
-            $formProduitTauxExtraction->setDefault('taux_extraction', $default_taux);
+            $formProduitTauxExtraction = new BaseForm();
+            $formProduitTauxExtraction->setWidget('volume_revendique_total', new bsWidgetFormInputFloat([], []));
+            $formProduitTauxExtraction->setValidator('volume_revendique_total', new sfValidatorNumber(['required' => false]));
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["readonly" => "readonly"]));
+            $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
+
+            $formProduitTauxExtraction->setDefault('taux_extraction', $produitRecap->taux_extraction);
+            $formProduitTauxExtraction->setDefault('volume_revendique_total', $produitRecap->volume_revendique_total);
             $formProduit->embedForm($noeud, $formProduitTauxExtraction);
         }
 
@@ -41,7 +44,8 @@ class SVExtractionForm extends acCouchdbForm
             if(is_null($value['taux_extraction'])) {
                 continue;
             }
-            $this->getDocument()->extraction->add($hash)->taux_extraction = $value['taux_extraction'];
+            $produitExtraction = $this->getDocument()->extraction->add($hash);
+            $produitExtraction->add('volume_revendique_total', $value['volume_revendique_total']);
         }
 
         $this->getDocument()->recalculeVolumesRevendiques();
