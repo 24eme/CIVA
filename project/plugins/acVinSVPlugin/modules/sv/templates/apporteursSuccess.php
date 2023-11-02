@@ -59,3 +59,5 @@
   <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter un apporteur</a></div>
   <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
+
+<?php include_partial("sv/modalAjoutApporteur", ['sv' => $sv, 'form' => $form]) ?>
