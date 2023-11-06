@@ -71,6 +71,9 @@ cat $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | grep -v "date"
     iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.csv;
 done;
 
+bash bin/export_drs_csv.sh $DR_CAMPAGNE > $BASEDIR/$PATH_MISEADISPO_AVA/DR/$DR_CAMPAGNE.csv
+bash bin/export_svs_csv.sh $DR_CAMPAGNE > $BASEDIR/$PATH_MISEADISPO_AVA/Production/$DR_CAMPAGNE.csv
+
 cd $GIILDA_BASEDIR
 
 php symfony export:comptes-csv $SYMFONYTASKOPTIONS > $BASEDIR/$PATH_MISEADISPO_CIVA/export/bi/export_bi_comptes.utf8.csv
