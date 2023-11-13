@@ -9,6 +9,11 @@ function(doc) {
         return;
     }
 
+    if(doc.statut == "SUSPENDU") {
+
+	     return;
+    }
+
     if(doc.commune) {
 	commune = doc.commune;
     } else {

@@ -63,11 +63,13 @@
           </div>
         </div>
 
-        <div id="documents_aide">
+        <?php include_component('tiers', 'monEspaceColonne', ['etablissement' => $etablissement]) ?>
+
+        <div id="documents_aide" style="width: 234px">
             <h3 class="titre_section">Documents d'aide</h3>
             <div class="contenu_section">
                 <ul>
-                    <li><a href="/helpPdf/notice_declaration_production.pdf" class="pdf">Télécharger&nbsp;la&nbsp;notice&nbsp;Production</a></li>
+                    <li><a href="/helpPdf/notice_declaration_production.pdf" class="pdf">Télécharger&nbsp;la&nbsp;notice</a></li>
                 </ul>
                 <p class="intro pdf_link">Ces notices sont au format PDF. Pour les visualiser, veuillez utiliser un <a href='http://pdfreaders.org/'>lecteur PDF</a>.</p>
             </div>
