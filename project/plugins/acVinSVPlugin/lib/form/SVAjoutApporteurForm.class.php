@@ -10,7 +10,7 @@ class SVAjoutApporteurForm extends acCouchdbForm
     public function configure()
     {
         $this->setWidget('cvi', new sfWidgetFormInputText());
-        $this->setValidator('cvi', new sfValidatorString(['min_length' => 10, 'max_length' => 10]));
+        $this->setValidator('cvi', new sfValidatorRegex(['pattern' => '/[0-9]{10}/'], ['invalid' => 'Le format CVI n\'est pas correct']));
         $this->widgetSchema->setLabel('cvi', "Ajout ou mise à jour d'un apporteur");
 
         $this->widgetSchema->setNameFormat('sv_ajout_apporteur[%s]');

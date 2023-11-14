@@ -3,6 +3,17 @@
 
 <h3>Liste de vos apporteurs</h3>
 
+<?php if ($sf_user->hasFlash('error_msg')): ?>
+  <div class="alert alert-danger" role="alert">
+    <?php echo $sf_user->getFlash('error_msg') ?>
+  </div>
+<?php endif ?>
+<?php if ($sf_user->hasFlash('success_msg')): ?>
+  <div class="alert alert-success" role="alert">
+    <?php echo $sf_user->getFlash('success_msg') ?>
+  </div>
+<?php endif ?>
+
 <p style="margin-bottom: 15px;">Saisissez ici les données de production de tous vos apporteurs.</p>
 
 <table style="margin-top: 15px;" class="table table-bordered table-striped">

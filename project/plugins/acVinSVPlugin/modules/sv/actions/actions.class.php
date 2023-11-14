@@ -102,11 +102,17 @@ class svActions extends sfActions {
         $this->form->bind($request->getParameter($this->form->getName()));
 
         if (! $this->form->isValid()) {
+            $msg = [];
+            foreach ($this->form->getErrorSchema() as $e) {
+                $msg[] = $e->getMessage();
+            }
+            $this->getUser()->setFlash('error_msg', "Erreur lors de l'ajout de l'apporteur ".$this->form->getValue('cvi')." : ".implode(',', $msg));
             return $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
         }
 
         $this->form->save();
 
+        $this->getUser()->setFlash('success_msg', "Apporteur ajouté : ".$this->form->getValue('cvi'));
         $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
     }
 
