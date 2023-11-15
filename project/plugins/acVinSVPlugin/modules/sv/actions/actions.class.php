@@ -89,7 +89,8 @@ class svActions extends sfActions {
 
     public function executeApporteurs(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
-        $this->form = new SVAjoutApporteurForm($this->sv);
+        $this->hasCVI = $request->getParameter('addCVI', null);
+        $this->form = new SVAjoutApporteurForm($this->sv, ['cvi' => $this->hasCVI]);
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
     }
@@ -97,7 +98,8 @@ class svActions extends sfActions {
     public function executeAjoutApporteur(sfWebRequest $request)
     {
         $this->sv = $this->getRoute()->getSV();
-        $this->form = new SVAjoutApporteurForm($this->sv);
+        $this->hasCVI = $request->getParameter('addCVI', null);
+        $this->form = new SVAjoutApporteurForm($this->sv, ['cvi' => $this->hasCVI]);
 
         $this->form->bind($request->getParameter($this->form->getName()));
 
@@ -108,6 +110,10 @@ class svActions extends sfActions {
             }
             $this->getUser()->setFlash('error_msg', "Erreur lors de l'ajout de l'apporteur ".$this->form->getValue('cvi')." : ".implode(',', $msg));
             return $this->redirect('sv_apporteurs', ['id' => $this->sv->_id]);
+        }
+
+        if (! $this->hasCVI) {
+            return $this->redirect('sv_apporteurs', ['id' => $this->sv->_id, 'addCVI' => $this->form->getValues()['cvi']]);
         }
 
         $this->form->save();

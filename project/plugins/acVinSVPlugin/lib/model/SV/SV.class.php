@@ -170,14 +170,16 @@ class SV extends BaseSV
         return $produits;
     }
 
-    public function addApporteurHorsRegion($cvi)
+    public function addApporteurHorsRegion($cvi, $raison_sociale, $pays)
     {
         if (array_key_exists($cvi, $this->apporteurs->toArray())) {
             return;
         }
 
         foreach ($this->listeProduitsHorsRegion() as $hash => $produit) {
-            $this->addProduit($cvi, $hash);
+            $p = $this->addProduit($cvi, $hash);
+            $p->nom = $raison_sociale;
+            $p->commune = $pays;
         }
     }
 
