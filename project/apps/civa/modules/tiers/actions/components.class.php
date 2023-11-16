@@ -16,4 +16,10 @@ class tiersComponents extends sfComponents {
             $this->form = new DelegationLoginForm($this->getUser()->getCompte());
         }
     }
+
+    public function executeMonEspaceColonne(sfWebRequest $request)
+    {
+        $this->svs = SVClient::getInstance()->getAllByEtablissement($this->etablissement);
+        ksort($this->svs);
+    }
 }

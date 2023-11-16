@@ -6,13 +6,24 @@
         <h3 class="modal-title" id="gridSystemModalLabel">Ajouter un apporteur</h3>
       </div>
       <div class="modal-body">
-        <form action="<?php echo url_for('sv_ajout_apporteur', ['sf_subject' => $sv]) ?>" method="POST" id="form_ajout_apporteur">
+        <form action="<?php echo url_for('sv_ajout_apporteur', ['sf_subject' => $sv]) ?><?php echo (! $hasCVI) ? '' : "?addCVI=$hasCVI" ?>" method="POST" id="form_ajout_apporteur">
         <?php echo $form->renderHiddenFields() ?>
         <?php echo $form->renderGlobalErrors() ?>
           <div class="form-group">
             <?php echo $form['cvi']->renderLabel() ?>
             <?php echo $form['cvi']->render(['class' => 'form-control']) ?>
           </div>
+
+          <?php if (isset($form['raison_sociale'])): ?>
+          <div class="form-group">
+            <?php echo $form['raison_sociale']->renderLabel() ?>
+            <?php echo $form['raison_sociale']->render(['class' => 'form-control']) ?>
+          </div>
+          <div class="form-group">
+            <?php echo $form['pays']->renderLabel() ?>
+            <?php echo $form['pays']->render(['class' => 'form-control']) ?>
+          </div>
+          <?php endif ?>
         </form>
       </div>
       <div class="modal-footer">

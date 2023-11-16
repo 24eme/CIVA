@@ -55,6 +55,17 @@ class SVClient extends acCouchdbClient {
         return $idsCampagne;
     }
 
+    public function getAllByEtablissement($etablissement)
+    {
+        $type = self::getTypeByEtablissement($etablissement);
+        $ids = $this->startkey(sprintf('%s-%s-%s', $type, $etablissement->cvi, '0000'))
+                    ->endkey(sprintf('%s-%s-%s', $type, $etablissement->cvi, '9999'))
+                    ->execute(acCouchdbClient::HYDRATE_ON_DEMAND)
+                    ->getIds();
+
+        return $ids;
+    }
+
     public function getAll($campagne)
     {
         $ids = $this->getAllIdsByCampagne($campagne);
