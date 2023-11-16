@@ -13,6 +13,10 @@
             <?php echo $form['produit']->renderLabel() ?>
             <?php echo $form['produit']->render(['class' => 'form-control']) ?>
           </div>
+          <div class="form-group">
+            <?php echo $form['denomination_complementaire']->renderLabel() ?>
+            <?php echo $form['denomination_complementaire']->render(['class' => 'form-control']) ?>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

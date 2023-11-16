@@ -15,6 +15,9 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
         $this->setWidget('produit', new sfWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
         $this->setValidator('produit', new sfValidatorChoice(['choices' => array_keys($this->getProduits())]));
 
+        $this->setWidget('denomination_complementaire', new sfWidgetFormInputText());
+        $this->setValidator('denomination_complementaire', new sfValidatorString(['required' => false]));
+
         $this->widgetSchema->setNameFormat('sv_ajout_produit_apporteur[%s]');
     }
 
@@ -22,7 +25,8 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
     {
         $values = $this->getValues();
         $hash = $values['produit'];
-        $newProduit = $this->getDocument()->addProduit($this->cvi, $hash);
+        $denom = $values['denomination_complementaire'] ?: null;
+        $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
 
         $this->getDocument()->save();
     }
