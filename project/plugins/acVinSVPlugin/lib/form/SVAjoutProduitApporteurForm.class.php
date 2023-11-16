@@ -26,7 +26,19 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
         $values = $this->getValues();
         $hash = $values['produit'];
         $denom = $values['denomination_complementaire'] ?: null;
+
+        if ($this->isAlsace($this->cvi) === false) {
+            $apporteur = $this->getDocument()->apporteurs->get($this->cvi);
+            $rs = $apporteur->getNom();
+            $c = $apporteur->getCommune();
+        }
+
         $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
+
+        if ($this->isAlsace($this->cvi) === false) {
+            $newProduit->nom = $rs;
+            $newProduit->commune = $c;
+        }
 
         $this->getDocument()->save();
     }
@@ -38,5 +50,10 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
         }
         return $produits;
+    }
+
+    private function isAlsace($cvi)
+    {
+        return in_array(substr($cvi, 0, 2), ['68', '67']);
     }
 }
