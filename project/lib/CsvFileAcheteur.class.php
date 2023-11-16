@@ -13,9 +13,12 @@ class CsvFileAcheteur
   const CSV_VTSGN = 7;
   const CSV_DENOMINATION = 8;
   const CSV_SUPERFICIE = 9;
-  const CSV_VOLUME = 10;
-  const CSV_VOLUME_DPLC = 11;
-  const CSV_VOLUME_VCI = 15;
+  const CSV_OLD_VOLUME = 10;
+  const CSV_VOLUME = 11;
+  const CSV_OLD_VOLUME_DPLC = 11;
+  const CSV_VOLUME_DPLC = 12;
+  const CSV_OLD_VOLUME_VCI = 15;
+  const CSV_VOLUME_VCI = 13;
 
   const CSV_SV_QUANTITE_VF = 10;
   const CSV_SV_VOLUME_VF = 11;
