@@ -1,6 +1,6 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<h3><?php echo EtablissementClient::getInstance()->findByCvi($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->findByCvi($cvi)->commune; ?></small></h3>
+<h3><?php echo $sv->apporteurs->get($cvi)->getNom() ?> <small><?php echo $cvi ?> - <?php echo $sv->apporteurs->get($cvi)->getCommune(); ?></small></h3>
 
 <p style="margin-bottom: 15px;">Saisissez ici les données de production de cet apporteur.</p>
 
