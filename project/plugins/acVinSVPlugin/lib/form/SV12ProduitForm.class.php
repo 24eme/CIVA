@@ -8,7 +8,7 @@ class SV12ProduitForm extends acCouchdbObjectForm
     }
 
     public function configure() {
-        $this->setWidget('superficie_recolte', new bsWidgetFormInputFloat(array(), ['class' => 'form-control text-right input-float', 'disabled' => $this->getObject()->isRebeche()]));
+        $this->setWidget('superficie_recolte', new bsWidgetFormInputFloat(array(), ['class' => 'form-control text-right input-float', 'disabled' => $this->getObject()->isRebeche(), 'tabindex' => -1]));
         $this->setValidator('superficie_recolte', new sfValidatorNumber(array('required' => false)));
 
         $this->setWidget('quantite_recolte', new bsWidgetFormInputInteger(array(), array('class' => 'form-control text-right input-integer input_quantite', 'disabled' => $this->getObject()->isRebeche())));
