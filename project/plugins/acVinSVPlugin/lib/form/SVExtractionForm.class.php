@@ -23,7 +23,7 @@ class SVExtractionForm extends acCouchdbForm
             $formProduitTauxExtraction = new BaseForm();
             $formProduitTauxExtraction->setWidget('volume_extrait', new bsWidgetFormInputFloat([], []));
             $formProduitTauxExtraction->setValidator('volume_extrait', new sfValidatorNumber(['required' => false]));
-            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["readonly" => "readonly", "tabindex" => -1]));
+            $formProduitTauxExtraction->setWidget('taux_extraction', new bsWidgetFormInputFloat([], ["tabindex" => -1]));
             $formProduitTauxExtraction->setValidator('taux_extraction', new sfValidatorNumber(['required' => false]));
 
             $formProduitTauxExtraction->setDefault('taux_extraction', $produitRecap->taux_extraction);
