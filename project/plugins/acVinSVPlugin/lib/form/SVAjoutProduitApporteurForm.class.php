@@ -15,9 +15,6 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
         $this->setWidget('produit', new sfWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
         $this->setValidator('produit', new sfValidatorChoice(['choices' => array_keys($this->getProduits())]));
 
-        $this->setWidget('mouts', new sfWidgetFormInputCheckbox());
-        $this->setValidator('mouts', new sfValidatorBoolean(['required' => false]));
-
         $this->widgetSchema->setNameFormat('sv_ajout_produit_apporteur[%s]');
     }
 
@@ -33,12 +30,6 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
         if(strpos($hash, "/appellations/CREMANT/") !== false && strpos($hash, "/cepages/BL") !== false) {
             $this->getDocument()->addProduit($this->cvi, str_replace("/cepages/BL", "/cepages/RBBL", $hash));
-        }
-
-        if (isset($values['mouts']) && $values['mouts'] && ! $newProduit->exist('volume_mouts')) {
-            $newProduit->add('volume_mouts');
-            $newProduit->add('volume_mouts_revendique');
-            $newProduit->add('superficie_mouts');
         }
 
         $this->getDocument()->save();
