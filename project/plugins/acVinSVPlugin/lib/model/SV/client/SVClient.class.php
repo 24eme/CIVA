@@ -145,10 +145,14 @@ class SVClient extends acCouchdbClient {
         }
 
         if(preg_match('/(-| |^)AB(-| |$)/i', $denomination)) {
-            $denoms[] = 'AB';
+            $denoms[] = 'BIO';
         }
 
         if(preg_match('/(-| |^)BIO(-| |$)/i', $denomination)) {
+            $denoms[] = 'BIO';
+        }
+
+        if(preg_match('/(-| |^)BIO-?LOGI(E|C|QUE)(-| |$)/i', $denomination)) {
             $denoms[] = 'BIO';
         }
 
