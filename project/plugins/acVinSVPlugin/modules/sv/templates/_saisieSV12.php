@@ -14,14 +14,6 @@
       <td><?php echo $produit->nom ?></td>
       <td>
         <?php echo $produit->getRawValue()->getLibelleHtml() ?>
-        <?php if (strpos($hash, '/CREMANT/') !== false && ! $produit->getRawValue()->exist('volume_mouts')): ?>
-          <br/>
-          <small>
-            <a class="text-muted" href="<?php echo url_for('sv_ajout_mouts_apporteur', ['id' => $sv->_id, 'cvi' => $cvi, 'hash' => str_replace('/', '-', $hash)]) ?>">
-              Ajouter des moûts
-            </a>
-          </small>
-        <?php endif ?>
       </td>
       <td><div class="input-group"><?php echo $formProduit['superficie_recolte']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">ares</small></span></div></td>
       <td><div class="input-group"><?php echo $formProduit['quantite_recolte']->render() ?><input class="form-control text-right input-float input-sm input_quantite_pre hidden" type="text" autocomplete="off" data-decimal-auto="2" data-decimal="2" readonly="readonly" /><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">kg</small></span></div></td>

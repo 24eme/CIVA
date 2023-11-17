@@ -137,25 +137,6 @@ class svActions extends sfActions {
         return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
     }
 
-    public function executeAjoutMoutsApporteur(sfWebRequest $request)
-    {
-        $this->sv = $this->getRoute()->getSV();
-        $this->cvi = $request->getParameter('cvi');
-        $this->hash = $request->getParameter('hash');
-
-        $produit = $this->sv->get(str_replace('-', '/', $this->hash));
-
-        if (! $produit->exist('volume_mouts')) {
-            $produit->add('volume_mouts');
-            $produit->add('volume_mouts_revendique');
-            $produit->add('superficie_mouts');
-
-            $this->sv->save();
-        }
-
-        return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
-    }
-
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
