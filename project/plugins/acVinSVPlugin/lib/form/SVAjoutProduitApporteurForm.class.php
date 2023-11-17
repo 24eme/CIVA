@@ -23,9 +23,16 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
     public function save($con = null)
     {
+        $mouts = false;
+
         $values = $this->getValues();
         $hash = $values['produit'];
         $denom = $values['denomination_complementaire'] ?: null;
+
+        if (strpos($hash, '/mouts') !== false) {
+            $hash = str_replace('/mouts', '', $hash);
+            $mouts = true;
+        }
 
         if ($this->isAlsace($this->cvi) === false) {
             $apporteur = $this->getDocument()->apporteurs->get($this->cvi);
@@ -37,6 +44,12 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
         }
 
+        if ($mouts && ! $newProduit->exist('volume_mouts')) {
+            $newProduit->add('volume_mouts');
+            $newProduit->add('volume_mouts_revendique');
+            $newProduit->add('superficie_mouts');
+        }
+
         $this->getDocument()->save();
     }
 
@@ -45,6 +58,11 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
         $produits = [];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
+
+            // Si crémant, on rajoute un deuxième produit mouts
+            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
+                $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
+            }
         }
         return $produits;
     }
