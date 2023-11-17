@@ -139,7 +139,7 @@ class uploadActions extends sfActions {
             else if (!$this->hasVolume($line))
                 $this->nb_noVolumes++;
 
-            if (!$this->no_volume && $line[CsvFileAcheteur::CSV_SUPERFICIE]*1 && !$line[CsvFileAcheteur::CSV_VOLUME]*1 ) {
+            if (!$this->no_volume && $line[CsvFileAcheteur::CSV_SUPERFICIE]*1 && !$this->csv->getLineVolume($line)*1 ) {
                 $this->warnings[$cpt][] = 'Aucun volume déclaré la ligne sera importée et indiqué comme "Problème Climatique"';
             }
 	    if ($this->hasForbidenDenomination($line)) {
@@ -402,7 +402,7 @@ class uploadActions extends sfActions {
     }
 
     protected function hasWrongUnit($line) {
-      if ($line[CsvFileAcheteur::CSV_VOLUME] > 1500)
+      if ($this->csv->getLineVolume($line) > 1500)
 	return true;
       if ($line[CsvFileAcheteur::CSV_SUPERFICIE] > 1500)
 	return true;
@@ -411,10 +411,10 @@ class uploadActions extends sfActions {
     protected function hasGoodUnit($line) {
       if (
 	  (preg_match('/^[0-9,\.]+$/', $line[CsvFileAcheteur::CSV_SUPERFICIE]) || !$line[CsvFileAcheteur::CSV_SUPERFICIE]) &&
-	  (!$line[CsvFileAcheteur::CSV_VOLUME] || preg_match('/^[0-9,\.]+$/', $line[CsvFileAcheteur::CSV_VOLUME]))
+	  (!$this->csv->getLineVolume($line) || preg_match('/^[0-9,\.]+$/', $this->csv->getLineVolume($line)))
 	  )
             return true;
-      if ($line[CsvFileAcheteur::CSV_VOLUME] * 100 / $line[CsvFileAcheteur::CSV_SUPERFICIE] > 10)
+      if ($this->csv->getLineVolume($line) * 100 / $line[CsvFileAcheteur::CSV_SUPERFICIE] > 10)
 	return true;
       return false;
     }
@@ -422,13 +422,13 @@ class uploadActions extends sfActions {
     protected function hasVolume($line) {
         if ($this->no_volume)
             return true;
-        return $this->isPositiveOrZero($line[CsvFileAcheteur::CSV_VOLUME]);
+        return $this->isPositiveOrZero($this->csv->getLineVolume($line));
     }
 
     protected function isVolumeNotCorrect($line) {
         if ($this->no_volume)
             return false;
-        return!$this->isPositiveOrZero($line[CsvFileAcheteur::CSV_VOLUME]);
+        return!$this->isPositiveOrZero($this->csv->getLineVolume($line));
     }
 
     protected function shouldHaveSuperficie($line) {
@@ -479,7 +479,7 @@ class uploadActions extends sfActions {
     }
 
     protected function isVciAuthorized($produit, $line) {
-        if(!$line[CsvFileAcheteur::CSV_VOLUME_VCI]) {
+        if(!$this->csv->getLineVolumeVCI($line)) {
             return true;
         }
 

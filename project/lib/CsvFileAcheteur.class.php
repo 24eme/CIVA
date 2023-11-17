@@ -13,9 +13,12 @@ class CsvFileAcheteur
   const CSV_VTSGN = 7;
   const CSV_DENOMINATION = 8;
   const CSV_SUPERFICIE = 9;
-  const CSV_VOLUME = 10;
-  const CSV_VOLUME_DPLC = 11;
-  const CSV_VOLUME_VCI = 15;
+  const CSV_OLD_VOLUME = 10;
+  const CSV_VOLUME = 11;
+  const CSV_OLD_VOLUME_DPLC = 11;
+  const CSV_VOLUME_DPLC = 12;
+  const CSV_OLD_VOLUME_VCI = 15;
+  const CSV_VOLUME_VCI = 13;
 
   const CSV_SV_QUANTITE_VF = 10;
   const CSV_SV_VOLUME_VF = 11;
@@ -27,6 +30,7 @@ class CsvFileAcheteur
   private $separator = null;
   private $csvdata = null;
   private $ignore = null;
+  private $isOldFormat = false;
 
   public function getFileName() {
     return $this->file;
@@ -81,6 +85,13 @@ class CsvFileAcheteur
       $this->csvdata[] = self::clean($data);
     }
     fclose($handler);
+    if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME_VCI]), "vci") !== false) {
+        $this->isOldFormat = true;
+    }
+    if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME]), "volume") !== false) {
+        $this->isOldFormat = true;
+    }
+
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
       array_shift($this->csvdata);
     return $this->csvdata;
@@ -134,5 +145,23 @@ class CsvFileAcheteur
           return 0;
       }
       return round(str_replace(",", ".", $value)*1, 2);
+  }
+
+  public function getLineVolume($line) {
+      if($this->isOldFormat) {
+
+          return $line[self::CSV_OLD_VOLUME];
+      }
+
+      return $line[self::CSV_VOLUME];
+  }
+
+  public function getLineVolumeVCI($line) {
+      if($this->isOldFormat) {
+
+          return $line[self::CSV_OLD_VOLUME_VCI];
+      }
+
+      return $line[self::CSV_VOLUME_VCI];
   }
 }
