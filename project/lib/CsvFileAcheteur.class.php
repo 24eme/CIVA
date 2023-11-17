@@ -88,6 +88,9 @@ class CsvFileAcheteur
     if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME_VCI]), "vci") !== false) {
         $this->isOldFormat = true;
     }
+    if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME]), "volume") !== false) {
+        $this->isOldFormat = true;
+    }
 
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
       array_shift($this->csvdata);
