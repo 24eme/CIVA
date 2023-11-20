@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <a href="<?php echo url_for('sv_apporteurs', $sv) ?>"  class="close"><span aria-hidden="true">&times;</span></a>
-        <h3 class="modal-title" id="gridSystemModalLabel">Ajouter un apporteur</h3>
+        <h3 class="modal-title" id="gridSystemModalLabel">Ajout / Mise jour d'un apporteur</h3>
       </div>
       <div class="modal-body">
         <form action="<?php echo url_for('sv_ajout_apporteur', ['sf_subject' => $sv]) ?><?php echo (! $hasCVI) ? '' : "?addCVI=$hasCVI" ?>" method="POST" id="form_ajout_apporteur" class="form-horizontal">
