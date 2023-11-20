@@ -121,6 +121,6 @@ let calcul = function(ligne, e) {
 <div class="row" style="margin-top: 30px;">
   <div class="col-xs-6 text-left"><a tabindex="-1" href="<?php echo url_for('sv_apporteurs', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-6 text-right">
-    <button type="submit" form="form_extraction" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button>
+    <button type="submit" form="form_extraction" <?php if($sv->hasVolumeRevendique()): ?>onclick="return confirm('En validant cette modification les volumes revendiqués vont être recalculer pour chacun de vos apporteurs.\n\nÉtes-vous sûr de continuer ?')"<?php endif; ?> class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button>
   </div>
 </div>
