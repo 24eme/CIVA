@@ -517,6 +517,16 @@ class SV extends BaseSV
         }
     }
 
+    public function hasVolumeRevendique() {
+        foreach($this->getProduits() as $produit) {
+            if($produit->volume_revendique) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isFromCSV() {
 
         return $this->exist('_attachments') && count($this->_attachments);
