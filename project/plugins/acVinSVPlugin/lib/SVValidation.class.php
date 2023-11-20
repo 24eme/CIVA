@@ -6,6 +6,7 @@ class SVValidation extends DocumentValidation
     {
         $this->addControle('erreur', 'apporteurs_complet', "Toutes les données des apporteurs n'ont pas été saisies");
         $this->addControle('erreur', 'apporteurs_coherent_sv11', "Il y a des incohérences entre le volume récolté, revendiqué, détruit et le VCI");
+        $this->addControle('erreur', 'volume_extrait', "Le volume revendiqué total n'est pas égal au volume extrait déclaré");
         $this->addControle('erreur', 'stockage_repartition', "Trop de volume déclaré dans le lieu de stockage");
         $this->addControle('erreur', 'rebeches_cremant_manquant', "Vous avez déclaré des rebêches alors que vous ne produisez pas de Crémant");
         $this->addControle('erreur', 'cremant_rebeches_manquant', "Vous n'avez pas déclaré de rebêches alors que vous produisez du Crémant");
@@ -22,6 +23,16 @@ class SVValidation extends DocumentValidation
             }
 
             if($this->document->type == SVClient::TYPE_SV12) {
+                foreach($this->document->getRecapProduits() as $hash => $recapProduit) {
+                    if(!$this->document->extraction->exist(str_replace('/declaration/', '', $hash))) {
+                        continue;
+                    }
+                    $extractionProduit = $this->document->extraction->get(str_replace('/declaration/', '', $hash));
+                    if($extractionProduit->volume_extrait && $extractionProduit->volume_extrait != $recapProduit->volume_revendique) {
+                        $this->addPoint('erreur', 'volume_extrait', $recapProduit->libelle, $this->generateUrl('sv_revendication', ['sf_subject' => $this->document]));
+                    }
+                }
+
                 foreach($apporteur->getProduits() as $produit) {
                     if ($produit->isMout() && $produit->superficie_mouts <= 0) {
                         $this->addPoint('erreur', 'superficie_mouts_incoherent', "Saisir la superficie", $this->generateUrl(
