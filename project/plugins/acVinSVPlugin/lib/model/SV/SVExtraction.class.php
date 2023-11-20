@@ -20,7 +20,12 @@ class SVExtraction extends BaseSVExtraction {
 
     public function setVolumeExtrait($volume) {
         $this->_set('volume_extrait', $volume);
-        echo $this->getQuantiteRecolte() / $volume."\n";
+
+        if(!$volume) {
+            $this->taux_extraction = null;
+            return;
+        }
+
         $this->taux_extraction = round($this->getQuantiteRecolte() / $volume, 4);
     }
 }
