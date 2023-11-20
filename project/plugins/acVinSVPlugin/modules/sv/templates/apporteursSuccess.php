@@ -59,7 +59,7 @@
         <small class="text-muted">hl</small>
       <?php endif; ?>
   </td>
-  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
+  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies($sv->type == SVClient::TYPE_SV12) > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
   <td class="text-right"><a href="<?php echo url_for('sv_saisie', array('sf_subject' => $sv, 'cvi' => $apporteur->getKey())); ?>" class="btn btn-xs btn-default">Saisir <span class="glyphicon glyphicon-chevron-right"></span></a></td>
 </tr>
 <?php endforeach; ?>
@@ -67,7 +67,7 @@
 
 <div class="row" style="margin-top: 30px;">
   <div class="col-xs-4 text-left"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
-  <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter un apporteur</a></div>
+  <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter ou mettre à jour un apporteur</a></div>
   <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
 

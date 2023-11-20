@@ -6,6 +6,7 @@
 <style>
   <?php echo pdfStyle(); ?>
   .tableau td, .tableau th, .tableau table {border: 1px solid black;}
+  .tableau th.th { font-weight: bold; }
   table {
     padding-left: 0px;
     padding-right: 5px;
@@ -77,6 +78,23 @@
       </tr>
     <?php endif; ?>
     <?php endforeach; ?>
+    <?php if (isset($produits[ExportSVPdf::KEY_AUTRES_PRODUITS])): ?>
+    <tr>
+      <th class="th" style="text-align: left;"><?php echo pdfTdLargeStart(); ?>&nbsp;Total</th>
+      <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo echoLongFloatFr($document->getSum()['superficie'] / 100); ?>&nbsp;<small>ha</small></th>
+      <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($document->getSum()['recolte']) ?>&nbsp;<small>hl</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($document->getSum()['revendique']) ?>&nbsp;<small>hl</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($document->getSum()['volume_detruit']) ?>&nbsp;<small>hl</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($document->getSum()['vci']) ?>&nbsp;<small>hl</small></th>
+      <?php else: ?>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $document->getSum()['recolte'] ?>&nbsp;<small>kg</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($document->getSum()['revendique']) ?>&nbsp;<small>hl</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($document->getSum()['mouts']) ? $document->getSum()['mouts'] : 0.00) ?>&nbsp;<small>hl</small></th>
+        <th class="th"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(isset($document->getSum()['revendique_mouts']) ? $document->getSum()['revendique_mouts'] : 0.00) ?>&nbsp;<small>hl</small></th>
+      <?php endif ?>
+    </tr>
+    <?php endif; ?>
   </table>
 
   <?php if (isset($produits[ExportSVPdf::KEY_AUTRES_PRODUITS])): ?>

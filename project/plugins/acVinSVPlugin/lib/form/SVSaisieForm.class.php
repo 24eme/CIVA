@@ -19,6 +19,9 @@ class SVSaisieForm extends acCouchdbForm
             if($this->cvi && $this->cvi != $produit->cvi) {
                 continue;
             }
+            if ($produit->isRebeche()) {
+                continue;
+            }
             $classSVForm = $this->type."ProduitForm";
             $formProduits->embedForm($produit->getHash(), new $classSVForm($produit));
         }

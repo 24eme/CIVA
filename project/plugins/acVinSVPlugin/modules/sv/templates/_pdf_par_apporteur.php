@@ -71,7 +71,7 @@
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_detruit) ?>&nbsp;<small>hl</small></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->vci) ?>&nbsp;<small>hl</small></td>
           <?php else: ?>
-            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small></td>
+            <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php if(!is_null($produit->quantite_recolte)): ?><?php echo $produit->quantite_recolte ?>&nbsp;<small>kg</small><?php endif; ?></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(($produit->exist('volume_mouts')) ? $produit->volume_mouts : 0.00) ?>&nbsp;<small>hl</small></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr(($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0.00) ?>&nbsp;<small>hl</small></td>

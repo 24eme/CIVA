@@ -5,6 +5,9 @@ class SV12RevendicationProduitForm extends acCouchdbObjectForm
     protected function updateDefaultsFromObject() {
         parent::updateDefaultsFromObject();
         $this->setDefault('taux_extraction', $this->getObject()->getTauxExtraction());
+        if($this->getObject()->exist('volume_mouts')) {
+            $this->setDefault('volume_mouts_revendique', $this->getObject()->volume_mouts);
+        }
     }
 
     public function configure() {

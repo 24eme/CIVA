@@ -3,25 +3,32 @@
     <div class="modal-content">
       <div class="modal-header">
         <a href="<?php echo url_for('sv_apporteurs', $sv) ?>"  class="close"><span aria-hidden="true">&times;</span></a>
-        <h3 class="modal-title" id="gridSystemModalLabel">Ajouter un apporteur</h3>
+        <h3 class="modal-title" id="gridSystemModalLabel">Ajout / Mise jour d'un apporteur</h3>
       </div>
       <div class="modal-body">
-        <form action="<?php echo url_for('sv_ajout_apporteur', ['sf_subject' => $sv]) ?><?php echo (! $hasCVI) ? '' : "?addCVI=$hasCVI" ?>" method="POST" id="form_ajout_apporteur">
+        <form action="<?php echo url_for('sv_ajout_apporteur', ['sf_subject' => $sv]) ?><?php echo (! $hasCVI) ? '' : "?addCVI=$hasCVI" ?>" method="POST" id="form_ajout_apporteur" class="form-horizontal">
         <?php echo $form->renderHiddenFields() ?>
         <?php echo $form->renderGlobalErrors() ?>
           <div class="form-group">
-            <?php echo $form['cvi']->renderLabel() ?>
-            <?php echo $form['cvi']->render(['class' => 'form-control']) ?>
+            <?php echo $form['cvi']->renderLabel(null, ['class' => 'control-label col-xs-5']) ?>
+            <div class="col-xs-7">
+              <?php echo $form['cvi']->render(['class' => 'form-control']) ?>
+              <small  style="margin-bottom: 0;" class="help-block">Numéro CVI pour la France ou N° TVA Intra. pour l'étranger</small>
+            </div>
           </div>
 
           <?php if (isset($form['raison_sociale'])): ?>
           <div class="form-group">
-            <?php echo $form['raison_sociale']->renderLabel() ?>
-            <?php echo $form['raison_sociale']->render(['class' => 'form-control']) ?>
+              <?php echo $form['raison_sociale']->renderLabel(null, ['class' => 'control-label col-xs-5']) ?>
+              <div class="col-xs-7">
+                  <?php echo $form['raison_sociale']->render(['class' => 'form-control']) ?>
+              </div>
           </div>
           <div class="form-group">
-            <?php echo $form['pays']->renderLabel() ?>
-            <?php echo $form['pays']->render(['class' => 'form-control']) ?>
+              <?php echo $form['pays']->renderLabel(null, ['class' => 'control-label col-xs-5']) ?>
+              <div class="col-xs-7">
+                  <?php echo $form['pays']->render(['class' => 'form-control']) ?>
+              </div>
           </div>
           <?php endif ?>
         </form>

@@ -1,8 +1,6 @@
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<button type="button" data-toggle="modal" data-target="#modal_ajout_produit" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Ajouter un produit</button>
-
-<h3><?php echo EtablissementClient::getInstance()->findByCvi($cvi)->raison_sociale ?> <small><?php echo $cvi ?> - <?php echo EtablissementClient::getInstance()->findByCvi($cvi)->commune; ?></small></h3>
+<h3><?php echo $sv->apporteurs->get($cvi)->getNom() ?> <small><?php echo $cvi ?> - <?php echo $sv->apporteurs->get($cvi)->getCommune(); ?></small></h3>
 
 <p style="margin-bottom: 15px;">Saisissez ici les données de production de cet apporteur.</p>
 
@@ -15,6 +13,10 @@
   <?php else: ?>
     <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php endif ?>
+
+  <div class="text-right"  style="margin-top: -5px;">
+      <button type="button" data-toggle="modal" tabindex="-1" data-target="#modal_ajout_produit" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-plus"></span> Ajouter un produit</button>
+  </div>
 
   <div class="row" style="margin-top: 30px;">
     <?php if (isset($cvi_precedent)): ?>

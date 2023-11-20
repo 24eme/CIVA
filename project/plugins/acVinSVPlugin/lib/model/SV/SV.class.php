@@ -63,6 +63,11 @@ class SV extends BaseSV
             $drAcheteurType = 'cooperatives';
         }
 
+        // maj de l'apporteur
+        if ($this->apporteurs->exist($dr->cvi)) {
+            $this->apporteurs->remove($dr->cvi);
+        }
+
         foreach ($dr->getProduits() as $cepage) {
             if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
                 continue;
@@ -510,6 +515,16 @@ class SV extends BaseSV
             }
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
         }
+    }
+
+    public function hasVolumeRevendique() {
+        foreach($this->getProduits() as $produit) {
+            if($produit->volume_revendique) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isFromCSV() {
