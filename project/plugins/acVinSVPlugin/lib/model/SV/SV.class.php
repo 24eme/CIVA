@@ -63,6 +63,11 @@ class SV extends BaseSV
             $drAcheteurType = 'cooperatives';
         }
 
+        // maj de l'apporteur
+        if ($this->apporteurs->exist($dr->cvi)) {
+            $this->apporteurs->remove($dr->cvi);
+        }
+
         foreach ($dr->getProduits() as $cepage) {
             if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
                 continue;
