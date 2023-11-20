@@ -12,7 +12,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
     public function configure()
     {
-        $this->setWidget('produit', new sfWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
+        $this->setWidget('produit', new bsWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
         $this->setValidator('produit', new sfValidatorChoice(['choices' => array_keys($this->getProduits())]));
 
         $this->setWidget('denomination_complementaire', new sfWidgetFormInputText());
@@ -55,7 +55,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
     public function getProduits()
     {
-        $produits = [];
+        $produits = ["" => ""];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
             if($produit->getAttribut('no_dr')) {
                 continue;
@@ -72,7 +72,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
-            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
+            if (strpos($produit->getHash(), '/CREMANT/') !== false && strpos($produit->getHash(), '/cepages/RB') === false) {
                 $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
             }
         }
