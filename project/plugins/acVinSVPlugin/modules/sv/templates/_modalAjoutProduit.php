@@ -11,7 +11,7 @@
         <?php echo $form->renderGlobalErrors() ?>
           <div class="form-group">
             <?php echo $form['produit']->renderLabel() ?>
-            <?php echo $form['produit']->render(['class' => 'form-control']) ?>
+            <?php echo $form['produit']->render(['class' => 'form-control select2']) ?>
           </div>
           <div class="form-group">
             <?php echo $form['denomination_complementaire']->renderLabel() ?>
