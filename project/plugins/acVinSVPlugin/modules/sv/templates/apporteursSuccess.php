@@ -59,7 +59,7 @@
         <small class="text-muted">hl</small>
       <?php endif; ?>
   </td>
-  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
+  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies($sv->type == SVClient::TYPE_SV12) > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
   <td class="text-right"><a href="<?php echo url_for('sv_saisie', array('sf_subject' => $sv, 'cvi' => $apporteur->getKey())); ?>" class="btn btn-xs btn-default">Saisir <span class="glyphicon glyphicon-chevron-right"></span></a></td>
 </tr>
 <?php endforeach; ?>

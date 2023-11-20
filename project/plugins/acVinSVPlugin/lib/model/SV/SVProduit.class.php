@@ -84,6 +84,9 @@ class SVProduit extends BaseSVProduit {
         }
 
         if ($this->isMout()) {
+            if ($squeezeRevendique) {
+                return !is_null($this->volume_mouts) && !is_null($this->superficie_mouts);
+            }
             return !is_null($this->volume_mouts) && !is_null($this->volume_mouts_revendique) && !is_null($this->superficie_mouts);
         }
 
