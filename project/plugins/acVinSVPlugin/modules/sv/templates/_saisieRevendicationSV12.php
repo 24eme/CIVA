@@ -15,8 +15,8 @@
     <tr class="vertical-center">
       <td><?php echo $produit->nom ?></td>
       <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>
-      <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
-      <td class="text-right"><?php echoFloat($produit->quantite_recolte) ?> <small class="text-muted">kg</small></td>
+      <td class="text-right"><?php if ($produit->getRawValue()->isRebeche() === false): ?><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small><?php endif ?></td>
+      <td class="text-right"><?php if ($produit->getRawValue()->isRebeche() === false): ?><?php echoFloat($produit->quantite_recolte) ?> <small class="text-muted">kg</small><?php endif ?></td>
       <td><div class="input-group"><?php echo $formProduit['volume_revendique']->render() ?><input class="form-control text-right input-float input-sm input_volume_revendique_pre hidden" type="text" autocomplete="off" data-decimal-auto="2" data-decimal="2" readonly="readonly" /><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
       <td class="text-center"><?php echoFloat($produit->getTauxExtraction()) ?></td>
     </tr>
