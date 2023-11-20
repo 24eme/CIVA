@@ -57,6 +57,18 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
     {
         $produits = [];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
+            if($produit->getAttribut('no_dr')) {
+                continue;
+            }
+            if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
+                continue;
+            }
+            if($produit->getAppellation()->getAttribut('no_dr')) {
+                continue;
+            }
+            if($produit->getAppellation()->getGenre()->getKey() == "VCI") {
+                continue;
+            }
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
