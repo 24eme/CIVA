@@ -176,6 +176,7 @@ class svActions extends sfActions {
     public function executeSaisie(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+        $this->modal = $request->getParameter('modal', null);
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
@@ -198,6 +199,10 @@ class svActions extends sfActions {
 	    }
 
         $this->form->save();
+
+        if ($request->getParameter('ajout-produit')) {
+            return $this->redirect('sv_saisie', ['sf_subject' => $this->sv, 'cvi' => $this->cvi, 'modal' => 'ajout-produit']);
+        }
 
         if($request->getParameter('precedent_cvi')) {
 
