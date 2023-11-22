@@ -137,19 +137,6 @@ class svActions extends sfActions {
         return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
     }
 
-    public function executeSuppressionProduitApporteur(sfWebRequest $request)
-    {
-        $this->sv = $this->getRoute()->getSV();
-        $this->hash = str_replace('-', '/', $request->getParameter('hash', null));
-
-        if ($this->sv->exist($this->hash)) {
-            $this->sv->remove($this->hash);
-            $this->sv->save();
-        }
-
-        return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $request->getParameter('cvi')]);
-    }
-
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
