@@ -8,6 +8,8 @@
 
 <?php include_partial('sv/recap', ['sv' => $sv]); ?>
 
+<?php include_partial('sv/fichier', ['sv' => $sv]); ?>
+
 <?php include_partial('sv/motifModificationForm', ['sv' => $sv, 'form' => $motifModificationForm]); ?>
 
 <div class="row" style="margin-top: 10px;">

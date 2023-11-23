@@ -505,6 +505,21 @@ L'application de télédéclaration de production du CIVA
         return $this->renderText(json_encode($json).PHP_EOL);
     }
 
+    public function executeCSV(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+        $file = $this->sv->_attachments->getFirst();
+
+        $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', $file->length);
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($this->sv->getAttachmentUri($file->getKey())));
+    }
+
     public function executeInvaliderCiva(sfWebRequest $request)
     {
         $this->sv = $this->getRoute()->getSV();
