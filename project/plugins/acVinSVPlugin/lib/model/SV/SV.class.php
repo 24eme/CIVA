@@ -464,7 +464,7 @@ class SV extends BaseSV
 
     public function getModifiee()
     {
-        return $this->isValide() === false && $this->valide->date_saisie;
+        return $this->valide->date_saisie !== $this->valide->date_modification;
     }
 
     public function devalidate()
