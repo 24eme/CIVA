@@ -116,4 +116,5 @@ SV:
         definition:
           fields:
             date_saisie: {  }
+            date_modification: { }
             statut: {  }
