@@ -417,7 +417,6 @@ class SV extends BaseSV
 
     public function setMotifModification($type, $autre = null)
     {
-        $this->add('motif_modification')->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->add('motif_modification')->motif = $type;
 
         if ($type === self::SV_MOTIF_MODIFICATION_AUTRE) {

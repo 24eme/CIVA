@@ -109,7 +109,6 @@ SV:
         required: false
         definition:
           fields:
-            date_modification: { }
             motif: { }
             libelle: { }
       valide:
