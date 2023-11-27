@@ -511,7 +511,7 @@ L'application de télédéclaration de production du CIVA
         $file = $this->sv->_attachments->getFirst();
 
         $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
-        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '"');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '.csv"');
         $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
         $this->getResponse()->setHttpHeader('Content-Length', $file->length);
         $this->getResponse()->setHttpHeader('Pragma', '');
