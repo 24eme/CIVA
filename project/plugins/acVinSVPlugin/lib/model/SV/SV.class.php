@@ -435,7 +435,10 @@ class SV extends BaseSV
 
     public function validate()
     {
-        $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        if ($this->valide->date_saisie === null) {
+            $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        }
+        $this->valide->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->valide->statut = self::STATUT_VALIDE;
 
         $this->getRebeches();
