@@ -247,7 +247,7 @@ class compteActions extends sfActions {
                 }
 
                 try {
-                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
+                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->getSociete()->getEmailTeledeclaration(), "CIVA - Mot de passe oublié", "Bonjour,\n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }
