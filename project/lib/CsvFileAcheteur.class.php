@@ -85,7 +85,7 @@ class CsvFileAcheteur
       $this->csvdata[] = self::clean($data);
     }
     fclose($handler);
-    if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME_VCI]), "vci") !== false) {
+    if (isset($this->csvdata[0][self::CSV_OLD_VOLUME_VCI]) && strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME_VCI]), "vci") !== false) {
         $this->isOldFormat = true;
     }
     if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME]), "volume") !== false) {

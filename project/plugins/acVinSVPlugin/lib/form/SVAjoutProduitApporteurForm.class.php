@@ -36,10 +36,12 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
         if ($this->isAlsace($this->cvi) === false) {
             $apporteur = $this->getDocument()->apporteurs->get($this->cvi);
+            $nom = $apporteur->getNom();
+            $commune = $apporteur->getCommune();
 
             $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
-            $newProduit->nom = $apporteur->getNom();
-            $newProduit->commune = $apporteur->getCommune();
+            $newProduit->nom = $nom;
+            $newProduit->commune = $commune;
         } else {
             $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
         }

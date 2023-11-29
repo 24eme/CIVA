@@ -294,7 +294,7 @@ class SV extends BaseSV
 
     public function addProduit($identifiant, $hash, $denominationComplementaire = null, $hidden_denom = null) {
         $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
-        if(!$etablissement && preg_match("/^[0-9]{10}$/", $identifiant)) {
+        if(!$etablissement && preg_match("/^[0-9]{10}|[A-Z]{2}[A-Z0-9]{8,12}$/", $identifiant)) {
             $etablissement = new stdClass();
             $etablissement->cvi = $identifiant;
             $etablissement->nom = $identifiant;
@@ -417,7 +417,6 @@ class SV extends BaseSV
 
     public function setMotifModification($type, $autre = null)
     {
-        $this->add('motif_modification')->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->add('motif_modification')->motif = $type;
 
         if ($type === self::SV_MOTIF_MODIFICATION_AUTRE) {
@@ -436,7 +435,10 @@ class SV extends BaseSV
 
     public function validate()
     {
-        $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        if ($this->valide->date_saisie === null) {
+            $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        }
+        $this->valide->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->valide->statut = self::STATUT_VALIDE;
 
         $this->getRebeches();
@@ -462,7 +464,7 @@ class SV extends BaseSV
 
     public function getModifiee()
     {
-        return $this->isValide() === false && $this->valide->date_saisie;
+        return $this->valide->date_saisie !== $this->valide->date_modification;
     }
 
     public function devalidate()
