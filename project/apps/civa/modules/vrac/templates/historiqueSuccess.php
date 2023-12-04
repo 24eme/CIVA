@@ -1,6 +1,6 @@
 <div id="contrats_vrac">
 	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
-	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant())) ?>">Exporter les contrats en CSV</a>
+	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">Exporter les contrats en CSV</a>
 	<div class="fond">
 		<form action="<?php echo url_for('vrac_historique', array('campagne' => $campagne, 'identifiant' => $compte->getIdentifiant())) ?>" method="GET">
 			<ul class="filtres clearfix">
