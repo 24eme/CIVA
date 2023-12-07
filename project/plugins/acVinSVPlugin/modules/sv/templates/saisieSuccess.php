@@ -14,10 +14,8 @@
     <?php include_partial('sv/saisieSV12', ['form' => $form, 'sv' => $sv, 'cvi' => $cvi]) ?>
   <?php endif ?>
 
-  <div class="row" style="margin-top: 30px;">
-    <div class="col-xs-offset-6 col-xs-6">
-      <button type="button" data-toggle="modal" data-target="#modal_ajout_produit" class="pull-right btn btn-link"><span class="glyphicon glyphicon-cog"></span> Ajouter un produit</button>
-    </div>
+  <div class="text-right"  style="margin-top: -5px;">
+      <button name="ajout-produit" type="submit" tabindex="-1" class="btn btn-sm btn-default" value="1"><span class="glyphicon glyphicon-plus"></span> Ajouter un produit</button>
   </div>
 
   <div class="row" style="margin-top: 30px;">
@@ -34,3 +32,11 @@
 </form>
 
 <?php include_partial('sv/modalAjoutProduit', ['sv' => $sv, 'cvi' => $cvi, 'form' => $formAjoutProduit]); ?>
+
+<?php if ($modal): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function (e) {
+    $('#modal_ajout_produit').modal('show')
+  });
+</script>
+<?php endif ?>

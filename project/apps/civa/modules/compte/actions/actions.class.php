@@ -196,12 +196,12 @@ class compteActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeModification(sfWebRequest $request) {
+        $this->compte = $this->getUser()->getCompte();
         if(sfConfig::get('app_giilda_url_mon_compte') && $request->getParameter('identifiant')) {
 
-            return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mon_compte'), $request->getParameter('identifiant')));
+            return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mon_compte'), $this->compte->getSociete()->identifiant));
         }
 
-        $this->compte = $this->getUser()->getCompte();
         $this->forward404Unless(in_array($this->compte->getStatutTeledeclarant(), array(CompteClient::STATUT_TELEDECLARANT_OUBLIE, CompteClient::STATUT_TELEDECLARANT_INSCRIT)));
 
         $this->form = new CompteModificationForm($this->compte);
@@ -247,7 +247,7 @@ class compteActions extends sfActions {
                 }
 
                 try {
-                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->email, "CIVA - Mot de passe oublié", "Bonjour " . $compte->nom . ", \n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
+                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->getSociete()->getEmailTeledeclaration(), "CIVA - Mot de passe oublié", "Bonjour,\n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
                 } catch (Exception $e) {
                     $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
                 }

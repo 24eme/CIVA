@@ -17,7 +17,7 @@ class SVAjoutApporteurForm extends acCouchdbForm
     {
         $this->setWidget('cvi', new sfWidgetFormInputText());
         $this->setValidator('cvi', new sfValidatorRegex(['pattern' => '/[0-9]{10}|[A-Z]{2}[A-Z0-9]{8,12}/'], ['invalid' => 'Le format CVI n\'est pas correct']));
-        $this->widgetSchema->setLabel('cvi', "Ajout ou mise à jour d'un apporteur");
+        $this->widgetSchema->setLabel('cvi', "Numéro CVI (ou N°TVA Intra)");
 
         if ($this->withInfo) {
             $this->setWidget('raison_sociale', new sfWidgetFormInputText());

@@ -13,7 +13,7 @@
         <th class="col-xs-3">Produit</th>
         <th class="col-xs-1 text-center">Total revendiqué</th>
         <?php foreach($sv->stockage as $stockage): ?>
-        <th class="col-xs-1 text-center"><?php echo $stockage->numero ?><br /><?php echo $stockage->nom ?><br /><?php echo $stockage->adresse ?><br  /><?php echo $stockage->code_postal ?> <?php echo $stockage->commune ?></th>
+        <th class="text-center" style="word-break: break-word"><?php echo $stockage->adresse ?><br  /><?php echo $stockage->code_postal ?> <?php echo $stockage->commune ?><br/><small><?php echo $stockage->numero ?><br /><?php echo $stockage->nom ?></small></th>
         <?php endforeach; ?>
       </tr>
     </thead>
@@ -32,7 +32,7 @@
             <?php endif; ?>
         </th>
         <?php foreach($formProduit as $num_stockage => $formStockage): ?>
-          <td class="col-xs-1"><div class="input-group"><?php echo $formStockage->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
+          <td><div class="input-group"><?php echo $formStockage->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
         <?php endforeach ?>
       </tr>
       <?php endforeach ?>

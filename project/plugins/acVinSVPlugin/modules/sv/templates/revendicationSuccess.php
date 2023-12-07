@@ -1,7 +1,9 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_REVENDICATION)); ?>
 
-<a href="<?php echo url_for('sv_recalcule_volumes_revendiques', $sv) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-refresh"></span> Recalculer les volumes revendiqués</a>
+<?php if($sv->type == SVClient::TYPE_SV12 && $sv->isFromCSV() === false): ?>
+<a href="<?php echo url_for('sv_recalcule_volumes_revendiques', $sv) ?>" class="pull-right btn btn-link"  onclick="return confirm('Êtes-vous sûr de vouloir recalculer les volumes revendiquées ?')"><span class="glyphicon glyphicon-refresh"></span> Recalculer les volumes revendiqués à partir du taux d'extraction</a>
+<?php endif; ?>
 
 <h3>Liste de vos apporteurs</h3>
 

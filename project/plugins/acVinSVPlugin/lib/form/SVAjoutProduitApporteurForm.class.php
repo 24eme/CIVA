@@ -12,7 +12,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
     public function configure()
     {
-        $this->setWidget('produit', new sfWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
+        $this->setWidget('produit', new bsWidgetFormChoice(['choices' => array_combine(array_keys($this->getProduits()), $this->getProduits())]));
         $this->setValidator('produit', new sfValidatorChoice(['choices' => array_keys($this->getProduits())]));
 
         $this->setWidget('denomination_complementaire', new sfWidgetFormInputText());
@@ -36,10 +36,12 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
         if ($this->isAlsace($this->cvi) === false) {
             $apporteur = $this->getDocument()->apporteurs->get($this->cvi);
+            $nom = $apporteur->getNom();
+            $commune = $apporteur->getCommune();
 
             $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
-            $newProduit->nom = $apporteur->getNom();
-            $newProduit->commune = $apporteur->getCommune();
+            $newProduit->nom = $nom;
+            $newProduit->commune = $commune;
         } else {
             $newProduit = $this->getDocument()->addProduit($this->cvi, $hash, $denom);
         }
@@ -55,12 +57,24 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
 
     public function getProduits()
     {
-        $produits = [];
+        $produits = ["" => ""];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
+            if($produit->getAttribut('no_dr')) {
+                continue;
+            }
+            if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
+                continue;
+            }
+            if($produit->getAppellation()->getAttribut('no_dr')) {
+                continue;
+            }
+            if($produit->getAppellation()->getGenre()->getKey() == "VCI") {
+                continue;
+            }
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
-            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
+            if (strpos($produit->getHash(), '/CREMANT/') !== false && strpos($produit->getHash(), '/cepages/RB') === false) {
                 $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
             }
         }
