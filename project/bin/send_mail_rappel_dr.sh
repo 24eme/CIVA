@@ -8,7 +8,7 @@ FILE_RECOLTANTSANSDR=/tmp/$(date +%Y%m%d%H%M%S)_export_rappel_recoltant_sans_dr.
 MAIL_FROM="Webmaster Vinsalsace.pro <ne_pas_repondre@civa.fr>"
 MAIL_REPLYTO="$2"
 MAIL_SUBJECT="Relance pour absence de DR"
-MAIL_BODY="Bonjour,\n\La Déclaration de Récolte est à télé-déclarer sur le Portail du CIVA.\n\À ce jour nous n'avons pas enregistré de saisie pour la déclaration de Récolte 2023.\n\nNous vous rappelons que vous devez impérativement télé-déclarer votre Récolte AVANT le dimanche 10 décembre 23h59.\n\nVous pouvez effectuer la saisie en cliquant sur le lien suivant : https://declaration.vinsalsace.pro \n\nCordialement, \n\nDominique WOLFF"
+MAIL_BODY="Bonjour,\n\nLa Déclaration de Récolte est à télé-déclarer sur le Portail du CIVA.\n\nÀ ce jour nous n'avons pas enregistré de saisie pour la déclaration de Récolte 2023.\n\nNous vous rappelons que vous devez impérativement télé-déclarer votre Récolte AVANT le dimanche 10 décembre 23h59.\n\nVous pouvez effectuer la saisie en cliquant sur le lien suivant : https://declaration.vinsalsace.pro \n\nCordialement, \n\nDominique WOLFF"
 
 if ! test "$ANNEE"; then
 echo "L'année de déclaration de récolte est requise en 1er argument"
