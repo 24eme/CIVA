@@ -47,7 +47,12 @@
   </td>
   <td class="text-right">
       <?php if($sv->type == SVClient::TYPE_SV12): ?>
-        <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
+        <?php if ($recap['quantite'] && $recap['mouts_revendique']): ?>
+          (<abbr title="Revendiqué">R</abbr>) <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
+          (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?> <small class="text-muted">hl</small><br/>
+        <?php elseif ($recap['quantite']): ?>
+          <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
+        <?php endif ?>
       <?php elseif($recap['revendique'] || $recap['mouts_revendique']): ?>
         <?php if($recap['revendique'] && $recap['mouts_revendique']): ?>
         (R+M) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
