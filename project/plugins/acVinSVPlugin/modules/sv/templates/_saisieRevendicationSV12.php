@@ -12,6 +12,7 @@
   <tbody>
   <?php foreach($form['produits'] as $hash => $formProduit): ?>
   <?php $produit = $sv->get($hash); ?>
+    <?php if (! $produit->superficie_recolte && ! $produit->quantite_recolte): continue; endif ?>
     <tr class="vertical-center">
       <td><?php echo $produit->nom ?></td>
       <td><?php echo $produit->getRawValue()->getLibelleHtml() ?></td>

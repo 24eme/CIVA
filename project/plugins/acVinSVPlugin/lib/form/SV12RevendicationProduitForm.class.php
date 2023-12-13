@@ -10,10 +10,12 @@ class SV12RevendicationProduitForm extends acCouchdbObjectForm
         }
     }
 
-    public function configure() {
-
-        $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique']));
-        $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
+    public function configure()
+    {
+        if ($this->getObject()->superficie_recolte || $this->getObject()->quantite_recolte) {
+            $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique']));
+            $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
+        }
 
         if($this->getObject()->exist('volume_mouts')) {
             $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
