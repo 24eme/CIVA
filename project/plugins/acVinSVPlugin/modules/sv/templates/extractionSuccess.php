@@ -3,7 +3,7 @@
 
 <h3>Extraction du volume à revendiquer</h3>
 
-<p style="margin-bottom: 15px;">Saisissez ici le volume obtenu réels, afin d'obtenir le taux d'extraction, le  volume revendiqué par apporteur sera automatiquement calculé par rapport à ce taux.</p>
+<p style="margin-bottom: 15px;">Saisissez ici le volume réel obtenu par produit, afin de déterminer le taux d'extraction. Les volumes revendiqués par apporteur seront automatiquement calculés par rapport aux taux.</p>
 
 <form action="<?php echo url_for('sv_extraction', ['sf_subject' => $sv]) ?>" method="POST" id="form_extraction">
 <?php echo $form->renderHiddenFields() ?>
