@@ -216,8 +216,7 @@ class SVClient extends acCouchdbClient {
                 $produit->add('volume_mouts');
                 $produit->add('volume_mouts_revendique');
                 $produit->add('superficie_mouts');
-                $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
-                $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
+                $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
                 $produit->superficie_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
                 // dans le cas où il n'y a que des moûts, on mets à 0 le volume revendiqué du produit
