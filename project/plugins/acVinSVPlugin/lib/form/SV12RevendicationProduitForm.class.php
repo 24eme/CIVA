@@ -18,7 +18,7 @@ class SV12RevendicationProduitForm extends acCouchdbObjectForm
         }
 
         if($this->getObject()->exist('volume_mouts')) {
-            $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique')));
+            $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique', 'readonly' => 'readonly')));
             $this->setValidator('volume_mouts_revendique', new sfValidatorNumber(array('required' => false)));
         }
 
