@@ -126,4 +126,10 @@ class SVProduit extends BaseSVProduit {
         }
         return $this->_set('volume_revendique', $v);
     }
+
+    public function setVolumeMouts($v) {
+        $this->_set('volume_mouts', $v);
+
+        $this->volume_mouts_revendique = $this->volume_mouts;
+    }
 }

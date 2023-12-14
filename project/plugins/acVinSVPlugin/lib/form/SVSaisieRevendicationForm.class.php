@@ -17,4 +17,12 @@ class SVSaisieRevendicationForm extends SVSaisieForm
 
         $this->widgetSchema->setNameFormat('sv_saisie_revendication[%s]');
     }
+
+
+        public function hasRevendication()
+        {
+            return count(array_filter($this->getEmbeddedForm('produits')->getEmbeddedForms(), function ($produit) {
+                return isset($produit['volume_revendique']);
+            })) > 0;
+        }
 }
