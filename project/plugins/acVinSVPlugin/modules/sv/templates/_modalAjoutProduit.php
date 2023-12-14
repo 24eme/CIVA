@@ -6,16 +6,20 @@
         <h3 class="modal-title" id="gridSystemModalLabel">Ajouter un produit</h3>
       </div>
       <div class="modal-body">
-        <form action="<?php echo url_for('sv_ajout_produit_apporteur', ['id' => $sv->_id, 'cvi' => $cvi]) ?>" method="POST" id="form_ajout_produit_apporteur">
+        <form action="<?php echo url_for('sv_ajout_produit_apporteur', ['id' => $sv->_id, 'cvi' => $cvi]) ?>" method="POST" id="form_ajout_produit_apporteur" class="form-horizontal">
         <?php echo $form->renderHiddenFields() ?>
         <?php echo $form->renderGlobalErrors() ?>
           <div class="form-group">
-            <?php echo $form['produit']->renderLabel() ?>
-            <?php echo $form['produit']->render(['class' => 'form-control select2']) ?>
+            <?php echo $form['produit']->renderLabel(null, ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-9">
+              <?php echo $form['produit']->render(['class' => 'form-control select2']) ?>
+            </div>
           </div>
           <div class="form-group">
-            <?php echo $form['denomination_complementaire']->renderLabel() ?>
-            <?php echo $form['denomination_complementaire']->render(['class' => 'form-control']) ?>
+            <?php echo $form['denomination_complementaire']->renderLabel("Dénom. compl.", ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-6">
+              <?php echo $form['denomination_complementaire']->render(['class' => 'form-control']) ?>
+            </div>
           </div>
         </form>
       </div>
