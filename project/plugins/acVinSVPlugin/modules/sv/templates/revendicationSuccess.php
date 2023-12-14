@@ -57,7 +57,7 @@
 </table>
 
 <div class="row" style="margin-top: 30px;">
-  <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
+  <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-4 text-center"></div>
   <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
