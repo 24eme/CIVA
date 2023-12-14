@@ -36,9 +36,9 @@
   <td><?php echo $apporteur->commune ?></td>
   <td class="text-right">
       <?php if ($recap['superficie'] && $recap['mouts_superficie']): ?>
-        (R+M) <?php echoFloat($recap['superficie'] + $recap['mouts_superficie']) ?>
+        (<abbr title="Revendiqué + Moûts">R+M</abbr>) <?php echoFloat($recap['superficie'] + $recap['mouts_superficie']) ?>
       <?php elseif ($recap['mouts_superficie']): ?>
-        (M) <?php echoFloat($recap['mouts_superficie']) ?>
+        (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_superficie']) ?>
       <?php else : ?>
         <?php echoFloat($recap['superficie']) ?>
       <?php endif ?>
@@ -47,12 +47,17 @@
   </td>
   <td class="text-right">
       <?php if($sv->type == SVClient::TYPE_SV12): ?>
-        <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
+        <?php if ($recap['quantite'] && $recap['mouts_revendique']): ?>
+          (<abbr title="Revendiqué">R</abbr>) <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
+          (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?> <small class="text-muted">hl</small><br/>
+        <?php elseif ($recap['quantite']): ?>
+          <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
+        <?php endif ?>
       <?php elseif($recap['revendique'] || $recap['mouts_revendique']): ?>
         <?php if($recap['revendique'] && $recap['mouts_revendique']): ?>
-        (R+M) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
+        (<abbr title="Revendiqué + Moûts">R+M</abbr>) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
         <?php elseif($recap['mouts_revendique']): ?>
-        (M) <?php echoFloat($recap['mouts_revendique']) ?>
+        (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?>
         <?php else: ?>
         <?php echoFloat($recap['revendique']) ?>
         <?php endif; ?>
