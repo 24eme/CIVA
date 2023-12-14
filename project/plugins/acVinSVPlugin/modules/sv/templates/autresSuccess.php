@@ -28,7 +28,7 @@
 </form>
 
 <div class="row" style="margin-top: 30px;">
-  <div class="col-xs-6 text-left"><a tabindex="-1" href="<?php echo url_for('sv_revendication', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
+<div class="col-xs-6 text-left"><a tabindex="-1" href="<?php if(SVEtapes::getInstance($sv->type)->exist(SVEtapes::ETAPE_REVENDICATION)): ?><?php echo url_for('sv_revendication', $sv) ?><?php else :?><?php echo url_for('sv_apporteurs', $sv) ?><?php endif; ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-6 text-right">
     <button type="submit" form="form_autres" class="btn btn-success">Valider et continuer <span class="glyphicon glyphicon-chevron-right"></span></button>
   </div>
