@@ -362,21 +362,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->famille = $tiers->getFamille();
     	$this->acheteur->identifiant = $tiers->_id;
 
-        $this->acheteur->remove('emails');
-        $this->acheteur->add('emails');
-
-		$emails = array();
-		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
-				continue;
-			}
-
-			$emails[] = $compte->email;
-		}
-
-		$emails = array_values(array_unique($emails));
-
-		$this->acheteur->emails = $emails;
+      $this->acheteur->remove('emails');
+      $this->acheteur->add('emails');
+			$this->acheteur->emails = $this->getTiersEmails($tiers);
     }
 
     public function storeVendeurInformations($tiers)
@@ -396,21 +384,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->famille = $tiers->getFamille();
     	$this->vendeur->identifiant = $tiers->_id;
 
-        $this->vendeur->remove('emails');
-        $this->vendeur->add('emails');
-
-		$emails = array();
-		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
-				continue;
-			}
-
-			$emails[] = $compte->email;
-		}
-
-		$emails = array_values(array_unique($emails));
-
-		$this->vendeur->emails = $emails;
+      $this->vendeur->remove('emails');
+      $this->vendeur->add('emails');
+			$this->vendeur->emails = $this->getTiersEmails($tiers);
     }
 
     public function storeMandataireInformations($tiers)
@@ -428,21 +404,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->identifiant = $tiers->_id;
     	$this->mandataire->num_db2 = $tiers->num_interne;
 
-        $this->mandataire->remove('emails');
-        $this->mandataire->add('emails');
-
-		$emails = array();
-		foreach($tiers->getSociete()->getContactsObj() as $compte) {
-        	if(!$compte->getEmail() || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
-				continue;
-			}
-
-			$emails[] = $compte->email;
-		}
-
-		$emails = array_values(array_unique($emails));
-
-		$this->mandataire->emails = $emails;
+      $this->mandataire->remove('emails');
+      $this->mandataire->add('emails');
+			$this->mandataire->emails = $this->getTiersEmails($tiers);
     }
 
     public function storeInterlocuteurCommercialInformations($nom, $contact) {
