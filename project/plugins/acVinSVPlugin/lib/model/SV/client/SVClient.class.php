@@ -348,7 +348,10 @@ class SVClient extends acCouchdbClient {
     public function getEtablissement($societe) {
         foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             try {
-                return SVClient::getTypeByEtablissement($etablissement);
+                if(SVClient::getTypeByEtablissement($etablissement)) {
+
+                    return $etablissement;
+                }
             } catch(Exception $e) {
 
             }
