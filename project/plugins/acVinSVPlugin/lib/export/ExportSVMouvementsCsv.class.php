@@ -78,7 +78,7 @@ class ExportSVMouvementsCsv extends ExportSVCsv
     {
         $volume_recolte = $produit->volume_recolte;
 
-        if($produit->exist('volume_mouts') && $produit->volume_mouts)) {
+        if($produit->exist('volume_mouts') && $produit->volume_mouts) {
             $volume_recolte += $produit->volume_mouts;
         }
 
