@@ -433,6 +433,22 @@ class SV extends BaseSV
         return $this->motifs_modification;
     }
 
+    public function removeEmptyProduits()
+    {
+        foreach ($this->apporteurs as $apporteur) {
+            foreach ($apporteur->getProduits() as $hash => $produit) {
+                if ($produit->isEmpty()) {
+                    $this->remove($hash);
+                }
+            }
+        }
+    }
+
+    public function cleanDoc()
+    {
+        $this->removeEmptyProduits();
+    }
+
     public function validate()
     {
         if ($this->valide->date_saisie === null) {

@@ -109,6 +109,24 @@ class SVProduit extends BaseSVProduit {
         }
     }
 
+    public function isEmpty()
+    {
+        if ($this->getDocument()->type == SVClient::TYPE_SV11) {
+            if (! $this->superficie_recolte && ! $this->volume_recolte && ! $this->volume_revendique && ! $this->volume_detruit) {
+                return true;
+            }
+        }
+
+        if ($this->getDocument()->type == SVClient::TYPE_SV12) {
+            if (! $this->superficie_recolte && ! $this->quantite_recolte && ! $this->volume_revendique) {
+                echo $this->libelle;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isRebeche()
     {
         return strpos($this->getProduitHash(), '/cepages/RB') !== false;

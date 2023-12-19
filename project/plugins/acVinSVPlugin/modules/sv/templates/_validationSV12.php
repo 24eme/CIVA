@@ -14,6 +14,9 @@
   </thead>
   <tbody>
   <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
+    <?php if (! $produit->superficie_recolte && ! $produit->quantite_recolte && ! $produit->volume_revendique): ?>
+      <?php continue; ?>
+    <?php endif ?>
     <tr>
       <td><?php echo $produit->getRawValue()->libelle_html ?></td>
       <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
