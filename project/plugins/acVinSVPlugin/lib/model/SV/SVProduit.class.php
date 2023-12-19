@@ -99,6 +99,12 @@ class SVProduit extends BaseSVProduit {
             if ($squeezeRevendique) {
                 return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte);
             }
+
+            // Si pas de volume / superficie à l'étape 1
+            if ($this->superficie_recolte === 0 && $this->quantite_recolte === 0) {
+                return true;
+            }
+
             return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte) && !is_null($this->volume_revendique);
         }
     }
