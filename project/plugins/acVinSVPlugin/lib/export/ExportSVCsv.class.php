@@ -42,10 +42,11 @@ class ExportSVCsv
     {
         $hashproduit = $produit->getHash();
         $cvi_apporteur = explode("/", $hashproduit)[2];
-        $volume_recolte = null;
 
-        if(!is_null($produit->volume_recolte) || !is_null($produit->volume_mouts)) {
-            $volume_recolte = $produit->volume_recolte + $produit->volume_mouts;
+        $volume_recolte = $produit->volume_recolte;
+
+        if($produit->exist('volume_mouts') && $produit->volume_mouts)) {
+            $volume_recolte += $produit->volume_mouts;
         }
 
         return [

@@ -76,10 +76,10 @@ class ExportSVMouvementsCsv extends ExportSVCsv
 
     public function build(SV $sv, SVProduit $produit)
     {
-        $volume_recolte = null;
+        $volume_recolte = $produit->volume_recolte;
 
-        if(!is_null($produit->volume_recolte) || !is_null($produit->volume_mouts)) {
-            $volume_recolte = $produit->volume_recolte + $produit->volume_mouts;
+        if($produit->exist('volume_mouts') && $produit->volume_mouts)) {
+            $volume_recolte += $produit->volume_mouts;
         }
 
         return [
