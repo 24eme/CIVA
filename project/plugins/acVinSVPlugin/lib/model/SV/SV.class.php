@@ -517,6 +517,25 @@ class SV extends BaseSV
             }
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
         }
+
+        $recap = $this->getRecapProduits();
+
+        foreach ($recap as $hash => $produit) {
+            $noeud = str_replace('/declaration/', '', $hash);
+
+            if (! $this->extraction->exist($noeud)) {
+                continue;
+            }
+
+            $volume_extrait = $this->extraction->get($noeud)->volume_extrait;
+            $volume_revendique = $recap[$hash]->volume_revendique;
+
+            if (round($volume_revendique, 2) != round($volume_extrait, 2)) {
+                $diff = round(round($volume_extrait, 2) - round($volume_revendique, 2), 2);
+                $apporteur = current(array_keys($recap[$hash]->apporteurs));
+                $this->apporteurs->get($apporteur)->get($noeud)->volume_revendique += $diff;
+            }
+        }
     }
 
     public function hasVolumeRevendique() {
