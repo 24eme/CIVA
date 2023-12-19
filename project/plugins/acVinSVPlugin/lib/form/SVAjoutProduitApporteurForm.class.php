@@ -65,6 +65,9 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
                 continue;
             }
+            if(strpos($produit->getHash(), '/cepages/RB') !== false) {
+                continue;
+            }
             if($produit->getAppellation()->getAttribut('no_dr')) {
                 continue;
             }
@@ -74,7 +77,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
-            if (strpos($produit->getHash(), '/CREMANT/') !== false && strpos($produit->getHash(), '/cepages/RB') === false) {
+            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
                 $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
             }
         }
