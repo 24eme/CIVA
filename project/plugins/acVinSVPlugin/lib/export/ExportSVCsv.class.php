@@ -42,6 +42,11 @@ class ExportSVCsv
     {
         $hashproduit = $produit->getHash();
         $cvi_apporteur = explode("/", $hashproduit)[2];
+        $volume_recolte = null;
+
+        if(!is_null($produit->volume_recolte) || !is_null($produit->volume_mouts)) {
+            $volume_recolte = $produit->volume_recolte + $produit->volume_mouts;
+        }
 
         return [
             $sv->declarant->cvi,
@@ -53,12 +58,12 @@ class ExportSVCsv
             $produit->getConfig()->getCepage()->getLibelle(),
             $produit->getConfig()->getMention()->getLibelle(),
             $produit->denomination_complementaire,
-            $produit->superficie_recolte,
+            $produit->superficie_recolte + $produit->superficie_mouts,
             $produit->quantite_recolte,
-            $produit->volume_recolte,
+            $volume_recolte,
             $produit->volume_detruit,
             $produit->vci,
-            $produit->volume_revendique,
+            $produit->volume_revendique + $produit->volume_mouts_revendique,
 
             $sv->type,
             $sv->valide->date_saisie,

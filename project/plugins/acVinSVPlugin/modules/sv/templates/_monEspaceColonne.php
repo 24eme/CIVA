@@ -8,6 +8,7 @@
                 <a href="#">Années précédentes</a>
                 <ul class="declarations">
                     <?php foreach ($svs as $sv): ?>
+                        <?php if(substr($sv, -4, 4) == CurrentClient::getCurrent()->campagne): continue; endif; ?>
                         <li>
                             <a href="<?php echo url_for('sv_visualisation', ['id' => $sv]) ?>">
                                 <?php echo substr($sv, -4, 4) ?>

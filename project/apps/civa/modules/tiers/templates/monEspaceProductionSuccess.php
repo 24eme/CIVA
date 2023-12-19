@@ -63,7 +63,7 @@
           </div>
         </div>
 
-        <?php include_component('tiers', 'monEspaceColonne', ['etablissement' => $etablissement]) ?>
+        <?php include_component('sv', 'monEspaceColonne', ['etablissement' => $etablissement]) ?>
 
         <div id="documents_aide" style="width: 234px">
             <h3 class="titre_section">Documents d'aide</h3>
@@ -75,11 +75,6 @@
             </div>
         </div>
     </div>
-    <?php if (!$sf_user->isInDelegateMode() && $sf_user->hasCredential(myUser::CREDENTIAL_DELEGATION)): ?>
-        <div class="contenu clearfix">
-            <?php include_component('tiers', 'delegationForm', array('form' => isset($formDelegation) ? $formDelegation : null)) ?>
-        </div>
-    <?php endif;?>
 </div>
 
 <div style="display: none" id="popup_loader_creation_sv" title="Génération de la déclaration de production">
