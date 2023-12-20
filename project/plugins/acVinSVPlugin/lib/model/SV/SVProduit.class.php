@@ -77,6 +77,12 @@ class SVProduit extends BaseSVProduit {
         return $this->_get('superficie_mouts');
     }
 
+    public function getSuperficieTotale()
+    {
+        $s_mouts = $this->getSuperficieMouts();
+        return $this->getSuperficieRecolte() + $s_mouts;
+    }
+
     public function isComplete($squeezeRevendique = false) {
         if($this->isRebeche()) {
 
