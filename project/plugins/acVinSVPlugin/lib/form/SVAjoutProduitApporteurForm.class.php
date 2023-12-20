@@ -59,7 +59,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
     {
         $produits = ["" => ""];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
-            if($produit->getAttribut('no_dr')) {
+            if($produit->getAttribut('no_dr') && strpos($produit->getHash(), '/CREMANT/') === false) {
                 continue;
             }
             if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
