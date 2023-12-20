@@ -111,6 +111,10 @@ class SVProduit extends BaseSVProduit {
 
     public function isEmpty()
     {
+        if ($this->isMout()) {
+            return false;
+        }
+
         if ($this->getDocument()->type == SVClient::TYPE_SV11) {
             if (! $this->superficie_recolte && ! $this->volume_recolte && ! $this->volume_revendique && ! $this->volume_detruit) {
                 return true;
