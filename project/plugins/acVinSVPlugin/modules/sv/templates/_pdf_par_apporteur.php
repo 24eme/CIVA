@@ -64,7 +64,7 @@
         <tr>
           <td class="td" style="text-align: left;"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo truncate_text($apporteur->getNom(), 19, '...'); ?></td>
           <td class="td" style="text-align: left;"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo $produit->libelle; ?></td>
-          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo echoLongFloatFr($produit->superficie_recolte / 100); ?>&nbsp;<small>ha</small></td>
+          <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo echoLongFloatFr($produit->getSuperficieTotale() / 100); ?>&nbsp;<small>ha</small></td>
           <?php if ($document->getType() === SVClient::TYPE_SV11): ?>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_recolte) ?>&nbsp;<small>hl</small></td>
             <td class="td"><?php echo pdfTdLargeStart(); ?>&nbsp;<?php echo sprintFloatFr($produit->volume_revendique) ?>&nbsp;<small>hl</small></td>
