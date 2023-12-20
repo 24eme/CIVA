@@ -59,7 +59,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
     {
         $produits = ["" => ""];
         foreach (ConfigurationClient::getInstance()->getCurrent()->declaration->getProduitsAll() as $produit) {
-            if($produit->getAttribut('no_dr')) {
+            if($produit->getAttribut('no_dr') && strpos($produit->getHash(), '/CREMANT/') === false) {
                 continue;
             }
             if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
@@ -77,7 +77,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
-            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
+            if (strpos($produit->getHash(), '/CREMANT/') !== false && in_array($produit->getCepage()->getKey(), ['BL', 'RS'])) {
                 $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
             }
         }
