@@ -77,7 +77,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             $produits[$produit->getHash()] = $produit->getLibelleFormat();
 
             // Si crémant, on rajoute un deuxième produit mouts
-            if (strpos($produit->getHash(), '/CREMANT/') !== false) {
+            if (strpos($produit->getHash(), '/CREMANT/') !== false && in_array($produit->getCepage()->getKey(), ['BL', 'RS'])) {
                 $produits[$produit->getHash().'/mouts'] = 'Moût - '.$produit->getLibelleFormat();
             }
         }
