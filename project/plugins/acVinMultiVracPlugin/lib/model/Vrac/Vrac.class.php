@@ -127,9 +127,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	);
 
 	public static $cepages_exclus_cremant = array(
-		'RB',
-		'BL',
-		'RS',
+		'RB'
 	);
 
   	public static function getStatutsLibellesActions()
