@@ -441,16 +441,16 @@ class SV extends BaseSV
         foreach ($this->apporteurs as $apporteur) {
             foreach ($apporteur->getProduits() as $hash => $produit) {
                 if ($produit->isEmpty()) {
-                    $this->remove($hash);
+                    $this->getDocument()->remove($hash);
                 }
             }
             foreach($apporteur as $item) {
-                if(!count($item)) {
-                    $keysToRemove[$item->getKey()] = $item->getKey();
+                if(!count($item->toArray(true, false))) {
+                    $keysToRemove[$item->getHash()] = $item->getHash();
                 }
             }
-            foreach($keysToRemove as $key) {
-                $apporteur->remove($key);
+            foreach($keysToRemove as $hash) {
+                $this->getDocument()->remove($hash);
             }
         }
     }
