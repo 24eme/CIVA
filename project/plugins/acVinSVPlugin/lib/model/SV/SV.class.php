@@ -227,6 +227,7 @@ class SV extends BaseSV
                 $recap[$key]->denominationComplementaire = $produit->denomination_complementaire;
                 $recap[$key]->libelle_html = $produit->getLibelleHtml();
                 $recap[$key]->superficie_recolte = 0;
+                $recap[$key]->superficie_totale = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
                     $recap[$key]->volume_recolte = 0;
@@ -265,6 +266,8 @@ class SV extends BaseSV
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
             $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
+
+            $recapProduit->superficie_totale += $produit->getSuperficieTotale();
         }
 
         $recapSorted = array();
@@ -431,6 +434,22 @@ class SV extends BaseSV
     public function getMotifsModification()
     {
         return $this->motifs_modification;
+    }
+
+    public function removeEmptyProduits()
+    {
+        foreach ($this->apporteurs as $apporteur) {
+            foreach ($apporteur->getProduits() as $hash => $produit) {
+                if ($produit->isEmpty()) {
+                    $this->remove($hash);
+                }
+            }
+        }
+    }
+
+    public function cleanDoc()
+    {
+        $this->removeEmptyProduits();
     }
 
     public function validate()

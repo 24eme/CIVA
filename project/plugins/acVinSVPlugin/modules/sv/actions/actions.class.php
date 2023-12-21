@@ -356,6 +356,7 @@ class svActions extends sfActions {
             return sfView::SUCCESS;
         }
 
+        $this->sv->cleanDoc();
         $this->sv->validate();
         $this->sv->save();
 

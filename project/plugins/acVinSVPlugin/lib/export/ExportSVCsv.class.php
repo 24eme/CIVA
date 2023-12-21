@@ -63,7 +63,7 @@ class ExportSVCsv
             $produit->getConfig()->getCepage()->getLibelle(),
             $produit->getConfig()->getMention()->getLibelle(),
             $produit->denomination_complementaire,
-            $produit->superficie_recolte + $produit->superficie_mouts,
+            $produit->getSuperficieTotale(),
             $produit->quantite_recolte,
             $volume_recolte,
             $produit->volume_detruit,

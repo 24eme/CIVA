@@ -77,6 +77,12 @@ class SVProduit extends BaseSVProduit {
         return $this->_get('superficie_mouts');
     }
 
+    public function getSuperficieTotale()
+    {
+        $s_mouts = $this->getSuperficieMouts();
+        return $this->getSuperficieRecolte() + $s_mouts;
+    }
+
     public function isComplete($squeezeRevendique = false) {
         if($this->isRebeche()) {
 
@@ -107,6 +113,28 @@ class SVProduit extends BaseSVProduit {
 
             return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte) && !is_null($this->volume_revendique);
         }
+    }
+
+    public function isEmpty()
+    {
+        if ($this->isMout()) {
+            return false;
+        }
+
+        if ($this->getDocument()->type == SVClient::TYPE_SV11) {
+            if (! $this->superficie_recolte && ! $this->volume_recolte && ! $this->volume_revendique && ! $this->volume_detruit) {
+                return true;
+            }
+        }
+
+        if ($this->getDocument()->type == SVClient::TYPE_SV12) {
+            if (! $this->superficie_recolte && ! $this->quantite_recolte && ! $this->volume_revendique) {
+                echo $this->libelle;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isRebeche()
