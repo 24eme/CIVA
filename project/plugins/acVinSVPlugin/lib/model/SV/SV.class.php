@@ -444,6 +444,14 @@ class SV extends BaseSV
                     $this->remove($hash);
                 }
             }
+            foreach($apporteur as $item) {
+                if(!count($item)) {
+                    $keysToRemove[$item->getKey()] = $item->getKey();
+                }
+            }
+            foreach($keysToRemove as $key) {
+                $apporteur->remove($key);
+            }
         }
     }
 
