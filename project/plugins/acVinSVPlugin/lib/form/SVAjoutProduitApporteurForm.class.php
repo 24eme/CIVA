@@ -65,7 +65,7 @@ class SVAjoutProduitApporteurForm extends acCouchdbForm
             if(!in_array($produit->getAppellation()->getCertification()->getKey(), array("AOC_ALSACE", "VINSSIG"))) {
                 continue;
             }
-            if(!$sv->isFromCSV() && strpos($produit->getHash(), '/cepages/RB') !== false) {
+            if(!$this->getDocument()->isFromCSV() && strpos($produit->getHash(), '/cepages/RB') !== false) {
                 continue;
             }
             if($produit->getAppellation()->getAttribut('no_dr')) {
