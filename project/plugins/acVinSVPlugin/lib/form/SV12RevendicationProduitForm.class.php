@@ -16,6 +16,10 @@ class SV12RevendicationProduitForm extends acCouchdbObjectForm
             $this->setValidator('volume_revendique', new sfValidatorNumber(array('required' => false)));
         }
 
+        if($this->getObject()->isRebeche()) {
+            $this->setWidget('volume_revendique', new bsWidgetFormInputFloat(array(), ['placeholder' => '', 'class' => 'form-control text-right input-float input_volume_revendique', 'readonly' => 'readonly']));
+        }
+
         if($this->getObject()->exist('volume_mouts')) {
             $this->setWidget('volume_mouts_revendique', new bsWidgetFormInputFloat(array(), array('class' => 'form-control text-right input-float input_volume_revendique', 'readonly' => 'readonly')));
             $this->setValidator('volume_mouts_revendique', new sfValidatorNumber(array('required' => false)));
