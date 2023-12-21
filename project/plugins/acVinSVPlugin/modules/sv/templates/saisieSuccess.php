@@ -15,7 +15,7 @@
   <?php endif ?>
 
   <div class="text-right"  style="margin-top: -5px;">
-      <button name="ajout-produit" type="submit" tabindex="-1" class="btn btn-sm btn-default" value="1"><span class="glyphicon glyphicon-plus"></span> Ajouter un produit</button>
+      <button name="ajout-produit" type="submit" tabindex="-1" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-plus"></span> Ajouter un produit</button>
   </div>
 
   <div class="row" style="margin-top: 30px;">

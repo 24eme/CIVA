@@ -120,7 +120,9 @@ class SVProduit extends BaseSVProduit {
         if ($this->isMout()) {
             return false;
         }
-
+        if ($this->isRebeche()) {
+            return false;
+        }
         if ($this->getDocument()->type == SVClient::TYPE_SV11) {
             if (! $this->superficie_recolte && ! $this->volume_recolte && ! $this->volume_revendique && ! $this->volume_detruit) {
                 return true;
@@ -129,7 +131,6 @@ class SVProduit extends BaseSVProduit {
 
         if ($this->getDocument()->type == SVClient::TYPE_SV12) {
             if (! $this->superficie_recolte && ! $this->quantite_recolte && ! $this->volume_revendique) {
-                echo $this->libelle;
                 return true;
             }
         }
@@ -148,14 +149,14 @@ class SVProduit extends BaseSVProduit {
     }
 
     public function setVolumeRecolte($v) {
-        if ($this->isRebeche() && !$this->volume_revendique) {
+        if ($this->isRebeche()) {
             $this->_set('volume_revendique', $v);
         }
         return $this->_set('volume_recolte', $v);
     }
 
     public function setVolumeRevendique($v) {
-        if ($this->isRebeche() && !$this->volume_recolte) {
+        if ($this->isRebeche()) {
             $this->_set('volume_recolte', $v);
         }
         return $this->_set('volume_revendique', $v);

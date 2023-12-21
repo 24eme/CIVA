@@ -15,8 +15,18 @@
       <td>
         <?php echo $produit->getRawValue()->getLibelleHtml() ?>
       </td>
+      <?php if(isset($formProduit['superficie_recolte'])): ?>
       <td><div class="input-group"><?php echo $formProduit['superficie_recolte']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">ares</small></span></div></td>
-      <td><div class="input-group"><?php echo $formProduit['quantite_recolte']->render() ?><input class="form-control text-right input-float input-sm input_quantite_pre hidden" type="text" autocomplete="off" data-decimal-auto="2" data-decimal="2" readonly="readonly" /><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">kg</small></span></div></td>
+      <?php else: ?>
+      <td></td>
+      <?php endif; ?>
+      <?php if(isset($formProduit['quantite_recolte'])): ?>
+      <td><div class="input-group"><?php echo $formProduit['quantite_recolte']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">kg</small></span></div></td>
+    <?php elseif(isset($formProduit['volume_recolte'])): ?>
+      <td><div class="input-group"><?php echo $formProduit['volume_recolte']->render() ?><span class="input-group-addon" style="background: #f2f2f2;"><small class="text-muted">hl</small></span></div></td>
+      <?php else: ?>
+      <td></td>
+      <?php endif; ?>
     </tr>
   <?php endforeach ?>
   </tbody>
