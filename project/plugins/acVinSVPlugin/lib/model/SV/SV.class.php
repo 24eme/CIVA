@@ -485,13 +485,21 @@ class SV extends BaseSV
     }
 
     public function getValidee() {
+        if(!$this->isValide()) {
 
-        return $this->isValide();
+            return null
+        }
+        return $this->valide->date_saisie;
     }
 
     public function getModifiee()
     {
-        return $this->valide->date_saisie !== $this->valide->date_modification;
+        if(!$this->isValide()) {
+
+            return null
+        }
+
+        return $this->valide->date_modification;
     }
 
     public function devalidate()
