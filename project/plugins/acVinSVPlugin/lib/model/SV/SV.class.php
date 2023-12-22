@@ -487,7 +487,7 @@ class SV extends BaseSV
     public function getValidee() {
         if(!$this->isValide()) {
 
-            return null
+            return null;
         }
         return $this->valide->date_saisie;
     }
@@ -496,7 +496,7 @@ class SV extends BaseSV
     {
         if(!$this->isValide()) {
 
-            return null
+            return null;
         }
 
         return $this->valide->date_modification;
