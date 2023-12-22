@@ -565,6 +565,16 @@ class SV extends BaseSV
         }
     }
 
+    public function getValidee() {
+
+        return $this->valide->date_saisie;
+    }
+
+    public function getModifiee() {
+
+        return $this->valide->date_modification;
+    }
+
     public function hasVolumeRevendique() {
         foreach($this->getProduits() as $produit) {
             if($produit->volume_revendique) {
