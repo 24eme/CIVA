@@ -371,6 +371,7 @@ class DRMGenerateCSV {
         $certification = $cepageConfig->getCertification()->getLibelle();
         $genre = $cepageConfig->getGenre()->getLibelle();
         $appellation = $cepageConfig->getAppellation()->getLibelle();
+        $appellation = str_replace($certification.' ', '', $appellation);
         $mention = $cepageConfig->getMention()->getLibelle();
         if($mentionVtsgn){
           $mention = $mentionVtsgn;
