@@ -137,25 +137,6 @@ class svActions extends sfActions {
         return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
     }
 
-    public function executeAjoutMoutsApporteur(sfWebRequest $request)
-    {
-        $this->sv = $this->getRoute()->getSV();
-        $this->cvi = $request->getParameter('cvi');
-        $this->hash = $request->getParameter('hash');
-
-        $produit = $this->sv->get(str_replace('-', '/', $this->hash));
-
-        if (! $produit->exist('volume_mouts')) {
-            $produit->add('volume_mouts');
-            $produit->add('volume_mouts_revendique');
-            $produit->add('superficie_mouts');
-
-            $this->sv->save();
-        }
-
-        return $this->redirect('sv_saisie', ['id' => $this->sv->_id, 'cvi' => $this->cvi]);
-    }
-
     public function executeExtraction(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
 
@@ -195,6 +176,7 @@ class svActions extends sfActions {
     public function executeSaisie(sfWebRequest $request) {
         $this->sv = $this->getRoute()->getSV();
         $this->cvi = $request->getParameter('cvi', null);
+        $this->modal = $request->getParameter('modal', null);
 
         if ($this->sv->isValide()) { return $this->redirect('sv_visualisation', ['id' => $this->sv->_id]); }
 
@@ -217,6 +199,10 @@ class svActions extends sfActions {
 	    }
 
         $this->form->save();
+
+        if ($request->getParameter('ajout-produit')) {
+            return $this->redirect('sv_saisie', ['sf_subject' => $this->sv, 'cvi' => $this->cvi, 'modal' => 'ajout-produit']);
+        }
 
         if($request->getParameter('precedent_cvi')) {
 
@@ -370,6 +356,7 @@ class svActions extends sfActions {
             return sfView::SUCCESS;
         }
 
+        $this->sv->cleanDoc();
         $this->sv->validate();
         $this->sv->save();
 
@@ -517,6 +504,21 @@ L'application de télédéclaration de production du CIVA
 
         $export->addHeaders($this->getResponse());
         return $this->renderText(json_encode($json).PHP_EOL);
+    }
+
+    public function executeCSV(sfWebRequest $request)
+    {
+        $this->sv = $this->getRoute()->getSV();
+        $file = $this->sv->_attachments->getFirst();
+
+        $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '.csv"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', $file->length);
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($this->sv->getAttachmentUri($file->getKey())));
     }
 
     public function executeInvaliderCiva(sfWebRequest $request)

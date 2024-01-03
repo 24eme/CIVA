@@ -1,7 +1,7 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<h3>Liste de vos apporteurs</h3>
+<h3>Revendication de vos apporteurs</h3>
 
 <?php if ($sf_user->hasFlash('error_msg')): ?>
   <div class="alert alert-danger" role="alert">
@@ -36,9 +36,9 @@
   <td><?php echo $apporteur->commune ?></td>
   <td class="text-right">
       <?php if ($recap['superficie'] && $recap['mouts_superficie']): ?>
-        (R+M) <?php echoFloat($recap['superficie'] + $recap['mouts_superficie']) ?>
+        (<abbr title="Revendiqué + Moûts">R+M</abbr>) <?php echoFloat($recap['superficie'] + $recap['mouts_superficie']) ?>
       <?php elseif ($recap['mouts_superficie']): ?>
-        (M) <?php echoFloat($recap['mouts_superficie']) ?>
+        (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_superficie']) ?>
       <?php else : ?>
         <?php echoFloat($recap['superficie']) ?>
       <?php endif ?>
@@ -46,20 +46,25 @@
       <small class="text-muted">ares</small>
   </td>
   <td class="text-right">
-      <?php if($sv->type == SVClient::TYPE_SV12): ?>
-        <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
-      <?php elseif($recap['revendique'] || $recap['mouts_revendique']): ?>
+      <?php if($sv->type == SVClient::TYPE_SV12 && $recap['quantite']): ?>
+          <?php if($recap['mouts_revendique']): ?>(<abbr title="Revendiqué">R</abbr>) <?php endif; ?><?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
+      <?php endif ?>
+      <?php if ($sv->type == SVClient::TYPE_SV12 && $recap['mouts_revendique']): ?>
+          <?php if($recap['quantite']): ?><br /><?php endif; ?>
+          (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?> <small class="text-muted">hl</small>
+      <?php endif; ?>
+      <?php if($sv->type == SVClient::TYPE_SV11 && ($recap['revendique'] || $recap['mouts_revendique'])): ?>
         <?php if($recap['revendique'] && $recap['mouts_revendique']): ?>
-        (R+M) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
+        (<abbr title="Revendiqué + Moûts">R+M</abbr>) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
         <?php elseif($recap['mouts_revendique']): ?>
-        (M) <?php echoFloat($recap['mouts_revendique']) ?>
+        (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?>
         <?php else: ?>
         <?php echoFloat($recap['revendique']) ?>
         <?php endif; ?>
         <small class="text-muted">hl</small>
       <?php endif; ?>
   </td>
-  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies() > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
+  <td class="text-center"><?php if($apporteur->isComplete(($sv->type == SVClient::TYPE_SV12))): ?><span class="label label-success">Saisie complète</span><?php elseif($apporteur->getNbSaisies($sv->type == SVClient::TYPE_SV12) > 0): ?><span class="label label-warning">Saisie en cours</span><?php endif; ?></td>
   <td class="text-right"><a href="<?php echo url_for('sv_saisie', array('sf_subject' => $sv, 'cvi' => $apporteur->getKey())); ?>" class="btn btn-xs btn-default">Saisir <span class="glyphicon glyphicon-chevron-right"></span></a></td>
 </tr>
 <?php endforeach; ?>
@@ -67,7 +72,7 @@
 
 <div class="row" style="margin-top: 30px;">
   <div class="col-xs-4 text-left"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
-  <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter un apporteur</a></div>
+  <div class="col-xs-4 text-center"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_ajout_apporteur"><span class="glyphicon glyphicon-plus"></span> Ajouter ou mettre à jour un apporteur</a></div>
   <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
 

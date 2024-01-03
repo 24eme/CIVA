@@ -3,7 +3,7 @@
 class SV12 extends SV
 {
     protected $colonnes = [
-        'superficie', 'recolte', 'revendique', 'mouts', 'superficie_mouts'
+        'superficie', 'recolte', 'revendique', 'mouts', 'superficie_mouts', 'revendique_mouts'
     ];
 
     public function getSum()
@@ -14,6 +14,7 @@ class SV12 extends SV
             $sum['revendique'] += $p->volume_revendique;
             $sum['mouts'] += $p->volume_mouts;
             $sum['superficie_mouts'] += $p->superficie_mouts;
+            $sum['revendique_mouts'] += $p->volume_mouts_revendique;
 
             return $sum;
         }, array_fill_keys($this->colonnes, 0));

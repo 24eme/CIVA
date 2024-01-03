@@ -2,7 +2,7 @@
 
 class ExportSVPdf extends ExportDocument
 {
-    const PRODUITS_PAR_PAGES = 20;
+    const PRODUITS_PAR_PAGES = 19;
     const KEY_AUTRES_PRODUITS = 'Autres produits';
 
     protected $declaration = null;
@@ -44,14 +44,15 @@ class ExportSVPdf extends ExportDocument
         $total_produit_page = 0;
         foreach ($apporteurs as $apporteur) {
             $total_produit_page += count($apporteur->getProduits());
+            $total_produit_page += 4;
 
-            if ($total_produit_page < 16 && count($a) < 4) {
+            if ($total_produit_page <= 24) {
                 $a[] = $apporteur;
                 continue;
             }
 
             @$this->document->addPage($this->getPartial('sv/pdf_par_apporteur', array('document' => $this->declaration, 'etablissement' => $this->etablissement, 'apporteurs' => $a)));
-            $total_produit_page = count($apporteur->getProduits());
+            $total_produit_page = count($apporteur->getProduits()) + 4;
             $a = [];
             $a[] = $apporteur;
         }
@@ -105,6 +106,12 @@ class ExportSVPdf extends ExportDocument
             $date = new DateTime($this->declaration->valide->date_saisie);
             $titre .= sprintf(" validée le %s", $date->format("d/m/Y"));
         }
+
+        if ($this->declaration->valide->date_modification && $this->declaration->getModifiee()) {
+            $date = new DateTime($this->declaration->valide->date_modification);
+            $titre .= sprintf(", modifiée le %s", $date->format("d/m/Y"));
+        }
+
         return $titre;
     }
 

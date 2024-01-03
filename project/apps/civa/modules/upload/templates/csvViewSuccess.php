@@ -66,15 +66,15 @@ foreach ($csv->getRawValue()->getCsv() as $line)
   else
     printf('%.02f', $line[9]);
   echo '</td><td class="csv_num">';
-  if (preg_match('/[^0-9,\.]/', $line[10]))
-    echo $line[10];
+  if (preg_match('/[^0-9,\.]/', $csv->getLineVolume($line)))
+    echo $csv->getLineVolume($line);
   else
-    printf('%.02f', $line[10]);
+    printf('%.02f', $csv->getLineVolume($line));
   echo '</td><td class="csv_num">';
-  if (isset($line[15]) && $line[15] && preg_match('/[^0-9,\.]/', $line[15]))
-      echo $line[15];
-    elseif(isset($line[15]) && $line[15])
-      printf('%.02f', $line[15]);
+  if ($csv->getLineVolumeVCI($line) && preg_match('/[^0-9,\.]/', $csv->getLineVolumeVCI($line)))
+      echo $csv->getLineVolumeVCI($line);
+    elseif($csv->getLineVolumeVCI($line))
+      printf('%.02f', $csv->getLineVolumeVCI($line));
   echo '</td><tr>';
   if (count($errors[$cpt])) {
     foreach($errors[$cpt]->getRawValue() as $error) {

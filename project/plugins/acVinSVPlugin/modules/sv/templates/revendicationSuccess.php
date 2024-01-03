@@ -1,7 +1,9 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_REVENDICATION)); ?>
 
-<a href="<?php echo url_for('sv_recalcule_volumes_revendiques', $sv) ?>" class="pull-right btn btn-link"><span class="glyphicon glyphicon-refresh"></span> Recalculer les volumes revendiqués</a>
+<?php if($sv->type == SVClient::TYPE_SV12 && $sv->isFromCSV() === false): ?>
+<a href="<?php echo url_for('sv_recalcule_volumes_revendiques', $sv) ?>" class="pull-right btn btn-link"  onclick="return confirm('Êtes-vous sûr de vouloir recalculer les volumes revendiquées ?')"><span class="glyphicon glyphicon-refresh"></span> Recalculer les volumes revendiqués à partir du taux d'extraction</a>
+<?php endif; ?>
 
 <h3>Liste de vos apporteurs</h3>
 
@@ -55,7 +57,7 @@
 </table>
 
 <div class="row" style="margin-top: 30px;">
-  <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
+  <div class="col-xs-4 text-left"><a href="<?php echo url_for('sv_extraction', $sv) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Étape précédente</a></div>
   <div class="col-xs-4 text-center"></div>
   <div class="col-xs-4 text-right"><a href="<?php echo url_for('sv_autres', $sv) ?>" class="btn btn-default">Étape suivante <span class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>

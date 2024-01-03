@@ -63,6 +63,11 @@ class SV extends BaseSV
             $drAcheteurType = 'cooperatives';
         }
 
+        // maj de l'apporteur
+        if ($this->apporteurs->exist($dr->cvi)) {
+            $this->apporteurs->remove($dr->cvi);
+        }
+
         foreach ($dr->getProduits() as $cepage) {
             if($cepage->getAppellation()->getKey() == "appellation_CREMANT" && strpos($cepage->getCepage()->getKey(), "cepage_RB") !== false) {
                 continue;
@@ -222,6 +227,7 @@ class SV extends BaseSV
                 $recap[$key]->denominationComplementaire = $produit->denomination_complementaire;
                 $recap[$key]->libelle_html = $produit->getLibelleHtml();
                 $recap[$key]->superficie_recolte = 0;
+                $recap[$key]->superficie_totale = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
                     $recap[$key]->volume_recolte = 0;
@@ -260,6 +266,8 @@ class SV extends BaseSV
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
             $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
+
+            $recapProduit->superficie_totale += $produit->getSuperficieTotale();
         }
 
         $recapSorted = array();
@@ -288,8 +296,8 @@ class SV extends BaseSV
     }
 
     public function addProduit($identifiant, $hash, $denominationComplementaire = null, $hidden_denom = null) {
-        $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
-        if(!$etablissement && preg_match("/^[0-9]{10}$/", $identifiant)) {
+        $etablissement = EtablissementClient::getInstance()->findByCvi($identifiant, acCouchdbClient::HYDRATE_JSON);
+        if(!$etablissement && preg_match("/^[0-9]{10}|[A-Z]{2}[A-Z0-9]{8,12}$/", $identifiant)) {
             $etablissement = new stdClass();
             $etablissement->cvi = $identifiant;
             $etablissement->nom = $identifiant;
@@ -412,7 +420,6 @@ class SV extends BaseSV
 
     public function setMotifModification($type, $autre = null)
     {
-        $this->add('motif_modification')->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->add('motif_modification')->motif = $type;
 
         if ($type === self::SV_MOTIF_MODIFICATION_AUTRE) {
@@ -429,9 +436,36 @@ class SV extends BaseSV
         return $this->motifs_modification;
     }
 
+    public function removeEmptyProduits()
+    {
+        foreach ($this->apporteurs as $apporteur) {
+            foreach ($apporteur->getProduits() as $hash => $produit) {
+                if ($produit->isEmpty()) {
+                    $this->getDocument()->remove($hash);
+                }
+            }
+            foreach($apporteur as $item) {
+                if(!count($item->toArray(true, false))) {
+                    $keysToRemove[$item->getHash()] = $item->getHash();
+                }
+            }
+            foreach($keysToRemove as $hash) {
+                $this->getDocument()->remove($hash);
+            }
+        }
+    }
+
+    public function cleanDoc()
+    {
+        $this->removeEmptyProduits();
+    }
+
     public function validate()
     {
-        $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        if ($this->valide->date_saisie === null) {
+            $this->valide->date_saisie = (new DateTimeImmutable())->format('Y-m-d');
+        }
+        $this->valide->date_modification = (new DateTimeImmutable())->format('Y-m-d');
         $this->valide->statut = self::STATUT_VALIDE;
 
         $this->getRebeches();
@@ -451,13 +485,21 @@ class SV extends BaseSV
     }
 
     public function getValidee() {
+        if(!$this->isValide()) {
 
-        return $this->isValide();
+            return null;
+        }
+        return $this->valide->date_saisie;
     }
 
     public function getModifiee()
     {
-        return $this->isValide() === false && $this->valide->date_saisie;
+        if(!$this->isValide()) {
+
+            return null;
+        }
+
+        return $this->valide->date_modification;
     }
 
     public function devalidate()
@@ -510,6 +552,35 @@ class SV extends BaseSV
             }
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
         }
+
+        $recap = $this->getRecapProduits();
+
+        foreach ($recap as $hash => $produit) {
+            $noeud = str_replace('/declaration/', '', $hash);
+
+            if (! $this->extraction->exist($noeud)) {
+                continue;
+            }
+
+            $volume_extrait = $this->extraction->get($noeud)->volume_extrait;
+            $volume_revendique = $recap[$hash]->volume_revendique;
+
+            if (round($volume_revendique, 2) != round($volume_extrait, 2)) {
+                $diff = round(round($volume_extrait, 2) - round($volume_revendique, 2), 2);
+                $apporteur = current(array_keys($recap[$hash]->apporteurs));
+                $this->apporteurs->get($apporteur)->get($noeud)->volume_revendique += $diff;
+            }
+        }
+    }
+
+    public function hasVolumeRevendique() {
+        foreach($this->getProduits() as $produit) {
+            if($produit->volume_revendique) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isFromCSV() {

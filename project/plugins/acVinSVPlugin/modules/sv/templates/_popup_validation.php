@@ -15,9 +15,6 @@
                       <div class="col-xs-6 text-right">
                         <button type="submit" data-loading-text="Validation en cours ..."
                                 class="btn btn-success btn-loading"
-                                <?php if ($sv->getModifiee()): ?>
-                                  form="form_sv_motif_modification"
-                                <?php endif ?>
                                 id="signature_sv_popup_confirm">
                           Valider la déclaration
                         </button>

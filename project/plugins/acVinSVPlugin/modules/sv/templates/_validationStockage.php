@@ -20,11 +20,11 @@
           <?php if (is_array($produits) === false) { $produits = $produits->toArray(); } ?>
           <td class="col-xs-1 text-right" style="vertical-align: middle">
             <?php if (array_key_exists($hash, $produits)): ?>
-              <?php echoFloat($produits[$hash]) ?> <span class="text-muted">hl</span>
+              <?php echoFloat($produits[$hash]) ?> <small class="text-muted">hl</small>
             <?php endif ?>
           </td>
         <?php endforeach ?>
-        <th class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique + $produit->volume_mouts_revendique) ?></span> <small class="text-muted">hl</span></th>
+        <th class="col-xs-1 text-right"><span class="total"><?php echoFloat($produit->volume_revendique + $produit->volume_mouts_revendique) ?></span> <small class="text-muted">hl</small></th>
       </tr>
     <?php endforeach ?>
     </tbody>

@@ -145,10 +145,14 @@ class SVClient extends acCouchdbClient {
         }
 
         if(preg_match('/(-| |^)AB(-| |$)/i', $denomination)) {
-            $denoms[] = 'AB';
+            $denoms[] = 'BIO';
         }
 
         if(preg_match('/(-| |^)BIO(-| |$)/i', $denomination)) {
+            $denoms[] = 'BIO';
+        }
+
+        if(preg_match('/(-| |^)BIO-?LOGI(E|C|QUE)(-| |$)/i', $denomination)) {
             $denoms[] = 'BIO';
         }
 
@@ -212,8 +216,7 @@ class SVClient extends acCouchdbClient {
                 $produit->add('volume_mouts');
                 $produit->add('volume_mouts_revendique');
                 $produit->add('superficie_mouts');
-                $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
-                $produit->volume_mouts_revendique += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
+                $produit->volume_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]);
                 $produit->superficie_mouts += CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]);
 
                 // dans le cas où il n'y a que des moûts, on mets à 0 le volume revendiqué du produit
@@ -345,7 +348,10 @@ class SVClient extends acCouchdbClient {
     public function getEtablissement($societe) {
         foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
             try {
-                return SVClient::getTypeByEtablissement($etablissement);
+                if(SVClient::getTypeByEtablissement($etablissement)) {
+
+                    return $etablissement;
+                }
             } catch(Exception $e) {
 
             }
