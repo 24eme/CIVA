@@ -1255,10 +1255,19 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function getTauxCvo() {
-		$date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
-		$conf = ConfigurationClient::getConfiguration($date)->get('/declaration/certifications/AOC_ALSACE');
-		$tx = round($conf->getTauxCvo($this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d')) / 2, 2);
-		return ($tx >= 0)? $tx : null;
+        $nbaoc = 0;
+        foreach($this->declaration->certification->genre as $certif) {
+            if (strpos($certif->getKey(), 'appellation_VINTABLE') === false) {
+                $nbaoc++;
+            }
+        }
+        $tx = 0;
+        if ($nbaoc) {
+            $date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
+            $conf = ConfigurationClient::getConfiguration($date)->get('/declaration/certifications/AOC_ALSACE');
+            $tx = round($conf->getTauxCvo($date) / 2, 2);
+        }
+        return ($tx >= 0)? $tx : null;
     }
 
 	public function storeAnnexe($file, $filename) {
