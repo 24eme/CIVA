@@ -285,7 +285,6 @@ class DRMGenerateCSV {
         }
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;;\n";
-      $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;;\n";
       return $lignes;
     }
 
@@ -305,11 +304,11 @@ class DRMGenerateCSV {
           $lignes.=$produitDetail->volume_normal;
         }
         $lignes.=";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitDetail->volume_normal;
+            $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;";
+            $lignes.=$produitDetail->volume_normal;
+            $lignes.=";\n";
         }
-        $lignes.=";\n";
       }
       if($produitDetail->volume_sgn){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_debut;initial;";
@@ -317,11 +316,11 @@ class DRMGenerateCSV {
           $lignes.=$produitDetail->volume_sgn;
         }
         $lignes.=";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;";
         if($withVolume){
-          $lignes.=$produitDetail->volume_sgn;
+            $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','SGN') . ";" . "stocks_fin;final;";
+            $lignes.=$produitDetail->volume_sgn;
+            $lignes.=";\n";
         }
-        $lignes.=";\n";
       }
       if($produitDetail->volume_vt){
         $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_debut;initial;";
@@ -329,11 +328,11 @@ class DRMGenerateCSV {
           $lignes.=$produitDetail->volume_vt;
         }
         $lignes.=";\n";
-        $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;";
         if($withVolume){
+          $lignes.= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu','VT') . ";" . "stocks_fin;final;";
           $lignes.=$produitDetail->volume_vt;
+          $lignes.=";\n";
         }
-        $lignes.=";\n";
 
       }
       return $lignes;
@@ -344,7 +343,9 @@ class DRMGenerateCSV {
       $debutLigne = self::TYPE_CAVE . ";" . $this->periode . ";" . $this->identifiant . ";" . $this->numero_accise . ";";
       $lignes = "";
       $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_debut;initial;".$volume.";\n";
-      $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;".$volume.";\n";
+      if ($volume) {
+          $lignes .= $debutLigne . $this->getProduitCSV($produitDetail,'suspendu') . ";" . "stocks_fin;final;".$volume.";\n";
+      }
       return $lignes;
     }
 
@@ -380,6 +381,7 @@ class DRMGenerateCSV {
         $certification = $cepageConfig->getCertification()->getLibelle();
         $genre = $cepageConfig->getGenre()->getLibelle();
         $appellation = $cepageConfig->getAppellation()->getLibelle();
+        $appellation = str_replace($certification.' ', '', $appellation);
         $mention = $cepageConfig->getMention()->getLibelle();
         if($mentionVtsgn){
           $mention = $mentionVtsgn;

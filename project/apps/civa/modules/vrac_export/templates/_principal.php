@@ -131,7 +131,7 @@
     </tr>
         <?php $nb_ligne -= ($vrac->exist('vendeur_frais_annexes'))? (count(explode("\n", $vrac->vendeur_frais_annexes))) : 1; ?>
     <tr>
-        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO à la charge du vendeur</th>
+        <th class="td-large th-conditions"><?php echo pdfTdLargeStart() ?>CVO AOC à la charge du vendeur</th>
         <td class="td-large td-conditions"><?php echo pdfTdLargeStart() ?>&nbsp;<?php echo $vrac->getTauxCvo(); ?> € HT/hl</td>
     </tr>
     <?php $nb_ligne -= 1 ?>
