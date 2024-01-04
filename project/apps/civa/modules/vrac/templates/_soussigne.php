@@ -62,7 +62,7 @@
 	<li class="noprint">Code postal : <strong><?php echo $tiers->code_postal ?></strong></li>
 	<li class="noprint">Commune : <strong><?php echo $tiers->commune ?></strong></li>
 	<li class="noprint">Téléphone : <strong><?php echo formatPhone($tiers->telephone) ?></strong></li>
-	<li class="noprint">E-mail : <strong><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></li>
+	<li class="noprint">E-mail : <strong><span title="<?php echo implode(", ", $tiers->getRawValue()->emails->toArray(true, false)); ?>"><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></strong></span></li>
     <?php if($vrac->exist($tiers->getKey().'_assujetti_tva')&&$fiche): ?>
     <li class="noprint">
         Assujeti à la TVA : <strong><?php if($vrac->get($tiers->getKey().'_assujetti_tva')): ?>Oui<?php else: ?>Non<?php endif; ?></strong>
