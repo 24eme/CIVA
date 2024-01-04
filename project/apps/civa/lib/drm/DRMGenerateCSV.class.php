@@ -141,9 +141,9 @@ class DRMGenerateCSV {
         return $documents;
     }
 
-    public function getDocumentsForRepriseMouvements(){
+    protected function getDocumentsForRepriseMouvementsByIdentifiant($identifiant) {
         $documents = array();
-        $reprisesMvtInfos = DRMRepriseMvtsView::getInstance()->getRepriseMvts('ETABLISSEMENT-'.$this->identifiant, $this->periode);
+        $reprisesMvtInfos = DRMRepriseMvtsView::getInstance()->getRepriseMvts('ETABLISSEMENT-'.$identifiant, $this->periode);
         foreach ($reprisesMvtInfos as $mvtInfo) {
           $mvtInfoSuppl = ($mvtInfo->key[DRMRepriseMvtsView::KEY_TYPE_DOC] == self::REPRISE_DOC_VRAC)? $mvtInfo : null;
           $reprise = $this->createRepriseInfo($mvtInfo->key[DRMRepriseMvtsView::KEY_TYPE_DOC],
@@ -152,6 +152,17 @@ class DRMGenerateCSV {
                                               $mvtInfoSuppl);
           $documents[] = $reprise;
         }
+
+        return $documents;
+    }
+
+    public function getDocumentsForRepriseMouvements(){
+        $documents = $this->getDocumentsForRepriseMouvementsByIdentifiant($this->identifiant);
+
+        if($this->etablissement && $this->etablissement->cvi && $this->identifiant != $this->etablissement->cvi) {
+            $documents = array_merge($documents, $this->getDocumentsForRepriseMouvementsByIdentifiant($this->etablissement->cvi));
+        }
+
         return $documents;
     }
 
