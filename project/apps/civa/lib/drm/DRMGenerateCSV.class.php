@@ -81,6 +81,7 @@ class DRMGenerateCSV {
       $this->aggregate = $aggregate;
       $this->firstDrm = $firstDrm;
       $this->withLieuDit = $withLieuDit;
+      $this->etablissement = EtablissementClient::getInstance()->find('ETABLISSEMENT-'.$this->identifiant);
     }
 
     public function getPeriode(){
@@ -92,9 +93,9 @@ class DRMGenerateCSV {
         $annee = ConfigurationClient::getInstance()->getAnnee($this->periode);
         $mois = intval(substr($this->periode,4,2));
 
-        $prev_dr = $this->getPreviousDr($this->identifiant, $this->periode);
-        $prev_ds = $this->getPreviousDs($this->identifiant, $annee, $mois);
-	
+        $prev_dr = $this->getPreviousDr();
+        $prev_ds = $this->getPreviousDs();
+
         $reprise_dr = false;
         if($prev_dr && (!$prev_ds || (!is_array($prev_ds) && ($prev_dr->getCampagne()."10" > $prev_ds->getPeriode())))){
           $drReprise = $this->createRepriseInfo(self::REPRISE_DOC_DR,self::REPRISE_TYPE_CATALOGUE,$prev_dr->_id);
@@ -162,8 +163,12 @@ class DRMGenerateCSV {
       return $lignes;
     }
 
-    private function getPreviousDr($identifiant, $periode){
-      $all_prev_dr = DRClient::getInstance()->getAllByCvi($identifiant);
+    private function getPreviousDr(){
+      $all_prev_dr = DRClient::getInstance()->getAllByCvi($this->identifiant);
+
+      if(!count($all_prev_dr->getDatas())) {
+        $all_prev_dr = DRClient::getInstance()->getAllByCvi($this->etablissement->cvi);
+      }
 
       if(!$all_prev_dr){
         return null;
@@ -171,12 +176,12 @@ class DRMGenerateCSV {
       $drArray = $all_prev_dr->getDatas();
       $drArrayReverse = array_reverse($drArray);
       foreach ($drArrayReverse as $prev_dr) {
-       if(!$prev_dr->exist('validee') || preg_replace('/([0-9]+)-([0-9]+)-([0-9]+)/', '\1\2', $prev_dr->validee) > $periode) {
+       if(!$prev_dr->exist('validee') || preg_replace('/([0-9]+)-([0-9]+)-([0-9]+)/', '\1\2', $prev_dr->validee) > $this->periode) {
                continue;
        }
         $a = substr(strrchr($prev_dr->_id, "-"), 1);
-        $annee = substr($periode,0,4);
-        $mois = intval(substr($periode,4,2));
+        $annee = substr($this->periode,0,4);
+        $mois = intval(substr($this->periode,4,2));
         if(($a == $annee ) && ($mois > 9)){
           return $prev_dr;
         }elseif($a == ($annee-1)){
@@ -186,9 +191,14 @@ class DRMGenerateCSV {
       return end($drArray);
     }
 
-    private function getPreviousDs($identifiant, $annee,$mois){
+    private function getPreviousDs(){
+      $annee = ConfigurationClient::getInstance()->getAnnee($this->periode);
+      $mois = intval(substr($this->periode,4,2));
       $acCouchdbClientDS = acCouchdbManager::getClient('DS');
-      $all_prev_ds = $acCouchdbClientDS->startkey('DS-'.$identifiant.'-000000-000')->endkey('DS-'.$identifiant.'-999999-999')->execute();
+      $all_prev_ds = $acCouchdbClientDS->startkey('DS-'.$this->identifiant.'-000000-000')->endkey('DS-'.$this->identifiant.'-999999-999')->execute();
+      if(!$all_prev_ds && !count($all_prev_ds->getDatas())) {
+        $all_prev_ds = $acCouchdbClientDS->startkey('DS-'.$etablissement->cvi.'-000000-000')->endkey('DS-'.$etablissement->cvi.'-999999-999')->execute();
+      }
       if(!$all_prev_ds){
         return null;
       }
