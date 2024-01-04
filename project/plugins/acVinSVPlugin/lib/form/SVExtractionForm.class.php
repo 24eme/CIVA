@@ -20,6 +20,10 @@ class SVExtractionForm extends acCouchdbForm
 
             $produitRecap = $this->getDocument()->extraction->add($noeud);
 
+            if (! $produitRecap->getQuantiteRecolte()) {
+                continue;
+            }
+
             $formProduitTauxExtraction = new BaseForm();
             $formProduitTauxExtraction->setWidget('volume_extrait', new bsWidgetFormInputFloat([], []));
             $formProduitTauxExtraction->setValidator('volume_extrait', new sfValidatorNumber(['required' => false]));

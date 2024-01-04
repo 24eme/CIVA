@@ -7,4 +7,9 @@ class svComponents extends sfComponents {
             $this->url = null;
         }
     }
+    public function executeMonEspaceColonne(sfWebRequest $request)
+    {
+        $this->svs = SVClient::getInstance()->getAllByEtablissement($this->etablissement);
+        krsort($this->svs);
+    }
 }

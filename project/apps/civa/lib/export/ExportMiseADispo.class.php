@@ -103,7 +103,7 @@ abstract class ExportMiseADispo
         }
 
         if (!($file_export_document->getDocument()->validee && $file_export_document->getDocument()->modifiee) || ($file_export_document->getDocument()->exist('import_db2') && $file_export_document->getDocument()->import_db2)) {
-            throw new sfException("This document in not valid or has been imported from db2 : ".$id);
+            throw new sfException("This document is not yet validate : ".$id);
         }
 
         link($file_export_document->getPath(), $path);

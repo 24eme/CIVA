@@ -135,6 +135,22 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         $this->id_societe = $new_id;
     }
 
+    public function getEmailTeledeclaration() {
+        if ($this->isSocieteContact()) {
+            $societe = $this->getSociete();
+            if ($societe->exist('teledeclaration_email') && $societe->teledeclaration_email) {
+                return $societe->teledeclaration_email;
+            }
+        }
+        if ($this->isEtablissementContact()) {
+            $etablissement = $this->getEtablissement();
+            if ($etablissement->exist('teledeclaration_email') && $etablissement->teledeclaration_email) {
+                return $etablissement->teledeclaration_email;
+            }
+        }
+        return null;
+    }
+
     public function save() {
 
         if ($this->isSocieteContact()) {

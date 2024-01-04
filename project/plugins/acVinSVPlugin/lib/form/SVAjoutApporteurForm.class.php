@@ -50,7 +50,11 @@ class SVAjoutApporteurForm extends acCouchdbForm
             $this->getDocument()->addApporteurHorsRegion($values['cvi'], $values['raison_sociale'], $values['pays']);
         } else {
             $dr = DRClient::getInstance()->find('DR-' . $values['cvi'] . '-' . $this->getDocument()->getPeriode());
-            $this->getDocument()->addProduitsFromDR($dr);
+            if ($dr) {
+                $this->getDocument()->addProduitsFromDR($dr);
+            } else {
+                $this->getDocument()->addApporteurHorsRegion($values['cvi'], $values['raison_sociale'], $values['pays']);
+            }
         }
 
         $this->getDocument()->save();
