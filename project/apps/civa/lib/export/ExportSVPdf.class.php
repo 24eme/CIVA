@@ -107,7 +107,7 @@ class ExportSVPdf extends ExportDocument
             $titre .= sprintf(" validée le %s", $date->format("d/m/Y"));
         }
 
-        if ($this->declaration->valide->date_modification && $this->declaration->getModifiee()) {
+        if ($this->declaration->valide->date_modification && $this->declaration->getModifiee() && $this->declaration->valide->date_saisie < $this->declaration->valide->date_modification) {
             $date = new DateTime($this->declaration->valide->date_modification);
             $titre .= sprintf(", modifiée le %s", $date->format("d/m/Y"));
         }
