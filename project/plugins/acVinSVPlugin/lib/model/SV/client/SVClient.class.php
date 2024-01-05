@@ -281,7 +281,7 @@ class SVClient extends acCouchdbClient {
             }
 
             if (strpos(strtoupper($line[CsvFileAcheteur::CSV_APPELLATION]), 'LIES') === 0) {
-                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
+                if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]) <= 0) {
                     $check[self::CSV_ERROR_VOLUME][] = [$i];
                 }
                 continue;
@@ -301,7 +301,7 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
-            if (strpos($produit->getHash(), 'cepages/RB') !== false && round($line[CsvFileAcheteur::CSV_SV_VOLUME_VF], 2) <= 0) {
+            if (strpos($produit->getHash(), 'cepages/RB') !== false && CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]) <= 0) {
                 $check[self::CSV_ERROR_VOLUME_REBECHE][] = [$i];
             }
 
@@ -309,34 +309,34 @@ class SVClient extends acCouchdbClient {
                 continue;
             }
 
-            if ($line[CsvFileAcheteur::CSV_SUPERFICIE] <= 0) {
+            if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) <= 0) {
                 $check[self::CSV_ERROR_SUPERFICIE][] = [$i];
             }
 
             if($type == SVClient::TYPE_SV11) {
-                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_VF] <= 0) {
+                if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]) <= 0) {
                     $check[self::CSV_ERROR_VOLUME][] = [$i];
                 }
-                $volume = $line[CsvFileAcheteur::CSV_SV_VOLUME_VF];
+                $volume = CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VF]);
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
                     $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC];
                 }
                 if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT])) {
                     $volume -= (float) $line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT];
                 }
-                if (round($volume, 2) != 0) {
+                if ($volume != 0) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
                 }
-                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) && ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) > ((float) $line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
+                if (isset($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) && CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_VCI]) >  CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_DPLC])) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV11][] = [$i];
                 }
             }
 
             if($type == SVClient::TYPE_SV12) {
-                if ($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF] <= 0 && strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') === false) {
+                if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_QUANTITE_VF]) <= 0 && strpos(KeyInflector::slugify($line[CsvFileAcheteur::CSV_APPELLATION]), 'MOUTS') === false) {
                     $check[self::CSV_ERROR_QUANTITE][] = [$i];
                 }
-                if ($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT] <= 0) {
+                if (CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SV_VOLUME_PRODUIT]) <= 0) {
                     $check[self::CSV_ERROR_VOLUME_REVENDIQUE_SV12][] = [$i];
                 }
             }
