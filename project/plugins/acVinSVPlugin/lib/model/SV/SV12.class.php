@@ -9,7 +9,7 @@ class SV12 extends SV
     public function getSum()
     {
         return array_reduce($this->getRecapProduits(), function ($sum, $p) {
-            $sum['superficie'] += $p->superficie_recolte;
+            $sum['superficie'] += $p->superficie_totale;
             $sum['recolte'] += $p->quantite_recolte;
             $sum['revendique'] += $p->volume_revendique;
             $sum['mouts'] += $p->volume_mouts;
