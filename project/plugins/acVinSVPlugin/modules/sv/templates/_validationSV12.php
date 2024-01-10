@@ -14,7 +14,7 @@
   </thead>
   <tbody>
   <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
-    <?php if (! $produit->superficie_recolte && ! $produit->quantite_recolte && ! $produit->volume_revendique): ?>
+    <?php if (! $produit->superficie_recolte && ! $produit->quantite_recolte && ! $produit->volume_revendique && !$produit->superficie_mouts && !$produit->volume_mouts): ?>
       <?php continue; ?>
     <?php endif ?>
     <tr>
