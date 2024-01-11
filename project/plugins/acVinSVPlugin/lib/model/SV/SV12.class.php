@@ -3,13 +3,14 @@
 class SV12 extends SV
 {
     protected $colonnes = [
-        'superficie', 'recolte', 'revendique', 'mouts', 'superficie_mouts', 'revendique_mouts'
+        'superficie', 'superficie_recolte', 'recolte', 'revendique', 'mouts', 'superficie_mouts', 'revendique_mouts'
     ];
 
     public function getSum()
     {
         return array_reduce($this->getRecapProduits(), function ($sum, $p) {
             $sum['superficie'] += $p->superficie_totale;
+            $sum['superficie_recolte'] += $p->superficie_recolte;
             $sum['recolte'] += $p->quantite_recolte;
             $sum['revendique'] += $p->volume_revendique;
             $sum['mouts'] += $p->volume_mouts;

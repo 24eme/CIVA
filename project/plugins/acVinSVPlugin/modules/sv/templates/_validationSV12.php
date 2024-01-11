@@ -32,7 +32,7 @@
   <tr>
     <?php $totalParColonne = $sv->getSum() ?>
     <td class="text-right"><strong>Total</strong></td>
-    <td class="text-right"><?php echoFloat($totalParColonne['superficie']) ?> <small class="text-muted">ares</small></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['superficie_recolte']) ?> <small class="text-muted">ares</small></td>
     <td class="text-right"><?php echo $totalParColonne['recolte'] ?> <small class="text-muted">kg</small></td>
     <td class="text-right"><?php echoFloat($totalParColonne['revendique']) ?> <small class="text-muted">hl</small></td>
     <?php if ($sv->hasMouts()): ?>
