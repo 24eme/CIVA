@@ -19,8 +19,12 @@
             <?php endif; ?></td>
         </tr>
         <?php endforeach; ?>
+        <?php if ($histo->statut != Vrac::STATUT_CLOTURE) :?>
+        <tr class="text-muted">
+            <td colspan="3">Actions restant à mener :</td>
+        </tr>
         <?php $find = false; ?>
-        <?php foreach(Vrac::$statuts_template_historique as $libelleStatut => $statut): ?>
+        <?php foreach(Vrac::$statuts_historique_a_venir as $libelleStatut => $statut): ?>
             <?php if($statut == $histo->statut): $find = true; continue; ?><?php endif; ?>
             <?php if(!$find): continue; ?><?php endif; ?>
             <?php if(strpos($libelleStatut, "(isVendeurProprietaire)") !== false && !$vrac->isVendeurProprietaire()): continue; endif; ?>
@@ -30,6 +34,7 @@
                 <td><?php echo str_replace(" (isVendeurProprietaire)", "", $libelleStatut); ?></td>
             </tr>
         <?php endforeach; ?>
+        <?php endif; ?>
     </tbody>
 </table>
 <pre style="background: #000; color: white; padding: 5px; overflow: scroll; display: none; opacity: 0.90;" id="contenu_mail"></pre>
