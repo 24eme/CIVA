@@ -209,7 +209,8 @@ class SV extends BaseSV
 
         foreach ($this->apporteurs as $apporteur) {
             foreach ($apporteur->getProduits() as $produit) {
-                $produits[substr($produit->getHash(), 23)][] = $apporteur->getCvi();
+                // première occurence de c dans /apporteurs/XXXXXXXXX/certifi[...]
+                $produits[strpbrk($produit->getHash(), 'c')][] = $apporteur->getCvi();
             }
         }
 
