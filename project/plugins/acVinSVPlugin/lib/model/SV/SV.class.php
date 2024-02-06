@@ -177,12 +177,15 @@ class SV extends BaseSV
 
     public function addApporteurHorsRegion($cvi, $raison_sociale, $pays)
     {
-        if (array_key_exists($cvi, $this->apporteurs->toArray())) {
+        $etablissement = EtablissementClient::findByCvi($cvi);
+        $identifiant = $etablissement ? $etablissement->identifiant : $cvi;
+
+        if (array_key_exists($identifiant, $this->apporteurs->toArray())) {
             return;
         }
 
         foreach ($this->listeProduitsHorsRegion() as $hash => $produit) {
-            $p = $this->addProduit($cvi, $hash);
+            $p = $this->addProduit($identifiant, $hash);
             $p->nom = $raison_sociale;
             $p->commune = $pays;
         }
@@ -297,7 +300,7 @@ class SV extends BaseSV
     }
 
     public function addProduit($identifiant, $hash, $denominationComplementaire = null, $hidden_denom = null) {
-        $etablissement = EtablissementClient::getInstance()->findByCvi($identifiant, acCouchdbClient::HYDRATE_JSON);
+        $etablissement = EtablissementClient::getInstance()->findByIdentifiant($identifiant, acCouchdbClient::HYDRATE_JSON);
         if(!$etablissement && preg_match("/^[0-9]{10}|[A-Z]{2}[A-Z0-9]{8,12}$/", $identifiant)) {
             $etablissement = new stdClass();
             $etablissement->cvi = $identifiant;
