@@ -99,15 +99,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_CLOTURE => "Contrat clôturé",
 	);
 
-    static $statuts_template_historique = array(
+    static $statuts_historique_a_venir = array(
         "Projet de contrat initié" => self::STATUT_CREE,
         "Projet soumis à l'acheteur ou au courtier (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR_TRANSMIS,
         "Projet soumis à l'acheteur ou au courtier pour validation (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR,
         "Projet en attente de validation par l'acheteur ou le courtier" => self::STATUT_PROJET_ACHETEUR,
         "Proposition de contrat soumise aux autres soussignés pour signature" => self::STATUT_PROPOSITION,
         "Signature des soussignés" => self::STATUT_SIGNE,
-        "Contrat de vente visé" => self::STATUT_VALIDE,
-        "Contrat clôturé" => self::STATUT_CLOTURE
+        "Visa par le CIVA" => self::STATUT_VALIDE,
+        "Saisie des enlèvements" => self::STATUT_CLOTURE,
+        "Clôture du contrat" => self::STATUT_CLOTURE
     );
 
 	static $statuts_supprimable = array(
