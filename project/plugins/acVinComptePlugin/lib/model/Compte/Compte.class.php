@@ -277,11 +277,6 @@ class Compte extends BaseCompte implements InterfaceCompteGenerique {
         return false;
     }
 
-    public function isInterlocuteurContact() {
-
-        return ($this->compte_type == CompteClient::TYPE_COMPTE_INTERLOCUTEUR);
-    }
-
     private function removeFournisseursTag() {
         $this->removeTags('automatique', array('Fournisseur', 'MDV', 'PLV'));
     }
