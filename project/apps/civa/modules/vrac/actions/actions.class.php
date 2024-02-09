@@ -457,7 +457,7 @@ class vracActions extends sfActions
     {
 
         $this->user = $this->getEtablissementCreateur();
-        $this->config = ConfigurationClient::getConfiguration('2012');
+        $this->config = ConfigurationClient::getCurrent();
         //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
         $this->appellationsLieuDit = json_encode(array());
         $this->vrac = $this->getRoute()->getVrac();
@@ -512,7 +512,7 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	$this->config = ConfigurationClient::getCurrent();
     	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
@@ -538,7 +538,7 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	$this->config = ConfigurationClient::getCurrent();
     	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
@@ -573,7 +573,7 @@ class vracActions extends sfActions
     	if (!$hash) {
     		throw new sfException('Hash cépage obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getConfiguration('2012');
+    	$this->config = ConfigurationClient::getCurrent();
     	if (!$this->config->exist($hash)) {
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
