@@ -18,8 +18,7 @@
 					<td>
 						<select id="choix_appellation" name="appellation">
 							<option value="">--</option>
-							<?php foreach ($config->declaration->getArrayAppellations() as $key => $appellation): ?>
-                            <?php if ($vrac->type_contrat == VracClient::TYPE_MOUT && $appellation->getKey() != 'CREMANT') continue; ?>
+							<?php foreach ($form->getAppellations() as $key => $appellation): ?>
 							<option value="<?php echo $key ?>"><?php echo $appellation->libelle ?></option>
 							<?php endforeach; ?>
 						</select>

@@ -34,4 +34,27 @@ class VracProduitAjoutForm extends acCouchdbObjectForm
     public function doUpdateObject($values) {
     	$this->getObject()->addDynamiqueDetail(HashMapper::inverse($values['hash']), $values['lieu_dit'], $values['vtsgn']);
     }
+
+    public function getAppellations()
+    {
+        $appellations = array_filter(ConfigurationClient::getCurrent()->declaration->getArrayAppellations(), function($appellation, $key) {
+            if ($this->getObject()->type_contrat == VracClient::TYPE_MOUT && $appellation->getKey() != 'CREMANT') {
+                return false;
+            }
+
+            if (in_array($appellation->getCertification()->getKey(), ["AOC_ALSACE", "VINSSIG"]) === false) {
+                return false;
+            }
+
+            if ($appellation->getGenre()->getKey() === "VCI") { return false; }
+
+            if ($appellation->getCertification()->getKey() === "VINSSIG" && ($appellation->getGenre()->getKey() === "EFF" || $appellation->getKey() !== "VINTABLE")) {
+                return false;
+            }
+
+            return true;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return $appellations;
+    }
 }
