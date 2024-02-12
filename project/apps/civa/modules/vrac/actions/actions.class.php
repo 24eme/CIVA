@@ -512,7 +512,7 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getCurrent();
+    	$this->config = ConfigurationClient::getConfiguration('2012');
     	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
@@ -538,7 +538,7 @@ class vracActions extends sfActions
     	if (!$appellation) {
     		throw new sfException('Appellation obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getCurrent();
+    	$this->config = ConfigurationClient::getConfiguration('2012');
     	if (!$this->config->exist($appellation)) {
     		throw new sfException('Appellation "'.$appellation.'" n\'existe pas.');
     	}
@@ -573,7 +573,7 @@ class vracActions extends sfActions
     	if (!$hash) {
     		throw new sfException('Hash cépage obligatoire.');
     	}
-    	$this->config = ConfigurationClient::getCurrent();
+    	$this->config = ConfigurationClient::getConfiguration('2012');
     	if (!$this->config->exist($hash)) {
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
