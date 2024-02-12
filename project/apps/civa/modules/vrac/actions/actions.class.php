@@ -457,8 +457,6 @@ class vracActions extends sfActions
     {
 
         $this->user = $this->getEtablissementCreateur();
-        $this->config = ConfigurationClient::getConfiguration('2012');
-        //$this->appellationsLieuDit = json_encode($this->config->getAppellationsLieuDit());
         $this->appellationsLieuDit = json_encode(array());
         $this->vrac = $this->getRoute()->getVrac();
 
@@ -578,7 +576,7 @@ class vracActions extends sfActions
     		throw new sfException('Cépage "'.$hash.'" n\'existe pas.');
     	}
     	$cepage = $this->config->get($hash);
-    	return $this->renderText($cepage->hasVtsgn());
+    	return $this->renderText($cepage->hasHashVTSGN());
     }
 
     public function executeDownloadNotice() {
