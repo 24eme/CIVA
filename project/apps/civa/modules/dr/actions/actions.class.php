@@ -122,9 +122,9 @@ class drActions extends _DRActions {
         $this->dr = $this->getRoute()->getDR();
         $this->etablissement = $this->getRoute()->getEtablissement();
 
-        $this->form_gest = new TiersExploitantForm($this->dr->declarant->exploitant, ['etablissement' => $this->etablissement]);
+        $this->form_gest = new TiersExploitantForm($this->dr->declarant->exploitant);
         $this->form_gest_err = 0;
-        $this->form_expl = new TiersExploitationForm($this->dr->declarant, ['etablissement' => $this->etablissement]);
+        $this->form_expl = new TiersExploitationForm($this->dr->declarant);
         $this->form_expl_err = 0;
 
         if ($request->isMethod(sfWebRequest::POST)) {

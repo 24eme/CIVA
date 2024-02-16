@@ -95,10 +95,10 @@ class dsActions extends sfActions {
         $this->dss = DSCivaClient::getInstance()->findDssByDS($this->ds);
         $this->form_gest = null;
         $this->form_gest_err = 0;
-        $this->form_gest = new TiersExploitantForm($this->ds->declarant->exploitant, ['etablissement' => $this->tiers]);
+        $this->form_gest = new TiersExploitantForm($this->ds->declarant->exploitant);
         $this->form_gest_err = 0;
 
-        $this->form_expl = new TiersExploitationForm($this->ds->declarant, ['etablissement' => $this->tiers]);
+        $this->form_expl = new TiersExploitationForm($this->ds->declarant);
         $this->form_expl_err = 0;
         if ($request->isMethod(sfWebRequest::POST)) {
             if($request->isXmlHttpRequest())
