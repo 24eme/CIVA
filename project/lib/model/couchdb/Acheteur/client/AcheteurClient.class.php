@@ -52,7 +52,7 @@ class AcheteurClient extends acCouchdbClient {
 
     protected function loadAcheteursList($type) {
         if (is_null($this->_acheteurs)) {
-            $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
+            $this->_acheteurs = $this->loadAcheteurs();
         }
 
         return $this->_acheteurs[$type];
@@ -60,7 +60,7 @@ class AcheteurClient extends acCouchdbClient {
 
     public function getAcheteurs() {
         if (is_null($this->_acheteurs)) {
-            $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
+            $this->_acheteurs = $this->loadAcheteurs();
         }
 
         $acheteurs = array();
