@@ -29,13 +29,11 @@ function(doc) {
     }
 
     var vendeurNom = "";
-    if(doc.vendeur.intitule){ vendeurNom = doc.vendeur.intitule+" "; }
-    vendeurNom = vendeurNom + doc.vendeur.raison_sociale;
+    vendeurNom = doc.vendeur.raison_sociale;
 
     var acheteurNom = "";
-    if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
-    acheteurNom = acheteurNom + doc.acheteur.raison_sociale;
-    
+    acheteurNom = doc.acheteur.raison_sociale;
+
     var mercuriales = "M";
 	if (doc.vendeur_type == 'caves_cooperatives') {
 		mercuriales = "C";
