@@ -234,6 +234,15 @@ class ConfigurationCepage extends BaseConfigurationCepage {
 
         return false;
     }
+
+    public function hasHashVTSGN()
+    {
+        $hashVT = str_replace('mentions/DEFAUT', 'mentions/VT', $this->getHash());
+        $hashSGN = str_replace('mentions/DEFAUT', 'mentions/SGN', $this->getHash());
+
+        return $this->getDocument()->exist($hashVT) || $this->getDocument()->exist($hashSGN);
+    }
+
     /* FIN DR */
 
 }

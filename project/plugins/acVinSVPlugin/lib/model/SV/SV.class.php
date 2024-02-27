@@ -177,12 +177,15 @@ class SV extends BaseSV
 
     public function addApporteurHorsRegion($cvi, $raison_sociale, $pays)
     {
-        if (array_key_exists($cvi, $this->apporteurs->toArray())) {
+        $etablissement = EtablissementClient::findByCvi($cvi);
+        $identifiant = $etablissement ? $etablissement->identifiant : $cvi;
+
+        if (array_key_exists($identifiant, $this->apporteurs->toArray())) {
             return;
         }
 
         foreach ($this->listeProduitsHorsRegion() as $hash => $produit) {
-            $p = $this->addProduit($cvi, $hash);
+            $p = $this->addProduit($identifiant, $hash);
             $p->nom = $raison_sociale;
             $p->commune = $pays;
         }
@@ -209,7 +212,8 @@ class SV extends BaseSV
 
         foreach ($this->apporteurs as $apporteur) {
             foreach ($apporteur->getProduits() as $produit) {
-                $produits[substr($produit->getHash(), 23)][] = $apporteur->getCvi();
+                // première occurence de c dans /apporteurs/XXXXXXXXX/certifi[...]
+                $produits[strpbrk($produit->getHash(), 'c')][] = $apporteur->getCvi();
             }
         }
 
@@ -227,6 +231,7 @@ class SV extends BaseSV
                 $recap[$key]->denominationComplementaire = $produit->denomination_complementaire;
                 $recap[$key]->libelle_html = $produit->getLibelleHtml();
                 $recap[$key]->superficie_recolte = 0;
+                $recap[$key]->superficie_totale = 0;
 
                 if ($this->getType() === SVClient::TYPE_SV11) {
                     $recap[$key]->volume_recolte = 0;
@@ -265,6 +270,8 @@ class SV extends BaseSV
             $recapProduit->volume_revendique += $produit->volume_revendique;
             $recapProduit->apporteurs[$produit->identifiant] = $produit->nom;
             $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
+
+            $recapProduit->superficie_totale += $produit->getSuperficieTotale();
         }
 
         $recapSorted = array();
@@ -433,6 +440,30 @@ class SV extends BaseSV
         return $this->motifs_modification;
     }
 
+    public function removeEmptyProduits()
+    {
+        foreach ($this->apporteurs as $apporteur) {
+            foreach ($apporteur->getProduits() as $hash => $produit) {
+                if ($produit->isEmpty()) {
+                    $this->getDocument()->remove($hash);
+                }
+            }
+            foreach($apporteur as $item) {
+                if(!count($item->toArray(true, false))) {
+                    $keysToRemove[$item->getHash()] = $item->getHash();
+                }
+            }
+            foreach($keysToRemove as $hash) {
+                $this->getDocument()->remove($hash);
+            }
+        }
+    }
+
+    public function cleanDoc()
+    {
+        $this->removeEmptyProduits();
+    }
+
     public function validate()
     {
         if ($this->valide->date_saisie === null) {
@@ -458,13 +489,21 @@ class SV extends BaseSV
     }
 
     public function getValidee() {
+        if(!$this->isValide()) {
 
-        return $this->isValide();
+            return null;
+        }
+        return $this->valide->date_saisie;
     }
 
     public function getModifiee()
     {
-        return $this->valide->date_saisie !== $this->valide->date_modification;
+        if(!$this->isValide()) {
+
+            return null;
+        }
+
+        return $this->valide->date_modification;
     }
 
     public function devalidate()
@@ -516,6 +555,25 @@ class SV extends BaseSV
                 continue;
             }
             $produit->volume_revendique = round($produit->quantite_recolte / $produit->getTauxExtraction(), 2);
+        }
+
+        $recap = $this->getRecapProduits();
+
+        foreach ($recap as $hash => $produit) {
+            $noeud = str_replace('/declaration/', '', $hash);
+
+            if (! $this->extraction->exist($noeud)) {
+                continue;
+            }
+
+            $volume_extrait = $this->extraction->get($noeud)->volume_extrait;
+            $volume_revendique = $recap[$hash]->volume_revendique;
+
+            if (round($volume_revendique, 2) != round($volume_extrait, 2)) {
+                $diff = round(round($volume_extrait, 2) - round($volume_revendique, 2), 2);
+                $apporteur = current(array_keys($recap[$hash]->apporteurs));
+                $this->apporteurs->get($apporteur)->get($noeud)->volume_revendique += $diff;
+            }
         }
     }
 

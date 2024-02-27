@@ -99,15 +99,16 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		self::STATUT_CLOTURE => "Contrat clôturé",
 	);
 
-    static $statuts_template_historique = array(
+    static $statuts_historique_a_venir = array(
         "Projet de contrat initié" => self::STATUT_CREE,
         "Projet soumis à l'acheteur ou au courtier (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR_TRANSMIS,
         "Projet soumis à l'acheteur ou au courtier pour validation (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR,
         "Projet en attente de validation par l'acheteur ou le courtier" => self::STATUT_PROJET_ACHETEUR,
         "Proposition de contrat soumise aux autres soussignés pour signature" => self::STATUT_PROPOSITION,
         "Signature des soussignés" => self::STATUT_SIGNE,
-        "Contrat de vente visé" => self::STATUT_VALIDE,
-        "Contrat clôturé" => self::STATUT_CLOTURE
+        "Visa par le CIVA" => self::STATUT_VALIDE,
+        "Saisie des enlèvements" => self::STATUT_CLOTURE,
+        "Clôture du contrat" => self::STATUT_CLOTURE
     );
 
 	static $statuts_supprimable = array(
@@ -127,9 +128,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	);
 
 	public static $cepages_exclus_cremant = array(
-		'RB',
-		'BL',
-		'RS',
+		'RB', 'RBBL', 'RBRS'
 	);
 
   	public static function getStatutsLibellesActions()
@@ -330,7 +329,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 					if (!$email) {
 						$email = $compte->getEmail();
 					}
-	        if(!$email || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
+	        if(!$email || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
 						continue;
 					}
 					$emails[] = $email;
@@ -1257,10 +1256,19 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function getTauxCvo() {
-		$date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
-		$conf = ConfigurationClient::getConfiguration($date)->get('/declaration/certifications/AOC_ALSACE');
-		$tx = round($conf->getTauxCvo($this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d')) / 2, 2);
-		return ($tx >= 0)? $tx : null;
+        $nbaoc = 0;
+        foreach($this->declaration->certification->genre as $certif) {
+            if (strpos($certif->getKey(), 'appellation_VINTABLE') === false) {
+                $nbaoc++;
+            }
+        }
+        $tx = 0;
+        if ($nbaoc) {
+            $date = $this->valide->date_saisie ? $this->valide->date_saisie : date('Y-m-d');
+            $conf = ConfigurationClient::getConfiguration($date)->get('/declaration/certifications/AOC_ALSACE');
+            $tx = round($conf->getTauxCvo($date) / 2, 2);
+        }
+        return ($tx >= 0)? $tx : null;
     }
 
 	public function storeAnnexe($file, $filename) {

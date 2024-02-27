@@ -24,4 +24,13 @@ abstract class _VracTiers extends acCouchdbDocumentTree {
         return $this->getTiersObject()->isActif();
     }
 
+    public function getRaisonSociale() {
+        $rs = $this->_get('raison_sociale');
+        if (strpos($rs, $this->intitule) !== false) {
+            $rs = str_replace($this->intitule.' ', '', $rs);
+            $this->raison_sociale = $rs;
+        }
+        return $rs;
+    }
+
 }

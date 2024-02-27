@@ -14,6 +14,9 @@
   </thead>
   <tbody>
   <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
+    <?php if (! $produit->superficie_recolte && ! $produit->quantite_recolte && ! $produit->volume_revendique && !$produit->superficie_mouts && !$produit->volume_mouts): ?>
+      <?php continue; ?>
+    <?php endif ?>
     <tr>
       <td><?php echo $produit->getRawValue()->libelle_html ?></td>
       <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
@@ -29,7 +32,7 @@
   <tr>
     <?php $totalParColonne = $sv->getSum() ?>
     <td class="text-right"><strong>Total</strong></td>
-    <td class="text-right"><?php echoFloat($totalParColonne['superficie']) ?> <small class="text-muted">ares</small></td>
+    <td class="text-right"><?php echoFloat($totalParColonne['superficie_recolte']) ?> <small class="text-muted">ares</small></td>
     <td class="text-right"><?php echo $totalParColonne['recolte'] ?> <small class="text-muted">kg</small></td>
     <td class="text-right"><?php echoFloat($totalParColonne['revendique']) ?> <small class="text-muted">hl</small></td>
     <?php if ($sv->hasMouts()): ?>

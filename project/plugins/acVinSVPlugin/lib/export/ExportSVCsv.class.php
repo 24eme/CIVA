@@ -43,6 +43,16 @@ class ExportSVCsv
         $hashproduit = $produit->getHash();
         $cvi_apporteur = explode("/", $hashproduit)[2];
 
+        $volume_recolte = $produit->volume_recolte;
+        if($produit->exist('volume_mouts') && $produit->volume_mouts) {
+            $volume_recolte += $produit->volume_mouts;
+        }
+
+        $volume_revendique = $produit->volume_revendique;
+        if($produit->exist('volume_mouts_revendique') && $produit->volume_mouts_revendique) {
+            $volume_revendique += $produit->volume_mouts_revendique;
+        }
+
         return [
             $sv->declarant->cvi,
             $sv->declarant->raison_sociale,
@@ -53,13 +63,12 @@ class ExportSVCsv
             $produit->getConfig()->getCepage()->getLibelle(),
             $produit->getConfig()->getMention()->getLibelle(),
             $produit->denomination_complementaire,
-            $produit->superficie_recolte,
+            $produit->getSuperficieTotale(),
             $produit->quantite_recolte,
-            $produit->volume_recolte,
+            $volume_recolte,
             $produit->volume_detruit,
             $produit->vci,
-            $produit->volume_revendique,
-
+            $volume_revendique,
             $sv->type,
             $sv->valide->date_saisie,
             substr($hashproduit, 22),

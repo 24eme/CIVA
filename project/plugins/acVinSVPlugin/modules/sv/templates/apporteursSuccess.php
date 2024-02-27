@@ -1,7 +1,7 @@
 <?php use_helper('Float'); ?>
 <?php include_partial('sv/step', array('object' => $sv, 'etapes' => SVEtapes::getInstance($sv->type), 'step' => SVEtapes::ETAPE_APPORTEURS)); ?>
 
-<h3>Liste de vos apporteurs</h3>
+<h3>Revendication de vos apporteurs</h3>
 
 <?php if ($sf_user->hasFlash('error_msg')): ?>
   <div class="alert alert-danger" role="alert">
@@ -46,14 +46,14 @@
       <small class="text-muted">ares</small>
   </td>
   <td class="text-right">
-      <?php if($sv->type == SVClient::TYPE_SV12): ?>
-        <?php if ($recap['quantite'] && $recap['mouts_revendique']): ?>
-          (<abbr title="Revendiqué">R</abbr>) <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
-          (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?> <small class="text-muted">hl</small><br/>
-        <?php elseif ($recap['quantite']): ?>
-          <?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small><br/>
-        <?php endif ?>
-      <?php elseif($recap['revendique'] || $recap['mouts_revendique']): ?>
+      <?php if($sv->type == SVClient::TYPE_SV12 && $recap['quantite']): ?>
+          <?php if($recap['mouts_revendique']): ?>(<abbr title="Revendiqué">R</abbr>) <?php endif; ?><?php echoFloat($recap['quantite']) ?> <small class="text-muted">kg</small>
+      <?php endif ?>
+      <?php if ($sv->type == SVClient::TYPE_SV12 && $recap['mouts_revendique']): ?>
+          <?php if($recap['quantite']): ?><br /><?php endif; ?>
+          (<abbr title="Moûts">M</abbr>) <?php echoFloat($recap['mouts_revendique']) ?> <small class="text-muted">hl</small>
+      <?php endif; ?>
+      <?php if($sv->type == SVClient::TYPE_SV11 && ($recap['revendique'] || $recap['mouts_revendique'])): ?>
         <?php if($recap['revendique'] && $recap['mouts_revendique']): ?>
         (<abbr title="Revendiqué + Moûts">R+M</abbr>) <?php echoFloat($recap['revendique'] + $recap['mouts_revendique']) ?>
         <?php elseif($recap['mouts_revendique']): ?>

@@ -229,7 +229,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->update();
         $this->cleanNoeuds();
         $this->remove('etape');
-        $this->storeDeclarant();
         if(!$date) {
             $date = date('Y-m-d');
         }

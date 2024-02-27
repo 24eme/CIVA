@@ -76,13 +76,23 @@ class ExportSVMouvementsCsv extends ExportSVCsv
 
     public function build(SV $sv, SVProduit $produit)
     {
+        $volume_recolte = $produit->volume_recolte;
+        if($produit->exist('volume_mouts') && $produit->volume_mouts) {
+            $volume_recolte += $produit->volume_mouts;
+        }
+
+        $volume_revendique = $produit->volume_revendique;
+        if($produit->exist('volume_mouts_revendique') && $produit->volume_mouts_revendique) {
+            $volume_revendique += $produit->volume_mouts_revendique;
+        }
+
         return [
-        $this->buildLine($sv, $produit, "superficie", $produit->superficie_recolte),
+        $this->buildLine($sv, $produit, "superficie", $produit->superficie_recolte + $produit->superficie_mouts),
         $this->buildLine($sv, $produit, "quantite", $produit->quantite_recolte),
-        $this->buildLine($sv, $produit, "volume", $produit->volume_recolte),
+        $this->buildLine($sv, $produit, "volume", $volume_recolte),
         $this->buildLine($sv, $produit, "vci", $produit->vci),
         $this->buildLine($sv, $produit, "volume_detruit", $produit->volume_detruit),
-        $this->buildLine($sv, $produit, "volume_revendique", $produit->volume_revendique),
+        $this->buildLine($sv, $produit, "volume_revendique", $volume_revendique),
         ];
     }
 

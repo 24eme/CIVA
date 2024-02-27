@@ -77,6 +77,12 @@ class SVProduit extends BaseSVProduit {
         return $this->_get('superficie_mouts');
     }
 
+    public function getSuperficieTotale()
+    {
+        $s_mouts = $this->getSuperficieMouts();
+        return $this->getSuperficieRecolte() + $s_mouts;
+    }
+
     public function isComplete($squeezeRevendique = false) {
         if($this->isRebeche()) {
 
@@ -99,8 +105,37 @@ class SVProduit extends BaseSVProduit {
             if ($squeezeRevendique) {
                 return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte);
             }
+
+            // Si pas de volume / superficie à l'étape 1
+            if ($this->superficie_recolte === 0 && $this->quantite_recolte === 0) {
+                return true;
+            }
+
             return !is_null($this->superficie_recolte) && !is_null($this->quantite_recolte) && !is_null($this->volume_revendique);
         }
+    }
+
+    public function isEmpty()
+    {
+        if ($this->isMout()) {
+            return false;
+        }
+        if ($this->isRebeche()) {
+            return false;
+        }
+        if ($this->getDocument()->type == SVClient::TYPE_SV11) {
+            if (! $this->superficie_recolte && ! $this->volume_recolte && ! $this->volume_revendique && ! $this->volume_detruit) {
+                return true;
+            }
+        }
+
+        if ($this->getDocument()->type == SVClient::TYPE_SV12) {
+            if (! $this->superficie_recolte && ! $this->quantite_recolte && ! $this->volume_revendique) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isRebeche()
@@ -114,16 +149,22 @@ class SVProduit extends BaseSVProduit {
     }
 
     public function setVolumeRecolte($v) {
-        if ($this->isRebeche() && !$this->volume_revendique) {
+        if ($this->isRebeche()) {
             $this->_set('volume_revendique', $v);
         }
         return $this->_set('volume_recolte', $v);
     }
 
     public function setVolumeRevendique($v) {
-        if ($this->isRebeche() && !$this->volume_recolte) {
+        if ($this->isRebeche()) {
             $this->_set('volume_recolte', $v);
         }
         return $this->_set('volume_revendique', $v);
+    }
+
+    public function setVolumeMouts($v) {
+        $this->_set('volume_mouts', $v);
+
+        $this->volume_mouts_revendique = $this->volume_mouts;
     }
 }

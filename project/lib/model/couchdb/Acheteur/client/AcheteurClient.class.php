@@ -10,55 +10,30 @@ class AcheteurClient extends acCouchdbClient {
     }
 
     public function loadAcheteurs() {
-        $cooperatives = $this->startkey(array('Cooperative'))
-                ->endkey(array('Cooperative', array()))
-                ->executeView('ACHAT', 'qualite');
-        $negociants = $this->startkey(array('Negociant'))
-                ->endkey(array('Negociant', array()))
-                ->executeView('ACHAT', 'qualite');
-        $negocaves = $this->startkey(array('NegoCave'))
-                ->endkey(array('NegoCave', array()))
-                ->executeView('ACHAT', 'qualite');
-        $recoltants = $this->startkey(array('Recoltant'))
-                ->endkey(array('Recoltant', array()))
-                ->executeView('ACHAT', 'qualite');
+        $liste = $this->executeView('ACHAT', 'qualite');
 
         $acheteurs_negociant = array();
         $acheteurs_cave = array();
         $acheteurs_mout = array();
-        foreach ($cooperatives as $key => $value) {
-            $acheteurs_cave[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_cave[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_cave[$value->cvi]['nom'] = $value->nom;
 
-            $acheteurs_mout[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_mout[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
-        }
-        foreach ($negociants as $key => $value) {
-            $acheteurs_negociant[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_negociant[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_negociant[$value->cvi]['nom'] = $value->nom;
+        foreach ($liste as $id => $etab) {
+            if ($etab->getFamille() === EtablissementFamilles::FAMILLE_COOPERATIVE) {
+                $acheteurs_cave[$etab->cvi]['cvi'] = $etab->cvi;
+                $acheteurs_cave[$etab->cvi]['commune'] = $etab->commune;
+                $acheteurs_cave[$etab->cvi]['nom'] = $etab->nom;
+            }
 
-            $acheteurs_mout[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_mout[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
-        }
+            if (in_array($etab->getFamille(), [EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR])) {
+                $acheteurs_negociant[$etab->cvi]['cvi'] = $etab->cvi;
+                $acheteurs_negociant[$etab->cvi]['commune'] = $etab->commune;
+                $acheteurs_negociant[$etab->cvi]['nom'] = $etab->nom;
+            }
 
-        foreach ($negocaves as $key => $value) {
-            $acheteurs_negociant[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_negociant[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_negociant[$value->cvi]['nom'] = $value->nom;
-
-            $acheteurs_mout[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_mout[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_mout[$value->cvi]['nom'] = $value->nom;
-        }
-
-        foreach ($recoltants as $key => $value) {
-            $acheteurs_negociant[$value->cvi]['cvi'] = $value->cvi;
-            $acheteurs_negociant[$value->cvi]['commune'] = $value->commune;
-            $acheteurs_negociant[$value->cvi]['nom'] = $value->nom;
+            if (in_array($etab->getFamille(), [EtablissementFamilles::FAMILLE_NEGOCIANT, EtablissementFamilles::FAMILLE_COOPERATIVE])) {
+                $acheteurs_mout[$etab->cvi]['cvi'] = $etab->cvi;
+                $acheteurs_mout[$etab->cvi]['commune'] = $etab->commune;
+                $acheteurs_mout[$etab->cvi]['nom'] = $etab->nom;
+            }
         }
 
         uasort($acheteurs_negociant, 'AcheteurClient::sortByNom');
@@ -77,7 +52,7 @@ class AcheteurClient extends acCouchdbClient {
 
     protected function loadAcheteursList($type) {
         if (is_null($this->_acheteurs)) {
-            $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
+            $this->_acheteurs = $this->loadAcheteurs();
         }
 
         return $this->_acheteurs[$type];
@@ -85,7 +60,7 @@ class AcheteurClient extends acCouchdbClient {
 
     public function getAcheteurs() {
         if (is_null($this->_acheteurs)) {
-            $this->_acheteurs = CacheFunction::cache('model', array($this, 'loadAcheteurs'), array(), 31556926);
+            $this->_acheteurs = $this->loadAcheteurs();
         }
 
         $acheteurs = array();

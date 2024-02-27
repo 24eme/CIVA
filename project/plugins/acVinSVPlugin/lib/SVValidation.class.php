@@ -28,7 +28,7 @@ class SVValidation extends DocumentValidation
                         continue;
                     }
                     $extractionProduit = $this->document->extraction->get(str_replace('/declaration/', '', $hash));
-                    if($extractionProduit->volume_extrait && $extractionProduit->volume_extrait != $recapProduit->volume_revendique) {
+                    if($extractionProduit->volume_extrait && round($extractionProduit->volume_extrait, 2) != round($recapProduit->volume_revendique, 2)) {
                         $this->addPoint('erreur', 'volume_extrait', $recapProduit->libelle, $this->generateUrl('sv_revendication', ['sf_subject' => $this->document]));
                     }
                 }
