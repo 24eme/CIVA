@@ -32,7 +32,6 @@ class Roles
     const TELEDECLARATION_PRODUCTION = 'teledeclaration_production';
     const TELEDECLARATION_DS_PROPRIETE = 'teledeclaration_ds_propriete';
     const TELEDECLARATION_DS_NEGOCE = 'teledeclaration_ds_negoce';
-    const TELEDECLARATION_DS_DECEMBRE = 'teledeclaration_ds_decembre';
     const TELEDECLARATION_GAMMA = 'teledeclaration_gamma';
     const TELEDECLARATION_VRAC = 'teledeclaration_vrac';
     const TELEDECLARATION_VRAC_CREATION = 'teledeclaration_vrac_creation';
@@ -55,7 +54,6 @@ class Roles
         self::TELEDECLARATION_VRAC_CREATION => "Création contrats",
         self::TELEDECLARATION_DS_PROPRIETE => "DS Propriété",
         self::TELEDECLARATION_DS_NEGOCE => "DS Négoce",
-        self::TELEDECLARATION_DS_DECEMBRE => "DS Décembre",
         self::TELEDECLARATION_DRM => "DRM",
         self::TELEDECLARATION_DOUANE => "Transmission Ciel",
         );

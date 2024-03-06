@@ -34,11 +34,6 @@ class EtablissementDroits
         $droits[Roles::TELEDECLARATION_VRAC] = Roles::TELEDECLARATION_VRAC;
         $droits[Roles::TELEDECLARATION_VRAC_CREATION] = Roles::TELEDECLARATION_VRAC_CREATION;
 
-        if($etablissement->exist('ds_decembre')) {
-
-            $droits[Roles::TELEDECLARATION_DS_DECEMBRE] = Roles::TELEDECLARATION_DS_DECEMBRE;
-        }
-
         return $droits;
     }
 }

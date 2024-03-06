@@ -128,7 +128,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	);
 
 	public static $cepages_exclus_cremant = array(
-		'RB'
+		'RB', 'RBBL', 'RBRS'
 	);
 
   	public static function getStatutsLibellesActions()
@@ -329,7 +329,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 					if (!$email) {
 						$email = $compte->getEmail();
 					}
-	        if(!$email || !$compte->mot_de_passe || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
+	        if(!$email || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
 						continue;
 					}
 					$emails[] = $email;
