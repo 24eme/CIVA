@@ -69,6 +69,9 @@ cat $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures.utf8.csv | grep -v "date"
     iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.csv;
     grep -E "^($annee|date)" $PATH_MISEADISPO_CIVA/export/bi/export_bi_factures_synthese.utf8.csv | sort | uniq | sort -r > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.utf8.csv;
     iconv -f UTF8 -t ISO88591//TRANSLIT $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.utf8.csv > $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.csv;
+    mkdir -p $PATH_MISEADISPO_CIVA/export/bi/compta/$annee
+    cp $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures.csv $PATH_MISEADISPO_CIVA/export/bi/compta/$annee
+    cp $PATH_MISEADISPO_CIVA/export/bi/$annee/"$annee"_export_bi_factures_synthese.csv  $PATH_MISEADISPO_CIVA/export/bi/compta/$annee
 done;
 
 bash bin/export_drs_csv.sh $DR_CAMPAGNE > $BASEDIR/$PATH_MISEADISPO_AVA/DR/$DR_CAMPAGNE.csv
