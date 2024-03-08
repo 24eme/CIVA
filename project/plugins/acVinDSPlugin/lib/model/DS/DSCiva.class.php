@@ -46,10 +46,27 @@ class DSCiva extends DS implements IUtilisateursDocument {
         $this->set('stockage', $tiers->lieux_stockage[$num_lieu]);
     }
 
+    public function getExploitant()
+    {
+        $etab = $this->getEtablissement();
+        $societe = $etab->getSociete();
+
+        foreach ($societe->getContacts()->toArray() as $id => $c) {
+            $compte = CompteClient::getInstance()->find($id);
+            if ($compte && $compte->getFonction() === 'Exploitant') {
+                return $compte;
+            }
+        }
+
+        return $this->getEtablissement()->exploitant;
+    }
+
     public function storeDeclarant() {
         parent::storeDeclarant();
 
         $tiers = $this->getEtablissement();
+        $exploitant = $this->getExploitant();
+
         $this->declaration_commune = $tiers->declaration_commune;
         $this->declaration_insee = $tiers->declaration_insee;
 
@@ -59,13 +76,12 @@ class DSCiva extends DS implements IUtilisateursDocument {
             $this->add('civaba', $tiers->civaba);
         }
 
-        $this->declarant->exploitant->sexe = $tiers->exploitant->civilite;
-        $this->declarant->exploitant->nom = $tiers->exploitant->nom;
-        $this->declarant->exploitant->adresse = $tiers->exploitant->adresse;
-        $this->declarant->exploitant->code_postal = $tiers->exploitant->code_postal;
-        $this->declarant->exploitant->commune = $tiers->exploitant->commune;
-        $this->declarant->exploitant->date_naissance = $tiers->exploitant->date_naissance;
-        $this->declarant->exploitant->telephone = $tiers->exploitant->telephone;
+        $this->declarant->exploitant->sexe = $exploitant->civilite;
+        $this->declarant->exploitant->nom = $exploitant->nom;
+        $this->declarant->exploitant->adresse = $exploitant->adresse;
+        $this->declarant->exploitant->code_postal = $exploitant->code_postal;
+        $this->declarant->exploitant->commune = $exploitant->commune;
+        $this->declarant->exploitant->telephone = $exploitant->telephone;
     }
 
     public function storeInfos() {
