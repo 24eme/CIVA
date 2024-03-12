@@ -5,6 +5,7 @@ Compte:
       _rev: { }
       type: { }
       identifiant: { }
+      login: { required: false }
       mot_de_passe: { }
       civilite: { }
       prenom: { }
