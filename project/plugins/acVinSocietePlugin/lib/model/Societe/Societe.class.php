@@ -165,6 +165,9 @@ class Societe extends BaseSociete implements InterfaceCompteGenerique {
         if($withSocietesLiees && $this->exist('societes_liees')) {
             foreach($this->societes_liees as $idSociete) {
                 $societe = SocieteClient::getInstance()->find($idSociete);
+                if (!$societe) {
+                        throw new sfException('Bad societe '.$idSociete.' from societes_liees ('.$this->_id.')');
+                }
                 foreach($societe->getEtablissementsObj() as $id => $etb) {
                     $etablissements[$id] = clone $etb;
                 }
