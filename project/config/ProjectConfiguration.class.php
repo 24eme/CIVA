@@ -23,6 +23,8 @@ class ProjectConfiguration extends sfProjectConfiguration
 	    $this->enablePlugins('acVinComptePlugin');
 	    $this->enablePlugins('acVinSVPlugin');
         $this->enablePlugins('acElasticaPlugin');
+
+        $this->enablePlugins('MandatSepaPlugin');
   	}
 
 	public static function getAppRouting()
