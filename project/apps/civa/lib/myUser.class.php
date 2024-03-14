@@ -29,4 +29,22 @@ class myUser extends DeclarationSecurityUser {
 
         return $this->getAttribute(self::SESSION_COMPTE_LOGIN, null, self::NAMESPACE_COMPTE) != $this->getAttribute(self::SESSION_COMPTE_LOGIN, null, self::NAMESPACE_COMPTE_ORIGIN);
     }
+
+    public static function autoSignin($compte)
+    {
+         if(! $this->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+             return;
+         }
+
+         $societe = $compte->getSociete();
+
+         if($societe->_id == $this->getCompte()->id_societe) {
+             return;
+         }
+
+         $this->signInCompteUsed($compte);
+         $this->signOutTiers();
+         $this->signInTiers($societe);
+    }
+
 }

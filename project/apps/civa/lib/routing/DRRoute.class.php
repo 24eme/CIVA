@@ -34,7 +34,7 @@ class DRRoute extends sfObjectRoute implements InterfaceTiersRoute {
         $etablissement = $this->getDR()->getEtablissement();
 
         if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
-			CompteRoute::autoSignin($etablissement->getSociete()->getMasterCompte());
+			myUser::autoSignin($etablissement->getSociete()->getMasterCompte());
 		}
 
         return $etablissement;

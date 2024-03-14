@@ -22,7 +22,7 @@ class SVRoute extends EtablissementRoute {
         $etablissement = $this->getSV()->getEtablissement();
 
         if(sfContext::getInstance()->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
-            CompteRoute::autoSignin($etablissement->getSociete()->getMasterCompte());
+            myUser::autoSignin($etablissement->getSociete()->getMasterCompte());
         }
 
         return $etablissement;
