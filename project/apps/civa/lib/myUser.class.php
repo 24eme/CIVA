@@ -30,7 +30,7 @@ class myUser extends DeclarationSecurityUser {
         return $this->getAttribute(self::SESSION_COMPTE_LOGIN, null, self::NAMESPACE_COMPTE) != $this->getAttribute(self::SESSION_COMPTE_LOGIN, null, self::NAMESPACE_COMPTE_ORIGIN);
     }
 
-    public static function autoSignin($compte)
+    public function autoSignin($compte)
     {
          if(! $this->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
              return;
@@ -45,6 +45,11 @@ class myUser extends DeclarationSecurityUser {
          $this->signInCompteUsed($compte);
          $this->signOutTiers();
          $this->signInTiers($societe);
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasCredential(self::CREDENTIAL_ADMIN);
     }
 
 }
