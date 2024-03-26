@@ -96,9 +96,14 @@ class tiersActions extends sfActions {
             $compte = CompteClient::getInstance()->findByLogin($request->getParameter('compte'));
         }
 
-	$isAdmin = $request->getParameter('isAdmin', false);
-        if(!$compte) {
+	    $isAdmin = $request->getParameter('isAdmin', false);
+
+        if(!$compte && $isAdmin) {
             return $this->renderPartial("tiers/ongletsAdmin", array("active" => $request->getParameter('active'), 'isAdmin' => $isAdmin, 'absolute' => true));
+        }
+
+        if(!$compte) {
+            return sfView::NONE;
         }
 
         $blocs = $this->buildBlocs($compte, $isAdmin);
