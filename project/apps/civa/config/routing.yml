@@ -363,14 +363,6 @@ compte:
   url: /compte
   param: { module: compte, action: first }
 
-compte_creation:
-  url: /compte/creation
-  param: { module: compte, action: creation }
-
-compte_modification_oublie:
-  url: /compte/mot_de_passe_oublie
-  param: { module: compte, action: modificationOublie }
-
 compte_modification:
   url: /mon_compte
   param: { module: compte, action: modification }
@@ -382,22 +374,6 @@ compte_mot_de_passe_oublie_login:
 compte_mot_de_passe_oublie:
   url: /mot_de_passe_oublie
   param: { module: compte, action: motDePasseOublie }
-
-compte_mot_de_passe_oublie_confirm:
-  url: /mot_de_passe_oublie/confirm
-  param: { module: compte, action: motDePasseOublieConfirm }
-
-compte_droits:
-  url: /mon_compte/gestion_des_droits
-  param: { module: compte, action: droits }
-
-compte_personne_ajouter:
-  url: /mon_compte/personne/ajouter
-  param: { module: compte, action: personneAjouter }
-
-compte_personne_modifier:
-  url: /mon_compte/personne/modifier/:id
-  param: { module: compte, action: personneModifier }
 
 
 # *********** GAMMA ***********
