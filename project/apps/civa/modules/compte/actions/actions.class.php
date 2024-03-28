@@ -90,7 +90,7 @@ class compteActions extends sfActions {
         require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
         $this->getUser()->signOut();
 
-        $url = 'http://'.$request->getHost();
+        $url = 'http'.($request->isSecure() ? 's': null).'://'.$request->getHost();
         error_reporting(E_ALL);
         phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
 
