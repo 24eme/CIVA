@@ -44,7 +44,7 @@
                 <li><a href="<?php echo url_for('compte', [], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php endif; ?>
 
-            <?php if($isAuthenticated && !$isAdmin && $compteOrigine):?>
+            <?php if($isAuthenticated && !$isAdmin && $compteOrigine && $compte && $compteOrigine->identifiant != $compte->identifiant):?>
                  <li class="red"><a href="<?php echo url_for('delegate_mode_retour_espace_civa', array(), isset($isAbsoluteUrl)); ?>">Retour à mon espace</a></li>
             <?php elseif($isAuthenticated): ?>
                 <li><a href="<?php echo url_for('logout', array(), isset($isAbsoluteUrl)); ?>">Déconnexion</a></li>
