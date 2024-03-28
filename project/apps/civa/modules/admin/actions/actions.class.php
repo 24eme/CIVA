@@ -21,9 +21,9 @@ class adminActions extends sfActions {
         if ($request->isMethod(sfWebRequest::POST)) {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
-                $this->getUser()->signInCompteUsed($this->form->getEtablissement()->getMasterCompte());
+                $this->getUser()->signInCompteUsed($this->form->getEtablissement()->getSociete()->getMasterCompte());
 
-                return $this->redirect('tiers', array('identifiant' => $this->form->getEtablissement()->getMasterCompte()->identifiant));
+                return $this->redirect('tiers', array('identifiant' => $this->form->getEtablissement()->getSociete()->identifiant));
             }
         }
     }

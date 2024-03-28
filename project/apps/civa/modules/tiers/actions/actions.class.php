@@ -93,7 +93,7 @@ class tiersActions extends sfActions {
     public function executeNav(sfWebRequest $request) {
         $compte = null;
         if($request->getParameter('compte')) {
-            $compte = CompteClient::getInstance()->findByLogin($request->getParameter('compte'));
+            $compte = CompteClient::getInstance()->find($request->getParameter('compte'));
         }
 
 	    $isAdmin = $request->getParameter('isAdmin', false);
