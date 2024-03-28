@@ -29,26 +29,26 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($compte && $compte->getRawValue() instanceof Compte): ?>
+            <?php if ($isAuthenticated && $isAdmin): ?>
+                <li class="admin"><a href="<?php echo url_for('admin', array(), isset($isAbsoluteUrl)); ?>">Administration</a></li>
+            <?php elseif($isAuthenticated && $compte): ?>
                 <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $compte->getIdentifiant()), isset($isAbsoluteUrl)); ?>">Mes déclarations</a></li>
             <?php endif; ?>
+
             <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
             <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
 
             <?php if ($compte) : ?>
                 <li><a href="<?php echo url_for('compte_modification', ['identifiant' => $compte->login], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
+            <?php else: ?>
+                <li><a href="<?php echo url_for('compte', [], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php endif; ?>
 
-            <?php if($compte): ?>
-                <?php if ($isAdmin): ?>
-                    <li class="admin"><a href="<?php echo url_for('admin', array(), isset($isAbsoluteUrl)); ?>">Administration</a></li>
-                <?php elseif($compteOrigine):?>
-                     <li class="red"><a href="<?php echo url_for('delegate_mode_retour_espace_civa', array(), isset($isAbsoluteUrl)); ?>">Retour à mon espace</a></li>
-                <?php endif; ?>
-                <?php if(!$compteOrigine) : ?>
-                     <li><a href="<?php echo url_for('logout', array(), isset($isAbsoluteUrl)); ?>">Déconnexion</a></li>
-                <?php endif; ?>
-            <?php else : ?>
+            <?php if($isAuthenticated && !$isAdmin && $compteOrigine):?>
+                 <li class="red"><a href="<?php echo url_for('delegate_mode_retour_espace_civa', array(), isset($isAbsoluteUrl)); ?>">Retour à mon espace</a></li>
+            <?php elseif($isAuthenticated): ?>
+                <li><a href="<?php echo url_for('logout', array(), isset($isAbsoluteUrl)); ?>">Déconnexion</a></li>
+            <?php else: ?>
                 <li><a href="<?php echo url_for('login', array(), isset($isAbsoluteUrl)); ?>">Connexion</a></li>
             <?php endif; ?>
         </ul>
