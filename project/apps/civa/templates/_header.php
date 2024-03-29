@@ -38,9 +38,9 @@
             <li><a href="http://vinsalsace.pro/">Mon espace CIVA</a></li>
             <li><a href="http://declaration.ava-aoc.fr">Mon espace AVA</a></li>
 
-            <?php if ($compte) : ?>
+            <?php if ($isAuthenticated && $compte) : ?>
                 <li><a href="<?php echo url_for('compte_modification', ['identifiant' => $compte->login], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
-            <?php else: ?>
+            <?php elseif($isAuthenticated): ?>
                 <li><a href="<?php echo url_for('compte_modification', [], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php endif; ?>
 
