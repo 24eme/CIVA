@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Script désactivé, il faut passer par l'interface web"
+exit;
+
 . $(echo $0 | sed 's/[^\/]*$//')config.inc
 
 DATADB2FILE=$1
