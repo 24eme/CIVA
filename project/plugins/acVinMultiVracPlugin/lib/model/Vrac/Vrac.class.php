@@ -332,6 +332,10 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
                     continue;
                 }
 
+                if ($compte->getCompteType() === "INTERLOCUTEUR" && $compte->mot_de_passe === null) {
+                    continue;
+                }
+
                 if ($compte->exist('teledeclaration_email') && $compte->teledeclaration_email) {
                     $email = $compte->teledeclaration_email;
                 } else {

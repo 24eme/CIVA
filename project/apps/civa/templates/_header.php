@@ -17,7 +17,7 @@
         </h1>
         <?php if ($compte) : ?>
             <p class="utilisateur">
-                <?php if ($compteOrigine):?>
+                <?php if ($compte && $compteOrigine && $compteOrigine->identifiant != $compte->identifiant):?>
                         <?php echo sprintf('%s , vous êtes connecté en tant que %s', $compteOrigine->getNomAAfficher(), $compte->getNomAAfficher()) ;?>
                 <?php else : ?>
                         <?php echo link_to($compte->getNomAAfficher(), 'tiers');  ?>
@@ -29,9 +29,14 @@
     <div id="acces_directs">
         <h2>Accès directs</h2>
         <ul>
-            <?php if ($isAuthenticated && $isAdmin): ?>
-                <li class="admin"><a href="<?php echo url_for('admin', array(), isset($isAbsoluteUrl)); ?>">Administration</a></li>
-            <?php elseif($isAuthenticated && $compte): ?>
+
+            <?php if($isAuthenticated && $isAdmin && $compte && $compteOrigine): ?>
+                <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $compte->getIdentifiant()), isset($isAbsoluteUrl)); ?>">Mes déclarations</a></li>
+            <?php endif; ?>
+            <?php if($isAuthenticated && $isAdmin && (!$compte || !$compteOrigine)): ?>
+                <li><a href="<?php echo url_for('admin', array(), isset($isAbsoluteUrl)); ?>">Mes déclarations</a></li>
+            <?php endif; ?>
+            <?php if($isAuthenticated && !$isAdmin && $compte): ?>
                 <li><a href="<?php echo url_for('mon_espace_civa', array('identifiant' => $compte->getIdentifiant()), isset($isAbsoluteUrl)); ?>">Mes déclarations</a></li>
             <?php endif; ?>
 
@@ -50,6 +55,10 @@
                 <li><a href="<?php echo url_for('logout', array(), isset($isAbsoluteUrl)); ?>">Déconnexion</a></li>
             <?php else: ?>
                 <li><a href="<?php echo url_for('login', array(), isset($isAbsoluteUrl)); ?>">Connexion</a></li>
+            <?php endif; ?>
+
+            <?php if ($isAuthenticated && $isAdmin): ?>
+                <li class="admin"><a href="<?php echo url_for('admin', array(), isset($isAbsoluteUrl)); ?>">Administration</a></li>
             <?php endif; ?>
         </ul>
     </div>
