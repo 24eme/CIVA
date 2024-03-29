@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Script désactivé, il faut passer par l'interface web"
+exit;
+
 . $(echo "$0" | sed 's/[^\/]*$//')config.inc
 
 if [ ! -f "$1" ]
@@ -15,4 +18,3 @@ sed -f /tmp/tiers_2_societe.sed "$1" > /tmp/TIECPT.tmp
 cd "$GIILDA_BASEDIR"
     php symfony import:MandatSepa /tmp/TIECPT.tmp --application=civa
 cd -
-
