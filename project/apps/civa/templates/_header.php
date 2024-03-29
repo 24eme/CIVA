@@ -41,7 +41,7 @@
             <?php if ($compte) : ?>
                 <li><a href="<?php echo url_for('compte_modification', ['identifiant' => $compte->login], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php else: ?>
-                <li><a href="<?php echo url_for('compte', [], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
+                <li><a href="<?php echo url_for('compte_modification', [], isset($isAbsoluteUrl)); ?>">Mon compte</a></li>
             <?php endif; ?>
 
             <?php if($isAuthenticated && !$isAdmin && $compteOrigine && $compte && $compteOrigine->identifiant != $compte->identifiant):?>
