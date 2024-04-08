@@ -8,6 +8,7 @@ class EtablissementDroits
         if(in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
 
             $droits[Roles::TELEDECLARATION_DR] = Roles::TELEDECLARATION_DR;
+            $droits[Roles::TELEDECLARATION_DRM] = Roles::TELEDECLARATION_DRM;
         }
 
         if($etablissement->exist('acheteur_raisin') && $etablissement->acheteur_raisin) {
