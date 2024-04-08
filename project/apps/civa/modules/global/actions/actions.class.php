@@ -43,14 +43,14 @@ class globalActions extends sfActions {
     public function executeHeader(sfWebRequest $request) {
         $compte = null;
         if($request->getParameter('compte')) {
-            $compte = CompteClient::getInstance()->findByLogin($request->getParameter('compte'));
+            $compte = CompteClient::getInstance()->findByIdentifiant($request->getParameter('compte'));
         }
 
         $compteOrigine = null;
         if($request->getParameter('compteOrigine')) {
-            $compteOrigine = CompteClient::getInstance()->findByLogin($request->getParameter('compteOrigine'));
+            $compteOrigine = CompteClient::getInstance()->findByIdentifiant($request->getParameter('compteOrigine'));
         }
 
-        return $this->renderPartial("global/header", array("compte" => $compte, "compteOrigine" => $compteOrigine, "isAdmin" => $request->getParameter('isAdmin', false), "isAbsoluteUrl" => true, "title" => $request->getParameter('title', "Espace des professionnels du Vignoble d’Alsace")));
+        return $this->renderPartial("global/header", array("compte" => $compte, "compteOrigine" => $compteOrigine, "isAdmin" => $request->getParameter('isAdmin', false), "isAbsoluteUrl" => true, "title" => $request->getParameter('title', "Espace des professionnels du Vignoble d’Alsace"), 'isAuthenticated' => $request->getParameter('isAuthenticated', false)));
     }
 }

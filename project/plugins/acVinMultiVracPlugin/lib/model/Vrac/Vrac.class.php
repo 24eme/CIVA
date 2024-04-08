@@ -324,17 +324,30 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		public function getTiersEmails($tiers) {
 			$emails = array();
+
+            $emails[] = $tiers->getSociete()->getEmailTeledeclaration();
+
 			foreach($tiers->getSociete()->getContactsObj() as $compte) {
-					$email = $compte->getEmailTeledeclaration();
-					if (!$email) {
-						$email = $compte->getEmail();
-					}
-	        if(!$email || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
-						continue;
-					}
-					$emails[] = $email;
-			}
-			return array_values(array_unique($emails));
+                if ($compte->getCompteType() === "SOCIETE") {
+                    continue;
+                }
+
+                if ($compte->getCompteType() === "INTERLOCUTEUR" && $compte->mot_de_passe === null) {
+                    continue;
+                }
+
+                if ($compte->exist('teledeclaration_email') && $compte->teledeclaration_email) {
+                    $email = $compte->teledeclaration_email;
+                } else {
+                    $email = $compte->getEmail();
+                }
+
+                if(!$email || !$compte->isActif() || !$compte->hasDroit(Roles::TELEDECLARATION_VRAC)) {
+                    continue;
+                }
+                $emails[] = $email;
+            }
+            return array_values(array_unique($emails));
 		}
 
     public function storeAcheteurInformations($tiers)

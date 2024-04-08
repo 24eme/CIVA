@@ -93,12 +93,17 @@ class tiersActions extends sfActions {
     public function executeNav(sfWebRequest $request) {
         $compte = null;
         if($request->getParameter('compte')) {
-            $compte = CompteClient::getInstance()->findByLogin($request->getParameter('compte'));
+            $compte = CompteClient::getInstance()->find($request->getParameter('compte'));
         }
 
-	$isAdmin = $request->getParameter('isAdmin', false);
-        if(!$compte) {
+	    $isAdmin = $request->getParameter('isAdmin', false);
+
+        if(!$compte && $isAdmin) {
             return $this->renderPartial("tiers/ongletsAdmin", array("active" => $request->getParameter('active'), 'isAdmin' => $isAdmin, 'absolute' => true));
+        }
+
+        if(!$compte) {
+            return sfView::NONE;
         }
 
         $blocs = $this->buildBlocs($compte, $isAdmin);

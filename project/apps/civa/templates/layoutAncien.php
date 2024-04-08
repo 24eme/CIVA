@@ -18,7 +18,7 @@
   <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->
 	<div id="global">
-	    <?php include_partial('global/header', array('compte' => ($sf_user->isAuthenticated() && $sf_user->getCompte()) ? $sf_user->getCompte() : null, 'compteOrigine' => ($sf_user->isInDelegateMode()) ? $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED) : null,'isAdmin' => $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR))); ?>
+	    <?php include_partial('global/header', array('compte' => ($sf_user->isAuthenticated() && $sf_user->getCompte()) ? $sf_user->getCompte() : null, 'compteOrigine' => ($sf_user->isInDelegateMode()) ? $sf_user->getCompte(myUser::NAMESPACE_COMPTE_AUTHENTICATED) : null,'isAdmin' => $sf_user->hasCredential(myUser::CREDENTIAL_OPERATEUR), 'isAuthenticated' => $sf_user->isAuthenticated())); ?>
         <?php include_partial('global/errorFlash') ?>
         <div id="contenu">
             <?php if(sfConfig::get('app_instance') == 'preprod' ): ?>

@@ -90,7 +90,7 @@ class compteActions extends sfActions {
         require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
         $this->getUser()->signOut();
 
-        $url = 'http://'.$request->getHost();
+        $url = 'http'.($request->isSecure() ? 's': null).'://'.$request->getHost();
         error_reporting(E_ALL);
         phpCAS::client(CAS_VERSION_2_0,sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
 
@@ -102,12 +102,9 @@ class compteActions extends sfActions {
         if (phpCas::isAuthenticated()) {
             phpCAS::logoutWithRedirectService($url);
         }
-        
+
         $this->redirect($url);
     }
-
-
-
 
     /**
      * Executes index action
@@ -115,208 +112,39 @@ class compteActions extends sfActions {
      * @param sfRequest $request A request object
      */
     public function executeFirst(sfWebRequest $request) {
-        $this->service = $request->getParameter('service');
-        $this->form = new CompteLoginFirstForm();
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $this->getUser()->signInFirst($this->form->getValue('compte'));
-                if ($this->service) {
-                	$this->redirect($this->generateUrl('compte_creation').'?service='.$this->service);
-                } else {
-                	$this->redirect('@compte_creation');
-                }
-            }
+        if(!sfConfig::get('app_giilda_url_code_creation')) {
+
+            throw new Exception('app paramètre non défini : app_giilda_url_code_creation');
         }
+
+        return $this->redirect(sfConfig::get('app_giilda_url_code_creation'));
     }
 
-    /**
-     *
-     * @param sfWebRequest $request
-     */
-    public function executeCreation(sfWebRequest $request) {
-        $this->compte = $this->getUser()->getCompte();
-        $this->service = $request->getParameter('service');
-        $this->forward404Unless($this->compte->getStatus() == CompteClient::STATUT_TELEDECLARANT_NOUVEAU);
-
-        $this->form = new CreationCompteForm($this->compte);
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $this->compte = $this->form->save();
-                CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($this->compte);
-                try {
-                    $message = $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $this->compte->email, "CIVA - Création de votre compte", "Bonjour " . $this->compte->nom . ",\n\nVotre compte a bien été créé sur le site du CIVA. \n\nCordialement,\n\nLe CIVA");
-                    $this->getUser()->setFlash('confirmation', "Votre compte a bien été créé.");
-                } catch (Exception $e) {
-                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-                }
-                if ($this->service) {
-                	$this->redirect($this->service);
-                } else {
-                	$this->redirect('@tiers');
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @param sfWebRequest $request
-     */
-    public function executeModificationOublie(sfWebRequest $request) {
-        $this->compte = $this->getUser()->getCompte();
-        $this->service = $request->getParameter('service');
-        $this->forward404Unless($this->compte->getStatus() == _Compte::STATUS_MOT_DE_PASSE_OUBLIE);
-
-        $this->form = new CompteModificationOublieForm($this->compte);
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $this->compte = $this->form->save();
-                try {
-                    $message = $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $this->compte->email, "CIVA - Changement de votre mot de passe", "Bonjour " . $this->compte->nom . ",\n\nVotre mot de passe sur le site du CIVA vient d'etre modifié.\n\nCordialement,\n\nLe CIVA");
-                    $this->getUser()->setFlash('confirmation', "Votre mot de passe a bien été modifié.");
-                } catch (Exception $e) {
-                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-                }
-                if ($this->service) {
-                	$this->redirect($this->service);
-                } else {
-                	$this->redirect('mon_espace_civa', array('identifiant' => $this->compte->getIdentifiant()));
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @param sfWebRequest $request
-     */
     public function executeModification(sfWebRequest $request) {
-        $this->compte = $this->getUser()->getCompte();
-        if(sfConfig::get('app_giilda_url_mon_compte') && $request->getParameter('identifiant')) {
+        if(!sfConfig::get('app_giilda_url_mon_compte')) {
 
-            return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mon_compte'), $this->compte->getSociete()->identifiant));
+            throw new Exception('app paramètre non défini : app_giilda_url_mon_compte');
         }
 
-        $this->forward404Unless(in_array($this->compte->getStatutTeledeclarant(), array(CompteClient::STATUT_TELEDECLARANT_OUBLIE, CompteClient::STATUT_TELEDECLARANT_INSCRIT)));
-
-        $this->form = new CompteModificationForm($this->compte);
-	    $this->service = $request->getParameter('service');
-
-        if ($request->isMethod(sfWebRequest::POST)) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $this->compte = $this->form->save();
-                CompteClient::getInstance()->updateEmailEtablissementFromCompteAndSaveThem($this->compte);
-                $this->getUser()->setFlash('maj', 'Vos identifiants ont bien été mis à jour.');
-		if ($this->service) {
-		  return $this->redirect($this->service);
-		}
-                $this->redirect('@compte_modification');
-            }
-        }
+        return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mon_compte'), $request->getParameter('identifiant') ? $request->getParameter('identifiant') : $this->getUser()->getCompte()->login));
     }
 
     public function executeMotDePasseOublieLogin(sfWebRequest $request) {
-        $this->forward404Unless($compte = CompteClient::getInstance()->retrieveByLogin($request->getParameter('login', null)));
-        $this->forward404Unless($compte->mot_de_passe == '{OUBLIE}' . $request->getParameter('mdp', null));
-        $this->service = $request->getParameter('service');
-        $this->getUser()->signInFirst($compte);
-    	if ($this->service) {
-        	$this->redirect($this->generateUrl('compte_modification_oublie').'?service='.$this->service);
-        } else {
-        	$this->redirect('@compte_modification_oublie');
+        if(!sfConfig::get('app_giilda_url_mot_de_passe_oublie_login')) {
+
+            throw new Exception('app paramètre non défini : app_giilda_url_mot_de_passe_oublie_login');
         }
+
+        return $this->redirect(sprintf(sfConfig::get('app_giilda_url_mot_de_passe_oublie_login'), $request->getParameter('login'), $request->getParameter('mdp')));
     }
 
     public function executeMotDePasseOublie(sfWebRequest $request) {
-    	$this->service = $request->getParameter('service');
-        $this->form = new CompteMotDePasseOublieForm();
-        if ($request->getParameter($this->form->getName())) {
-            $this->form->bind($request->getParameter($this->form->getName()));
-            if ($this->form->isValid()) {
-                $compte = $this->form->save();
-                $lien = sfConfig::get('app_base_url') . $this->generateUrl("compte_mot_de_passe_oublie_login", array("login" => $compte->login, "mdp" => str_replace("{OUBLIE}", "", $compte->mot_de_passe)));
+        if(!sfConfig::get('app_giilda_url_mot_de_passe_oublie')) {
 
-                if ($this->service) {
-                	$lien .= '?service='.$this->service;
-                }
-
-                try {
-                    $this->getMailer()->composeAndSend(array(sfConfig::get('app_email_from') => sfConfig::get('app_email_from_name')), $compte->getSociete()->getEmailTeledeclaration(), "CIVA - Mot de passe oublié", "Bonjour,\n\nVous avez oublié votre mot de passe pour le redéfinir merci de cliquer sur le lien suivant : \n\n" . $lien . "\n\nCordialement,\n\nLe CIVA");
-                } catch (Exception $e) {
-                    $this->getUser()->setFlash('error', "Problème de configuration : l'email n'a pu être envoyé");
-                }
-                if ($this->service) {
-                	$this->redirect($this->generateUrl('compte_mot_de_passe_oublie_confirm').'?service='.$this->service);
-                } else {
-                	$this->redirect('@compte_mot_de_passe_oublie_confirm');
-                }
-            }
-        }
-    }
-
-    public function executeMotDePasseOublieConfirm(sfWebRequest $request) {
-        $this->service = $request->getParameter('service');
-    }
-
-    public function executeDroits(sfWebRequest $request) {
-        $this->compte = $this->getUser()->getCompte();
-        $this->etablissements = $this->compte->getSociete()->getEtablissementsObject(true, true);
-
-        $this->form = new CompteDroitsForm($this->compte->getSociete());
-
-        if(!$request->isMethod(sfWebRequest::POST)) {
-            return sfView::SUCCESS;
+            throw new Exception('app paramètre non défini : app_giilda_url_mot_de_passe_oublie');
         }
 
-        $this->form->bind($request->getParameter($this->form->getName()));
-
-        if(!$this->form->isValid()) {
-            return sfView::SUCCESS;
-        }
-
-        $this->form->save();
-
-        return $this->redirect('compte_droits');
+        return $this->redirect(sfConfig::get('app_giilda_url_mot_de_passe_oublie'));
     }
 
-    public function executePersonneAjouter(sfWebRequest $request) {
-        $this->setTemplate('personne');
-        $this->compte = $this->getUser()->getCompte();
-        $interlocuteur = CompteClient::getInstance()->createCompteFromSociete($this->compte->getSociete());
-        $interlocuteur->mot_de_passe = CompteClient::getInstance()->generateMotDePasseCreation();
-        $this->form = $this->processFormPersonne($interlocuteur, $request);
-    }
-
-    public function executePersonneModifier(sfWebRequest $request) {
-        $this->setTemplate('personne');
-        $this->compte = $this->getUser()->getCompte();
-        $this->personne = CompteClient::getInstance()->find($request->getParameter('id'));
-        $this->forward404Unless($this->personne);
-
-        $this->form = $this->processFormPersonne($this->personne, $request);
-    }
-
-    protected function processFormPersonne($personne, sfWebRequest $request) {
-        $form = new ComptePersonneForm($personne);
-
-        if(!$request->isMethod(sfWebRequest::POST)) {
-            return $form;
-        }
-
-        $form->bind($request->getParameter($form->getName()));
-
-        if(!$form->isValid()) {
-            return $form;
-        }
-
-        $form->save();
-
-        return $this->redirect('compte_droits');
-    }
 }
