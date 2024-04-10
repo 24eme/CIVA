@@ -55,7 +55,7 @@ class GammaClient
         return null;
     }
 
-    public function createOrFind($etablissement, $compte) {
+    public function createOrFind($etablissement) {
         $gamma = $this->findByEtablissement($etablissement);
 
         if(!$gamma) {
@@ -63,7 +63,10 @@ class GammaClient
             $gamma->_id = "GAMMA-".$etablissement->getIdentifiant();
         }
 
-        $gamma->identifiant_inscription = $compte->identifiant;
+        $gamma->identifiant_inscription = $etablissement->getCompte()->login;
+        if (!$gamma->identifiant_inscription) {
+            $gamma->identifiant_inscription = $etablissement->getSociete()->getCompte()->login;
+        }
         $gamma->no_accises = $etablissement->no_accises;
 
         return $gamma;
