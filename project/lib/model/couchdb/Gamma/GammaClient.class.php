@@ -63,9 +63,15 @@ class GammaClient
             $gamma->_id = "GAMMA-".$etablissement->getIdentifiant();
         }
 
-        $gamma->identifiant_inscription = $etablissement->getCompte()->login;
+        $gamma->identifiant_inscription = null;
+        if ($etablissement->getMasterCompte()->exist('login')) {
+            $gamma->identifiant_inscription = $etablissement->getCompte()->login;
+        }
+        if (!$gamma->identifiant_inscription && $etablissement->getSociete() && $etablissement->getSociete()->getMasterCompte()->exist('login')) {
+            $gamma->identifiant_inscription = $etablissement->getSociete()->getMasterCompte()->login;
+        }
         if (!$gamma->identifiant_inscription) {
-            $gamma->identifiant_inscription = $etablissement->getSociete()->getCompte()->login;
+            $gamma->identifiant_inscription = $etablissement->identifiant;
         }
         $gamma->no_accises = $etablissement->no_accises;
 
