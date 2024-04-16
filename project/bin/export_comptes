@@ -2,7 +2,7 @@
 
 mkdir -p data/export/comptes > /dev/null
 
-php symfony export:comptes-csv > /tmp/comptes.csv
+php symfony exportciva:comptes-csv > /tmp/comptes.csv
 
 head -n 1 /tmp/comptes.csv > /tmp/comptes.csv.header
 tail -n +2 /tmp/comptes.csv  > /tmp/comptes.csv.body
