@@ -98,6 +98,7 @@ EOF;
         );
 
         foreach ($rows as $row) {
+            SocieteClient::getInstance()->clearSingleton();
             $etablissement = EtablissementClient::getInstance()->find($row->id);
             $compte = $etablissement->getMasterCompte();
             $compteSociete = $etablissement->getSociete()->getMasterCompte();
