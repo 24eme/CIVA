@@ -20,7 +20,7 @@ class gammaActions extends sfActions
         $isInscrit = GammaClient::getInstance()->findByEtablissement($etablissement);
 
         if (!$isInscrit) {
-		    $gamma = GammaClient::getInstance()->createOrFind($etablissement, $compte);
+		    $gamma = GammaClient::getInstance()->createOrFind($etablissement);
             GammaClient::getInstance()->storeDoc($gamma);
         }
 

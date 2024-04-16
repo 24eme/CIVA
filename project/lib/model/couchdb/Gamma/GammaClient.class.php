@@ -55,7 +55,7 @@ class GammaClient
         return null;
     }
 
-    public function createOrFind($etablissement, $compte) {
+    public function createOrFind($etablissement) {
         $gamma = $this->findByEtablissement($etablissement);
 
         if(!$gamma) {
@@ -63,7 +63,16 @@ class GammaClient
             $gamma->_id = "GAMMA-".$etablissement->getIdentifiant();
         }
 
-        $gamma->identifiant_inscription = $compte->identifiant;
+        $gamma->identifiant_inscription = null;
+        if ($etablissement->getMasterCompte()->exist('login')) {
+            $gamma->identifiant_inscription = $etablissement->getCompte()->login;
+        }
+        if (!$gamma->identifiant_inscription && $etablissement->getSociete() && $etablissement->getSociete()->getMasterCompte()->exist('login')) {
+            $gamma->identifiant_inscription = $etablissement->getSociete()->getMasterCompte()->login;
+        }
+        if (!$gamma->identifiant_inscription) {
+            $gamma->identifiant_inscription = $etablissement->identifiant;
+        }
         $gamma->no_accises = $etablissement->no_accises;
 
         return $gamma;
@@ -73,19 +82,22 @@ class GammaClient
         if($etablissement === null) {
             $etablissement = GammaClient::getInstance()->getEtablissement($compte);
         }
+        if(!$etablissement && $compte->getSociete()) {
+            $etablissement = $compte->getSociete()->getEtablissementPrincipal();
+        }
 
         if(!$etablissement) {
-            return sprintf("%s,%s,%s,%s", $compte->identifiant, null, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
+            return sprintf("%s,%s,%s,%s,%s:%s", $compte->identifiant, null, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher, 'GammaClient', $compte->_id);
         }
 
         $gamma = $this->findByEtablissement($etablissement);
 
         if(!$gamma) {
 
-            return sprintf("%s,%s,%s,%s", $compte->identifiant, $etablissement->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
+            return sprintf("%s,%s,%s,%s,%s:%s", $etablissement->getCompte()->identifiant, $etablissement->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher, 'GammaClient', $etablissement->_id);
         }
 
-        return sprintf("%s,%s,%s,%s", $gamma->identifiant_inscription, $gamma->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher);
+        return sprintf("%s,%s,%s,%s,%s:%s", $gamma->identifiant_inscription, $gamma->no_accises, ($compte->getNom()) ? $compte->getNom() : $compte->nom_a_afficher, $compte->nom_a_afficher, 'GammaClient', $gamma->_id);
     }
 
     public function storeDoc($doc) {
