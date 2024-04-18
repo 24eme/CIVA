@@ -96,6 +96,11 @@ class tiersActions extends sfActions {
             $compte = CompteClient::getInstance()->find($request->getParameter('compte'));
         }
 
+        $etablissement = null;
+        if($request->getParameter('etablissement')) {
+            $etablissement = EtablissementClient::getInstance()->find($request->getParameter('etablissement'));
+        }
+
 	    $isAdmin = $request->getParameter('isAdmin', false);
 
         if(!$compte && $isAdmin) {
@@ -106,12 +111,12 @@ class tiersActions extends sfActions {
             return sfView::NONE;
         }
 
-        $blocs = $this->buildBlocs($compte, $isAdmin);
+        $blocs = $this->buildBlocs($compte, $isAdmin, $etablissement);
 
         return $this->renderPartial("tiers/onglets", array("compte" => $compte, 'isAdmin' => $isAdmin, "blocs" => $blocs, "active" => $request->getParameter('active'), 'absolute' => true));
     }
 
-    protected function buildBlocs($compte, $isAdmin = false) {
+    protected function buildBlocs($compte, $isAdmin = false, $etablissement = null) {
         $blocs = array();
         if($compte->hasDroit(Roles::TELEDECLARATION_DR)) {
             $blocs[Roles::TELEDECLARATION_DR] = $this->generateUrl('mon_espace_civa_dr_compte', $compte);
@@ -119,17 +124,21 @@ class tiersActions extends sfActions {
         $url_drm = sfConfig::get("app_giilda_url_drm");
         $societe = $compte->getSociete();
         if($compte->hasDroit(Roles::TELEDECLARATION_DRM) && $url_drm) {
-            foreach($societe->getEtablissementsObject(true, true) as $etablissement) {
-                if($etablissement->hasDroit(Roles::TELEDECLARATION_DRM)) {
-                    $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $etablissement->identifiant);
-                    break;
+            if($etablissement) {
+                $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $etablissement->identifiant);
+            } else {
+                foreach($societe->getEtablissementsObject(true, true) as $e) {
+                    if($e->hasDroit(Roles::TELEDECLARATION_DRM)) {
+                        $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $e->identifiant);
+                        break;
+                    }
                 }
             }
         }
         if($isAdmin && $url_drm && preg_match('/(drm)/', $this->getRequest()->getParameter('active'))) {
             $blocs[Roles::TELEDECLARATION_DRM] = sfConfig::get("app_giilda_url_drm_admin");
         }
-        if ($societe) {
+        if ($societe && !$etablissement) {
             $etablissement = $societe->getEtablissementPrincipal();
         }
 
