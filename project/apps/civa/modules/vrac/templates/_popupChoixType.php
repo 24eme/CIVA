@@ -9,7 +9,7 @@
                     <select style="margin: 0; width: 100%;" id="<?php echo $idSelect ?>">
                     <?php foreach($etablissements as $etablissement): ?>
                         <?php if(!VracSecurity::getInstance($sf_user->getCompte(), null)->isAuthorizedTiers($etablissement, VracSecurity::CREATION)): continue; endif; ?>
-                        <option value="<?php echo $etablissement->_id ?>"><?php echo $etablissement->nom ?></option>
+                        <option value="<?php echo $etablissement->_id ?>"><?php echo $etablissement->nom ?> <?php echo $etablissement->cvi ?> <?php echo EtablissementFamilles::$familles[$etablissement->famille]; ?></option>
                     <?php endforeach; ?>
                     </select>
                 </div>
