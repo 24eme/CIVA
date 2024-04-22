@@ -128,7 +128,7 @@ class tiersActions extends sfActions {
                 $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $etablissement->identifiant);
             } else {
                 foreach($societe->getEtablissementsObject(true, true) as $e) {
-                    if($e->hasDroit(Roles::TELEDECLARATION_DRM)) {
+                    if($e->hasDroit(Roles::TELEDECLARATION_DRM) && $e->getMasterCompte()->hasDroit(Roles::TELEDECLARATION_DRM)) {
                         $blocs[Roles::TELEDECLARATION_DRM] = sprintf($url_drm, $e->identifiant);
                         break;
                     }
