@@ -1,9 +1,6 @@
 default:
   credentials: []
 
-login:
-  credentials: [compte_tiers]
-
 nav:
   is_secure: false
 
