@@ -96,6 +96,10 @@ class tiersActions extends sfActions {
             $compte = CompteClient::getInstance()->find($request->getParameter('compte'));
         }
 
+        if($compte && ($compte->hasDroit(_CompteClient::DROIT_ADMIN) || $compte->hasDroit(_CompteClient::DROIT_OPERATEUR))) {
+            $compte = null;
+        }
+
         $etablissement = null;
         if($request->getParameter('etablissement')) {
             $etablissement = EtablissementClient::getInstance()->find($request->getParameter('etablissement'));
