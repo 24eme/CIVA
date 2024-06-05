@@ -90,7 +90,7 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
                 $this->addCredential(self::CREDENTIAL_DELEGATION);
             }
 
-            if ($compte->type == 'Compte' && $compte->getSociete() && count($compte->getSociete()->etablissements) && !$this->isAdmin() && !$this->isSimpleOperateur())) {
+            if ($compte->type == 'Compte' && $compte->getSociete() && count($compte->getSociete()->etablissements) && !$this->isAdmin() && !$this->isSimpleOperateur()) {
                 $this->addCredential(self::CREDENTIAL_COMPTE_TIERS);
             }
         }
