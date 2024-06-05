@@ -56,6 +56,10 @@ class compteActions extends sfActions {
             $this->getUser()->setFlash('referer', preg_replace("/\?$/", "", preg_replace("/ticket=[a-zA-Z0-9-]+(&|$)/", "", $request->getUri())));
         }
 
+        if($this->getUser()->isAdmin() || $this->getUser()->isSimpleOperateur()) {
+            return $this->redirect('admin');
+        }
+
         return $this->redirect('tiers');
     }
 
@@ -67,7 +71,7 @@ class compteActions extends sfActions {
 
         if($this->getUser()->hasCredential(myUser::CREDENTIAL_COMPTE)) {
 
-            return $this->redirect('@tiers');
+            return $this->redirectAfterLogin($request);
         }
 
         $this->getUser()->signOut();
@@ -77,7 +81,7 @@ class compteActions extends sfActions {
             $this->form->bind($request->getParameter($this->form->getName()));
             if ($this->form->isValid()) {
                 $this->getUser()->signIn($this->form->process()->login);
-                $this->redirect('tiers');
+                $this->redirectAfterLogin($request);
             }
         }
     }
