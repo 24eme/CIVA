@@ -46,10 +46,4 @@ class myUser extends DeclarationSecurityUser {
          $this->signOutTiers();
          $this->signInTiers($societe);
     }
-
-    public function isAdmin()
-    {
-        return $this->hasCredential(self::CREDENTIAL_ADMIN);
-    }
-
 }
