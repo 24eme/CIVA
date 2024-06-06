@@ -60,6 +60,11 @@ class compteActions extends sfActions {
             return $this->redirect('admin');
         }
 
+
+        if(!count($this->getUser()->getCompte()->getSociete()->etablissements)) {
+            return $this->redirect('compte_modification', ['identifiant' => $this->getUser()->getCompte()->identifiant]);
+        }
+
         return $this->redirect('tiers');
     }
 
