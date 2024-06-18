@@ -86,6 +86,9 @@ abstract class CompteSecurityUser extends sfBasicSecurityUser {
             foreach ($compte->add('droits') as $credential) {
                 $this->addCredential($credential);
             }
+            if($this->isAdmin()) {
+                $this->addCredential(_CompteClient::DROIT_OPERATEUR);
+            }
             if($compte->exist('delegation') && $this->getCompte()->login == $this->getCompte(self::NAMESPACE_COMPTE_AUTHENTICATED)->login){
                 $this->addCredential(self::CREDENTIAL_DELEGATION);
             }
