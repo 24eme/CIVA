@@ -313,12 +313,12 @@ class DRClient extends acCouchdbClient {
                 $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $lieu->getDplcCaveParticuliere();
             } elseif($node->getConfig()->existRendementCepage()) {
                 $totauxByAppellationsRecap = $this->getTotauxWithNode($totauxByAppellationsRecap, $app_key, $lieu, $nom);
+                $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $lieu->getDplcCaveParticuliere();
                 foreach ($lieu->getCouleurs() as $couleur_key => $couleur) {
                     foreach($couleur->getCepages() as $cepage_key => $cepage) {
                         if($cepage_key == 'cepage_PR') {
                             $totauxByAppellationsRecap[$app_key]->dplc_sur_place_rouge += $cepage->getDplcCaveParticuliere();
-                        } else {
-                            $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc += $cepage->getDplcCaveParticuliere();
+                            $totauxByAppellationsRecap[$app_key]->dplc_sur_place_blanc -= $cepage->getDplcCaveParticuliere();
                         }
                     }
                 }
