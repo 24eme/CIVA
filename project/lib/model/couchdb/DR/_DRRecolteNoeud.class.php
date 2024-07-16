@@ -207,7 +207,7 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
     }
 
     public function getDplcCaveParticuliere() {
-        if(!$this->hasRecapitulatifVente()) {
+        if(!$this->hasRecapitulatifVente() && $this->getTotalVolumeVendus()) {
             $dplc = $this->getSumNoeudFields("dplcCaveParticuliere");
         } else {
             $dplc = $this->getDplcReel() - $this->getTotalDontDplcVendus();
