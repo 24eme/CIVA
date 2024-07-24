@@ -40,7 +40,7 @@ class DSSendBrouillonTask extends sfBaseTask
         $this->periode = $arguments['periode'];
         $this->is_decembre = preg_match("/12$/", $this->periode);
 
-        $etablissement = CompteClient::getInstance()->find($arguments["id_etablissement"], acCouchdbClient::HYDRATE_JSON);
+        $etablissement = EtablissementClient::getInstance()->find($arguments["id_etablissement"], acCouchdbClient::HYDRATE_JSON);
 
         if(!$etablissement){
 
@@ -57,7 +57,7 @@ class DSSendBrouillonTask extends sfBaseTask
             return;
         }
 
-        $etablissement = CompteClient::getInstance()->find($arguments["id_etablissement"]);
+        $etablissement = EtablissementClient::getInstance()->find($arguments["id_etablissement"]);
 
         if($etablissement->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
 
