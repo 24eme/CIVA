@@ -168,7 +168,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
 
         if($noeud instanceof DSAppellation) {
             $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash(), 'DS'));
-        } elseif(count($config->getChildrenNode()) == 1) {
+        } elseif($config->getChildrenNode() && count($config->getChildrenNode()) == 1) {
             $this->addNoeud(HashMapper::inverse($config->getChildrenNode()->getFirst()->getHash(), 'DS'));
         }
 
