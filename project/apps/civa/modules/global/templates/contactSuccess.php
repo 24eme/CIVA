@@ -2,7 +2,7 @@
 
 <!-- #application_dr -->
 <div id="application_dr" class="clearfix pages-statiques">
-    <h3>Conseil Interprofessionnel des Vins d’Alsace</h3>
+    <h3>Comité Interprofessionnel des Vins d’Alsace</h3>
     <p>
         12 avenue de la Foire-Aux-Vins<br />
         BP 11217<br />
