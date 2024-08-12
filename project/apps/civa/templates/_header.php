@@ -5,7 +5,7 @@
     <?php endif; ?>
 <?php endif; ?>
 <div id="header" class="clearfix pngfix">
-    <h1 id="logo"><a href="<?php if($compte): ?><?php echo url_for('mon_espace_civa', array('identifiant' => $compte->getLogin()), isset($isAbsoluteUrl)); ?><?php endif; ?>" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="<?php echo image_path("/images/visuels/logo_civa.png", true) ?>" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
+    <h1 id="logo"><a href="<?php if($compte): ?><?php echo url_for('mon_espace_civa', array('identifiant' => $compte->getLogin()), isset($isAbsoluteUrl)); ?><?php endif; ?>" title="CIVA - Comité Interprofessionnel des Vins d'Alsace - Retour à l'accueil"><img src="<?php echo image_path("/images/visuels/logo_civa.png", true) ?>" alt="CIVA - Comité Interprofessionnel des Vins d'Alsace" /></a></h1>
 
     <div id="titre_rubrique">
         <h1>
