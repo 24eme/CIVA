@@ -7,5 +7,7 @@
     <p>Son champ d’activité couvrait à l’origine l’Appellation d’Origine Contrôlée "Alsace", reconnue par décret du 3 octobre 1962.</p>
 
     <p>Il s’est étendu par la suite aux appellations "Alsace Grand Cru" et "Crémant d’Alsace" reconnues respectivement par décret du 20 novembre 1975 modifié en 1992, et décret du 24 août 1976.</p>
+
+    <p>Les statuts du CIVA ont été modifiés par le décret du 17 juillet 2023 afin de rapprocher son fonctionnement de celui des autres organisations interprofessionnelles reconnues.</p>
 </div>
 <!-- fin #application_dr -->
