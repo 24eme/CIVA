@@ -30,6 +30,9 @@ function displayMail($messages) {
 
     $content = "";
     foreach($messages as $message) {
+        if (!$message) {
+            continue;
+        }
         $content .= "De : ".implode(",", array_keys($message->getFrom()))."\n";
         $content .= "À : ".implode(",", array_keys($message->getTo()))."\n";
         $content .= "Sujet : ".$message->getSubject()."\n\n";
