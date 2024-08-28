@@ -60,7 +60,7 @@ EOF;
             foreach ($operateur->installations as $installation) {
                 $file[] = implode(';', [
                     $operateur->numeroCvi,
-                    $operateur->libelleEvv,
+                    '"'.$operateur->libelleEvv.'"',
                     $installation->numeroInstallation,
                     trim($installation->lieuAdresse1.' '.$installation->lieuAdresse2),
                     $installation->lieuCodePostal,
