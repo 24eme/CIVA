@@ -20,7 +20,7 @@ if(!function_exists('printdiffratio')){
 ?>
 <table border="0" cellspacing=0 cellpadding="0">
 	<tr>
-		<td style="width: 8%;"><img src="<?php echo sfConfig::get('sf_web_dir')."/images/pdf/civa.png" ?>" alt="CIVA-Logo" /></td>
+		<td style="width: 8%;"><img src="<?php echo sfConfig::get('sf_web_dir')."/images/pdf/logo_civa.svg" ?>" alt="CIVA-Logo" /></td>
 		<td style="width: 92%; text-align: center;">
 			<h1 style="text-decoration: underline;">CUMUL PERMANENT PROVISOIRE DES CONTRATS DE VENTE DE VINS D'ALSACE<br /><?php echo strtoupper($bio_ou_conv); ?></h1>
 			<span>Transactions en vrac entre Opérateurs du vignoble Alsace AOC(hors Grands-crus et hors vins de base Crémant d'Alsace)</span>

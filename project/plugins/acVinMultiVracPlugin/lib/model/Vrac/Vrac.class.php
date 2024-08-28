@@ -1270,7 +1270,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function getTauxCvo() {
         $nbaoc = 0;
-        foreach($this->declaration->certification->genre as $certif) {
+        if ($this->declaration->exist('certification')) foreach($this->declaration->certification->genre as $certif) {
             if (strpos($certif->getKey(), 'appellation_VINTABLE') === false) {
                 $nbaoc++;
             }
