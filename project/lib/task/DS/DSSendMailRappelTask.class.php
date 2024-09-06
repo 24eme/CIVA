@@ -110,12 +110,11 @@ Vous avez commencé à saisir en ligne votre Déclaration de Stocks ".date('Y').
 
 Nous vous rappelons que vous devez impérativement la valider AVANT le 10 septembre MINUIT.
 
-Pour terminer la saisie, cliquez sur le lien suivant : <https://declaration.vinsalsace.pro>
-
+Pour terminer la saisie, cliquez sur le lien suivant : https://declaration.vinsalsace.pro
 
 Cordialement,
 
-Dominique WOLFF");
+Le CIVA");
 
         try {
             if(!$email) {
@@ -152,12 +151,11 @@ Nous vous rappelons que vous devez impérativement télé-déclarer votre Stock 
 ATTENTION: Si votre Stock est NEANT, un arrêté du 18 Juillet dernier vous exempte de déposer une Déclaration de Stocks.
 Dans ce cas-là, pour éviter qu'on ne vous relance, merci de me le signaler en réponse à ce mail.
 
-Sinon, vous pouvez effectuer la saisie en cliquant sur le lien suivant <https://declaration.vinsalsace.pro>
-
+Sinon, vous pouvez effectuer la saisie en cliquant sur le lien suivant https://declaration.vinsalsace.pro
 
 Cordialement,
 
-Dominique WOLFF
+Le CIVA
 ");
 
         try {
