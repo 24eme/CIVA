@@ -22,7 +22,7 @@
 
     <!-- #header -->
     <div id="header" class="clearfix pngfix">
-        <h1 id="logo"><a href="#" title="CIVA - Conseil Interprofessionnel des Vins d'Alsace "><img src="/images/visuels/logo_civa.png" alt="CIVA - Conseil Interprofessionnel des Vins d'Alsace" /></a></h1>
+        <h1 id="logo"><a href="#" title="CIVA - Comité Interprofessionnel des Vins d'Alsace "><img src="/images/visuels/logo_civa.png" alt="CIVA - Comité Interprofessionnel des Vins d'Alsace" /></a></h1>
 
         <div id="titre_rubrique">
 

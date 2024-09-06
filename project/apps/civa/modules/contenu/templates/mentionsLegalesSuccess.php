@@ -4,7 +4,7 @@
 <div id="application_dr" class="clearfix pages-statiques">
     <h3>Raison sociale</h3>
     <p><strong>CIVA</strong>
-        <br />Conseil Interprofessionnel des Vins d’Alsace
+        <br />Comité Interprofessionnel des Vins d’Alsace
         <br />12 avenue de la Foire-Aux-Vins
         <br />BP 11217
         <br />68012 Colmar Cedex
@@ -33,7 +33,7 @@
     <p>Conformément aux dispositions de la loi n°&nbsp;78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, vous disposez d’un droit d’accès, de modification, de rectification et de suppression des données qui vous concernent. Pour demander une modification, rectification ou suppression des données vous concernant, il vous suffit d’envoyer un courrier par voie électronique ou postale au CIVA en justifiant de votre identité.</p>
 
     <ul style="margin-left: 10px;"><li><strong>Envoyer un courrier postal</strong>
-            <br />Conseil Interprofessionnel des Vins d’Alsace
+            <br />Comité Interprofessionnel des Vins d’Alsace
             <br />12 avenue de la Foire-Aux-Vins
             <br />BP 11217
             <br />68012 Colmar Cedex
