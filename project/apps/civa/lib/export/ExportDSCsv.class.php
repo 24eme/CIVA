@@ -107,7 +107,7 @@ class ExportDSCsv {
         if($ds->dplc) {
             $output .= sprintf("%s;dplc;;;;%s;;;;%s", $ligneStart, $ds->dplc, $ligneEnd);
         }
-        if($ds->exist('dplc_rouge') && $ds->dplc_rouge) {
+        if(property_exists($ds, 'dplc_rouge') && $ds->dplc_rouge) {
             $output .= sprintf("%s;dplc rouge;;;;%s;;;;%s", $ligneStart, $ds->dplc_rouge, $ligneEnd);
         }
         if($ds->lies) {
