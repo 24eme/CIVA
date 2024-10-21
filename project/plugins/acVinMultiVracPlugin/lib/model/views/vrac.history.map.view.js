@@ -29,10 +29,12 @@ function(doc) {
     }
 
     var vendeurNom = "";
-    vendeurNom = doc.vendeur.raison_sociale;
+    if(doc.vendeur.intitule){ vendeurNom = doc.vendeur.intitule+" "; }
+    vendeurNom = vendeurNom + doc.vendeur.raison_sociale.replace(vendeurNom, "");
 
     var acheteurNom = "";
-    acheteurNom = doc.acheteur.raison_sociale;
+    if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
+    acheteurNom = acheteurNom + doc.acheteur.raison_sociale.replace(acheteurNom, "");
 
     var mercuriales = "M";
 	if (doc.vendeur_type == 'caves_cooperatives') {
@@ -111,22 +113,26 @@ function(doc) {
                                                                         if(!lieuKey) {
                                                                             lieuKey = "DEFAUT";
                                                                         }
-                                                                        
+
                                                                         var couleurKey = couleur.replace("couleur", "").toLowerCase();
                                                                         if(!couleurKey) {
                                                                             couleurKey = "DEFAUT";
                                                                         }
-                                                                        
-                                                                        
+
+
                                                                         var produitHash = "/declaration/certifications/AOC_ALSACE/genres/"+genreKey+"/appellations/"+appellation.replace('appellation_', '')+"/mentions/"+mentionKey+"/lieux/"+lieuKey+"/couleurs/"+couleurKey+"/cepages/"+cepage.replace("cepage_", "");
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
-                                                                        
+
                                                                         var quantite = produit.volume_propose;
 
                                                                         if(produit.nb_bouteille) {
                                                                             quantite = produit.nb_bouteille;
                                                                         }
-                                                                        
+
+                                                                        if(produit.surface_propose) {
+                                                                          quantite = produit.surface_propose;
+                                                                        }
+
                                                                         var centilisation = 1;
                                                                         var prix_unitaire_hl = produit.prix_unitaire;
                                                                         if(produit.centilisation) {
