@@ -73,7 +73,7 @@ function(doc) {
 
   if (pluriannuel === "PLURIANNUEL") {
     var campagne_start = doc.campagne.substr(0, 4)
-    duree = campagne_start + ' à ' + (campagne_start + 2)
+    duree = campagne_start + ' à ' + (+campagne_start + 2)
     mode = doc.contrat_pluriannuel_mode_surface ? "ARES" : "HL"
   }
 
