@@ -29,10 +29,12 @@ function(doc) {
     }
 
     var vendeurNom = "";
-    vendeurNom = doc.vendeur.raison_sociale;
+    if(doc.vendeur.intitule){ vendeurNom = doc.vendeur.intitule+" "; }
+    vendeurNom = vendeurNom + doc.vendeur.raison_sociale.replace(vendeurNom, "");
 
     var acheteurNom = "";
-    acheteurNom = doc.acheteur.raison_sociale;
+    if(doc.acheteur.intitule){ acheteurNom = doc.acheteur.intitule+" "; }
+    acheteurNom = acheteurNom + doc.acheteur.raison_sociale.replace(acheteurNom, "");
 
     var mercuriales = "M";
 	if (doc.vendeur_type == 'caves_cooperatives') {
@@ -47,6 +49,33 @@ function(doc) {
 	if (doc.interne) {
 		mercuriales = "I";
 	}
+
+  var pluriannuel = doc.contrat_pluriannuel ? "PLURIANNUEL" : "ANNUEL"
+  var clause_reserve = doc.clause_reserve_propriete ? "OUI" : "NON"
+
+  var duree = null, mode = null, prix_unite = null, createur = null;
+
+  if (doc.prix_unite) {
+    prix_unite = doc.prix_unite
+  } else if (doc.type_contrat === "BOUTEILLE") {
+    prix_unite = "EUR_BOUTEILLE"
+  } else {
+    prix_unite = "EUR_HL"
+  }
+
+  if (doc.createur_identifiant === doc.vendeur_identifiant) {
+    createur = "VENDEUR"
+  } else if (doc.createur_identifiant === doc.acheteur_identifiant) {
+    createur = "ACHETEUR"
+  } else {
+    createur = "COURTIER"
+  }
+
+  if (pluriannuel === "PLURIANNUEL") {
+    var campagne_start = doc.campagne.substr(0, 4)
+    duree = campagne_start + ' à ' + (+campagne_start + 2)
+    mode = doc.contrat_pluriannuel_mode_surface ? "ARES" : "HL"
+  }
 
     for(certification in doc.declaration) {
         if (certification.match(/^certification/g)) {
@@ -84,22 +113,26 @@ function(doc) {
                                                                         if(!lieuKey) {
                                                                             lieuKey = "DEFAUT";
                                                                         }
-                                                                        
+
                                                                         var couleurKey = couleur.replace("couleur", "").toLowerCase();
                                                                         if(!couleurKey) {
                                                                             couleurKey = "DEFAUT";
                                                                         }
-                                                                        
-                                                                        
+
+
                                                                         var produitHash = "/declaration/certifications/AOC_ALSACE/genres/"+genreKey+"/appellations/"+appellation.replace('appellation_', '')+"/mentions/"+mentionKey+"/lieux/"+lieuKey+"/couleurs/"+couleurKey+"/cepages/"+cepage.replace("cepage_", "");
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
-                                                                        
+
                                                                         var quantite = produit.volume_propose;
 
                                                                         if(produit.nb_bouteille) {
                                                                             quantite = produit.nb_bouteille;
                                                                         }
-                                                                        
+
+                                                                        if(produit.surface_propose) {
+                                                                          quantite = produit.surface_propose;
+                                                                        }
+
                                                                         var centilisation = 1;
                                                                         var prix_unitaire_hl = produit.prix_unitaire;
                                                                         if(produit.centilisation) {
@@ -118,7 +151,66 @@ function(doc) {
                                                                             dateRetiraison = produit.retiraisons[keyRetiraison].date;
                                                                         }
 
-                                                                        emit([teledeclare, doc.valide.date_saisie, doc._id], [doc.campagne, doc.valide.statut, doc._id, doc.numero_contrat, archive, doc.acheteur_identifiant, acheteurNom, doc.vendeur_identifiant, vendeurNom, doc.mandataire_identifiant,doc.mandataire.nom, null, null, doc.type_contrat, produitHash, produitLibelle, produit.volume_propose, produit.volume_enleve, prix_unitaire_hl, prix_unitaire_hl, prix_variable, interne, original, mercuriales, doc.valide.date_validation, doc.valide.date_validation, doc.valide.date_saisie, produit.millesime, null, produit.denomination.replace(/,/g, ""), null, null, null, doc.cepage, libelle_cepage, label, quantite, produit.prix_unitaire, centilisation, doc.acheteur_type, doc.vendeur_type, doc.valide.date_cloture, dateRetiraison]);
+                                                                        var volume_reserve = null;
+                                                                        if (produit.dont_volume_bloque !== undefined) {
+                                                                          volume_reserve = produit_volume_bloque
+                                                                        }
+
+                                                                        emit(
+                                                                          [teledeclare, doc.valide.date_saisie, doc._id],
+                                                                          [
+                                                                            doc.campagne,
+                                                                            doc.valide.statut,
+                                                                            doc._id,
+                                                                            doc.numero_contrat,
+                                                                            archive,
+                                                                            doc.acheteur_identifiant,
+                                                                            acheteurNom,
+                                                                            doc.vendeur_identifiant,
+                                                                            vendeurNom,
+                                                                            doc.mandataire_identifiant,doc.mandataire.nom,
+                                                                            null,
+                                                                            null,
+                                                                            doc.type_contrat,
+                                                                            produitHash,
+                                                                            produitLibelle,
+                                                                            produit.volume_propose,
+                                                                            produit.volume_enleve,
+                                                                            prix_unitaire_hl,
+                                                                            prix_unitaire_hl,
+                                                                            prix_variable,
+                                                                            interne,
+                                                                            original,
+                                                                            mercuriales,
+                                                                            doc.valide.date_validation,
+                                                                            doc.valide.date_validation,
+                                                                            doc.valide.date_saisie,
+                                                                            produit.millesime,
+                                                                            null,
+                                                                            produit.denomination.replace(/,/g, ""),
+                                                                            null,
+                                                                            null,
+                                                                            null,
+                                                                            doc.cepage,
+                                                                            libelle_cepage,
+                                                                            label,
+                                                                            quantite,
+                                                                            produit.prix_unitaire,
+                                                                            centilisation,
+                                                                            doc.acheteur_type,
+                                                                            doc.vendeur_type,
+                                                                            doc.valide.date_cloture,
+                                                                            dateRetiraison,
+
+                                                                            pluriannuel,
+                                                                            duree,
+                                                                            mode,
+                                                                            prix_unite,
+                                                                            volume_reserve,
+                                                                            clause_reserve,
+                                                                            createur
+                                                                          ]
+                                                                        );
                                                                     }
                                                                 }
                                                             }
