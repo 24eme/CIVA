@@ -153,7 +153,7 @@ function(doc) {
 
                                                                         var volume_reserve = null;
                                                                         if (produit.dont_volume_bloque !== undefined) {
-                                                                          volume_reserve = produit_volume_bloque
+                                                                          volume_reserve = produit.dont_volume_bloque
                                                                         }
 
                                                                         emit(
