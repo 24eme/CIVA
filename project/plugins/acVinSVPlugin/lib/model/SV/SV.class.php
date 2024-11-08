@@ -319,7 +319,7 @@ class SV extends BaseSV
         $produit->getLibelle();
         $produit->cvi = $etablissement->cvi;
         $produit->nom = $etablissement->nom;
-        $produit->commune = $etablissement->declaration_commune;
+        $produit->commune = $etablissement->commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
             $this->apporteurs->get($etablissement->cvi)->reorderByConf();
