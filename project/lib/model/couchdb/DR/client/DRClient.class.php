@@ -151,7 +151,7 @@ class DRClient extends acCouchdbClient {
           if(CsvFileAcheteur::recodeNumber($csvFile->getLineVolume($line)) > 0 || CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
               $acheteurDRType = "negoces";
-              if ($acheteur_obj->famille == EtablissementFamilles::COOPERATIVE) {
+              if ($acheteur_obj->famille == EtablissementFamilles::FAMILLE_COOPERATIVE) {
                 $acheteurDRType = "cooperatives";
               }
             $acheteurs = $detail->add($acheteurDRType);
