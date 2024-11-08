@@ -808,14 +808,25 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->identifiant = $this->cvi;
         $this->declarant_document->storeDeclarant();
 
-        $tiers = $this->getEtablissement();
+        $etablissement = $this->getEtablissement();
         $exploitant = $this->getExploitant();
 
-        $this->declaration_commune = $tiers->declaration_commune;
-        $this->declaration_insee = $tiers->declaration_insee;
+        if($etablissement->_exist('declaration_commune')) {
+            $this->declaration_commune = $etablissement->declaration_commune;
+        } else {
+            $this->declaration_commune = $etablissement->commune;
+        }
+
+        if($etablissement->_exist('declaration_insee')) {
+            $this->declaration_insee = $etablissement->declaration_insee;
+        } elseif($etablissement->insee) {
+            $this->declaration_insee = $etablissement->insee;
+        } else {
+            $this->declaration_insee = substr($etablissement->cvi, 0, 5);
+        }
 
         if(!$this->declarant->email) {
-            $this->declarant->email = $tiers->getEmailTeledeclaration();
+            $this->declarant->email = $etablissement->getEmailTeledeclaration();
         }
 
         $this->declarant->exploitant->sexe = $exploitant->civilite;
