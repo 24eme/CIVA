@@ -326,7 +326,7 @@ class uploadActions extends sfActions {
         if (!$this->is_rebeche)
             return false;
         try {
-            if ($this->etablissement->acheteur_raisin != DRClient::ACHETEUR_COOPERATIVE)
+            if ($this->etablissement->famille != EtablissementFamilles::FAMILLE_COOPERATIVE)
                 return true;
         } catch (Exception $e) {
             return false;
@@ -368,7 +368,7 @@ class uploadActions extends sfActions {
 
     private function shouldHaveRebeche($line) {
         try {
-            if ($this->etablissement->acheteur_raisin != DRClient::ACHETEUR_COOPERATIVE)
+            if ($this->etablissement->famille != EtablissementFamilles::FAMILLE_COOPERATIVE)
                 return false;
         } catch (Exception $e) {
             return false;

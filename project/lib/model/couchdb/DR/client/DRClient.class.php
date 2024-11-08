@@ -7,10 +7,6 @@ class DRClient extends acCouchdbClient {
   const VALIDEE_PAR_RECOLTANT = "RECOLTANT";
   const VALIDEE_PAR_CIVA = "CIVA";
   const VALIDEE_PAR_AUTO = "AUTO";
-  const ACHETEUR_COOPERATIVE = 'Cooperative';
-  const ACHETEUR_NEGOCIANT = 'Negociant';
-  const ACHETEUR_NEGOCAVE = 'NegoCave';
-  const ACHETEUR_RECOLTANT = 'Recoltant';
 
   protected $appellations_config_vtsgn = array();
 
@@ -155,7 +151,7 @@ class DRClient extends acCouchdbClient {
           if(CsvFileAcheteur::recodeNumber($csvFile->getLineVolume($line)) > 0 || CsvFileAcheteur::recodeNumber($line[CsvFileAcheteur::CSV_SUPERFICIE]) > 0)
           {
               $acheteurDRType = "negoces";
-              if ($acheteur_obj->acheteur_raisin == self::ACHETEUR_COOPERATIVE) {
+              if ($acheteur_obj->famille == EtablissementFamilles::COOPERATIVE) {
                 $acheteurDRType = "cooperatives";
               }
             $acheteurs = $detail->add($acheteurDRType);
