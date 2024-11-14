@@ -39,7 +39,7 @@ class DelegationLoginForm extends BaseForm {
 
     public function process() {
         if ($this->isValid()) {
-            return CompteClient::getInstance()->find('COMPTE-'.$this->getValue('compte'));
+            return CompteClient::getInstance()->findByLogin($this->getValue('compte'));
         } else {
             throw new sfException("must be valid");
         }
