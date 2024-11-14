@@ -177,7 +177,7 @@ class SV extends BaseSV
 
     public function addApporteurHorsRegion($cvi, $raison_sociale, $pays)
     {
-        $etablissement = EtablissementClient::findByCvi($cvi);
+        $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
         $identifiant = $etablissement ? $etablissement->identifiant : $cvi;
 
         if (array_key_exists($identifiant, $this->apporteurs->toArray())) {
