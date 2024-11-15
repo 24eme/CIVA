@@ -177,7 +177,7 @@ class SV extends BaseSV
 
     public function addApporteurHorsRegion($cvi, $raison_sociale, $pays)
     {
-        $etablissement = EtablissementClient::findByCvi($cvi);
+        $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
         $identifiant = $etablissement ? $etablissement->identifiant : $cvi;
 
         if (array_key_exists($identifiant, $this->apporteurs->toArray())) {
@@ -319,7 +319,7 @@ class SV extends BaseSV
         $produit->getLibelle();
         $produit->cvi = $etablissement->cvi;
         $produit->nom = $etablissement->nom;
-        $produit->commune = $etablissement->declaration_commune;
+        $produit->commune = $etablissement->commune;
         $produit->identifiant = $etablissement->identifiant;
         if(!$exist) {
             $this->apporteurs->get($etablissement->cvi)->reorderByConf();
