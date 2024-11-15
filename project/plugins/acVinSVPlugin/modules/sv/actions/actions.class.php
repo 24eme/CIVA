@@ -358,6 +358,11 @@ class svActions extends sfActions {
 
         $this->sv->cleanDoc();
         $this->sv->validate();
+
+        if($request->getParameter('autorisation')) {
+            $this->sv->getOrAdd('autorisation')->add(SVClient::AUTORISATION_AVA, 1);
+        }
+
         $this->sv->save();
 
         $message = "Bonjour,
