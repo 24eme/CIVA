@@ -591,4 +591,11 @@ class SV extends BaseSV
 
         return $this->exist('_attachments') && count($this->_attachments);
     }
+
+    public function hasAutorisation($autorisation) {
+
+        return $this->exist('autorisation') &&
+               $this->autorisation->exist($autorisation) &&
+               $this->autorisation->get($autorisation);
+    }
 }
