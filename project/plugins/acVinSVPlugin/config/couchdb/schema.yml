@@ -118,3 +118,9 @@ SV:
             date_saisie: {  }
             date_modification: { }
             statut: {  }
+      autorisation:
+        required: false
+        type: collection
+        definition:
+          fields:
+            '*': { type: integer }
