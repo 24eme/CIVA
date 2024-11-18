@@ -124,13 +124,16 @@ function(doc) {
                                                                         var produitLibelle = libelle_appellation + ' ' + libelle_cepage;
 
                                                                         var quantite = produit.volume_propose;
+                                                                        var quantite_unite = 'hl'
 
                                                                         if(produit.nb_bouteille) {
                                                                             quantite = produit.nb_bouteille;
+                                                                            quantite_unite = 'bouteille'
                                                                         }
 
                                                                         if(produit.surface_propose) {
                                                                           quantite = produit.surface_propose;
+                                                                          quantite_unite = 'ares'
                                                                         }
 
                                                                         var centilisation = 1;
@@ -195,6 +198,7 @@ function(doc) {
                                                                             libelle_cepage,
                                                                             label,
                                                                             quantite,
+                                                                            quantite_unite,
                                                                             produit.prix_unitaire,
                                                                             centilisation,
                                                                             doc.acheteur_type,
