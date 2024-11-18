@@ -64,16 +64,31 @@ class DSCiva extends DS implements IUtilisateursDocument {
     public function storeDeclarant() {
         parent::storeDeclarant();
 
-        $tiers = $this->getEtablissement();
+        $etablissement = $this->getEtablissement();
         $exploitant = $this->getExploitant();
 
-        $this->declaration_commune = $tiers->declaration_commune;
-        $this->declaration_insee = $tiers->declaration_insee;
+        if($etablissement->_exist('declaration_commune')) {
+            $this->declaration_commune = $etablissement->declaration_commune;
+        } else {
+            $this->declaration_commune = $etablissement->commune;
+        }
 
-        $this->declarant->email = $tiers->getEmailTeledeclaration();
+        if($etablissement->_exist('declaration_insee')) {
+            $this->declaration_insee = $etablissement->declaration_insee;
+        } elseif($etablissement->insee) {
+            $this->declaration_insee = $etablissement->insee;
+        } else {
+            $this->declaration_insee = substr($etablissement->cvi, 0, 5);
+        }
 
-        if($tiers->exist('civaba') && $tiers->civaba){
-            $this->add('civaba', $tiers->civaba);
+        if(!$this->declarant->email) {
+            $this->declarant->email = $etablissement->getEmailTeledeclaration();
+        }
+
+        $this->declarant->email = $etablissement->getEmailTeledeclaration();
+
+        if($tiers->exist('civaba') && $etablissement->civaba){
+            $this->add('civaba', $etablissement->civaba);
         }
 
         $this->declarant->exploitant->sexe = $exploitant->civilite;
