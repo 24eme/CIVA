@@ -460,7 +460,9 @@ class vracActions extends sfActions
         $this->appellationsLieuDit = json_encode(array());
         $this->vrac = $this->getRoute()->getVrac();
 
-        $this->secureVrac(VracSecurity::EDITION, $this->vrac);
+        if(!$this->getUser()->isAdmin()) {
+            $this->secureVrac(VracSecurity::EDITION, $this->vrac);
+        }
 
     	$this->etapes = VracEtapes::getInstance();
     	$this->etape = $request->getParameter('etape');
