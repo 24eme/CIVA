@@ -51,7 +51,7 @@ class Current extends BaseCurrent {
 
         return $this->getCurrentCampagne();
     }
-    
+
     public function getCurrentCampagne() {
         $current = date('Y');
         foreach ($this->configurations as $k => $v) {
