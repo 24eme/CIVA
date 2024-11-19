@@ -44,7 +44,12 @@ EOF;
                 throw new sfCommandArgumentsException("DR non trouvé : '".$id."'");
             }
 
-            $file = sprintf("%s/%s/%s/DR_%s_%s_%s.csv", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne, $dr->cvi, $dr->campagne, $dr->_rev);
+            $dir = sprintf("%s/%s/%s", sfConfig::get('sf_data_dir'), "export/dr/csv", $dr->campagne);
+            if (is_dir($dir) === false) {
+                mkdir($dir, 0775, true);
+            }
+
+            $file = sprintf("%s/DR_%s_%s_%s.csv", $dir, $dr->cvi, $dr->campagne, $dr->_rev);
 
             if(is_file($file)) {
 
@@ -52,14 +57,14 @@ EOF;
                 continue;
             }
 
-            $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi, false);         
+            $csvContruct = new ExportDRCsv($dr->campagne, $dr->cvi, false);
             $csvContruct->export();
 
             $content = $csvContruct->output();
 
             file_put_contents($file, $content);
 
-            echo $csvContruct->output();
+            echo $content;
         }
     }
 }

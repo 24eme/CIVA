@@ -358,6 +358,11 @@ class svActions extends sfActions {
 
         $this->sv->cleanDoc();
         $this->sv->validate();
+
+        if($request->getParameter('autorisation')) {
+            $this->sv->getOrAdd('autorisation')->add(SVClient::AUTORISATION_AVA, 1);
+        }
+
         $this->sv->save();
 
         $message = "Bonjour,
@@ -545,6 +550,10 @@ L'application de télédéclaration de production du CIVA
             return $this->redirect($this->url);
         }
 
+        if(!$sv->hasAutorisation(SVClient::AUTORISATION_AVA)){
+            return $this->redirect('sv_autorisation', array('id' => $sv->_id, 'url' => $this->url));
+        }
+
         $this->setLayout(false);
 
         $this->document = new ExportSVPdf($sv, 'pdf');
@@ -555,4 +564,18 @@ L'application de télédéclaration de production du CIVA
         $this->csv = base64_encode($csvContruct->exportOne($sv));
     }
 
+    public function executeAutorisation(sfWebRequest $request) {
+        $this->url = $request->getParameter('url');
+        $this->id = $request->getParameter('id');
+
+        if(!$request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $sv = acCouchdbManager::getClient()->find($this->id);
+        $sv->add('autorisation')->add(SVClient::AUTORISATION_AVA, 1);
+        $sv->save();
+
+        return $this->redirect('sv_transmission', array('url'=> $this->url, 'id' => $this->id));
+    }
 }

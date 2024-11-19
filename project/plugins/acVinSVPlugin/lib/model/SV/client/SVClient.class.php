@@ -15,6 +15,10 @@ class SVClient extends acCouchdbClient {
     const CSV_ERROR_VOLUME_REVENDIQUE_SV11 = "CSV_ERROR_VOLUME_REVENDIQUE_SV11";
     const CSV_ERROR_VOLUME_REVENDIQUE_SV12 = "CSV_ERROR_VOLUME_REVENDIQUE_SV12";
 
+    const AUTORISATION_AVA = "AVA";
+
+
+
     public static function getInstance()
     {
         return acCouchdbManager::getClient("SV");
