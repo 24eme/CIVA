@@ -956,6 +956,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 		if(count($this->getStatutsChanged())) {
             $this->removePDFHistorise();
 		}
+
+        $this->updateTotaux();
     }
 
     public function forceSave()
