@@ -91,6 +91,9 @@ class CsvFileAcheteur
     if (strpos(strtolower($this->csvdata[0][self::CSV_OLD_VOLUME]), "volume") !== false) {
         $this->isOldFormat = true;
     }
+    if ($this->isOldFormat && strpos(strtolower($this->csvdata[0][self::CSV_VOLUME_DPLC]), "vci") !== false) {
+        throw new sfException("Le CSV n'est pas au bon format.");
+    }
 
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
       array_shift($this->csvdata);
@@ -144,7 +147,7 @@ class CsvFileAcheteur
 
           return 0;
       }
-      return round(str_replace(",", ".", $value)*1, 2);
+      return round(floatval(str_replace(",", ".", $value)), 2);
   }
 
   public function getLineVolume($line) {
