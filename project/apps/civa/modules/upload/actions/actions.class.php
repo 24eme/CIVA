@@ -26,7 +26,7 @@ class uploadActions extends sfActions {
             if ($this->formUploadCsv->isValid()) {
                 return $this->redirect('csv_view', array('sf_subject' => $this->etablissement, 'md5' => $this->formUploadCsv->getValue('file')->getMd5()));
             } else {
-                $this->getUser()->setFlash('error', $this->formUploadCsv->getErrorSchema()['file']->getMessageFormat());
+                $this->getUser()->setFlash('error', "Le CSV n'est pas valide ou n'est pas au bon format.");
             }
         }
 
