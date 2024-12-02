@@ -25,10 +25,12 @@ class uploadActions extends sfActions {
             $this->formUploadCsv->bind($request->getParameter($this->formUploadCsv->getName()), $request->getFiles($this->formUploadCsv->getName()));
             if ($this->formUploadCsv->isValid()) {
                 return $this->redirect('csv_view', array('sf_subject' => $this->etablissement, 'md5' => $this->formUploadCsv->getValue('file')->getMd5()));
+            } else {
+                $this->setFlash('error', $this->formUploadCsv->getErrorSchema()['file']->getMessageFormat());
             }
         }
 
-        $this->setTemplate('monEspaceDRAcheteur', 'tiers');
+        return $this->redirect('mon_espace_civa_dr_acheteur', ['identifiant' => $this->etablissement->identifiant]);
     }
 
     public function executeCsvList(sfWebRequest $request) {
