@@ -38,6 +38,7 @@ class ValidatorImportCsv extends sfValidatorFile
 
     try {
       $csv = new CsvFileAcheteur($file);
+      $csv->getCsv();
     }catch(Exception $e) {
       $csv = null;
       $errorSchema->addError(new sfValidatorError($this, $e->getMessage()));
