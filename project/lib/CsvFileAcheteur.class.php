@@ -92,7 +92,7 @@ class CsvFileAcheteur
         $this->isOldFormat = true;
     }
     if ($this->isOldFormat && strpos(strtolower($this->csvdata[0][self::CSV_VOLUME_DPLC]), "vci") !== false) {
-        throw new sfException("Le CSV n'est pas au bon format.");
+        throw new Exception("Le CSV n'est pas au bon format");
     }
 
     if ($this->ignore && !preg_match('/^\d{10}$/', $this->csvdata[0][0]))
