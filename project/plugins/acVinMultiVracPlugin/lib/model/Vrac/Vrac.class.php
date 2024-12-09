@@ -229,7 +229,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	{
         $campagne = substr($this->campagne,0,4);
 
-        $conf = ConfigurationClient::getConfiguration($campagne);
+        $conf = ConfigurationClient::getConfigurationByCampagne($campagne);
         return $conf;
      }
 
