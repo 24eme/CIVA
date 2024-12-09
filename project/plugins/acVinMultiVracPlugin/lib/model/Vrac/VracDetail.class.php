@@ -161,6 +161,18 @@ class VracDetail extends BaseVracDetail {
     	return null;
     }
 
+    public function canHaveVolumeBloque() {
+        if($this->getDocument()->isPluriannuelCadre()) {
+            return false;
+        }
+
+        if($this->getDocument()->type_contrat != VracClient::TYPE_VRAC) {
+            return false;
+        }
+
+        return preg_match("#/cepage_(PG|GW|RI)#", $this->getHash());
+    }
+
     public function updateProduit()
     {
     	if ($this->exist('nb_bouteille') && $this->actif) {

@@ -52,9 +52,7 @@ class VracProduitForm extends acCouchdbObjectForm
             }
         }
 
-        if(!$this->getObject()->getDocument()->isPluriannuelCadre() && $this->getObject()->getDocument()->type_contrat == VracClient::TYPE_VRAC
-            && (strpos($this->getObject()->getHash(), 'cepage_PG') !== false || strpos($this->getObject()->getHash(), 'cepage_GW') !== false)
-        ) {
+        if($this->getObject()->canHaveVolumeBloque()) {
             $this->setWidget('dont_volume_bloque', new sfWidgetFormInputFloat());
             $this->setValidator('dont_volume_bloque', new sfValidatorNumber(array('required' => false)));
         }
