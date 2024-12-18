@@ -28,7 +28,8 @@ class ExportSVCsv
             }
             if(!count($sv->getProduits())) {
                 fputcsv($stream, [
-                    $sv->declarant->cvi,$sv->declarant->raison_sociale,null,null,null,null,null,null,null,null,null,null,null,null,null,$sv->type,$sv->valide->date_saisie,null,$sv->_id], ';');
+                    $sv->type, substr($sv->campagne, 0, 4), $sv->declarant->cvi, $sv->declarant->raison_sociale, null, null, null, null, null, null, null, null, null, null, null, null, null, $sv->valide->date_saisie, null, $sv->_id
+                ], ';');
             }
             foreach ($sv->getProduits() as $produit) {
                 fputcsv($stream, $this->build($sv, $produit), ';');
@@ -54,6 +55,8 @@ class ExportSVCsv
         }
 
         return [
+            $sv->type,
+            substr($sv->campagne, 0, 4),
             $sv->declarant->cvi,
             $sv->declarant->raison_sociale,
             $cvi_apporteur,
@@ -69,7 +72,6 @@ class ExportSVCsv
             $produit->volume_detruit,
             $produit->vci,
             $volume_revendique,
-            $sv->type,
             $sv->valide->date_saisie,
             substr($hashproduit, 22),
             $sv->_id,
@@ -104,9 +106,9 @@ class ExportSVCsv
     public function getHeader()
     {
         return [
-            "CVI acheteur", "Nom acheteur", "CVI récoltant", "Nom récoltant", "Appellation", "Lieu", "Cépage", "VTSGN",
+            "Type", "Année", "CVI acheteur", "Nom acheteur", "CVI récoltant", "Nom récoltant", "Appellation", "Lieu", "Cépage", "VTSGN",
             "Dénomination", "Superficie livrée", "Qté livrée en kg", "Volume livré", "Volume à détruire", "Dont VCI",
-            "Volume revendiqué", "Type", "Date de validation", "Hash produit", "Document ID"
+            "Volume revendiqué", "Date de validation", "Hash produit", "Document ID"
         ];
     }
 }
