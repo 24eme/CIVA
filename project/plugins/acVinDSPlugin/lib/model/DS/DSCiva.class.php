@@ -87,7 +87,7 @@ class DSCiva extends DS implements IUtilisateursDocument {
 
         $this->declarant->email = $etablissement->getEmailTeledeclaration();
 
-        if($tiers->exist('civaba') && $etablissement->civaba){
+        if($etablissement->exist('civaba') && $etablissement->civaba){
             $this->add('civaba', $etablissement->civaba);
         }
 
