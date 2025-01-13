@@ -12,7 +12,7 @@ EXPORT_FILE=tmp/export_liste_"$DR_CAMPAGNE"_$(date +%Y%m%d%H%M%S).csv
 
 echo "CVI;Campagne;Raison sociale;Type;Statut;Date de validation;Email;Telephone" > "$TASK_DIR/$EXPORT_FILE";
 
-bash bin/export_svs_csv.sh "$DR_CAMPAGNE" | tail -n +2 | awk -F';' -v CAMPAGNE="$DR_CAMPAGNE" '{v="EN COURS"; if($17) {v="VALIDEE"} ; print CAMPAGNE ";" $1 ";" $2 ";" $16 ";" v ";" $17 }' | uniq | sort > "$TASK_DIR/$EXPORT_FILE.sv"
+bash bin/export_svs_csv.sh "$DR_CAMPAGNE" | tail -n +2 | awk -F';' -v CAMPAGNE="$DR_CAMPAGNE" '{v="EN COURS"; if($18) {v="VALIDEE"} ; print CAMPAGNE ";" $3 ";" $4 ";" $1 ";" v ";" $18 }' | uniq | sort > "$TASK_DIR/$EXPORT_FILE.sv"
 
 curl -s "http://$COUCHDBDOMAIN:$COUCHDBPORT/$COUCHDBBASE/_design/DR/_view/Achats" | cut -d '"' -f 8,16 | sed 's/"/;/g' | grep "^$DR_CAMPAGNE;" | cut -d ";" -f 2 | sort | uniq > "$TASK_DIR/$EXPORT_FILE.drachat"
 
