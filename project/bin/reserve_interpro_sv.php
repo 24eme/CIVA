@@ -27,19 +27,19 @@ fputcsv($output, [
 ], ';');
 
 while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
-    if (strpos($ligne[4], $_APPELLATION) !== 0) {
+    if (strpos($ligne[6], $_APPELLATION) !== 0) {
         continue;
     }
 
-    if ($ligne[6] !== $_CEPAGE) {
+    if ($ligne[8] !== $_CEPAGE) {
         continue;
     }
 
-    if ($ligne[7] === 'VT' || $ligne[7] === 'SGN') {
+    if ($ligne[9] === 'VT' || $ligne[9] === 'SGN') {
         continue;
     }
 
-    if ($current_cvi !== null && $current_cvi !== $ligne[0]) {
+    if ($current_cvi !== null && $current_cvi !== $ligne[2]) {
         $rendement = round($current_volume / ($current_superficie / 100), 2);
 
         $reserve_calculee = 0;
@@ -74,11 +74,11 @@ while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
         $current_volume = 0;
     }
 
-    $current_superficie += $ligne[9];
-    $current_volume     += $ligne[14];
-    $current_cvi = $ligne[0];
-    $current_rs = $ligne[1];
-    $current_type = $ligne[15];
+    $current_superficie += $ligne[11];
+    $current_volume     += $ligne[16];
+    $current_cvi = $ligne[2];
+    $current_rs = $ligne[3];
+    $current_type = $ligne[0];
 }
 
 fclose($export_sv);
