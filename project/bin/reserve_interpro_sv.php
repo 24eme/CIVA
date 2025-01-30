@@ -1,13 +1,32 @@
 <?php
 
-$_APPELLATION = "AOC Alsace blanc";
-$_CEPAGE      = "Pinot Gris";
-$_RENDEMENT_LIMITE = 56.0;
-$_RENDEMENT_MAX    = 70.0;
+$_RENDEMENTS = [
+    'Pinot Gris' => [
+        'limite' => 52.0,
+        'max'    => 65.0
+    ],
+    'Gewurztraminer' => [
+        'limite' => 40.0,
+        'max'    => 50.0
+    ],
+    'Riesling' => [
+        'limite' => 60.0,
+        'max'    => 75.0
+    ]
+];
 
-if (count($argv) !== 2) {
-    die('Il manque des arguments. Usage : php ' . $argv[0] . ' export-sv.csv'.PHP_EOL);
+if (count($argv) !== 3) {
+    die('Il manque des arguments. Usage : php ' . $argv[0] . ' export-sv.csv \''.implode("'|'", array_keys($_RENDEMENTS)).'\''.PHP_EOL);
 }
+
+if (array_key_exists($argv[2], $_RENDEMENTS) === false) {
+    die('Mauvais cépage renseigné. Usage : php ' . $argv[0] . ' export-sv.csv \''.implode("'|'", array_keys($_RENDEMENTS)).'\''.PHP_EOL);
+}
+
+$_APPELLATION = "AOC Alsace blanc";
+$_CEPAGE = $argv[2];
+$_RENDEMENT_LIMITE = $_RENDEMENTS[$argv[2]]['limite'];
+$_RENDEMENT_MAX    = $_RENDEMENTS[$argv[2]]['max'];
 
 $export_sv = fopen($argv[1], 'r');
 $output = fopen('php://output', 'w+');
@@ -80,6 +99,17 @@ while (($ligne = fgetcsv($export_sv, 1000, ";")) !== false) {
     $current_rs = $ligne[3];
     $current_type = $ligne[0];
 }
+
+fputcsv($output, [
+    $current_type, // SV11 / SV12
+    $current_cvi, // CVI
+    $current_rs, // Raison sociale
+    $current_superficie,
+    $current_volume,
+    $rendement,
+    $reserve_calculee,
+    $reserve_notifiee
+], ';');
 
 fclose($export_sv);
 fclose($output);
