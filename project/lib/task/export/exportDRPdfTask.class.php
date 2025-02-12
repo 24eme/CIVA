@@ -8,6 +8,7 @@ class exportDRPdfTask extends sfBaseTask {
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
             new sfCommandOption('clean', null, sfCommandOption::PARAMETER_REQUIRED, 'Clean All before', false),
+            new sfCommandOption('debug', null, sfCommandOption::PARAMETER_REQUIRED, 'Debug', false),
         ));
 
         $this->namespace = 'export';
@@ -35,7 +36,7 @@ EOF;
         foreach($ids as $id) {
             $export = acCouchdbManager::getClient()->find($id);
             $this->logSection($export->get('_id'), 'exporting ...');
-            $export_dr = new ExportDR($export, array($this, 'getPartial'), true);
+            $export_dr = new ExportDR($export, array($this, 'getPartial'), $options['debug']);
             $export_dr->export();
             if($options['clean']) {
                 $export_dr->clean();
