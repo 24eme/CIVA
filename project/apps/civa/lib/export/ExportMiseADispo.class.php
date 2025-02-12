@@ -92,14 +92,16 @@ abstract class ExportMiseADispo
         if ($this->getHashMd5($campagne) && $this->getHashMd5($campagne) == $this->getHashMd5FileFromFile($campagne)) {
             return;
         }
-        
+
         $path_campagne = $this->_file_dir.'/'.$file_export_document->getAnnee();
         $path = $path_campagne.'/'.$this->getFileName($file_export_document);
         $this->mkdirUnlessFolder($this->_file_dir.'/'.$file_export_document->getAnnee());
         $files = sfFinder::type("file")->name('/'.$this->getFileNameForMatch($file_export_document)."/")->in($path_campagne);
         foreach($files as $file) {
-           echo sprintf("remove existing pdf %s\n", $file);
-           unlink($file); 
+            if ($this->_debug) {
+                printf("remove existing pdf %s\n", $file);
+            }
+            unlink($file);
         }
 
         if (!($file_export_document->getDocument()->validee && $file_export_document->getDocument()->modifiee) || ($file_export_document->getDocument()->exist('import_db2') && $file_export_document->getDocument()->import_db2)) {
@@ -139,7 +141,9 @@ abstract class ExportMiseADispo
         if (count($files) > 0) {
             $zip_path = $this->_file_dir . '/' . $campagne.'.zip';
             if (is_file($zip_path)) {
-                echo sprintf("remove existing zip %s\n", $zip_path);
+                if ($this->_debug) {
+                    echo sprintf("remove existing zip %s\n", $zip_path);
+                }
                 unlink($zip_path);
             }
             $zip = new ZipArchive();
@@ -194,7 +198,9 @@ abstract class ExportMiseADispo
         }
         $path = $this->_file_dir.'/'.$campagne.'.checksum';
         if (is_file($path)) {
-            echo sprintf("remove checksum file %s\n", $path);
+            if ($this->_debug) {
+                printf("remove checksum file %s\n", $path);
+            }
             unlink($path);
         }
 
