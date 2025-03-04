@@ -704,7 +704,7 @@ class vracActions extends sfActions
 
     protected function populateVracTiers($vrac)
     {
-		$declarant = $this->getEtablissementCreateur();
+		$declarant = ($vrac->createur_identifiant)? EtablissementClient::getInstance()->find($vrac->createur_identifiant) : $this->getEtablissementCreateur();
 
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
 
