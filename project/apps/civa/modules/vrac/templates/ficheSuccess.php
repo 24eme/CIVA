@@ -46,10 +46,13 @@ td.echeance {display: inline;}
 		<?php endforeach; ?>
     <?php endif; ?>
 	<li style="float: right; opacity: 0.2;">
-			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
-			</span>
-		</span>
+			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
 	</li>
+    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && in_array($vrac->valide->statut, [Vrac::STATUT_VALIDE, Vrac::STATUT_VALIDE_CADRE, Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE])): ?>
+	<li style="float: right; opacity: 0.8;">
+			<span><a href="<?php echo url_for('vrac_reouvrir', $vrac);  ?>" style="background: #f90;">Réouvrir</a></span>
+	</li>
+    <?php endif; ?>
     <li style="float: right">
 		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
     </li>

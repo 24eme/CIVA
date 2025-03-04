@@ -277,6 +277,16 @@ class vracActions extends sfActions
         }
     }
 
+	public function executeReouvrir(sfWebRequest $request)
+	{
+        $this->vrac = $this->getRoute()->getVrac();
+        $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
+        $this->forward404Unless($this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
+        $this->vrac->valide->statut = null;
+        $this->vrac->forceSave();
+    	return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $this->vrac->etape));
+    }
+
 
 	public function executeMercurialeEdit(sfWebRequest $request)
 	{
