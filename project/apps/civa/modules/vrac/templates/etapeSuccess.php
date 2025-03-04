@@ -33,6 +33,8 @@
             <li class="suiv">
                 <?php if ($etapes->getLast() == $etape && $vrac->isVendeurProprietaire()): ?>
                  <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac"> Envoyer le projet<small style="font-size: 12px; display: block; font-weight: normal;">à l'acheteur</small></button>
+                 <?php elseif ($etapes->getLast() == $etape && $sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                     <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac"> Valider</button>
                 <?php elseif ($etapes->getLast() == $etape): ?>
                     <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac">Valider et envoyer<small style="font-size: 12px; display: block; font-weight: normal;">le projet au vendeur</small></button>
                 <?php else: ?>
