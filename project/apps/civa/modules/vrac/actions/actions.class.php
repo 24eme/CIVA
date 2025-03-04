@@ -446,7 +446,9 @@ class vracActions extends sfActions
             return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
 		}
 
-        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+        if (!$this->vrac->valide->email_validation) {
+            VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+        }
 
         if($this->vrac->isPapier()) {
             $this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
