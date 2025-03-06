@@ -171,7 +171,7 @@ td.echeance {display: inline;}
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
-                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider vos enlèvements</button>
+                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider<?php if(!$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?> vos enlèvements<?php endif; ?></button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
 					<p>Contrat vrac <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
