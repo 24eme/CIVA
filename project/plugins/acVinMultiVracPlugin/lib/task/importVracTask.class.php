@@ -31,7 +31,13 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
         $file = new CsvFile($arguments['file']);
-        $vracs = VracCsvImport::createFromArray($file->getCsv());
+        $vracs = VracCsvImport::createFromArray($file->getCsv(), false);
         $vracs->import();
+
+        if ($vracs->getErrors()) {
+            foreach ($vracs->getErrors() as $importError) {
+                $this->logSection("IMPORT", $importError['message']." at line ".$importError['line'], null, 'ERROR');
+            }
+        }
     }
 }

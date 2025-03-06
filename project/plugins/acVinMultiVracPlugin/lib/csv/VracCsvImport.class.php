@@ -153,7 +153,11 @@ class VracCsvImport extends CsvFile
             // Section produit
             $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
             if (! $produitConfig) {
-                echo "ERR: Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]".PHP_EOL;
+                $this->errors[] = [
+                    "line" => self::$line,
+                    "context" => "Contrat: ".$line[self::CSV_NUMERO_CONTRAT],
+                    "message" => "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]",
+                ];
                 continue;
             }
 
