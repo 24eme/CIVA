@@ -122,7 +122,6 @@ class VracCsvImport extends CsvFile
                 $current = $line[self::CSV_NUMERO_CONTRAT];
             }
 
-            $v->teledeclare = false;
             $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
 
             $acheteur = $this->guessId($line[self::CSV_ACHETEUR_NUMERO]);
@@ -152,7 +151,8 @@ class VracCsvImport extends CsvFile
                 continue;
             }
 
-            $produit = $v->addProduit($produitConfig->getHash());
+            $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
+            $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
 
             $produit->millesime = $line[self::CSV_MILLESIME];
 
@@ -184,7 +184,7 @@ class VracCsvImport extends CsvFile
                 $v->reference_contrat_pluriannuel = substr($v->numero_contrat, -1, 4);
             }
 
-            $v->clause_reserve_propriete = $line[self::CSV_RESERVE_PROPRIETE];
+            $v->add('clause_reserve_propriete', $line[self::CSV_RESERVE_PROPRIETE]);
 
             if ($verified) {
                 $v->valide->statut = $line[self::CSV_STATUT];
