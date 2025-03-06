@@ -27,14 +27,20 @@ class VracCsvImport extends CsvFile
     const CSV_CEPAGE = 18;
     const CSV_VOLUME_PROPOSE = 19;
     const CSV_VOLUME_ENLEVE = 20;
-    const CSV_PRIX_UNITAIRE = 21;
-    const CSV_DATE_ENLEVEMENT = 22;
 
-    const CSV_PLURIANNUEL = 23;
-    const CSV_PLURIANNUEL_CAMPAGNES = 24;
+    const CSV_QUANTITE = 21;
+    const CSV_QUANTITE_TYPE = 22;
 
-    const CSV_RESERVE_PROPRIETE = 25;
-    const CSV_DATE_SIGNATURE = 26;
+    const CSV_PRIX_UNITAIRE = 23;
+    const CSV_PRIX_UNITE = 24;
+    const CSV_DATE_ENLEVEMENT = 25;
+
+    const CSV_PLURIANNUEL = 26;
+    const CSV_PLURIANNUEL_CAMPAGNES = 27;
+    const CSV_PLURIANNUEL_TYPE_CONTRAT = 28;
+
+    const CSV_RESERVE_PROPRIETE = 29;
+    const CSV_DATE_SIGNATURE = 30;
 
     const LABEL_BIO = 'agriculture_biologique';
 
