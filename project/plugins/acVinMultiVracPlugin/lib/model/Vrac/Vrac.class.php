@@ -579,23 +579,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             return;
         }
 
-        if ($this->valide->date_cloture) {
-            $this->setStatut(self::STATUT_CLOTURE);
-            return;
-        }
-        if ($this->hasRetiraisons()) {
-			$this->valide->statut = self::STATUT_ENLEVEMENT;
-            return;
-        }
-        if ($this->valide->date_validation) {
-            if ($this->isPluriannuelCadre()) {
-                $this->setStatut(self::STATUT_VALIDE_CADRE);
-            } else {
-                $this->setStatut(self::STATUT_VALIDE);
-            }
-            return;
-        }
-
 		if($this->isVendeurProprietaire()) {
             $this->setStatut(self::STATUT_PROJET_VENDEUR_TRANSMIS, $this->createur_identifiant);
             $this->setStatut(self::STATUT_PROJET_VENDEUR);
