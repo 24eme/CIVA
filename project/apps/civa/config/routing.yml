@@ -186,15 +186,6 @@ vrac_fiche:
     type:     object
   requirements:
     sf_method: [get, post]
-vrac_reouvrir:
-  url: /vrac/:numero_contrat/reouvrir
-  param: { module: vrac, action: reouvrir }
-  class: VracRoute
-  options:
-    model:    Vrac
-    type:     object
-  requirements:
-    sf_method: [get]
 vrac_validation:
   url: /vrac/:numero_contrat/fiche/validation
   param: { module: vrac, action: signer }

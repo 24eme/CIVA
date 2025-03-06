@@ -50,7 +50,7 @@ td.echeance {display: inline;}
 	</li>
     <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && in_array($vrac->valide->statut, [Vrac::STATUT_VALIDE, Vrac::STATUT_VALIDE_CADRE, Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE])): ?>
 	<li style="float: right; opacity: 0.8;">
-			<span><a href="<?php echo url_for('vrac_reouvrir', $vrac);  ?>" style="background: #f90;">Réouvrir</a></span>
+			<span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => $vrac->etape]);  ?>" style="background: #f90;">Modifier</a></span>
 	</li>
     <?php endif; ?>
     <li style="float: right">
