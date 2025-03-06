@@ -218,41 +218,25 @@ class VracCsvImport extends CsvFile
      * Trouve le numero d'identifiant en fonction d'un autre
      *
      * @param string $numero Le numéro d'accise, de siret, ou de cvi
-     * @return false|Etablissement L'identifiant à trouver ou false
+     * @throw Exception
+     * @return Etablissement L'identifiant à trouver ou false
      */
     private function guessId($numero)
     {
-        $res = false;
-        $etablissement = EtablissementClient::getInstance();
+        $res = EtablissementAllView::getInstance()->findByEtablissement($numero);
 
-        switch ($numero) {
-            // SIRET
-            case (preg_match('#^\d{14}$#', $numero) ? true : false):
-                $res = false;
-                break;
-
-            // CVI
-            case (preg_match('#^C?\d{10}$#', $numero) ? true : false):
-                $res = $etablissement->findByCvi($numero);
-                break;
-
-            // Accise
-            case (preg_match('#^FR0[a-zA-Z0-9]{10}$#', $numero) ? true : false):
-                $res = $etablissement->findByNoAccise($numero);
-                break;
-
-            // Mauvais code
-            default:
-                $res = null;
-                break;
+        if ($res === null) {
+            $res = EtablissementClient::getInstance()->findByCvi($numero);
         }
 
         if ($res === null) {
+            throw new Exception($numero . " ne correspond à aucun établissement");
             $res = false;
         }
 
-        if ($res instanceof Etablissement) {
-            $res = $res;
+        $res = EtablissementClient::getInstance()->find($res[0]->id);
+        if (! $res instanceof Etablissement) {
+            throw new Exception($numero . " transformation en établissement échouée");
         }
 
         return $res;
