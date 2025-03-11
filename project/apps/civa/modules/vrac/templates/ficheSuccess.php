@@ -48,7 +48,7 @@ td.echeance {display: inline;}
 	<li style="float: right; opacity: 0.2;">
 			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
 	</li>
-    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && in_array($vrac->valide->statut, [Vrac::STATUT_VALIDE, Vrac::STATUT_VALIDE_CADRE, Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE])): ?>
+    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
 	<li style="float: right; opacity: 0.8;">
 			<span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
 	</li>
