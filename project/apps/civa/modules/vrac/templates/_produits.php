@@ -61,7 +61,7 @@
 			$counter = 0;
             $volumeTotal = 0;
             $autreVolumeTotal = 0;
-			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
+			foreach ($vrac->declaration->getProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
@@ -89,7 +89,7 @@
 			$counter = 0;
             $volumeTotal = 0;
             $autreVolumeTotal = 0;
-			foreach ($vrac->declaration->getActifProduitsDetailsSorted() as $details):
+			foreach ($vrac->declaration->getProduitsDetailsSorted() as $details):
 			foreach ($details as $detail):
     			$volumeTotal += ($vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
                 $autreVolumeTotal += (!$vrac->isInModeSurface())? $detail->surface_propose : $detail->volume_propose;
