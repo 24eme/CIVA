@@ -4,43 +4,51 @@ class VracCsvImport extends CsvFile
 {
     const CSV_CONTRAT = 0;
     const CSV_CAMPAGNE = 1;
-    const CSV_STATUT = 2;
-    const CSV_NUMERO_CONTRAT = 3;
-    const CSV_NUMERO_ARCHIVE = 4;
+    const CSV_NUMERO_INTERNE = 2;
 
-    const CSV_CREATEUR_NUMERO = 5;
-    const CSV_ACHETEUR_NUMERO = 6;
-    const CSV_ACHETEUR_NOM = 7;
-    const CSV_VENDEUR_NUMERO = 8;
-    const CSV_VENDEUR_NOM = 9;
-    const CSV_COURTIER_MANDATAIRE_NUMERO = 10;
-    const CSV_COURTIER_MANDATAIRE_NOM = 11;
+    const CSV_CREATEUR_IDENTIFIANT = 3;
+    const CSV_ACHETEUR_CVI = 4;
+    const CSV_VENDEUR_CVI = 5;
+    const CSV_COURTIER_MANDATAIRE_SIRET = 6;
 
-    const CSV_TYPE_TRANSACTION = 12;
+    const CSV_TYPE_TRANSACTION = 7; // Raisin / Bouteille / Vrac
 
-    const CSV_VIN_LIBELLE = 13;
-    const CSV_VIN_MENTION = 14; // HVE / BIO
-    const CSV_VIN_VTSGN = 15;
-    const CSV_VIN_DOMAINE = 16;
-    const CSV_MILLESIME = 17;
+    const CSV_HASH_CERTIFICATION = 8;
+    const CSV_HASH_GENRE = 9;
+    const CSV_HASH_APPELLATION = 10;
+    const CSV_HASH_MENTION = 11; // VT / SGN
+    const CSV_HASH_LIEU = 12;
+    const CSV_HASH_COULEUR = 13;
+    const CSV_HASH_CEPAGE = 13;
 
-    const CSV_CEPAGE = 18;
-    const CSV_VOLUME_PROPOSE = 19;
-    const CSV_VOLUME_ENLEVE = 20;
+    const CSV_VIN_CODE_INAO = 15;
+    const CSV_VIN_LIBELLE = 16;
+    const CSV_VIN_MENTION = 17; // HVE / BIO
+    const CSV_VIN_VTSGN = 18;
+    const CSV_VIN_DENOMINATION = 19;
+    const CSV_VIN_MILLESIME = 20;
+    const CSV_VIN_CEPAGE = 21;
 
-    const CSV_QUANTITE = 21;
-    const CSV_QUANTITE_TYPE = 22;
+    const CSV_QUANTITE = 22;
+    const CSV_QUANTITE_TYPE = 23;
 
-    const CSV_PRIX_UNITAIRE = 23;
-    const CSV_PRIX_UNITE = 24;
-    const CSV_DATE_ENLEVEMENT = 25;
+    const CSV_PRIX_UNITAIRE = 24;
+    const CSV_PRIX_UNITE = 25;
 
     const CSV_PLURIANNUEL = 26;
-    const CSV_PLURIANNUEL_CAMPAGNES = 27;
-    const CSV_PLURIANNUEL_TYPE_CONTRAT = 28;
+    const CSV_PLURIANNUEL_CONTRAT_CADRE = 27;
 
-    const CSV_RESERVE_PROPRIETE = 29;
-    const CSV_DATE_SIGNATURE = 30;
+    const CSV_CLAUSE_RESERVE_PROPRIETE = 28;
+    const CSV_CLAUSE_DELAI_PAIEMENT = 29;
+    const CSV_CLAUSE_RESILIATION = 30;
+    const CSV_CLAUSE_MANDAT_FACTURATION = 31;
+
+    const CSV_DATE_SIGNATURE_VENDEUR = 32;
+    const CSV_DATE_SIGNATURE_ACHETEUR = 33;
+    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 34;
+    const CSV_DATE_SAISIE = 35;
+    const CSV_DATE_VALIDATION = 36;
+    const CSV_DATE_CLOTURE = 37;
 
     const LABEL_BIO = 'agriculture_biologique';
 
