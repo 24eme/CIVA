@@ -123,6 +123,7 @@ class VracCsvImport extends CsvFile
      * @return int Nombre de vracs importés
      */
     public function import($verified = false) {
+        /** @var Configuration $configuration */
         $configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
         $v = null;
@@ -158,11 +159,33 @@ class VracCsvImport extends CsvFile
             }
 
             // Section produit
-            $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+            // Identification par code inao si présent, sinon par hash, et enfin par libellé en dernier recours
+            $produitConfig = null;
+
+            if ($line[self::CSV_VIN_CODE_INAO]) {
+                $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
+            }
+
+            if (! $produitConfig && $line[self::CSV_HASH_CERTIFICATION]) {
+                $produitConfig = $configuration->identifyProduct(
+                    $line[self::CSV_HASH_CERTIFICATION],
+                    $line[self::CSV_HASH_GENRE],
+                    $line[self::CSV_HASH_APPELLATION],
+                    $line[self::CSV_HASH_MENTION],
+                    $line[self::CSV_HASH_LIEU],
+                    $line[self::CSV_HASH_COULEUR],
+                    $line[self::CSV_HASH_CEPAGE]
+                );
+            }
+
+            if (! $produitConfig) {
+                $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+            }
+
             if (! $produitConfig) {
                 $this->errors[] = [
                     "line" => self::$line,
-                    "context" => "Contrat: ".$line[self::CSV_NUMERO_CONTRAT],
+                    "context" => "Contrat: ".$line[self::CSV_NUMERO_INTERNE],
                     "message" => "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]",
                 ];
                 continue;
