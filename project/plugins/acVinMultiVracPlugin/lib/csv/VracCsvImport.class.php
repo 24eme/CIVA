@@ -69,7 +69,8 @@ class VracCsvImport extends CsvFile
     /**
      * Crée une instance depuis un tableau CSV
      *
-     * @param array $array Le CSV transformé en tableau
+     * @param array $lines Le CSV transformé en tableau
+     * @param bool $headers Le csv contient une ligne de header ?
      * @return self
      */
     public static function createFromArray(array $lines, $headers = true) {
@@ -115,8 +116,10 @@ class VracCsvImport extends CsvFile
 
     /**
      * Importe des vracs dans la base
+     * Si `$verified` est égal à `false`, alors rien n'est importé, mais
+     * les erreurs / warnings sont générés (mode dry-run)
      *
-     * @param bool $verified Le csv a été vérifier
+     * @param bool $verified Le csv a été vérifié
      * @return int Nombre de vracs importés
      */
     public function import($verified = false) {
