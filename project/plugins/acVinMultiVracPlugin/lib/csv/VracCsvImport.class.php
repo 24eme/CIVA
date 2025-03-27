@@ -143,24 +143,18 @@ class VracCsvImport extends CsvFile
 
             $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
 
-            $acheteur = $this->guessId($line[self::CSV_ACHETEUR_NUMERO]);
-            if ($acheteur !== false) {
-                $v->acheteur_identifiant = $acheteur->_id;
-                $v->storeAcheteurInformations($acheteur);
-            }
+            $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+            $v->acheteur_identifiant = $acheteur->_id;
+            $v->storeAcheteurInformations($acheteur);
 
-            $vendeur = $this->guessId($line[self::CSV_VENDEUR_NUMERO]);
-            if ($vendeur !== false) {
-                $v->vendeur_identifiant = $vendeur->_id;
-                $v->storeVendeurInformations($vendeur);
-            }
+            $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+            $v->vendeur_identifiant = $vendeur->_id;
+            $v->storeVendeurInformations($vendeur);
 
-            if ($line[self::CSV_COURTIER_MANDATAIRE_NUMERO]) {
-                $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_NUMERO]);
-                if ($mandataire !== false) {
-                    $v->mandataire_identifiant = $mandataire->_id;
-                    $v->storeMandataireInformations($mandataire);
-                }
+            if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
+                $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                $v->mandataire_identifiant = $mandataire->_id;
+                $v->storeMandataireInformations($mandataire);
             }
 
             // Section produit
@@ -241,8 +235,8 @@ class VracCsvImport extends CsvFile
      * Trouve le numero d'identifiant en fonction d'un autre
      *
      * @param string $numero Le numéro d'accise, de siret, ou de cvi
-     * @throw Exception
-     * @return Etablissement L'identifiant à trouver ou false
+     * @throw Exception Si identifiant inconnu
+     * @return Etablissement L'établissement correspondant à l'identifiant
      */
     private function guessId($numero)
     {
@@ -254,7 +248,6 @@ class VracCsvImport extends CsvFile
 
         if ($res === null) {
             throw new Exception($numero . " ne correspond à aucun établissement");
-            $res = false;
         }
 
         $res = EtablissementClient::getInstance()->find($res[0]->id);
