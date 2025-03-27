@@ -225,6 +225,14 @@ class VracCsvImport extends CsvFile
             $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
 
+            $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
+            $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
+            $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
+            $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
+            $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
+            $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
+            $v->valide->status = Vrac::STATUT_CLOTURE;
+
             if ($verified) {
                 $v->valide->statut = $line[self::CSV_STATUT];
                 $v->updateTotaux();
