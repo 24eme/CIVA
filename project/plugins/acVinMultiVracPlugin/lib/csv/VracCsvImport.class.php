@@ -26,8 +26,8 @@ class VracCsvImport extends CsvFile
     const CSV_VIN_MENTION = 17; // HVE / BIO
     const CSV_VIN_VTSGN = 18;
     const CSV_VIN_DENOMINATION = 19;
-    const CSV_VIN_MILLESIME = 20;
-    const CSV_VIN_CEPAGE = 21;
+    const CSV_VIN_CEPAGE = 20;
+    const CSV_VIN_MILLESIME = 21;
 
     const CSV_QUANTITE = 22;
     const CSV_QUANTITE_TYPE = 23;
