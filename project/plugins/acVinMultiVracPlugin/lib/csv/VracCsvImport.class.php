@@ -125,18 +125,20 @@ class VracCsvImport extends CsvFile
     public function import($verified = false) {
         $configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
+        $v = null;
 
         foreach ($this->getLines() as $line) {
-            if ($current !== $line[self::CSV_NUMERO_CONTRAT]) {
-                $v = new Vrac();
-                $v->initVrac(
-                    $configuration,
-                    $line[self::CSV_CREATEUR_NUMERO],
-                    $line[self::CSV_NUMERO_CONTRAT],
-                    $line[self::CSV_DATE_SIGNATURE],
-                    $line[self::CSV_CAMPAGNE]
+            if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
+                $v = VracClient::getInstance()->createVrac(
+                    $line[self::CSV_CREATEUR_IDENTIFIANT],
+                    $line[self::CSV_DATE_SAISIE]
                 );
-                $current = $line[self::CSV_NUMERO_CONTRAT];
+                $v->campagne = $line[self::CSV_CAMPAGNE];
+                $current = $line[self::CSV_NUMERO_INTERNE];
+            }
+
+            if ($v === null) {
+                throw new sfException('Le vrac devrait être initialisé...');
             }
 
             $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
