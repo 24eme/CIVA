@@ -194,31 +194,27 @@ class VracCsvImport extends CsvFile
             $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
             $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
 
-            $produit->millesime = $line[self::CSV_MILLESIME];
+            $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
             if ($line[self::CSV_VIN_MENTION]) {
                 $produit->getOrAdd('label');
                 $produit->label = $line[self::CSV_VIN_MENTION];
             }
 
-            if ($line[self::CSV_VIN_DOMAINE]) {
-                $produit->denomination = $line[self::CSV_VIN_DOMAINE];
+            if ($line[self::CSV_VIN_DENOMINATION]) {
+                $produit->denomination = $line[self::CSV_VIN_DENOMINATION];
+            }
+
+            if ($v->type_contrat === VracClient::TYPE_RAISIN) {
+                $produit->surface_propose = $line[self::CSV_QUANTITE];
             }
 
             $produit->vtsgn = $line[self::CSV_VIN_VTSGN] ?? null;
-
-            if ($v->type_contrat === VracClient::TYPE_VRAC) {
-                $produit->volume_propose = $line[self::CSV_VOLUME_PROPOSE];
-                $produit->volume_enleve = $line[self::CSV_VOLUME_ENLEVE];
-
-                if ($line[self::CSV_DATE_ENLEVEMENT]) {
-                    $produit->retiraisons->add(null, ['date' => $line[self::CSV_DATE_ENLEVEMENT], 'volume' => $produit->volume_enleve]);
-                }
-            }
-
             $produit->prix_unitaire = $line[self::CSV_PRIX_UNITAIRE];
-
             // Fin produit
+
+            $v->prix_unite = $line[self::CSV_PRIX_UNITE];
+
             $v->contrat_pluriannuel = $line[self::CSV_PLURIANNUEL] === "PLURIANNUEL" ? 1 : 0;
             if ($v->contrat_pluriannuel) {
                 $v->reference_contrat_pluriannuel = substr($v->numero_contrat, -1, 4);
