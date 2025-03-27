@@ -215,12 +215,15 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = $line[self::CSV_PLURIANNUEL] === "PLURIANNUEL" ? 1 : 0;
+            $v->contrat_pluriannuel = $line[self::CSV_PLURIANNUEL] === "APPLICATION" ? 1 : 0;
             if ($v->contrat_pluriannuel) {
-                $v->reference_contrat_pluriannuel = substr($v->numero_contrat, -1, 4);
+                $v->reference_contrat_pluriannuel = $line[self::CSV_PLURIANNUEL_CONTRAT_CADRE];
             }
 
-            $v->add('clause_reserve_propriete', $line[self::CSV_RESERVE_PROPRIETE]);
+            $v->add('clause_reserve_propriete', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE] === "OUI" ? 1 : 0);
+            $v->add('clause_mandat_facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION] === "OUI" ? 1 : 0);
+            $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
+            $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
 
             if ($verified) {
                 $v->valide->statut = $line[self::CSV_STATUT];
