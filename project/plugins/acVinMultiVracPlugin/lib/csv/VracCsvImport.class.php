@@ -282,7 +282,12 @@ class VracCsvImport extends CsvFile
             throw new Exception($numero . " ne correspond à aucun établissement");
         }
 
-        $res = EtablissementClient::getInstance()->find($res[0]->id);
+        if (is_array($res)) {
+            $res = EtablissementClient::getInstance()->find($res[0]->id);
+        } else {
+            $res = EtablissementClient::getInstance()->find($res->_id);
+        }
+
         if (! $res instanceof Etablissement) {
             throw new Exception($numero . " transformation en établissement échouée");
         }
