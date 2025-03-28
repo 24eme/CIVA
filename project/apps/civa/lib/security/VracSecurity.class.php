@@ -42,7 +42,7 @@ class VracSecurity implements SecurityInterface {
             $droits = array($droits);
         }
 
-        if(array_intersect([self::CONSULTATION, self::EDITION, self::ENLEVEMENT], $droits) && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+        if(array_intersect([self::CONSULTATION, self::EDITION, self::ENLEVEMENT, self::CLOTURE], $droits) && $this->getUser()->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
 
             return true;
         }
