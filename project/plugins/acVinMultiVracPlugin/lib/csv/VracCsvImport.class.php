@@ -130,8 +130,10 @@ class VracCsvImport extends CsvFile
 
         foreach ($this->getLines() as $line) {
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
+                $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+
                 $v = VracClient::getInstance()->createVrac(
-                    $line[self::CSV_CREATEUR_IDENTIFIANT],
+                    $createur->_id,
                     $line[self::CSV_DATE_SAISIE]
                 );
                 $v->campagne = $line[self::CSV_CAMPAGNE];
