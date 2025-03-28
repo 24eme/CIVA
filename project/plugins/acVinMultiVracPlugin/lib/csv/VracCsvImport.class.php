@@ -19,7 +19,7 @@ class VracCsvImport extends CsvFile
     const CSV_HASH_MENTION = 11; // VT / SGN
     const CSV_HASH_LIEU = 12;
     const CSV_HASH_COULEUR = 13;
-    const CSV_HASH_CEPAGE = 13;
+    const CSV_HASH_CEPAGE = 14;
 
     const CSV_VIN_CODE_INAO = 15;
     const CSV_VIN_LIBELLE = 16;
