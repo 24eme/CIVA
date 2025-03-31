@@ -161,23 +161,12 @@ class VracCsvImport extends CsvFile
             }
 
             // Section produit
-            // Identification par code inao si présent, sinon par hash, et enfin par libellé en dernier recours
+            // Identification par code inao si présent, sinon par libellé
             $produitConfig = null;
 
             if ($line[self::CSV_VIN_CODE_INAO]) {
                 $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
-            }
-
-            if (! $produitConfig && $line[self::CSV_HASH_CERTIFICATION]) {
-                $produitConfig = $configuration->identifyProduct(
-                    $line[self::CSV_HASH_CERTIFICATION],
-                    $line[self::CSV_HASH_GENRE],
-                    $line[self::CSV_HASH_APPELLATION],
-                    $line[self::CSV_HASH_MENTION],
-                    $line[self::CSV_HASH_LIEU],
-                    $line[self::CSV_HASH_COULEUR],
-                    $line[self::CSV_HASH_CEPAGE]
-                );
+                $produitConfig = current($produitConfig);
             }
 
             if (! $produitConfig) {
