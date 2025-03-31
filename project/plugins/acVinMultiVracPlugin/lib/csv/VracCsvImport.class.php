@@ -225,7 +225,6 @@ class VracCsvImport extends CsvFile
             $v->valide->statut = Vrac::STATUT_CLOTURE;
 
             if ($verified) {
-                $v->valide->statut = $line[self::CSV_STATUT];
                 $v->updateTotaux();
                 $v->save();
 
