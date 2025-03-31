@@ -39,5 +39,11 @@ EOF;
                 $this->logSection("IMPORT", $importError['message']." at line ".$importError['line'], null, 'ERROR');
             }
         }
+
+        if ($vracs->getWarnings()) {
+            foreach ($vracs->getWarnings() as $importWarning) {
+                $this->logSection("IMPORT", $importWarning['message']." at line ".$importWarning['line'], null, 'ERROR');
+            }
+        }
     }
 }
