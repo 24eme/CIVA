@@ -184,6 +184,7 @@ class VracCsvImport extends CsvFile
 
             $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
             $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
+            $produit->actif = 1;
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
