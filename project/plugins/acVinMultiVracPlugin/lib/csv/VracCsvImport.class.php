@@ -54,8 +54,8 @@ class VracCsvImport extends CsvFile
 
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
-    /** @var int $imported Nombre de vrac importé */
-    protected static $imported = 0;
+    /** @var array<string> $imported ID des vracs importés */
+    protected static $imported = [];
 
     /** @var int $line Numero de ligne du CSV */
     protected static $line = 1;
@@ -120,7 +120,7 @@ class VracCsvImport extends CsvFile
      * les erreurs / warnings sont générés (mode dry-run)
      *
      * @param bool $verified Le csv a été vérifié
-     * @return int Nombre de vracs importés
+     * @return array<string> Tableau d'ID des vracs importés
      */
     public function import($verified = false) {
         /** @var Configuration $configuration */
@@ -228,7 +228,7 @@ class VracCsvImport extends CsvFile
                 $v->updateTotaux();
                 $v->save();
 
-                self::$imported++;
+                self::$imported[] = $v->_id;
             } else {
                 $validator = new VracValidation($v);
 
@@ -248,7 +248,7 @@ class VracCsvImport extends CsvFile
             self::$line++;
         }
 
-        return self::$imported;
+        return array_unique(self::$imported);
     }
 
     /**

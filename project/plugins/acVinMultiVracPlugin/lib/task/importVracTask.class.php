@@ -32,7 +32,7 @@ EOF;
 
         $file = new CsvFile($arguments['file']);
         $vracs = VracCsvImport::createFromArray($file->getCsv(), false);
-        $vracs->import();
+        $imported = $vracs->import();
 
         if ($vracs->getErrors()) {
             foreach ($vracs->getErrors() as $importError) {
