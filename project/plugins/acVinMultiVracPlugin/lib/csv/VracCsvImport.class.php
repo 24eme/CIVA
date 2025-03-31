@@ -197,11 +197,11 @@ class VracCsvImport extends CsvFile
             }
 
             if ($v->type_contrat === VracClient::TYPE_RAISIN) {
-                $produit->surface_propose = $line[self::CSV_QUANTITE];
+                $produit->surface_propose = (float) $line[self::CSV_QUANTITE];
             }
 
             $produit->vtsgn = $line[self::CSV_VIN_VTSGN] ?? null;
-            $produit->prix_unitaire = $line[self::CSV_PRIX_UNITAIRE];
+            $produit->prix_unitaire = (float) $line[self::CSV_PRIX_UNITAIRE];
             // Fin produit
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
