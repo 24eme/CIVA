@@ -32,7 +32,7 @@ EOF;
 
         $file = new CsvFile($arguments['file']);
         $vracs = VracCsvImport::createFromArray($file->getCsv(), false);
-        $imported = $vracs->import();
+        $vracs->import();
 
         if ($vracs->getErrors()) {
             foreach ($vracs->getErrors() as $importError) {
@@ -43,6 +43,13 @@ EOF;
         if ($vracs->getWarnings()) {
             foreach ($vracs->getWarnings() as $importWarning) {
                 $this->logSection("IMPORT", $importWarning['message']." at line ".$importWarning['line'], null, 'ERROR');
+            }
+        }
+
+        if (empty($vracs->getErrors())) {
+            $imported = $vracs->import(true);
+            foreach ($imported as $id) {
+                echo "Vrac importé : $id".PHP_EOL;
             }
         }
     }
