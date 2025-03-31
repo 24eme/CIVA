@@ -222,7 +222,7 @@ class VracCsvImport extends CsvFile
             $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
             $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
             $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
-            $v->valide->status = Vrac::STATUT_CLOTURE;
+            $v->valide->statut = Vrac::STATUT_CLOTURE;
 
             if ($verified) {
                 $v->valide->statut = $line[self::CSV_STATUT];
