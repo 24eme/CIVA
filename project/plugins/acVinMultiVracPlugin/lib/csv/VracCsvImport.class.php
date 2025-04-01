@@ -42,13 +42,15 @@ class VracCsvImport extends CsvFile
     const CSV_CLAUSE_DELAI_PAIEMENT = 29;
     const CSV_CLAUSE_RESILIATION = 30;
     const CSV_CLAUSE_MANDAT_FACTURATION = 31;
+    const CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES = 32;
+    const CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES = 33;
 
-    const CSV_DATE_SIGNATURE_VENDEUR = 32;
-    const CSV_DATE_SIGNATURE_ACHETEUR = 33;
-    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 34;
-    const CSV_DATE_SAISIE = 35;
-    const CSV_DATE_VALIDATION = 36;
-    const CSV_DATE_CLOTURE = 37;
+    const CSV_DATE_SIGNATURE_VENDEUR = 34;
+    const CSV_DATE_SIGNATURE_ACHETEUR = 35;
+    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 36;
+    const CSV_DATE_SAISIE = 37;
+    const CSV_DATE_VALIDATION = 38;
+    const CSV_DATE_CLOTURE = 39;
 
     const LABEL_BIO = 'agriculture_biologique';
 
@@ -216,6 +218,8 @@ class VracCsvImport extends CsvFile
             $v->add('clause_mandat_facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION] === "OUI" ? 1 : 0);
             $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
+            $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
+            $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
 
             $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
             $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
