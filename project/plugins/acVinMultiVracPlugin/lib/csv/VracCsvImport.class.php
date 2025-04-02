@@ -132,6 +132,8 @@ class VracCsvImport extends CsvFile
                 );
                 $v->campagne = $line[self::CSV_CAMPAGNE];
                 $current = $line[self::CSV_NUMERO_INTERNE];
+
+                $produitPosition = 0;
             }
 
             if ($v === null) {
@@ -179,6 +181,7 @@ class VracCsvImport extends CsvFile
             $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
             $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
             $produit->actif = 1;
+            $produit->position = $produitPosition++;
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
