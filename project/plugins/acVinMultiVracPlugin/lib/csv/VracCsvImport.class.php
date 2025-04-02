@@ -121,6 +121,7 @@ class VracCsvImport extends CsvFile
         $configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
         $v = null;
+        $produitPosition = 0;
 
         foreach ($this->getLines() as $line) {
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
