@@ -131,6 +131,7 @@ class VracCsvImport extends CsvFile
                     $line[self::CSV_DATE_SAISIE]
                 );
                 $v->campagne = $line[self::CSV_CAMPAGNE];
+                $v->numero_papier = $line[self::CSV_NUMERO_INTERNE];
                 $current = $line[self::CSV_NUMERO_INTERNE];
 
                 $produitPosition = 0;
