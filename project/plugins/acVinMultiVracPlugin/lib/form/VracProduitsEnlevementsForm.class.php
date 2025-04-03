@@ -3,7 +3,7 @@ class VracProduitsEnlevementsForm extends acCouchdbObjectForm
 {
 	public function configure()
     {
-        $this->embedForm('produits', new VracProduitEnlevementCollectionForm($this->getObject()->declaration->getActifProduitsDetailsSorted()));
+        $this->embedForm('produits', new VracProduitEnlevementCollectionForm($this->getObject()->declaration->getProduitsDetailsSorted()));
         $this->widgetSchema->setNameFormat('vrac[%s]');
     }
 
@@ -20,8 +20,10 @@ class VracProduitsEnlevementsForm extends acCouchdbObjectForm
 	public function bind(array $taintedValues = null, array $taintedFiles = null)
     {
         foreach ($this->embeddedForms as $key => $form) {
-        	$form->bind($taintedValues[$key], $taintedFiles[$key]);
-			$this->updateEmbedForm($key, $form);
+            if($form) {
+        	    $form->bind($taintedValues[$key], isset($taintedFiles[$key])? $taintedFiles[$key] : null);
+			    $this->updateEmbedForm($key, $form);
+            }
         }
         parent::bind($taintedValues, $taintedFiles);
     }

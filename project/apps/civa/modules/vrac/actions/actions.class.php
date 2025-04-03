@@ -436,7 +436,9 @@ class vracActions extends sfActions
             return $this->redirect('vrac_etape', array('sf_subject' => $this->vrac, 'etape' => $request->hasParameter('submitAndReload') ? $this->etape : $this->vrac->etape));
 		}
 
-        VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+        if (!$this->vrac->valide->email_validation) {
+            VracMailer::getInstance()->sendMailsByStatutsChanged($this->vrac);
+        }
 
         if($this->vrac->isPapier()) {
             $this->getUser()->setFlash('notice', 'Le contrat papier a été créé avec succès. Chacun des acteurs du contrat va recevoir un mail de confirmation contenant le numéro de visa.');
@@ -628,7 +630,7 @@ class vracActions extends sfActions
 			return null;
 		}
 
-    	if ($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule()) {
+    	if (($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule())||$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
     	return null;
@@ -692,7 +694,7 @@ class vracActions extends sfActions
 
     protected function populateVracTiers($vrac)
     {
-		$declarant = $this->getEtablissementCreateur();
+		$declarant = ($vrac->createur_identifiant)? EtablissementClient::getInstance()->find($vrac->createur_identifiant) : $this->getEtablissementCreateur();
 
     	$typeTiers = $this->getUser()->getAttribute('vrac_type_tiers');
 

@@ -30,7 +30,7 @@ class VracProduitEnlevementCollectionForm extends sfForm
     {
         foreach ($this->embeddedForms as $key => $form) {
             if($form) {
-                $form->bind($taintedValues[$key], $taintedFiles[$key]);
+                $form->bind($taintedValues[$key], isset($taintedFiles[$key])? $taintedFiles[$key] : null);
                 $this->updateEmbedForm($key, $form);
             }
         }

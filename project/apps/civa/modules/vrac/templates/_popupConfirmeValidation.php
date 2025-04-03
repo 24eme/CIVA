@@ -1,8 +1,12 @@
-<div id="popup_confirme_validationVrac" class="popup_ajout popup_confirme" title="<?php if($vrac->isVendeurProprietaire()): ?>Envoi du projet à l'acheteur<?php else: ?>Validation et envoi du projet au vendeur<?php endif; ?>">
+<div id="popup_confirme_validationVrac" class="popup_ajout popup_confirme" title="<?php if($vrac->isVendeurProprietaire()): ?>Envoi du projet à l'acheteur<?php elseif($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>Validation<?php else: ?>Validation et envoi du projet au vendeur<?php endif; ?>">
     <form method="post" action="">
         <?php if($vrac->isVendeurProprietaire()): ?>
             <p>
                 Confirmez-vous l'envoi du projet à l'acheteur ? <br />
+            </p>
+        <?php elseif($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+            <p>
+                Confirmez-vous la validation ? <br />
             </p>
         <?php else: ?>
             <p>

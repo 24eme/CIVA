@@ -46,10 +46,13 @@ td.echeance {display: inline;}
 		<?php endforeach; ?>
     <?php endif; ?>
 	<li style="float: right; opacity: 0.2;">
-			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a>
-			</span>
-		</span>
+			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
 	</li>
+    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
+	<li style="float: right; opacity: 0.8;">
+			<span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
+	</li>
+    <?php endif; ?>
     <li style="float: right">
 		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
     </li>
@@ -168,7 +171,7 @@ td.echeance {display: inline;}
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
-                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider vos enlèvements</button>
+                    <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider<?php if(!$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?> vos enlèvements<?php endif; ?></button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
 					<p>Contrat vrac <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>

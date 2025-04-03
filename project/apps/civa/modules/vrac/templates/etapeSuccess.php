@@ -4,6 +4,12 @@
 	<li class="ui-tabs-selected" style="position: relative;">
 		<a href="#" style="height: 18px; padding-left: 25px;"><span title="Contrat de <?php echo ucfirst(strtolower($vrac->type_contrat)) ?>" style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span> <?php echo $etapes->getLibelle($etape) ?> <?php if($vrac->getContratDeReference()->isPluriannuelCadre()): ?><small style="font-size: 80%; opacity: 0.8;">&nbsp;Contrat pluriannuel</small><?php endif; ?></a>
 	</li>
+    <?php if ($vrac->isValide()): ?>
+    <li style="float: right; opacity: 0.8;">
+        <small style="opacity: 0.5;position:absolute;top:-1rem;right:1.5rem;font-weight:400;">Ce vrac est déjà validé</small>
+        <span><a href="<?php echo url_for('vrac_fiche', ['sf_subject' => $vrac]);  ?>" style="background: #f90;">Revenir à la fiche</a></span>
+    </li>
+    <?php endif; ?>
 </ul>
 <div id="contrats_vrac">
 
@@ -33,6 +39,8 @@
             <li class="suiv">
                 <?php if ($etapes->getLast() == $etape && $vrac->isVendeurProprietaire()): ?>
                  <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac"> Envoyer le projet<small style="font-size: 12px; display: block; font-weight: normal;">à l'acheteur</small></button>
+                 <?php elseif ($etapes->getLast() == $etape && $sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
+                     <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac"> Valider</button>
                 <?php elseif ($etapes->getLast() == $etape): ?>
                     <button class="btn_majeur btn_vert btn_grand btn_upper_case" id="valideVrac">Valider et envoyer<small style="font-size: 12px; display: block; font-weight: normal;">le projet au vendeur</small></button>
                 <?php else: ?>

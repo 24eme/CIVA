@@ -23,12 +23,12 @@ class VracProduitEnlevementForm extends acCouchdbObjectForm
         }
     	$this->getObject()->updateVolumeEnleve();
     }
-    
+
 	public function bind(array $taintedValues = null, array $taintedFiles = null)
     {
         foreach ($this->embeddedForms as $key => $form) {
-            if(isset($taintedValues[$key])) {
-                $form->bind($taintedValues[$key], $taintedFiles[$key]);
+            if($form) {
+                $form->bind($taintedValues[$key], isset($taintedFiles[$key])? $taintedFiles[$key] : null);
                 $this->updateEmbedForm($key, $form);
             }
         }

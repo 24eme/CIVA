@@ -123,10 +123,6 @@ class VracContratValidation extends DocumentValidation
             $this->addPoint('erreur', 'conditions_paiement_required', 'Délais de paiement', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
         }
 
-        $totalPourcentage = $this->document->getPourcentageTotalDesClausesEvolutionPrix();
-        if ($totalPourcentage != 100) {
-            $this->addPoint('erreur', 'clause_evolution_prix_incomplete', 'clause evolution prix répartie à '.$totalPourcentage.'%', $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'conditions')));
-        }
 	    if (count($vtsgn) > 0) {
 	      $this->addPoint('erreur', 'vtsgn_denomination', implode(",", $vtsgn), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
 	    }

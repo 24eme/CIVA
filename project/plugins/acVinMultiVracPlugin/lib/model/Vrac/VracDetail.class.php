@@ -202,11 +202,13 @@ class VracDetail extends BaseVracDetail {
         $this->surface_propose = null;
     	$this->volume_propose = null;
     	$this->volume_enleve = null;
-	$this->remove('label');
+	    $this->remove('label');
     	if ($this->exist('nb_bouteille')) {
 	    	$this->nb_bouteille = null;
 	    	$this->centilisation = null;
     	}
+        $this->remove('retiraisons');
+        $this->add('retiraisons');
     }
 
 }
