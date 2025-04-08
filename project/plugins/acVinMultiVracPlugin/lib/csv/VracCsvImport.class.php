@@ -161,11 +161,11 @@ class VracCsvImport extends CsvFile
             }
 
             if (! $produitConfig) {
-                $this->errors[] = [
-                    "line" => self::$line,
-                    "context" => "Contrat: ".$line[self::CSV_NUMERO_INTERNE],
-                    "message" => "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]",
-                ];
+                $e = new stdClass();
+                $e->num_ligne = self::$line;
+                $e->erreur_csv = "produit_non_reconnu";
+                $e->raison = "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]";
+                $this->errors[] = $e;
                 continue;
             }
 
@@ -225,7 +225,11 @@ class VracCsvImport extends CsvFile
 
                 if ($validator->hasErreurs()) {
                     foreach ($validator->getErreurs() as $err) {
-                        $this->errors[self::$line][] = $err->getMessage() . ': ' . $err->getInfo();
+                        $e = new stdClass();
+                        $e->num_ligne = self::$line;
+                        $e->erreur_csv = $err->getCode();
+                        $e->raison = $err->getMessage() . ': ' . $err->getInfo();
+                        $this->errors[] = $e;
                     }
                 }
 
