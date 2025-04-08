@@ -34,7 +34,7 @@ class CSVVRAC extends BaseCSVVRAC
 
     public function addErreur($erreur)
     {
-        $erreurNode = $this->erreurs->getOrAdd($erreur->num_ligne);
+        $erreurNode = $this->erreurs->add();
         $erreurNode->num_ligne = $erreur->num_ligne;
         $erreurNode->csv_erreur = $erreur->erreur_csv;
         $erreurNode->diagnostic = $erreur->raison;

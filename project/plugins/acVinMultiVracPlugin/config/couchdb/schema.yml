@@ -285,7 +285,7 @@ CSVVRAC:
       identifiant: {}
       statut: {}
       erreurs:
-        type: collection
+        type: array_collection
         definition:
           fields:
             '*':
