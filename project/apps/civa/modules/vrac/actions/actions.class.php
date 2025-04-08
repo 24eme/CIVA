@@ -23,6 +23,24 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
+    public function executeImportCSV(sfWebRequest $request)
+    {
+        $path = sfConfig::get('sf_data_dir').'/import_vrac_test.csv';
+        $this->csvVrac = CSVVRACClient::getInstance()->createOrFind($path, new DateTimeImmutable('2025-01-01'));
+
+        $vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $vracimport->import();
+
+        if (count($vracimport->getErrors())) {
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            foreach ($vracimport->getErrors() as $error) {
+                $this->csvVrac->addErreur($error);
+            }
+        }
+
+        return sfView::SUCCESS;
+    }
+
 	public function executeHistorique(sfWebRequest $request)
 	{
 		$this->compte = $this->getRoute()->getCompte();
