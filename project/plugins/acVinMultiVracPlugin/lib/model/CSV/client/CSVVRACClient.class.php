@@ -16,10 +16,9 @@ class CSVVRACClient extends acCouchdbClient
         return $this->find($this->buildId($identifiant), $hydrate);
     }
 
-    public function createOrFindFromVrac($path, Vrac $vrac)
+    public function createOrFind($path, DateTimeInterface $date)
     {
-        $csvId = $this->buildId($vrac->numero_contrat);
-        $csvVrac = $this->find($csvId);
+        $csvVrac = $this->findFromIdentifiant($date->format('YmdHis'));
 
         if ($csvVrac instanceof CSVVRAC) {
             $csvVrac->storeAttachment($path, 'text/csv', $csvVrac->getFileName());
@@ -27,8 +26,8 @@ class CSVVRACClient extends acCouchdbClient
         }
 
         $csvVrac = new CSVVRAC();
-        $csvVrac->_id = $csvId;
-        $csvVrac->identifiant = $vrac->numero_contrat;
+        $csvVrac->_id = $this->buildId($date->format('YmdHis'));
+        $csvVrac->identifiant = $date->format('YmdHis');
         $csvVrac->storeAttachment($path, 'text/csv', $csvVrac->getFileName());
         $csvVrac->save();
         return $csvVrac;
