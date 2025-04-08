@@ -80,17 +80,6 @@ class VracCsvImport extends CsvFile
     }
 
     /**
-     * Générateur qui renvoie les lignes du CSV une à une
-     *
-     * @yield array $line Un vrac
-     */
-    public function getLines() {
-        foreach ($this->csvdata as $line) {
-            yield $line;
-        }
-    }
-
-    /**
      * Retourne le tableau contenant les erreurs
      *
      * @return array Le tableau d'erreur
@@ -123,7 +112,7 @@ class VracCsvImport extends CsvFile
         $v = null;
         $produitPosition = 0;
 
-        foreach ($this->getLines() as $line) {
+        foreach ($this->getCsv() as $line) {
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
                 $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
 
