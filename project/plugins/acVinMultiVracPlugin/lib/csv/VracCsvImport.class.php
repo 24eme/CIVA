@@ -221,7 +221,7 @@ class VracCsvImport extends CsvFile
 
                 self::$imported[] = $v->_id;
             } else {
-                $validator = new VracValidation($v);
+                $validator = new VracContratValidation($v);
 
                 if ($validator->hasErreurs()) {
                     foreach ($validator->getErreurs() as $err) {
