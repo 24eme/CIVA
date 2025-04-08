@@ -12,6 +12,11 @@ class CSVVRAC extends BaseCSVVRAC
         $this->type = "CSVVRAC";
     }
 
+    public function getFile()
+    {
+        return $this->getAttachmentUri($this->getFileName());
+    }
+
     public function getFileContent()
     {
         return file_get_contents($this->getAttachmentUri($this->getFileName()));
