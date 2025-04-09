@@ -48,6 +48,15 @@ class VracCsvImport extends CsvFile
 
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
+    public static $headers = [
+        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Vendeur CVI", "Courtier siret",
+        "Type de vente", "Code INAO", "Libelle produit", "Mention", "VT/SGN", "Denomination", "Cepage", "Millesime",
+        "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Contrat cadre",
+        "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
+        "Vendeur frais annexes", "Acheteur primes diverses", "Date de signature vendeur", "Date de signature acheteur",
+        "Date de signature courtier", "Date de saisie", "Date de validation", "Date de cloture"
+    ];
+
     /** @var array<string> $imported ID des vracs importés */
     protected static $imported = [];
 
@@ -95,6 +104,11 @@ class VracCsvImport extends CsvFile
      */
     public function getWarnings() {
         return $this->warnings;
+    }
+
+    public static function getHeaders()
+    {
+        return self::$headers;
     }
 
     /**

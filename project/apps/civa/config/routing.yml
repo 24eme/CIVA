@@ -122,11 +122,16 @@ vrac_historique:
   options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
-vrac_import_csv:
+vrac_csv_import:
   url: /vrac/:identifiant/import
   param: {module: vrac, action: importCSV}
   class: CompteRoute
   options: {model: Compte, type: object}
+  requirements: {sf_method: [get, post]}
+
+vrac_csv_fiche:
+  url: /vrac/import/:csvvrac/fiche
+  param: {module: vrac, action: CSVVracFiche}
   requirements: {sf_method: [get, post]}
 
 vrac_export_csv:
