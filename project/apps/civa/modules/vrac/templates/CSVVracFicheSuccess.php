@@ -22,4 +22,6 @@
             </table>
         </div>
     </div>
+
+    <a href="#" class="btn btn-default">Retour à la liste</a>
 </div>
