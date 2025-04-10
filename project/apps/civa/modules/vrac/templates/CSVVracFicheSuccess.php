@@ -5,14 +5,16 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>Ligne</th>
                         <?php foreach ($vracimport->getHeaders() as $header): ?>
                             <th><?php echo $header ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($vracimport->getCsv() as $line): ?>
+                    <?php foreach ($vracimport->getCsv() as $num => $line): ?>
                     <tr>
+                        <td><?php echo $num + 1 ?></td>
                         <?php foreach ($line as $td): ?>
                             <td><?php echo $td ?></td>
                         <?php endforeach; ?>
