@@ -1,6 +1,9 @@
 <div id="application_dr" class="mon_espace_civa">
-    <h1 class="titre_principal">Bilan de l'import des contrats <?php echo $csvVrac->identifiant ?></h1>
+    <h1 class="titre_principal">Bilan de l'import des contrats</h1>
     <div class="contenu">
+
+        <h3 class="titre_section">Fichier importé</h3>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
