@@ -23,7 +23,7 @@
         </thead>
         <tbody>
             <?php foreach ($csvs as $csv): ?>
-            <tr>
+            <tr<?php if (count($csv->erreurs)): echo " class='danger'"; endif ?>>
                 <td><?php echo DateTime::createFromFormat("Ymd", substr($csv->_id, -11, 8))->format('d/m/Y') ?></td>
                 <td><?php echo count($csv->erreurs) ?></td>
                 <td><?php echo count($csv->documents) ?></td>
