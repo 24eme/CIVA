@@ -295,3 +295,8 @@ CSVVRAC:
                   num_ligne: {type: integer}
                   csv_erreur: {}
                   diagnostic: {}
+      documents:
+        type: array_collection
+        definition:
+          fields:
+            '*': {}

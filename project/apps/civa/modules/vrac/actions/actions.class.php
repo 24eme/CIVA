@@ -50,6 +50,33 @@ class vracActions extends sfActions
         return sfView::SUCCESS;
     }
 
+    public function executeNewCSVVrac(sfWebRequest $request)
+    {
+        $this->compte = $this->getRoute()->getCompte();
+
+        $csv = current($request->getFiles());
+        $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport->import();
+
+        if (count($this->vracimport->getErrors())) {
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            foreach ($this->vracimport->getErrors() as $error) {
+                $this->csvVrac->addErreur($error);
+            }
+
+            $this->csvVrac->documents = [];
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+        } else {
+            $ids = $this->vracimport->import(true);
+            $this->csvVrac->documents = $ids;
+        }
+
+        $this->csvVrac->save();
+
+        return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+    }
+
 	public function executeHistorique(sfWebRequest $request)
 	{
 		$this->compte = $this->getRoute()->getCompte();
