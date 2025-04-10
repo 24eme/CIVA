@@ -11,32 +11,25 @@ class CSVVRACClient extends acCouchdbClient
         return acCouchdbManager::getClient("CSVVRAC");
     }
 
-    public function findFromIdentifiant($identifiant, $hydrate = acCouchdbClient::HYDRATE_DOCUMENT)
+    public function findByIdentifiant($identifiant, $date = null, $hydrade = acCouchdbClient::HYDRATE_DOCUMENT)
     {
-        return $this->find($this->buildId($identifiant), $hydrate);
-    }
-
-    public function findByIdentifiant($identifiant, $hydrade = acCouchdbClient::HYDRATE_DOCUMENT)
-    {
-        $csvs = $this->startkey("CSVVRAC-".$identifiant."-00000000000")
-                     ->endkey("CSVVRAC-".$identifiant."-99999999999")
+        $start = "00000000";
+        $end = "99999999";
+        if ($date) {
+            $start = $end = $date;
+        }
+        $csvs = $this->startkey("CSVVRAC-".$identifiant."-{$start}000")
+                     ->endkey("CSVVRAC-".$identifiant."-{$end}999")
                      ->execute();
 
         return $csvs;
     }
 
-    public function createOrFind($path, DateTimeInterface $date)
+    public function createNouveau($path, Compte $compte)
     {
-        $csvVrac = $this->findFromIdentifiant($date->format('YmdHis'));
-
-        if ($csvVrac instanceof CSVVRAC) {
-            $csvVrac->storeAttachment($path, 'text/csv', $csvVrac->getFileName());
-            return $csvVrac;
-        }
-
         $csvVrac = new CSVVRAC();
-        $csvVrac->_id = $this->buildId($date->format('YmdHis'));
-        $csvVrac->identifiant = $date->format('YmdHis');
+        $csvVrac->_id = $this->buildId($compte->identifiant);
+        $csvVrac->identifiant = $compte->identifiant;
         $csvVrac->storeAttachment($path, 'text/csv', $csvVrac->getFileName());
         $csvVrac->save();
         return $csvVrac;
@@ -44,6 +37,8 @@ class CSVVRACClient extends acCouchdbClient
 
     public function buildId($identifiant)
     {
-        return "CSVVRAC-" . $identifiant;
+        $date = (new DateTime())->format('Ymd');
+        $count = count($this->findByIdentifiant($identifiant, $date)) + 1;
+        return "CSVVRAC-" . $identifiant . "-" . $date . sprintf("%03d", $count);
     }
 }
