@@ -17,6 +17,7 @@
             <tr>
                 <td>Date</td>
                 <td>Erreur(s)</td>
+                <td>Documents créés</td>
                 <td>Action</td>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
             <tr>
                 <td><?php echo DateTime::createFromFormat("Ymd", substr($csv->_id, -11, 8))->format('d/m/Y') ?></td>
                 <td><?php echo count($csv->erreurs) ?></td>
+                <td><?php echo count($csv->documents) ?></td>
                 <td>
                     <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csv->_id]) ?>"><i class="glyphicon glyphicon-eye-open"></i> Visualiser</a>
                 </td>
