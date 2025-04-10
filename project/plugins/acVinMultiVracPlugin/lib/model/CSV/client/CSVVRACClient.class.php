@@ -16,6 +16,15 @@ class CSVVRACClient extends acCouchdbClient
         return $this->find($this->buildId($identifiant), $hydrate);
     }
 
+    public function findByIdentifiant($identifiant, $hydrade = acCouchdbClient::HYDRATE_DOCUMENT)
+    {
+        $csvs = $this->startkey("CSVVRAC-".$identifiant."-00000000000")
+                     ->endkey("CSVVRAC-".$identifiant."-99999999999")
+                     ->execute();
+
+        return $csvs;
+    }
+
     public function createOrFind($path, DateTimeInterface $date)
     {
         $csvVrac = $this->findFromIdentifiant($date->format('YmdHis'));

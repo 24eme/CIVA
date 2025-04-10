@@ -23,5 +23,5 @@
         </div>
     </div>
 
-    <a href="#" class="btn btn-default">Retour à la liste</a>
+    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
 </div>

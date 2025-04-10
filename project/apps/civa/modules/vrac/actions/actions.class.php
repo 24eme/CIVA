@@ -23,8 +23,14 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
-    public function executeImportCSV(sfWebRequest $request) {
-        return sfView::NONE;
+    public function executeListeCSVVrac(sfWebRequest $request)
+    {
+        $this->setLayout('layout');
+
+        $this->compte = $this->getRoute()->getCompte();
+        $this->csvs = CSVVRACClient::getInstance()->findByIdentifiant($this->compte->getIdentifiant());
+
+        return sfView::SUCCESS;
     }
 
     public function executeCSVVracFiche(sfWebRequest $request)
