@@ -11,7 +11,6 @@
 			<li><a href="<?php echo url_for('annuaire') ?>">Gérer son annuaire</a></li>
 			<?php endif; ?>
 			<li><a href="<?php echo url_for('vrac_historique', $compte) ?>">Voir tout</a></li>
-			<li><a href="<?php echo url_for('vrac_csv_liste', $compte) ?>">Importer des vracs statistiques</a></li>
 		</ul>
 	</div>
 </div>
