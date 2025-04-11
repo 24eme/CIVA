@@ -51,7 +51,7 @@ class VracCsvImport extends CsvFile
     public static $headers = [
         "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Vendeur CVI", "Courtier siret",
         "Type de vente", "Code INAO", "Libelle produit", "Label", "VT/SGN", "Denomination", "Cepage", "Millesime",
-        "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Contrat cadre",
+        "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Numéro contrat cadre",
         "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
         "Vendeur frais annexes", "Acheteur primes diverses", "Date de signature vendeur", "Date de signature acheteur",
         "Date de signature courtier", "Date de saisie", "Date de validation", "Date de cloture"
