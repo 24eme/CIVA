@@ -197,12 +197,14 @@ class VracDetail extends BaseVracDetail {
     	$this->lieu_dit = null;
     	$this->millesime = null;
     	$this->prix_unitaire = null;
-    	$this->denomination = null;
+        if(!$this->getDocument()->isPluriannuelCadre()) {
+            $this->denomination = null;
+            $this->remove('label');
+        }
     	$this->cloture = null;
         $this->surface_propose = null;
     	$this->volume_propose = null;
     	$this->volume_enleve = null;
-	    $this->remove('label');
     	if ($this->exist('nb_bouteille')) {
 	    	$this->nb_bouteille = null;
 	    	$this->centilisation = null;

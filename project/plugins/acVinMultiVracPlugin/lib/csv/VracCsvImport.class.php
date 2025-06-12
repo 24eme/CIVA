@@ -48,6 +48,15 @@ class VracCsvImport extends CsvFile
 
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
+    public static $headers = [
+        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Vendeur CVI", "Courtier siret",
+        "Type de vente", "Code INAO", "Libelle produit", "Label", "VT/SGN", "Denomination", "Cepage", "Millesime",
+        "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Numéro contrat cadre",
+        "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
+        "Vendeur frais annexes", "Acheteur primes diverses", "Date de signature vendeur", "Date de signature acheteur",
+        "Date de signature courtier", "Date de saisie", "Date de validation", "Date de cloture"
+    ];
+
     /** @var array<string> $imported ID des vracs importés */
     protected static $imported = [];
 
@@ -80,17 +89,6 @@ class VracCsvImport extends CsvFile
     }
 
     /**
-     * Générateur qui renvoie les lignes du CSV une à une
-     *
-     * @yield array $line Un vrac
-     */
-    public function getLines() {
-        foreach ($this->csvdata as $line) {
-            yield $line;
-        }
-    }
-
-    /**
      * Retourne le tableau contenant les erreurs
      *
      * @return array Le tableau d'erreur
@@ -108,6 +106,11 @@ class VracCsvImport extends CsvFile
         return $this->warnings;
     }
 
+    public static function getHeaders()
+    {
+        return self::$headers;
+    }
+
     /**
      * Importe des vracs dans la base
      * Si `$verified` est égal à `false`, alors rien n'est importé, mais
@@ -123,7 +126,7 @@ class VracCsvImport extends CsvFile
         $v = null;
         $produitPosition = 0;
 
-        foreach ($this->getLines() as $line) {
+        foreach ($this->getCsv() as $line) {
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
                 $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
 
@@ -172,11 +175,11 @@ class VracCsvImport extends CsvFile
             }
 
             if (! $produitConfig) {
-                $this->errors[] = [
-                    "line" => self::$line,
-                    "context" => "Contrat: ".$line[self::CSV_NUMERO_INTERNE],
-                    "message" => "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]",
-                ];
+                $e = new stdClass();
+                $e->num_ligne = self::$line;
+                $e->erreur_csv = "produit_non_reconnu";
+                $e->raison = "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]";
+                $this->errors[] = $e;
                 continue;
             }
 
@@ -232,11 +235,15 @@ class VracCsvImport extends CsvFile
 
                 self::$imported[] = $v->_id;
             } else {
-                $validator = new VracValidation($v);
+                $validator = new VracContratValidation($v);
 
                 if ($validator->hasErreurs()) {
                     foreach ($validator->getErreurs() as $err) {
-                        $this->errors[self::$line][] = $err->getMessage() . ': ' . $err->getInfo();
+                        $e = new stdClass();
+                        $e->num_ligne = self::$line;
+                        $e->erreur_csv = $err->getCode();
+                        $e->raison = $err->getMessage() . ': ' . $err->getInfo();
+                        $this->errors[] = $e;
                     }
                 }
 
