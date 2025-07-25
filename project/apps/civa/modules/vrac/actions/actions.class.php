@@ -23,6 +23,60 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
+    public function executeListeCSVVrac(sfWebRequest $request)
+    {
+        $this->setLayout('layout');
+
+        $this->compte = $this->getRoute()->getCompte();
+        $this->csvs = CSVVRACClient::getInstance()->findByIdentifiant($this->compte->getIdentifiant());
+
+        return sfView::SUCCESS;
+    }
+
+    public function executeCSVVracFiche(sfWebRequest $request)
+    {
+        $this->setLayout('layout');
+
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+
+        if (count($this->vracimport->getErrors())) {
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            foreach ($this->vracimport->getErrors() as $error) {
+                $this->csvVrac->addErreur($error);
+            }
+        }
+
+        return sfView::SUCCESS;
+    }
+
+    public function executeNewCSVVrac(sfWebRequest $request)
+    {
+        $this->compte = $this->getRoute()->getCompte();
+
+        $csv = current($request->getFiles());
+        $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport->import();
+
+        if (count($this->vracimport->getErrors())) {
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            foreach ($this->vracimport->getErrors() as $error) {
+                $this->csvVrac->addErreur($error);
+            }
+
+            $this->csvVrac->documents = [];
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+        } else {
+            $ids = $this->vracimport->import(true);
+            $this->csvVrac->documents = $ids;
+        }
+
+        $this->csvVrac->save();
+
+        return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+    }
+
 	public function executeHistorique(sfWebRequest $request)
 	{
 		$this->compte = $this->getRoute()->getCompte();

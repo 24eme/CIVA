@@ -58,7 +58,7 @@ class VracConditionsForm extends acCouchdbObjectForm
 		if($this->getObject()->exist('clause_evolution_prix')) {
 			$this->setWidget('clause_evolution_prix', new sfWidgetFormTextarea());
 			$this->setValidator('clause_evolution_prix', new sfValidatorString(array('required' => false)));
-			$this->getWidgetSchema()->setLabel('clause_evolution_prix', "Critères et modalités d'évolution des prix pour les années N+1 et N+2");
+			$this->getWidgetSchema()->setLabel('clause_evolution_prix', "Clause de révision automatique du prix");
 		}
 
 		if($this->getObject()->type_contrat == VracClient::TYPE_MOUT) {
