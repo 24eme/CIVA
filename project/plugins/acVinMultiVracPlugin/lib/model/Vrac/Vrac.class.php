@@ -742,12 +742,24 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function getTotalVolumePropose()
     {
-    	return $this->volume_propose_total;
+        $total = 0;
+        foreach ($this->declaration->getProduitsDetailsSorted() as $details) {
+            foreach ($details as $detail) {
+                $total += $detail->volume_propose;
+            }
+        }
+    	return $total;
     }
 
     public function getTotalSurfacePropose()
     {
-    	return $this->surface_propose_total;
+        $total = 0;
+        foreach ($this->declaration->getProduitsDetailsSorted() as $details) {
+            foreach ($details as $detail) {
+                $total += $detail->surface_propose;
+            }
+        }
+    	return $total;
     }
 
     public function getTotalPrixEnleve()
