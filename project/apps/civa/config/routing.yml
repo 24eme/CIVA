@@ -129,8 +129,8 @@ vrac_csv_liste:
   options: {model: Compte, type: object}
   requirements: {sf_method: [get, post]}
 
-vrac_csv_import:
-  url: /vrac/import/:identifiant/import
+vrac_csv_create:
+  url: /vrac/import/:identifiant/create
   param: {module: vrac, action: newCSVVrac}
   class: CompteRoute
   options: {model: Compte, type: object}
@@ -139,7 +139,12 @@ vrac_csv_import:
 vrac_csv_fiche:
   url: /vrac/import/:csvvrac/fiche
   param: {module: vrac, action: CSVVracFiche}
-  requirements: {sf_method: [get, post]}
+  requirements: {sf_method: [get]}
+
+vrac_csv_import:
+  url: /vrac/import/:csvvrac/import
+  param: {module: vrac, action: CSVVracImport}
+  requirements: {sf_method: [post]}
 
 vrac_export_csv:
   url: /vrac/:identifiant/export/csv

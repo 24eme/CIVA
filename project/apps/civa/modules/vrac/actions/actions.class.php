@@ -60,18 +60,39 @@ class vracActions extends sfActions
         $this->vracimport->import();
 
         if (count($this->vracimport->getErrors())) {
+            $this->csvVrac->documents = [];
             $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
             foreach ($this->vracimport->getErrors() as $error) {
                 $this->csvVrac->addErreur($error);
             }
-
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-        } else {
-            $ids = $this->vracimport->import(true);
-            $this->csvVrac->documents = $ids;
         }
 
+        $this->csvVrac->save();
+
+        return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+    }
+
+    public function executeCSVVracImport(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+
+        if (! $this->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
+            return $this->forwardSecure();
+        };
+
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
+            throw new sfException("Impossible d'importer un fichier en erreur");
+        }
+
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE) {
+            throw new sfException("Impossible de réimporter un fichier");
+        }
+
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $imported = $this->vracimport->import(true);
+
+        $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
+        $this->csvVrac->documents = $imported;
         $this->csvVrac->save();
 
         return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
