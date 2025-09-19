@@ -261,6 +261,27 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Ajoute une annexe à chaque Vrac du tableau $imported
+     *
+     * @param $annexe L'annexe à ajouter
+     */
+    public function addAnnexe($annexe = null)
+    {
+        if (! $annexe) {
+            return;
+        }
+
+        foreach (self::$imported as $vid) {
+            $vrac = VracClient::getInstance()->find($vid);
+
+            if ($vrac) {
+                $vrac->storeAnnexe($annexe, 'Annexe_contrat');
+                $vrac->save();
+            }
+        }
+    }
+
+    /**
      * Trouve le numero d'identifiant en fonction d'un autre
      *
      * @param string $numero Le numéro d'accise, de siret, ou de cvi
