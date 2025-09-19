@@ -49,7 +49,39 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
+        <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE): ?>
+            <div class="alert alert-info">
+                Ces contrats ont déjà été importés
+            </div>
+
+            <div class="text-center">
+                <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
+            </div>
+        <?php elseif ($csvVrac->hasErreurs()): ?>
+            <div class="alert alert-danger">
+                Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats.
+            </div>
+
+            <div class="text-center">
+                <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
+            </div>
+        <?php else: ?>
+            <h3 class="titre_section">Annexes</h3>
+            <p>Ajouter une annexe à tous les contrats ? (Optionel)</p>
+
+            <form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>">
+                <div style="padding: 10px 0">
+                    <div class="form-group">
+                        <label for="annexeInputFile">Fichier csv</label>
+                        <input type="file" id="annexeInputFile" name="annexeInputFile" class="form-control">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary">Importer</button>
+                    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
+                </div>
+            </form>
+        <?php endif ?>
+    </div>
 </div>
