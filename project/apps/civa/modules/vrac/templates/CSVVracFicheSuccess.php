@@ -28,7 +28,7 @@
         <h3 class="titre_section">Fichier importé</h3>
 
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
                         <th>Ligne</th>
