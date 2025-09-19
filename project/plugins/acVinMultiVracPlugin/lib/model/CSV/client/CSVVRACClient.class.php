@@ -5,6 +5,7 @@ class CSVVRACClient extends acCouchdbClient
     const TYPE_VRAC = "VRAC";
     const LEVEL_WARNING = 'WARNING';
     const LEVEL_ERROR = 'ERROR';
+    const LEVEL_IMPORTE = 'IMPORTE';
 
     public static function getInstance()
     {

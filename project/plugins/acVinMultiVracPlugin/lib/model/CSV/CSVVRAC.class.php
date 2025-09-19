@@ -32,6 +32,17 @@ class CSVVRAC extends BaseCSVVRAC
         return count($this->erreurs);
     }
 
+    public function getErreurs($line = null)
+    {
+        if ($line === null) {
+            return $this->_get('erreurs');
+        }
+
+        return array_filter($this->_get('erreurs')->toArray(), function ($v) use ($line) {
+            return $v->num_ligne === $line;
+        });
+    }
+
     public function addErreur($erreur)
     {
         $erreurNode = $this->erreurs->add();

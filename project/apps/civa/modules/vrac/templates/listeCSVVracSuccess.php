@@ -1,7 +1,7 @@
 <div>
     <h1 class="titre_principal">Téléversement d'un fichier</h1>
     <div style="padding: 10px 0">
-        <form method="POST" enctype='multipart/form-data' class="form-inline" action="<?php echo url_for('vrac_csv_import', ['identifiant' => $compte->identifiant]) ?>">
+        <form method="POST" enctype='multipart/form-data' class="form-inline" action="<?php echo url_for('vrac_csv_create', ['identifiant' => $compte->identifiant]) ?>">
             <div class="form-group">
                 <label for="csvVracInputFile">Fichier csv</label>
                 <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control">
