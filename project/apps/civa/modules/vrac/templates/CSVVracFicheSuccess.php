@@ -28,7 +28,7 @@
         <h3 class="titre_section">Fichier importé</h3>
 
         <div class="table-responsive">
-            <table class="table table-bordered table-condensed">
+            <table class="table table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
                         <th>Ligne</th>
@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($vracimport->getCsv() as $num => $line): ?>
-                    <tr id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'bg-danger' : '' ?>">
+                    <tr id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'danger' : '' ?>">
                         <td><?php echo $num + 1 ?></td>
                         <?php foreach ($line as $td): ?>
                             <td><?php echo $td ?></td>
