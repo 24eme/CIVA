@@ -92,7 +92,7 @@ class vracActions extends sfActions
         $imported = $this->vracimport->import(true);
 
         $annexe = current($request->getFiles());
-        $this->vracimport->addAnnexe($annexe);
+        $this->vracimport->addAnnexe($annexe['tmp_name']);
 
         $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
         $this->csvVrac->documents = $imported;
