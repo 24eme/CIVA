@@ -51,7 +51,7 @@ class VracCsvImport extends CsvFile
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
     public static $headers = [
-        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Vendeur CVI", "Courtier siret",
+        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Acheteur TVA", "Vendeur CVI", "Vendeur TVA", "Courtier siret",
         "Type de vente", "Code INAO", "Libelle produit", "Label", "VT/SGN", "Denomination", "Cepage", "Millesime",
         "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Numéro contrat cadre",
         "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
