@@ -151,10 +151,12 @@ class VracCsvImport extends CsvFile
 
             $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
             $v->acheteur_identifiant = $acheteur->_id;
+            $v->acheteur_assujetti_tva = $line[self::CSV_ACHETEUR_CVI] ? 1 : 0;
             $v->storeAcheteurInformations($acheteur);
 
             $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
             $v->vendeur_identifiant = $vendeur->_id;
+            $v->vendeur_assujetti_tva = $line[self::CSV_VENDEUR_CVI] ? 1 : 0;
             $v->storeVendeurInformations($vendeur);
 
             if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
