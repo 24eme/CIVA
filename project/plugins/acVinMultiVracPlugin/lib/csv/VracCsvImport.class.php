@@ -63,7 +63,7 @@ class VracCsvImport extends CsvFile
     protected static $imported = [];
 
     /** @var int $line Numero de ligne du CSV */
-    protected static $line = 1;
+    protected static $line = 0;
 
     /** @var array $errors Tableau des erreurs de vérification */
     private $errors = [];
@@ -145,6 +145,8 @@ class VracCsvImport extends CsvFile
         $produitPosition = 0;
 
         foreach ($this->getCsv() as $line) {
+            self::$line++;
+
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
                 try {
                     $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
@@ -285,8 +287,6 @@ class VracCsvImport extends CsvFile
                     }
                 }
             }
-
-            self::$line++;
         }
 
         return array_unique(self::$imported);
