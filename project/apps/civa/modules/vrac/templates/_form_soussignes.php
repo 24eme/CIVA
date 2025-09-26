@@ -25,17 +25,10 @@
 			<?php if ($form->getObject()->isNew()): ?>
             <div id="contrat_pluriannuel_inputs" style="display: none;">
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
-                <div id="ligne_campagnes_application" class="ligne_form" style="display:flex;gap:30px;" >
-                    <span>
-                        <?php echo $form['pluriannuel_campagne_debut']->renderError() ?>
-                        <?php echo $form['pluriannuel_campagne_debut']->renderLabel(null, array("class" => "bold")) ?>
-                        <?php echo $form['pluriannuel_campagne_debut']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
-                    </span>
-                    <span>
-                        <?php echo $form['pluriannuel_campagne_duree']->renderError() ?>
-                        <?php echo $form['pluriannuel_campagne_duree']->renderLabel(null, array("class" => "bold")) ?>
-                        <?php echo $form['pluriannuel_campagne_duree']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
-                    </span>
+                <div id="ligne_campagnes_application" class="ligne_form">
+                    <?php echo $form['campagne']->renderError() ?>
+    				<?php echo $form['campagne']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
+    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 120px;")) ?>
                 </div>
             </div>
             <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
@@ -411,32 +404,6 @@
 		<?php endif; ?>
 		$(".remove_autocomplete").click(function() {
 			$(this).parents(".selecteur").siblings(".cible").empty();
-		});
-
-		$("#vrac_soussignes_pluriannuel_campagne_debut").change(function() {
-		    const campagneChoice = $("#vrac_soussignes_pluriannuel_campagne_debut option:selected").val();
-
-			const campagneAnneeObj = $("#vrac_soussignes_pluriannuel_campagne_duree");
-			let campagneAnneeOptions = campagneAnneeObj.find("option");
-			let campagneFinUpdated = parseInt(campagneChoice);
-			campagneAnneeOptions.each(function(index, campagne) {
-			    const campagneDebut = campagne.value.substring(0,4);
-				const campagneFin = campagne.value.slice(-4);
-
-				campagneFinUpdated++;
-
-				$(campagne).val(function(index, value) {
-                    value = value.replace(campagneFin, campagneFinUpdated.toString());
-				    value = value.replace(campagneDebut, campagneChoice);
-                    return value;
-				});
-
-				$(campagne).text(function(index, text) {
-				    text = text.replace(campagneFin, campagneFinUpdated.toString());
-				    text = text.replace(campagneDebut, campagneChoice);
-                    return text;
-				});
-			})
 		});
 	});
 	</script>

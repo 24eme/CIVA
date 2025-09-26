@@ -92,16 +92,6 @@ class VracSoussignesForm extends acCouchdbObjectForm
 
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
-
-        $this->setWidget('pluriannuel_campagne_debut', new sfWidgetFormChoice(array('choices' => $this->getCampagneChoicesDebut())));
-        $this->setWidget('pluriannuel_campagne_duree', new sfWidgetFormChoice(array('choices' => $this->getDureeContrat())));
-
-        $this->getWidget('pluriannuel_campagne_debut')->setLabel('Conclu à partir de la campagne');
-        $this->getWidget('pluriannuel_campagne_duree')->setLabel('Pour une durée de');
-
-        $this->setValidator('pluriannuel_campagne_debut', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getCampagneChoicesDebut()))));
-        $this->setValidator('pluriannuel_campagne_duree', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getDureeContrat()))));
-
     }
 
     public static function getCurrentCampagne() {
@@ -109,42 +99,19 @@ class VracSoussignesForm extends acCouchdbObjectForm
         return $campagne_manager->getCampagneByDate(date('Y-m-d'));
     }
 
-    public function getCampagneChoicesDebut() {
-        list($campagne, $millesime, $campagnes) = self::getCurrentMillesime();
-        for($i=$millesime; $i<=$millesime+1; $i++) {
-            $campagnes[$i] = $i;
-        }
-        return $campagnes;
-    }
-
-    public function getDureeContrat() {
-        list($campagne, $millesime, $campagnes) = self::getCurrentMillesime();
-        $annee = 0;
-        for($i=$millesime+1; $i<=$millesime+10; $i++) {
-            $campagnes[$millesime . '-' . $i] =  ++$annee . ($annee == 1 ? ' an ' : ' ans ') . '(' . $millesime . ' à ' . $i . ')';
-        }
-        return $campagnes;
-    }
-
     public static function getCampagnesChoices() {
-        list($campagne, $millesime, $campagnes) = self::getCurrentMillesime();
+        $campagne = self::getCurrentCampagne();
+        $millesime = substr($campagne, 0, 4) * 1;
+		if (date('m') == 12||date('Y') > $millesime) {
+			$millesime++;
+		}
+        $campagnes = [];
         for($i=$millesime; $i<=$millesime+1; $i++) {
             $campagnes[$i.'-'.($i+1)] = $i.' à '.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0))-1);
         }
         return $campagnes;
     }
 
-    public static function getCurrentMillesime() {
-        $campagne = self::getCurrentCampagne();
-        $millesime = substr($campagne, 0, 4) * 1;
-		if (date('m') == 12||date('Y') > $millesime) {
-			$millesime++;
-		}
-
-		$campagnes = [];
-
-        return [$campagne, $millesime, $campagnes];
-    }
 	protected function updateDefaultsFromObject() {
         parent::updateDefaultsFromObject();
         $defaults = $this->getDefaults();
