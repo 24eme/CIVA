@@ -146,7 +146,12 @@ class VracCsvImport extends CsvFile
 
         foreach ($this->getCsv() as $line) {
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
-                $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+                try {
+                    $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+                } catch (Exception $e) {
+                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du créateur n'a pas été reconnu [".$line[self::CSV_CREATEUR_IDENTIFIANT]."] (".$e->getMessage().")");
+                    continue;
+                }
 
                 $v = VracClient::getInstance()->createVrac(
                     $createur->_id,
@@ -165,18 +170,33 @@ class VracCsvImport extends CsvFile
 
             $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
 
-            $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+            try {
+                $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+            } catch (Exception $e) {
+                $this->addError(self::$line, "operateur_inexistant", "L'identifiant de l'acheteur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
+                continue;
+            }
             $v->acheteur_identifiant = $acheteur->_id;
             $v->acheteur_assujetti_tva = $line[self::CSV_ACHETEUR_CVI] ? 1 : 0;
             $v->storeAcheteurInformations($acheteur);
 
-            $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+            try {
+                $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+            } catch (Exception $e) {
+                $this->addError(self::$line, "operateur_inexistant", "L'identifiant du vendeur n'a pas été reconnu [".$line[self::CSV_VENDEUR_CVI]."] (".$e->getMessage().")");
+                continue;
+            }
             $v->vendeur_identifiant = $vendeur->_id;
             $v->vendeur_assujetti_tva = $line[self::CSV_VENDEUR_CVI] ? 1 : 0;
             $v->storeVendeurInformations($vendeur);
 
             if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
-                $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                try {
+                    $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                } catch (Exception $e) {
+                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$line[self::CSV_COURTIER_MANDATAIRE_SIRET]."] (".$e->getMessage().")");
+                    continue;
+                }
                 $v->mandataire_identifiant = $mandataire->_id;
                 $v->storeMandataireInformations($mandataire);
             }
