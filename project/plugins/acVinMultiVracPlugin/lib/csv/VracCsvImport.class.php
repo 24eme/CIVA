@@ -100,6 +100,22 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Ajoute une erreur dans le tableau
+     *
+     * @param int $ligne La ligne de l'erreur
+     * @param string $code Le code d'erreur
+     * @param string $raison Description
+     */
+    public function addError($ligne, $code, $raison)
+    {
+        $e = new stdClass();
+        $e->num_ligne = $ligne;
+        $e->erreur_csv = $code;
+        $e->raison = $raison;
+        $this->errors[] = $e;
+    }
+
+    /**
      * Retourne le tableau contenant les avertissements
      *
      * @return array Le tableau des avertissements
