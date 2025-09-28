@@ -8,6 +8,16 @@
 		</tr>
 	</thead>
 	<tbody>
+        <?php if($vrac->exist('prix_non_determine')): ?>
+        <tr>
+            <td>
+                Prix non determiné
+            </td>
+            <td class="<?php echo isVersionnerCssClass($vrac, 'prix_non_determine') ?>">
+                <?php echo ($vrac->prix_non_determine)? nl2br($vrac->prix_non_determine) : 'Aucun'; ?>
+            </td>
+        </tr>
+        <?php endif; ?>
         <?php if($vrac->exist('vendeur_frais_annexes')): ?>
         <tr>
 			<td>

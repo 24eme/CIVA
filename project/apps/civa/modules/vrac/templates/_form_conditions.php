@@ -11,6 +11,28 @@
 <p class="intro_contrat_vrac">Veuillez saisir ici les <strong>conditions applicables</strong> au contrat.</p>
 
 <?php if(!$vrac->isPapier()): ?>
+<table class="validation table_donnees">
+    <thead>
+        <tr>
+            <th style="width: 212px;">Prix</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if(isset($form['prix_non_determine'])): ?>
+            <tr>
+                <td>
+                    <?php echo $form['prix_non_determine']->renderLabel() ?>
+                </td>
+                <td width="465">
+                    <?php echo $form['prix_non_determine']->render(array('rows' => '1', 'cols' => '61')) ?>
+                </td>
+                <td>
+                    <a class="btn_minus action_aidesaisie aideSaisiePrixNDPopup" href="">Ajouter un prix non determiné</a>
+                </td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 <?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>
 <table class="validation table_donnees">
 	<thead>
@@ -170,6 +192,7 @@
 <?php include_partial('vrac/popupAideSaisieFrais', array('target' => $form['vendeur_frais_annexes']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>
 <?php endif; ?>
+<?php include_partial('vrac/popupAideSaisiePrixNonDetermine', array('target' => $form['prix_non_determine']->renderId(), 'vrac' => $form->getObject())); ?>
 <?php include_partial('vrac/popupAideSaisieDelaiPaiement', array('target' => $form['conditions_paiement']->renderId(), 'vrac' => $form->getObject())); ?>
 <?php if(isset($form['clause_resiliation'])): ?>
 <?php include_partial('vrac/popupAideSaisieResiliation', array('target' => $form['clause_resiliation']->renderId())); ?>

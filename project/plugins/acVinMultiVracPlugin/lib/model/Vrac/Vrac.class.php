@@ -949,6 +949,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			$this->add('clause_reserve_propriete', null);
 			$this->add('clause_mandat_facturation', null);
 			$this->add('vendeur_frais_annexes');
+			$this->add('prix_non_determine');
 			$this->add('acheteur_primes_diverses');
 			$this->add('clause_resiliation');
             if($this->type_contrat == VracClient::TYPE_VRAC) {

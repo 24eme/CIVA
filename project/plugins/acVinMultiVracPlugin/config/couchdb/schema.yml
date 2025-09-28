@@ -12,6 +12,7 @@ Vrac:
               definition:
                 fields:
                   '*': { }
+      prix_non_determine: {  }
       conditions_paiement: {  }
       conditions_particulieres: {  }
       createur_identifiant: {  }

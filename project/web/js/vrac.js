@@ -206,6 +206,11 @@ var initChoixTypeVrac = function()
 
 var initAideALaSaisie = function()
 {
+  $('.aideSaisiePrixNDPopup').click(function() {
+         openPopup($("#popup_prix_non_determine"));
+         return false;
+     });
+
     $('.aideSaisieFraisPopup').click(function() {
         openPopup($("#popup_vendeur_frais_annexes"));
         return false;
