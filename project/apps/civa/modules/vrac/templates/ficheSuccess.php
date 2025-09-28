@@ -98,7 +98,7 @@ td.echeance {display: inline;}
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
-    			<th style="width: 280px;">Campagnes pluriannel</th>
+                <th style="width: 280px;">Campagnes pluriannuelles</th>
     		</tr>
     	</thead>
     	<tbody>
