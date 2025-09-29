@@ -258,7 +258,7 @@ class VracCsvImport extends CsvFile
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
-            $v->add('clause_evolution_prix', "Il va changer tous les ans"]);
+            $v->add('clause_evolution_prix', "Il va changer tous les ans");
 
             // $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
             // $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
