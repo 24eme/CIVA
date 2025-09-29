@@ -259,13 +259,13 @@ class VracCsvImport extends CsvFile
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
 
-            $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
-            $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
-            $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
-            $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
-            $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
-            $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
-            $v->valide->statut = Vrac::STATUT_PROPOSITION;
+            // $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
+            // $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
+            // $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
+            // $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
+            // $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
+            // $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
+            $v->etape = "validation";
 
             if ($verified) {
                 $v->updateTotaux();
