@@ -95,7 +95,8 @@ class vracActions extends sfActions
         $this->vracimport->addAnnexe($annexe['tmp_name']);
 
         $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
-        $this->csvVrac->documents = $imported;
+        $this->csvVrac->remove('documents');
+        $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
         return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
