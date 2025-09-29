@@ -290,7 +290,7 @@ class VracCsvImport extends CsvFile
             }
         }
 
-        return array_unique(self::$imported);
+        return array_values(array_unique(self::$imported));
     }
 
     /**
