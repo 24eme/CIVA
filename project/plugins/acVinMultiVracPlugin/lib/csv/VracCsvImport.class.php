@@ -247,7 +247,7 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = $line[self::CSV_PLURIANNUEL] === "APPLICATION" ? 1 : 0;
+            $v->contrat_pluriannuel = ($line[self::CSV_PLURIANNUEL]) ? 1 : 0;
             if ($v->contrat_pluriannuel) {
                 $v->reference_contrat_pluriannuel = $line[self::CSV_PLURIANNUEL_CONTRAT_CADRE];
             }
