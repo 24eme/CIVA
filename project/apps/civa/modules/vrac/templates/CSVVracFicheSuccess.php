@@ -52,7 +52,14 @@
 
         <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE): ?>
             <div class="alert alert-info">
-                Ces contrats ont déjà été importés
+                Les contrats suivants ont été importés :
+                <ul>
+                    <?php foreach ($csvVrac->getDocuments() as $import): ?>
+                    <li>
+                        <a href="<?php echo url_for('vrac_fiche', ['numero_contrat' => str_replace('VRAC-', '', $import)]) ?>"><?php echo $import ?></a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
 
             <div class="text-center">
