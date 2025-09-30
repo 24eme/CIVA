@@ -8,20 +8,22 @@
             <div class="alert alert-danger">
                 Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats sans modification de votre fichier.
             </div>
-            <div class="row bg-secondary">
-                <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
-                    <?php if ($listeerreurs = $csvVrac->getErreurs($i)): ?>
-                        <div class="col-xs-1">
-                            <a href="#line<?php echo $i ?>">#<?php echo $i ?></a>
-                        </div>
-                        <div class="col-xs-11">
-                            <?php foreach ($listeerreurs as $e): ?>
-                                <p><?php echo $e->diagnostic; ?></p>
-                            <?php endforeach ?>
-                        </div>
-                    <?php endif ?>
-                <?php endfor; ?>
-            </div>
+            <table class="table table-bordered">
+            <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
+                <?php if ($listeerreurs = $csvVrac->getErreurs($i)): ?>
+                <tr>
+                    <td><a href="#line<?php echo $i ?>">#<?php echo $i ?></a></td>
+                    <td>
+                        <table>
+                        <?php foreach ($listeerreurs as $e): ?>
+                            <tr><td><?php echo $e->diagnostic; ?></td></tr>
+                        <?php endforeach ?>
+                        </table>
+                    </td>
+                <tr>
+                <?php endif ?>
+            <?php endfor; ?>
+            </table>
         <?php else: ?>
             <div class="alert alert-info">
                 Total de ligne dans le fichier : <strong><?php echo count($vracimport->getCsv()) ?></strong><br>
