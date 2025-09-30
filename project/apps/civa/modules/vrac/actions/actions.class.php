@@ -850,10 +850,4 @@ class vracActions extends sfActions
         return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
 
-    public function executeAjouterAnnexe(sfWebRequest $request) {
-        $this->vrac = $this->getRoute()->getVrac();
-        $this->form = new VracAnnexeForm($this->vrac);
-
-            // return $this->redirect('vrac_ajout_annexe', array('sf_subject' => $this->vrac));
-           }
 }

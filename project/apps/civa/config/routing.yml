@@ -307,16 +307,6 @@ vrac_etape:
     allow_empty: true
   requirements:
     sf_method: [get, post]
-vrac_ajout_annexe:
-  url: /vrac/:numero_contrat/ajouter/annexes
-  param: { module: vrac, action: ajouterAnnexe }
-  class: VracRoute
-  options:
-    model:    Vrac
-    type:     object
-    allow_empty: true
-  requirements:
-    sf_method: [get, post]
 vrac_ajout_produit:
   url: /vrac/:numero_contrat/:etape/ajouter
   param: { module: vrac, action: ajouterProduit }

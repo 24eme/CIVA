@@ -88,12 +88,6 @@ td.echeance {display: inline;}
 <?php include_partial('vrac/ficheConditions', array('vrac' => $vrac, 'fiche' => true)); ?>
 <hr class="printonly"/>
 <?php include_partial('vrac/ficheAnnexes', array('vrac' => $vrac, 'fiche' => true, 'edit' => false)); ?>
-<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $user->_id == $vrac->vendeur_identifiant): ?>
- 			<td style="width: 40%;margin-bottom:10px;">
-                 <a style="text-decoration:none; color:#2a2a2a;display:block; width:160px;margin-bottom:15px;" href="<?php echo url_for('vrac_ajout_annexe', array('sf_subject' => $vrac)) ?>"<button class=" btn_vert btn_petit btn_upper_case">Ajouter des annexes</button></a>
- 			</td>
-			<?php endif; ?>
-
 <?php endif; ?>
 
 <?php if($vrac->exist('historique')): ?>

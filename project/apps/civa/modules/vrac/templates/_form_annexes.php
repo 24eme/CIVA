@@ -1,13 +1,11 @@
 <p class="intro_contrat_vrac">Veuillez ajouter ici les <strong>annexes applicables</strong> au contrat.</p>
 
-<?php if ($vrac->valide->statut == Vrac::STATUT_CREE) : ?>
-    <fieldset class="message">
-        <legend class="message_title">Important</legend>
-        <ul class="messages_log">
-            <li>La proposition préalable du vendeur, ou son mandat au courtier accompagné de la proposition préalable faite en son nom, doit figurer en annexe du contrat.</li>
-        </ul>
-    </fieldset>
-<?php endif; ?>
+<fieldset class="message">
+    <legend class="message_title">Important</legend>
+    <ul class="messages_log">
+        <li>La proposition préalable du vendeur, ou son mandat au courtier accompagné de la proposition préalable faite en son nom, doit figurer en annexe du contrat.</li>
+    </ul>
+</fieldset>
 
 <?php if(!$vrac->isPapier()): ?>
 <table class="validation table_donnees">
