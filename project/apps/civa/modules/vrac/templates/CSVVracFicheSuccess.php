@@ -10,7 +10,7 @@
             </div>
             <table class="table table-bordered">
             <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
-                <?php if ($listeerreurs = $csvVrac->getErreurs($i)): ?>
+                <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
                 <tr>
                     <td><a href="#line<?php echo $i ?>">#<?php echo $i ?></a></td>
                     <td>
