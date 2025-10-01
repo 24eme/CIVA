@@ -120,6 +120,21 @@ class vracActions extends sfActions
         return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
     }
 
+    public function executeCSVVracDownload(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $file = $this->csvVrac->_attachments->getFirst();
+
+        $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '.csv"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', $file->length);
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($this->csvVrac->getAttachmentUri($file->getKey())));
+    }
+
 	public function executeHistorique(sfWebRequest $request)
 	{
 		$this->compte = $this->getRoute()->getCompte();

@@ -54,7 +54,7 @@
             <?php endif ; ?>
         <?php endif; ?>
 
-        <h3 class="titre_section">Contenu du fichier importé</h3>
+        <h3 class="titre_section">Contenu du fichier importé <small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></h3>
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-condensed">
