@@ -44,7 +44,7 @@
                     <div style="padding: 10px 0">
                         <div class="form-group">
                             <label for="annexeInputFile">Fichier csv</label>
-                            <input type="file" id="annexeInputFile" name="annexeInputFile" class="form-control">
+                            <?php echo $formAnnexe['annexeInputFile']->render(['class' => 'form-control']); ?>
                         </div>
                     </div>
                     <div class="text-center">

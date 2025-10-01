@@ -39,6 +39,8 @@ class vracActions extends sfActions
 
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->formAnnexe = new sfForm();
+        $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true]));
 
         if (count($this->vracimport->getErrors())) {
             $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
@@ -91,8 +93,24 @@ class vracActions extends sfActions
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $imported = $this->vracimport->import(true);
 
-        $annexe = current($request->getFiles());
-        $this->vracimport->addAnnexe($annexe['tmp_name']);
+        $this->formAnnexe = new sfForm();
+        $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true]));
+        $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFile([
+            'required' => false, 'max_size' => '2097152',
+            'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
+            'mime_types' => 'pdf'
+        ]));
+
+        $this->formAnnexe->bind(null, $request->getFiles());
+        if ($this->formAnnexe->isValid()) {
+            $annexe = $this->formAnnexe->getValue('annexeInputFile');
+            if ($annexe) {
+                $this->vracimport->addAnnexe($annexe->getTempName(), $annexe->getOriginalName());
+            }
+        } else {
+            // Mauvais format de fichier / Fichier trop gros
+            // Message session ? Erreur ? Redirection ?
+        }
 
         $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
         $this->csvVrac->remove('documents');

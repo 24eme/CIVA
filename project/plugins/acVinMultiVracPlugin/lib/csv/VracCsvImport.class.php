@@ -297,8 +297,9 @@ class VracCsvImport extends CsvFile
      * Ajoute une annexe à chaque Vrac du tableau $imported
      *
      * @param $annexe L'annexe à ajouter
+     * @param $name Le nom de l'annexe à ajouter
      */
-    public function addAnnexe($annexe = null)
+    public function addAnnexe($annexe = null, $name = 'Annexe_contrat')
     {
         if (! $annexe) {
             return;
@@ -308,7 +309,7 @@ class VracCsvImport extends CsvFile
             $vrac = VracClient::getInstance()->find($vid);
 
             if ($vrac) {
-                $vrac->storeAnnexe($annexe, 'Annexe_contrat');
+                $vrac->storeAnnexe($annexe, $name);
                 $vrac->save();
             }
         }
