@@ -255,6 +255,30 @@ var initGenerationContratApplication = function()
     });
 };
 
+const initVracImport = function ()
+{
+    const listingInputFileTemplate = document.getElementById('annexeInputFileList')
+    if (listingInputFileTemplate) {
+      const inputAnnexes = document.getElementById('annexeInputFile')
+      const parent = inputAnnexes.closest('div')
+
+      inputAnnexes.addEventListener('change', function () {
+        parent.nextElementSibling.remove()
+        const fileList = this.files;
+        const table = document.importNode(listingInputFileTemplate.content, true)
+
+        for (const file of fileList) {
+          const tr = document.createElement('tr')
+          const td = document.createElement('td')
+          td.textContent = file.name
+          table.querySelector('tbody').appendChild(tr).appendChild(td)
+        }
+
+        parent.after(table)
+      })
+    }
+}
+
 var initClotureContrat = function()
 {
     $('#clotureContrat_OK').click(function() {
@@ -556,6 +580,7 @@ var sumContrat = function(brothers, cible)
          initSummableContrat();
          initClotureContratCheckboxes();
          initGenerationContratApplication();
+         initVracImport();
 
 
          $('.smalldatepicker').datepicker(

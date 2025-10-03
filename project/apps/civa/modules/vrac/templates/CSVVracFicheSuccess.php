@@ -46,6 +46,15 @@
                             <label for="annexeInputFile">Fichier csv</label>
                             <?php echo $formAnnexe['annexeInputFile']->render(['class' => 'form-control']); ?>
                         </div>
+                        <template id="annexeInputFileList">
+                          <div>
+                            <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
+                            <table class="table table-condensed">
+                                <thead><th>Nom du fichier</th></head>
+                                <tbody></tbody>
+                            </table>
+                          </div>
+                        </template>
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary">Importer</button>
