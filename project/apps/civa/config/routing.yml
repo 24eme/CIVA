@@ -146,6 +146,11 @@ vrac_csv_import:
   param: {module: vrac, action: CSVVracImport}
   requirements: {sf_method: [post]}
 
+vrac_csv_download:
+  url: /vrac/import/:csvvrac/download
+  param: {module: vrac, action: CSVVracDownload}
+  requirements: {sf_method: [get]}
+
 vrac_export_csv:
   url: /vrac/:identifiant/export/csv
   param: { module: vrac, action: exportCSV }

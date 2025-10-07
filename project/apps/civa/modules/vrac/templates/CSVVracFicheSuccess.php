@@ -8,20 +8,22 @@
             <div class="alert alert-danger">
                 Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats sans modification de votre fichier.
             </div>
-            <div class="row bg-secondary">
-                <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
-                    <?php if ($listeerreurs = $csvVrac->getErreurs($i)): ?>
-                        <div class="col-xs-1">
-                            <a href="#line<?php echo $i ?>">#<?php echo $i ?></a>
-                        </div>
-                        <div class="col-xs-11">
-                            <?php foreach ($listeerreurs as $e): ?>
-                                <p><?php echo $e->diagnostic; ?></p>
-                            <?php endforeach ?>
-                        </div>
-                    <?php endif ?>
-                <?php endfor; ?>
-            </div>
+            <table class="table table-bordered">
+            <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
+                <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
+                <tr>
+                    <td><a href="#line<?php echo $i ?>">#<?php echo $i ?></a></td>
+                    <td>
+                        <table>
+                        <?php foreach ($listeerreurs as $e): ?>
+                            <tr><td><?php echo $e->diagnostic; ?></td></tr>
+                        <?php endforeach ?>
+                        </table>
+                    </td>
+                <tr>
+                <?php endif ?>
+            <?php endfor; ?>
+            </table>
         <?php else: ?>
             <div class="alert alert-info">
                 Total de ligne dans le fichier : <strong><?php echo count($vracimport->getCsv()) ?></strong><br>
@@ -42,8 +44,17 @@
                     <div style="padding: 10px 0">
                         <div class="form-group">
                             <label for="annexeInputFile">Fichier csv</label>
-                            <input type="file" id="annexeInputFile" name="annexeInputFile" class="form-control">
+                            <?php echo $formAnnexe['annexeInputFile']->render(['class' => 'form-control']); ?>
                         </div>
+                        <template id="annexeInputFileList">
+                          <div>
+                            <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
+                            <table class="table table-condensed">
+                                <thead><th>Nom du fichier</th></head>
+                                <tbody></tbody>
+                            </table>
+                          </div>
+                        </template>
                     </div>
                     <div class="text-center">
                         <button class="btn btn-primary">Importer</button>
@@ -52,7 +63,7 @@
             <?php endif ; ?>
         <?php endif; ?>
 
-        <h3 class="titre_section">Contenu du fichier importé</h3>
+        <h3 class="titre_section">Contenu du fichier importé <small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></h3>
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-condensed">
