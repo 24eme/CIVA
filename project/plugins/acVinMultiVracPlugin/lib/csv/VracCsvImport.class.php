@@ -294,6 +294,17 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Retourne le nombre de contrat importable du fichier
+     * Se base sur le nombre unique de CSV_NUMERO_INTERNE
+     *
+     * @return int
+     */
+    public function getContratsImportables()
+    {
+        return array_values(array_unique(array_column($this->getCsv(), self::CSV_NUMERO_INTERNE)));
+    }
+
+    /**
      * Ajoute une annexe à chaque Vrac du tableau $imported
      *
      * @param $annexe L'annexe à ajouter

@@ -27,7 +27,11 @@
         <?php else: ?>
             <div class="alert alert-info">
                 Total de ligne dans le fichier : <strong><?php echo count($vracimport->getCsv()) ?></strong><br>
-                Contrats importés : <strong><?php echo count($csvVrac->getDocuments()) ?></strong>
+                <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE): ?>
+                    Contrats importés : <strong><?php echo count($csvVrac->getDocuments()) ?></strong>
+                <?php else: ?>
+                    Contrats importables : <strong><?php echo count($vracimport->getContratsImportables()) ?></strong>
+                <?php endif; ?>
                 <ul>
                     <?php foreach ($csvVrac->getDocuments() as $import): ?>
                     <li>
