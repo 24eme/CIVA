@@ -95,7 +95,7 @@ class vracActions extends sfActions
 
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true]));
-        $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFile([
+        $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
             'required' => false, 'max_size' => '2097152',
             'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
             'mime_types' => 'pdf'

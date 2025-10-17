@@ -48,7 +48,7 @@
                     <div style="padding: 10px 0">
                         <div class="form-group">
                             <label for="annexeInputFile">Fichier csv</label>
-                            <?php echo $formAnnexe['annexeInputFile']->render(['class' => 'form-control']); ?>
+                            <?php echo $formAnnexe['annexeInputFile']->render(['name' => 'annexeInputFile[]', 'class' => 'form-control']); ?>
                         </div>
                         <template id="annexeInputFileList">
                           <div>
