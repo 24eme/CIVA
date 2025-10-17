@@ -40,7 +40,7 @@ class vracActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->formAnnexe = new sfForm();
-        $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true]));
+        $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
         if (count($this->vracimport->getErrors())) {
             $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
