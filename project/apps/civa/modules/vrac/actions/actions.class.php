@@ -103,9 +103,11 @@ class vracActions extends sfActions
 
         $this->formAnnexe->bind(null, $request->getFiles());
         if ($this->formAnnexe->isValid()) {
-            $annexe = $this->formAnnexe->getValue('annexeInputFile');
-            if ($annexe) {
-                $this->vracimport->addAnnexe($annexe->getTempName(), 'annexe_'.$annexe->getOriginalName());
+            $annexes = $this->formAnnexe->getValue('annexeInputFile');
+            if ($annexes) {
+                foreach ($annexes as $annexe) {
+                    $this->vracimport->addAnnexe($annexe->getTempName(), 'annexe_'.$annexe->getOriginalName());
+                }
             }
         } else {
             // Mauvais format de fichier / Fichier trop gros
