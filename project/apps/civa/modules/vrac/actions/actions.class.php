@@ -106,7 +106,7 @@ class vracActions extends sfActions
             $annexes = $this->formAnnexe->getValue('annexeInputFile');
             if ($annexes) {
                 foreach ($annexes as $annexe) {
-                    $this->vracimport->addAnnexe($annexe->getTempName(), 'annexe_'.$annexe->getOriginalName());
+                    $this->vracimport->addAnnexe($annexe->getTempName(), $annexe->getOriginalName());
                 }
             }
         } else {

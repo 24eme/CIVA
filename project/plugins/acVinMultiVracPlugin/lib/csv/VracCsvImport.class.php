@@ -316,14 +316,37 @@ class VracCsvImport extends CsvFile
             return;
         }
 
+        $name_cleaned = $this->cleanAnnexeName($name);
+
         foreach (self::$imported as $vid) {
             $vrac = VracClient::getInstance()->find($vid);
 
             if ($vrac) {
-                $vrac->storeAnnexe($annexe, $name);
+                $vrac->storeAnnexe($annexe, $name_cleaned);
                 $vrac->save();
             }
         }
+    }
+
+    /**
+     * Slugify le nom de l'annexe pour homogénisation
+     *
+     * @param $name Le nom de l'annexe
+     * @return string
+     */
+    private function cleanAnnexeName($name)
+    {
+        $annexe = 'annexe_';
+
+        $dot = strrpos($name, '.');
+        $extension = ($dot !== false) ? substr($name, $dot) : '';
+        $basename = str_replace($extension, '', $name);
+
+        $annexe .= strtolower(
+            KeyInflector::slugify($basename).$extension
+        );
+
+        return $annexe;
     }
 
     /**
