@@ -293,6 +293,17 @@ class VracCsvImport extends CsvFile
         return array_values(array_unique(self::$imported));
     }
 
+    public function checkErreurs(CSVVRAC $csvVrac)
+    {
+        if (count($this->getErrors())) {
+            $csvVrac->documents = [];
+            $csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            foreach ($this->getErrors() as $error) {
+                $csvVrac->addErreur($error);
+            }
+        }
+    }
+
     /**
      * Retourne le nombre de contrat importable du fichier
      * Se base sur le nombre unique de CSV_NUMERO_INTERNE

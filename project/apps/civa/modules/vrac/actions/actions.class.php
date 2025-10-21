@@ -23,7 +23,7 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
-    public function executeListeCSVVrac(sfWebRequest $request)
+    public function executeCSVVracListe(sfWebRequest $request)
     {
         $this->setLayout('layout');
 
@@ -42,17 +42,10 @@ class vracActions extends sfActions
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-        }
-
         return sfView::SUCCESS;
     }
 
-    public function executeNewCSVVrac(sfWebRequest $request)
+    public function executeCSVVracNew(sfWebRequest $request)
     {
         $this->compte = $this->getRoute()->getCompte();
 
@@ -60,14 +53,31 @@ class vracActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->vracimport->import();
+        $this->vracimport->checkErreurs($this->csvVrac);
 
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
+        $this->csvVrac->save();
+
+        return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+    }
+
+    public function executeCSVVracUpload(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+
+        if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
+            return $this->forwardSecure();
         }
+
+        $csv = current($request->getFiles());
+        if ($csv['size'] === 0) {
+            throw new sfException("Pas de fichier fourni");
+        }
+        $this->csvVrac->clearErreurs();
+        $this->csvVrac->storeAttachment($csv['tmp_name'], 'text/csv', $this->csvVrac->getFileName());
+        $this->csvVrac->save();
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport->import();
+        $this->vracimport->checkErreurs($this->csvVrac);
 
         $this->csvVrac->save();
 

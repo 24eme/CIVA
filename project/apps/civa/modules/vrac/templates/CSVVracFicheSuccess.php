@@ -24,6 +24,16 @@
                 <?php endif ?>
             <?php endfor; ?>
             </table>
+
+            <h1 class="titre_section">Reverser un fichier</h1>
+            <form method="POST" enctype='multipart/form-data' class="form-inline" action="<?php echo url_for('vrac_csv_upload', ['csvvrac' => $csvVrac->_id]) ?>">
+                <div class="form-group">
+                    <label for="csvVracInputFile">Fichier csv</label>
+                    <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control" required="required">
+                </div>
+                <button type="submit" class="btn btn-default">Valider</button>
+            </form>
+
         <?php else: ?>
             <div class="alert alert-info">
                 Total de ligne dans le fichier : <strong><?php echo count($vracimport->getCsv()) ?></strong><br>
