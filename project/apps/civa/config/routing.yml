@@ -124,14 +124,14 @@ vrac_historique:
 
 vrac_csv_liste:
   url: /vrac/import/:identifiant
-  param: {module: vrac, action: listeCSVVrac}
+  param: {module: vrac, action: CSVVracListe}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [get, post]}
 
 vrac_csv_create:
   url: /vrac/import/:identifiant/create
-  param: {module: vrac, action: newCSVVrac}
+  param: {module: vrac, action: CSVVracNew}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [post]}

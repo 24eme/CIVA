@@ -23,7 +23,7 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
-    public function executeListeCSVVrac(sfWebRequest $request)
+    public function executeCSVVracListe(sfWebRequest $request)
     {
         $this->setLayout('layout');
 
@@ -52,7 +52,7 @@ class vracActions extends sfActions
         return sfView::SUCCESS;
     }
 
-    public function executeNewCSVVrac(sfWebRequest $request)
+    public function executeCSVVracNew(sfWebRequest $request)
     {
         $this->compte = $this->getRoute()->getCompte();
 
