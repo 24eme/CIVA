@@ -136,6 +136,11 @@ vrac_csv_create:
   options: {model: Compte, type: object}
   requirements: {sf_method: [post]}
 
+vrac_csv_upload:
+  url: /vrac/import/:csvvrac/upload
+  param: {module: vrac, action: CSVVracUpload}
+  requirements: {sf_method: [post]}
+
 vrac_csv_fiche:
   url: /vrac/import/:csvvrac/fiche
   param: {module: vrac, action: CSVVracFiche}
