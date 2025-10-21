@@ -293,6 +293,11 @@ class VracCsvImport extends CsvFile
         return array_values(array_unique(self::$imported));
     }
 
+    /**
+     * Inscrit les erreurs dans l'objet CSVVRAC
+     *
+     * @param csvVrac le CSVVrac où inscrire les erreurs
+     */
     public function checkErreurs(CSVVRAC $csvVrac)
     {
         if (count($this->getErrors())) {
