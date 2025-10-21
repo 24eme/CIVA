@@ -42,13 +42,6 @@ class vracActions extends sfActions
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-        }
-
         return sfView::SUCCESS;
     }
 
