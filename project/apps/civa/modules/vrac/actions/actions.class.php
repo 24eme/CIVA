@@ -60,14 +60,7 @@ class vracActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->vracimport->import();
-
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-        }
+        $this->vracimport->checkErreurs($this->csvVrac);
 
         $this->csvVrac->save();
 
@@ -91,14 +84,7 @@ class vracActions extends sfActions
         $this->csvVrac->save();
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->vracimport->import();
-
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-        }
+        $this->vracimport->checkErreurs($this->csvVrac);
 
         $this->csvVrac->save();
 
