@@ -10,7 +10,7 @@
         </form>
     </div>
 
-    <h1 class="titre_principal">Liste des fichiers vrac importés par <?php echo $compte->nom_a_afficher ?></h1>
+    <h1 class="titre_principal">Liste des contrats importés par <?php echo $compte->nom_a_afficher ?></h1>
 
     <table class="table">
         <thead>

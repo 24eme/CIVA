@@ -294,24 +294,59 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Retourne le nombre de contrat importable du fichier
+     * Se base sur le nombre unique de CSV_NUMERO_INTERNE
+     *
+     * @return int
+     */
+    public function getContratsImportables()
+    {
+        return array_values(array_unique(array_column($this->getCsv(), self::CSV_NUMERO_INTERNE)));
+    }
+
+    /**
      * Ajoute une annexe à chaque Vrac du tableau $imported
      *
      * @param $annexe L'annexe à ajouter
+     * @param $name Le nom de l'annexe à ajouter
      */
-    public function addAnnexe($annexe = null)
+    public function addAnnexe($annexe = null, $name = 'Annexe_contrat')
     {
         if (! $annexe) {
             return;
         }
 
+        $name_cleaned = $this->cleanAnnexeName($name);
+
         foreach (self::$imported as $vid) {
             $vrac = VracClient::getInstance()->find($vid);
 
             if ($vrac) {
-                $vrac->storeAnnexe($annexe, 'Annexe_contrat');
+                $vrac->storeAnnexe($annexe, $name_cleaned);
                 $vrac->save();
             }
         }
+    }
+
+    /**
+     * Slugify le nom de l'annexe pour homogénisation
+     *
+     * @param $name Le nom de l'annexe
+     * @return string
+     */
+    private function cleanAnnexeName($name)
+    {
+        $annexe = 'annexe_';
+
+        $dot = strrpos($name, '.');
+        $extension = ($dot !== false) ? substr($name, $dot) : '';
+        $basename = str_replace($extension, '', $name);
+
+        $annexe .= strtolower(
+            KeyInflector::slugify($basename).$extension
+        );
+
+        return $annexe;
     }
 
     /**

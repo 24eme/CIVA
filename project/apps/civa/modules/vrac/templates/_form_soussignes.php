@@ -128,7 +128,7 @@
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
                 <div class="ligne_form_sm">
 					<label for="" class="bold">Campagnes d'application :</label>
-                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo ($millesime+VracClient::getConfigVar('nb_campagnes_pluriannuel',0)-1) ?></span>
+                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo substr($vrac->campagne, 5) ?></span>
                 </div>
             </div>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
@@ -423,43 +423,41 @@
             $.fn.changeContratDuree();
         });
 
+        $("#vrac_soussignes_pluriannuel_campagne_debut").click(function() {
+            $.fn.changeContratDuree();
+        });
+
+        $("#vrac_soussignes_pluriannuel_contrat_duree").click(function() {
+            $.fn.changeContratDuree();
+        });
+
         $.fn.changeContratDuree = function() {
-            const selectedContratDuree = $("#vrac_soussignes_pluriannuel_contrat_duree").val();
-            $("input[name=vrac_soussignes[pluriannuel_contrat_duree_select]]").val(selectedContratDuree);
+            const campagneChoice = $("#vrac_soussignes_pluriannuel_campagne_debut option:selected").val().substring(0, 4);
 
-            $("#vrac_soussignes_pluriannuel_campagne_debut").change(function() {
-                const campagneChoice = $("#vrac_soussignes_pluriannuel_campagne_debut option:selected").val();
+            const contratDureeObj = $("#vrac_soussignes_pluriannuel_contrat_duree");
+            let contratDureeOptions = contratDureeObj.find("option");
+            let contratFinUpdated = parseInt(campagneChoice)+2;
+            contratDureeOptions.each(function(index, contratDuree) {
+                const contratDebut = contratDuree.value.substring(0,4);
+                const contratFin = contratDuree.value.slice(-4);
 
-                const contratDureeObj = $("#vrac_soussignes_pluriannuel_contrat_duree");
-                let contratDureeOptions = contratDureeObj.find("option");
-                let contratFinUpdated = parseInt(campagneChoice);
-                contratDureeOptions.each(function(index, contratDuree) {
-                    const contratDebut = contratDuree.value.substring(0,4);
-                    const contratFin = contratDuree.value.slice(-4);
+                contratFinUpdated++;
 
-                    contratFinUpdated++;
-
-                    $(contratDuree).val(function(index, value) {
-                        value = value.replace(contratFin, contratFinUpdated.toString());
-                        value = value.replace(contratDebut, campagneChoice);
-                        return value;
-                    });
-
-                    $(contratDuree).text(function(index, text) {
-                        text = text.replace(contratFin, contratFinUpdated.toString());
-                        text = text.replace(contratDebut, campagneChoice);
-                        return text;
-                    });
+                $(contratDuree).val(function(index, value) {
+                    value = value.replace(contratFin, contratFinUpdated.toString());
+                    value = value.replace(contratDebut, campagneChoice);
+                    return value;
                 });
 
-                const selectedContratDuree = $("#vrac_soussignes_pluriannuel_contrat_duree").val();
-                $("input[name=vrac_soussignes[pluriannuel_contrat_duree_select]]").val(selectedContratDuree);
+                $(contratDuree).text(function(index, text) {
+                    text = text.replace(contratFin, contratFinUpdated.toString());
+                    text = text.replace(contratDebut, campagneChoice);
+                    return text;
+                });
             });
-
-            $("#vrac_soussignes_pluriannuel_contrat_duree").change(function() {
-                const selectedContratDuree = $("#vrac_soussignes_pluriannuel_contrat_duree").val();
-                $("input[name=vrac_soussignes[pluriannuel_contrat_duree_select]]").val(selectedContratDuree);
-            });
+            const selectedContratDuree = $("#vrac_soussignes_pluriannuel_contrat_duree").val();
+            $("input[name=vrac_soussignes[pluriannuel_contrat_duree_select]]").val(selectedContratDuree);
+            console.log(selectedContratDuree);
         }
 	});
 	</script>
