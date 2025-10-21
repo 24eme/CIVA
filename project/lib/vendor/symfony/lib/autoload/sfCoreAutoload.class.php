@@ -462,6 +462,7 @@ class sfCoreAutoload
     'sfvalidatorerror' => 'validator/sfValidatorError.class.php',
     'sfvalidatorerrorschema' => 'validator/sfValidatorErrorSchema.class.php',
     'sfvalidatorfile' => 'validator/sfValidatorFile.class.php',
+    'sfvalidatorfilemulti' => 'validator/sfValidatorFileMulti.class.php',
     'sfvalidatorfromdescription' => 'validator/sfValidatorFromDescription.class.php',
     'sfvalidatorinteger' => 'validator/sfValidatorInteger.class.php',
     'sfvalidatornumber' => 'validator/sfValidatorNumber.class.php',

@@ -8,48 +8,50 @@ class VracCsvImport extends CsvFile
 
     const CSV_CREATEUR_IDENTIFIANT = 3;
     const CSV_ACHETEUR_CVI = 4;
-    const CSV_VENDEUR_CVI = 5;
-    const CSV_COURTIER_MANDATAIRE_SIRET = 6;
+    const CSV_ACHETEUR_TVA = 5;
+    const CSV_VENDEUR_CVI = 6;
+    const CSV_VENDEUR_TVA = 7;
+    const CSV_COURTIER_MANDATAIRE_SIRET = 8;
 
-    const CSV_TYPE_TRANSACTION = 7; // Raisin / Bouteille / Vrac
+    const CSV_TYPE_TRANSACTION = 9; // Raisin / Bouteille / Vrac
 
-    const CSV_VIN_CODE_INAO = 8;
-    const CSV_VIN_LIBELLE = 9;
-    const CSV_VIN_MENTION = 10; // HVE / BIO
-    const CSV_VIN_VTSGN = 11;
-    const CSV_VIN_DENOMINATION = 12;
-    const CSV_VIN_CEPAGE = 13;
-    const CSV_VIN_MILLESIME = 14;
+    const CSV_VIN_CODE_INAO = 10;
+    const CSV_VIN_LIBELLE = 11;
+    const CSV_VIN_MENTION = 12; // HVE / BIO
+    const CSV_VIN_VTSGN = 13;
+    const CSV_VIN_DENOMINATION = 14;
+    const CSV_VIN_CEPAGE = 15;
+    const CSV_VIN_MILLESIME = 16;
 
-    const CSV_QUANTITE = 15;
-    const CSV_QUANTITE_TYPE = 16;
+    const CSV_QUANTITE = 17;
+    const CSV_QUANTITE_TYPE = 18;
 
-    const CSV_PRIX_UNITAIRE = 17;
-    const CSV_PRIX_UNITE = 18;
+    const CSV_PRIX_UNITAIRE = 19;
+    const CSV_PRIX_UNITE = 20;
 
-    const CSV_PLURIANNUEL = 19;
-    const CSV_PLURIANNUEL_CONTRAT_CADRE = 20;
+    const CSV_PLURIANNUEL = 21;
+    const CSV_PLURIANNUEL_CONTRAT_CADRE = 22;
 
-    const CSV_CLAUSE_RESERVE_PROPRIETE = 21;
-    const CSV_CLAUSE_DELAI_PAIEMENT = 22;
-    const CSV_CLAUSE_RESILIATION = 23;
-    const CSV_CLAUSE_MANDAT_FACTURATION = 24;
-    const CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES = 25;
-    const CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES = 26;
+    const CSV_CLAUSE_RESERVE_PROPRIETE = 23;
+    const CSV_CLAUSE_DELAI_PAIEMENT = 24;
+    const CSV_CLAUSE_RESILIATION = 25;
+    const CSV_CLAUSE_MANDAT_FACTURATION = 26;
+    const CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES = 27;
+    const CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES = 28;
 
-    const CSV_DATE_SIGNATURE_VENDEUR = 27;
-    const CSV_DATE_SIGNATURE_ACHETEUR = 28;
-    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 29;
-    const CSV_DATE_SAISIE = 30;
-    const CSV_DATE_VALIDATION = 31;
-    const CSV_DATE_CLOTURE = 32;
+    const CSV_DATE_SIGNATURE_VENDEUR = 29;
+    const CSV_DATE_SIGNATURE_ACHETEUR = 30;
+    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 31;
+    const CSV_DATE_SAISIE = 32;
+    const CSV_DATE_VALIDATION = 33;
+    const CSV_DATE_CLOTURE = 34;
 
     const LABEL_BIO = 'agriculture_biologique';
 
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
     public static $headers = [
-        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Vendeur CVI", "Courtier siret",
+        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Acheteur TVA", "Vendeur CVI", "Vendeur TVA", "Courtier siret",
         "Type de vente", "Code INAO", "Libelle produit", "Label", "VT/SGN", "Denomination", "Cepage", "Millesime",
         "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Numéro contrat cadre",
         "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
@@ -61,7 +63,7 @@ class VracCsvImport extends CsvFile
     protected static $imported = [];
 
     /** @var int $line Numero de ligne du CSV */
-    protected static $line = 1;
+    protected static $line = 0;
 
     /** @var array $errors Tableau des erreurs de vérification */
     private $errors = [];
@@ -98,6 +100,22 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Ajoute une erreur dans le tableau
+     *
+     * @param int $ligne La ligne de l'erreur
+     * @param string $code Le code d'erreur
+     * @param string $raison Description
+     */
+    public function addError($ligne, $code, $raison)
+    {
+        $e = new stdClass();
+        $e->num_ligne = $ligne;
+        $e->erreur_csv = $code;
+        $e->raison = $raison;
+        $this->errors[] = $e;
+    }
+
+    /**
      * Retourne le tableau contenant les avertissements
      *
      * @return array Le tableau des avertissements
@@ -127,8 +145,15 @@ class VracCsvImport extends CsvFile
         $produitPosition = 0;
 
         foreach ($this->getCsv() as $line) {
+            self::$line++;
+
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
-                $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+                try {
+                    $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+                } catch (Exception $e) {
+                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du créateur n'a pas été reconnu [".$line[self::CSV_CREATEUR_IDENTIFIANT]."] (".$e->getMessage().")");
+                    continue;
+                }
 
                 $v = VracClient::getInstance()->createVrac(
                     $createur->_id,
@@ -147,16 +172,33 @@ class VracCsvImport extends CsvFile
 
             $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
 
-            $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+            try {
+                $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+            } catch (Exception $e) {
+                $this->addError(self::$line, "operateur_inexistant", "L'identifiant de l'acheteur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
+                continue;
+            }
             $v->acheteur_identifiant = $acheteur->_id;
+            $v->acheteur_assujetti_tva = $line[self::CSV_ACHETEUR_CVI] ? 1 : 0;
             $v->storeAcheteurInformations($acheteur);
 
-            $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+            try {
+                $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+            } catch (Exception $e) {
+                $this->addError(self::$line, "operateur_inexistant", "L'identifiant du vendeur n'a pas été reconnu [".$line[self::CSV_VENDEUR_CVI]."] (".$e->getMessage().")");
+                continue;
+            }
             $v->vendeur_identifiant = $vendeur->_id;
+            $v->vendeur_assujetti_tva = $line[self::CSV_VENDEUR_CVI] ? 1 : 0;
             $v->storeVendeurInformations($vendeur);
 
             if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
-                $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                try {
+                    $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                } catch (Exception $e) {
+                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$line[self::CSV_COURTIER_MANDATAIRE_SIRET]."] (".$e->getMessage().")");
+                    continue;
+                }
                 $v->mandataire_identifiant = $mandataire->_id;
                 $v->storeMandataireInformations($mandataire);
             }
@@ -175,11 +217,7 @@ class VracCsvImport extends CsvFile
             }
 
             if (! $produitConfig) {
-                $e = new stdClass();
-                $e->num_ligne = self::$line;
-                $e->erreur_csv = "produit_non_reconnu";
-                $e->raison = "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]";
-                $this->errors[] = $e;
+                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
                 continue;
             }
 
@@ -209,10 +247,10 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = $line[self::CSV_PLURIANNUEL] === "APPLICATION" ? 1 : 0;
-            if ($v->contrat_pluriannuel) {
-                $v->reference_contrat_pluriannuel = $line[self::CSV_PLURIANNUEL_CONTRAT_CADRE];
-            }
+            $v->contrat_pluriannuel = ($line[self::CSV_PLURIANNUEL]) ? 1 : 0;
+            /*if ($v->contrat_pluriannuel) {
+                $v->add('reference_contrat_pluriannuel', $line[self::CSV_PLURIANNUEL_CONTRAT_CADRE]);
+            }*/
 
             $v->add('clause_reserve_propriete', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE] === "OUI" ? 1 : 0);
             $v->add('clause_mandat_facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION] === "OUI" ? 1 : 0);
@@ -220,14 +258,15 @@ class VracCsvImport extends CsvFile
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
+            $v->add('clause_evolution_prix', "Il va changer tous les ans");
 
-            $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
-            $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
-            $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
-            $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
-            $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
-            $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
-            $v->valide->statut = Vrac::STATUT_CLOTURE;
+            // $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
+            // $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
+            // $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
+            // $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
+            // $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
+            // $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
+            $v->etape = "validation";
 
             if ($verified) {
                 $v->updateTotaux();
@@ -239,11 +278,7 @@ class VracCsvImport extends CsvFile
 
                 if ($validator->hasErreurs()) {
                     foreach ($validator->getErreurs() as $err) {
-                        $e = new stdClass();
-                        $e->num_ligne = self::$line;
-                        $e->erreur_csv = $err->getCode();
-                        $e->raison = $err->getMessage() . ': ' . $err->getInfo();
-                        $this->errors[] = $e;
+                        $this->addError(self::$line, $err->getCode(), $err->getMessage().': '.$err->getInfo());
                     }
                 }
 
@@ -253,11 +288,65 @@ class VracCsvImport extends CsvFile
                     }
                 }
             }
-
-            self::$line++;
         }
 
-        return array_unique(self::$imported);
+        return array_values(array_unique(self::$imported));
+    }
+
+    /**
+     * Retourne le nombre de contrat importable du fichier
+     * Se base sur le nombre unique de CSV_NUMERO_INTERNE
+     *
+     * @return int
+     */
+    public function getContratsImportables()
+    {
+        return array_values(array_unique(array_column($this->getCsv(), self::CSV_NUMERO_INTERNE)));
+    }
+
+    /**
+     * Ajoute une annexe à chaque Vrac du tableau $imported
+     *
+     * @param $annexe L'annexe à ajouter
+     * @param $name Le nom de l'annexe à ajouter
+     */
+    public function addAnnexe($annexe = null, $name = 'Annexe_contrat')
+    {
+        if (! $annexe) {
+            return;
+        }
+
+        $name_cleaned = $this->cleanAnnexeName($name);
+
+        foreach (self::$imported as $vid) {
+            $vrac = VracClient::getInstance()->find($vid);
+
+            if ($vrac) {
+                $vrac->storeAnnexe($annexe, $name_cleaned);
+                $vrac->save();
+            }
+        }
+    }
+
+    /**
+     * Slugify le nom de l'annexe pour homogénisation
+     *
+     * @param $name Le nom de l'annexe
+     * @return string
+     */
+    private function cleanAnnexeName($name)
+    {
+        $annexe = 'annexe_';
+
+        $dot = strrpos($name, '.');
+        $extension = ($dot !== false) ? substr($name, $dot) : '';
+        $basename = str_replace($extension, '', $name);
+
+        $annexe .= strtolower(
+            KeyInflector::slugify($basename).$extension
+        );
+
+        return $annexe;
     }
 
     /**
