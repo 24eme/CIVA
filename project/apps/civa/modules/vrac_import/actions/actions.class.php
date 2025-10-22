@@ -1,6 +1,21 @@
 <?php
 class vrac_importActions extends sfActions
 {
+    private function secureRoute($identifiant)
+    {
+        if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $identifiant) {
+            return $this->forwardSecure();
+        }
+    }
+
+    public function executeAccueil(sfWebRequest $request)
+    {
+        $this->compte = $this->getRoute()->getCompte();
+        $this->secureRoute($this->compte->identifiant);
+
+        return sfView::SUCCESS;
+    }
+
     public function executeCSVVracListe(sfWebRequest $request)
     {
         $this->compte = $this->getRoute()->getCompte();
