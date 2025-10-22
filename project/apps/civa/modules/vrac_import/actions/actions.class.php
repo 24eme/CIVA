@@ -3,8 +3,6 @@ class vrac_importActions extends sfActions
 {
     public function executeCSVVracListe(sfWebRequest $request)
     {
-        $this->setLayout('layout');
-
         $this->compte = $this->getRoute()->getCompte();
         $this->csvs = CSVVRACClient::getInstance()->findByIdentifiant($this->compte->getIdentifiant());
 
@@ -13,8 +11,6 @@ class vrac_importActions extends sfActions
 
     public function executeCSVVracFiche(sfWebRequest $request)
     {
-        $this->setLayout('layout');
-
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->formAnnexe = new sfForm();
