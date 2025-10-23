@@ -30,6 +30,8 @@ class vrac_importActions extends sfActions
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
+        $this->secureRoute($this->compte->identifiant);
+
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
