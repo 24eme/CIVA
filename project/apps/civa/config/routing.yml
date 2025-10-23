@@ -122,38 +122,50 @@ vrac_historique:
   options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
-vrac_csv_liste:
+vrac_csv_accueil:
   url: /vrac/import/:identifiant
-  param: {module: vrac, action: CSVVracListe}
+  param: {module: vrac_import, action: accueil}
+  class: CompteRoute
+  options: {model: Compte, type: object}
+  requirements: {sf_method: [get]}
+
+vrac_csv_liste:
+  url: /vrac/import/:identifiant/historique
+  param: {module: vrac_import, action: CSVVracListe}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [get, post]}
 
 vrac_csv_create:
   url: /vrac/import/:identifiant/create
-  param: {module: vrac, action: CSVVracNew}
+  param: {module: vrac_import, action: CSVVracNew}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [post]}
 
 vrac_csv_upload:
   url: /vrac/import/:csvvrac/upload
-  param: {module: vrac, action: CSVVracUpload}
+  param: {module: vrac_import, action: CSVVracUpload}
   requirements: {sf_method: [post]}
 
 vrac_csv_fiche:
   url: /vrac/import/:csvvrac/fiche
-  param: {module: vrac, action: CSVVracFiche}
-  requirements: {sf_method: [get]}
+  param: {module: vrac_import, action: CSVVracFiche}
+  requirements: {sf_method: [get,post]}
+
+vrac_csv_validation:
+  url: /vrac/import/:csvvrac/validation
+  param: {module: vrac_import, action: CSVVracValidation}
+  requirements: {sf_method: [get,post]}
 
 vrac_csv_import:
   url: /vrac/import/:csvvrac/import
-  param: {module: vrac, action: CSVVracImport}
+  param: {module: vrac_import, action: CSVVracImport}
   requirements: {sf_method: [post]}
 
 vrac_csv_download:
   url: /vrac/import/:csvvrac/download
-  param: {module: vrac, action: CSVVracDownload}
+  param: {module: vrac_import, action: CSVVracDownload}
   requirements: {sf_method: [get]}
 
 vrac_export_csv:

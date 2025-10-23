@@ -293,6 +293,11 @@ class VracCsvImport extends CsvFile
         return array_values(array_unique(self::$imported));
     }
 
+    /**
+     * Inscrit les erreurs dans l'objet CSVVRAC
+     *
+     * @param csvVrac le CSVVrac où inscrire les erreurs
+     */
     public function checkErreurs(CSVVRAC $csvVrac)
     {
         if (count($this->getErrors())) {
@@ -327,8 +332,6 @@ class VracCsvImport extends CsvFile
             return;
         }
 
-        $name_cleaned = $this->cleanAnnexeName($name);
-
         foreach (self::$imported as $vid) {
             $vrac = VracClient::getInstance()->find($vid);
 
@@ -337,27 +340,6 @@ class VracCsvImport extends CsvFile
                 $vrac->save();
             }
         }
-    }
-
-    /**
-     * Slugify le nom de l'annexe pour homogénisation
-     *
-     * @param $name Le nom de l'annexe
-     * @return string
-     */
-    private function cleanAnnexeName($name)
-    {
-        $annexe = 'annexe_';
-
-        $dot = strrpos($name, '.');
-        $extension = ($dot !== false) ? substr($name, $dot) : '';
-        $basename = str_replace($extension, '', $name);
-
-        $annexe .= strtolower(
-            KeyInflector::slugify($basename).$extension
-        );
-
-        return $annexe;
     }
 
     /**
