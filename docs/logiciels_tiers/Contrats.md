@@ -10,7 +10,7 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 
 | Nom du champs                              | Type / Format        | Exemple / Liste                                   | Lecture / Écriture | Commentaire                                                                                                               |
 |:-------------------------------------------|:---------------------|:--------------------------------------------------|:-------------------|:--------------------------------------------------------------------------------------------------------------------------|
-| Type                                       | Constantes           | CONTRAT                                           | Écriture           |                                                                                                                           |
+| Type                                       | Constante            | CONTRAT                                           | Écriture           | Doit toujours contenir CONTRAT                                                                                            |
 | Campagne                                   | YYYY-YYYY            | 2025-2026                                         | Écriture           | Campagne du contrat ou de début de contrat pour les contrats pluriannuels cadres                                          |
 | Type de contrat                            | Constantes           | ANNUEL,PLURIANNUEL_CADRE,PLURIANNUEL_APPLICATION  | Écriture           |                                                                                                                           |
 | Durée du contrat pluriannuel               | Nombre entier        | 3                                                 | Écriture           | En nombre d'année, à indiquer uniquement pour les contrats PLURIANNUEL_CADRE                                              |
@@ -34,10 +34,10 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 | Cepage                                     | Texte Simple         | Riesling                                          | Écriture           |                                                                                                                           |
 | Code INAO                                  | Texte Simple         | 1B021S 4                                          | Écriture           |                                                                                                                           |
 | Libelle Produit                            | Texte Simple         | AOC Alsace Grand Cru Kirchberg de Barr Riesling   | Écriture           |                                                                                                                           |
-| Mention                                    | Constantes           | BIO,HVE                                           | Écriture           |                                                                                                                           |
+| Label                                      | Constantes           | BIO,HVE3                                          | Écriture           |                                                                                                                           |
 | VT/SGN                                     | Constantes           | VT,SGN                                            | Écriture           |                                                                                                                           |
 | Dénomination                               | Texte Simple         | Vieille vigne                                     | Écriture           |                                                                                                                           |
-| Millésime                                  | Année au format YYYY | 2025                                              | Écriture           |                                                                                                                           |
+| Millésime                                  | Année au format YYYY | 2025                                              | Écriture           | Pas utilisé pour les contrats PLURIANNUEL_CADRE                                                                           |
 | Quantite                                   | Nombre               | 200.7                                             | Écriture           |                                                                                                                           |
 | Quantite type                              | Constantes           | ares,hl                                           | Écriture           |                                                                                                                           |
 | Prix Unitaire                              | Nombre               | 24.52                                             | Écriture           |                                                                                                                           |
@@ -67,7 +67,7 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 | Numéro de visa CIVA                        | Identifiant          |                                                   | Lecture seule      | Cette colonne n'a pas besoin d'être présente pour l'import                                                                |
 
 > [!TIP]
-> La reconnaissance du produit est réalisée via plusieurs méthode :
+> La reconnaissance du produit est réalisée via l'une de ces 3 méthodes :
 > - Via les colonnes Certification, Genre, Appellation, Mention, Lieu, Couleur et Cépage
 > - Via le code INAO du produit
 > - Via le libellé produit
@@ -96,4 +96,4 @@ Le format reste le même mais il n'y a pas besoin de resaisir toutes les colonne
 Une fois déposé et vérifié, les contrats d'application seront générés et automatiquement envoyé au vendeur par mail pour validation.
 
 > [!NOTE]
-> Il sera possible de télécharger depuis l'espace contrat de la plateforme du CIVA un export ces nouveaux contrats d'application à générer pour la nouvelle campagne, afin de pouvoir le compléter (produits, surface, prix, etc ...) puis le déposer.
+> Il sera possible de télécharger depuis l'espace contrat de la plateforme du CIVA un export de ces nouveaux contrats d'application à générer pour la nouvelle campagne au même format CSV. Ainsi ce fichier pourra servir de base pour être compléter (produits, surface, prix, etc ...) avant d'être déposé sur la plateforme pour import.
