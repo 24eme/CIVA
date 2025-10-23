@@ -27,17 +27,17 @@
         <form method="POST" enctype='multipart/form-data' class="form" action="<?php echo url_for('vrac_csv_create', ['identifiant' => $compte->identifiant]) ?>">
             <div class="form-group">
                 <label for="csvVracInputFile">Fichier csv</label>
-                <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control">
+                <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control" required>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_application">
+                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_application" required>
                 Contrats d'applications
               </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_cadre">
+                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_cadre" required>
                 Contrats cadres
               </label>
             </div>
