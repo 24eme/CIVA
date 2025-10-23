@@ -74,6 +74,10 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 >
 > Il s'agit des même méthodes de reconnaissance que pour l'import de données des récoltes et des DRM
 
+> [!WARNING]
+> Chaque ligne du CSV représente un produit d'un contrat, il peut donc avoir plusieurs lignes pour un même contrat, les valeurs des colonnes relative au contrat devront donc être répétées dans chacune des lignes
+
+
 > [!NOTE]
 > Seul les colonnes en écriture sont à remplir.
 >
@@ -87,6 +91,8 @@ Sur cette interface il sera aussi possible d'importer un fichier PDF contenant l
 
 Une fois les vérifications de données effectuées, les contrats seront créés comme des projets qu'il faudra ensuite aller valider et envoyer au vendeur un par un.
 
+[Télécharger un exemple de CSV de contrats pluriannuel cadre](exemple_contrats_pluriannuel_cadre.csv)
+
 ## Générer les contrats pluriannuel d'application de la nouvelle campagne
 
 Comme pour l'import des contrats pluriannuel cadre le fichier csv contenant les contrats pluriannuel d'application à générer pourra être deposé via un formulaire sur la page d'accueil de l'espace contrat de la plateforme du CIVA (https://declaration.vinsalsace.pro/).
@@ -97,3 +103,5 @@ Une fois déposé et vérifié, les contrats d'application seront générés et 
 
 > [!NOTE]
 > Il sera possible de télécharger depuis l'espace contrat de la plateforme du CIVA un export de ces nouveaux contrats d'application à générer pour la nouvelle campagne au même format CSV. Ainsi ce fichier pourra servir de base pour être compléter (produits, surface, prix, etc ...) avant d'être déposé sur la plateforme pour import.
+
+[Télécharger un exemple de CSV de contrats pluriannuel d'application](exemple_contrats_pluriannuel_application.csv)
