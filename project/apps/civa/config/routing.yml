@@ -151,7 +151,12 @@ vrac_csv_upload:
 vrac_csv_fiche:
   url: /vrac/import/:csvvrac/fiche
   param: {module: vrac_import, action: CSVVracFiche}
-  requirements: {sf_method: [get]}
+  requirements: {sf_method: [get,post]}
+
+vrac_csv_validation:
+  url: /vrac/import/:csvvrac/validation
+  param: {module: vrac_import, action: CSVVracValidation}
+  requirements: {sf_method: [get,post]}
 
 vrac_csv_import:
   url: /vrac/import/:csvvrac/import

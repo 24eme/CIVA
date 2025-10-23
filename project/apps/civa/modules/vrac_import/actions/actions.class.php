@@ -35,7 +35,30 @@ class vrac_importActions extends sfActions
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
-        return sfView::SUCCESS;
+        if ($request->getMethod() === sfWebRequest::GET) {
+            return sfView::SUCCESS;
+        }
+
+        $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
+            'required' => false, 'max_size' => '2097152',
+            'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
+            'mime_types' => 'pdf'
+        ]));
+
+        $this->formAnnexe->bind(null, $request->getFiles());
+        if ($this->formAnnexe->isValid()) {
+            $annexes = $this->formAnnexe->getValue('annexeInputFile');
+            if ($annexes) {
+                foreach ($annexes as $annexe) {
+                    $this->csvVrac->addAnnexe($annexe->getTempName(), $annexe->getOriginalName());
+                }
+            }
+        } else {
+            // Mauvais format de fichier / Fichier trop gros
+            // Message session ? Erreur ? Redirection ?
+        }
+
+        return $this->redirect('vrac_csv_validation', ['csvvrac' => $this->csvVrac->_id]);
     }
 
     public function executeCSVVracNew(sfWebRequest $request)
@@ -77,6 +100,13 @@ class vrac_importActions extends sfActions
         $this->csvVrac->save();
 
         return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+    }
+
+    public function executeCSVVracValidation(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
+        $this->secureRoute($this->compte->identifiant);
     }
 
     public function executeCSVVracImport(sfWebRequest $request)

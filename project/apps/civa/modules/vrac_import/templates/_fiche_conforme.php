@@ -13,7 +13,7 @@
 
 <p>Vous pouvez ajouter une ou plusieurs annexes aux contrats qui seront importés (optionnel)</p>
 
-<form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>">
+<form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>">
     <div style="padding: 10px 0">
         <div class="form-group">
             <label for="annexeInputFile">Fichiers d'annexes</label>
@@ -30,6 +30,6 @@
         </template>
     </div>
     <div class="text-right">
-        <button class="btn btn-primary">Importer</button>
+        <button class="btn btn-primary">Suivant</button>
     </div>
 </form>

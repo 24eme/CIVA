@@ -58,4 +58,43 @@ class CSVVRAC extends BaseCSVVRAC
         $this->add('erreurs');
         $this->statut = null;
     }
+
+    /**
+     * Ajoute une annexe à chaque Vrac du tableau $imported
+     *
+     * @param $annexe L'annexe à ajouter
+     * @param $name Le nom de l'annexe à ajouter
+     */
+    public function addAnnexe($annexe = null, $name = 'Annexe_contrat')
+    {
+        if (! $annexe) {
+            return;
+        }
+
+        $name_cleaned = $this->cleanAnnexeName($name);
+        $this->storeAttachment($annexe, 'text/csv', $name_cleaned);
+    }
+
+    /**
+     * Slugify le nom de l'annexe pour homogénisation
+     *
+     * @param $name Le nom de l'annexe
+     * @return string
+     */
+    private function cleanAnnexeName($name)
+    {
+        $annexe = 'annexe_';
+
+        $dot = strrpos($name, '.');
+        $extension = ($dot !== false) ? substr($name, $dot) : '';
+        $basename = str_replace($extension, '', $name);
+        $basename = str_replace('annexe_', '', $basename);
+
+        $annexe .= strtolower(
+            KeyInflector::slugify($basename).$extension
+        );
+
+        return $annexe;
+    }
+
 }
