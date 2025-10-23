@@ -28,6 +28,8 @@ class vrac_importActions extends sfActions
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
+
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
@@ -37,6 +39,8 @@ class vrac_importActions extends sfActions
     public function executeCSVVracNew(sfWebRequest $request)
     {
         $this->compte = $this->getRoute()->getCompte();
+
+        $this->secureRoute($this->compte->identifiant);
 
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);

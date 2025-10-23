@@ -1,110 +1,25 @@
-<div id="application_dr" class="mon_espace_civa">
-    <h1 class="titre_principal">Bilan de l'import des contrats</h1>
-    <div class="contenu">
+<div>
+    <ol class="breadcrumb">
+        <li><a href="#">Import de contrats</a></li>
+        <li><a href="#"><?php echo $compte->nom_a_afficher ?></a></li>
+    </ol>
 
-        <h3 class="titre_section">Récapitulatif du fichier</h3>
+    <nav class="navbar navbar-default nav-step">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
+            </li>
+            <li class="active">
+                <a href="#" class=""><span>Contenu du fichier</span><small class="hidden">Etape 2</small></a>
+            </li>
+            <li class="disabled">
+                <a href="#" class=""><span>Validation</span><small class="hidden">Etape 3</small></a>
+            </li>
+        </ul>
+    </nav>
 
-        <?php if ($csvVrac->hasErreurs()): ?>
-            <div class="alert alert-danger">
-                Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats sans modification de votre fichier.
-            </div>
-            <table class="table table-bordered">
-            <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
-                <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
-                <tr>
-                    <td><a href="#line<?php echo $i ?>">#<?php echo $i ?></a></td>
-                    <td>
-                        <table>
-                        <?php foreach ($listeerreurs as $e): ?>
-                            <tr><td><?php echo $e->diagnostic; ?></td></tr>
-                        <?php endforeach ?>
-                        </table>
-                    </td>
-                <tr>
-                <?php endif ?>
-            <?php endfor; ?>
-            </table>
-
-            <h1 class="titre_section">Reverser un fichier</h1>
-            <form method="POST" enctype='multipart/form-data' class="form-inline" action="<?php echo url_for('vrac_csv_upload', ['csvvrac' => $csvVrac->_id]) ?>">
-                <div class="form-group">
-                    <label for="csvVracInputFile">Fichier csv</label>
-                    <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control" required="required">
-                </div>
-                <button type="submit" class="btn btn-default">Valider</button>
-            </form>
-
-        <?php else: ?>
-            <div class="alert alert-info">
-                Total de ligne dans le fichier : <strong><?php echo count($vracimport->getCsv()) ?></strong><br>
-                <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE): ?>
-                    Contrats importés : <strong><?php echo count($csvVrac->getDocuments()) ?></strong>
-                <?php else: ?>
-                    Contrats importables : <strong><?php echo count($vracimport->getContratsImportables()) ?></strong>
-                <?php endif; ?>
-                <ul>
-                    <?php foreach ($csvVrac->getDocuments() as $import): ?>
-                    <li>
-                        <a href="<?php echo url_for('vrac_fiche', ['numero_contrat' => str_replace('VRAC-', '', $import)]) ?>"><?php echo $import ?></a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <?php if ($csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE): ?>
-                <h3 class="titre_section">Annexes</h3>
-                <p>Ajouter une annexe à tous les contrats ? (Optionel)</p>
-
-                <form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>">
-                    <div style="padding: 10px 0">
-                        <div class="form-group">
-                            <label for="annexeInputFile">Fichier csv</label>
-                            <?php echo $formAnnexe['annexeInputFile']->render(['name' => 'annexeInputFile[]', 'class' => 'form-control']); ?>
-                        </div>
-                        <template id="annexeInputFileList">
-                          <div>
-                            <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
-                            <table class="table table-condensed">
-                                <thead><th>Nom du fichier</th></head>
-                                <tbody></tbody>
-                            </table>
-                          </div>
-                        </template>
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary">Importer</button>
-                    </div>
-                </form>
-            <?php endif ; ?>
-        <?php endif; ?>
-
-        <h3 class="titre_section">Contenu du fichier importé <small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></h3>
-
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-condensed">
-                <thead>
-                    <tr>
-                        <th>Ligne</th>
-                        <?php foreach ($vracimport->getHeaders() as $header): ?>
-                            <th><?php echo $header ?></th>
-                        <?php endforeach; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($vracimport->getCsv() as $num => $line): ?>
-                    <tr id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'danger' : '' ?>">
-                        <td><?php echo $num + 1 ?></td>
-                        <?php foreach ($line as $td): ?>
-                            <td><?php echo $td ?></td>
-                        <?php endforeach; ?>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="text-center">
-            <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
-        </div>
-
-    </div>
+    <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_ERROR): ?>
+        <?php include_partial('vrac_import/fiche_erreur', compact('csvVrac', 'vracimport', 'compte')) ?>
+    <?php else: ?>
+    <?php endif; ?>
 </div>
