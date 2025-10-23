@@ -91,7 +91,7 @@ Sur cette interface il sera aussi possible d'importer un fichier PDF contenant l
 
 Une fois les vérifications de données effectuées, les contrats seront créés comme des projets qu'il faudra ensuite aller valider et envoyer au vendeur un par un.
 
-[Télécharger un exemple de CSV de contrats pluriannuel cadre](exemple_contrats_pluriannuel_cadre.csv)
+[Voir un exemple de CSV de contrats pluriannuel cadre](exemple_contrats_pluriannuel_cadre.csv)
 
 ## Générer les contrats pluriannuel d'application de la nouvelle campagne
 
@@ -104,4 +104,4 @@ Une fois déposé et vérifié, les contrats d'application seront générés et 
 > [!NOTE]
 > Il sera possible de télécharger depuis l'espace contrat de la plateforme du CIVA un export de ces nouveaux contrats d'application à générer pour la nouvelle campagne au même format CSV. Ainsi ce fichier pourra servir de base pour être compléter (produits, surface, prix, etc ...) avant d'être déposé sur la plateforme pour import.
 
-[Télécharger un exemple de CSV de contrats pluriannuel d'application](exemple_contrats_pluriannuel_application.csv)
+[Voir un exemple de CSV de contrats pluriannuel d'application](exemple_contrats_pluriannuel_application.csv)
