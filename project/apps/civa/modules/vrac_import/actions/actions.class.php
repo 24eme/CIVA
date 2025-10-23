@@ -83,7 +83,7 @@ class vrac_importActions extends sfActions
 
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
             return $this->forwardSecure();
-        };
+        }
 
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
             throw new sfException("Impossible d'importer un fichier en erreur");
