@@ -64,28 +64,7 @@
 
 <h3>Contenu du fichier importé <small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></h3>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-striped table-condensed">
-        <thead>
-            <tr>
-                <th>Ligne</th>
-                <?php foreach ($vracimport->getHeaders() as $header): ?>
-                    <th><?php echo $header ?></th>
-                <?php endforeach; ?>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($vracimport->getCsv() as $num => $line): ?>
-            <tr id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'danger' : '' ?>">
-                <td><?php echo $num + 1 ?></td>
-                <?php foreach ($line as $td): ?>
-                    <td><?php echo $td ?></td>
-                <?php endforeach; ?>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+<?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
 
 <div class="clearfix mt-1">
     <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
