@@ -321,6 +321,34 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Formatte le CSV au format tableau pour le récap
+     *
+     * @return array
+     */
+    public function display()
+    {
+        // numéros de contrats
+        $contrats = $this->getContratsImportables();
+        $ret = [];
+
+        foreach ($contrats as $numero_interne) {
+            $ret[$numero_interne] = [
+                'soussignes' => [
+                    'acheteur' => null,
+                    'vendeur' => null,
+                    'courtier' => null
+                ],
+                'produits' => []
+            ];
+
+            $filtered = array_filter($this->getCsv(), function ($v) use ($numero_interne) {
+                return $numero_interne === $v[self::CSV_NUMERO_INTERNE];
+            });
+
+        }
+    }
+
+    /**
      * Ajoute une annexe à chaque Vrac du tableau $imported
      *
      * @param $annexe L'annexe à ajouter
