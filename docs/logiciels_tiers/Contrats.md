@@ -72,7 +72,7 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 > - Via le code INAO du produit
 > - Via le libellé produit
 >
-> Il s'agit des même méthodes de reconnaissance que pour l'import de données des récoltes et des DRM
+> Il s'agit des même méthodes de reconnaissance que pour l'import de données des récoltes et des DRM basé sur le [catalogue produit](catalogue_produits.csv)
 
 > [!WARNING]
 > Chaque ligne du CSV représente un produit d'un contrat, il peut donc avoir plusieurs lignes pour un même contrat, les valeurs des colonnes relative au contrat devront donc être répétées dans chacune des lignes
