@@ -138,8 +138,7 @@ class VracCsvImport extends CsvFile
      * @return array<string> Tableau d'ID des vracs importés
      */
     public function import($verified = false) {
-        /** @var Configuration $configuration */
-        $configuration = ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
         $v = null;
         $produitPosition = 0;
@@ -204,25 +203,13 @@ class VracCsvImport extends CsvFile
             }
 
             // Section produit
-            // Identification par code inao si présent, sinon par libellé
-            $produitConfig = null;
+            $produit = $this->guessProduit($line, $v);
 
-            if ($line[self::CSV_VIN_CODE_INAO]) {
-                $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
-                $produitConfig = current($produitConfig);
-            }
-
-            if (! $produitConfig) {
-                $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
-            }
-
-            if (! $produitConfig) {
+            if (! $produit) {
                 $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
                 continue;
             }
 
-            $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
-            $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
             $produit->actif = 1;
             $produit->position = $produitPosition++;
 
@@ -383,6 +370,38 @@ class VracCsvImport extends CsvFile
                 $vrac->save();
             }
         }
+    }
+
+    /**
+     * Retourne le produit défini dans la ligne du csv
+     * Identification par code inao si présent, sinon par libellé
+     *
+     * @param array $line Une ligne du CSV
+     * @param Vrac $v Un objet Vrac
+     * @return null|VracDetail
+     */
+    private function guessProduit(array $line, Vrac $v)
+    {
+        $configuration = ConfigurationClient::getInstance()->getCurrent();
+        $produitConfig = null;
+
+        if ($line[self::CSV_VIN_CODE_INAO]) {
+            $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
+            $produitConfig = current($produitConfig);
+        }
+
+        if (! $produitConfig) {
+            $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+        }
+
+        if (! $produitConfig) {
+            return null;
+        }
+
+        $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
+        $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
+
+        return $produit;
     }
 
     /**
