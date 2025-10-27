@@ -138,7 +138,6 @@ class VracCsvImport extends CsvFile
      * @return array<string> Tableau d'ID des vracs importés
      */
     public function import($verified = false) {
-        $this->configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
         $v = null;
         $produitPosition = 0;
