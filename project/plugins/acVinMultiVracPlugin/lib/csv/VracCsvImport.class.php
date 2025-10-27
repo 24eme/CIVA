@@ -343,9 +343,22 @@ class VracCsvImport extends CsvFile
                     $courtier = $courtier ?: $this->guessId($entry[self::CSV_COURTIER_MANDATAIRE_SIRET]);
                 }
 
+                $v = new Vrac(); // "obligatoire" pour récupérer l'objet produit via addProduit
+                $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
+                $produit = $this->guessProduit($entry, $v);
+
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
                 $ret[$numero_interne]['soussignes']['vendeur'] = $vendeur;
                 $ret[$numero_interne]['soussignes']['courtier'] = $courtier;
+
+                $ret[$numero_interne]['produits'][] = [
+                    'libelle' => $produit->getLibelleComplet(),
+                    'millesime' => $entry[self::CSV_VIN_MILLESIME],
+                    'volume' => $entry[self::CSV_QUANTITE] . ' ' . $entry[self::CSV_QUANTITE_TYPE],
+                    'prix' => $entry[self::CSV_PRIX_UNITAIRE] . ' ' . VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]],
+                ];
+
+                unset($v);
             }
         }
 
