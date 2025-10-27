@@ -71,6 +71,9 @@ class VracCsvImport extends CsvFile
     /** @var array $warnings Tableau des warnings de la vérification */
     private $warnings = [];
 
+    /** @var Configuration $configuration La configuration produit
+    private $configuration = null;
+
     /**
      * Crée une instance depuis un tableau CSV
      *
@@ -381,16 +384,16 @@ class VracCsvImport extends CsvFile
      */
     private function guessProduit(array $line, Vrac $v)
     {
-        $configuration = ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = $this->configuration ?: ConfigurationClient::getInstance()->getCurrent();
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
-            $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
+            $produitConfig = $this->configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
             $produitConfig = current($produitConfig);
         }
 
         if (! $produitConfig) {
-            $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+            $produitConfig = $this->configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
         }
 
         if (! $produitConfig) {
