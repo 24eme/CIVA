@@ -75,6 +75,20 @@ class CSVVRAC extends BaseCSVVRAC
         $this->storeAttachment($annexe, 'text/csv', $name_cleaned);
     }
 
+    public function getAnnexes()
+    {
+        $annexes = [];
+        foreach($this->_attachments as $name => $data) {
+            if (strpos($name, 'annexe_') !== 0) {
+                continue;
+            }
+
+            $annexes[] = $this->getAttachmentUri($name);
+        }
+
+        return $annexes;
+    }
+
     /**
      * Slugify le nom de l'annexe pour homogénisation
      *

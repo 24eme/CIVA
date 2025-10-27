@@ -65,4 +65,10 @@
             </div>
         </div>
     </div>
+    <div>
+        <p class="lead">Chaque contrats aura pour annexes le ou les documents suivants :</p>
+        <?php foreach ($csvVrac->getAnnexes() as $annexe): ?>
+            <object type="application/pdf" style="height: 30vh; width: 100%" data="<?php echo $annexe ?>#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0"></object>
+        <?php endforeach; ?>
+    </div>
 </div>
