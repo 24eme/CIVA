@@ -341,11 +341,26 @@ class VracCsvImport extends CsvFile
                 'produits' => []
             ];
 
+            $courtier = $vendeur = $acheteur = null;
+
             $filtered = array_filter($this->getCsv(), function ($v) use ($numero_interne) {
                 return $numero_interne === $v[self::CSV_NUMERO_INTERNE];
             });
 
+            foreach ($filtered as $entry) {
+                $acheteur = $acheteur ?: $this->guessId($entry[self::CSV_ACHETEUR_CVI]);
+                $vendeur = $vendeur ?: $this->guessId($entry[self::CSV_VENDEUR_CVI]);
+                if ($entry[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
+                    $courtier = $courtier ?: $this->guessId($entry[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                }
+
+                $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
+                $ret[$numero_interne]['soussignes']['vendeur'] = $vendeur;
+                $ret[$numero_interne]['soussignes']['courtier'] = $courtier;
+            }
         }
+
+        return $ret;
     }
 
     /**

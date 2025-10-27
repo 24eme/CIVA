@@ -32,7 +32,26 @@
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="liste">
-                <?php // $vracimport->display(); ?>
+                <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr><th>Numéro</th><th>Soussignés</th><th>Produit(s)</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
+                        <tr>
+                            <td>Contrat n°<?php echo $numero_contrat ?></td>
+                            <td>
+                                Entre <?php echo $contrat['soussignes']['acheteur']->raison_sociale ?> (<abbr title="Acheteur">A</abbr>)
+                                et <?php echo $contrat['soussignes']['vendeur']->raison_sociale ?> (<abbr title="Vendeur">V</abbr>)
+                                <?php if ($contrat['soussignes']['courtier']): ?>
+                                    , via <?php echo $contrat['soussignes']['courtier']->raison_sociale ?> (<abbr title="Courtier">C</abbr>)
+                                <?php endif ?>
+                            </td>
+                            <td></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                </table>
             </div>
             <div role="tabpanel" class="tab-pane" id="fichier">
                 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
