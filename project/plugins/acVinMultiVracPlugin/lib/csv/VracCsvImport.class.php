@@ -384,7 +384,7 @@ class VracCsvImport extends CsvFile
      */
     private function guessProduit(array $line, Vrac $v)
     {
-        $this->configuration = $this->configuration ?: ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = isset($this->configuration) ? $this->configuration : ConfigurationClient::getInstance()->getCurrent();
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
