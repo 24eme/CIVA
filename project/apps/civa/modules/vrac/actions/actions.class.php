@@ -423,11 +423,6 @@ class vracActions extends sfActions
 
 
         $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
-        if ($this->etape == VracEtapes::ETAPE_SOUSSIGNES) {
-            $values = $this->form->getValues();
-            $selectedContratDuree = $values['pluriannuel_contrat_duree_select'];
-            $this->vrac->setCampagne($selectedContratDuree);
-        }
 
         if (!$this->form->isValid()) {
 
