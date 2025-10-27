@@ -134,7 +134,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         list($millesime, $campagnes) = self::getCurrentMillesime();
 
         for($i=$millesime; $i<=$millesime+1; $i++) {
-            $campagnes[$i.'-'.($i+1)] = $i.'-'.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0) -1));
+            $campagnes[$i.'-'.($i+1)] = $i.'-'.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0) -2));
         }
         return $campagnes;
     }
