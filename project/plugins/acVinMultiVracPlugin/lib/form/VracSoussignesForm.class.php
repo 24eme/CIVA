@@ -83,7 +83,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $campagnes = self::getCampagnesChoices();
         $this->setWidget('campagne', new sfWidgetFormChoice(array('choices' => $campagnes)));
         $this->setValidator('campagne', new sfValidatorChoice(array('choices' => array_keys($campagnes), 'required' => false)));
-        $this->getWidgetSchema()->setLabel('campagne', "Campagnes d'application :");
+        $this->getWidgetSchema()->setLabel('campagne', "Conclu à partir de la campagne:");
 
         $unites = VracClient::$prix_unites;
         $this->setWidget('prix_unite', new sfWidgetFormChoice(array('choices' => $unites)));
@@ -93,14 +93,11 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
 
-        $this->setWidget('pluriannuel_campagne_debut', new sfWidgetFormChoice(array('choices' => $this->getCampagnesChoices())));
         $this->setWidget('pluriannuel_contrat_duree', new sfWidgetFormChoice(array('choices' => $this->getDureeContratCurrentMillesime())));
         $this->setWidget('pluriannuel_contrat_duree_select', new sfWidgetFormInputHidden());
 
-        $this->getWidget('pluriannuel_campagne_debut')->setLabel('Conclu à partir de la campagne');
         $this->getWidget('pluriannuel_contrat_duree')->setLabel('Pour une durée de');
 
-        $this->setValidator('pluriannuel_campagne_debut', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getCampagnesChoices()))));
         $this->setValidator('pluriannuel_contrat_duree', new ValidatorVracChoices(array('required' => false, 'choices' => array_keys($this->getDureeContratCurrentMillesime()))));
         $this->setValidator('pluriannuel_contrat_duree_select', new sfValidatorString(array('required' => false)));
 
@@ -134,7 +131,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
         list($millesime, $campagnes) = self::getCurrentMillesime();
 
         for($i=$millesime; $i<=$millesime+1; $i++) {
-            $campagnes[$i.'-'.($i+1)] = $i.'-'.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0) -1));
+            $campagnes[$i.'-'.($i+1)] = $i.'-'.(($i+VracClient::getConfigVar('nb_campagnes_pluriannuel',0) -2));
         }
         return $campagnes;
     }
