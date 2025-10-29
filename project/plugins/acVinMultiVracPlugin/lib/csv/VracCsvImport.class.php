@@ -377,11 +377,12 @@ class VracCsvImport extends CsvFile
             return;
         }
 
+        var_dump($annexe);
         foreach (self::$imported as $vid) {
             $vrac = VracClient::getInstance()->find($vid);
 
             if ($vrac) {
-                $vrac->storeAnnexe($annexe, $name_cleaned);
+                $vrac->getOrAdd('_attachments')->add($name, $annexe);
                 $vrac->save();
             }
         }

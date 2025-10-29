@@ -76,7 +76,7 @@
     <?php endif ?>
 
     <div class="clearfix form-control-static">
-        <form method="POST" id="formimport"></form>
+        <form method="POST" id="formimport" action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>"></form>
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default">Revenir aux annexes</a>
         <button type="submit" form="formimport" class="btn btn-primary pull-right">Importer les <?php echo count($vracimport->getContratsImportables()) ?> contrats</button>
     </div>

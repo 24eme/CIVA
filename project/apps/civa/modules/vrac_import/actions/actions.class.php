@@ -114,10 +114,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracImport(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
-
-        if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
-            return $this->forwardSecure();
-        }
+        $this->secureRoute($this->csvVrac->identifiant);
 
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
             throw new sfException("Impossible d'importer un fichier en erreur");
@@ -130,21 +127,9 @@ class vrac_importActions extends sfActions
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $imported = $this->vracimport->import(true);
 
-        $this->formAnnexe = new sfForm();
-        $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true]));
-        $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
-            'required' => false, 'max_size' => '2097152',
-            'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
-            'mime_types' => 'pdf'
-        ]));
-
-        $this->formAnnexe->bind(null, $request->getFiles());
-        if ($this->formAnnexe->isValid()) {
-            $annexes = $this->formAnnexe->getValue('annexeInputFile');
-            if ($annexes) {
-                foreach ($annexes as $annexe) {
-                    $this->vracimport->addAnnexe($annexe->getTempName(), $annexe->getOriginalName());
-                }
+        if (count($this->csvVrac->getAnnexes())) {
+            foreach ($this->csvVrac->_attachments as $name => $annexe) {
+                $this->vracimport->addAnnexe($annexe, $name);
             }
         } else {
             // Mauvais format de fichier / Fichier trop gros
@@ -156,7 +141,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
-        return $this->redirect('vrac_csv_liste', ['identifiant' => $this->csvVrac->identifiant]);
+        return $this->redirect('vrac_csv_historique', ['identifiant' => $this->csvVrac->identifiant]);
     }
 
     public function executeCSVVracDownload(sfWebRequest $request)
