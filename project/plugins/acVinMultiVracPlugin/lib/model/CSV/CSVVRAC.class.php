@@ -72,7 +72,7 @@ class CSVVRAC extends BaseCSVVRAC
         }
 
         $name_cleaned = $this->cleanAnnexeName($name);
-        $this->storeAttachment($annexe, 'text/csv', $name_cleaned);
+        $this->storeAttachment($annexe, mime_content_type($annexe), $name_cleaned);
     }
 
     public function getAnnexes()
