@@ -141,7 +141,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
-        return $this->redirect('vrac_csv_historique', ['identifiant' => $this->csvVrac->identifiant]);
+        return $this->redirect('vrac_csv_liste', ['identifiant' => $this->csvVrac->identifiant]);
     }
 
     public function executeCSVVracDownload(sfWebRequest $request)
