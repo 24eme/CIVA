@@ -83,7 +83,7 @@ class CSVVRAC extends BaseCSVVRAC
                 continue;
             }
 
-            $annexes[] = $this->getAttachmentUri($name);
+            $annexes[$name] = $this->getAttachmentUri($name);
         }
 
         return $annexes;

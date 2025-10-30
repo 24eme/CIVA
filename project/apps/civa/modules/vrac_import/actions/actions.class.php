@@ -128,7 +128,7 @@ class vrac_importActions extends sfActions
         $imported = $this->vracimport->import(true);
 
         if (count($this->csvVrac->getAnnexes())) {
-            foreach ($this->csvVrac->_attachments as $name => $annexe) {
+            foreach ($this->csvVrac->getAnnexes() as $name => $annexe) {
                 $this->vracimport->addAnnexe($annexe, $name);
             }
         } else {
