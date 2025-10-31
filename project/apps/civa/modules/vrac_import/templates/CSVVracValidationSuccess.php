@@ -41,7 +41,8 @@
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#liste" aria-controls="liste" role="tab" data-toggle="tab">Liste des contrats</a></li>
-            <li role="presentation"><a href="#fichier" aria-controls="fichier" role="tab" data-toggle="tab">Contenu du fichier</a></li>
+            <li role="presentation"><a href="#fichier" aria-controls="fichier" role="tab" data-toggle="tab">Contenu du fichier</a> </li>
+            <li role="presentation" class="pull-right"><small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></li>
         </ul>
 
         <div class="tab-content">
