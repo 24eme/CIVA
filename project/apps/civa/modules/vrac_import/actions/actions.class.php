@@ -32,6 +32,10 @@ class vrac_importActions extends sfActions
 
         $this->secureRoute($this->compte->identifiant);
 
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE) {
+            $this->redirect('vrac_csv_visualisation', ['csvvrac' => $this->csvVrac->_id]);
+        }
+
         $this->formAnnexe = new sfForm();
         $this->formAnnexe->setWidget('annexeInputFile', new sfWidgetFormInputFile([], ['multiple' => true, 'accept' => 'application/pdf, application/x-pdf']));
 
@@ -107,6 +111,10 @@ class vrac_importActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
         $this->secureRoute($this->compte->identifiant);
+
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE) {
+            $this->redirect('vrac_csv_visualisation', ['csvvrac' => $this->csvVrac->_id]);
+        }
 
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
     }
