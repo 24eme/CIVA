@@ -147,7 +147,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracDownload(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
-        $file = $this->csvVrac->_attachments->getFirst();
+        $file = $this->csvVrac->_attachments->get($this->csvVrac->getFileName());
 
         $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $file->getKey() . '.csv"');
