@@ -164,6 +164,10 @@ class vrac_importActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->secureRoute($this->csvVrac->identifiant);
 
+        if ($this->csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE) {
+            $this->redirect('vrac_csv_validation', ['csvvrac' => $csvVrac->_id]);
+        }
+
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
 
