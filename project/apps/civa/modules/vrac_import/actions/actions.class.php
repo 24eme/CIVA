@@ -158,4 +158,15 @@ class vrac_importActions extends sfActions
         $this->getResponse()->setHttpHeader('Expires', '0');
         return $this->renderText(file_get_contents($this->csvVrac->getAttachmentUri($file->getKey())));
     }
+
+    public function executeCSVVracVisualisation(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->secureRoute($this->csvVrac->identifiant);
+
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+
+        $this->setTemplate('CSVVracValidation');
+    }
 }
