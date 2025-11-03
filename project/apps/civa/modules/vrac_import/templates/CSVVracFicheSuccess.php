@@ -6,12 +6,21 @@
 
     <nav class="navbar navbar-default nav-step">
         <ul class="nav navbar-nav">
-            <li class="active">
-                <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
-            </li>
-            <li class="active">
-                <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
-            </li>
+            <?php if ($csvVrac->statut === CSVVRACClient::LEVEL_ERROR): ?>
+                <li class="active">
+                    <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
+                </li>
+                <li class="disabled">
+                    <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
+                </li>
+            <?php else: ?>
+                <li class="active">
+                    <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
+                </li>
+                <li class="active">
+                    <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
+                </li>
+            <?php endif ?>
             <li class="disabled">
                 <a href="#" class=""><span>Validation</span><small class="hidden">Etape 3</small></a>
             </li>
