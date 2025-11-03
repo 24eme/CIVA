@@ -10,7 +10,7 @@
                 <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
             </li>
             <li class="disabled">
-                <a href="#" class=""><span>Contenu du fichier</span><small class="hidden">Etape 2</small></a>
+                <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
             </li>
             <li class="disabled">
                 <a href="#" class=""><span>Validation</span><small class="hidden">Etape 3</small></a>
