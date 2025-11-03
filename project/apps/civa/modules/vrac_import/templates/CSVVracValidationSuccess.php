@@ -28,13 +28,8 @@
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
-        <div class="alert alert-info">
-            <p><strong>Ces contrats ont déjà été importés (<?php echo count($vracimport->getContratsImportables()) ?> contrats) :</strong></p>
-            <ul>
-                <?php foreach ($csvVrac->documents as $vracid): ?>
-                    <li><a href="<?php echo url_for('vrac_fiche', ['numero_contrat' => str_replace('VRAC-', '', $vracid)]); ?>"><?php echo $vracid ?></a></li>
-                <?php endforeach; ?>
-            </ul>
+        <div class="alert alert-success">
+            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été importés :</strong></p>
         </div>
     <?php endif ?>
 
