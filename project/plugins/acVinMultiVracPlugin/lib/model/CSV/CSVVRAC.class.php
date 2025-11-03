@@ -75,6 +75,12 @@ class CSVVRAC extends BaseCSVVRAC
         $this->storeAttachment($annexe, mime_content_type($annexe), $name_cleaned);
     }
 
+    /**
+     * Liste les annexes de l'objet
+     * Le fichier csv importé est exclu
+     *
+     * @return array<string,string> Un tableau avec en clé le nom de l'annexe et en valeur son uri
+     */
     public function getAnnexes()
     {
         $annexes = [];

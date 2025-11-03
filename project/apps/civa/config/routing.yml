@@ -168,6 +168,13 @@ vrac_csv_download:
   param: {module: vrac_import, action: CSVVracDownload}
   requirements: {sf_method: [get]}
 
+vrac_csv_attachment:
+  url: /vrac/import/:csvvrac/a/:attachment
+  param: {module: vrac_import, action: CSVVracAttachment}
+  requirements:
+    sf_method: [get]
+    attachment: .+
+
 vrac_csv_visualisation:
   url: /vrac/import/:csvvrac/visualisation
   param: {module: vrac_import, action: CSVVracVisualisation}

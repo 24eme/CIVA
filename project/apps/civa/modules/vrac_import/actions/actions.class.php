@@ -147,9 +147,6 @@ class vrac_importActions extends sfActions
             foreach ($this->csvVrac->getAnnexes() as $name => $annexe) {
                 $this->vracimport->addAnnexe($annexe, $name);
             }
-        } else {
-            // Mauvais format de fichier / Fichier trop gros
-            // Message session ? Erreur ? Redirection ?
         }
 
         $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
@@ -157,7 +154,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
-        return $this->redirect('vrac_csv_liste', ['identifiant' => $this->csvVrac->identifiant]);
+        return $this->redirect('mon_espace_civa_vrac', ['identifiant' => $this->csvVrac->identifiant]);
     }
 
     public function executeCSVVracDownload(sfWebRequest $request)
@@ -172,6 +169,24 @@ class vrac_importActions extends sfActions
         $this->getResponse()->setHttpHeader('Pragma', '');
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
+        return $this->renderText(file_get_contents($this->csvVrac->getAttachmentUri($file->getKey())));
+    }
+
+    public function executeCSVVracAttachment(sfWebRequest $request)
+    {
+        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->secureRoute($this->csvVrac->identifiant);
+
+        $attachment = $request->getParameter('attachment');
+
+        if ($this->csvVrac->_attachments->exist($attachment) === false) {
+            return $this->redirect404();
+        }
+
+        $file = $this->csvVrac->_attachments->get($attachment);
+        $this->getResponse()->setHttpHeader('Content-Type', $file->content_type);
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Content-Length', $file->length);
         return $this->renderText(file_get_contents($this->csvVrac->getAttachmentUri($file->getKey())));
     }
 
