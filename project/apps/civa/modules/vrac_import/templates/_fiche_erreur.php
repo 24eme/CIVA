@@ -4,18 +4,19 @@
     }
 </style>
 
-<h3>Récapitulatif du fichier</h3>
-<div class="alert alert-danger">
-    Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats sans modification de votre fichier.
+<h3>Vérification du fichier</h3>
+<div class="alert alert-danger" style="margin-top: 20px;">
+    Votre fichier comporte des erreurs. Vous ne pouvez pas importer vos contrats sans corriger votre fichier.
 </div>
-
+<h4 style="margin-top: 30px;">Liste des erreurs :</h4>
 <table class="table table-bordered">
-<thead><tr><th>Ligne</th><th>Description de l'erreur</th><th>Voir</th></tr></thead>
+<thead><tr><th>N° Ligne</th><th>Type</th><th>Description</th><th></th></tr></thead>
 <tbody>
 <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
     <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
     <tr>
-        <td><a href="#line<?php echo $i ?>">Ligne #<?php echo $i ?></a></td>
+        <td><a href="#line<?php echo $i ?>"><?php echo $i ?></a></td>
+        <td><label class="label label-danger">Erreur</label></td>
         <td>
             <table>
             <?php foreach ($listeerreurs as $e): ?>
@@ -23,20 +24,14 @@
             <?php endforeach ?>
             </table>
         </td>
-        <td><a href="#line<?php echo $i ?>"><i class="glyphicon glyphicon-eye-open"></i> Voir la ligne en erreur</a></td>
+        <td><a href="#line<?php echo $i ?>"><i class="glyphicon glyphicon-eye-open"></i> Voir la ligne</a></td>
     <tr>
     <?php endif ?>
 <?php endfor; ?>
 </tbody>
 </table>
 
-<hr/>
-
 <div class="clearfix">
-    <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#modal-reupload">
-        Reverser un fichier corrigé
-    </button>
-
     <div class="modal fade" id="modal-reupload" tabindex="-1" role="dialog" aria-labelledby="modal-reupload-label">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -53,22 +48,22 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" form="form-reupload" class="btn btn-default">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            <button type="submit" form="form-reupload" class="btn btn-success">Valider</button>
           </div>
         </div>
       </div>
     </div>
 </div>
 
-
-<h3>Contenu du fichier importé <small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier</a>)</small></h3>
+<h4>Contenu du fichier importé : <small class="pull-right">(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier csv</a>)</small></h4>
 
 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
 
-<div class="clearfix mt-1">
-    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Retour à la liste</a>
-    <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#modal-reupload">
-        Reverser un fichier corrigé
+<div class="clearfix mt-1 text-center" style="margin-top: 20px;">
+    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default pull-left"><span class="glyphicon glyphicon-chevron-left"></span> Retour à la liste</a>
+    <button data-toggle="modal" data-target="#modal-reupload" href="" class="btn btn-success disabled pull-right">Continuer <span class="glyphicon glyphicon-chevron-right"></span></button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-reupload">
+        <span class="glyphicon glyphicon-repeat"></span> Reverser un fichier corrigé
     </button>
 </div>

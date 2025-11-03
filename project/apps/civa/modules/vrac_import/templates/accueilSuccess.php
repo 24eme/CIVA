@@ -25,7 +25,7 @@
                 Contrats cadres
               </label>
             </div>
-            <button type="submit" class="btn btn-default">Valider</button>
+            <button type="submit" class="btn btn-success">Valider</button>
         </form>
         </div>
     </div>
