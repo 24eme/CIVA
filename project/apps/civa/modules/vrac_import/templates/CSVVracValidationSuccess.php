@@ -61,7 +61,7 @@
                             <div class="col-xs-8">
                                 <strong>Produits du contrat :</strong>
                                 <?php foreach ($contrat['produits'] as $produit_info): ?>
-                                <p>
+                                <p style="margin-bottom: 0">
                                 <?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?> de <?php echo $produit_info['volume'] ?> à <?php echo $produit_info['prix'] ?>
                                 </p>
                                 <?php endforeach ?>
