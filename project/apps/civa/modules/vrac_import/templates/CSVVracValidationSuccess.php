@@ -1,23 +1,8 @@
 <div>
-    <ol class="breadcrumb">
-        <li><a href="#">Import de contrats</a></li>
-        <li><a href="#"><?php echo $compte->nom_a_afficher ?></a></li>
-    </ol>
+    <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
 
     <?php if ($csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE): ?>
-    <nav class="navbar navbar-default nav-step">
-        <ul class="nav navbar-nav">
-            <li class="active">
-                <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
-            </li>
-            <li class="active">
-                <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
-            </li>
-            <li class="active">
-                <a href="#" class=""><span>Validation</span><small class="hidden">Etape 3</small></a>
-            </li>
-        </ul>
-    </nav>
+    <?php include_partial('vrac_import/step', ['step' => (($csvVrac->statut === CSVVRACClient::LEVEL_ERROR) ? 'import' : 'validation'), 'csvVrac' => $csvVrac]); ?>
 
     <h3>Validation avant l'import</h3>
 

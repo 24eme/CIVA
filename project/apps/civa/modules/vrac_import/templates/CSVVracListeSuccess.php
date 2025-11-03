@@ -1,4 +1,6 @@
 <div>
+    <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
+
     <h1 class="titre_principal">Historique des contrats importés par <?php echo $compte->nom_a_afficher ?></h1>
 
     <table class="table">

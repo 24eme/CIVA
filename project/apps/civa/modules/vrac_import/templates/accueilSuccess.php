@@ -1,22 +1,6 @@
 <div>
-    <ol class="breadcrumb">
-        <li><a href="#">Import de contrats</a></li>
-        <li><a href="#"><?php echo $compte->nom_a_afficher ?></a></li>
-    </ol>
-
-    <nav class="navbar navbar-default nav-step">
-        <ul class="nav navbar-nav">
-            <li class="active">
-                <a href="#" class=""><span>Import du fichier</span><small class="hidden">Etape 1</small></a>
-            </li>
-            <li class="disabled">
-                <a href="#" class=""><span>Annexes</span><small class="hidden">Etape 2</small></a>
-            </li>
-            <li class="disabled">
-                <a href="#" class=""><span>Validation</span><small class="hidden">Etape 3</small></a>
-            </li>
-        </ul>
-    </nav>
+    <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
+    <?php include_partial('vrac_import/step', ['step' => 'import']); ?>
 
     <h3>Téléversement du fichier</h3>
     <div>
