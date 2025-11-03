@@ -43,6 +43,10 @@ class vrac_importActions extends sfActions
             return sfView::SUCCESS;
         }
 
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
+            $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
+        }
+
         $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
             'required' => false, 'max_size' => '2097152',
             'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
@@ -114,6 +118,10 @@ class vrac_importActions extends sfActions
 
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_IMPORTE) {
             $this->redirect('vrac_csv_visualisation', ['csvvrac' => $this->csvVrac->_id]);
+        }
+
+        if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
+            $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
         }
 
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
