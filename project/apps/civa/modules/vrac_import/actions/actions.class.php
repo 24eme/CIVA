@@ -147,9 +147,6 @@ class vrac_importActions extends sfActions
             foreach ($this->csvVrac->getAnnexes() as $name => $annexe) {
                 $this->vracimport->addAnnexe($annexe, $name);
             }
-        } else {
-            // Mauvais format de fichier / Fichier trop gros
-            // Message session ? Erreur ? Redirection ?
         }
 
         $this->csvVrac->statut = CSVVRACClient::LEVEL_IMPORTE;
