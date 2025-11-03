@@ -1,6 +1,7 @@
 <style>
     tr:target {
         border: 2px dotted red;
+        scroll-margin-top: 80px;
     }
 </style>
 
@@ -15,7 +16,7 @@
 <?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
     <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
     <tr>
-        <td><a href="#line<?php echo $i ?>"><?php echo $i ?></a></td>
+        <td class="text-right"><a href="#line<?php echo $i ?>"><?php echo $i ?></a></td>
         <td><label class="label label-danger">Erreur</label></td>
         <td>
             <table>
