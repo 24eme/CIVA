@@ -27,6 +27,24 @@ class CSVVRAC extends BaseCSVVRAC
         return 'import_edi_' . $this->identifiant . '.csv';
     }
 
+    /**
+     * Affiche un label bootstrap en fonction du statut
+     */
+    public function getStatutLabel()
+    {
+        switch ($this->statut) {
+            case CSVVRACClient::LEVEL_ERROR:
+                return '<span class="label label-danger">Erreur</span>';
+                break;
+            case CSVVRACClient::LEVEL_IMPORTE:
+                return '<span class="label label-success">Importé</span>';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
     public function hasErreurs()
     {
         return count($this->erreurs);
