@@ -255,7 +255,7 @@ const initVracImport = function ()
     const listingInputFileTemplate = document.getElementById('annexeInputFileList')
     if (listingInputFileTemplate) {
       const inputAnnexes = document.getElementById('annexeInputFile')
-      const parent = inputAnnexes.closest('div')
+      const parent = inputAnnexes.closest('div.row')
 
       inputAnnexes.addEventListener('change', function () {
         parent.nextElementSibling.remove()
