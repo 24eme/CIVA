@@ -40,7 +40,7 @@ class CSVVRAC extends BaseCSVVRAC
                 return '<span class="label label-success">Importé</span>';
                 break;
             default:
-                return '';
+                return '<span class="label label-warning">Brouillon</span>';
                 break;
         }
     }
