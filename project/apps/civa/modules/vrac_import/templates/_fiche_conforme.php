@@ -1,3 +1,10 @@
+<style>
+    tr:target {
+        border: 2px dotted red;
+        scroll-margin-top: 80px;
+    }
+</style>
+
 <div class="alert alert-success" style="margin-top: 20px;">
     Votre fichier est conforme
 </div>

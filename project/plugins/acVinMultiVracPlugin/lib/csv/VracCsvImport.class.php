@@ -345,6 +345,7 @@ class VracCsvImport extends CsvFile
 
                 $v = new Vrac(); // "obligatoire" pour récupérer l'objet produit via addProduit
                 $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
+                $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
                 $produit = $this->guessProduit($entry, $v);
 
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;

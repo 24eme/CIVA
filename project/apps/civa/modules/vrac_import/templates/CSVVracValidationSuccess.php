@@ -1,3 +1,9 @@
+<style>
+    table#table_contrat tr td {
+        border-right-style: dashed;
+        border-left-style: dashed;
+    }
+</style>
 <div>
     <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
 
@@ -19,15 +25,43 @@
     <?php endif ?>
 
     <div>
+        <a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">Télécharger le fichier csv importer</a>
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#liste" aria-controls="liste" role="tab" data-toggle="tab">Liste des contrats</a></li>
+            <li role="presentation" class="active"><a href="#liste" aria-controls="liste" role="tab" data-toggle="tab">Liste des contrats <span class="badge"><?php echo count($vracimport->getContratsImportables()) ?></span></a></li>
             <li role="presentation"><a href="#fichier" aria-controls="fichier" role="tab" data-toggle="tab">Contenu du fichier</a> </li>
-            <li role="presentation" class="pull-right"><small>(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier csv</a>)</small></li>
+            <li role="presentation" class="pull-right"><small></small></li>
         </ul>
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="liste">
+                <table id="table_contrat" class="table table-bordered table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>N° Interne</th>
+                            <th>Soussigné(s)</th>
+                            <th>Produit</th>
+                            <th class="text-center">Quantité</th>
+                            <th class="text-center">Prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <?php foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
+                    <tr>
+                        <td><span title="<?php echo ucfirst(strtolower($contrat['type_contrat'])) ?>" class="icon-<?php echo strtolower($contrat['type_contrat']) ?>"></span><span title="Contrat pluriannuel"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                          <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
+                          <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
+                      </svg></span></td>
+                        <td><?php echo $numero_contrat ?></td>
+                        <td><?php echo $contrat['soussignes']['vendeur']->raison_sociale ?></td>
+                        <td><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?><br /><?php endforeach ?></td>
+                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['volume'] ?><br /><?php endforeach ?></td>
+                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['prix'] ?><br /><?php endforeach ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php /*foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="panel-title">Contrat n° <?php echo $numero_contrat ?></div>
@@ -53,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                <?php endforeach; */ ?>
             </div>
             <div role="tabpanel" class="tab-pane" id="fichier">
                 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>

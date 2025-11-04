@@ -7,7 +7,7 @@
     }
 </style>
 <div class="table-responsive" style="max-height: 500px; border: 1px solid #c6c8c7; border-left: 0;">
-    <table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0; position: relative;  border: 0;">
+    <table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0; position: relative;  border: 0; font-family: monospace;">
         <thead>
             <tr>
                 <th>N°&nbsp;Ligne</th>
@@ -18,7 +18,7 @@
         </thead>
         <tbody style="margin-top: 100px;">
             <?php foreach ($vracimport->getCsv() as $num => $line): ?>
-            <tr style="font-family: monospace;" id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'danger text-danger' : '' ?>">
+            <tr id="line<?php echo $num + 1 ?>" class="<?php echo count($csvVrac->getErreurs($num + 1)) ? 'danger text-danger' : '' ?>">
                 <td class="text-right"><?php echo $num + 1 ?></td>
                 <?php foreach ($line as $td): ?>
                     <td><?php echo $td ?></td>
