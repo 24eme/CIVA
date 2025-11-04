@@ -742,12 +742,24 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function getTotalVolumePropose()
     {
-    	return $this->volume_propose_total;
+        $total = 0;
+        foreach ($this->declaration->getProduitsDetailsSorted() as $details) {
+            foreach ($details as $detail) {
+                $total += $detail->volume_propose;
+            }
+        }
+    	return $total;
     }
 
     public function getTotalSurfacePropose()
     {
-    	return $this->surface_propose_total;
+        $total = 0;
+        foreach ($this->declaration->getProduitsDetailsSorted() as $details) {
+            foreach ($details as $detail) {
+                $total += $detail->surface_propose;
+            }
+        }
+    	return $total;
     }
 
     public function getTotalPrixEnleve()
@@ -1175,21 +1187,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         }
         $vrac->remove('historique');
         return $vrac;
-	}
-
-	public function getPourcentageTotalDesClausesEvolutionPrix() {
-		if ($this->exist('clause_evolution_prix') && $this->clause_evolution_prix) {
-            $total = 0;
-            $clauses = explode(PHP_EOL, $this->clause_evolution_prix);
-            foreach($clauses as $clause) {
-                $pos = strpos($clause, '%');
-                if ($pos !== false) {
-                    $total += (substr($clause, 0, $pos) * 1);
-                }
-            }
-            return $total;
-        }
-        return 100;
 	}
 
 	public function isPremiereApplication() {

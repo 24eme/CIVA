@@ -39,7 +39,7 @@
 				CVO AOC à la charge du vendeur
 			</td>
 			<td colspan="2">
-				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2022_2023.pdf">Organisation du marché 2022/2023</a>)</small>
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2024_2025.pdf">Organisation du marché 2024/2025</a>)</small>
 			</td>
 		</tr>
         <?php endif; ?>
@@ -124,13 +124,10 @@
 				<?php echo $form['clause_evolution_prix']->renderLabel() ?>
 			</td>
             <td width="465">
-			<?php echo $form['clause_evolution_prix']->render(array('rows' => '2', 'cols' => '61', 'readonly' => 'readonly')) ?>
-            <p style="display: <?php echo ($form->getObject()->getPourcentageTotalDesClausesEvolutionPrix() > 0 && $form->getObject()->clause_evolution_prix)? 'block' : 'none'; ?>;">
-                Part totale : <span id="partTotale"><?php echo $form->getObject()->getPourcentageTotalDesClausesEvolutionPrix() ?></span>/100
-            </p>
+			<?php echo $form['clause_evolution_prix']->render(array('rows' => '2', 'cols' => '61')) ?>
 			</td>
             <td>
-                <a class="btn_minus action_aidesaisie aideSaisieEvolutionsPrixPopup" href="">Ajouter des indicateurs</a> / <a class="inputCleaner" data-target="<?php echo $form['clause_evolution_prix']->renderId() ?>" href="">[x] Vider</a>
+                <a class="msg_aide aideSaisieEvolutionsPrixPopup" title="Message d'aide" href=""></a>
             </td>
 		</tr>
 		<?php endif; ?>
@@ -169,10 +166,14 @@
 	</tbody>
 </table>
 <?php endif; ?>
+<?php if(isset($form['vendeur_frais_annexes']) && isset($form['acheteur_primes_diverses'])): ?>
 <?php include_partial('vrac/popupAideSaisieFrais', array('target' => $form['vendeur_frais_annexes']->renderId())); ?>
 <?php include_partial('vrac/popupAideSaisiePrimes', array('target' => $form['acheteur_primes_diverses']->renderId())); ?>
+<?php endif; ?>
 <?php include_partial('vrac/popupAideSaisieDelaiPaiement', array('target' => $form['conditions_paiement']->renderId(), 'vrac' => $form->getObject())); ?>
+<?php if(isset($form['clause_resiliation'])): ?>
 <?php include_partial('vrac/popupAideSaisieResiliation', array('target' => $form['clause_resiliation']->renderId())); ?>
+<?php endif; ?>
 <?php if(isset($form['clause_evolution_prix'])): ?>
 <?php include_partial('vrac/popupAideSaisieEvolutionsPrix', array('target' => $form['clause_evolution_prix']->renderId())); ?>
 <?php endif; ?>

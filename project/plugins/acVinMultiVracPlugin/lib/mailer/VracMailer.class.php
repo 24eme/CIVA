@@ -110,7 +110,7 @@ class VracMailer {
         }
 
         if (count($messages)) {
-            $message = $messages[0]->copy();
+            $message = method_exists($messages[0], 'copy')? $messages[0]->copy() : clone $messages[0];
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
@@ -259,7 +259,7 @@ class VracMailer {
             $messages[] = $message;
         }
         if ($vrac->declaration->hashProduitsWithVolumeBloque() && count($messages)) {
-            $message = $messages[0]->copy();
+            $message = method_exists($messages[0], 'copy')? $messages[0]->copy() : clone $messages[0];
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
@@ -315,7 +315,7 @@ class VracMailer {
         }
 
         if (count($messages)) {
-            $message = $messages[0]->copy();
+            $message = method_exists($messages[0], 'copy')? $messages[0]->copy() : clone $messages[0];
             $message->setTo(sfConfig::get('app_email_notifications', array()));
             $messages[] = $message;
         }
