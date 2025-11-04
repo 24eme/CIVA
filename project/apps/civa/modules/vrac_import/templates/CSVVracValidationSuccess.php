@@ -14,7 +14,7 @@
         <h3>Visualisation de l'import</h3>
 
         <div class="alert alert-success">
-            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été importés :</strong></p>
+            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été importés</strong></p>
         </div>
     <?php endif ?>
 
