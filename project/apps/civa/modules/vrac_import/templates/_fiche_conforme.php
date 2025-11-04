@@ -4,7 +4,7 @@
 
 <h3>Souhaitez vous ajouter une annexe aux contrats à importer ?</h3>
 
-<p>Vous pouvez ajouter une ou plusieurs annexes aux contrats qui seront importés (optionnel)</p>
+<p>Vous pouvez ajouter une ou plusieurs annexes <strong>au format PDF</strong> aux contrats qui seront importés (optionnel)</p>
 
 <form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>">
     <div class="row" style="padding: 10px 0">
