@@ -77,10 +77,10 @@
     <?php if ($csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE): ?>
     <div class="clearfix form-control-static" style="margin-top: 10px;">
         <form method="POST" id="formimport" action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>"></form>
-        <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Revenir aux annexes</a>
+        <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
         <button type="submit" form="formimport" class="btn btn-success pull-right">Importer les <?php echo count($vracimport->getContratsImportables()) ?> contrats <span class="glyphicon glyphicon-ok"></span></button>
     </div>
     <?php else: ?>
-        <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default">Revenir à la liste des imports</a>
+        <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default">Retour à mon espace</a>
     <?php endif ?>
 </div>

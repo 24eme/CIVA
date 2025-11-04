@@ -62,7 +62,7 @@
 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
 
 <div class="clearfix mt-1 text-center" style="margin-top: 20px;">
-    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default pull-left"><span class="glyphicon glyphicon-chevron-left"></span> Retour à la liste</a>
+    <a href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $csvVrac->identifiant]) ?>" class="btn btn-default pull-left"><span class="glyphicon glyphicon-chevron-left"></span> Retour à mon espace</a>
     <button data-toggle="modal" data-target="#modal-reupload" href="" class="btn btn-success disabled pull-right">Continuer <span class="glyphicon glyphicon-chevron-right"></span></button>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-reupload">
         <span class="glyphicon glyphicon-repeat"></span> Reverser un fichier corrigé
