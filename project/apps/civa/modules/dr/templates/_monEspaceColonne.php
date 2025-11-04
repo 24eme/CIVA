@@ -21,7 +21,7 @@
 	    <ul>
 	        <li><a href="<?php echo url_for('dr_telecharger_la_notice') ?>" class="pdf">Télécharger&nbsp;la&nbsp;notice&nbsp;Récolte</a></li>
 	        <li><a href="<?php echo url_for('dr_telecharger_guide_vci') ?>" class="pdf">Télécharger le guide du VCI</a></li>
-          <li><a href="/drm/doc/docs/Fonctionnement_VCI_2024.pdf" class="pdf">Fonctionnement&nbsp;VCI&nbsp;2024</a></li>
+          <li><a href="/drm/doc/docs/Fonctionnement_VCI_2025.pdf" class="pdf">Fonctionnement&nbsp;VCI&nbsp;2025</a></li>
 	    </ul>
 	    <p class="intro pdf_link">Ces notices sont au format PDF. Pour les visualiser, veuillez utiliser un <a href='http://pdfreaders.org/'>lecteur PDF</a>.</p>
 	</div>

@@ -4,7 +4,7 @@
 
 <h3>Souhaitez vous ajouter une annexe aux contrats à importer ?</h3>
 
-<p>Vous pouvez ajouter une ou plusieurs annexes aux contrats qui seront importés (optionnel)</p>
+<p>Vous pouvez ajouter une ou plusieurs annexes <strong>au format PDF</strong> aux contrats qui seront importés (optionnel)</p>
 
 <form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>">
     <div class="row" style="padding: 10px 0">
@@ -13,15 +13,15 @@
             <?php echo $formAnnexe['annexeInputFile']->render(['name' => 'annexeInputFile[]', 'class' => 'form-control']); ?>
         </div>
     </div>
-        <template id="annexeInputFileList">
-          <div>
-            <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
-            <table class="table table-condensed">
-                <thead><tr><th>Nom du fichier</th></tr></thead>
-                <tbody></tbody>
-            </table>
-          </div>
-        </template>
+    <template id="annexeInputFileList">
+      <div>
+        <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
+        <table class="table table-condensed">
+            <thead><tr><th>Nom du fichier</th></tr></thead>
+            <tbody></tbody>
+        </table>
+      </div>
+    </template>
     <div class="text-right" style="margin-top: 30px;">
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn pull-left btn-default disabled"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
         <button class="btn btn-success">Continuer <span class="glyphicon glyphicon-chevron-right"></span</button>

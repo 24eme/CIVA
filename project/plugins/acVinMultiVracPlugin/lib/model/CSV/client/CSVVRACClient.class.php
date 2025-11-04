@@ -19,8 +19,9 @@ class CSVVRACClient extends acCouchdbClient
         if ($date) {
             $start = $end = $date;
         }
-        $csvs = $this->startkey("CSVVRAC-".$identifiant."-{$start}000")
-                     ->endkey("CSVVRAC-".$identifiant."-{$end}999")
+        $csvs = $this->endkey("CSVVRAC-".$identifiant."-{$start}000")
+                     ->startkey("CSVVRAC-".$identifiant."-{$end}999")
+                     ->descending(true)
                      ->execute();
 
         return $csvs;

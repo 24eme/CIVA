@@ -154,7 +154,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
-        return $this->redirect('mon_espace_civa_vrac', ['identifiant' => $this->csvVrac->identifiant]);
+        return $this->redirect('vrac_historique', ['identifiant' => $this->csvVrac->identifiant, 'campagne' => ConfigurationClient::getInstance()->getCurrentCampagne()]);
     }
 
     public function executeCSVVracDownload(sfWebRequest $request)
