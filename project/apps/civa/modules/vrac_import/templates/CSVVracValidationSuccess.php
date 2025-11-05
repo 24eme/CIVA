@@ -25,7 +25,7 @@
     <?php endif ?>
 
     <div>
-        <a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">Télécharger le fichier csv importer</a>
+        <a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">Télécharger le fichier csv importé</a>
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#liste" aria-controls="liste" role="tab" data-toggle="tab">Liste des contrats <span class="badge"><?php echo count($vracimport->getContratsImportables()) ?></span></a></li>
             <li role="presentation"><a href="#fichier" aria-controls="fichier" role="tab" data-toggle="tab">Contenu du fichier</a> </li>

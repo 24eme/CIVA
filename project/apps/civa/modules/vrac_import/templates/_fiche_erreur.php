@@ -57,7 +57,9 @@
     </div>
 </div>
 
-<h4>Contenu du fichier importé : <small class="pull-right">(<a href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">télécharger le fichier csv</a>)</small></h4>
+<a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">Télécharger le fichier csv importé</a>
+
+<h4>Contenu du fichier importé :</h4>
 
 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
 
