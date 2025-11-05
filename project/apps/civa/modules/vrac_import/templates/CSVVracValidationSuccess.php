@@ -38,7 +38,7 @@
                     <thead>
                         <tr>
                             <th>Type</th>
-                            <th>N° Interne</th>
+                            <th class="col-xs-1">N° Interne</th>
                             <th>Soussigné(s)</th>
                             <th>Produit</th>
                             <th class="text-center">Quantité</th>

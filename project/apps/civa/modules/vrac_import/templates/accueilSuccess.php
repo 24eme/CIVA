@@ -25,6 +25,7 @@
                 <input type="radio" name="type_vrac" id="type_vrac" value="vrac_application" required>
                 Contrats d'applications
               </label>
+               <a class="btn btn-link btn-sm" href="">(Télécharger le csv préprempli)</a>
             </div>
 
         </form>
