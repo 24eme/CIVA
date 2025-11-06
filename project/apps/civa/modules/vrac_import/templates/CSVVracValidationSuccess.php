@@ -8,19 +8,19 @@
     <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
 
     <?php if ($csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE): ?>
-    <?php include_partial('vrac_import/step', ['step' => (($csvVrac->statut === CSVVRACClient::LEVEL_ERROR) ? 'import' : 'validation'), 'csvVrac' => $csvVrac]); ?>
+        <?php include_partial('vrac_import/step', ['step' => (($csvVrac->statut === CSVVRACClient::LEVEL_ERROR) ? 'import' : 'validation'), 'csvVrac' => $csvVrac]); ?>
 
-    <h3>Validation avant l'import</h3>
+        <h3>Validation avant la génération</h3>
 
     <div class="alert alert-info">
-        <p><strong>Vous êtes sur le point d'importer <?php echo count($vracimport->getContratsImportables()) ?> contrats.</strong></p>
+        <p><strong>Vous êtes sur le point de générer <?php echo count($vracimport->getContratsImportables()) ?> contrats.</strong></p>
     </div>
 
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
         <div class="alert alert-success">
-            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été importés</strong></p>
+            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été générés.</strong></p>
         </div>
     <?php endif ?>
 
@@ -113,7 +113,7 @@
     <div class="clearfix form-control-static" style="margin-top: 10px;">
         <form method="POST" id="formimport" action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>"></form>
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
-        <button type="submit" form="formimport" class="btn btn-success pull-right">Importer les <?php echo count($vracimport->getContratsImportables()) ?> contrats <span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" form="formimport" class="btn btn-success pull-right">Générer les <?php echo count($vracimport->getContratsImportables()) ?> contrats <span class="glyphicon glyphicon-ok"></span></button>
     </div>
     <?php else: ?>
         <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default">Retour à mon espace</a>
