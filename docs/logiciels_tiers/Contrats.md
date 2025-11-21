@@ -110,7 +110,7 @@ Une fois déposé et vérifié, les contrats d'application seront générés et 
 
 [Voir un exemple de CSV de contrats pluriannuel d'application](exemple_contrats_pluriannuel_application.csv)
 
-## Fichier initial pour la reprise de données des contrats cadres et d'applications déjà en cours
+## Fichier initial de reprise de données des contrats en cours
 
 Pour pouvoir importer les contrats cadres et d'applications en cours afin de démarrer avec un historique, il faudra fournir au CIVA un fichier au même format que décrit ci-dessus en rajouter ces colonnes à la fin de chaque ligne :
 
