@@ -18,7 +18,7 @@ Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites
 | Nombre | Un nombre entier ou flottant, avec . ou , comme séparateur de décimales |
 | Identifiant | Un identifiant provenant de la base du CIVA |
 | Date | Une date au format spécifiée : [voir format](https://www.php.net/manual/fr/datetime.format.php) |
-| Booléen | Valeur vrai / faux |
+| Booléen | Valeur possible 0, 1, NON, OUI |
 | Texte simple | Chaine de caractères **sans retour chariot** |
 | Texte multiligne | Chaine de caractères avec possibilité d'avoir des retours chariots |
 
