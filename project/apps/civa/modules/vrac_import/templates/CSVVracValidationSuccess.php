@@ -53,7 +53,12 @@
                           <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
                       </svg></span></td>
                         <td><?php echo $numero_contrat ?></td>
-                        <td><?php echo $contrat['soussignes']['vendeur']->raison_sociale ?></td>
+                        <td>
+                            <?php echo $contrat['soussignes']['vendeur']->raison_sociale ?>
+                            <?php if ($contrat['soussignes']['courtier']): ?>
+                                (via : <?php echo $contrat['soussignes']['courtier']->raison_sociale ?>)
+                            <?php endif ?>
+                        </td>
                         <td><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?><br /><?php endforeach ?></td>
                         <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['volume'] ?><br /><?php endforeach ?></td>
                         <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['prix'] ?><br /><?php endforeach ?></td>
