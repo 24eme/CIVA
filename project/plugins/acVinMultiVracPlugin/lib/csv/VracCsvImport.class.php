@@ -74,6 +74,9 @@ class VracCsvImport extends CsvFile
     /** @var Configuration $configuration La configuration produit
     private $configuration = null;
 
+    /** @var array $found_etablissements Cache des établissements */
+    private static $found_etablissements = [];
+
     /**
      * Crée une instance depuis un tableau CSV
      *
@@ -440,6 +443,10 @@ class VracCsvImport extends CsvFile
      */
     private function guessId($numero)
     {
+        if (array_key_exists($numero, self::$found_etablissements)) {
+            return self::$found_etablissements[$numero];
+        }
+
         $res = EtablissementAllView::getInstance()->findByEtablissement($numero);
 
         if ($res === null) {
@@ -459,6 +466,8 @@ class VracCsvImport extends CsvFile
         if (! $res instanceof Etablissement) {
             throw new Exception($numero . " transformation en établissement échouée");
         }
+
+        self::$found_etablissements[$numero] = $res;
 
         return $res;
     }
