@@ -220,6 +220,10 @@ class VracCsvImport extends CsvFile
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
+            if ($line[self::CSV_PLURIANNUEL] && substr($v->campagne, 0, 4) !== $line[self::CSV_VIN_MILLESIME]) {
+                $produit->millesime = null;
+            }
+
             if ($line[self::CSV_VIN_MENTION]) {
                 $produit->getOrAdd('label');
                 $produit->label = $line[self::CSV_VIN_MENTION];
