@@ -78,6 +78,7 @@ class vrac_importActions extends sfActions
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport->hasExistingVrac($this->compte->getEtablissementInformations()->getCvi());
         $this->vracimport->import();
         $this->vracimport->checkErreurs($this->csvVrac);
 
@@ -102,6 +103,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->storeAttachment($csv['tmp_name'], 'text/csv', $this->csvVrac->getFileName());
         $this->csvVrac->save();
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport->hasExistingVrac($this->getUser()->getCompte()->getEtablissementInformations()->getCvi());
         $this->vracimport->import();
         $this->vracimport->checkErreurs($this->csvVrac);
 

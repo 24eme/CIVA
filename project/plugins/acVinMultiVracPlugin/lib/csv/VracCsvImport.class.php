@@ -135,6 +135,18 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    public function hasExistingVrac($identifiant)
+    {
+        $ids = $this->getContratsImportables();
+        $etab = $this->guessId($identifiant);
+
+        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
+            if (in_array($existingVrac->value->numero_papier, $ids)) {
+                $this->addError(0, "contrat_existant", "Le contrat avec le numéro interne ".$existingVrac->value->numero_papier." existe déjà");
+            }
+        }
+    }
+
     /**
      * Importe des vracs dans la base
      * Si `$verified` est égal à `false`, alors rien n'est importé, mais

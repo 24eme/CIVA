@@ -13,7 +13,7 @@
 <table class="table table-bordered">
 <thead><tr><th>N° Ligne</th><th>Type</th><th>Description</th><th></th></tr></thead>
 <tbody>
-<?php for ($i = 1; $i <= count($vracimport->getCsv()); $i++): ?>
+<?php for ($i = 0; $i <= count($vracimport->getCsv()); $i++): ?>
     <?php if ($listeerreurs = $csvVrac->getErreurs($i)->getRawValue()): ?>
     <tr>
         <td class="text-right"><a href="#line<?php echo $i ?>"><?php echo $i ?></a></td>
