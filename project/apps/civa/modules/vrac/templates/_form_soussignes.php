@@ -25,10 +25,17 @@
 			<?php if ($form->getObject()->isNew()): ?>
             <div id="contrat_pluriannuel_inputs" style="display: none;">
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
-                <div id="ligne_campagnes_application" class="ligne_form">
-                    <?php echo $form['campagne']->renderError() ?>
-    				<?php echo $form['campagne']->renderLabel(null, array("class" => "bold", "style" => "opacity: 0.25;")) ?>
-    				<?php echo $form['campagne']->render(array("disabled" => "disabled", "style" => "margin-left: 5px; width: 120px;")) ?>
+                <div id="ligne_campagnes_application" class="ligne_form" style="display:flex;gap:30px;" >
+                    <span>
+                        <?php echo $form['campagne']->renderError() ?>
+                        <?php echo $form['campagne']->renderLabel(null, array("class" => "bold")) ?>
+                        <?php echo $form['campagne']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
+                    </span>
+                    <span>
+                        <?php echo $form['pluriannuel_contrat_duree']->renderError() ?>
+                        <?php echo $form['pluriannuel_contrat_duree']->renderLabel(null, array("class" => "bold")) ?>
+                        <?php echo $form['pluriannuel_contrat_duree']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
+                    </span>
                 </div>
             </div>
             <?php if(isset($form['contrat_pluriannuel_mode_surface'])): ?>
@@ -117,7 +124,7 @@
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
                 <div class="ligne_form_sm">
 					<label for="" class="bold">Campagnes d'application :</label>
-                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo ($millesime+VracClient::getConfigVar('nb_campagnes_pluriannuel',0)-1) ?></span>
+                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo substr($vrac->campagne, 5) ?></span>
                 </div>
             </div>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
@@ -405,6 +412,46 @@
 		$(".remove_autocomplete").click(function() {
 			$(this).parents(".selecteur").siblings(".cible").empty();
 		});
+
+
+
+        $("#vrac_soussignes_contrat_pluriannuel_1").click(function() {
+            $.fn.changeContratDuree();
+        });
+
+        $("#vrac_soussignes_campagne").click(function() {
+            $.fn.changeContratDuree();
+        });
+
+        $("#vrac_soussignes_pluriannuel_contrat_duree").click(function() {
+            $.fn.changeContratDuree();
+        });
+
+        $.fn.changeContratDuree = function() {
+            const campagneChoice = $("#vrac_soussignes_campagne option:selected").val().substring(0, 4);
+
+            const contratDureeObj = $("#vrac_soussignes_pluriannuel_contrat_duree");
+            let contratDureeOptions = contratDureeObj.find("option");
+            let contratFinUpdated = parseInt(campagneChoice)+2;
+            contratDureeOptions.each(function(index, contratDuree) {
+                const contratDebut = contratDuree.value.substring(0,4);
+                const contratFin = contratDuree.value.slice(-4);
+
+                contratFinUpdated++;
+
+                $(contratDuree).val(function(index, value) {
+                    value = value.replace(contratFin, contratFinUpdated.toString());
+                    value = value.replace(contratDebut, campagneChoice);
+                    return value;
+                });
+
+                $(contratDuree).text(function(index, text) {
+                    text = text.replace(contratFin, contratFinUpdated.toString());
+                    text = text.replace(contratDebut, campagneChoice);
+                    return text;
+                });
+            });
+        }
 	});
 	</script>
 </div>

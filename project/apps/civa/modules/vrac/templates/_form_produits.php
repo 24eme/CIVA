@@ -53,7 +53,7 @@
 			<?php endif; ?>
 			<td class="millesime">
                 <?php if($vrac->isPluriannuelCadre()): $campagnes = VracSoussignesForm::getCampagnesChoices(); ?>
-                <?php echo $campagnes[$vrac->campagne] ?>
+                    <?php echo $campagnes[$vrac->campagne] ?>
                 <?php else: ?>
 				<span><?php echo $embedForm['millesime']->renderError() ?></span>
 				<?php echo $embedForm['millesime']->render(array("maxlength" => 4, 'checkmillesime' => (!$vrac->isPluriannuelCadre() && !in_array($vrac->type_contrat, [VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE]))? 1 : 0)) ?>
