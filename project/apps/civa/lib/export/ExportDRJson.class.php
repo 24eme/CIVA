@@ -6,12 +6,8 @@ class ExportDRJson
     const APPORT_NODE = "declarationProduitsRecoltes";
     const SITE_NODE = "declarationVolumesObtenusParSite";
 
-    public $HAS_MOUTS = false;
-    public $HAS_VOLUME_A_ELIMINER = true;
-
     public $PRODUITS_APPORTEUR_NODE = "apports";
     public $NUMERO_APPORTEUR = "numeroCVIApporteur";
-    public $APPORT_RAISIN = "volumeApportRaisins";
 
     protected $dr;
     protected $raw;
@@ -73,75 +69,43 @@ class ExportDRJson
         return $infos;
     }
 
-    public function getApportRaisin($produit)
-    {
-        return number_format($produit->volume_recolte, 2, ".", "");
-    }
-
     public function getProduits()
     {
         $produits = [];
 
         foreach ($this->dr->getProduits() as $hash_produit => $produit) {
-            if (strpos($hash_produit, '/cepages/RB') !== false) {
+            if (strpos($hash_produit, '/cepage_RB') !== false) {
                 continue; // pas les rebêches dans la boucle principale
             }
 
             $infoProduit = $this->buildInfoProduit($produit);
 
-            if (! $infoProduit) {
+            if (! $infoProduit['recolteTotale']) {
                 continue;
             }
 
             $produits[] = $infoProduit;
-
-            $produits[] = [
-                "typeRecoltant" => "EX", // Y a t'il des bailleurs vinificateurs ? (code BV)
-                "codeProduit" => $this->processCodeDouane($produit->getConfig()->getCodeDouane()),
-                "mentionValorisante" => $produit->denomination ?: "",
-                "zoneRecolte" => "B",
-                $this->PRODUITS_APPORTEUR_NODE => $apporteurs
-            ];
-
-            $apporteurs = [];
-
-            foreach ($apporteurs_du_produit as $cvi) {
-                $apporteur = $this->sv->apporteurs->get($cvi);
-                $produit = $this->sv->get('/apporteurs/'.$cvi.'/'.$hash_produit);
-
-                $apporteur = $this->buildInfoRecoltant($produit);
-
-                if ($this->getApportRaisin($produit)) {
-                    $apporteurs[] = $apporteur;
-                }
-
-                if ($this->HAS_MOUTS && $produit->exist('volume_mouts')) {
-                    unset($apporteur['quantiteAchatRaisins']);
-                    unset($apporteur['volumeIssuRaisins']);
-                    unset($apporteur['produitsAssocies']);
-
-                    $apporteur['volumeAchatMouts'] = number_format($produit->volume_mouts, 2, ".", "");
-                    $apporteur['volumeIssuMouts'] = number_format($produit->volume_mouts_revendique, 2, ".", "");
-                    $apporteur['superficieRecolte'] = number_format($produit->superficie_mouts / 100, 4, ".", "");
-
-                    $apporteurs[] = $apporteur;
-                }
-            }
-
-            if (empty($apporteurs)) {
-                continue;
-            }
-
-            $produits[] = [
-                "codeProduit" => $this->processCodeDouane($produit->getConfig()->getCodeDouane()),
-                "mentionValorisante" => $produit->denomination_complementaire ?: "",
-                $this->PRODUITS_APPORTEUR_NODE => $apporteurs
-            ];
         }
 
         return $produits;
     }
 
+    // Infos "manquantes" :
+    // * volEauEliminee
+    // * VSI
+    // * volAlcoolAjoute
+    // * volMoutJusDeRaisinsObtenu
+    // * VolMcMcrObtenu <- pourquoi le V en majuscule ??
+    // * volNonVinifie
+    // * volEnVinification <- quelle diff avec recolteTotale ?
+    // * conserveCaveParticuliereBailleurVini <- Y'a des bailleurs / matayer ?
+    // * destinationVinifieeParBailleur
+    // * conserveCaveParticuliereExploitant <- noeud cave particulière je suppose
+    // * destinationVentesMouts <- à faire dans la boucle des mouts je suppose
+    //
+    // Infos "pas sur" :
+    // * destinationVentesRaisins
+    // * destinationApportsCaveCoop
     public function buildInfoProduit($produit)
     {
         // infos globales
@@ -150,78 +114,78 @@ class ExportDRJson
             "zoneRecolte" => "B",
             "mentionValorisante" => $produit->denomination ?: "",
             "superficieRecolte" => number_format($produit->superficie / 100, 4, ".", ""),
-            $this->APPORT_RAISIN => $this->getApportRaisin($produit),
-            "recolteTotale" => number_format($produit->volume, 2, ".", "")
+            "recolteTotale" => number_format($produit->volume, 2, ".", ""),
+            "volVinRevendicableOuCommercialisable" => number_format($produit->volume_revendique, 2, ".", "")
         ];
 
-        // volume à éliminer
-        if ($this->HAS_VOLUME_A_ELIMINER && ($produit->vci || $produit->volume_detruit)) {
-            $volumeAEliminer = [];
+        if ($produit->exist('motif_non_recolte')) {
+            $infosProduit['motifAbsenceRecolte'] = [
+                'codeAbsenceRecolte' => in_array($produit->motif_non_recolte, ['PC', 'PS', 'IN', 'OG', 'AU']) ? $produit->motif_non_recolte : 'AU'
+            ];
 
-            if ($produit->volume_detruit) {
-                $volumeAEliminer['volumeAEliminer'] = number_format($produit->volume_detruit, 2, ".", "");
+            if ($infosProduit['motifAbsenceRecolte']['codeAbsenceRecolte'] === 'AU') {
+                $infosProduit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = ''; // pas l'info j'ai l'impression
             }
+        }
 
-            if ($produit->vci) {
-                $volumeAEliminer['volumeComplementaireIndividuel'] = number_format($produit->vci, 2, ".", "");
-            }
+        if ($produit->vci) {
+            $infosProduit['VCI'] = number_format($produit->vci, 2, ".", "");
+        }
 
-            if (empty($volumeAEliminer) === false) {
-                $infosApporteur['volumesAEliminer'] = $volumeAEliminer;
+        if (count($produit->negoces)) {
+            $ventesRaisins = [];
+            foreach ($produit->negoces as $negoce) {
+                $ventesRaisins[] = [
+                    'numeroEvvDestinataire' => $negoce->cvi, // Quid de `destinataireTVA` ?
+                    'volObtenuIssuRaisins' => $negoce->quantite_vendue
+                ];
             }
+            $infosProduit['destinationVentesRaisins'] = $ventesRaisins;
+        }
+
+        if (count($produit->cooperatives)) {
+            $apportCaves = [];
+            foreach ($produit->cooperatives as $coop) {
+                $apportCaves[] = [
+                    'numeroEvvCaveCoop' => $coop->cvi,
+                    'volObtenuIssuRaisins' => $coop->quantite_vendue
+                ];
+            }
+            $infosProduit['destinationApportsCaveCoop'] = $apportCaves;
+        }
+
+        if ($produit->dplc || $produit->lies) {
+            $infosProduit['volDRAOuLiesSoutirees'] = number_format(
+                ((float) $produit->dplc) + ((float) $produit->lies),
+                2, ".", ""
+            );
+        }
+
+        if (count($produit->mouts)) {
+            $total_mouts = 0;
+            foreach ($produit->mouts as $mout) {
+                $total_mouts += $mout;
+            }
+            $infosProduit['volMoutApteAOP'] = format_number($total_mouts, 2, ".", "");
         }
 
         // rebêches
         if (strpos($produit->getHash(), '/CREMANT/') !== false && $produit->volume_revendique) {
             $produitsAssocies = ['typeAssociation' => 'REB'];
-            $cepage = strrchr($this->sv->get($produit->getHash())->getCepage()->getHash(), '/');
+            $cepage = strrchr($this->dr->get($produit->getHash())->getCepage()->getHash(), '/');
 
-            if (in_array($cepage, ['/RS', '/PN'])) {
-                //si crémant rosé, on cherche les rebeches rosées
-                $hash_rebeche = str_replace($cepage, '/RBRS', $produit->getHash());
-            } else {
-                $hash_rebeche = str_replace($cepage, '/RBBL', $produit->getHash());
-            }
+            $hash_rebeche = str_replace($cepage, '/cepage_RB', $produit->getHash());
+            $rebeches = $this->dr->get($hash_rebeche);
+            $produitsAssocies['recolteTotaleProdAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
+            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
 
-            if (($denom = strrchr($hash_rebeche, '/')) !== '/DEFAUT') {
-                if ($this->sv->exist($hash_rebeche) === false) {
-                    $hash_rebeche = str_replace($denom, '/DEFAUT', $hash_rebeche);
-                }
-            }
-
-            if ($this->sv->hasRebechesInProduits()) {
-                // rebeches en détail
-                if ($this->sv->exist($hash_rebeche) === false) {
-                    $hash_rebeche = str_replace(['/RBBL', '/RBRS'], '/RB', $hash_rebeche);
-
-                    // cas Crémant rosé, mais rebeche blanc ????
-                    if ($this->sv->exist($hash_rebeche) === false) {
-                        $hash_rebeche = str_replace('/RB', '/RBBL', $hash_rebeche);
-                    }
-                }
-
-                $rebeches = $this->sv->get($hash_rebeche);
-                $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
-
-                $total_cremant_operateur = $this->sv->getVolumeCremantApporteur($produit->cvi, $cepage);
-                $pourcentage_cremant_operateur = ($produit->volume_revendique * 100) / $total_cremant_operateur;
-
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format(($pourcentage_cremant_operateur * $rebeches->volume_revendique) / 100, 2, ".", "");
-            } else {
-                // % des rebeches totales
-                $total_cremant = $this->sv->getVolumeCremantTotal();
-                $pourcentage_cremant = ($produit->volume_revendique * 100) / $total_cremant;
-
-                $produitsAssocies['volumeIssuRaisinsProduitAssocie'] = number_format(($pourcentage_cremant * $this->sv->getRebeches()) / 100, 2, ".", "");
-                $produitsAssocies['codeProduitAssocie'] = (in_array($cepage, ['/RS', '/PN'])) ? "4S999B" : "4B999B";
-            }
-
-            $infosApporteur['produitsAssocies'][] = $produitsAssocies;
+            $infosProduit['produitsAssocies'][] = $produitsAssocies;
         }
 
-        return $infosApporteur;
+        return $infosProduit;
     }
 
+    // Encore basé sur la SV
     protected function getSites()
     {
         $sites = [];
