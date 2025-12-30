@@ -539,7 +539,9 @@ class ExportDRXml {
         }
         $this->xml = $xml;
         $this->achats = $baliseachat;
-        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $this->achats, 'destinataire' => $this->destinataire));
+        if($this->partial_function) {
+            $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $this->achats, 'destinataire' => $this->destinataire));
+        }
     }
 
     public function getXml() {

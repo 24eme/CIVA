@@ -11,10 +11,12 @@ class ExportDRJson
 
     protected $dr;
     protected $raw;
+    protected $xml;
 
     public function __construct(DR $declaration)
     {
         $this->dr = $declaration;
+        $this->xml = (new ExportDRXml($declaration, null))->getXml();
     }
 
     public function isValide()
@@ -38,7 +40,7 @@ class ExportDRJson
     {
         $root = $this->getRootInfos();
         $root[self::APPORT_NODE]['produitsRecoltes'] = $this->getProduits();
-        $root[self::SITE_NODE]['sites'] = $this->getSites();
+        //$root[self::SITE_NODE]['sites'] = $this->getSites();
 
         $this->raw = $root;
     }
@@ -73,7 +75,81 @@ class ExportDRJson
     {
         $produits = [];
 
-        foreach ($this->dr->getProduits() as $hash_produit => $produit) {
+        $correspondanceNumLigneJson = [
+            "L5" => "recolteTotale",
+            "L9" => "conserveCaveParticuliereExploitant",
+            "L10" => "volEnVinification",
+            "L13" => "volMcMcrObtenu",
+            //"L15" => "volMoutApteAOP",
+            "L15" => "volVinRevendicableOuCommercialisable",
+            "L16" => "volDRAOuLiesSoutirees",
+            "L17" => "volEauEliminee",
+            "L18" => "VSI",
+            "L19" => "VCI",
+        ];
+
+        //print_r($this->xml);
+
+        foreach($this->xml as $xmlCol) {
+            $produit = [];
+            $produit["typeRecoltant"] = "EX"; // Y a t'il des bailleurs vinificateurs ? (code BV)
+            $produit["codeProduit"] = $xmlCol["L1"];
+            $produit["zoneRecolte"] = $xmlCol["L3"];
+            $produit["mentionValorisante"] = isset($xmlCol["mentionVal"]) ? $xmlCol["mentionVal"] : "";
+            $produit["superficieRecolte"] = number_format($xmlCol["L4"], 4, ".", "");
+            foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
+                $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
+            }
+            foreach($xmlCol["exploitant"] as $xmlLigneKey => $xmlLigneValue) {
+                if(preg_match("/^L6_/", $xmlLigneKey)) {
+                    $vente = [
+                        "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
+                        "volObtenuIssuRaisins" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                    ];
+                    $produit["destinationVentesRaisins"][] = $vente;
+                }
+                if(preg_match("/^L7_/", $xmlLigneKey)) {
+                    $vente = [
+                        "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
+                        "volObtenuIssuMouts" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                    ];
+                    $produit["destinationVentesMouts"][] = $vente;
+                }
+                if(preg_match("/^L8_/", $xmlLigneKey)) {
+                    $vente = [
+                        "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
+                        "volObtenuApportRaisins" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                    ];
+                    $produit["destinationApportsCaveCoop"][] = $vente;
+                }
+            }
+
+            if(isset($xmlCol['colonneAss'])) {
+                $produitAssocie = [
+                    "typeAssociation" => "REB",
+                    "codeProduitAssocie" => $xmlCol['colonneAss']['L1'],
+                    "recolteTotaleProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L5'], 2, ".", ""),
+                    "conserveCavePartExploitProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L9'], 2, ".", ""),
+                    "volEnVinificationProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L10'], 2, ".", ""),
+                    "volVinRevendicOuCommerciaProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L14'], 2, ".", ""),
+                ];
+
+                foreach($xmlCol['colonneAss']["exploitant"] as $xmlColAssLigneKey => $xmlColAssLigneValue) {
+                    if(preg_match("/^L8_/", $xmlColAssLigneKey)) {
+                        $vente = [
+                            "numeroEvvDestinataire" => $xmlColAssLigneValue["numCvi"]."",
+                            "volObtenuApportRaisins" => number_format($xmlColAssLigneValue["volume"], 2, ".", ""),
+                        ];
+                        $produitAssocie["destinationApportsCaveCoopProdAssocie"][] = $vente;
+                    }
+                }
+
+                $produit["produitsAssocies"][] = $produitAssocie;
+            }
+
+            $produits[] = $produit;
+
+        /*foreach ($this->dr->getProduitsDetails() as $hash_produit => $produit) {
             if (strpos($hash_produit, '/cepage_RB') !== false) {
                 continue; // pas les rebêches dans la boucle principale
             }
@@ -85,6 +161,7 @@ class ExportDRJson
             }
 
             $produits[] = $infoProduit;
+            }*/
         }
 
         return $produits;
