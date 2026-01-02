@@ -5,7 +5,7 @@
 TASK_DIR=$(pwd)/$TASK_DIR
 EXPORT_DIR=dr/xml
 LINK="$TASK_URL/$EXPORT_DIR/?C=M;O=D"
-DESCRIPTION="Export des DR en XML pour les Douanes [Voir tous les exports]($LINK)"
+DESCRIPTION="Export des DR en JSON pour les Douanes [Voir tous les exports]($LINK)"
 
 . bin/task_start.inc
 
