@@ -71,6 +71,12 @@ class VracCsvImport extends CsvFile
     /** @var array $warnings Tableau des warnings de la vérification */
     private $warnings = [];
 
+    /** @var Configuration $configuration La configuration produit
+    private $configuration = null;
+
+    /** @var array $found_etablissements Cache des établissements */
+    private static $found_etablissements = [];
+
     /**
      * Crée une instance depuis un tableau CSV
      *
@@ -129,6 +135,18 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    public function hasExistingVrac($identifiant)
+    {
+        $ids = $this->getContratsImportables();
+        $etab = $this->guessId($identifiant);
+
+        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
+            if (in_array($existingVrac->value->numero_papier, $ids)) {
+                $this->addError(0, "contrat_existant", "Le contrat avec le numéro interne ".$existingVrac->value->numero_papier." existe déjà");
+            }
+        }
+    }
+
     /**
      * Importe des vracs dans la base
      * Si `$verified` est égal à `false`, alors rien n'est importé, mais
@@ -138,8 +156,6 @@ class VracCsvImport extends CsvFile
      * @return array<string> Tableau d'ID des vracs importés
      */
     public function import($verified = false) {
-        /** @var Configuration $configuration */
-        $configuration = ConfigurationClient::getInstance()->getCurrent();
         $current = null;
         $v = null;
         $produitPosition = 0;
@@ -204,29 +220,21 @@ class VracCsvImport extends CsvFile
             }
 
             // Section produit
-            // Identification par code inao si présent, sinon par libellé
-            $produitConfig = null;
+            $produit = $this->guessProduit($line, $v);
 
-            if ($line[self::CSV_VIN_CODE_INAO]) {
-                $produitConfig = $configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
-                $produitConfig = current($produitConfig);
-            }
-
-            if (! $produitConfig) {
-                $produitConfig = $configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
-            }
-
-            if (! $produitConfig) {
+            if (! $produit) {
                 $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
                 continue;
             }
 
-            $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
-            $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
             $produit->actif = 1;
             $produit->position = $produitPosition++;
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
+
+            if ($line[self::CSV_PLURIANNUEL] && substr($v->campagne, 0, 4) !== $line[self::CSV_VIN_MILLESIME]) {
+                $produit->millesime = null;
+            }
 
             if ($line[self::CSV_VIN_MENTION]) {
                 $produit->getOrAdd('label');
@@ -293,6 +301,11 @@ class VracCsvImport extends CsvFile
         return array_values(array_unique(self::$imported));
     }
 
+    /**
+     * Inscrit les erreurs dans l'objet CSVVRAC
+     *
+     * @param csvVrac le CSVVrac où inscrire les erreurs
+     */
     public function checkErreurs(CSVVRAC $csvVrac)
     {
         if (count($this->getErrors())) {
@@ -316,6 +329,63 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Formatte le CSV au format tableau pour le récap
+     *
+     * @return array
+     */
+    public function display()
+    {
+        // numéros de contrats
+        $contrats = $this->getContratsImportables();
+        $ret = [];
+
+        foreach ($contrats as $numero_interne) {
+            $ret[$numero_interne] = [
+                'soussignes' => [
+                    'acheteur' => null,
+                    'vendeur' => null,
+                    'courtier' => null
+                ],
+                'produits' => []
+            ];
+
+            $courtier = $vendeur = $acheteur = null;
+
+            $filtered = array_filter($this->getCsv(), function ($v) use ($numero_interne) {
+                return $numero_interne === $v[self::CSV_NUMERO_INTERNE];
+            });
+
+            foreach ($filtered as $entry) {
+                $acheteur = $acheteur ?: $this->guessId($entry[self::CSV_ACHETEUR_CVI]);
+                $vendeur = $vendeur ?: $this->guessId($entry[self::CSV_VENDEUR_CVI]);
+                if ($entry[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
+                    $courtier = $courtier ?: $this->guessId($entry[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                }
+
+                $v = new Vrac(); // "obligatoire" pour récupérer l'objet produit via addProduit
+                $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
+                $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
+                $produit = $this->guessProduit($entry, $v);
+
+                $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
+                $ret[$numero_interne]['soussignes']['vendeur'] = $vendeur;
+                $ret[$numero_interne]['soussignes']['courtier'] = $courtier;
+
+                $ret[$numero_interne]['produits'][] = [
+                    'libelle' => $produit->getLibelleComplet(),
+                    'millesime' => $entry[self::CSV_VIN_MILLESIME],
+                    'volume' => $entry[self::CSV_QUANTITE] . ' ' . $entry[self::CSV_QUANTITE_TYPE],
+                    'prix' => $entry[self::CSV_PRIX_UNITAIRE] . ' ' . VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]],
+                ];
+
+                unset($v);
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
      * Ajoute une annexe à chaque Vrac du tableau $imported
      *
      * @param $annexe L'annexe à ajouter
@@ -327,37 +397,57 @@ class VracCsvImport extends CsvFile
             return;
         }
 
-        $name_cleaned = $this->cleanAnnexeName($name);
+        $temp = $annexe;
+
+        if (! is_file($temp)) {
+            $temp = tempnam(sys_get_temp_dir(), 'ANX_');
+            file_put_contents($temp, file_get_contents($annexe));
+        }
 
         foreach (self::$imported as $vid) {
             $vrac = VracClient::getInstance()->find($vid);
 
             if ($vrac) {
-                $vrac->storeAnnexe($annexe, $name_cleaned);
+                $vrac->storeAttachment($temp, mime_content_type($temp), $name);
                 $vrac->save();
             }
+        }
+
+        if (is_file($temp)) {
+            unlink($temp);
         }
     }
 
     /**
-     * Slugify le nom de l'annexe pour homogénisation
+     * Retourne le produit défini dans la ligne du csv
+     * Identification par code inao si présent, sinon par libellé
      *
-     * @param $name Le nom de l'annexe
-     * @return string
+     * @param array $line Une ligne du CSV
+     * @param Vrac $v Un objet Vrac
+     * @return null|VracDetail
      */
-    private function cleanAnnexeName($name)
+    private function guessProduit(array $line, Vrac $v)
     {
-        $annexe = 'annexe_';
+        $this->configuration = isset($this->configuration) ? $this->configuration : ConfigurationClient::getInstance()->getCurrent();
+        $produitConfig = null;
 
-        $dot = strrpos($name, '.');
-        $extension = ($dot !== false) ? substr($name, $dot) : '';
-        $basename = str_replace($extension, '', $name);
+        if ($line[self::CSV_VIN_CODE_INAO]) {
+            $produitConfig = $this->configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
+            $produitConfig = current($produitConfig);
+        }
 
-        $annexe .= strtolower(
-            KeyInflector::slugify($basename).$extension
-        );
+        if (! $produitConfig) {
+            $produitConfig = $this->configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+        }
 
-        return $annexe;
+        if (! $produitConfig) {
+            return null;
+        }
+
+        $hash_produit = HashMapper::inverse($produitConfig->getHash(), "VRAC");
+        $produit = $v->addProduit($hash_produit)->addDetail($hash_produit);
+
+        return $produit;
     }
 
     /**
@@ -369,6 +459,10 @@ class VracCsvImport extends CsvFile
      */
     private function guessId($numero)
     {
+        if (array_key_exists($numero, self::$found_etablissements)) {
+            return self::$found_etablissements[$numero];
+        }
+
         $res = EtablissementAllView::getInstance()->findByEtablissement($numero);
 
         if ($res === null) {
@@ -388,6 +482,8 @@ class VracCsvImport extends CsvFile
         if (! $res instanceof Etablissement) {
             throw new Exception($numero . " transformation en établissement échouée");
         }
+
+        self::$found_etablissements[$numero] = $res;
 
         return $res;
     }

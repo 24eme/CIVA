@@ -27,18 +27,14 @@
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
                 <div id="ligne_campagnes_application" class="ligne_form" style="display:flex;gap:30px;" >
                     <span>
-                        <?php echo $form['pluriannuel_campagne_debut']->renderError() ?>
-                        <?php echo $form['pluriannuel_campagne_debut']->renderLabel(null, array("class" => "bold")) ?>
-                        <?php echo $form['pluriannuel_campagne_debut']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
+                        <?php echo $form['campagne']->renderError() ?>
+                        <?php echo $form['campagne']->renderLabel(null, array("class" => "bold")) ?>
+                        <?php echo $form['campagne']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
                     </span>
                     <span>
                         <?php echo $form['pluriannuel_contrat_duree']->renderError() ?>
                         <?php echo $form['pluriannuel_contrat_duree']->renderLabel(null, array("class" => "bold")) ?>
                         <?php echo $form['pluriannuel_contrat_duree']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
-                    </span>
-                    <span>
-                        <?php echo $form['pluriannuel_contrat_duree_select']->renderError() ?>
-                        <?php echo $form['pluriannuel_contrat_duree_select']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
                     </span>
                 </div>
             </div>
@@ -423,7 +419,7 @@
             $.fn.changeContratDuree();
         });
 
-        $("#vrac_soussignes_pluriannuel_campagne_debut").click(function() {
+        $("#vrac_soussignes_campagne").click(function() {
             $.fn.changeContratDuree();
         });
 
@@ -432,7 +428,7 @@
         });
 
         $.fn.changeContratDuree = function() {
-            const campagneChoice = $("#vrac_soussignes_pluriannuel_campagne_debut option:selected").val().substring(0, 4);
+            const campagneChoice = $("#vrac_soussignes_campagne option:selected").val().substring(0, 4);
 
             const contratDureeObj = $("#vrac_soussignes_pluriannuel_contrat_duree");
             let contratDureeOptions = contratDureeObj.find("option");
@@ -455,9 +451,6 @@
                     return text;
                 });
             });
-            const selectedContratDuree = $("#vrac_soussignes_pluriannuel_contrat_duree").val();
-            $("input[name=vrac_soussignes[pluriannuel_contrat_duree_select]]").val(selectedContratDuree);
-            console.log(selectedContratDuree);
         }
 	});
 	</script>

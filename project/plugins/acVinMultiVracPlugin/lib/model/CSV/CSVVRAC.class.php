@@ -27,6 +27,24 @@ class CSVVRAC extends BaseCSVVRAC
         return 'import_edi_' . $this->identifiant . '.csv';
     }
 
+    /**
+     * Affiche un label bootstrap en fonction du statut
+     */
+    public function getStatutLabel()
+    {
+        switch ($this->statut) {
+            case CSVVRACClient::LEVEL_ERROR:
+                return '<span class="label label-danger">Erreur</span>';
+                break;
+            case CSVVRACClient::LEVEL_IMPORTE:
+                return '<span class="label label-success">Importé</span>';
+                break;
+            default:
+                return '<span class="label label-warning">Brouillon</span>';
+                break;
+        }
+    }
+
     public function hasErreurs()
     {
         return count($this->erreurs);
@@ -58,4 +76,63 @@ class CSVVRAC extends BaseCSVVRAC
         $this->add('erreurs');
         $this->statut = null;
     }
+
+    /**
+     * Ajoute une annexe à chaque Vrac du tableau $imported
+     *
+     * @param $annexe L'annexe à ajouter
+     * @param $name Le nom de l'annexe à ajouter
+     */
+    public function addAnnexe($annexe = null, $name = 'Annexe_contrat')
+    {
+        if (! $annexe) {
+            return;
+        }
+
+        $name_cleaned = $this->cleanAnnexeName($name);
+        $this->storeAttachment($annexe, mime_content_type($annexe), $name_cleaned);
+    }
+
+    /**
+     * Liste les annexes de l'objet
+     * Le fichier csv importé est exclu
+     *
+     * @return array<string,string> Un tableau avec en clé le nom de l'annexe et en valeur son uri
+     */
+    public function getAnnexes()
+    {
+        $annexes = [];
+        foreach($this->_attachments as $name => $data) {
+            if (strpos($name, 'annexe_') !== 0) {
+                continue;
+            }
+
+            $annexes[$name] = $this->getAttachmentUri($name);
+        }
+
+        return $annexes;
+    }
+
+    /**
+     * Slugify le nom de l'annexe pour homogénisation
+     *
+     * @param $name Le nom de l'annexe
+     * @return string
+     */
+    private function cleanAnnexeName($name)
+    {
+        $annexe = 'annexe_';
+
+        $dot = strrpos($name, '.');
+        $extension = ($dot !== false) ? substr($name, $dot) : '';
+        $basename = str_replace($extension, '', $name);
+        $basename = str_replace('annexe_', '', $basename);
+
+        $annexe .= strtolower(
+            KeyInflector::slugify($basename).$extension
+        );
+
+        return $annexe;
+    }
+
 }

@@ -1,46 +1,125 @@
-# Import des contrats en masse
+# Création des contrats CIVA via un fichier
 
-## Format pour les contrats cadres
+Ce document permet de décrire le fonctionnement pour importer des contrats en masse sur la plateforme du CIVA (https://declaration.vinsalsace.pro/).
 
-| Nom du champ                    | Exemple / format / Liste                        | Lecture / Ecriture |
-|---------------------------------|-------------------------------------------------|--------------------|
-| Type                            | CONTRAT                                         | Import/Export      |
-| Campagne                        | 2025-2026                                       | Import/Export      |
-| Numéro interne contrat          | MONNUMERO                                       | Import/Export      |
-| Acheteur CVI                    | 7523700800                                      | Import/Export      |
-| Acheteur Nom                    | Mon négociant                                   | Import/Export      |
-| Acheteur TVA                    | FR12456789                                      | Import/Export      |
-| Vendeur CVI                     | 7523700100                                      | Import/Export      |
-| Vendeur Nom                     | Mon producteur                                  | Import/Export      |
-| Vendeur TVA                     | FR12456789                                      | Import/Export      |
-| Courtier SIRET                  |                                                 | Import/Export      |
-| Courtier Nom                    |                                                 | Import/Export      |
-| Type de vente                   | VIN_VRAC,VIN_BOUTEILLE,RAISIN,MOUT              | Import/Export      |
-| Code INAO                       | 1B021S 4                                        | Import/Export      |
-| Libelle Produit                 | AOC Alsace Grand Cru Kirchberg de Barr Riesling | Import/Export      |
-| Mention                         | BIO,HVE                                         | Import/Export      |
-| VT/SGN                          | VT,SGN                                          | Import/Export      |
-| Dénomination                    | Vieille Vigne                                   | Import/Export      |
-| Millésime                       | 2025                                            | Import/Export      |
-| Quantite                        | 50                                              | Import/Export      |
-| Quantite type                   | ares                                            | Import/Export      |
-| Prix Unitaire                   | 20                                              | Import/Export      |
-| Unite prix                      | kg/euros                                        | Import/Export      |
-| Pluriannuel                     | Pluriannuel                                     | Import/Export      |
-| Contrat cadre                   |                                                 | Import/Export      |
-| Clause réserve propriété        | texte de la clause                              | Import/Export      |
-| Clause délai paiement           | texte de la clause                              | Import/Export      |
-| Clause résiliation              | texte de la clause                              | Import/Export      |
-| Clause mandat facturation       | texte de la clause                              | Import/Export      |
-| Clause de révision des contrats | texte de la clause                              | Import/Export      |
-| Vendeur frais annexes           | texte de la clause                              | Import/Export      |
-| Acheteur primes diverses        | texte de la clause                              | Import/Export      |
-| Créateur                        | acheteur,vendeur,courtier                       | Export             |
-| Date de saisie                  | date au format Y-m-d                            | Export             |
-| Date de signature vendeur       | date au format Y-m-d                            | Export             |
-| Date de signature acheteur      | date au format Y-m-d                            | Export             |
-| Date de signature courtier      | date au format Y-m-d                            | Export             |
-| Date de validation              | date au format Y-m-d                            | Export             |
-| Date de cloture                 | date au format Y-m-d                            | Export             |
-| Identifiant CIVA                | VRAC-202509781235                               | Export             |
-| Numéro de visa                  | 12154                                           | Export             |
+## Format du fichier
+
+Le fichier pour importer les contrat doit être au format `CSV` et encodé en `UTF-8`.
+
+Les différentes colonnes du fichier CSV et les valeurs attendues sont décrites dans ce tableau.
+
+#### Légende des formats
+| Format           | Description                                                                                     |
+|:-----------------|:------------------------------------------------------------------------------------------------|
+| [x,y,z]          | Un seul choix dans la liste prédéfinie                                                          |
+| [x..y]           | Un seul choix dans un intervalle donné                                                          |
+| Constante        | Une chaine de caractères prédéfinie                                                             |
+| Nombre entier    | Un nombre entier sans virgule                                                                   |
+| Nombre           | Un nombre entier ou flottant, avec . ou , comme séparateur de décimales                         |
+| Identifiant      | Un identifiant provenant de la base du CIVA                                                     |
+| Date             | Une date au format spécifiée : [voir format](https://www.php.net/manual/fr/datetime.format.php) |
+| Booléen          | Valeur possible 0, 1, NON, OUI                                                                  |
+| Texte simple     | Chaine de caractères **sans retour chariot**                                                    |
+| Texte multiligne | Chaine de caractères avec possibilité d'avoir des retours chariots                              |
+
+#### Liste des champs
+
+| Nom du champs                              | Type / Format            | Exemple / Liste                                    | Commentaire                                                                                                                                                                                                                                                                                                                               |
+|:-------------------------------------------|:-------------------------|:---------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Type                                       | Constante                | CONTRAT                                            | Doit toujours contenir CONTRAT                                                                                                                                                                                                                                                                                                            |
+| Campagne                                   | Date au format YYYY-YYYY | 2025-2026                                          | Campagne du contrat ou de début de contrat pour les contrats pluriannuels cadres                                                                                                                                                                                                                                                          |
+| Type de contrat                            | Constantes               | [ANNUEL,PLURIANNUEL_CADRE,PLURIANNUEL_APPLICATION] | Un contrat ANNUEL est un contrat spot, un contrat PLURIANNUEL_CADRE est un contrat cadre et un contrat PLURIANNUEL_APPLICATION est un avenant                                                                                                                                                                                             |
+| Durée du contrat pluriannuel               | Nombre entier            | [3..10]                                            | En nombre d'année, à indiquer uniquement pour les contrats PLURIANNUEL_CADRE                                                                                                                                                                                                                                                              |
+| Numéro interne du contrat                  | Identifiant              | 123456789                                          | Cet identifiant est l'identifiant interne du contrat dans votre système.                                                                                                                                                                                                                                                                  |
+| Numéro du contrat cadre référent           | Identifiant              | 987654321                                          | Numéro du contrat cadre auquel rattacher le contrat d'application. Uniquement pour les PLURIANNUEL_APPLICATION. Au choix, il est soit le Numéro interne, l'Identifiant CIVA ou le numéro visa du contrat cadre                                                                                                                            |
+| Type de vente                              | Constantes               | [VIN_VRAC,VIN_BOUTEILLE,RAISIN,MOUT]               |                                                                                                                                                                                                                                                                                                                                           |
+| Acheteur CVI                               | Identifiant              | 7523700800                                         | Numéro CVI ou Identifiant CIVA                                                                                                                                                                                                                                                                                                            |
+| Acheteur Nom                               | Texte Simple             | NEGOCE NOM                                         | À titre informatif                                                                                                                                                                                                                                                                                                                        |
+| Acheteur Assujeti TVA                      | Booléeen                 | [0,1,NON,OUI]                                      |                                                                                                                                                                                                                                                                                                                                           |
+| Vendeur CVI                                | Identifiant              | 7523700100                                         | Numéro CVI ou Identifiant CIVA                                                                                                                                                                                                                                                                                                            |
+| Vendeur Nom                                | Texte Simple             | PRODUCTEUR NOM                                     | À titre informatif                                                                                                                                                                                                                                                                                                                        |
+| Vendeur Assujeti TVA                       | Booléeen                 | [0,1,NON,OUI]                                      |                                                                                                                                                                                                                                                                                                                                           |
+| Courtier Identifiant                       | Identifiant              | 810720557                                          | SIREN, SIRET, N°Carte Pro ou Identifiant CIVA                                                                                                                                                                                                                                                                                             |
+| Courtier Nom                               | Texte Simple             | Nom du courtier                                    | À titre informatif                                                                                                                                                                                                                                                                                                                        |
+| Certification                              | Texte Simple             | AOC                                                |                                                                                                                                                                                                                                                                                                                                           |
+| Genre                                      | Texte Simple             |                                                    |                                                                                                                                                                                                                                                                                                                                           |
+| Appellation                                | Texte Simple             | Alsace Grand Cru                                   |                                                                                                                                                                                                                                                                                                                                           |
+| Mention                                    | Texte Simple             |                                                    |                                                                                                                                                                                                                                                                                                                                           |
+| Lieu                                       | Texte Simple             | Kirchberg de Barr                                  |                                                                                                                                                                                                                                                                                                                                           |
+| Couleur                                    | Texte Simple             | Blanc                                              |                                                                                                                                                                                                                                                                                                                                           |
+| Cepage                                     | Texte Simple             | Riesling                                           |                                                                                                                                                                                                                                                                                                                                           |
+| Code INAO                                  | Texte Simple             | 1B021S 4                                           |                                                                                                                                                                                                                                                                                                                                           |
+| Libelle Produit                            | Texte Simple             | AOC Alsace Grand Cru Kirchberg de Barr Riesling    |                                                                                                                                                                                                                                                                                                                                           |
+| Label                                      | Constantes               | [BIO,HVE3]                                         | Peut être vide                                                                                                                                                                                                                                                                                                                            |
+| VT/SGN                                     | Constantes               | [VT,SGN]                                           |                                                                                                                                                                                                                                                                                                                                           |
+| Dénomination                               | Texte Simple             | Vieille vigne                                      |                                                                                                                                                                                                                                                                                                                                           |
+| Millésime                                  | Année au format YYYY     | 2025                                               | Pas utilisé pour les contrats PLURIANNUEL_CADRE                                                                                                                                                                                                                                                                                           |
+| Quantite                                   | Nombre                   | 200.7                                              |                                                                                                                                                                                                                                                                                                                                           |
+| Quantite type                              | Constantes               | [ARES,HL]                                          |                                                                                                                                                                                                                                                                                                                                           |
+| Prix Unitaire                              | Nombre                   | 24.52                                              |                                                                                                                                                                                                                                                                                                                                           |
+| Unite prix                                 | Constantes               | [EUR_HL,EUR_KG,EUR_HA,EUR_BOUTEILLE]               |                                                                                                                                                                                                                                                                                                                                           |
+| Frais annexes vendeur                      | Texte Multiligne         | 5.00€ HT/hl de frais de courtage                   | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Primes diverses acheteur                   | Texte Multiligne         | 5.00€ HT/Hl d'apport global                        | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Clause réserve propriété                   | Booléeen                 | [0,1,NON,OUI]                                      | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Délai paiement                             | Constantes               | [4_TRANCHES,MENSUEL,30_JOURS,7_JOURS]              | - MENSUEL: Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte<br />- 4_TRANCHES: En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte<br />- 30_JOURS: Délai légal : 30 jours après la date de livraison<br />- 7_JOURS: Paiement sous 7 jours |
+| Clause de résiliation                      | Texte Multiligne         |                                                    | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Mandat facturation                         | Booléeen                 | [0,1,NON,OUI]                                      | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Critères et modalités d’évolution des prix | Texte Multiligne         |                                                    | Uniquement pour les contrats PLURIANNUEL_CADRE                                                                                                                                                                                                                                                                                            |
+| Critères de renégociation du prix          | Booléeen                 | [0,1,NON,OUI]                                      |                                                                                                                                                                                                                                                                                                                                           |
+| Suivi qualitatif                           | Booléeen                 | [0,1,NON,OUI]                                      | Uniquement pour les contrats VIN_VRAC                                                                                                                                                                                                                                                                                                     |
+| Délai maximum de retiraison                | Texte Simple             |                                                    | Facultatif                                                                                                                                                                                                                                                                                                                                |
+| Autres clauses particulières               | Texte Multiligne         |                                                    | Facultatif                                                                                                                                                                                                                                                                                                                                |
+
+> [!TIP]
+> La reconnaissance du produit est réalisée via l'une de ces 3 méthodes :
+> - Via les colonnes Certification, Genre, Appellation, Mention, Lieu, Couleur et Cépage
+> - Via le code INAO du produit
+> - Via le libellé produit
+>
+> Il s'agit des même méthodes de reconnaissance que pour l'import de données des récoltes et des DRM basé sur le [catalogue produit](catalogue_produits.csv)
+
+> [!WARNING]
+> Chaque ligne du CSV représente un produit d'un contrat, il peut donc avoir plusieurs lignes pour un même contrat, les valeurs des colonnes relative au contrat devront donc être répétées dans chacune des lignes
+
+
+> [!NOTE]
+> Seul les colonnes en écriture sont à remplir.
+>
+> Les colonnes qui sont en lecture seule seront remplies par le CIVA pour une restitution des donnes des contrats via un export sur le même format.
+
+## Import des contrats pluriannuel cadre et annuel classique
+
+Le fichier CSV pourra être deposé via un formulaire sur la page d'accueil de l'espace contrat de la plateforme du CIVA (https://declaration.vinsalsace.pro/).
+
+Sur cette interface il sera aussi possible d'importer un fichier PDF contenant les annexes du contrat qui sera joint à chacun des contrats importés.
+
+Une fois les vérifications de données effectuées, les contrats seront créés comme des projets qu'il faudra ensuite aller valider et envoyer au vendeur un par un.
+
+[Voir un exemple de CSV de contrats pluriannuel cadre](exemple_contrats_pluriannuel_cadre.csv)
+
+## Générer les contrats pluriannuel d'application de la nouvelle campagne
+
+Comme pour l'import des contrats pluriannuel cadre le fichier csv contenant les contrats pluriannuel d'application à générer pourra être deposé via un formulaire sur la page d'accueil de l'espace contrat de la plateforme du CIVA (https://declaration.vinsalsace.pro/).
+
+Le format reste le même mais il n'y a pas besoin de resaisir toutes les colonnes.
+
+Une fois déposé et vérifié, les contrats d'application seront générés et automatiquement envoyé au vendeur par mail pour validation.
+
+> [!NOTE]
+> Il sera possible de télécharger depuis l'espace contrat de la plateforme du CIVA un export de ces nouveaux contrats d'application à générer pour la nouvelle campagne au même format CSV. Ainsi ce fichier pourra servir de base pour être compléter (produits, surface, prix, etc ...) avant d'être déposé sur la plateforme pour import.
+
+[Voir un exemple de CSV de contrats pluriannuel d'application](exemple_contrats_pluriannuel_application.csv)
+
+## Fichier initial de reprise de données des contrats en cours
+
+Pour pouvoir importer les contrats cadres et d'applications en cours afin de démarrer avec un historique, il faudra fournir au CIVA un fichier au même format que décrit ci-dessus en rajouter ces colonnes à la fin de chaque ligne :
+
+| Nom du champs              | Type / Format            | Exemple / Liste                                         | Commentaire |
+|:---------------------------|:-------------------------|:--------------------------------------------------------|:------------|
+| Créateur                   | Constantes / Identifiant | [ACHETEUR,VENDEUR,COURTIER] ou identifiant du soussigné |             |
+| Date de saisie             | Date au format Y-m-d     |                                                         |             |
+| Date de signature vendeur  | Date au format Y-m-d     |                                                         |             |
+| Date de signature acheteur | Date au format Y-m-d     |                                                         |             |
+| Date de signature courtier | Date au format Y-m-d     |                                                         |             |
+| Date de validation         | Date au format Y-m-d     |                                                         |             |
+| Date de cloture            | Date au format Y-m-d     |                                                         |             |

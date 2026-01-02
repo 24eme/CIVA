@@ -1,16 +1,7 @@
 <div>
-    <h1 class="titre_principal">Téléversement d'un fichier</h1>
-    <div style="padding: 10px 0">
-        <form method="POST" enctype='multipart/form-data' class="form-inline" action="<?php echo url_for('vrac_csv_create', ['identifiant' => $compte->identifiant]) ?>">
-            <div class="form-group">
-                <label for="csvVracInputFile">Fichier csv</label>
-                <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-default">Valider</button>
-        </form>
-    </div>
+    <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
 
-    <h1 class="titre_principal">Liste des contrats importés par <?php echo $compte->nom_a_afficher ?></h1>
+    <h1 class="titre_principal">Historique des contrats importés par <?php echo $compte->nom_a_afficher ?></h1>
 
     <table class="table">
         <thead>
@@ -18,6 +9,7 @@
                 <td>Date</td>
                 <td>Erreur(s)</td>
                 <td>Documents créés</td>
+                <td>Statut</td>
                 <td>Action</td>
             </tr>
         </thead>
@@ -27,6 +19,7 @@
                 <td><?php echo DateTime::createFromFormat("Ymd", substr($csv->_id, -11, 8))->format('d/m/Y') ?></td>
                 <td><?php echo count($csv->erreurs) ?></td>
                 <td><?php echo count($csv->documents) ?></td>
+                <td><?php echo $csv->getRawValue()->getStatutLabel() ?></td>
                 <td>
                     <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csv->_id]) ?>"><i class="glyphicon glyphicon-eye-open"></i> Visualiser</a>
                 </td>
