@@ -43,7 +43,7 @@ EOF;
         }
         $svs = [];
         if (!$filtre) {
-            $allSV = $clientClassName::getInstance()->getAll($campagne);
+            $allSV = $clientClassName::getInstance()->getAllByCampagne($campagne);
             foreach ($allSV as $sv) {
                 if ($sv->type !== $declaration) {
                     continue;

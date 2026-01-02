@@ -11,8 +11,10 @@ DESCRIPTION="Export des DR en XML pour les Douanes [Voir tous les exports]($LINK
 
 mkdir -m 777 -p $TASK_DIR/$EXPORT_DIR > /dev/null
 
+php symfony sv:export-json "DR" $DR_CAMPAGNE > $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane.json
 php symfony export:dr-xml $DR_CAMPAGNE Douane --check=true > $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane_erreurs_log.csv
 php symfony export:dr-xml $DR_CAMPAGNE Douane > /dev/null
+
 
 cp $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane.xml $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane.xml
 cp $WORKINGDIR/data/export/dr/xml/DR-$DR_CAMPAGNE-Douane_stats.csv $TASK_DIR/$EXPORT_DIR/"$(date +%Y%m%d%H%M%S)"_DR-"$DR_CAMPAGNE"-Douane_stats.csv

@@ -53,7 +53,7 @@ class ExportDRJson
             'dateDepot' => DateTimeImmutable::createFromFormat('Y-m-d', $this->dr->validee)
                                             ->format('d/m/Y 00:00:00'),
             self::APPORT_NODE => ['produitsRecoltes' => []],
-            self::SITE_NODE => ['sites' => []]
+            //self::SITE_NODE => ['sites' => []]
         ];
 
         // Même codes que pour la SV : ER, RV, AU
@@ -88,8 +88,6 @@ class ExportDRJson
             "L19" => "VCI",
         ];
 
-        //print_r($this->xml);
-
         foreach($this->xml as $xmlCol) {
             $produit = [];
             $produit["typeRecoltant"] = "EX"; // Y a t'il des bailleurs vinificateurs ? (code BV)
@@ -97,11 +95,12 @@ class ExportDRJson
             $produit["zoneRecolte"] = $xmlCol["L3"];
             $produit["mentionValorisante"] = isset($xmlCol["mentionVal"]) ? $xmlCol["mentionVal"] : "";
             $produit["superficieRecolte"] = number_format($xmlCol["L4"], 4, ".", "");
-            if(isset($col['motifSurfZero']) && $col['motifSurfZero']) {
-                $produit['motifAbsenceRecolte'] = ['codeAbsenceRecolte' => in_array($produit->motif_non_recolte, ['PC', 'PS', 'IN', 'OG', 'AU']) ? $produit->motif_non_recolte : 'AU'];
+            if(isset($xmlCol['motifSurfZero']) && $xmlCol['motifSurfZero']) {
+                $produit['motifAbsenceRecolte'] = ['codeAbsenceRecolte' => in_array($xmlCol['motifSurfZero'], ['PC', 'PS', 'IN', 'OG', 'AU']) ? $xmlCol['motifSurfZero'] : 'AU'];
                 if ($produit['motifAbsenceRecolte']['codeAbsenceRecolte'] == 'AU') {
-                    $produit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = $produit->motif_non_recolte;
+                    $produit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = $xmlCol['motifSurfZero'];
                 }
+                $produits[] = $produit;
                 continue;
             }
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
@@ -172,101 +171,6 @@ class ExportDRJson
         }
 
         return $produits;
-    }
-
-    // Infos "manquantes" :
-    // * volEauEliminee
-    // * VSI
-    // * volAlcoolAjoute
-    // * volMoutJusDeRaisinsObtenu
-    // * VolMcMcrObtenu <- pourquoi le V en majuscule ??
-    // * volNonVinifie
-    // * volEnVinification <- quelle diff avec recolteTotale ?
-    // * conserveCaveParticuliereBailleurVini <- Y'a des bailleurs / matayer ?
-    // * destinationVinifieeParBailleur
-    // * conserveCaveParticuliereExploitant <- noeud cave particulière je suppose
-    // * destinationVentesMouts <- à faire dans la boucle des mouts je suppose
-    //
-    // Infos "pas sur" :
-    // * destinationVentesRaisins
-    // * destinationApportsCaveCoop
-    public function buildInfoProduit($produit)
-    {
-        // infos globales
-        $infosProduit = [
-            "typeRecoltant" => "EX", // Y a t'il des bailleurs vinificateurs ? (code BV)
-            "zoneRecolte" => "B",
-            "mentionValorisante" => $produit->denomination ?: "",
-            "superficieRecolte" => number_format($produit->superficie / 100, 4, ".", ""),
-            "recolteTotale" => number_format($produit->volume, 2, ".", ""),
-            "volVinRevendicableOuCommercialisable" => number_format($produit->volume_revendique, 2, ".", "")
-        ];
-
-        if ($produit->exist('motif_non_recolte')) {
-            $infosProduit['motifAbsenceRecolte'] = [
-                'codeAbsenceRecolte' => in_array($produit->motif_non_recolte, ['PC', 'PS', 'IN', 'OG', 'AU']) ? $produit->motif_non_recolte : 'AU'
-            ];
-
-            if ($infosProduit['motifAbsenceRecolte']['codeAbsenceRecolte'] === 'AU') {
-                $infosProduit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = ''; // pas l'info j'ai l'impression
-            }
-        }
-
-        if ($produit->vci) {
-            $infosProduit['VCI'] = number_format($produit->vci, 2, ".", "");
-        }
-
-        if (count($produit->negoces)) {
-            $ventesRaisins = [];
-            foreach ($produit->negoces as $negoce) {
-                $ventesRaisins[] = [
-                    'numeroEvvDestinataire' => $negoce->cvi, // Quid de `destinataireTVA` ?
-                    'volObtenuIssuRaisins' => $negoce->quantite_vendue
-                ];
-            }
-            $infosProduit['destinationVentesRaisins'] = $ventesRaisins;
-        }
-
-        if (count($produit->cooperatives)) {
-            $apportCaves = [];
-            foreach ($produit->cooperatives as $coop) {
-                $apportCaves[] = [
-                    'numeroEvvCaveCoop' => $coop->cvi,
-                    'volObtenuIssuRaisins' => $coop->quantite_vendue
-                ];
-            }
-            $infosProduit['destinationApportsCaveCoop'] = $apportCaves;
-        }
-
-        if ($produit->dplc || $produit->lies) {
-            $infosProduit['volDRAOuLiesSoutirees'] = number_format(
-                ((float) $produit->dplc) + ((float) $produit->lies),
-                2, ".", ""
-            );
-        }
-
-        if (count($produit->mouts)) {
-            $total_mouts = 0;
-            foreach ($produit->mouts as $mout) {
-                $total_mouts += $mout;
-            }
-            $infosProduit['volMoutApteAOP'] = format_number($total_mouts, 2, ".", "");
-        }
-
-        // rebêches
-        if (strpos($produit->getHash(), '/CREMANT/') !== false && $produit->volume_revendique) {
-            $produitsAssocies = ['typeAssociation' => 'REB'];
-            $cepage = strrchr($this->dr->get($produit->getHash())->getCepage()->getHash(), '/');
-
-            $hash_rebeche = str_replace($cepage, '/cepage_RB', $produit->getHash());
-            $rebeches = $this->dr->get($hash_rebeche);
-            $produitsAssocies['recolteTotaleProdAssocie'] = number_format($rebeches->volume_revendique, 2, ".", "");
-            $produitsAssocies['codeProduitAssocie'] = $this->processCodeDouane($rebeches->getConfig()->getCodeDouane());
-
-            $infosProduit['produitsAssocies'][] = $produitsAssocies;
-        }
-
-        return $infosProduit;
     }
 
     // Encore basé sur la SV
