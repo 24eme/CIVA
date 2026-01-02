@@ -97,6 +97,13 @@ class ExportDRJson
             $produit["zoneRecolte"] = $xmlCol["L3"];
             $produit["mentionValorisante"] = isset($xmlCol["mentionVal"]) ? $xmlCol["mentionVal"] : "";
             $produit["superficieRecolte"] = number_format($xmlCol["L4"], 4, ".", "");
+            if(isset($col['motifSurfZero']) && $col['motifSurfZero']) {
+                $produit['motifAbsenceRecolte'] = ['codeAbsenceRecolte' => in_array($produit->motif_non_recolte, ['PC', 'PS', 'IN', 'OG', 'AU']) ? $produit->motif_non_recolte : 'AU'];
+                if ($produit['motifAbsenceRecolte']['codeAbsenceRecolte'] == 'AU') {
+                    $produit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = $produit->motif_non_recolte;
+                }
+                continue;
+            }
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
                 $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
             }
