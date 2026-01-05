@@ -48,7 +48,7 @@ class ExportDRJson
     public function getRootInfos()
     {
         $infos = [
-            'campagne' => $this->dr->campagne,
+            'campagne' => $this->dr->campagne.'-'.($this->dr->campagne + 1),
             'numeroCVIRecoltant' => $this->dr->declarant->cvi,
             'dateDepot' => DateTimeImmutable::createFromFormat('Y-m-d', $this->dr->validee)
                                             ->format('d/m/Y 00:00:00'),
@@ -79,7 +79,8 @@ class ExportDRJson
             "L5" => "recolteTotale",
             "L9" => "conserveCaveParticuliereExploitant",
             "L10" => "volEnVinification",
-            "L13" => "volMcMcrObtenu",
+            "L12" => "volNonVinifie",
+            "L13" => "VolMcMcrObtenu",
             //"L15" => "volMoutApteAOP",
             "L15" => "volVinRevendicableOuCommercialisable",
             "L16" => "volDRAOuLiesSoutirees",
@@ -104,7 +105,9 @@ class ExportDRJson
                 continue;
             }
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
+                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0) {
                 $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
+                }
             }
             foreach($xmlCol["exploitant"] as $xmlLigneKey => $xmlLigneValue) {
                 if(preg_match("/^L6_/", $xmlLigneKey)) {
