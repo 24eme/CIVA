@@ -283,6 +283,7 @@ class VracCsvImport extends CsvFile
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
+            $v->add('clause_renegociation_prix', $this->guessBool('Clause renégociation du prix', $line[self::CSV_CLAUSE_CRITERE_RENEGOCIATION_PRIX]));
 
             if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
                 $v->add('pluriannuel_contrat_duree', $line[self::CSV_DUREE_CONTRAT_PLURI]);

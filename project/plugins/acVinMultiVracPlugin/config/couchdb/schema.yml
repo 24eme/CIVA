@@ -243,6 +243,7 @@ Vrac:
       clause_mandat_facturation: { required: false }
       clause_resiliation: { required: false }
       clause_evolution_prix: { required: false }
+      clause_renegociation_prix: { required: false }
       suivi_qualitatif: { required: false }
       delais_retiraison: { required: false }
       papier: { required: false }
