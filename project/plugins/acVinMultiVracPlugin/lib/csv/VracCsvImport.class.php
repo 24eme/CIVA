@@ -285,6 +285,10 @@ class VracCsvImport extends CsvFile
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
             $v->add('clause_evolution_prix', "Il va changer tous les ans");
 
+            if ($v->type_contrat === VracClient::TYPE_VRAC) {
+                $v->add('suivi_qualitatif', $this->guessBool('Suivi qualitatif', $line[self::CSV_CLAUSE_SUIVI_QUALITATIF]));
+            }
+
             // $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
             // $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
             // $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
