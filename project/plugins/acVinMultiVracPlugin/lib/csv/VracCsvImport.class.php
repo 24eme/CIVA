@@ -212,7 +212,7 @@ class VracCsvImport extends CsvFile
                 continue;
             }
             $v->acheteur_identifiant = $acheteur->_id;
-            $v->acheteur_assujetti_tva = $line[self::CSV_ACHETEUR_CVI] ? 1 : 0;
+            $v->acheteur_assujetti_tva = $this->guessBool('Acheteur assujetti tva', $line[self::CSV_ACHETEUR_CVI]);
             $v->storeAcheteurInformations($acheteur);
 
             try {
@@ -222,7 +222,7 @@ class VracCsvImport extends CsvFile
                 continue;
             }
             $v->vendeur_identifiant = $vendeur->_id;
-            $v->vendeur_assujetti_tva = $line[self::CSV_VENDEUR_CVI] ? 1 : 0;
+            $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_CVI]);
             $v->storeVendeurInformations($vendeur);
 
             if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
@@ -277,8 +277,8 @@ class VracCsvImport extends CsvFile
                 $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
             } */
 
-            $v->add('clause_reserve_propriete', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE] === "OUI" ? 1 : 0);
-            $v->add('clause_mandat_facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION] === "OUI" ? 1 : 0);
+            $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
+            $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
             $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
@@ -432,6 +432,25 @@ class VracCsvImport extends CsvFile
 
         if (is_file($temp)) {
             unlink($temp);
+        }
+    }
+
+    /**
+     * Retourne 0 ou 1 en fonction de la valeur donnée
+     *
+     * @param $key string
+     * @param $value string
+     * @return null|0|1
+     */
+    public function guessBool($key, $value)
+    {
+        if (in_array($value, [1, "1", "OUI", true], true) === true) {
+            return 1;
+        } elseif (in_array($value, [0, "0", "NON", false], true) === true) {
+            return 0;
+        } else {
+            $this->addError(self::$line, "invalid_value", "La valeur saisie [$value] du champs $key n'est pas reconnue");
+            return null;
         }
     }
 
