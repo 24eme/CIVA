@@ -126,7 +126,7 @@ class ExportDRJson
                 }
                 if(preg_match("/^L8_/", $xmlLigneKey)) {
                     $vente = [
-                        "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
+                        "numeroEvvCaveCoop" => $xmlLigneValue["numCvi"]."",
                         "volObtenuApportRaisins" => number_format($xmlLigneValue["volume"], 2, ".", ""),
                     ];
                     $produit["destinationApportsCaveCoop"][] = $vente;
@@ -146,7 +146,7 @@ class ExportDRJson
                 foreach($xmlCol['colonneAss']["exploitant"] as $xmlColAssLigneKey => $xmlColAssLigneValue) {
                     if(preg_match("/^L8_/", $xmlColAssLigneKey)) {
                         $vente = [
-                            "numeroEvvDestinataire" => $xmlColAssLigneValue["numCvi"]."",
+                            "numeroEvvCaveCoop" => $xmlColAssLigneValue["numCvi"]."",
                             "volObtenuApportRaisins" => number_format($xmlColAssLigneValue["volume"], 2, ".", ""),
                         ];
                         $produitAssocie["destinationApportsCaveCoopProdAssocie"][] = $vente;
