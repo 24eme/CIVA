@@ -78,7 +78,7 @@ class ExportDRJson
         $correspondanceNumLigneJson = [
             "L5" => "recolteTotale",
             "L9" => "conserveCaveParticuliereExploitant",
-            "L10" => "volEnVinification",
+            //"L10" => "volVinifie",
             "L12" => "volNonVinifie",
             "L13" => "VolMcMcrObtenu",
             //"L15" => "volMoutApteAOP",
@@ -101,13 +101,24 @@ class ExportDRJson
                 if ($produit['motifAbsenceRecolte']['codeAbsenceRecolte'] == 'AU') {
                     $produit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = $xmlCol['motifSurfZero'];
                 }
+                $produit['recolteTotale'] = number_format(0, 2, ".", "");
                 $produits[] = $produit;
                 continue;
             }
+            $produit["conserveCaveParticuliereExploitant"] = number_format(0, 2, ".", "");
+            $produit["volEnVinification"] = number_format(0, 2, ".", "");
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
-                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0 || in_array($xmlKey, ["L9", "L10", "L15"])) {
-                $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
+                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0) {
+                    $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
                 }
+            }
+            if(isset($produit["conserveCaveParticuliereExploitant"]) && floatval($produit["conserveCaveParticuliereExploitant"])) {
+                $produit["volEnVinification"] = number_format($produit["conserveCaveParticuliereExploitant"], 2, ".", "");
+            } else {
+                unset($produit["conserveCaveParticuliereExploitant"]);
+                unset($produit["volEnVinification"]);
+                unset($produit["volDRAOuLiesSoutirees"]);
+                unset($produit["volVinRevendicableOuCommercialisable"]);
             }
             foreach($xmlCol["exploitant"] as $xmlLigneKey => $xmlLigneValue) {
                 if(preg_match("/^L6_/", $xmlLigneKey)) {
@@ -133,7 +144,7 @@ class ExportDRJson
                 }
             }
 
-            if(isset($xmlCol['colonneAss'])) {
+            if(isset($xmlCol['colonneAss']) && isset($produit["conserveCaveParticuliereExploitant"])) {
                 $produitAssocie = [
                     "typeAssociation" => "REB",
                     "codeProduitAssocie" => $xmlCol['colonneAss']['L1'],
@@ -143,7 +154,7 @@ class ExportDRJson
                     "volVinRevendicOuCommerciaProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L14'], 2, ".", ""),
                 ];
 
-                foreach($xmlCol['colonneAss']["exploitant"] as $xmlColAssLigneKey => $xmlColAssLigneValue) {
+                /*foreach($xmlCol['colonneAss']["exploitant"] as $xmlColAssLigneKey => $xmlColAssLigneValue) {
                     if(preg_match("/^L8_/", $xmlColAssLigneKey)) {
                         $vente = [
                             "numeroEvvCaveCoop" => $xmlColAssLigneValue["numCvi"]."",
@@ -151,7 +162,7 @@ class ExportDRJson
                         ];
                         $produitAssocie["destinationApportsCaveCoopProdAssocie"][] = $vente;
                     }
-                }
+                    }*/
 
                 $produit["produitsAssocies"][] = $produitAssocie;
             }
