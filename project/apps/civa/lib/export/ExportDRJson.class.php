@@ -105,7 +105,7 @@ class ExportDRJson
                 continue;
             }
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
-                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0) {
+                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0 || in_array($xmlKey, ["L9", "L10", "L15"])) {
                 $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
                 }
             }
