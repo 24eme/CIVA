@@ -277,17 +277,17 @@ class VracCsvImport extends CsvFile
                 $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
             } */
 
-            if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
-                $v->add('pluriannuel_contrat_duree', $line[self::CSV_DUREE_CONTRAT_PLURI]);
-            }
-
             $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
             $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
             $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
-            $v->add('clause_evolution_prix', "Il va changer tous les ans");
+
+            if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
+                $v->add('pluriannuel_contrat_duree', $line[self::CSV_DUREE_CONTRAT_PLURI]);
+                $v->add('clause_evolution_prix', $line[self::CSV_CLAUSE_CRITERE_EVOLUTION_PRIX]);
+            }
 
             if ($v->type_contrat === VracClient::TYPE_VRAC) {
                 $v->add('suivi_qualitatif', $this->guessBool('Suivi qualitatif', $line[self::CSV_CLAUSE_SUIVI_QUALITATIF]));
