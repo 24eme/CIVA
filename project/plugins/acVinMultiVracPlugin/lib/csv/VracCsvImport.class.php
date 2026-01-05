@@ -4,47 +4,62 @@ class VracCsvImport extends CsvFile
 {
     const CSV_CONTRAT = 0;
     const CSV_CAMPAGNE = 1;
-    const CSV_NUMERO_INTERNE = 2;
+    const CSV_TYPE_CONTRAT = 2;
+    const CSV_DUREE_CONTRAT_PLURI = 3;
+    const CSV_NUMERO_INTERNE = 4;
+    const CSV_NUMERO_CONTRAT_CADRE = 5;
 
-    const CSV_CREATEUR_IDENTIFIANT = 3;
-    const CSV_ACHETEUR_CVI = 4;
-    const CSV_ACHETEUR_TVA = 5;
-    const CSV_VENDEUR_CVI = 6;
-    const CSV_VENDEUR_TVA = 7;
-    const CSV_COURTIER_MANDATAIRE_SIRET = 8;
+    const CSV_TYPE_TRANSACTION = 6; // Raisin / Bouteille / Vrac
 
-    const CSV_TYPE_TRANSACTION = 9; // Raisin / Bouteille / Vrac
+    const CSV_ACHETEUR_CVI = 7;
+    const CSV_ACHETEUR_NOM = 8;
+    const CSV_ACHETEUR_TVA = 9;
+    const CSV_VENDEUR_CVI = 10;
+    const CSV_VENDEUR_NOM = 11;
+    const CSV_VENDEUR_TVA = 12;
+    const CSV_COURTIER_MANDATAIRE_SIRET = 13;
+    const CSV_COURTIER_MANDATAIRE_NOM = 14;
 
-    const CSV_VIN_CODE_INAO = 10;
-    const CSV_VIN_LIBELLE = 11;
-    const CSV_VIN_MENTION = 12; // HVE / BIO
-    const CSV_VIN_VTSGN = 13;
-    const CSV_VIN_DENOMINATION = 14;
-    const CSV_VIN_CEPAGE = 15;
-    const CSV_VIN_MILLESIME = 16;
+    const CSV_VIN_CERTIFICATION = 15;
+    const CSV_VIN_GENRE = 16;
+    const CSV_VIN_APPELLATION = 17;
+    const CSV_VIN_MENTION = 18;
+    const CSV_VIN_LIEU = 19;
+    const CSV_VIN_COULEUR = 20;
+    const CSV_VIN_CEPAGE = 21;
+    const CSV_VIN_CODE_INAO = 22;
+    const CSV_VIN_LIBELLE = 23;
+    const CSV_VIN_LABEL = 24; // HVE / BIO
+    const CSV_VIN_VTSGN = 25;
+    const CSV_VIN_DENOMINATION = 26;
+    const CSV_VIN_MILLESIME = 27;
 
-    const CSV_QUANTITE = 17;
-    const CSV_QUANTITE_TYPE = 18;
+    const CSV_QUANTITE = 28;
+    const CSV_QUANTITE_TYPE = 29;
 
-    const CSV_PRIX_UNITAIRE = 19;
-    const CSV_PRIX_UNITE = 20;
+    const CSV_PRIX_UNITAIRE = 30;
+    const CSV_PRIX_UNITE = 31;
 
-    const CSV_PLURIANNUEL = 21;
-    const CSV_PLURIANNUEL_CONTRAT_CADRE = 22;
+    const CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES = 32;
+    const CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES = 33;
+    const CSV_CLAUSE_RESERVE_PROPRIETE = 34;
+    const CSV_CLAUSE_DELAI_PAIEMENT = 35;
+    const CSV_CLAUSE_RESILIATION = 36;
+    const CSV_CLAUSE_MANDAT_FACTURATION = 37;
+    const CSV_CLAUSE_CRITERE_EVOLUTION_PRIX = 38;
+    const CSV_CLAUSE_CRITERE_RENEGOCIATION_PRIX = 39;
+    const CSV_CLAUSE_SUIVI_QUALITATIF = 40;
+    const CSV_CLAUSE_DELAI_RETIRAISON = 41;
+    const CSV_CLAUSE_AUTRES = 42;
 
-    const CSV_CLAUSE_RESERVE_PROPRIETE = 23;
-    const CSV_CLAUSE_DELAI_PAIEMENT = 24;
-    const CSV_CLAUSE_RESILIATION = 25;
-    const CSV_CLAUSE_MANDAT_FACTURATION = 26;
-    const CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES = 27;
-    const CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES = 28;
-
-    const CSV_DATE_SIGNATURE_VENDEUR = 29;
-    const CSV_DATE_SIGNATURE_ACHETEUR = 30;
-    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 31;
-    const CSV_DATE_SAISIE = 32;
-    const CSV_DATE_VALIDATION = 33;
-    const CSV_DATE_CLOTURE = 34;
+    // Import initial
+    const CSV_CREATEUR = 43;
+    const CSV_DATE_SAISIE = 44;
+    const CSV_DATE_SIGNATURE_VENDEUR = 45;
+    const CSV_DATE_SIGNATURE_ACHETEUR = 46;
+    const CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE = 47;
+    const CSV_DATE_VALIDATION = 48;
+    const CSV_DATE_CLOTURE = 49;
 
     const LABEL_BIO = 'agriculture_biologique';
 
@@ -232,13 +247,13 @@ class VracCsvImport extends CsvFile
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
-            if ($line[self::CSV_PLURIANNUEL] && substr($v->campagne, 0, 4) !== $line[self::CSV_VIN_MILLESIME]) {
+            if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
                 $produit->millesime = null;
             }
 
-            if ($line[self::CSV_VIN_MENTION]) {
+            if ($line[self::CSV_VIN_LABEL]) {
                 $produit->getOrAdd('label');
-                $produit->label = $line[self::CSV_VIN_MENTION];
+                $produit->label = $line[self::CSV_VIN_LABEL];
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {
@@ -255,10 +270,10 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = ($line[self::CSV_PLURIANNUEL]) ? 1 : 0;
-            /*if ($v->contrat_pluriannuel) {
-                $v->add('reference_contrat_pluriannuel', $line[self::CSV_PLURIANNUEL_CONTRAT_CADRE]);
-            }*/
+            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_APPLICATION') ? 1 : 0;
+            /* if ($v->contrat_pluriannuel) {
+                $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
+            } */
 
             $v->add('clause_reserve_propriete', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE] === "OUI" ? 1 : 0);
             $v->add('clause_mandat_facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION] === "OUI" ? 1 : 0);
