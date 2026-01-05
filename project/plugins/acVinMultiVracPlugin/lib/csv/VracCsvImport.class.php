@@ -66,12 +66,14 @@ class VracCsvImport extends CsvFile
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
     public static $headers = [
-        "CONTRAT", "Campagne", "Numero contrat", "Createur CVI", "Acheteur CVI", "Acheteur TVA", "Vendeur CVI", "Vendeur TVA", "Courtier siret",
-        "Type de vente", "Code INAO", "Libelle produit", "Label", "VT/SGN", "Denomination", "Cepage", "Millesime",
-        "Quantite", "Quantite type", "Prix unitaire", "Prix unite", "Pluriannuel", "Numéro contrat cadre",
-        "Clause reserve propriété", "Clause délai paiement", "Clause résiliation", "Clause mandat facturation",
-        "Vendeur frais annexes", "Acheteur primes diverses", "Date de signature vendeur", "Date de signature acheteur",
-        "Date de signature courtier", "Date de saisie", "Date de validation", "Date de cloture"
+        "CONTRAT", "Campagne", "Type de contrat", "Durée du contrat pluriannuel", "Numero contrat", "Numéro du contrat cadre référent",
+        "Type de vente", "Acheteur CVI", "Acheteur nom", "Acheteur TVA", "Vendeur CVI", "Vendeur nom", "Vendeur TVA", "Courtier siret",
+        "Courtier nom", "Certification", "Genre", "Appellation", "Mention", "Lieu", "Couleur", "Cépage", "Code INAO",
+        "Libelle produit", "Label", "VT/SGN", "Dénomination", "Millesime", "Quantité", "Quantité type", "Prix unitaire",
+        "Prix unite", "Frais annexes vendeur", "Primes diverses acheteur", "Clause réserve propriété", "Clause délai paiement",
+        "Clause résiliation", "Mandat facturation", "Critères et modalités d’évolution des prix", "Critères de renégociation du prix",
+        "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières", "Créateur", "Date de saisie",
+        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture"
     ];
 
     /** @var array<string> $imported ID des vracs importés */
