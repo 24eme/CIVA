@@ -101,6 +101,7 @@ class ExportDRJson
                 if ($produit['motifAbsenceRecolte']['codeAbsenceRecolte'] == 'AU') {
                     $produit['motifAbsenceRecolte']['motifAutreAbsenceRecolte'] = $xmlCol['motifSurfZero'];
                 }
+                $produit['recolteTotale'] = number_format(0, 2, ".", "");
                 $produits[] = $produit;
                 continue;
             }
