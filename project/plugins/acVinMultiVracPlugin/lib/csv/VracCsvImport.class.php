@@ -180,9 +180,9 @@ class VracCsvImport extends CsvFile
 
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
                 try {
-                    $createur = $this->guessId($line[self::CSV_CREATEUR_IDENTIFIANT]);
+                    $createur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
                 } catch (Exception $e) {
-                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du créateur n'a pas été reconnu [".$line[self::CSV_CREATEUR_IDENTIFIANT]."] (".$e->getMessage().")");
+                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du créateur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
                     continue;
                 }
 
