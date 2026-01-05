@@ -105,7 +105,7 @@ class ExportDRJson
                 continue;
             }
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
-                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0) {
+                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0 || in_array($xmlKey, ["L9", "L10", "L15"])) {
                 $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
                 }
             }
@@ -157,101 +157,9 @@ class ExportDRJson
             }
 
             $produits[] = $produit;
-
-        /*foreach ($this->dr->getProduitsDetails() as $hash_produit => $produit) {
-            if (strpos($hash_produit, '/cepage_RB') !== false) {
-                continue; // pas les rebêches dans la boucle principale
-            }
-
-            $infoProduit = $this->buildInfoProduit($produit);
-
-            if (! $infoProduit['recolteTotale']) {
-                continue;
-            }
-
-            $produits[] = $infoProduit;
-            }*/
         }
 
         return $produits;
-    }
-
-    // Encore basé sur la SV
-    protected function getSites()
-    {
-        $sites = [];
-        foreach ($this->sv->stockage as $stockage) {
-            $site = [];
-            $site['codeSite'] = $stockage->numero;
-            $sites[$stockage->numero] = $site;
-        }
-
-        foreach ($this->sv->getRecapProduits() as $hash => $produit) {
-            if (strpos($hash, '/cepages/RB') !== false) {
-                continue; // pas les rebêches dans les sites
-            }
-
-            $has_volume = $this->getApportRaisin($produit);
-
-            if ($this->HAS_MOUTS) {
-                $has_volume += $produit->volume_mouts;
-            }
-
-            if (! $has_volume) {
-                continue;
-            }
-
-            $code_produit = $this->sv->getConfiguration()->get($produit->produit_hash)->code_douane;
-            $mention = $produit->denominationComplementaire;
-
-            foreach ($this->sv->stockage as $id => $lieu) {
-                $produitsLieu = $lieu->produits;
-                $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
-
-                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : "0";
-
-                $add = [
-                    'codeProduit' => $this->processCodeDouane($code_produit),
-                    'mentionValorisante' => $mention ?: "",
-                    'volumeObtenu' => $volume
-                ];
-
-                $sites[$lieu->numero]['produits'][] = $add;
-            }
-        }
-
-        return array_values($sites);
-    }
-
-    public function processCodeDouane($code_produit)
-    {
-        $code_produit = (strpos($code_produit, ',') === false) ? $code_produit : strstr($code_produit, ',', true);
-        return $this->convertCodeDouane($code_produit);
-    }
-
-    public function convertCodeDouane($code_produit)
-    {
-        if ($code_produit === "1S001S 1") {
-            return "1S001S";
-        }
-
-        if ($code_produit === "1R001S 1") {
-            return "1R001S";
-        }
-
-        if ($code_produit === "1S001M00") {
-            return "1S001M";
-        }
-
-        if ($code_produit === "1B001M00") {
-            return "1B001M";
-        }
-
-        if ($code_produit === "1B070S") {
-            return "1B070S09";
-        }
-
-        return str_replace(['D1', 'D2'], ['D6', 'D7'], $code_produit);
     }
 
     public function addHeaders($response)
