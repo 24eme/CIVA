@@ -153,6 +153,21 @@ class VracCsvImport extends CsvFile
     }
 
     /**
+     * Vérification que le fichier CSV contient uniquement le type de contrat
+     * spécifié à l'import
+     *
+     * @param string $type_contrat Le type de contrat (application / cadre)
+     */
+    public function hasMixedContratType($type_contrat)
+    {
+        foreach ($this->getCsv() as $line) {
+            if ($line[self::CSV_TYPE_CONTRAT] !== $type_contrat) {
+                $this->addError(0, "mixed_contrat_type", "Le type de contrat (".$line[self::CSV_TYPE_CONTRAT].") est différent du type spécifié ($type_contrat)");
+            }
+        }
+    }
+
+    /**
      * Extrait les numéros de contrats internes du CSV et vérifie qu'il n'existe
      * pas déjà dans la base. Émet une erreur le cas échéant
      *
