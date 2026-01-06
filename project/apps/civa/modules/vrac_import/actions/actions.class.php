@@ -77,6 +77,8 @@ class vrac_importActions extends sfActions
 
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
+        $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
+
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
         $this->vracimport->hasExistingVrac($this->compte->getEtablissementInformations()->getCvi());
         $this->vracimport->import();
