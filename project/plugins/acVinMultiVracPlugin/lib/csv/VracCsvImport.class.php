@@ -152,6 +152,12 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    /**
+     * Extrait les numéros de contrats internes du CSV et vérifie qu'il n'existe
+     * pas déjà dans la base. Émet une erreur le cas échéant
+     *
+     * @param string $identifiant l'identifiant du créateur
+     */
     public function hasExistingVrac($identifiant)
     {
         $ids = $this->getContratsImportables();
