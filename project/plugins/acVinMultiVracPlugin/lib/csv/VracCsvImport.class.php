@@ -187,7 +187,9 @@ class VracCsvImport extends CsvFile
 
     public function preimportChecks(CSVVRAC $csvVrac)
     {
-        $this->hasExistingVrac($csvVrac->identifiant); // si ça marche pas, tester avec l'établissement (ex: $this->compte->getEtablissementInformations()->getCvi() / $this->getUser()->getCompte()->getEtablissementInformations()->getCvi())
+        $compteIdentifiant = CompteClient::getInstance()->find($csvVrac->identifiant)->getEtablissementInformations()->getCvi();
+
+        $this->hasExistingVrac($compteIdentifiant);
         $this->hasMixedContratType($csvVrac->type_contrat);
     }
 
