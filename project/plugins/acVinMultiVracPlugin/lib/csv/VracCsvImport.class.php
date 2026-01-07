@@ -185,6 +185,12 @@ class VracCsvImport extends CsvFile
         }
     }
 
+    public function preimportChecks(CSVVRAC $csvVrac)
+    {
+        $this->hasExistingVrac($csvVrac->identifiant); // si ça marche pas, tester avec l'établissement (ex: $this->compte->getEtablissementInformations()->getCvi() / $this->getUser()->getCompte()->getEtablissementInformations()->getCvi())
+        $this->hasMixedContratType($csvVrac->type_contrat);
+    }
+
     /**
      * Importe des vracs dans la base
      * Si `$verified` est égal à `false`, alors rien n'est importé, mais

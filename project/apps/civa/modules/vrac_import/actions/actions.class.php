@@ -80,7 +80,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
 
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-        $this->vracimport->hasExistingVrac($this->compte->getEtablissementInformations()->getCvi());
+        $this->vracimport->preimportChecks($this->csvVrac);
         $this->vracimport->import();
         $this->vracimport->checkErreurs($this->csvVrac);
 
@@ -105,7 +105,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->storeAttachment($csv['tmp_name'], 'text/csv', $this->csvVrac->getFileName());
         $this->csvVrac->save();
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-        $this->vracimport->hasExistingVrac($this->getUser()->getCompte()->getEtablissementInformations()->getCvi());
+        $this->vracimport->preimportChecks($this->csvVrac);
         $this->vracimport->import();
         $this->vracimport->checkErreurs($this->csvVrac);
 
