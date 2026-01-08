@@ -26,6 +26,9 @@ class ExportDRJson
 
     public function export()
     {
+        if(!count($this->raw[self::APPORT_NODE]['produitsRecoltes'])) {
+            return null;
+        }
         $json = json_encode($this->raw);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -75,10 +78,58 @@ class ExportDRJson
     {
         $produits = [];
 
+        // foreach($this->dr->getProduitsDetails() as $detail) {
+        //     $produit = [];
+        //     $produit["typeRecoltant"] = "EX";
+        //     $produit["zoneRecolte"] = "B";
+        //     $produit["codeProduit"] = $detail->getConfig()->code_douane;
+        //     $produit['mentionValorisante'] = $detail->getMentionValorisante();
+        //     $produit["superficieRecolte"] = $detail->getTotalSuperficie();
+        //     $produit["recolteTotale"] = $detail->getTotalVolume();
+        //     if($detail->getTotalCaveParticuliere()) {
+        //         $produit["conserveCaveParticuliereExploitant"] = $detail->getTotalCaveParticuliere();
+        //     }
+        //     $produit["volVinifie"] = $detail->getTotalCaveParticuliere();
+        //     $produit["volVinRevendicableOuCommercialisable"] = $detail->getVolumeRevendiqueCaveParticuliere();
+        //     if($detail->getUsagesIndustriels()) {
+        //         $produit["volDRAOuLiesSoutirees"] = $detail->getUsagesIndustriels();
+        //     }
+        //     if($detail->getTotalVci()) {
+        //         $produit["VCI"] = $detail->getTotalVci();
+        //     }
+        //     foreach($detail->getVolumeAcheteurs("negoces") as $cvi => $volume) {
+        //         $vente = [
+        //             "numeroEvvDestinataire" => $cvi."",
+        //             "volObtenuIssuRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("negoces", $cvi) - $detail->getTotalDontVciVendusByCviRatio("negoces", $cvi), 2),
+        //         ];
+        //         $produit["destinationVentesRaisins"][] = $vente;
+        //     }
+        //
+        //     foreach($detail->getVolumeAcheteurs("mouts") as $cvi => $volume) {
+        //         $vente = [
+        //             "numeroEvvDestinataire" => $cvi."",
+        //             "volObtenuIssuMouts" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("mouts", $cvi) - $detail->getTotalDontVciVendusByCviRatio("mouts", $cvi), 2),
+        //         ];
+        //         $produit["destinationVentesMouts"][] = $vente;
+        //     }
+        //
+        //     foreach($detail->getVolumeAcheteurs("cooperatives") as $cvi => $volume) {
+        //         $vente = [
+        //             "numeroEvvCaveCoop" => $cvi."",
+        //             "volObtenuApportRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("cooperatives", $cvi) - $detail->getTotalDontVciVendusByCviRatio("cooperatives", $cvi), 2),
+        //         ];
+        //         $produit["destinationApportsCaveCoop"][] = $vente;
+        //     }
+        //
+        //     $produits[] = $produit;
+        // }
+        //
+        // return $produits;
+
         $correspondanceNumLigneJson = [
             "L5" => "recolteTotale",
             "L9" => "conserveCaveParticuliereExploitant",
-            //"L10" => "volVinifie",
+            "L10" => "volEnVinification",
             "L12" => "volNonVinifie",
             "L13" => "VolMcMcrObtenu",
             //"L15" => "volMoutApteAOP",
@@ -105,20 +156,10 @@ class ExportDRJson
                 $produits[] = $produit;
                 continue;
             }
-            $produit["conserveCaveParticuliereExploitant"] = number_format(0, 2, ".", "");
-            $produit["volEnVinification"] = number_format(0, 2, ".", "");
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
-                if($xmlCol["exploitant"][$xmlKey]*1.0 > 0) {
+                if(floatval($xmlCol["exploitant"][$xmlKey]) > 0) {
                     $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
                 }
-            }
-            if(isset($produit["conserveCaveParticuliereExploitant"]) && floatval($produit["conserveCaveParticuliereExploitant"])) {
-                $produit["volEnVinification"] = number_format($produit["conserveCaveParticuliereExploitant"], 2, ".", "");
-            } else {
-                unset($produit["conserveCaveParticuliereExploitant"]);
-                unset($produit["volEnVinification"]);
-                unset($produit["volDRAOuLiesSoutirees"]);
-                unset($produit["volVinRevendicableOuCommercialisable"]);
             }
             foreach($xmlCol["exploitant"] as $xmlLigneKey => $xmlLigneValue) {
                 if(preg_match("/^L6_/", $xmlLigneKey)) {

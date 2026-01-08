@@ -38,7 +38,7 @@ class ExportDRXml {
             }
             $item['volume'] += $volume;
             if($type == 'negoces' && $this->destinataire == self::DEST_DOUANE) {
-                $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCviRatio($type, $cvi);
+                $item['volume'] = round($item['volume'] - $obj->getTotalDontDplcVendusByCviRatio($type, $cvi) - $obj->getTotalDontVciVendusByCviRatio($type, $cvi), 2);
             }
 
             $xml[$key] = $item;
@@ -140,43 +140,39 @@ class ExportDRXml {
 
         $vciNegoce = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('negoces'));
         $vciMouts = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('mouts'));
+        $usagesIndustrielsNegoce = $this->getRatioRecap($object, 'getTotalDontDplcVendusType', array('negoces')) + $this->getRatioRecap($object, 'getTotalDontDplcVendusType', array('mouts'));
 
-        $col['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $vciNegoce;
+        $col['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $vciNegoce + $usagesIndustrielsNegoce;
         if($this->destinataire == self::DEST_CIVA) {
           $col['exploitant']['L9'] = $object->getTotalCaveParticuliere();
         }
 
-        $col['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $vciNegoce;
-        if($this->destinataire == self::DEST_CIVA){
-          $col['exploitant']['L10'] -= $vciNegoce;
-        }
+        $col['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $vciNegoce + $usagesIndustrielsNegoce;
 
         $col['exploitant']['L11'] = 0; //HS
         $col['exploitant']['L12'] = 0; //HS
         $col['exploitant']['L13'] = 0; //HS
         $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
 
-        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array(), true);
-        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
-        $venteNegoce = $object->getTotalVolumeAcheteurs('negoces');
-        $venteMouts = $object->getTotalVolumeAcheteurs('mouts');
-        $vci = $object->getTotalVci();
+        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendiqueCaveParticuliere', array(), true);
+        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustrielsCaveParticuliere', array());
+        $vci = $object->getTotalVci() - $this->getRatioRecap($object, 'getTotalDontVciVendusByTypeRatio', array('cooperatives'));
 
-        $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
+        $l15 = $volumeRevendique;
         if($l15 < 0) {
             $l15 = 0;
         }
 
-        $l16 = $usagesIndustriels + $vci;
+        $l16 = $usagesIndustriels + $usagesIndustrielsNegoce + $vci;
 
-        $col['exploitant']['L15'] = $l15; //Volume revendique
-        $col['exploitant']['L16'] = $l16;
+        $col['exploitant']['L15'] = round($l15, 2); //Volume revendique
+        $col['exploitant']['L16'] = round($l16, 2);
 
         $col['exploitant']['L17'] = 0; //HS
         $col['exploitant']['L18'] = 0; //HS
         $col['exploitant']['L19'] = 0;
         if($vci) {
-            $col['exploitant']['L19'] = $vci;
+            $col['exploitant']['L19'] = round($vci, 2);
         }
 
         if (preg_match("|cepage_RB|", $object->getHash())) {
