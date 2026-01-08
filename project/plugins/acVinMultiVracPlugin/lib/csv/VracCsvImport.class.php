@@ -160,10 +160,12 @@ class VracCsvImport extends CsvFile
      */
     public function hasMixedContratType($type_contrat)
     {
-        foreach ($this->getCsv() as $line) {
-            if ($line[self::CSV_TYPE_CONTRAT] !== $type_contrat) {
-                $this->addError(0, "mixed_contrat_type", "Le type de contrat (".$line[self::CSV_TYPE_CONTRAT].") est différent du type spécifié ($type_contrat)");
-            }
+        $wrong = array_filter(array_column($this->getCsv(), self::CSV_TYPE_CONTRAT), function ($type) use ($type_contrat) {
+            return $type !== $type_contrat;
+        });
+
+        if (count($wrong)) {
+            $this->addError(0, "mixed_contrat_type", count($wrong) . " contrat(s) sont différents du type spécifié ($type_contrat)");
         }
     }
 
