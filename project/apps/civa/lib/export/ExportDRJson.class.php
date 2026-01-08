@@ -43,8 +43,10 @@ class ExportDRJson
     {
         $root = $this->getRootInfos();
         $root[self::APPORT_NODE]['produitsRecoltes'] = $this->getProduits();
-        //$root[self::SITE_NODE]['sites'] = $this->getSites();
-
+        $sites = $this->getSites($root[self::APPORT_NODE]['produitsRecoltes']);
+        if(count($sites)) {
+            $root[self::SITE_NODE]['sites'] = $sites;
+        }
         $this->raw = $root;
     }
 
@@ -156,6 +158,7 @@ class ExportDRJson
                 $produits[] = $produit;
                 continue;
             }
+            unset($produit["volEnVinification"]);
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
                 if(floatval($xmlCol["exploitant"][$xmlKey]) > 0) {
                     $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
@@ -212,6 +215,56 @@ class ExportDRJson
         }
 
         return $produits;
+    }
+
+    protected function getSites($produits)
+    {
+        $etablissement = $this->dr->getEtablissementObject();
+        if(count($etablissement->getLieuxStockage()) < 2) {
+
+            return [];
+        }
+
+        $lieuPrincipal = $etablissement->getLieuStockagePrincipal();
+
+
+        $site = [];
+        $site['codeSite'] = $lieuPrincipal->numero;
+        $site['produits'] = [];
+
+        foreach ($produits as $produit) {
+            if(!isset($produit['volVinRevendicableOuCommercialisable']) || !floatval($produit['volVinRevendicableOuCommercialisable'])) {
+                continue;
+            }
+            if(!isset($site['produits'][$produit['codeProduit'].$produit['mentionValorisante']])) {
+                $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']] = [
+                    'codeProduit' => $produit['codeProduit'],
+                    'mentionValorisante' => $produit['mentionValorisante'],
+                    'volumeObtenu' => 0,
+                ];
+            }
+
+            $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']]['volumeObtenu'] += floatval($produit['volVinRevendicableOuCommercialisable']);
+        }
+
+        $site['produits'] = array_values($site['produits']);
+        foreach($site['produits'] as $key => $produit) {
+            $site['produits'][$key]['volumeObtenu'] = number_format($produit['volumeObtenu'], 2, ".", "");
+        }
+        $sites = [$site];
+
+        foreach($etablissement->getLieuxStockage() as $lieuStockage) {
+            if($lieuStockage->numero != $site['codeSite']) {
+                $addSite = ['codeSite' => $lieuStockage->numero, 'produits' => []];
+                foreach($site['produits'] as $produit) {
+                    $produit['volumeObtenu'] = number_format(0, 2, ".", "");
+                    $addSite['produits'][] = $produit;
+                }
+                $sites[] = $addSite;
+            }
+        }
+
+        return $sites;
     }
 
     public function addHeaders($response)

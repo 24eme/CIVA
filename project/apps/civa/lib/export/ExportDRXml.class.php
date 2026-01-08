@@ -191,7 +191,7 @@ class ExportDRXml {
             if ($this->destinataire == self::DEST_CIVA) {
                 $col['exploitant']['L14'] = $object->getTotalVolume();
             }
-            $col['exploitant']['L15'] = 0;
+            //$col['exploitant']['L15'] = 0;
 
             if($this->destinataire == self::DEST_DOUANE && round($object->getTotalVolumeAcheteurs('negoces'), 2) == $object->getTotalVolume()) {
                 $col['exploitant']['L14'] = 0;
