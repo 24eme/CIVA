@@ -243,7 +243,7 @@ class VracCsvImport extends CsvFile
                 continue;
             }
             $v->acheteur_identifiant = $acheteur->_id;
-            $v->acheteur_assujetti_tva = $this->guessBool('Acheteur assujetti tva', $line[self::CSV_ACHETEUR_CVI]);
+            $v->acheteur_assujetti_tva = $this->guessBool('Acheteur assujetti tva', $line[self::CSV_ACHETEUR_TVA]);
             $v->storeAcheteurInformations($acheteur);
 
             try {
@@ -253,7 +253,7 @@ class VracCsvImport extends CsvFile
                 continue;
             }
             $v->vendeur_identifiant = $vendeur->_id;
-            $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_CVI]);
+            $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
             $v->storeVendeurInformations($vendeur);
 
             if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
