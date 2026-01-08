@@ -148,7 +148,7 @@ class ExportDRJson
             $produit["codeProduit"] = $xmlCol["L1"];
             $produit["zoneRecolte"] = $xmlCol["L3"];
             $produit["mentionValorisante"] = isset($xmlCol["mentionVal"]) ? $xmlCol["mentionVal"] : "";
-            $produit["superficieRecolte"] = number_format($xmlCol["L4"], 4, ".", "");
+            $produit["superficieRecolte"] = number_format(round($xmlCol["L4"] / 100, 4), 4, ".", "");
             if(isset($xmlCol['motifSurfZero']) && $xmlCol['motifSurfZero']) {
                 $produit['motifAbsenceRecolte'] = ['codeAbsenceRecolte' => in_array($xmlCol['motifSurfZero'], ['PC', 'PS', 'IN', 'OG', 'AU']) ? $xmlCol['motifSurfZero'] : 'AU'];
                 if ($produit['motifAbsenceRecolte']['codeAbsenceRecolte'] == 'AU') {
@@ -233,9 +233,6 @@ class ExportDRJson
         $site['produits'] = [];
 
         foreach ($produits as $produit) {
-            if(!isset($produit['volVinRevendicableOuCommercialisable']) || !floatval($produit['volVinRevendicableOuCommercialisable'])) {
-                continue;
-            }
             if(!isset($site['produits'][$produit['codeProduit'].$produit['mentionValorisante']])) {
                 $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']] = [
                     'codeProduit' => $produit['codeProduit'],
@@ -243,8 +240,9 @@ class ExportDRJson
                     'volumeObtenu' => 0,
                 ];
             }
-
-            $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']]['volumeObtenu'] += floatval($produit['volVinRevendicableOuCommercialisable']);
+            if(isset($produit['volVinRevendicableOuCommercialisable']) && floatval($produit['volVinRevendicableOuCommercialisable'])) {
+                $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']]['volumeObtenu'] += floatval($produit['volVinRevendicableOuCommercialisable']);
+            }
         }
 
         $site['produits'] = array_values($site['produits']);
