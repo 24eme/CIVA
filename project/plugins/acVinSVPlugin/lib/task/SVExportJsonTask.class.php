@@ -73,7 +73,12 @@ EOF;
 
             $export = new $class($sv);
             $export->build();
-            $json[$class::ROOT_NODE][] = json_decode($export->export());
+
+            $exportRaw = $export->export();
+            if(!$exportRaw) {
+                continue;
+            }
+            $json[$class::ROOT_NODE][] = json_decode($exportRaw);
         }
 
         echo json_encode($json).PHP_EOL;

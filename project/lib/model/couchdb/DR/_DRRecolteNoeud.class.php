@@ -595,6 +595,18 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return round($this->getTotalDontDplcRecapitulatifVente(), 2);
     }
 
+    public function getTotalDontDplcVendusType($type) {
+        $total = 0;
+        foreach($this->getVolumeAcheteurs($type) as $cvi => $volume) {
+            $total += $this->getTotalDontDplcVendusByCvi($type, $cvi);
+        }
+        return $total;
+    }
+
+    public function getTotalDontDplcVendusByCviRatio($type, $cvi) {
+        return $this->getTotalDontDplcVendusByCvi($type, $cvi);
+    }
+
     public function getTotalDontVciVendus() {
         if($this->hasRecapitulatifVente()) {
 

@@ -16,13 +16,13 @@
             <label style="margin-top: 10px;">Type de contrat</label>
             <div style="margin-top: 5px;" class="radio">
               <label>
-                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_cadre" required>
+                <input type="radio" name="type_vrac" id="type_vrac" value="<?php echo CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE ?>" required>
                 Contrats cadres
               </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="type_vrac" id="type_vrac" value="vrac_application" required>
+                <input type="radio" name="type_vrac" id="type_vrac" value="<?php echo CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_APPLICATION ?>" required>
                 Contrats d'applications
               </label>
                <a class="btn btn-link btn-sm" href="">(Télécharger le csv préprempli)</a>

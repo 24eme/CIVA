@@ -131,6 +131,25 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         return null;
     }
 
+    public function getTotalDontDplcVendusByCviRatio($type, $cvi) {
+        if(preg_match("/cepage_RB/", $this->getHash())) {
+
+            return 0;
+        }
+        $recap = $this->getNoeudRecapitulatif();
+
+        if(!$recap) {
+            return 0;
+        }
+
+        $volumeTotal = $recap->getVolumeAcheteur($cvi, $type);
+        $volume = $this->getVolumeVenduByCvi($type, $cvi);
+
+        $ratio = ($volumeTotal) ? ($volume / $volumeTotal) : 0;
+
+        return round($recap->getTotalDontDplcVendusByCvi($type, $cvi) * $ratio, 2);
+    }
+
     public function getTotalDontVciVendusByCvi($type, $cvi) {
         if(!$this->getTotalVci()) {
 
