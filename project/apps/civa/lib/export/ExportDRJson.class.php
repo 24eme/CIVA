@@ -158,7 +158,6 @@ class ExportDRJson
                 $produits[] = $produit;
                 continue;
             }
-            unset($produit["volEnVinification"]);
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
                 if(round(floatval($xmlCol["exploitant"][$xmlKey]), 2) > 0) {
                     $produit[$jsonKey] = number_format(round($xmlCol["exploitant"][$xmlKey], 2), 2, ".", "");
@@ -170,6 +169,10 @@ class ExportDRJson
                         "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
                         "volObtenuIssuRaisins" => number_format(round($xmlLigneValue["volume"], 2), 2, ".", ""),
                     ];
+                    if(isset($xmlLigneValue["numTva"]) && $xmlLigneValue["numTva"]) {
+                        unset($vente["numeroEvvDestinataire"]);
+                        $vente['destinataireTVA'] = ['numeroDestinataireTVA' => $xmlLigneValue["numTva"]];
+                    }
                     $produit["destinationVentesRaisins"][] = $vente;
                 }
                 if(preg_match("/^L7_/", $xmlLigneKey)) {
@@ -177,6 +180,10 @@ class ExportDRJson
                         "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
                         "volObtenuIssuMouts" => number_format(round($xmlLigneValue["volume"], 2), 2, ".", ""),
                     ];
+                    if(isset($xmlLigneValue["numTva"]) && $xmlLigneValue["numTva"]) {
+                        unset($vente["numeroEvvDestinataire"]);
+                        $vente['destinataireTVA'] = ['numeroDestinataireTVA' => $xmlLigneValue["numTva"]];
+                    }
                     $produit["destinationVentesMouts"][] = $vente;
                 }
                 if(preg_match("/^L8_/", $xmlLigneKey)) {
