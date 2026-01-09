@@ -182,6 +182,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
     public function getVolumeVenduByCvi($type, $cvi) {
         $volume = 0;
+        if(!$this->exist($type)) {
+
+            return $volume;
+        }
         foreach($this->get($type) as $achat) {
             if($achat->cvi != $cvi) {
                 continue;
