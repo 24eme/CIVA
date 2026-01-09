@@ -233,6 +233,9 @@ class ExportDRJson
         $site['produits'] = [];
 
         foreach ($produits as $produit) {
+            if(!isset($produit['volVinRevendicableOuCommercialisable']) || !floatval($produit['volVinRevendicableOuCommercialisable'])) {
+                continue;
+            }
             if(!isset($site['produits'][$produit['codeProduit'].$produit['mentionValorisante']])) {
                 $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']] = [
                     'codeProduit' => $produit['codeProduit'],
@@ -240,15 +243,18 @@ class ExportDRJson
                     'volumeObtenu' => 0,
                 ];
             }
-            if(isset($produit['volVinRevendicableOuCommercialisable']) && floatval($produit['volVinRevendicableOuCommercialisable'])) {
-                $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']]['volumeObtenu'] += floatval($produit['volVinRevendicableOuCommercialisable']);
-            }
+            $site['produits'][$produit['codeProduit'].$produit['mentionValorisante']]['volumeObtenu'] += floatval($produit['volVinRevendicableOuCommercialisable']);
         }
 
         $site['produits'] = array_values($site['produits']);
         foreach($site['produits'] as $key => $produit) {
             $site['produits'][$key]['volumeObtenu'] = number_format($produit['volumeObtenu'], 2, ".", "");
         }
+
+        if(!count($site['produits'])) {
+            return [];
+        }
+
         $sites = [$site];
 
         foreach($etablissement->getLieuxStockage() as $lieuStockage) {
