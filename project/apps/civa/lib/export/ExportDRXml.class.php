@@ -32,8 +32,8 @@ class ExportDRXml {
             }
             $tvaIntra = null;
             if(!preg_match("/^(67|68)/", $cvi)) {
-                $etablissement = EtablissementClient::getInstance()->find($cvi);
-                if($etablissement->pays != 'FR') {
+                $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
+                if($etablissement && $etablissement->pays != 'FR') {
                     $tvaIntra = $etablissement->getSociete()->no_tva_intracommunautaire;
                 }
             }
