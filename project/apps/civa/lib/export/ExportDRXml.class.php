@@ -165,14 +165,14 @@ class ExportDRXml {
 
         $l16 = $usagesIndustriels + $usagesIndustrielsNegoce + $vci;
 
-        $col['exploitant']['L15'] = round($l15, 2); //Volume revendique
-        $col['exploitant']['L16'] = round($l16, 2);
+        $col['exploitant']['L15'] = $l15; //Volume revendique
+        $col['exploitant']['L16'] = $l16;
 
         $col['exploitant']['L17'] = 0; //HS
         $col['exploitant']['L18'] = 0; //HS
         $col['exploitant']['L19'] = 0;
         if($vci) {
-            $col['exploitant']['L19'] = round($vci, 2);
+            $col['exploitant']['L19'] = $vci;
         }
 
         if (preg_match("|cepage_RB|", $object->getHash())) {

@@ -161,28 +161,28 @@ class ExportDRJson
             unset($produit["volEnVinification"]);
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
                 if(floatval($xmlCol["exploitant"][$xmlKey]) > 0) {
-                    $produit[$jsonKey] = number_format($xmlCol["exploitant"][$xmlKey], 2, ".", "");
+                    $produit[$jsonKey] = number_format(round($xmlCol["exploitant"][$xmlKey], 2), 2, ".", "");
                 }
             }
             foreach($xmlCol["exploitant"] as $xmlLigneKey => $xmlLigneValue) {
                 if(preg_match("/^L6_/", $xmlLigneKey)) {
                     $vente = [
                         "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
-                        "volObtenuIssuRaisins" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                        "volObtenuIssuRaisins" => number_format(round($xmlLigneValue["volume"], 2), 2, ".", ""),
                     ];
                     $produit["destinationVentesRaisins"][] = $vente;
                 }
                 if(preg_match("/^L7_/", $xmlLigneKey)) {
                     $vente = [
                         "numeroEvvDestinataire" => $xmlLigneValue["numCvi"]."",
-                        "volObtenuIssuMouts" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                        "volObtenuIssuMouts" => number_format(round($xmlLigneValue["volume"], 2), 2, ".", ""),
                     ];
                     $produit["destinationVentesMouts"][] = $vente;
                 }
                 if(preg_match("/^L8_/", $xmlLigneKey)) {
                     $vente = [
                         "numeroEvvCaveCoop" => $xmlLigneValue["numCvi"]."",
-                        "volObtenuApportRaisins" => number_format($xmlLigneValue["volume"], 2, ".", ""),
+                        "volObtenuApportRaisins" => number_format(round($xmlLigneValue["volume"], 2), 2, ".", ""),
                     ];
                     $produit["destinationApportsCaveCoop"][] = $vente;
                 }
@@ -192,10 +192,10 @@ class ExportDRJson
                 $produitAssocie = [
                     "typeAssociation" => "REB",
                     "codeProduitAssocie" => $xmlCol['colonneAss']['L1'],
-                    "recolteTotaleProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L5'], 2, ".", ""),
-                    "conserveCavePartExploitProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L9'], 2, ".", ""),
-                    "volEnVinificationProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L10'], 2, ".", ""),
-                    "volVinRevendicOuCommerciaProdAssocie" => number_format($xmlCol['colonneAss']['exploitant']['L14'], 2, ".", ""),
+                    "recolteTotaleProdAssocie" => number_format(round($xmlCol['colonneAss']['exploitant']['L5'], 2), 2, ".", ""),
+                    "conserveCavePartExploitProdAssocie" => number_format(round($xmlCol['colonneAss']['exploitant']['L9'], 2), 2, ".", ""),
+                    "volEnVinificationProdAssocie" => number_format(round($xmlCol['colonneAss']['exploitant']['L10'], 2), 2, ".", ""),
+                    "volVinRevendicOuCommerciaProdAssocie" => number_format(round($xmlCol['colonneAss']['exploitant']['L14'], 2), 2, ".", ""),
                 ];
 
                 /*foreach($xmlCol['colonneAss']["exploitant"] as $xmlColAssLigneKey => $xmlColAssLigneValue) {
