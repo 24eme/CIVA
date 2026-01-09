@@ -160,7 +160,7 @@ class ExportDRJson
             }
             unset($produit["volEnVinification"]);
             foreach($correspondanceNumLigneJson as $xmlKey => $jsonKey) {
-                if(floatval($xmlCol["exploitant"][$xmlKey]) > 0) {
+                if(round(floatval($xmlCol["exploitant"][$xmlKey]), 2) > 0) {
                     $produit[$jsonKey] = number_format(round($xmlCol["exploitant"][$xmlKey], 2), 2, ".", "");
                 }
             }
