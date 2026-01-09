@@ -30,12 +30,20 @@ class ExportDRXml {
             if($volume == 0) {
                 continue;
             }
+            $tvaIntra = null;
+            if(!preg_match("/^(67|68)/", $cvi)) {
+                $etablissement = EtablissementClient::getInstance()->find($cvi);
+                if($etablissement->pays != 'FR') {
+                    $tvaIntra = $etablissement->getSociete()->no_tva_intracommunautaire;
+                }
+            }
             $key = self::$type2douane[$type].'_'.$cvi;
             if(!array_key_exists($key, $xml)) {
-                $item = array('numCvi' => $cvi, 'volume' => 0);
+                $item = array('numCvi' => $cvi, 'numTva' => $tvaIntra, 'volume' => 0);
             } else {
                 $item = $xml[$key];
             }
+
             $item['volume'] += $volume;
             if($type == 'negoces' && $this->destinataire == self::DEST_DOUANE) {
                 $item['volume'] = round($item['volume'] - $obj->getTotalDontDplcVendusByCviRatio($type, $cvi) - $obj->getTotalDontVciVendusByCviRatio($type, $cvi), 2);
