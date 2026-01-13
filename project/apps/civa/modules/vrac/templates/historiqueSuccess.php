@@ -28,10 +28,10 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-9" style="border-right: 1px dashed black">
+        <div class="col-xs-9">
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-3" style="border-left: 1px dashed black">
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
