@@ -33,9 +33,13 @@
         </div>
         <div class="col-xs-3">
             <?php $current_filters = []; ?>
-            <?php parse_str($_SERVER['QUERY_STRING'], $current_filters); ?>
+            <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
             <h3 style="margin-top:0">Filtrage</h3>
+
+            <?php if (empty($current_filters) === false): ?>
+                <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
+            <?php endif ?>
 
             <h5>Soussignés</h5>
             <div class="input-group">
