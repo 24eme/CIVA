@@ -32,6 +32,9 @@
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
         <div class="col-xs-3">
+            <?php $current_filters = []; ?>
+            <?php parse_str($_SERVER['QUERY_STRING'], $current_filters); ?>
+
             <h3 style="margin-top:0">Filtrage</h3>
 
             <h5>Soussignés</h5>
@@ -44,7 +47,7 @@
             <ul class="list-group">
                 <?php foreach ($campagnes as $c): ?>
                     <li class="list-group-item">
-                        <a href="#"><?php echo $c ?></a>
+                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>"><?php echo $c ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -52,11 +55,11 @@
             <h5>Type de contrat</h5>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a href="#">Tous</a>
+                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($types as $k => $s): ?>
                     <li class="list-group-item">
-                        <a href="#"><?php echo $s ?></a>
+                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -64,11 +67,11 @@
             <h5>Temporalité</h5>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a href="#">Tous</a>
+                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($temporalites as $k => $s): ?>
                     <li class="list-group-item">
-                        <a href="#"><?php echo $s ?></a>
+                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -76,11 +79,11 @@
             <h5>Statuts</h5>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a href="#">Tous</a>
+                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($statuts as $k => $s): ?>
                     <li class="list-group-item">
-                        <a href="#"><?php echo $s ?></a>
+                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
