@@ -46,7 +46,7 @@
             <h5>Campagne</h5>
             <ul class="list-group">
                 <?php foreach ($campagnes as $c): ?>
-                    <li class="list-group-item">
+                    <li class="list-group-item <?php echo $c === $campagne ? 'active' : null ?>">
                         <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>"><?php echo $c ?></a>
                     </li>
                 <?php endforeach; ?>
@@ -54,11 +54,11 @@
 
             <h5>Type de contrat</h5>
             <ul class="list-group">
-                <li class="list-group-item">
+                <li class="list-group-item <?php echo $type === null ? 'active' : null ?>">
                     <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($types as $k => $s): ?>
-                    <li class="list-group-item">
+                    <li class="list-group-item <?php echo $k === $type ? 'active' : null ?>">
                         <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
@@ -66,11 +66,11 @@
 
             <h5>Temporalité</h5>
             <ul class="list-group">
-                <li class="list-group-item">
+                <li class="list-group-item <?php echo $temporalite === null ? 'active' : null ?>">
                     <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($temporalites as $k => $s): ?>
-                    <li class="list-group-item">
+                    <li class="list-group-item <?php echo $k === $temporalite ? 'active' : null ?>">
                         <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
@@ -78,11 +78,11 @@
 
             <h5>Statuts</h5>
             <ul class="list-group">
-                <li class="list-group-item">
+                <li class="list-group-item <?php echo $statut === null ? 'active' : null ?>">
                     <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
                 </li>
                 <?php foreach ($statuts as $k => $s): ?>
-                    <li class="list-group-item">
+                    <li class="list-group-item <?php echo $k === $statut ? 'active' : null ?>">
                         <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>"><?php echo $s ?></a>
                     </li>
                 <?php endforeach; ?>
