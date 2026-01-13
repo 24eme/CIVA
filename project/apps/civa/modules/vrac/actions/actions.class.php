@@ -48,6 +48,8 @@ class vracActions extends sfActions
         $this->roles = $this->findRoles();
         $annuaire = $this->getAnnuaire();
         $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
+
+        $this->setLayout('layout');
 	}
 
     protected function findRoles() {

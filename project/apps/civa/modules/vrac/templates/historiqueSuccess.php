@@ -1,5 +1,63 @@
 <div id="contrats_vrac">
 	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
+    <div class="clearfix">
+        <div style="margin: 15px 0">
+            Agir sur les <span id="selected_contrats">0</span> contrat(s) sélectionné(s) :
+            <div class="btn-group">
+                <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Signer</a></li>
+                    <li><a href="#">Dupliquer</a></li>
+                    <li><a href="#">Générer</a></li>
+                </ul>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Export <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#">PDF</a></li>
+                        <li><a href="#">CSV</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-9" style="border-right: 1px dashed black">
+            <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
+        </div>
+        <div class="col-xs-3">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <span class="badge">14</span>
+                Cras justo odio
+              </li>
+              <li class="list-group-item">
+                  <span class="badge">14</span>
+                  Cras justo odio
+              </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const count_selected = document.getElementById('selected_contrats')
+        const listing_contrat = document.getElementById('soussignes_listing')
+
+        listing_contrat.addEventListener('click', function (e) {
+            if (e.target.closest('input[type=checkbox]') == null) {
+                return false
+            }
+
+            count_selected.innerHTML = +listing_contrat.querySelectorAll('tbody input[type=checkbox]:checked').length
+        })
+    </script>
+
 	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">Exporter les contrats en CSV</a>
 	<div class="fond">
 		<form action="<?php echo url_for('vrac_historique', array('campagne' => $campagne, 'identifiant' => $compte->getIdentifiant())) ?>" method="GET">
