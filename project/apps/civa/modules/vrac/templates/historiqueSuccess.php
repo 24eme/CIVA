@@ -32,15 +32,57 @@
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
         <div class="col-xs-3">
+            <h3 style="margin-top:0">Filtrage</h3>
+
+            <h5>Soussignés</h5>
+            <div class="input-group">
+                <span class="input-group-addon" id="soussignes_search"><span class="glyphicon glyphicon-filter"></span></span>
+                <input type="text" class="form-control" placeholder="Soussigné" aria-describedby="soussignes_search">
+            </div>
+
+            <h5>Campagne</h5>
             <ul class="list-group">
-              <li class="list-group-item">
-                <span class="badge">14</span>
-                Cras justo odio
-              </li>
-              <li class="list-group-item">
-                  <span class="badge">14</span>
-                  Cras justo odio
-              </li>
+                <?php foreach ($campagnes as $c): ?>
+                    <li class="list-group-item">
+                        <a href="#"><?php echo $c ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <h5>Type de contrat</h5>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="#">Tous</a>
+                </li>
+                <?php foreach ($types as $k => $s): ?>
+                    <li class="list-group-item">
+                        <a href="#"><?php echo $s ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <h5>Temporalité</h5>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="#">Tous</a>
+                </li>
+                <?php foreach ($temporalites as $k => $s): ?>
+                    <li class="list-group-item">
+                        <a href="#"><?php echo $s ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <h5>Statuts</h5>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="#">Tous</a>
+                </li>
+                <?php foreach ($statuts as $k => $s): ?>
+                    <li class="list-group-item">
+                        <a href="#"><?php echo $s ?></a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
