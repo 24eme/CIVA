@@ -73,7 +73,7 @@ class VracCsvImport extends CsvFile
         "Prix unite", "Frais annexes vendeur", "Primes diverses acheteur", "Clause réserve propriété", "Clause délai paiement",
         "Clause résiliation", "Mandat facturation", "Critères et modalités d’évolution des prix", "Critères de renégociation du prix",
         "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières", "Créateur", "Date de saisie",
-        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture"
+        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture","Statut","Centilisation","Quantité enlevé","Date retiraison","Id du document"
     ];
 
     /** @var array<string> $imported ID des vracs importés */
@@ -280,7 +280,7 @@ class VracCsvImport extends CsvFile
 
             $produit->millesime = $line[self::CSV_VIN_MILLESIME];
 
-            if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
+            if ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_CADRE) {
                 $produit->millesime = null;
             }
 
@@ -303,7 +303,7 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_APPLICATION') ? 1 : 0;
+            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) ? 1 : 0;
             /* if ($v->contrat_pluriannuel) {
                 $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
             } */
@@ -316,8 +316,8 @@ class VracCsvImport extends CsvFile
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
             $v->add('clause_renegociation_prix', $this->guessBool('Clause renégociation du prix', $line[self::CSV_CLAUSE_CRITERE_RENEGOCIATION_PRIX]));
 
-            if ($line[self::CSV_TYPE_CONTRAT] === 'PLURIANNUEL_CADRE') {
-                $v->add('pluriannuel_contrat_duree', $line[self::CSV_DUREE_CONTRAT_PLURI]);
+            if ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_CADRE) {
+                $v->add('duree_annee', $line[self::CSV_DUREE_CONTRAT_PLURI]);
                 $v->add('clause_evolution_prix', $line[self::CSV_CLAUSE_CRITERE_EVOLUTION_PRIX]);
             }
 

@@ -93,13 +93,13 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
 
-        $this->setWidget('pluriannuel_contrat_duree', new sfWidgetFormChoice(array('choices' => $this->getDureeContratCurrentMillesime())));
-        $this->setWidget('pluriannuel_contrat_duree_select', new sfWidgetFormInputHidden());
+        $this->setWidget('duree_annee', new sfWidgetFormChoice(array('choices' => $this->getDureeContratCurrentMillesime())));
+        $this->setWidget('duree_annee_select', new sfWidgetFormInputHidden());
 
-        $this->getWidget('pluriannuel_contrat_duree')->setLabel('Pour une durée de');
+        $this->getWidget('duree_annee')->setLabel('Pour une durée de');
 
-        $this->setValidator('pluriannuel_contrat_duree', new ValidatorVracChoices(array('required' => false, 'choices' => array_keys($this->getDureeContratCurrentMillesime()))));
-        $this->setValidator('pluriannuel_contrat_duree_select', new sfValidatorString(array('required' => false)));
+        $this->setValidator('duree_annee', new ValidatorVracChoices(array('required' => false, 'choices' => array_keys($this->getDureeContratCurrentMillesime()))));
+        $this->setValidator('duree_annee_select', new sfValidatorString(array('required' => false)));
 
     }
 

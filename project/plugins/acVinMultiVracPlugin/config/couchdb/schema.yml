@@ -234,8 +234,8 @@ Vrac:
       type_contrat: {  }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
+      duree_annee: { required: false }
       contrat_pluriannuel_mode_surface: { }
-      pluriannuel_contrat_duree: { required: false }
       prix_unite: { }
       date_modification: {  }
       date_export_creation: {  }
