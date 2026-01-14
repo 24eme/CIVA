@@ -1,30 +1,6 @@
 <div id="contrats_vrac">
 	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
     <div class="clearfix">
-        <div style="margin: 15px 0">
-            Agir sur les <span id="selected_contrats">0</span> contrat(s) sélectionné(s) :
-            <div class="btn-group">
-                <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Signer</a></li>
-                    <li><a href="#">Dupliquer</a></li>
-                    <li><a href="#">Générer</a></li>
-                </ul>
-            </div>
-            <div class="pull-right">
-                <div class="btn-group">
-                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Export <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#">PDF</a></li>
-                        <li><a href="#">CSV</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -35,62 +11,76 @@
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
+            <div style="margin-bottom: 15px">
+                <a class="btn btn-default btn-block" href="#">
+                    <span class="glyphicon glyphicon-export"></span>
+                    Export
+                </a>
+                <a class="btn btn-default btn-block" href="#">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Créer un contrat
+                </a>
+            </div>
+
             <h3 style="margin-top:0">Filtrage</h3>
 
             <?php if (empty($current_filters) === false): ?>
                 <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
             <?php endif ?>
 
-            <h5>Soussignés</h5>
+            <h4>Soussignés</h4>
             <div class="input-group">
                 <span class="input-group-addon" id="soussignes_search"><span class="glyphicon glyphicon-filter"></span></span>
                 <input type="text" class="form-control" placeholder="Soussigné" aria-describedby="soussignes_search">
             </div>
 
-            <h5>Campagne</h5>
-            <ul class="list-group">
+            <h4>Campagne</h4>
+            <div class="list-group">
                 <?php foreach ($campagnes as $c): ?>
-                    <li class="list-group-item <?php echo $c === $campagne ? 'active' : null ?>">
-                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>"><?php echo $c ?></a>
-                    </li>
+                    <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
+                        <?php echo $c ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? 0 ?>
+                        </span>
+                    </a>
                 <?php endforeach; ?>
-            </ul>
+            </div>
 
-            <h5>Type de contrat</h5>
-            <ul class="list-group">
-                <li class="list-group-item <?php echo $type === null ? 'active' : null ?>">
-                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
-                </li>
+            <h4>Type de contrat</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
                 <?php foreach ($types as $k => $s): ?>
-                    <li class="list-group-item <?php echo $k === $type ? 'active' : null ?>">
-                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>"><?php echo $s ?></a>
-                    </li>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
+                        <?php echo $s ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 1))[$k] ?? 0 ?>
+                        </span>
+                    </a>
                 <?php endforeach; ?>
-            </ul>
+            </div>
 
-            <h5>Temporalité</h5>
-            <ul class="list-group">
-                <li class="list-group-item <?php echo $temporalite === null ? 'active' : null ?>">
-                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
-                </li>
+            <h4>Temporalité</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $temporalite === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
                 <?php foreach ($temporalites as $k => $s): ?>
-                    <li class="list-group-item <?php echo $k === $temporalite ? 'active' : null ?>">
-                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>"><?php echo $s ?></a>
-                    </li>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $temporalite ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>">
+                        <?php echo $s ?>
+                    </a>
                 <?php endforeach; ?>
-            </ul>
+            </div>
 
-            <h5>Statuts</h5>
-            <ul class="list-group">
-                <li class="list-group-item <?php echo $statut === null ? 'active' : null ?>">
-                    <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
-                </li>
+            <h4>Statuts</h4>
+            <div class="list-group">
+                <a class="list-group-item <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
                 <?php foreach ($statuts as $k => $s): ?>
-                    <li class="list-group-item <?php echo $k === $statut ? 'active' : null ?>">
-                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>"><?php echo $s ?></a>
-                    </li>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
+                        <?php echo $s ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))[$k] ?? 0 ?>
+                        </span>
+                    </a>
                 <?php endforeach; ?>
-            </ul>
+            </div>
         </div>
     </div>
 

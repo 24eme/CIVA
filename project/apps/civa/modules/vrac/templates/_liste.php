@@ -1,9 +1,8 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Text') ?>
-<table id="soussignes_listing" cellspacing="0" cellpadding="0" class="table table-striped table-condensed">
+<table id="soussignes_listing" cellspacing="0" cellpadding="0" class="table table-striped table-condensed table_listing">
 	<thead>
 		<tr>
-            <th class="col_sel"></th>
 			<th class="col_type">Type</th>
 			<th class="col_numero">N°</th>
 			<th class="col_date">Date</th>
@@ -28,8 +27,7 @@
 				}
 				$hasValidated = false;
 		?>
-		<tr>
-            <td><input type="checkbox"></td>
+        <tr>
 			<td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
 					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
