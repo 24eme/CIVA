@@ -19,11 +19,11 @@
         <td class="text-right"><a href="#line<?php echo $i ?>"><?php echo $i ?></a></td>
         <td><label class="label label-danger">Erreur</label></td>
         <td>
-            <table>
+            <ul style="margin-bottom: 0; list-style-type: circle; list-style-position: inside;">
             <?php foreach ($listeerreurs as $e): ?>
-                <tr><td><?php echo $e->diagnostic; ?></td></tr>
+                <li><?php echo $e->diagnostic; ?></li>
             <?php endforeach ?>
-            </table>
+            </ul>
         </td>
         <td><a href="#line<?php echo $i ?>"><i class="glyphicon glyphicon-eye-open"></i> Voir la ligne</a></td>
     <tr>
