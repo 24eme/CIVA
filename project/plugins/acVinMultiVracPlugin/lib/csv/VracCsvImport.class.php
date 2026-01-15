@@ -181,7 +181,7 @@ class VracCsvImport extends CsvFile
         $etab = $this->guessId($identifiant);
 
         foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
-            if (in_array($existingVrac->value->numero_papier, $ids)) {
+            if (isset($existingVrac->value->numero_papier) && in_array($existingVrac->value->numero_papier, $ids)) {
                 $this->addError(0, "contrat_existant", "Le contrat avec le numéro interne ".$existingVrac->value->numero_papier." existe déjà");
             }
         }
@@ -284,9 +284,11 @@ class VracCsvImport extends CsvFile
                 $produit->millesime = null;
             }
 
+            $produit->getOrAdd('label');
             if ($line[self::CSV_VIN_LABEL]) {
-                $produit->getOrAdd('label');
                 $produit->label = $line[self::CSV_VIN_LABEL];
+            } else {
+                $produit->label = "AUCUNE";
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {

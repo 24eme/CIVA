@@ -53,7 +53,7 @@ class VracCsvExport
              $contrat->exist('clause_resiliation') ? $contrat->clause_resiliation : null,
              $contrat->exist('clause_mandat_facturation') ? $contrat->clause_mandat_facturation : null,
              $contrat->exist('clause_evolution_prix') ? $contrat->clause_evolution_prix : null,
-             $contrat->exist('clause_renegociation_prix') ? $contrat->clause_renegociation_prix : null,
+             $contrat->exist('clause_renegociation_prix') ? $contrat->clause_renegociation_prix : 0,
              $contrat->exist('suivi_qualitatif') ? $contrat->suivi_qualitatif : null,
              $contrat->exist('delais_retiraison') ? $contrat->delais_retiraison : null,
              $contrat->conditions_particulieres,
