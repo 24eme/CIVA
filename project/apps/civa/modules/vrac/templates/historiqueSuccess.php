@@ -21,10 +21,17 @@
                         <li><a href="#">PDF</a></li>
                     </ul>
                 </div>
-                <button class="btn btn-default btn-block" href="#">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Créer un contrat
-                </button>
+
+                <div class="btn-group btn-block">
+                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="glyphicon glyphicon-plus"></span> Créer un contrat <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="choixTypeVracPopupPapier" href="">Papier</a></li>
+                        <li><a class="choixTypeVracPopup" href="">Télédéclaration</a></li>
+                        <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
+                    </ul>
+                </div>
             </div>
 
             <h3 style="margin-top:0">Filtrage</h3>
