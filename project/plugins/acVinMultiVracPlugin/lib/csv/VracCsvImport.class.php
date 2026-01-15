@@ -218,7 +218,14 @@ class VracCsvImport extends CsvFile
                     $this->addError(self::$line, "operateur_inexistant", "L'identifiant du créateur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
                     continue;
                 }
-
+                if ($verified && $v) {
+                    $v->updateTotaux();
+                    if($v->isApplicationPluriannuel()) {
+                        $v->createApplication($createur);
+                    }
+                    $v->save();
+                    self::$imported[] = $v->_id;
+                }
                 if($line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
                     $vCadre = VracClient::getInstance()->findByNumeroContrat($line[self::CSV_NUMERO_CONTRAT_CADRE]);
                     $v = $vCadre->generateNextPluriannuelApplication();
@@ -289,9 +296,11 @@ class VracCsvImport extends CsvFile
                 $produit->millesime = null;
             }
 
+            $produit->getOrAdd('label');
             if ($line[self::CSV_VIN_LABEL]) {
-                $produit->getOrAdd('label');
                 $produit->label = $line[self::CSV_VIN_LABEL];
+            } else {
+                $produit->label = "AUCUNE";
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {
@@ -338,15 +347,7 @@ class VracCsvImport extends CsvFile
             // $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
             $v->etape = "validation";
 
-            if ($verified) {
-                $v->updateTotaux();
-                if($v->isApplicationPluriannuel()) {
-                    $v->createApplication($createur);
-                }
-                $v->save();
-
-                self::$imported[] = $v->_id;
-            } else {
+            if (!$verified) {
                 $validator = new VracContratValidation($v);
 
                 if ($validator->hasErreurs()) {
@@ -361,6 +362,15 @@ class VracCsvImport extends CsvFile
                     }
                 }
             }
+        }
+
+        if ($verified && $v) {
+            $v->updateTotaux();
+            if($v->isApplicationPluriannuel()) {
+                $v->createApplication($createur);
+            }
+            $v->save();
+            self::$imported[] = $v->_id;
         }
 
         return array_values(array_unique(self::$imported));
