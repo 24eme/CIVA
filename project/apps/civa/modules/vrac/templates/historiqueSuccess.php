@@ -7,7 +7,17 @@
         <div class="col-xs-9">
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
-        <div class="col-xs-3" style="border-left: 1px dashed black">
+        <div class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
+            <div class="btn-group">
+                <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Export <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
+                    <li><a href="#">PDF</a></li>
+                </ul>
+            </div>
+            <hr />
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
