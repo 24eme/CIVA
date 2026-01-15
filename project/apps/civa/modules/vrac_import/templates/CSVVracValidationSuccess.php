@@ -48,10 +48,7 @@
                     <tbody>
                 <?php foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
                     <tr>
-                        <td><span title="<?php echo ucfirst(strtolower($contrat['type_contrat'])) ?>" class="icon-<?php echo strtolower($contrat['type_contrat']) ?>"></span><span title="Contrat pluriannuel"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
-                          <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
-                          <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
-                      </svg></span></td>
+                        <td><span title="<?php echo ucfirst(strtolower($contrat['type_contrat'])) ?>" class="icon-<?php echo strtolower($contrat['type_contrat']) ?>"></span><?php if($contrat['temporalite_contrat'] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION): ?><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" ><path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></svg><?php else: ?><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16"><path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/><path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/></svg><?php endif; ?></td>
                         <td><?php echo $numero_contrat ?></td>
                         <td>
                             <?php echo $contrat['soussignes']['vendeur']->raison_sociale ?>
@@ -60,8 +57,8 @@
                             <?php endif ?>
                         </td>
                         <td><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?><br /><?php endforeach ?></td>
-                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['volume'] ?><br /><?php endforeach ?></td>
-                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['prix'] ?><br /><?php endforeach ?></td>
+                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace(" ", "&nbsp;", $produit_info['volume']) ?><br /><?php endforeach ?></td>
+                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace([" ","/"], "&nbsp;", $produit_info['prix']) ?><br /><?php endforeach ?></td>
                     </tr>
                 <?php endforeach; ?>
                     </tbody>
