@@ -3,11 +3,11 @@
 <table id="soussignes_listing" cellspacing="0" cellpadding="0" class="table table-striped table-condensed table_listing">
 	<thead>
 		<tr>
-			<th class="col_type">Type</th>
+            <th class="col_type" style="min-width: 50px;">Type</th>
 			<th class="col_numero">N°</th>
 			<th class="col_date">Date</th>
 			<th class="col_soussignes">Soussignés</th>
-			<th class="col_statut">Statut</th>
+            <th class="col_statut" style="width: 100px;">Statut</th>
 			<th class="col_actions">Actions</th>
 		</tr>
 	</thead>
@@ -37,11 +37,8 @@
                     if(isset($object->reference_contrat_pluriannuel) && $object->reference_contrat_pluriannuel):
                         $contratCadre = VracClient::getInstance()->find($object->reference_contrat_pluriannuel, acCouchdbClient::HYDRATE_JSON);
                 ?>
-                    <span title="Contrat d'application <?php echo substr($object->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo $contratCadre->numero_visa ?>">
-                    <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" >
-                      <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
-                    </svg>
-                    </span>
+                    <span title="Contrat d'application <?php echo substr($object->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo $contratCadre->numero_visa ?>"><svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" >
+                      <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></svg></span>
                 <?php elseif(isset($object->contrat_pluriannuel) && $object->contrat_pluriannuel): ?>
                     <span title="Contrat pluriannuel<?php echo ($object->numero_visa)? ' n°'.$object->numero_visa : ''; ?>">
                     <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
@@ -52,7 +49,7 @@
                 <?php endif; ?>
 			</td>
 			<td class="col_numero"><?php if ($item->numero_visa) echo $item->numero_visa; elseif(isset($contratCadre)) echo $contratCadre->numero_visa."-".substr($object->campagne, 0, 4); else echo ""; ?></td>
-			<td><?php echo format_date($item->date, 'p', 'fr'); ?></td>
+            <td><?php echo str_replace(" ", "&nbsp;", format_date($item->date, 'p', 'fr')); ?></td>
 			<td>
 				<ul class="liste_soussignes">
 					<?php
@@ -96,7 +93,7 @@
 					<?php endif; ?>
 				</ul>
 			</td>
-			<td><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
+            <td class="text-center"><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
 					<?php if ($item->statut == Vrac::STATUT_CREE||($item->statut == Vrac::STATUT_PROJET_VENDEUR && $item->is_proprietaire)): ?>

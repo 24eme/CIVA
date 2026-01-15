@@ -221,7 +221,6 @@ table#soussignes_listing tbody td {
     font-size: 12px;
     line-height: 17px;
     padding: 3px;
-    text-align: left;
     vertical-align: middle;
 }
 table#soussignes_listing .liste_actions li
