@@ -219,52 +219,57 @@ class VracCsvImport extends CsvFile
                     continue;
                 }
 
-                $v = VracClient::getInstance()->createVrac(
-                    $createur->_id,
-                    $line[self::CSV_DATE_SAISIE]
-                );
-                $v->campagne = $line[self::CSV_CAMPAGNE];
-                $v->numero_papier = $line[self::CSV_NUMERO_INTERNE];
-                $current = $line[self::CSV_NUMERO_INTERNE];
+                if($line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
+                    $vCadre = VracClient::getInstance()->findByNumeroContrat($line[self::CSV_NUMERO_CONTRAT_CADRE]);
+                    $v = $vCadre->generateNextPluriannuelApplication();
+                    $v->remove('declaration');
+                    $v->add('declaration');
+                } else {
+                    $v = VracClient::getInstance()->createVrac(
+                        $createur->_id,
+                        $line[self::CSV_DATE_SAISIE]
+                    );
+                    $v->campagne = $line[self::CSV_CAMPAGNE];
+                    $v->numero_papier = $line[self::CSV_NUMERO_INTERNE];
+                    $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
 
+                    try {
+                        $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
+                    } catch (Exception $e) {
+                        $this->addError(self::$line, "operateur_inexistant", "L'identifiant de l'acheteur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
+                        continue;
+                    }
+                    $v->acheteur_identifiant = $acheteur->_id;
+                    $v->acheteur_assujetti_tva = $this->guessBool('Acheteur assujetti tva', $line[self::CSV_ACHETEUR_TVA]);
+                    $v->storeAcheteurInformations($acheteur);
+
+                    try {
+                        $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
+                    } catch (Exception $e) {
+                        $this->addError(self::$line, "operateur_inexistant", "L'identifiant du vendeur n'a pas été reconnu [".$line[self::CSV_VENDEUR_CVI]."] (".$e->getMessage().")");
+                        continue;
+                    }
+                    $v->vendeur_identifiant = $vendeur->_id;
+                    $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
+                    $v->storeVendeurInformations($vendeur);
+
+                    if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
+                        try {
+                            $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                        } catch (Exception $e) {
+                            $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$line[self::CSV_COURTIER_MANDATAIRE_SIRET]."] (".$e->getMessage().")");
+                            continue;
+                        }
+                        $v->mandataire_identifiant = $mandataire->_id;
+                        $v->storeMandataireInformations($mandataire);
+                    }
+                }
+                $current = $line[self::CSV_NUMERO_INTERNE];
                 $produitPosition = 0;
             }
 
             if ($v === null) {
                 throw new sfException('Le vrac devrait être initialisé...');
-            }
-
-            $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
-
-            try {
-                $acheteur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
-            } catch (Exception $e) {
-                $this->addError(self::$line, "operateur_inexistant", "L'identifiant de l'acheteur n'a pas été reconnu [".$line[self::CSV_ACHETEUR_CVI]."] (".$e->getMessage().")");
-                continue;
-            }
-            $v->acheteur_identifiant = $acheteur->_id;
-            $v->acheteur_assujetti_tva = $this->guessBool('Acheteur assujetti tva', $line[self::CSV_ACHETEUR_TVA]);
-            $v->storeAcheteurInformations($acheteur);
-
-            try {
-                $vendeur = $this->guessId($line[self::CSV_VENDEUR_CVI]);
-            } catch (Exception $e) {
-                $this->addError(self::$line, "operateur_inexistant", "L'identifiant du vendeur n'a pas été reconnu [".$line[self::CSV_VENDEUR_CVI]."] (".$e->getMessage().")");
-                continue;
-            }
-            $v->vendeur_identifiant = $vendeur->_id;
-            $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
-            $v->storeVendeurInformations($vendeur);
-
-            if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
-                try {
-                    $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
-                } catch (Exception $e) {
-                    $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$line[self::CSV_COURTIER_MANDATAIRE_SIRET]."] (".$e->getMessage().")");
-                    continue;
-                }
-                $v->mandataire_identifiant = $mandataire->_id;
-                $v->storeMandataireInformations($mandataire);
             }
 
             // Section produit
@@ -284,11 +289,9 @@ class VracCsvImport extends CsvFile
                 $produit->millesime = null;
             }
 
-            $produit->getOrAdd('label');
             if ($line[self::CSV_VIN_LABEL]) {
+                $produit->getOrAdd('label');
                 $produit->label = $line[self::CSV_VIN_LABEL];
-            } else {
-                $produit->label = "AUCUNE";
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {
@@ -303,7 +306,7 @@ class VracCsvImport extends CsvFile
             $produit->prix_unitaire = (float) $line[self::CSV_PRIX_UNITAIRE];
             // Fin produit
 
-            $v->prix_unite = $line[self::CSV_PRIX_UNITE];
+            $v->prix_unite = isset(VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]] : $line[self::CSV_PRIX_UNITE];
 
             $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) ? 1 : 0;
             /* if ($v->contrat_pluriannuel) {
@@ -337,6 +340,9 @@ class VracCsvImport extends CsvFile
 
             if ($verified) {
                 $v->updateTotaux();
+                if($v->isApplicationPluriannuel()) {
+                    $v->createApplication($createur);
+                }
                 $v->save();
 
                 self::$imported[] = $v->_id;
@@ -424,6 +430,7 @@ class VracCsvImport extends CsvFile
                 $v = new Vrac(); // "obligatoire" pour récupérer l'objet produit via addProduit
                 $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
                 $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
+                $ret[$numero_interne]['temporalite_contrat'] = $entry[self::CSV_TYPE_CONTRAT];
                 $produit = $this->guessProduit($entry, $v);
 
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
@@ -433,8 +440,8 @@ class VracCsvImport extends CsvFile
                 $ret[$numero_interne]['produits'][] = [
                     'libelle' => $produit->getLibelleComplet(),
                     'millesime' => $entry[self::CSV_VIN_MILLESIME],
-                    'volume' => $entry[self::CSV_QUANTITE] . ' ' . $entry[self::CSV_QUANTITE_TYPE],
-                    'prix' => $entry[self::CSV_PRIX_UNITAIRE] . ' ' . VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]],
+                    'volume' => $entry[self::CSV_QUANTITE] . ' ' . strtolower($entry[self::CSV_QUANTITE_TYPE]),
+                    'prix' => $entry[self::CSV_PRIX_UNITAIRE] . " " . ( isset(VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]] : $entry[self::CSV_PRIX_UNITE]),
                 ];
 
                 unset($v);
