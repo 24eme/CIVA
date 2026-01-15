@@ -8,28 +8,23 @@
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
         <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
-            <div class="btn-group">
-                <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Export <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
-                    <li><a href="#">PDF</a></li>
-                </ul>
-            </div>
-            <hr />
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
             <div style="margin-bottom: 15px">
-                <a class="btn btn-default btn-block" href="#">
-                    <span class="glyphicon glyphicon-export"></span>
-                    Export
-                </a>
-                <a class="btn btn-default btn-block" href="#">
+                <div class="btn-group btn-block">
+                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
+                        <li><a href="#">PDF</a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-default btn-block" href="#">
                     <span class="glyphicon glyphicon-plus"></span>
                     Créer un contrat
-                </a>
+                </button>
             </div>
 
             <h3 style="margin-top:0">Filtrage</h3>
