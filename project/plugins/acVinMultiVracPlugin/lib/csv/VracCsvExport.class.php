@@ -11,14 +11,15 @@ class VracCsvExport
     }
 
     public static function contrat(Vrac $contrat) {
+        $f = fopen('php://memory', 'r+');
         foreach($contrat->declaration->getProduitsDetails() as $produit) {
             $fields = [
              "CONTRAT",
              $contrat->campagne,
              $contrat->getTemporaliteContrat(),
              $contrat->getDureeAnnee(),
-             $contrat->numero_visa,
-             $contrat->exist('reference_contrat_pluriannuel') ? $contrat->reference_contrat_pluriannuel : null,
+             $contrat->numero_contrat,
+             $contrat->exist('reference_contrat_pluriannuel') ? str_replace('VRAC-', '', $contrat->reference_contrat_pluriannuel) : null,
              $contrat->type_contrat,
              ($contrat->acheteur->cvi) ? $contrat->acheteur->cvi : $contrat->acheteur->civaba,
              ($contrat->acheteur->intitule) ? $contrat->acheteur->intitule . ' ' .$contrat->acheteur->raison_sociale : $contrat->acheteur->raison_sociale,
@@ -63,19 +64,16 @@ class VracCsvExport
              $contrat->valide->date_validation_mandataire,
              $contrat->valide->date_validation,
              $contrat->valide->date_cloture,
+             $contrat->numero_visa,
              $contrat->valide->statut,
              ($produit->exist('centilisation'))? VracClient::getLibelleCentilisation($produit->centilisation) : null,
              $produit->getQuantiteEnleve(),
              (count($produit->retiraisons) > 0) ? $produit->retiraisons[0]->date : null,
              $contrat->_id,
             ];
-
-            $f = fopen('php://memory', 'r+');
             fputcsv($f, $fields, ';');
         }
-
         rewind($f);
-
         return stream_get_contents($f);
     }
 
