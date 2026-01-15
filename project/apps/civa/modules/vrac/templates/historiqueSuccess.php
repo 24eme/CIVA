@@ -7,7 +7,7 @@
         <div class="col-xs-9">
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
-        <div class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
+        <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
             <div class="btn-group">
                 <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Export <span class="caret"></span>
@@ -46,14 +46,19 @@
 
             <h4>Campagne</h4>
             <div class="list-group">
-                <?php foreach ($campagnes as $c): ?>
-                    <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
+                <?php foreach ($campagnes as $k => $c): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
                         <span class="badge pull-right">
                         <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? 0 ?>
                         </span>
                     </a>
                 <?php endforeach; ?>
+                <?php if (count($campagnes) > 4): ?>
+                    <div class="list-group-item list-group-item-xs text-center" data-sens="more">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </div>
+                <?php endif ?>
             </div>
 
             <h4>Type de contrat</h4>
@@ -95,15 +100,26 @@
     </div>
 
     <script>
-        const count_selected = document.getElementById('selected_contrats')
-        const listing_contrat = document.getElementById('soussignes_listing')
-
-        listing_contrat.addEventListener('click', function (e) {
-            if (e.target.closest('input[type=checkbox]') == null) {
-                return false
+        const col_filters = document.getElementById('col-filters')
+        col_filters.addEventListener('click', function (e) {
+            if (e.target.dataset.sens) {
+                const sens = e.target.dataset.sens
+                const listgroup = e.target.closest('.list-group')
+                listgroup.querySelectorAll('.list-group-item').forEach(function (el, i) {
+                    if (i > 4 && el.dataset.sens == undefined) {
+                        el.classList.toggle('hidden')
+                        if (sens === "more") {
+                            listgroup.querySelector('[data-sens] span').classList.remove('glyphicon-chevron-down')
+                            listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-up')
+                            listgroup.querySelector('[data-sens]').dataset.sens = "less"
+                        } else {
+                            listgroup.querySelector('[data-sens] span').classList.remove('glyphicon-chevron-up')
+                            listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-down')
+                            listgroup.querySelector('[data-sens]').dataset.sens = "more"
+                        }
+                    }
+                })
             }
-
-            count_selected.innerHTML = +listing_contrat.querySelectorAll('tbody input[type=checkbox]:checked').length
         })
     </script>
 </div>
