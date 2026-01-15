@@ -50,7 +50,7 @@
                     <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
                         <span class="badge pull-right">
-                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? 0 ?>
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? "?" ?>
                         </span>
                     </a>
                 <?php endforeach; ?>
