@@ -31,13 +31,13 @@
                     </ul>
                 </div>
 
-                <div class="btn-group btn-block">
-                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="glyphicon glyphicon-plus"></span> Créer un contrat <span class="caret"></span>
+                <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
+                    <a type="button" class="btn btn-default" style="flex-grow: 1">Créer un contrat</a>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="choixTypeVracPopupPapier" href="">Papier</a></li>
-                        <li><a class="choixTypeVracPopup" href="">Télédéclaration</a></li>
                         <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
                     </ul>
                 </div>
