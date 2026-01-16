@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
-                    <a type="button" class="btn btn-default" style="flex-grow: 1">Créer un contrat</a>
+                    <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac">Créer un contrat</a>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="caret"></span>
                       <span class="sr-only">Toggle Dropdown</span>
@@ -153,3 +153,52 @@
 <ul id="btn_etape" class="btn_prev_suiv">
 	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
 </ul>
+
+<div id="popup_choix_typeVrac" class="popup_ajout modal" title="Création du contrat" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Création du contrat</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="form_creation_contrats_vrac">
+            <div class="form-group">
+                <?php $etablissements = VracClient::getInstance()->getEtablissements($sf_user->getCompte()->getSociete()); ?>
+                <select class="form-control">
+                <?php foreach($etablissements as $etablissement): ?>
+                    <?php if(!VracSecurity::getInstance($sf_user->getCompte(), null)->isAuthorizedTiers($etablissement, VracSecurity::CREATION)): continue; endif; ?>
+                    <option value="<?php echo $etablissement->_id ?>"><?php echo $etablissement->nom ?> <?php echo $etablissement->cvi ?> <?php echo EtablissementFamilles::$familles[$etablissement->famille]; ?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display:inline-block">Vous êtes :</label>
+                <label class="radio-inline">
+                  <input required type="radio" name="choix_type" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', ['type' => 'vendeur', 'papier' => 0]) ?>"> Vendeur
+                </label>
+                <label class="radio-inline">
+                  <input required type="radio" name="choix_type" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', ['type' => 'acheteur', 'papier' => 0]) ?>"> Acheteur
+                </label>
+            </div>
+        </form>
+
+        <script type="text/javascript">
+            const form = document.getElementById("form_creation_contrats_vrac")
+            form.addEventListener('submit', function (e) {
+                e.preventDefault()
+                const url = form.querySelector('input[type=radio]:checked').value
+                const creator = form.querySelector('select > option:checked').value
+
+                document.location.href = url + "&createur=" + creator
+                return false;
+            })
+        </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button form="form_creation_contrats_vrac" class="btn btn-primary">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
