@@ -49,10 +49,10 @@
                 <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
             <?php endif ?>
 
-            <h4>Soussignés</h4>
+            <h4>Recherche</h4>
             <div class="input-group">
-                <span class="input-group-addon" id="soussignes_search"><span class="glyphicon glyphicon-filter"></span></span>
-                <input type="text" class="form-control" placeholder="Soussigné" aria-describedby="soussignes_search">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+                <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
             </div>
 
             <h4>Campagne</h4>
@@ -112,6 +112,8 @@
 
     <script>
         const col_filters = document.getElementById('col-filters')
+        const table_soussignes = document.getElementById('soussignes_listing')
+
         col_filters.addEventListener('click', function (e) {
             if (e.target.dataset.sens) {
                 const sens = e.target.dataset.sens
@@ -128,6 +130,19 @@
                             listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-down')
                             listgroup.querySelector('[data-sens]').dataset.sens = "more"
                         }
+                    }
+                })
+            }
+        })
+
+        col_filters.addEventListener('input', function (e) {
+            if (e.target.id === "soussignes_search") {
+                const terms = document.getElementById(e.target.id).value
+                table_soussignes.querySelectorAll('tbody tr').forEach(function (tr) {
+                    if (tr.textContent.toLowerCase().includes(terms.toLowerCase())) {
+                        tr.classList.remove('hidden')
+                    } else {
+                        tr.classList.add('hidden')
                     }
                 })
             }
