@@ -44,8 +44,12 @@ class dr_exportActions extends _DRActions {
         $export->build();
         $json[$class::ROOT_NODE][] = json_decode($export->export());
 
-        $export->addHeaders($this->getResponse());
-        return $this->renderText(json_encode($json).PHP_EOL);
+        if(sfConfig::get('sf_debug')) {
+            $this->getResponse()->setHttpHeader('Content-Type', 'application/json');
+        } else {
+            $export->addHeaders($this->getResponse());
+        }
+        return $this->renderText(json_encode($json, JSON_PRETTY_PRINT).PHP_EOL);
     }
 
     private function ajaxPdf($from_csv = false) {
