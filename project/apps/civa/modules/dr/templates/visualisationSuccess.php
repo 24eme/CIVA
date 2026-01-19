@@ -13,6 +13,10 @@
             <!-- fin #acheteurs_caves -->
         </div>
     </div>
+
+    <?php if($sf_user->isAdmin()): ?>
+    <a style="font-size: 10px; float: right; color: #666; position: absolute; bottom: 10px; right: 10px;" href="<?php echo url_for("dr_json", $dr) ?>">Export JSON</a>
+    <?php endif; ?>
     <?php $boutons = array('retour','previsualiser'); ?>
 
     <?php if($sf_user->getCampagne() == $dr->campagne && $dr->isValideeTiers()): ?>
