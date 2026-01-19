@@ -31,13 +31,13 @@
                     </ul>
                 </div>
 
-                <div class="btn-group btn-block">
-                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="glyphicon glyphicon-plus"></span> Créer un contrat <span class="caret"></span>
+                <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
+                    <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac">Créer un contrat</a>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="choixTypeVracPopupPapier" href="">Papier</a></li>
-                        <li><a class="choixTypeVracPopup" href="">Télédéclaration</a></li>
                         <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
                     </ul>
                 </div>
@@ -49,10 +49,10 @@
                 <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
             <?php endif ?>
 
-            <h4>Soussignés</h4>
+            <h4>Recherche</h4>
             <div class="input-group">
-                <span class="input-group-addon" id="soussignes_search"><span class="glyphicon glyphicon-filter"></span></span>
-                <input type="text" class="form-control" placeholder="Soussigné" aria-describedby="soussignes_search">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+                <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
             </div>
 
             <h4>Campagne</h4>
@@ -112,6 +112,8 @@
 
     <script>
         const col_filters = document.getElementById('col-filters')
+        const table_soussignes = document.getElementById('soussignes_listing')
+
         col_filters.addEventListener('click', function (e) {
             if (e.target.dataset.sens) {
                 const sens = e.target.dataset.sens
@@ -132,9 +134,71 @@
                 })
             }
         })
+
+        col_filters.addEventListener('input', function (e) {
+            if (e.target.id === "soussignes_search") {
+                const terms = document.getElementById(e.target.id).value
+                table_soussignes.querySelectorAll('tbody tr').forEach(function (tr) {
+                    if (tr.textContent.toLowerCase().includes(terms.toLowerCase())) {
+                        tr.classList.remove('hidden')
+                    } else {
+                        tr.classList.add('hidden')
+                    }
+                })
+            }
+        })
     </script>
 </div>
 
 <ul id="btn_etape" class="btn_prev_suiv">
 	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
 </ul>
+
+<div id="popup_choix_typeVrac" class="popup_ajout modal" title="Création du contrat" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Création du contrat</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="form_creation_contrats_vrac">
+            <div class="form-group">
+                <?php $etablissements = VracClient::getInstance()->getEtablissements($sf_user->getCompte()->getSociete()); ?>
+                <select class="form-control">
+                <?php foreach($etablissements as $etablissement): ?>
+                    <?php if(!VracSecurity::getInstance($sf_user->getCompte(), null)->isAuthorizedTiers($etablissement, VracSecurity::CREATION)): continue; endif; ?>
+                    <option value="<?php echo $etablissement->_id ?>"><?php echo $etablissement->nom ?> <?php echo $etablissement->cvi ?> <?php echo EtablissementFamilles::$familles[$etablissement->famille]; ?></option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display:inline-block">Vous êtes :</label>
+                <label class="radio-inline">
+                  <input required type="radio" name="choix_type" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', ['type' => 'vendeur', 'papier' => 0]) ?>"> Vendeur
+                </label>
+                <label class="radio-inline">
+                  <input required type="radio" name="choix_type" id="choix_type_vendeur" value="<?php echo url_for('vrac_selection_type', ['type' => 'acheteur', 'papier' => 0]) ?>"> Acheteur
+                </label>
+            </div>
+        </form>
+
+        <script type="text/javascript">
+            const form = document.getElementById("form_creation_contrats_vrac")
+            form.addEventListener('submit', function (e) {
+                e.preventDefault()
+                const url = form.querySelector('input[type=radio]:checked').value
+                const creator = form.querySelector('select > option:checked').value
+
+                document.location.href = url + "&createur=" + creator
+                return false;
+            })
+        </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button form="form_creation_contrats_vrac" class="btn btn-primary">Valider</button>
+      </div>
+    </div>
+  </div>
+</div>
