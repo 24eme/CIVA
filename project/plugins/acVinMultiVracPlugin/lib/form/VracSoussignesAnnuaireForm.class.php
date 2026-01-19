@@ -58,6 +58,14 @@ class VracSoussignesAnnuaireForm extends VracSoussignesForm
         $this->setValidator('prix_unite', new sfValidatorChoice(array('choices' => array_keys($unites), 'required' => false)));
         $this->getWidgetSchema()->setLabel('prix_unite', "Unité de prix :");
 
+        $this->setWidget('duree_annee', new sfWidgetFormChoice(array('choices' => $this->getDureeContratCurrentMillesime())));
+        $this->setWidget('duree_annee_select', new sfWidgetFormInputHidden());
+
+        $this->getWidget('duree_annee')->setLabel('Pour une durée de');
+
+        $this->setValidator('duree_annee', new ValidatorVracChoices(array('required' => false, 'choices' => array_keys($this->getDureeContratCurrentMillesime()))));
+        $this->setValidator('duree_annee_select', new sfValidatorString(array('required' => false)));
+
         $this->validatorSchema->setPostValidator(new VracSoussignesAnnuaireValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
     }
