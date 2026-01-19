@@ -32,9 +32,9 @@
                         <?php echo $form['campagne']->render(array("style" => "margin-left: 5px; width: 120px;")) ?>
                     </span>
                     <span>
-                        <?php echo $form['pluriannuel_contrat_duree']->renderError() ?>
-                        <?php echo $form['pluriannuel_contrat_duree']->renderLabel(null, array("class" => "bold")) ?>
-                        <?php echo $form['pluriannuel_contrat_duree']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
+                        <?php echo $form['duree_annee']->renderError() ?>
+                        <?php echo $form['duree_annee']->renderLabel(null, array("class" => "bold")) ?>
+                        <?php echo $form['duree_annee']->render(array("style" => "margin-left: 5px; width: 150px;")) ?>
                     </span>
                 </div>
             </div>
@@ -423,14 +423,14 @@
             $.fn.changeContratDuree();
         });
 
-        $("#vrac_soussignes_pluriannuel_contrat_duree").click(function() {
+        $("#vrac_soussignes_duree_annee").click(function() {
             $.fn.changeContratDuree();
         });
 
         $.fn.changeContratDuree = function() {
             const campagneChoice = $("#vrac_soussignes_campagne option:selected").val().substring(0, 4);
 
-            const contratDureeObj = $("#vrac_soussignes_pluriannuel_contrat_duree");
+            const contratDureeObj = $("#vrac_soussignes_duree_annee");
             let contratDureeOptions = contratDureeObj.find("option");
             let contratFinUpdated = parseInt(campagneChoice)+2;
             contratDureeOptions.each(function(index, contratDuree) {

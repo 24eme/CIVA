@@ -1,29 +1,140 @@
 <div id="contrats_vrac">
+    <div class="row">
+        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-edit" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">3</h3>contrat(s) à signer</div></div>
+        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">1</h3>contrat(s) à en attente</div></div>
+        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;"><svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+  <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+  <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+</svg><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">10</h3>contrat(s) pluriannuel en cours</div></div>
+    </div>
+    <hr />
 	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
-	<a style="float: right; margin-right: 20px; bottom: 6px; color: #2A2A2A; text-decoration: none;" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">Exporter les contrats en CSV</a>
-	<div class="fond">
-		<form action="<?php echo url_for('vrac_historique', array('campagne' => $campagne, 'identifiant' => $compte->getIdentifiant())) ?>" method="GET">
-			<ul class="filtres clearfix">
-				<li><label for="statut">Type de contrat :</label><select id="type" name="type"><option value="">Tous</option><?php foreach ($types as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($type == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
-                <li><label for="statut">Temporalité :</label><select id="temporalite" name="temporalite"><option value="">Tous</option><?php foreach ($temporalites as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($temporalite == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
-				<li><label for="statut">Statut :</label><select id="statut" name="statut"><option value="">Tous</option><?php foreach ($statuts as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($statut == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
-				<?php if(count($roles) > 1): ?>
-				<li><label for="statut">En tant que :</label><select id="role" name="role"><option value="">Tous</option><?php foreach ($roles as $k => $s): ?><option value="<?php echo $k ?>"<?php if ($role == $k): ?> selected="selected"<?php endif; ?>><?php echo $s ?></option><?php endforeach; ?></select></li>
-				<?php endif; ?>
-				<li><label for="campagne">Campagne :</label><select id="campagne" name="campagne"><?php foreach ($campagnes as $c): ?><option value="<?php echo $c ?>"<?php if ($campagne == $c): ?> selected="selected"<?php endif; ?>><?php echo $c ?></option><?php endforeach; ?></select></li>
-                <li><label for="campagne">Commercial :</label><select id="commercial" name="commercial"><option value="">Tous</option><?php foreach ($commerciaux as $k => $com): ?><option value="<?php echo $k ?>"<?php if ($commercial == $k): ?> selected="selected"<?php endif; ?>><?php echo $k ?></option><?php endforeach; ?></select></li>
-				<li><button id="valide_form" style="cursor: pointer; background: none repeat scroll 0 0 transparent; border: 0 none;" type="submit"><img src="/images/boutons/btn_valider_2.png" alt="Continuer à l'étape suivante"></button></li>
-			</ul>
-		</form>
-		<div id="espace_alsace_contrats">
-		<?php if (count($vracs) > 0): ?>
-		<?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
-		<?php else: ?>
-		<p><i>Aucun contrat.</i></p>
-		<?php endif; ?>
-		</div>
-	</div>
+    <div class="clearfix">
+    </div>
+
+    <div class="row">
+        <div class="col-xs-9">
+            <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
+        </div>
+        <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
+            <?php $current_filters = []; ?>
+            <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
+
+            <div style="margin-bottom: 15px">
+                <div class="btn-group btn-block">
+                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
+                        <li><a href="#">PDF</a></li>
+                    </ul>
+                </div>
+
+                <div class="btn-group btn-block">
+                    <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="glyphicon glyphicon-plus"></span> Créer un contrat <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="choixTypeVracPopupPapier" href="">Papier</a></li>
+                        <li><a class="choixTypeVracPopup" href="">Télédéclaration</a></li>
+                        <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top:0">Filtrage</h3>
+
+            <?php if (empty($current_filters) === false): ?>
+                <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
+            <?php endif ?>
+
+            <h4>Soussignés</h4>
+            <div class="input-group">
+                <span class="input-group-addon" id="soussignes_search"><span class="glyphicon glyphicon-filter"></span></span>
+                <input type="text" class="form-control" placeholder="Soussigné" aria-describedby="soussignes_search">
+            </div>
+
+            <h4>Campagne</h4>
+            <div class="list-group">
+                <?php foreach ($campagnes as $k => $c): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
+                        <?php echo $c ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? "?" ?>
+                        </span>
+                    </a>
+                <?php endforeach; ?>
+                <?php if (count($campagnes) > 4): ?>
+                    <div class="list-group-item list-group-item-xs text-center" data-sens="more">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </div>
+                <?php endif ?>
+            </div>
+
+            <h4>Type de contrat</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
+                <?php foreach ($types as $k => $s): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
+                        <?php echo $s ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 1))[$k] ?? 0 ?>
+                        </span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
+            <h4>Temporalité</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $temporalite === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
+                <?php foreach ($temporalites as $k => $s): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $temporalite ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>">
+                        <?php echo $s ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
+            <h4>Statuts</h4>
+            <div class="list-group">
+                <a class="list-group-item <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
+                <?php foreach ($statuts as $k => $s): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
+                        <?php echo $s ?>
+                        <span class="badge pull-right">
+                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))[$k] ?? 0 ?>
+                        </span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const col_filters = document.getElementById('col-filters')
+        col_filters.addEventListener('click', function (e) {
+            if (e.target.dataset.sens) {
+                const sens = e.target.dataset.sens
+                const listgroup = e.target.closest('.list-group')
+                listgroup.querySelectorAll('.list-group-item').forEach(function (el, i) {
+                    if (i > 4 && el.dataset.sens == undefined) {
+                        el.classList.toggle('hidden')
+                        if (sens === "more") {
+                            listgroup.querySelector('[data-sens] span').classList.remove('glyphicon-chevron-down')
+                            listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-up')
+                            listgroup.querySelector('[data-sens]').dataset.sens = "less"
+                        } else {
+                            listgroup.querySelector('[data-sens] span').classList.remove('glyphicon-chevron-up')
+                            listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-down')
+                            listgroup.querySelector('[data-sens]').dataset.sens = "more"
+                        }
+                    }
+                })
+            }
+        })
+    </script>
 </div>
+
 <ul id="btn_etape" class="btn_prev_suiv">
 	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
 </ul>
