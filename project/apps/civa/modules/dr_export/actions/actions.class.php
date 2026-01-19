@@ -29,6 +29,25 @@ class dr_exportActions extends _DRActions {
         return $this->renderText($xml->getContent());
     }
 
+    public function executeJson(sfWebRequest $request)
+    {
+        $dr = $this->getRoute()->getDR();
+
+        if ($dr->isValideeCiva() === false || $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) === false) {
+            return $this->redirect('dr_visualisation', $dr);
+        }
+
+        $class = "Export".$dr->getType()."Json";
+        $json = [$class::ROOT_NODE => []];
+
+        $export = new $class($dr);
+        $export->build();
+        $json[$class::ROOT_NODE][] = json_decode($export->export());
+
+        $export->addHeaders($this->getResponse());
+        return $this->renderText(json_encode($json).PHP_EOL);
+    }
+
     private function ajaxPdf($from_csv = false) {
         sfConfig::set('sf_web_debug', false);
         return $this->renderText($this->generateUrl('dr_pdf', array('identifiant' => $this->etablissement->identifiant, 'annee' => $this->annee, 'from_csv' => $from_csv)));

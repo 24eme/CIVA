@@ -756,6 +756,13 @@ dr_pdf:
   options: { model: Etablissement, type: object }
   requirements: { sf_method: [get, post] }
 
+dr_json:
+  url: /dr/:id/json
+  param: {module: dr_export, action: json}
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
 dr_csv:
   url: /dr/:id/csv
   param: {module: dr_export, action: csv}
