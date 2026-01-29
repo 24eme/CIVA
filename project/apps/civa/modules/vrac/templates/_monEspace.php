@@ -5,8 +5,7 @@
 		<ul id="actions_contrat">
 			<?php if(VracSecurity::getInstance($compte, null)->isAuthorized(VracSecurity::CREATION)): ?>
 			<li class="nouveau_contrat"><a href="<?php echo ($hasDoubt)? null : url_for('vrac_nouveau'); ?>" class="<?php if($hasDoubt): ?>choixTypeVracPopup<?php endif; ?>"><img src="/images/boutons/btn_nouveau_contrat.png" alt="" /></a></li>
-			<?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?>
-			<li class="nouveau_contrat"><a class="btn_majeur btn_minus btn_jaune <?php if($hasDoubt): ?>choixTypeVracPopupPapier<?php endif; ?>" href="<?php echo ($hasDoubt)? null : url_for('vrac_nouveau', array('papier' => 1)); ?>">Saisir un contrat papier</a></li>
+            <?php if($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) || sfConfig::get('app_instance') == 'preprod'): ?>
 			<li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
 			<?php endif; ?>
 			<li><a href="<?php echo url_for('annuaire') ?>">Gérer son annuaire</a></li>
