@@ -1,6 +1,13 @@
 <?php
 class vrac_importActions extends sfActions
 {
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    }
+
     private function secureRoute($identifiant)
     {
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $identifiant) {
