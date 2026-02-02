@@ -41,6 +41,10 @@
                         <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
                     </ul>
                 </div>
+
+                <a class="btn btn-default btn-block" href="<?php echo url_for('annuaire') ?>">
+                  <span class="glyphicon glyphicon-book"></span> Gérer son annuaire
+                </a>
             </div>
 
             <h3 style="margin-top:0">Filtrage</h3>
