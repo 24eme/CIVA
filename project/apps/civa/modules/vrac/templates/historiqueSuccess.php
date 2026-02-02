@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
-                    <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac">Créer un contrat</a>
+                    <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="caret"></span>
                       <span class="sr-only">Toggle Dropdown</span>
