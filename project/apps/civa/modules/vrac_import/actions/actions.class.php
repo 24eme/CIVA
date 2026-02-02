@@ -140,6 +140,8 @@ class vrac_importActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->secureRoute($this->csvVrac->identifiant);
 
+        ini_set('memory_limit', '512M');
+
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
             throw new sfException("Impossible d'importer un fichier en erreur");
         }
