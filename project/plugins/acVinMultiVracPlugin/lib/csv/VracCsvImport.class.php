@@ -283,7 +283,7 @@ class VracCsvImport extends CsvFile
             $produit = $this->guessProduit($line, $v);
 
             if (! $produit) {
-                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
+                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."] pour la campagne ".$line[self::CSV_CAMPAGNE]);
                 continue;
             }
 
@@ -523,7 +523,7 @@ class VracCsvImport extends CsvFile
      */
     private function guessProduit(array $line, Vrac $v)
     {
-        $this->configuration = isset($this->configuration) ? $this->configuration : ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = ConfigurationClient::getInstance()->getConfigurationByCampagne($line[self::CSV_CAMPAGNE]);
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
