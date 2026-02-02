@@ -115,8 +115,8 @@
         const table_soussignes = document.getElementById('soussignes_listing')
 
         col_filters.addEventListener('click', function (e) {
-            if (e.target.dataset.sens) {
-                const sens = e.target.dataset.sens
+            if (e.target.closest('[data-sens]')) {
+                const sens = e.target.closest('[data-sens]').dataset.sens
                 const listgroup = e.target.closest('.list-group')
                 listgroup.querySelectorAll('.list-group-item').forEach(function (el, i) {
                     if (i > 4 && el.dataset.sens == undefined) {
