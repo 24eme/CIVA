@@ -75,6 +75,8 @@ class vrac_importActions extends sfActions
 
         $this->secureRoute($this->compte->identifiant);
 
+        ini_set('memory_limit', '512M');
+
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
@@ -96,6 +98,8 @@ class vrac_importActions extends sfActions
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
             return $this->forwardSecure();
         }
+
+        ini_set('memory_limit', '512M');
 
         $csv = current($request->getFiles());
         if ($csv['size'] === 0) {
