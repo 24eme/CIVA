@@ -1,6 +1,13 @@
 <div id="contrats_vrac">
     <div class="row">
-        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-edit" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">3</h3>contrat(s) à signer</div></div>
+        <div class="col-xs-4">
+            <a href="?statut=VALIDE_PARTIELLEMENT" style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
+                <span class="glyphicon glyphicon-edit" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span>
+                <span style="margin-top: 0; margin-bottom: 0; font-size: 24px;">
+                    <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))["VALIDE_PARTIELLEMENT"] ?? 0 ?>
+                </span> contrat(s) à signer
+            </a>
+        </div>
         <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">1</h3>contrat(s) à en attente</div></div>
         <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;"><svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
   <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
