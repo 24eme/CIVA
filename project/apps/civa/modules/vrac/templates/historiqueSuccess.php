@@ -45,6 +45,10 @@
                 <a class="btn btn-default btn-block" href="<?php echo url_for('annuaire') ?>">
                   <span class="glyphicon glyphicon-book"></span> Gérer son annuaire
                 </a>
+
+                <a class="btn btn-default btn-block" href="<?php echo url_for('telecharger_la_notice_vrac') ?>">
+                    <span class="glyphicon glyphicon-question-sign"></span> Document d'aide
+                </a>
             </div>
 
             <h3 style="margin-top:0">Filtrage</h3>
