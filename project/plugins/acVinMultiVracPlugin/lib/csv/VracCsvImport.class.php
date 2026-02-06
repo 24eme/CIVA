@@ -324,6 +324,8 @@ class VracCsvImport extends CsvFile
                 $v->contrat_pluriannuel = 1;
                 if ($line[self::CSV_NUMERO_CONTRAT_CADRE]) {
                     $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
+                } elseif ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
+                    $this->addError(self::$line, "missing_contrat_cadre_id", "Il manque l'identifiant du contrat cadre pour le contrat [".$line[self::CSV_NUMERO_INTERNE]."]");
                 }
             }
 
