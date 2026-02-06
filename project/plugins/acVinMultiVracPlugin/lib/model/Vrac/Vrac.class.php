@@ -1090,11 +1090,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
 	public function isPonctuel() {
-		return !$this->contrat_pluriannuel;
+		return $this->contrat_pluriannuel === 0;
 	}
 
 	public function isPluriannuel() {
-		return !$this->isPonctuel();
+		return $this->contrat_pluriannuel === 1;
 	}
 
     public function hasReferencePluriannuel() {
@@ -1102,11 +1102,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function isPluriannuelCadre() {
-        return (!$this->isPonctuel() && !$this->hasReferencePluriannuel());
+        return $this->isPluriannuel() && ! $this->hasReferencePluriannuel();
     }
 
 	public function isApplicationPluriannuel() {
-        return (!$this->isPonctuel() && $this->hasReferencePluriannuel());
+        return $this->isPluriannuel() && $this->hasReferencePluriannuel();
 	}
 
     public function isInModeSurface() {
