@@ -317,10 +317,15 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = isset(VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]] : $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) ? 1 : 0;
-            /* if ($v->contrat_pluriannuel) {
-                $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
-            } */
+            if (in_array($line[self::CSV_TYPE_CONTRAT], [
+                VracClient::TEMPORALITE_PLURIANNUEL_CADRE,
+                VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION
+            ]) === true) {
+                $v->contrat_pluriannuel = 1;
+                if ($line[self::CSV_NUMERO_CONTRAT_CADRE]) {
+                    $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
+                }
+            }
 
             $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
             $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
