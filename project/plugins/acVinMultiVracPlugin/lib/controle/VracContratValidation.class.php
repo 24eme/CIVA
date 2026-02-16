@@ -71,7 +71,7 @@ class VracContratValidation extends DocumentValidation
 						unset($produit_tmp[$key]);
 						foreach ($produit_tmp as $d) {
 							if ($detail->lieu_dit == $d->lieu_dit && $detail->vtsgn == $d->vtsgn && $detail->millesime == $d->millesime && $detail->denomination == $d->denomination && $detail->label == $d->label) {
-								$doublon_libelles[$detail->getHash()] = $detail->getLibelle();
+                                $doublon_libelles[$detail->getHash()] = $detail->getLibelleComplet();
 								$this->produits_controle[$detail->getHash()] = $detail;
 							}
 						}
