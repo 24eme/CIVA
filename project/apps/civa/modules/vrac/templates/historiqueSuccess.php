@@ -3,27 +3,42 @@
         <div class="col-xs-4">
             <a href="?statut=VALIDE_PARTIELLEMENT" style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
                 <span class="glyphicon glyphicon-edit" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span>
-                <span style="margin-top: 0; margin-bottom: 0; font-size: 24px;">
-                    <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))["VALIDE_PARTIELLEMENT"] ?? 0 ?>
-                </span> contrat(s) à signer
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;"><?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))["VALIDE_PARTIELLEMENT"] ?? 0 ?></h3>
+                contrat(s) à signer
             </a>
         </div>
-        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">1</h3>contrat(s) à en attente</div></div>
-        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;"><svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
-  <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
-  <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
-</svg><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">10</h3>contrat(s) pluriannuel en cours</div></div>
-    </div>
-    <hr />
-	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
-    <div class="clearfix">
+        <div class="col-xs-4">
+            <div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
+                <span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span>
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">1</h3>
+                contrat(s) à en attente
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;">
+                <svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                    <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+                    <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+                </svg>
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">10</h3>
+                contrat(s) pluriannuel en cours
+            </div>
+        </div>
     </div>
 
+    <hr />
+
     <div class="row">
-        <div class="col-xs-9">
+    <div class="col-xs-9">
+	    <h2 class="titre_principal">Historique de vos contrats de vente</h2>
+        <div class="clearfix"></div>
+
+        <div class="px-1">
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
-        <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
+    </div>
+
+    <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
@@ -57,6 +72,8 @@
                     <span class="glyphicon glyphicon-question-sign"></span> Document d'aide
                 </a>
             </div>
+
+            <hr/>
 
             <h3 style="margin-top:0">Filtrage</h3>
 
