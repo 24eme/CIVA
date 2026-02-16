@@ -63,33 +63,6 @@
                 <?php endforeach; ?>
                     </tbody>
                 </table>
-                <?php /*foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="panel-title">Contrat n° <?php echo $numero_contrat ?></div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="col-xs-4">
-                                Entre <strong>l'acheteur</strong> :<br/>
-                                <?php echo $contrat['soussignes']['acheteur']->raison_sociale ?><br/>
-                                et <strong>le vendeur</strong> :<br/>
-                                <?php echo $contrat['soussignes']['vendeur']->raison_sociale ?><br/>
-                                <?php if ($contrat['soussignes']['courtier']): ?>
-                                    Via <strong>le courtier</strong> :<br/>
-                                    <?php echo $contrat['soussignes']['courtier']->raison_sociale ?> (<abbr title="Courtier">C</abbr>)
-                                <?php endif ?>
-                            </div>
-                            <div class="col-xs-8">
-                                <strong>Produits du contrat :</strong>
-                                <?php foreach ($contrat['produits'] as $produit_info): ?>
-                                <p style="margin-bottom: 0">
-                                <?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?> de <?php echo $produit_info['volume'] ?> à <?php echo $produit_info['prix'] ?>
-                                </p>
-                                <?php endforeach ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; */ ?>
             </div>
             <div role="tabpanel" class="tab-pane" id="fichier">
                 <?php include_partial('vrac_import/contenu_fichier', compact('vracimport', 'csvVrac')); ?>
