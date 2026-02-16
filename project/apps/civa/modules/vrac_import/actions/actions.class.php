@@ -1,6 +1,13 @@
 <?php
 class vrac_importActions extends sfActions
 {
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    }
+
     private function secureRoute($identifiant)
     {
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $identifiant) {
@@ -75,6 +82,8 @@ class vrac_importActions extends sfActions
 
         $this->secureRoute($this->compte->identifiant);
 
+        ini_set('memory_limit', '1024M');
+
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
@@ -96,6 +105,8 @@ class vrac_importActions extends sfActions
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
             return $this->forwardSecure();
         }
+
+        ini_set('memory_limit', '1024M');
 
         $csv = current($request->getFiles());
         if ($csv['size'] === 0) {
@@ -135,6 +146,8 @@ class vrac_importActions extends sfActions
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->secureRoute($this->csvVrac->identifiant);
+
+        ini_set('memory_limit', '1024M');
 
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
             throw new sfException("Impossible d'importer un fichier en erreur");

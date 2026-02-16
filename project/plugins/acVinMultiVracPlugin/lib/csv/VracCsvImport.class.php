@@ -283,7 +283,7 @@ class VracCsvImport extends CsvFile
             $produit = $this->guessProduit($line, $v);
 
             if (! $produit) {
-                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
+                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."] pour la campagne ".$line[self::CSV_CAMPAGNE]);
                 continue;
             }
 
@@ -317,10 +317,17 @@ class VracCsvImport extends CsvFile
 
             $v->prix_unite = isset(VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]] : $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) ? 1 : 0;
-            /* if ($v->contrat_pluriannuel) {
-                $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
-            } */
+            if (in_array($line[self::CSV_TYPE_CONTRAT], [
+                VracClient::TEMPORALITE_PLURIANNUEL_CADRE,
+                VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION
+            ]) === true) {
+                $v->contrat_pluriannuel = 1;
+                if ($line[self::CSV_NUMERO_CONTRAT_CADRE]) {
+                    $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
+                } elseif ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
+                    $this->addError(self::$line, "missing_contrat_cadre_id", "Il manque l'identifiant du contrat cadre pour le contrat [".$line[self::CSV_NUMERO_INTERNE]."]");
+                }
+            }
 
             $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
             $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
@@ -523,7 +530,7 @@ class VracCsvImport extends CsvFile
      */
     private function guessProduit(array $line, Vrac $v)
     {
-        $this->configuration = isset($this->configuration) ? $this->configuration : ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = ConfigurationClient::getInstance()->getConfigurationByCampagne($line[self::CSV_CAMPAGNE]);
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
