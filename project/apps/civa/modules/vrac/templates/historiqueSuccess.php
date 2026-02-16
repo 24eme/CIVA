@@ -92,6 +92,7 @@
                 <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
                 <?php foreach ($types as $k => $s): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
+                        <span style="width: 25px; height: 18px; text-align: center;display: inline-block"><img src="/images/pictos/pi_<?php echo strtolower($k) ?>.png"/></span>
                         <?php echo $s ?>
                         <span class="badge pull-right">
                         <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 1))[$k] ?? 0 ?>
