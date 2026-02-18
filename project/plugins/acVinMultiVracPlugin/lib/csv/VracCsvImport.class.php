@@ -497,6 +497,9 @@ class VracCsvImport extends CsvFile
                 $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
                 $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
                 $ret[$numero_interne]['temporalite_contrat'] = $entry[self::CSV_TYPE_CONTRAT];
+                if($entry[self::CSV_DUREE_CONTRAT_PLURI] && $entry[self::CSV_DUREE_CONTRAT_PLURI] > 1) {
+                $ret[$numero_interne]['duree_annee'] = $entry[self::CSV_DUREE_CONTRAT_PLURI];
+                }
                 $produit = $this->guessProduit($entry, $v);
 
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
