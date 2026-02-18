@@ -1176,6 +1176,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
 	public function generateNextPluriannuelApplication() {
+        if(!$this->isValide()) {
+            throw new Exception("Le contrat cadre n'a pas encore été validé");
+        }
         if($this->isAnnule()) {
             throw new Exception('Le contrat cadre a été annulé.');
         }

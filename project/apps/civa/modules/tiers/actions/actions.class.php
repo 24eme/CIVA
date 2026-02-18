@@ -237,11 +237,13 @@ class tiersActions extends sfActions {
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
+        return $this->redirect('vrac_historique', $this->getRoute()->getCompte());
         $this->secure(Roles::TELEDECLARATION_VRAC);
         $this->compte = $this->getRoute()->getCompte();
         $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
 
         $this->help_popup_action = "help_popup_mon_espace_civa";
+
     }
 
     public function executeMonEspaceCompteGamma(sfWebRequest $request) {
