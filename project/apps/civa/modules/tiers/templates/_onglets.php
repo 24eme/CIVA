@@ -1,7 +1,3 @@
-<?php if(!isset($isAdmin)):
-	$isAdmin = $sf_user->hasCredential(myUser::CREDENTIAL_ADMIN);
-	endif;
-?>
 <nav id="main_nav">
 <ul id="onglets_majeurs" class="clearfix">
 	<?php if(!$isAdmin || $active != 'accueil'): ?>

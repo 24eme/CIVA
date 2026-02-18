@@ -1,4 +1,4 @@
-<?php include_partial('tiers/onglets', array('active' => 'stock_'.$type_ds, 'compte' => $compte, 'blocs' => $blocs)) ?>
+<?php include_component('tiers', 'onglets', array('active' => 'stock_'.$type_ds, 'compte' => $compte)); ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
     
