@@ -94,6 +94,15 @@ class VracCsvImport extends CsvFile
     /** @var array $found_etablissements Cache des établissements */
     private static $found_etablissements = [];
 
+    protected $numeroContratExistants = [];
+
+    protected $csvVrac = null;
+
+    public function __construct(CSVVRAC $csvVrac) {
+        parent::__construct($csvVrac->getFile());
+        $this->csvVrac = $csvVrac;
+    }
+
     /**
      * Crée une instance depuis un tableau CSV
      *
@@ -169,30 +178,35 @@ class VracCsvImport extends CsvFile
         }
     }
 
-    /**
-     * Extrait les numéros de contrats internes du CSV et vérifie qu'il n'existe
-     * pas déjà dans la base. Émet une erreur le cas échéant
-     *
-     * @param string $identifiant l'identifiant du créateur
-     */
-    public function hasExistingVrac($identifiant)
-    {
-        $ids = $this->getContratsImportables();
-        $etab = $this->guessId($identifiant);
-
-        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
-            if (isset($existingVrac->value->numero_papier) && in_array($existingVrac->value->numero_papier, $ids)) {
-                $this->addError(0, "contrat_existant", "Le contrat avec le numéro interne ".$existingVrac->value->numero_papier." existe déjà");
-            }
+    public function getNumeroContratExistants() {
+        if(count($this->numeroContratExistants)) {
+            return $this->numeroContratExistants;
         }
+        $this->numeroContratExistants = [];
+        $etab = $this->guessId(CompteClient::getInstance()->find($this->csvVrac->identifiant)->getEtablissementInformations()->getCvi());
+        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
+            if(isset($existingVrac->value->numero_papier)) {
+                $this->numeroContratExistants[$existingVrac->value->numero_papier] = $existingVrac->value->id;
+            }
+            if(isset($existingVrac->value->numero)) {
+                $this->numeroContratExistants[$existingVrac->value->numero] = $existingVrac->value->id;
+            }
+            $this->numeroContratExistants[$existingVrac->value->numero_visa] = $existingVrac->id;
+            $this->numeroContratExistants[$existingVrac->id] = $existingVrac->id;
+        }
+
+        return $this->numeroContratExistants;
     }
 
-    public function preimportChecks(CSVVRAC $csvVrac)
-    {
-        $compteIdentifiant = CompteClient::getInstance()->find($csvVrac->identifiant)->getEtablissementInformations()->getCvi();
+    public function findContratByNumeroInterne() {
 
-        $this->hasExistingVrac($compteIdentifiant);
-        $this->hasMixedContratType($csvVrac->type_contrat);
+    }
+
+    public function preimportChecks()
+    {
+        $compteIdentifiant = CompteClient::getInstance()->find($this->csvVrac->identifiant)->getEtablissementInformations()->getCvi();
+
+        $this->hasMixedContratType($this->csvVrac->type_contrat);
     }
 
     /**
@@ -204,6 +218,7 @@ class VracCsvImport extends CsvFile
      * @return array<string> Tableau d'ID des vracs importés
      */
     public function import($verified = false) {
+        $numerosExistants = $this->getNumeroContratExistants();
         $current = null;
         $v = null;
         $produitPosition = 0;
@@ -212,6 +227,11 @@ class VracCsvImport extends CsvFile
             self::$line++;
 
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
+                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants)) {
+                    $this->addError(self::$line, "contrat_existant", "Le contrat avec le numéro interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà");
+                    continue;
+                }
+
                 try {
                     $createur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
                 } catch (Exception $e) {
@@ -228,6 +248,10 @@ class VracCsvImport extends CsvFile
                 }
                 if($line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
                     $vCadre = VracClient::getInstance()->findByNumeroContrat($line[self::CSV_NUMERO_CONTRAT_CADRE]);
+                    if(!$vCadre) {
+                        $this->addError(self::$line, "cadre_inexiste", "Le contrat cadre n'a pas été trouvé [".$line[self::CSV_NUMERO_CONTRAT_CADRE]."]");
+                        continue;
+                    }
                     $v = $vCadre->generateNextPluriannuelApplication();
                     $v->remove('declaration');
                     $v->add('declaration');
@@ -388,13 +412,13 @@ class VracCsvImport extends CsvFile
      *
      * @param csvVrac le CSVVrac où inscrire les erreurs
      */
-    public function checkErreurs(CSVVRAC $csvVrac)
+    public function checkErreurs()
     {
         if (count($this->getErrors())) {
-            $csvVrac->documents = [];
-            $csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            $this->csvVrac->documents = [];
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
             foreach ($this->getErrors() as $error) {
-                $csvVrac->addErreur($error);
+                $this->csvVrac->addErreur($error);
             }
         }
     }
