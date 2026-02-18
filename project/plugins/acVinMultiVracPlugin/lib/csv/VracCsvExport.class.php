@@ -69,6 +69,7 @@ class VracCsvExport
              ($produit->exist('centilisation'))? VracClient::getLibelleCentilisation($produit->centilisation) : null,
              $produit->getQuantiteEnleve(),
              (count($produit->retiraisons) > 0) ? $produit->retiraisons[0]->date : null,
+             "https://declaration.vinsalsace.pro/vrac/".$contrat->numero_contrat."/fiche",
              $contrat->_id,
             ];
             fputcsv($f, $fields, ';');

@@ -92,10 +92,12 @@ class vracActions extends sfActions
         $this->getResponse()->setHttpHeader('Cache-Control', 'public');
         $this->getResponse()->setHttpHeader('Expires', '0');
 
-        mkdir('/tmp/vrac');
-        mkdir('/tmp/vrac/'.$subdir);
+        mkdir('/tmp/vrac/'.$subdir, 0700, true);
         foreach($this->vracs as $v) {
             $vrac = VracClient::getInstance()->find($v->id);
+            if (!$vrac->isValide()) {
+                continue;
+            }
             $doc = new ExportVracPdf($vrac, false, array($this, 'getPartial'));
             $doc->generatePDF();
             file_put_contents('/tmp/vrac/'.$subdir.'/CONTRAT-'.$vrac->numero_contrat.'.pdf', $doc->output());
@@ -105,7 +107,9 @@ class vracActions extends sfActions
         exec("zip -r /tmp/vrac/".$subdir.".zip ".$subdir);
         exec('rm -rf /tmp/vrac/'.$subdir);
 
-        return $this->renderText(file_get_contents($filename));
+        $ret = $this->renderText(file_get_contents($filename));
+        unlink("/tmp/vrac/".$subdir.".zip");
+        return $ret;
     }
 
     protected function findRoles() {

@@ -1,3 +1,5 @@
+<?php include_component('tiers', 'ongletsBootstrap', array('active' => 'vrac', 'compte' => $compte)); ?>
+
 <div id="contrats_vrac">
     <div class="row">
         <div class="col-xs-4">

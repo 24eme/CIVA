@@ -1,3 +1,52 @@
+<style media="screen">
+#nav #onglets_majeurs .ui-tabs-disabled, #nav #onglets_majeurs .ui-tabs-disabled a {
+	background: #f1f1f1;
+	color: #cccc;
+}
+
+#nav #onglets_majeurs li {
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+
+#nav {
+    margin-bottom: 20px;
+}
+
+#nav ul {
+    border-bottom: 1px solid #f1f1f1;
+}
+
+#nav #onglets_majeurs {
+    display: block;
+    padding: 0 20px;
+}
+
+#nav #onglets_majeurs li {
+    display: inline-block;
+    background: #bcbdbc;
+    padding: 4px 15px;
+}
+
+#nav #onglets_majeurs li.ui-tabs-selected {
+    background: #ffa913;
+}
+
+#nav #onglets_majeurs li a {
+    color: #fff;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#nav #onglets_majeurs li a:hover {
+    text-decoration: none;
+}
+
+#nav #onglets_majeurs li.ui-tabs-selected a {
+    color: #000;
+}
+</style>
+<div style="position:relative;" id="nav">
 <nav id="main_nav">
 <ul id="onglets_majeurs" class="clearfix">
 	<?php if(!$isAdmin || $active != 'accueil'): ?>
@@ -53,3 +102,4 @@
 	<?php endif; ?>
 </ul>
 </nav>
+</div>
