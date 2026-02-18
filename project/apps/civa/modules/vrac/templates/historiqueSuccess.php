@@ -1,29 +1,50 @@
 <div id="contrats_vrac">
     <div class="row">
         <div class="col-xs-4">
-            <a href="?statut=VALIDE_PARTIELLEMENT" style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
+            <div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
+                <a href="?statut=VALIDE_PARTIELLEMENT">
                 <span class="glyphicon glyphicon-edit" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span>
-                <span style="margin-top: 0; margin-bottom: 0; font-size: 24px;">
-                    <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))["VALIDE_PARTIELLEMENT"] ?? 0 ?>
-                </span> contrat(s) à signer
-            </a>
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;"><?php echo $statuts_globaux[Vrac::STATUT_VALIDE_PARTIELLEMENT] ?? 0; ?></h3>
+                contrat(s) à signer
+                </a>
+            </div>
         </div>
-        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;"><span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">1</h3>contrat(s) à en attente</div></div>
-        <div class="col-xs-4"><div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;"><svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
-  <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
-  <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
-</svg><h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;">10</h3>contrat(s) pluriannuel en cours</div></div>
-    </div>
-    <hr />
-	<h2 class="titre_principal">Historique de vos contrats de vente</h2>
-    <div class="clearfix">
+        <div class="col-xs-4">
+            <div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer; position: relative;">
+                <a href="?statut=PROPOSITION">
+                <span class="glyphicon glyphicon-hourglass" style="font-size: 24px; position:absolute; left: 30px; top: 20px;"></span>
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;"><?php echo $statuts_globaux[Vrac::STATUT_PROPOSITION] ?? 0; ?></h3>
+                contrat(s) à en attente
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div style="background: #eeeedc; border: 1px solid #e0e1bd; color: #7e8601; border-radius: 3px; text-align: center; padding: 10px; cursor: pointer;">
+                <a href="?statut=PROJETS_EN_COURS">
+                <svg style=" position:absolute; left: 30px; top: 20px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                    <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2"/>
+                    <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0"/>
+                </svg>
+                <h3 style="margin-top: 0; margin-bottom: 0; font-size: 24px;"><?php echo $statuts_globaux['PROJETS_EN_COURS'] ?? 0; ?></h3>
+                contrat(s) pluriannuel en cours
+                </a>
+            </div>
+        </div>
     </div>
 
+    <hr />
+
     <div class="row">
-        <div class="col-xs-9">
+    <div class="col-xs-9">
+	    <h2 class="titre_principal">Historique de vos contrats de vente</h2>
+        <div class="clearfix"></div>
+
+        <div class="px-1">
             <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
         </div>
-        <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
+    </div>
+
+    <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
@@ -33,8 +54,8 @@
                       <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="<?php echo url_for('vrac_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
-                        <li><a href="#">PDF</a></li>
+                        <li><a href="<?php echo url_for('vracs_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
+                        <li><a href="<?php echo url_for('vracs_export_pdf', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">PDF</a></li>
                     </ul>
                 </div>
 
@@ -58,6 +79,8 @@
                 </a>
             </div>
 
+            <hr/>
+
             <h3 style="margin-top:0">Filtrage</h3>
 
             <?php if (empty($current_filters) === false): ?>
@@ -76,7 +99,7 @@
                     <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
                         <span class="badge pull-right">
-                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 2))[$c] ?? "?" ?>
+                        <?php echo $facettes['campagne'][$c] ?? "?" ?>
                         </span>
                     </a>
                 <?php endforeach; ?>
@@ -89,12 +112,16 @@
 
             <h4>Type de contrat</h4>
             <div class="list-group">
-                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">Tous</a>
+                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">
+                    <span style="width:25px; height:18px; text-align: center;display: inline-block"> &nbsp; </span>
+                    Tous
+                </a>
                 <?php foreach ($types as $k => $s): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
+                        <span style="width: 25px; height: 18px; text-align: center;display: inline-block"><img src="/images/pictos/pi_<?php echo strtolower($k) ?>.png"/></span>
                         <?php echo $s ?>
                         <span class="badge pull-right">
-                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 1))[$k] ?? 0 ?>
+                        <?php echo $facettes['type'][$k] ?? 0 ?>
                         </span>
                     </a>
                 <?php endforeach; ?>
@@ -102,11 +129,26 @@
 
             <h4>Temporalité</h4>
             <div class="list-group">
-                <a class="list-group-item list-group-item-xs <?php echo $temporalite === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">Tous</a>
+                <a class="list-group-item list-group-item-xs <?php echo $temporalite === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">
+                    <span style="width:25px; height:18px; text-align: center;display: inline-block"> &nbsp; </span>
+                    Tous
+                </a>
                 <?php foreach ($temporalites as $k => $s): ?>
-                    <a class="list-group-item list-group-item-xs <?php echo $k === $temporalite ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>">
-                        <?php echo $s ?>
-                    </a>
+                <a class="list-group-item list-group-item-xs <?php echo $k === $temporalite ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => $k])) ?>">
+                <span style="width:25px; height:18px; text-align: center;display: inline-block">
+                <?php switch ($k) {
+                    case 'PLURIANNUEL_CADRE':
+                        echo '<svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" ><path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></svg>';
+                        break;
+                    case 'PLURIANNUEL_APPLICATION':
+                        echo '<svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16"><path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/><path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/></svg>';
+                        break;
+                    default:
+                        echo " &nbsp; ";
+                        break;
+                } ?></span>
+                    <?php echo $s ?>
+                </a>
                 <?php endforeach; ?>
             </div>
 
@@ -115,9 +157,9 @@
                 <a class="list-group-item <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
                 <?php foreach ($statuts as $k => $s): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
-                        <?php echo $s ?>
-                        <span class="badge pull-right">
-                        <?php echo array_count_values(array_column(array_column($vracs->getRawValue(), 'key'), 3))[$k] ?? 0 ?>
+                        <span style="max-width: 150px"><?php echo $s ?></span>
+                        <span class="badge pull-right" data-key="<?php echo $k; ?>">
+                        <?php echo $facettes['statut'][$k] ?? 0 ?>
                         </span>
                     </a>
                 <?php endforeach; ?>
