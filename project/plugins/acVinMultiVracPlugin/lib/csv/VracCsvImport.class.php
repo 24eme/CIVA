@@ -73,7 +73,8 @@ class VracCsvImport extends CsvFile
         "Prix unite", "Frais annexes vendeur", "Primes diverses acheteur", "Clause réserve propriété", "Clause délai paiement",
         "Clause résiliation", "Mandat facturation", "Critères et modalités d’évolution des prix", "Critères de renégociation du prix",
         "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières", "Créateur", "Date de saisie",
-        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture", "Numero de visa", "Statut", "Centilisation", "Quantité enlevé", "Date retiraison", "Id du document"
+        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture",
+        "Numero de visa", "Statut", "Centilisation", "Quantité enlevé", "Date retiraison", "URL du Contrat", "Id du document"
     ];
 
     /** @var array<string> $imported ID des vracs importés */
