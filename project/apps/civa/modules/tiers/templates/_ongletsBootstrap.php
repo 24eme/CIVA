@@ -1,4 +1,10 @@
 <style media="screen">
+
+#nav #onglets_majeurs {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 #nav #onglets_majeurs .ui-tabs-disabled, #nav #onglets_majeurs .ui-tabs-disabled a {
 	background: #f1f1f1;
 	color: #cccc;
