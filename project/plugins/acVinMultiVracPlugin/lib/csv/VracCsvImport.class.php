@@ -184,12 +184,12 @@ class VracCsvImport extends CsvFile
         }
         $this->numeroContratExistants = [];
         $etab = $this->guessId(CompteClient::getInstance()->find($this->csvVrac->identifiant)->getEtablissementInformations()->getCvi());
-        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
+        foreach (VracTousView::getInstance()->findBy($etab->_id, null, VracClient::TYPE_RAISIN) as $existingVrac) {
             if(isset($existingVrac->value->numero_papier)) {
-                $this->numeroContratExistants[$existingVrac->value->numero_papier] = $existingVrac->value->id;
+                $this->numeroContratExistants[$existingVrac->value->numero_papier] = $existingVrac->id;
             }
             if(isset($existingVrac->value->numero)) {
-                $this->numeroContratExistants[$existingVrac->value->numero] = $existingVrac->value->id;
+                $this->numeroContratExistants[$existingVrac->value->numero] = $existingVrac->id;
             }
             $this->numeroContratExistants[$existingVrac->value->numero_visa] = $existingVrac->id;
             $this->numeroContratExistants[$existingVrac->id] = $existingVrac->id;
@@ -247,12 +247,19 @@ class VracCsvImport extends CsvFile
                     self::$imported[] = $v->_id;
                 }
                 if($line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
-                    $vCadre = VracClient::getInstance()->findByNumeroContrat($line[self::CSV_NUMERO_CONTRAT_CADRE]);
-                    if(!$vCadre) {
+                    if(!isset($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]])) {
                         $this->addError(self::$line, "cadre_inexiste", "Le contrat cadre n'a pas été trouvé [".$line[self::CSV_NUMERO_CONTRAT_CADRE]."]");
                         continue;
                     }
-                    $v = $vCadre->generateNextPluriannuelApplication();
+                    $vCadre = VracClient::getInstance()->find($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]]);
+
+                    try {
+                        $v = $vCadre->generateNextPluriannuelApplication();
+                    } catch (Exception $e) {
+                        $this->addError(self::$line, "contrat_cadre_non_valide", $e->getMessage());
+                        continue;
+                    }
+
                     $v->remove('declaration');
                     $v->add('declaration');
                 } else {
