@@ -38,7 +38,6 @@ class VracContratValidation extends DocumentValidation
   	{
   		$this->produits_controle = array();
 		$doublon_libelles = array();
-		$label_libelles = array();
 		$millesimes = array();
 		$produits = array();
         $vtsgn = [];
@@ -53,9 +52,6 @@ class VracContratValidation extends DocumentValidation
                 } elseif($this->document->getPrixUnite() == VracClient::PRIX_HL && $detail->prix_unitaire < self::PRIX_SEUIL) {
                     $this->addPoint('vigilance', 'prix_litre', $detail->getLibelle(), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
                 }
-				if (!$detail->exist('label') || $detail->label === null || $detail->label === "") {
-				    $label_libelles[] = $detail->getLibelle();
-				}
 				if (!$detail->millesime && !$this->document->isPluriannuelCadre() && !in_array($this->document->type_contrat, [VracClient::TYPE_VRAC,VracClient::TYPE_BOUTEILLE])) {
 				    $millesimes[] = $detail->getLibelle();
 				}
@@ -89,10 +85,6 @@ class VracContratValidation extends DocumentValidation
 
         if(!$this->document->isVendeurProprietaire() && $this->annuaire && !$this->annuaire->exist($this->document->vendeur_type."/".$this->document->vendeur_identifiant)) {
             $this->addPoint('vigilance', 'presence_annuaire', $this->document->vendeur->raison_sociale, $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'soussignes')));
-        }
-
-        if (count($label_libelles) > 0 && $this->document->type_contrat != VracClient::TYPE_BOUTEILLE) {
-            $this->addPoint('erreur', 'label_non_saisi', implode(",", $label_libelles), $this->generateUrl('vrac_etape', array('sf_subject' => $this->document, 'etape' => 'produits')));
         }
 
         if (count($millesimes) > 0) {
