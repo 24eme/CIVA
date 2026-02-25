@@ -99,6 +99,8 @@ class VracCsvImport extends CsvFile
 
     protected $csvVrac = null;
 
+    protected $etablissementAcheteur = null;
+
     public function __construct(CSVVRAC $csvVrac) {
         parent::__construct($csvVrac->getFile());
         $this->csvVrac = $csvVrac;
@@ -162,6 +164,28 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    public function getEtablissementAcheteur() {
+        if(isset($this->etablissementAcheteur)) {
+            return $this->etablissementAcheteur;
+        }
+        $cvi = null;
+        foreach($this->getCsv() as $numLigne => $line) {
+            if(is_null($cvi)) {
+                $cvi = $line[self::CSV_ACHETEUR_CVI];
+            }
+            if($cvi != $line[self::CSV_ACHETEUR_CVI]) {
+                $this->addError($numLigne++, "mixed_acheteur", "L'acheteur n'est pas le même pour toute les lignes");
+            }
+        }
+
+        try {
+            $this->etablissementAcheteur = $this->guessId($cvi);
+        } catch (Exception $e) {
+        }
+
+        return $this->etablissementAcheteur;
+    }
+
     /**
      * Vérification que le fichier CSV contient uniquement le type de contrat
      * spécifié à l'import
@@ -183,9 +207,11 @@ class VracCsvImport extends CsvFile
         if(count($this->numeroContratExistants)) {
             return $this->numeroContratExistants;
         }
+        if(!$this->getEtablissementAcheteur()) {
+            return;
+        }
         $this->numeroContratExistants = [];
-        $etab = $this->guessId(CompteClient::getInstance()->find($this->csvVrac->identifiant)->getEtablissementInformations()->getCvi());
-        foreach (VracTousView::getInstance()->findBy($etab->_id, null, VracClient::TYPE_RAISIN) as $existingVrac) {
+        foreach (VracTousView::getInstance()->findBy($this->getEtablissementAcheteur()->_id, null, VracClient::TYPE_RAISIN) as $existingVrac) {
             if(isset($existingVrac->value->numero_papier)) {
                 $this->numeroContratExistants[$existingVrac->value->numero_papier] = $existingVrac->id;
             }
@@ -199,14 +225,9 @@ class VracCsvImport extends CsvFile
         return $this->numeroContratExistants;
     }
 
-    public function findContratByNumeroInterne() {
-
-    }
-
     public function preimportChecks()
     {
-        $compteIdentifiant = CompteClient::getInstance()->find($this->csvVrac->identifiant)->getEtablissementInformations()->getCvi();
-
+        $this->getEtablissementAcheteur();
         $this->hasMixedContratType($this->csvVrac->type_contrat);
     }
 
