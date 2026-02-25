@@ -622,7 +622,7 @@ class VracCsvImport extends CsvFile
         }
 
         if (! $produitConfig) {
-            $produitConfig = $this->configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+            $produitConfig = $this->configuration->identifyProductByLibelle(CsvFileAcheteur::normalizeProductLibelle($line[self::CSV_VIN_LIBELLE]));
         }
 
         if (! $produitConfig) {
