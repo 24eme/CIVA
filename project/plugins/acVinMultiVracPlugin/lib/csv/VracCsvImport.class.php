@@ -164,6 +164,15 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    public function getCsv() {
+        $csv = parent::getCsv();
+        if(isset($csv[0][0]) && $csv[0][0] != "CONTRAT") {
+            unset($csv[0]);
+        }
+
+        return $csv;
+    }
+
     public function getEtablissementAcheteur() {
         if(isset($this->etablissementAcheteur)) {
             return $this->etablissementAcheteur;
