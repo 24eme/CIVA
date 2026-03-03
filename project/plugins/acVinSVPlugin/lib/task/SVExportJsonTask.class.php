@@ -37,35 +37,48 @@ EOF;
 
         $filtre = $arguments['id'] ?? null;
 
+        $clientClassName = "SVClient";
+        if($declaration == "DR") {
+            $clientClassName = "DRClient";
+        }
         $svs = [];
-        $allSV = SVClient::getInstance()->getAll($campagne);
-        foreach ($allSV as $sv) {
-            if ($sv->type !== $declaration) {
-                continue;
-            }
+        if (!$filtre) {
+            $allSV = $clientClassName::getInstance()->getAllByCampagne($campagne);
+            foreach ($allSV as $sv) {
+                if ($sv->type !== $declaration) {
+                    continue;
+                }
 
-            if (strpos($sv->_id, '-75') !== false) {
-                continue;
-            }
+                if (strpos($sv->_id, '-75') !== false) {
+                    continue;
+                }
 
-            if ($filtre && $filtre !== $sv->_id) {
-                continue;
-            }
+                if ($filtre && $filtre !== $sv->_id) {
+                    continue;
+                }
 
-            $svs[] = $sv;
+                $svs[] = $sv;
+            }
+        } else {
+            $svs[] = $clientClassName::getInstance()->find($filtre);
         }
 
         $class = "Export".$declaration."Json";
         $json = [$class::ROOT_NODE => []];
 
         foreach ($svs as $sv) {
-            if (empty($sv->apporteurs->toArray())) {
+            if ($sv->exist('apporteurs') && empty($sv->apporteurs->toArray())) {
                 continue;
             }
 
             $export = new $class($sv);
             $export->build();
-            $json[$class::ROOT_NODE][] = json_decode($export->export());
+
+            $exportRaw = $export->export();
+            if(!$exportRaw) {
+                continue;
+            }
+            $json[$class::ROOT_NODE][] = json_decode($exportRaw);
         }
 
         echo json_encode($json).PHP_EOL;

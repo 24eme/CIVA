@@ -16,7 +16,7 @@
     <div class="col-xs-4"><a href="<?php echo url_for('mon_espace_civa_production', $sv->getEtablissementObject()) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a></div>
     <div class="col-xs-4 text-center">
       <div class="btn-group dropup">
-        <a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"></span> Télécharger le PDF</a>
+        <a href="<?php echo url_for('sv_pdf', $sv) ?>" class="btn btn-success"> Télécharger le PDF</a>
         <?php if ($sf_user->hasCredential(myUser::CREDENTIAL_ADMIN)): ?>
           <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>

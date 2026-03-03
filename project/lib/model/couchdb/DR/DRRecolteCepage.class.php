@@ -76,6 +76,10 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
         return null;
     }
 
+    public function getTotalDontDplcVendusByCviRatio($type, $cvi) {
+        return parent::getTotalDontDplcVendusByCviRatio($type, $cvi);
+    }
+
     public function getTotalDontDplcVendusByCvi($type, $cvi) {
         if($this->hasRecapitulatif()) {
             return parent::getTotalDontDplcVendusByCvi($type, $cvi);

@@ -125,6 +125,20 @@ class VracDetail extends BaseVracDetail {
     	return ($this->surface_propose && $this->actif)? $this->surface_propose : 0;
     }
 
+    public function getQuantitePropose() {
+        if($this->exist('nb_bouteille') && !is_null($this->nb_bouteille)) {
+
+            return $this->nb_bouteille;
+        }
+
+        if(!is_null($this->surface_propose)) {
+
+            return $this->surface_propose;
+        }
+
+        return $this->volume_propose;
+    }
+
     public function getTotalPrixPropose()
     {
     	if ($this->exist('nb_bouteille')) {
@@ -141,6 +155,28 @@ class VracDetail extends BaseVracDetail {
     	} else {
     		return ($this->volume_enleve && $this->prix_unitaire && $this->actif)? $this->volume_enleve * $this->prix_unitaire : 0;
     	}
+    }
+
+    public function getQuantiteEnleve() {
+        if(!$this->volume_enleve) {
+            return null;
+        }
+
+        return $this->volume_enleve;
+    }
+
+    public function getQuantiteType() {
+        if($this->exist('nb_bouteille') && !is_null($this->nb_bouteille)) {
+
+            return 'BOUTEILLE';
+        }
+
+        if(!is_null($this->surface_propose)) {
+
+            return 'ARES';
+        }
+
+        return 'HL';
     }
 
     public function allProduitsClotures()

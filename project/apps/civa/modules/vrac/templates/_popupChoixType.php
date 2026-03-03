@@ -1,7 +1,7 @@
 <?php $id = "popup_choix_typeVrac".((isset($papier) && $papier) ? "Papier" : null); ?>
 <?php $idSelect = "select_createur".((isset($papier) && $papier) ? "Papier" : null); ?>
 
-<div id="<?php echo $id ?>" class="popup_ajout " title="Création du contrat">
+<div id="<?php echo $id ?>" class="popup_ajout" title="Création du contrat">
     <form method="post" action="" id="contrats_vrac">
     		<div class="form_col selecteur bloc_infos" style="width:auto; border:none;margin:0;">
                 <div class="ligne_form" style="margin:0 0 25px 0;">

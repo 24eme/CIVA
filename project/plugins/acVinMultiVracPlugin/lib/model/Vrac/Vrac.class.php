@@ -231,6 +231,26 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $conf;
      }
 
+    public function getTemporaliteContrat() {
+        if($this->isPluriannuelCadre()) {
+            return VracClient::TEMPORALITE_PLURIANNUEL_CADRE;
+        }
+        if($this->isApplicationPluriannuel()) {
+            return VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION;
+        }
+
+        return VracClient::TEMPORALITE_ANNUEL;
+    }
+
+    public function getDureeAnnee() {
+        if(!$this->exist('duree_annee')) {
+
+            return ($this->isPluriannuelCadre()) ? 3 : 1;
+        }
+
+        return $this->_get('duree_annee');
+    }
+
     public function initProduits()
     {
         if($this->type_contrat == VracClient::TYPE_RAISIN && $dr = DRClient::getInstance()->findLastByCvi($this->vendeur->cvi)) {
@@ -1070,11 +1090,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	}
 
 	public function isPonctuel() {
-		return !$this->contrat_pluriannuel;
+		return $this->contrat_pluriannuel === 0;
 	}
 
 	public function isPluriannuel() {
-		return !$this->isPonctuel();
+		return $this->contrat_pluriannuel === 1;
 	}
 
     public function hasReferencePluriannuel() {
@@ -1082,11 +1102,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function isPluriannuelCadre() {
-        return (!$this->isPonctuel() && !$this->hasReferencePluriannuel());
+        return $this->isPluriannuel() && ! $this->hasReferencePluriannuel();
     }
 
 	public function isApplicationPluriannuel() {
-        return (!$this->isPonctuel() && $this->hasReferencePluriannuel());
+        return $this->isPluriannuel() && $this->hasReferencePluriannuel();
 	}
 
     public function isInModeSurface() {
@@ -1156,8 +1176,14 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
 	public function generateNextPluriannuelApplication() {
+        if(!$this->isValide()) {
+            throw new Exception("Le contrat cadre n'a pas encore été validé");
+        }
         if($this->isAnnule()) {
             throw new Exception('Le contrat cadre a été annulé.');
+        }
+        if(!$this->isPluriannuelCadre()) {
+            throw new Exception("Ce contrat n'est pas un contrat cadre");
         }
         $numContratApplication = $this->getNextNumContratApplication();
         if (!$numContratApplication)

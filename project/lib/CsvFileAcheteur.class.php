@@ -111,16 +111,15 @@ class CsvFileAcheteur
 
       $appellation = $line[CsvFileAcheteur::CSV_APPELLATION];
       $appellation = preg_replace("/^0$/", "", $appellation);
-      $appellation = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $appellation);
+      $appellation = self::normalizeProductLibelle($appellation);
       $appellation = preg_replace('/Mo[uû]ts? /i', '', $appellation);
 
       $lieu = $line[CsvFileAcheteur::CSV_LIEU];
       $lieu = preg_replace("/^0$/", "", $lieu);
 
       $cepage = $line[CsvFileAcheteur::CSV_CEPAGE];
+      $cepage = self::normalizeProductLibelle($cepage);
       $cepage = preg_replace("/^0$/", "", $cepage);
-      $cepage = preg_replace("/Gewurzt\./i", "Gewurztraminer", $cepage);
-      $cepage = preg_replace("/Muscat d'Alsace/i", "Muscat", $cepage);
       $cepage = preg_replace("/^Klevener/i", "Klevener de Heiligenstein ", $cepage);
       $cepage = preg_replace("/Rebêches Blanc/i", "Rebêches", $cepage);
       $cepage = preg_replace("/Rebêches Rouge/i", "Rebêches", $cepage);
@@ -140,6 +139,14 @@ class CsvFileAcheteur
       }
 
       return $produit;
+  }
+
+  public static function normalizeProductLibelle($libelle) {
+      $libelle = preg_replace("/Gewurzt\./i", "Gewurztraminer", $libelle);
+      $libelle = preg_replace("/Muscat d'Alsace/i", "Muscat", $libelle);
+      $libelle = preg_replace("/AOC ALSACE PINOT NOIR ROUGE/i", "AOC Alsace PN rouge", $libelle);
+
+      return $libelle;
   }
 
   public static function recodeNumber($value) {

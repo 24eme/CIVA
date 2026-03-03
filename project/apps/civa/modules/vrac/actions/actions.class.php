@@ -23,63 +23,8 @@ class vracActions extends sfActions
     	return $this->redirect('vrac_etape', array('sf_subject' => new Vrac(), 'etape' => $etapes->getFirst()));
     }
 
-    public function executeListeCSVVrac(sfWebRequest $request)
-    {
-        $this->setLayout('layout');
-
+    private function getVracsFromRequest(sfWebRequest $request) {
         $this->compte = $this->getRoute()->getCompte();
-        $this->csvs = CSVVRACClient::getInstance()->findByIdentifiant($this->compte->getIdentifiant());
-
-        return sfView::SUCCESS;
-    }
-
-    public function executeCSVVracFiche(sfWebRequest $request)
-    {
-        $this->setLayout('layout');
-
-        $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-        }
-
-        return sfView::SUCCESS;
-    }
-
-    public function executeNewCSVVrac(sfWebRequest $request)
-    {
-        $this->compte = $this->getRoute()->getCompte();
-
-        $csv = current($request->getFiles());
-        $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-        $this->vracimport->import();
-
-        if (count($this->vracimport->getErrors())) {
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-            foreach ($this->vracimport->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
-            }
-
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
-        } else {
-            $ids = $this->vracimport->import(true);
-            $this->csvVrac->documents = $ids;
-        }
-
-        $this->csvVrac->save();
-
-        return $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
-    }
-
-	public function executeHistorique(sfWebRequest $request)
-	{
-		$this->compte = $this->getRoute()->getCompte();
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
 
@@ -93,16 +38,79 @@ class vracActions extends sfActions
 		if (!$this->campagne) {
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
-		$etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        $this->etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
+    }
+
+	public function executeHistorique(sfWebRequest $request)
+	{
+        $this->getVracsFromRequest($request);
+
+        $this->facettes = [];
+        $this->facettes['type'] = array_count_values(array_column(array_column($this->vracs, 'key'), 1));
+        $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
+        $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'key'), 3));
+
+        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+
         $this->statuts = $this->getStatuts();
+        if (!$this->facettes['statut'][Vrac::STATUT_PROJET_VENDEUR]) {
+            unset($this->statuts[Vrac::STATUT_PROJET_VENDEUR]);
+        } elseif (!$this->facettes['statut'][Vrac::STATUT_PROJET_ACHETEUR]) {
+            unset($this->statuts[Vrac::STATUT_PROJET_ACHETEUR]);
+        } else {
+            $this->statuts[Vrac::STATUT_PROJET_ACHETEUR] = 'Projet (Acheteur)';
+            $this->statuts[Vrac::STATUT_PROJET_VENDEUR] = 'Projet (Vendeur)';
+        }
+        $this->statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = 'En attente de validation/sign.';
+
+        $this->statuts_globaux = array(
+            Vrac::STATUT_VALIDE_PARTIELLEMENT => $this->statut_vracs[Vrac::STATUT_VALIDE_PARTIELLEMENT],
+            Vrac::STATUT_PROPOSITION => $this->statut_vracs[Vrac::STATUT_PROPOSITION],
+            'PROJETS_EN_COURS' => $this->statut_vracs[Vrac::STATUT_PROJET_VENDEUR] + $this->statut_vracs[Vrac::STATUT_PROJET_ACHETEUR]
+        );
         $this->types = VracClient::getContratTypes();
         $this->temporalites = VracClient::$_contrat_temporalites;
         $this->roles = $this->findRoles();
         $annuaire = $this->getAnnuaire();
         $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
+
+        $this->setLayout('layout');
 	}
+
+    public function executeExportPDF(sfWebRequest $request)
+	{
+        $this->getVracsFromRequest($request);
+
+        $subdir = date('Ymdhis').'_contrats_'.$this->compte->identifiant;
+        $filename = '/tmp/vrac/'.$subdir.'.zip';
+
+        $this->getResponse()->setHttpHeader('Content-Type', 'application/zip');
+        $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . basename($filename) . '"');
+        $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');
+        $this->getResponse()->setHttpHeader('Pragma', '');
+        $this->getResponse()->setHttpHeader('Cache-Control', 'public');
+        $this->getResponse()->setHttpHeader('Expires', '0');
+
+        mkdir('/tmp/vrac/'.$subdir, 0700, true);
+        foreach($this->vracs as $v) {
+            $vrac = VracClient::getInstance()->find($v->id);
+            if (!$vrac->isValide()) {
+                continue;
+            }
+            $doc = new ExportVracPdf($vrac, false, array($this, 'getPartial'));
+            $doc->generatePDF();
+            file_put_contents('/tmp/vrac/'.$subdir.'/CONTRAT-'.$vrac->numero_contrat.'.pdf', $doc->output());
+        }
+
+        chdir("/tmp/vrac");
+        exec("zip -r /tmp/vrac/".$subdir.".zip ".$subdir);
+        exec('rm -rf /tmp/vrac/'.$subdir);
+
+        $ret = $this->renderText(file_get_contents($filename));
+        unlink("/tmp/vrac/".$subdir.".zip");
+        return $ret;
+    }
 
     protected function findRoles() {
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
@@ -473,11 +481,17 @@ class vracActions extends sfActions
 
             return sfView::SUCCESS;
         }
+
+
+
         $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+
         if (!$this->form->isValid()) {
 
             return sfView::SUCCESS;
         }
+
+
 
 		$this->form->save();
 		if ($request->isXmlHttpRequest()) {

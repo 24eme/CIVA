@@ -122,31 +122,76 @@ vrac_historique:
   options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
 
-vrac_csv_liste:
+vrac_csv_accueil:
   url: /vrac/import/:identifiant
-  param: {module: vrac, action: listeCSVVrac}
+  param: {module: vrac_import, action: accueil}
+  class: CompteRoute
+  options: {model: Compte, type: object}
+  requirements: {sf_method: [get]}
+
+vrac_csv_liste:
+  url: /vrac/import/:identifiant/historique
+  param: {module: vrac_import, action: CSVVracListe}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [get, post]}
 
-vrac_csv_import:
-  url: /vrac/import/:identifiant/import
-  param: {module: vrac, action: newCSVVrac}
+vrac_csv_create:
+  url: /vrac/import/:identifiant/create
+  param: {module: vrac_import, action: CSVVracNew}
   class: CompteRoute
   options: {model: Compte, type: object}
   requirements: {sf_method: [post]}
 
+vrac_csv_upload:
+  url: /vrac/import/:csvvrac/upload
+  param: {module: vrac_import, action: CSVVracUpload}
+  requirements: {sf_method: [post]}
+
 vrac_csv_fiche:
   url: /vrac/import/:csvvrac/fiche
-  param: {module: vrac, action: CSVVracFiche}
-  requirements: {sf_method: [get, post]}
+  param: {module: vrac_import, action: CSVVracFiche}
+  requirements: {sf_method: [get,post]}
 
-vrac_export_csv:
+vrac_csv_validation:
+  url: /vrac/import/:csvvrac/validation
+  param: {module: vrac_import, action: CSVVracValidation}
+  requirements: {sf_method: [get,post]}
+
+vrac_csv_import:
+  url: /vrac/import/:csvvrac/import
+  param: {module: vrac_import, action: CSVVracImport}
+  requirements: {sf_method: [post]}
+
+vrac_csv_download:
+  url: /vrac/import/:csvvrac/download
+  param: {module: vrac_import, action: CSVVracDownload}
+  requirements: {sf_method: [get]}
+
+vrac_csv_attachment:
+  url: /vrac/import/:csvvrac/a/:attachment
+  param: {module: vrac_import, action: CSVVracAttachment}
+  requirements:
+    sf_method: [get]
+    attachment: .+
+
+vrac_csv_visualisation:
+  url: /vrac/import/:csvvrac/visualisation
+  param: {module: vrac_import, action: CSVVracVisualisation}
+  requirements: {sf_method: [get]}
+
+vracs_export_csv:
   url: /vrac/:identifiant/export/csv
   param: { module: vrac, action: exportCSV }
   class: CompteRoute
   options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
+
+vracs_export_pdf:
+  url: /vrac/:identifiant/export/pdf
+  param: { module: vrac, action: exportPDF }
+  class: CompteRoute
+  options: { model: Compte, type: object }
 
 vrac_soussigne_informations:
   url: /vrac/:numero_contrat/soussignes-informations
@@ -715,6 +760,13 @@ dr_pdf:
   param: {module: dr_export, action: pdf}
   class: EtablissementRoute
   options: { model: Etablissement, type: object }
+  requirements: { sf_method: [get, post] }
+
+dr_json:
+  url: /dr/:id/json
+  param: {module: dr_export, action: json}
+  class: DRRoute
+  options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
 dr_csv:

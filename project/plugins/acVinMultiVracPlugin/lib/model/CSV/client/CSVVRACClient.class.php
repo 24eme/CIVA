@@ -3,8 +3,11 @@
 class CSVVRACClient extends acCouchdbClient
 {
     const TYPE_VRAC = "VRAC";
+    const TYPE_CONTRAT_PLURIANNUEL_CADRE = 'PLURIANNUEL_CADRE';
+    const TYPE_CONTRAT_PLURIANNUEL_APPLICATION = 'PLURIANNUEL_APPLICATION';
     const LEVEL_WARNING = 'WARNING';
     const LEVEL_ERROR = 'ERROR';
+    const LEVEL_IMPORTE = 'IMPORTE';
 
     public static function getInstance()
     {
@@ -18,8 +21,9 @@ class CSVVRACClient extends acCouchdbClient
         if ($date) {
             $start = $end = $date;
         }
-        $csvs = $this->startkey("CSVVRAC-".$identifiant."-{$start}000")
-                     ->endkey("CSVVRAC-".$identifiant."-{$end}999")
+        $csvs = $this->endkey("CSVVRAC-".$identifiant."-{$start}000")
+                     ->startkey("CSVVRAC-".$identifiant."-{$end}999")
+                     ->descending(true)
                      ->execute();
 
         return $csvs;

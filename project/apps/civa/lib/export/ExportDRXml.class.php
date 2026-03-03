@@ -30,15 +30,23 @@ class ExportDRXml {
             if($volume == 0) {
                 continue;
             }
+            $tvaIntra = null;
+            if(!preg_match("/^(67|68)/", $cvi)) {
+                $etablissement = EtablissementClient::getInstance()->findByCvi($cvi);
+                if($etablissement && $etablissement->pays != 'FR') {
+                    $tvaIntra = $etablissement->getSociete()->no_tva_intracommunautaire;
+                }
+            }
             $key = self::$type2douane[$type].'_'.$cvi;
             if(!array_key_exists($key, $xml)) {
-                $item = array('numCvi' => $cvi, 'volume' => 0);
+                $item = array('numCvi' => $cvi, 'numTva' => $tvaIntra, 'volume' => 0);
             } else {
                 $item = $xml[$key];
             }
+
             $item['volume'] += $volume;
             if($type == 'negoces' && $this->destinataire == self::DEST_DOUANE) {
-                $item['volume'] = $item['volume'] - $obj->getTotalDontVciVendusByCviRatio($type, $cvi);
+                $item['volume'] = round($item['volume'] - $obj->getTotalDontDplcVendusByCviRatio($type, $cvi) - $obj->getTotalDontVciVendusByCviRatio($type, $cvi), 2);
             }
 
             $xml[$key] = $item;
@@ -140,34 +148,37 @@ class ExportDRXml {
 
         $vciNegoce = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('negoces'));
         $vciMouts = $this->getRatioRecap($object, "getTotalDontVciVendusByTypeRatio", array('mouts'));
+        $usagesIndustrielsNegoce = $this->getRatioRecap($object, 'getTotalDontDplcVendusType', array('negoces')) + $this->getRatioRecap($object, 'getTotalDontDplcVendusType', array('mouts'));
 
-        $col['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $vciNegoce;
+        if(!isset($col['exploitant']['L9'])) {
+            $col['exploitant']['L9'] = 0;
+        }
+
+        $col['exploitant']['L9'] += $object->getTotalCaveParticuliere() + $vciNegoce + $usagesIndustrielsNegoce;
         if($this->destinataire == self::DEST_CIVA) {
           $col['exploitant']['L9'] = $object->getTotalCaveParticuliere();
         }
 
-        $col['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $object->getTotalVolumeAcheteurs('cooperatives') + $vciNegoce;
-        if($this->destinataire == self::DEST_CIVA){
-          $col['exploitant']['L10'] -= $vciNegoce;
+        if(!isset($col['exploitant']['L10'])) {
+            $col['exploitant']['L10'] = 0;
         }
+        $col['exploitant']['L10'] += $object->getTotalCaveParticuliere() + $vciNegoce + $usagesIndustrielsNegoce;
 
         $col['exploitant']['L11'] = 0; //HS
         $col['exploitant']['L12'] = 0; //HS
         $col['exploitant']['L13'] = 0; //HS
         $col['exploitant']['L14'] = 0; //Vin de table + Rebeches
 
-        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendique', array(), true);
-        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustriels', array());
-        $venteNegoce = $object->getTotalVolumeAcheteurs('negoces');
-        $venteMouts = $object->getTotalVolumeAcheteurs('mouts');
-        $vci = $object->getTotalVci();
+        $volumeRevendique = $this->getRatioRecap($object, 'getVolumeRevendiqueCaveParticuliere', array(), true);
+        $usagesIndustriels = $this->getRatioRecap($object, 'getUsagesIndustrielsCaveParticuliere', array());
+        $vci = $object->getTotalVci() - $this->getRatioRecap($object, 'getTotalDontVciVendusByTypeRatio', array('cooperatives'));
 
-        $l15 = $volumeRevendique - $venteNegoce - $venteMouts + $vciNegoce + $vciMouts;
+        $l15 = $volumeRevendique;
         if($l15 < 0) {
             $l15 = 0;
         }
 
-        $l16 = $usagesIndustriels + $vci;
+        $l16 = $usagesIndustriels + $usagesIndustrielsNegoce + $vci;
 
         $col['exploitant']['L15'] = $l15; //Volume revendique
         $col['exploitant']['L16'] = $l16;
@@ -195,7 +206,7 @@ class ExportDRXml {
             if ($this->destinataire == self::DEST_CIVA) {
                 $col['exploitant']['L14'] = $object->getTotalVolume();
             }
-            $col['exploitant']['L15'] = 0;
+            //$col['exploitant']['L15'] = 0;
 
             if($this->destinataire == self::DEST_DOUANE && round($object->getTotalVolumeAcheteurs('negoces'), 2) == $object->getTotalVolume()) {
                 $col['exploitant']['L14'] = 0;
@@ -422,7 +433,7 @@ class ExportDRXml {
                                 } elseif($this->destinataire == self::DEST_CIVA) {
                                     $totals[$total['L1']] = $total;
                                 } elseif($this->destinataire == self::DEST_DOUANE) {
-                                    if(!$total['mentionVal']) {
+                                    if(array_key_exists('mentionVal', $total) && !$total['mentionVal']) {
                                         unset($total['mentionVal']);
                                     }
                                     $this->addCol($total, $xml);
@@ -502,7 +513,7 @@ class ExportDRXml {
                         }
 
                         if (!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_LIEUDIT', 'appellation_VINTABLE')) && ($mention->getKey() == 'mention') && $this->destinataire == self::DEST_DOUANE && $total) {
-                            if(!$total['mentionVal']) {
+                            if(array_key_exists('mentionVal', $total) && !$total['mentionVal']) {
                                 unset($total['mentionVal']);
                             }
                             $this->addCol($total, $xml);
@@ -510,7 +521,7 @@ class ExportDRXml {
                         }
 
                         if(preg_match("|appellation_LIEUDIT/mention/lieu/couleurRouge|", $object->getHash()) && $total && $this->destinataire == self::DEST_DOUANE) {
-                            if(!$total['mentionVal']) {
+                            if(array_key_exists('mentionVal', $total) && !$total['mentionVal']) {
                                 unset($total['mentionVal']);
                             }
                             $this->addCol($total, $xml);
@@ -530,7 +541,7 @@ class ExportDRXml {
             }
             if(!in_array($appellation->getKey(), array('appellation_GRDCRU', 'appellation_VINTABLE')) && $this->destinataire == self::DEST_CIVA) {
                 foreach($totals as $total) {
-                    if(!$total['mentionVal']) {
+                    if(array_key_exists('mentionVal', $total) && !$total['mentionVal']) {
                         unset($total['mentionVal']);
                     }
                     $this->addCol($total, $xml);
@@ -539,7 +550,9 @@ class ExportDRXml {
         }
         $this->xml = $xml;
         $this->achats = $baliseachat;
-        $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $this->achats, 'destinataire' => $this->destinataire));
+        if($this->partial_function) {
+            $this->content = $this->getPartial('dr_export/xml', array('dr' => $dr, 'colonnes' => $xml, 'achats' => $this->achats, 'destinataire' => $this->destinataire));
+        }
     }
 
     public function getXml() {
@@ -582,7 +595,7 @@ class ExportDRXml {
                 } else {
                     $cols['exploitant'][$expl_key] += $col['exploitant'][$expl_key];
                 }
-                if($cols['exploitant'][$expl_key]['volume'] < 0) {
+                if(isset($cols['exploitant'][$expl_key]['volume']) && $cols['exploitant'][$expl_key]['volume'] < 0) {
                     $cols['exploitant'][$expl_key] = 0;
                 }
             }

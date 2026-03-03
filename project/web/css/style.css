@@ -213,3 +213,35 @@ ul.navbar-nav  > .active > a:focus {
 .strong {
     font-weight: bold;
 }
+
+/** VRAC **/
+table#soussignes_listing tbody td {
+    border-bottom: 1px dashed #c6c8c7;
+    color: #666;
+    font-size: 12px;
+    line-height: 17px;
+    padding: 3px;
+    vertical-align: middle;
+}
+table#soussignes_listing .liste_actions li
+{
+	background: transparent 0 50% no-repeat;
+	padding: 2px 5px 2px 22px;
+}
+table#soussignes_listing li.action_supprimer { background-image: url('../images/pictos/pi_supprimer.png'); }
+table#soussignes_listing li.action_enlever { background-image: url('../images/pictos/pi_crayon.png'); }
+table#soussignes_listing li.action_signer { background-image: url('../images/pictos/pi_signer.png'); }
+table#soussignes_listing li.action_continuer { background-image: url('../images/pictos/pi_fleche_continuer.png'); }
+table#soussignes_listing li.action_visualiser { background-image: url('../images/pictos/pi_visualiser.png'); }
+table#soussignes_listing ul.liste_soussignes li { padding: 2px 22px 2px 5px; }
+
+table#soussignes_listing li.soussigne_valide,
+table#soussignes_listing li.soussigne_attente,
+table#soussignes_listing li.soussigne_valide_grey,
+table#soussignes_listing li.soussigne_attente_grey { background: 98% 50% no-repeat; }
+
+table#soussignes_listing li.soussigne_valide { background-image: url('../images/pictos/pi_check_2.png'); }
+table#soussignes_listing li.soussigne_attente { background-image: url('../images/pictos/pi_sablier.png'); }
+
+table#soussignes_listing li.soussigne_valide_grey { background-image: url('../images/pictos/pi_check_2_grey.png'); }
+table#soussignes_listing li.soussigne_attente_grey { background-image: url('../images/pictos/pi_sablier_grey.png'); }

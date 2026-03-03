@@ -442,6 +442,7 @@ class SV extends BaseSV
 
     public function removeEmptyProduits()
     {
+        $apporteursToRemove = [];
         foreach ($this->apporteurs as $apporteur) {
             foreach ($apporteur->getProduits() as $hash => $produit) {
                 if ($produit->isEmpty()) {
@@ -456,6 +457,16 @@ class SV extends BaseSV
             foreach($keysToRemove as $hash) {
                 $this->getDocument()->remove($hash);
             }
+        }
+
+        foreach ($this->apporteurs as $apporteur) {
+            if(!count($apporteur->toArray(true, false))) {
+                $apporteursToRemove[$apporteur->getHash()] = $apporteur->getHash();
+            }
+        }
+
+        foreach($apporteursToRemove as $hash) {
+            $this->getDocument()->remove($hash);
         }
     }
 
@@ -508,6 +519,7 @@ class SV extends BaseSV
 
     public function devalidate()
     {
+        $this->cleanDoc();
         $this->valide->statut = null;
     }
 

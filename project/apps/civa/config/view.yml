@@ -18,7 +18,7 @@ default:
 
   stylesheets:    [global.css?202308031047, declaration_recolte.css?201711170207, declaration_stock.css?20140613, contrats_vrac.css?202306142324, jquery.ui.css, /components/vins/vins.css?20160919]
 
-  javascripts:    [plugins/jquery.plugins.min.js, plugins/editable-1.3.3.min.js, global.js?202212121215, declaration_recolte.js?202111041038, declaration_stock.js?20140613, form.js?20140613, vrac.js?202306151433, autocomplete.js?20180718]
+  javascripts:    [plugins/jquery.plugins.min.js, plugins/editable-1.3.3.min.js, global.js?202212121215, declaration_recolte.js?202111041038, declaration_stock.js?20140613, form.js?20140613, vrac.js?202510031700, autocomplete.js?20180718]
 
   has_layout:     true
   layout:         layout

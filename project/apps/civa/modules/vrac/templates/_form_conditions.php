@@ -39,7 +39,7 @@
 				CVO AOC à la charge du vendeur
 			</td>
 			<td colspan="2">
-				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2022_2023.pdf">Organisation du marché 2022/2023</a>)</small>
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2024_2025.pdf">Organisation du marché 2024/2025</a>)</small>
 			</td>
 		</tr>
         <?php endif; ?>
