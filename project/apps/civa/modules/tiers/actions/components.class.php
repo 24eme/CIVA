@@ -16,4 +16,25 @@ class tiersComponents extends sfComponents {
             $this->form = new DelegationLoginForm($this->getUser()->getCompte());
         }
     }
+
+    protected function prepareOnglets()
+    {
+        if (!isset($this->blocs) || !$this->blocs) {
+            $this->blocs = myUser::buildBlocs($this, $this->compte, $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN));
+        }
+        if(!isset($this->isAdmin)) {
+            $this->isAdmin = $this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN);
+        }
+    }
+
+    public function executeOnglets()
+    {
+        $this->prepareOnglets();
+    }
+
+    public function executeOngletsBootstrap()
+    {
+        $this->prepareOnglets();
+    }
+
 }

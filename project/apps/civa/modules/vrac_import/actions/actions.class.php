@@ -1,6 +1,13 @@
 <?php
 class vrac_importActions extends sfActions
 {
+    protected function forwardSecure()
+    {
+        $this->context->getController()->forward(sfConfig::get('sf_secure_module'), sfConfig::get('sf_secure_action'));
+
+        throw new sfStopException();
+    }
+
     private function secureRoute($identifiant)
     {
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $identifiant) {
@@ -27,7 +34,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracFiche(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport = new VracCsvImport($this->csvVrac);
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
         $this->secureRoute($this->compte->identifiant);
@@ -75,14 +82,16 @@ class vrac_importActions extends sfActions
 
         $this->secureRoute($this->compte->identifiant);
 
+        ini_set('memory_limit', '1024M');
+
         $csv = current($request->getFiles());
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
 
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-        $this->vracimport->preimportChecks($this->csvVrac);
+        $this->vracimport = new VracCsvImport($this->csvVrac);
+        $this->vracimport->preimportChecks();
         $this->vracimport->import();
-        $this->vracimport->checkErreurs($this->csvVrac);
+        $this->vracimport->checkErreurs();
 
         $this->csvVrac->save();
 
@@ -97,6 +106,8 @@ class vrac_importActions extends sfActions
             return $this->forwardSecure();
         }
 
+        ini_set('memory_limit', '1024M');
+
         $csv = current($request->getFiles());
         if ($csv['size'] === 0) {
             throw new sfException("Pas de fichier fourni");
@@ -104,10 +115,10 @@ class vrac_importActions extends sfActions
         $this->csvVrac->clearErreurs();
         $this->csvVrac->storeAttachment($csv['tmp_name'], 'text/csv', $this->csvVrac->getFileName());
         $this->csvVrac->save();
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
-        $this->vracimport->preimportChecks($this->csvVrac);
+        $this->vracimport = new VracCsvImport($this->csvVrac);
+        $this->vracimport->preimportChecks();
         $this->vracimport->import();
-        $this->vracimport->checkErreurs($this->csvVrac);
+        $this->vracimport->checkErreurs();
 
         $this->csvVrac->save();
 
@@ -128,13 +139,15 @@ class vrac_importActions extends sfActions
             $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
         }
 
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport = new VracCsvImport($this->csvVrac);
     }
 
     public function executeCSVVracImport(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->secureRoute($this->csvVrac->identifiant);
+
+        ini_set('memory_limit', '1024M');
 
         if ($this->csvVrac->statut === CSVVRACClient::LEVEL_ERROR) {
             throw new sfException("Impossible d'importer un fichier en erreur");
@@ -144,7 +157,7 @@ class vrac_importActions extends sfActions
             throw new sfException("Impossible de réimporter un fichier");
         }
 
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport = new VracCsvImport($this->csvVrac);
         $imported = $this->vracimport->import(true);
 
         if (count($this->csvVrac->getAnnexes())) {
@@ -204,7 +217,7 @@ class vrac_importActions extends sfActions
         }
 
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
-        $this->vracimport = new VracCsvImport($this->csvVrac->getFile());
+        $this->vracimport = new VracCsvImport($this->csvVrac);
 
         $this->setTemplate('CSVVracValidation');
     }

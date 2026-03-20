@@ -73,7 +73,8 @@ class VracCsvImport extends CsvFile
         "Prix unite", "Frais annexes vendeur", "Primes diverses acheteur", "Clause réserve propriété", "Clause délai paiement",
         "Clause résiliation", "Mandat facturation", "Critères et modalités d’évolution des prix", "Critères de renégociation du prix",
         "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières", "Créateur", "Date de saisie",
-        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture", "Numero de visa", "Statut", "Centilisation", "Quantité enlevé", "Date retiraison", "Id du document"
+        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture",
+        "Numero de visa", "Statut", "Centilisation", "Quantité enlevé", "Date retiraison", "URL du Contrat", "Id du document"
     ];
 
     /** @var array<string> $imported ID des vracs importés */
@@ -93,6 +94,17 @@ class VracCsvImport extends CsvFile
 
     /** @var array $found_etablissements Cache des établissements */
     private static $found_etablissements = [];
+
+    protected $numeroContratExistants = [];
+
+    protected $csvVrac = null;
+
+    protected $etablissementAcheteur = null;
+
+    public function __construct(CSVVRAC $csvVrac) {
+        parent::__construct($csvVrac->getFile());
+        $this->csvVrac = $csvVrac;
+    }
 
     /**
      * Crée une instance depuis un tableau CSV
@@ -152,6 +164,37 @@ class VracCsvImport extends CsvFile
         return self::$headers;
     }
 
+    public function getCsv() {
+        $csv = parent::getCsv();
+        if(isset($csv[0][0]) && $csv[0][0] != "CONTRAT") {
+            unset($csv[0]);
+        }
+
+        return $csv;
+    }
+
+    public function getEtablissementAcheteur() {
+        if(isset($this->etablissementAcheteur)) {
+            return $this->etablissementAcheteur;
+        }
+        $cvi = null;
+        foreach($this->getCsv() as $numLigne => $line) {
+            if(is_null($cvi)) {
+                $cvi = $line[self::CSV_ACHETEUR_CVI];
+            }
+            if($cvi != $line[self::CSV_ACHETEUR_CVI]) {
+                $this->addError($numLigne++, "mixed_acheteur", "L'acheteur n'est pas le même pour toute les lignes");
+            }
+        }
+
+        try {
+            $this->etablissementAcheteur = $this->guessId($cvi);
+        } catch (Exception $e) {
+        }
+
+        return $this->etablissementAcheteur;
+    }
+
     /**
      * Vérification que le fichier CSV contient uniquement le type de contrat
      * spécifié à l'import
@@ -169,30 +212,32 @@ class VracCsvImport extends CsvFile
         }
     }
 
-    /**
-     * Extrait les numéros de contrats internes du CSV et vérifie qu'il n'existe
-     * pas déjà dans la base. Émet une erreur le cas échéant
-     *
-     * @param string $identifiant l'identifiant du créateur
-     */
-    public function hasExistingVrac($identifiant)
-    {
-        $ids = $this->getContratsImportables();
-        $etab = $this->guessId($identifiant);
-
-        foreach (VracTousView::getInstance()->findBy($etab->_id) as $existingVrac) {
-            if (isset($existingVrac->value->numero_papier) && in_array($existingVrac->value->numero_papier, $ids)) {
-                $this->addError(0, "contrat_existant", "Le contrat avec le numéro interne ".$existingVrac->value->numero_papier." existe déjà");
-            }
+    public function getNumeroContratExistants() {
+        if(count($this->numeroContratExistants)) {
+            return $this->numeroContratExistants;
         }
+        if(!$this->getEtablissementAcheteur()) {
+            return;
+        }
+        $this->numeroContratExistants = [];
+        foreach (VracTousView::getInstance()->findBy($this->getEtablissementAcheteur()->_id, null, VracClient::TYPE_RAISIN) as $existingVrac) {
+            if(isset($existingVrac->value->numero_papier)) {
+                $this->numeroContratExistants[$existingVrac->value->numero_papier] = $existingVrac->id;
+            }
+            if(isset($existingVrac->value->numero)) {
+                $this->numeroContratExistants[$existingVrac->value->numero] = $existingVrac->id;
+            }
+            $this->numeroContratExistants[$existingVrac->value->numero_visa] = $existingVrac->id;
+            $this->numeroContratExistants[$existingVrac->id] = $existingVrac->id;
+        }
+
+        return $this->numeroContratExistants;
     }
 
-    public function preimportChecks(CSVVRAC $csvVrac)
+    public function preimportChecks()
     {
-        $compteIdentifiant = CompteClient::getInstance()->find($csvVrac->identifiant)->getEtablissementInformations()->getCvi();
-
-        $this->hasExistingVrac($compteIdentifiant);
-        $this->hasMixedContratType($csvVrac->type_contrat);
+        $this->getEtablissementAcheteur();
+        $this->hasMixedContratType($this->csvVrac->type_contrat);
     }
 
     /**
@@ -203,7 +248,9 @@ class VracCsvImport extends CsvFile
      * @param bool $verified Le csv a été vérifié
      * @return array<string> Tableau d'ID des vracs importés
      */
-    public function import($verified = false) {
+    public function import($verified = false, $importHistorique = false) {
+        $numerosExistants = $this->getNumeroContratExistants();
+
         $current = null;
         $v = null;
         $produitPosition = 0;
@@ -212,6 +259,11 @@ class VracCsvImport extends CsvFile
             self::$line++;
 
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
+                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants)) {
+                    $this->addError(self::$line, "contrat_existant", "Le contrat avec le numéro interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà (".$numerosExistants[$line[self::CSV_NUMERO_INTERNE]]   .")");
+                    continue;
+                }
+
                 try {
                     $createur = $this->guessId($line[self::CSV_ACHETEUR_CVI]);
                 } catch (Exception $e) {
@@ -227,15 +279,43 @@ class VracCsvImport extends CsvFile
                     self::$imported[] = $v->_id;
                 }
                 if($line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) {
-                    $vCadre = VracClient::getInstance()->findByNumeroContrat($line[self::CSV_NUMERO_CONTRAT_CADRE]);
-                    $v = $vCadre->generateNextPluriannuelApplication();
+                    if(!isset($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]])) {
+                        $this->addError(self::$line, "cadre_inexiste", "Le contrat cadre n'a pas été trouvé [".$line[self::CSV_NUMERO_CONTRAT_CADRE]."]");
+                        continue;
+                    }
+                    $vCadre = VracClient::getInstance()->find($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]]);
+
+                    try {
+                        $v = $vCadre->generateNextPluriannuelApplication();
+                    } catch (Exception $e) {
+                        $this->addError(self::$line, "contrat_cadre_non_valide", $e->getMessage());
+                        continue;
+                    }
+                    $v->numero_papier = $line[self::CSV_NUMERO_INTERNE];
+
                     $v->remove('declaration');
                     $v->add('declaration');
                 } else {
+                    $dateSaisie = null;
+                    if($importHistorique) {
+                        try {
+                            $dateSaisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
+                        } catch (Exception $e) {
+                            $this->addError(self::$line, "date_format", $e->getMessage());
+                            continue;
+                        }
+                    }
+
+                    if(!$importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                        continue;
+                    }
+
                     $v = VracClient::getInstance()->createVrac(
                         $createur->_id,
-                        $line[self::CSV_DATE_SAISIE]
+                        $dateSaisie,
                     );
+
                     $v->campagne = $line[self::CSV_CAMPAGNE];
                     $v->numero_papier = $line[self::CSV_NUMERO_INTERNE];
                     $v->type_contrat = $line[self::CSV_TYPE_TRANSACTION];
@@ -283,7 +363,7 @@ class VracCsvImport extends CsvFile
             $produit = $this->guessProduit($line, $v);
 
             if (! $produit) {
-                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."]");
+                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."] pour la campagne ".$line[self::CSV_CAMPAGNE]);
                 continue;
             }
 
@@ -298,9 +378,7 @@ class VracCsvImport extends CsvFile
 
             $produit->getOrAdd('label');
             if ($line[self::CSV_VIN_LABEL]) {
-                $produit->label = $line[self::CSV_VIN_LABEL];
-            } else {
-                $produit->label = "AUCUNE";
+                $produit->label = str_replace("HVE3", "HVE", $line[self::CSV_VIN_LABEL]);
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {
@@ -315,12 +393,14 @@ class VracCsvImport extends CsvFile
             $produit->prix_unitaire = (float) $line[self::CSV_PRIX_UNITAIRE];
             // Fin produit
 
-            $v->prix_unite = isset(VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$line[self::CSV_PRIX_UNITE]] : $line[self::CSV_PRIX_UNITE];
+            $v->prix_unite = $line[self::CSV_PRIX_UNITE];
 
-            $v->contrat_pluriannuel = ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION) ? 1 : 0;
-            /* if ($v->contrat_pluriannuel) {
-                $v->add('reference_contrat_pluriannuel', $line[self::CSV_NUMERO_CONTRAT_CADRE]);
-            } */
+            if (in_array($line[self::CSV_TYPE_CONTRAT], [
+                VracClient::TEMPORALITE_PLURIANNUEL_CADRE,
+                VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION
+            ]) === true) {
+                $v->contrat_pluriannuel = 1;
+            }
 
             $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
             $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
@@ -339,12 +419,19 @@ class VracCsvImport extends CsvFile
                 $v->add('suivi_qualitatif', $this->guessBool('Suivi qualitatif', $line[self::CSV_CLAUSE_SUIVI_QUALITATIF]));
             }
 
-            // $v->valide->date_saisie = $line[self::CSV_DATE_SAISIE];
-            // $v->valide->date_validation_vendeur = $line[self::CSV_DATE_SIGNATURE_VENDEUR];
-            // $v->valide->date_validation_acheteur = $line[self::CSV_DATE_SIGNATURE_ACHETEUR];
-            // $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] : null;
-            // $v->valide->date_validation = $line[self::CSV_DATE_VALIDATION];
-            // $v->valide->date_cloture = $line[self::CSV_DATE_CLOTURE];
+            if($importHistorique) {
+                try {
+                    $v->valide->date_saisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
+                    $v->valide->date_validation_vendeur = $this->guessDate($line[self::CSV_DATE_SIGNATURE_VENDEUR]);
+                    $v->valide->date_validation_acheteur = $this->guessDate($line[self::CSV_DATE_SIGNATURE_ACHETEUR]);
+                    $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $this->guessDate($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) : null;
+                    $v->valide->date_validation = $this->guessDate($line[self::CSV_DATE_VALIDATION]);
+                    $v->valide->date_cloture = $this->guessDate($line[self::CSV_DATE_CLOTURE]);
+                } catch (Exception $e) {
+                    $this->addError(self::$line, "date_format", $e->getMessage());
+                }
+            }
+
             $v->etape = "validation";
 
             if (!$verified) {
@@ -381,13 +468,13 @@ class VracCsvImport extends CsvFile
      *
      * @param csvVrac le CSVVrac où inscrire les erreurs
      */
-    public function checkErreurs(CSVVRAC $csvVrac)
+    public function checkErreurs()
     {
         if (count($this->getErrors())) {
-            $csvVrac->documents = [];
-            $csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+            $this->csvVrac->documents = [];
+            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
             foreach ($this->getErrors() as $error) {
-                $csvVrac->addErreur($error);
+                $this->csvVrac->addErreur($error);
             }
         }
     }
@@ -441,6 +528,9 @@ class VracCsvImport extends CsvFile
                 $v->campagne = $entry[self::CSV_CAMPAGNE]; // Sans la campagne, la récupération de la conf plante
                 $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
                 $ret[$numero_interne]['temporalite_contrat'] = $entry[self::CSV_TYPE_CONTRAT];
+                if($entry[self::CSV_DUREE_CONTRAT_PLURI] && $entry[self::CSV_DUREE_CONTRAT_PLURI] > 1) {
+                $ret[$numero_interne]['duree_annee'] = $entry[self::CSV_DUREE_CONTRAT_PLURI];
+                }
                 $produit = $this->guessProduit($entry, $v);
 
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
@@ -523,7 +613,7 @@ class VracCsvImport extends CsvFile
      */
     private function guessProduit(array $line, Vrac $v)
     {
-        $this->configuration = isset($this->configuration) ? $this->configuration : ConfigurationClient::getInstance()->getCurrent();
+        $this->configuration = ConfigurationClient::getInstance()->getConfigurationByCampagne($line[self::CSV_CAMPAGNE]);
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
@@ -532,7 +622,7 @@ class VracCsvImport extends CsvFile
         }
 
         if (! $produitConfig) {
-            $produitConfig = $this->configuration->identifyProductByLibelle($line[self::CSV_VIN_LIBELLE]);
+            $produitConfig = $this->configuration->identifyProductByLibelle(CsvFileAcheteur::normalizeProductLibelle($line[self::CSV_VIN_LIBELLE]));
         }
 
         if (! $produitConfig) {
@@ -581,5 +671,28 @@ class VracCsvImport extends CsvFile
         self::$found_etablissements[$numero] = $res;
 
         return $res;
+    }
+
+    /**
+     * Retourne une date au format YYYY-MM-DD en fonction d'une date au format fr
+     *
+     * @param $key string
+     * @return string
+     */
+    public function guessDate($csvDate)
+    {
+        $date = trim(str_replace("/", "-", $csvDate));
+
+        if(preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $date)) {
+
+            return $date;
+        }
+
+        if(preg_match("/^([0-9]{2})-([0-9]{2})-([0-9]{4})$/", $date, $matches)) {
+
+            return $matches[3]."-".$matches[2]."-".$matches[1];
+        }
+
+        throw new Exception("La date \"".$csvDate."\" n'est pas au bon format (YYYY-mm-dd)");
     }
 }

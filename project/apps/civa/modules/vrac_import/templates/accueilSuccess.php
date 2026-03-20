@@ -9,7 +9,7 @@
         <form id="form_csv" method="POST" enctype='multipart/form-data' class="form" action="<?php echo url_for('vrac_csv_create', ['identifiant' => $compte->identifiant]) ?>">
             <div class="row">
             <div class="form-group col-xs-8">
-                <label for="csvVracInputFile">Fichier csv</label>
+                <label for="csvVracInputFile">Fichier csv</label><a target="_blank" class="btn btn-link btn-sm" href="https://github.com/24eme/CIVA/blob/master/docs/logiciels_tiers/Contrats.md"><span class="glyphicon glyphicon-info-sign"></span> Voir la documentation du format attendu</a>
                 <input type="file" id="csvVracInputFile" name="csvVracInputFile" class="form-control" required>
             </div>
             </div>
@@ -25,7 +25,7 @@
                 <input type="radio" name="type_vrac" id="type_vrac" value="<?php echo CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_APPLICATION ?>" required>
                 Contrats d'applications
               </label>
-               <a class="btn btn-link btn-sm" href="">(Télécharger le csv préprempli)</a>
+               <!-- <a class="btn btn-link btn-sm" href="">(Télécharger le csv préprempli)</a> -->
             </div>
 
         </form>

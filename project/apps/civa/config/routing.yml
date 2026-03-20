@@ -180,12 +180,18 @@ vrac_csv_visualisation:
   param: {module: vrac_import, action: CSVVracVisualisation}
   requirements: {sf_method: [get]}
 
-vrac_export_csv:
+vracs_export_csv:
   url: /vrac/:identifiant/export/csv
   param: { module: vrac, action: exportCSV }
   class: CompteRoute
   options: { model: Compte, type: object }
   requirements: { sf_method: [get, post] }
+
+vracs_export_pdf:
+  url: /vrac/:identifiant/export/pdf
+  param: { module: vrac, action: exportPDF }
+  class: CompteRoute
+  options: { model: Compte, type: object }
 
 vrac_soussigne_informations:
   url: /vrac/:numero_contrat/soussignes-informations

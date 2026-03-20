@@ -1,7 +1,7 @@
 <style>
     tr:target {
         border: 2px dotted red;
-        scroll-margin-top: 80px;
+        scroll-margin-top: 120px;
     }
 </style>
 

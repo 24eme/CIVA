@@ -1,6 +1,6 @@
 <?php use_helper('Date') ?>
 <?php use_helper('Orthographe') ?>
-<?php include_partial('tiers/onglets', array('active' => 'accueil', 'compte' => $compte, 'blocs' => $blocs)) ?>
+<?php include_component('tiers', 'onglets', array('active' => 'accueil', 'compte' => $compte, 'blocs' => $blocs)); ?>
 
 <div id="application_dr" class="mon_espace_civa clearfix">
 
