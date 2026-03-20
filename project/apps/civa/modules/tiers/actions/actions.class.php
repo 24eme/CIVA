@@ -115,7 +115,7 @@ class tiersActions extends sfActions {
             return sfView::NONE;
         }
 
-        $blocs = $this->buildBlocs($compte, $isAdmin, $etablissement);
+        $blocs = myUser::buildBlocs($compte, $isAdmin, $etablissement);
 
         return $this->renderPartial("tiers/onglets", array("compte" => $compte, 'isAdmin' => $isAdmin, "blocs" => $blocs, "active" => $request->getParameter('active'), 'absolute' => true));
     }
