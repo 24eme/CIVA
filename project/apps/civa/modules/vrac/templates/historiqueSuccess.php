@@ -62,7 +62,11 @@
                 </div>
 
                 <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
-                    <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
+                    <?php if ($hasDoubt): ?>
+                        <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
+                    <?php else: ?>
+                        <a type="button" class="btn btn-default" style="flex-grow: 1" href="<?php echo url_for('vrac_nouveau') ?>"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
+                    <?php endif ?>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="caret"></span>
                       <span class="sr-only">Toggle Dropdown</span>
@@ -223,7 +227,6 @@
       <div class="modal-body">
         <form method="post" action="" id="form_creation_contrats_vrac">
             <div class="form-group">
-                <?php $etablissements = VracClient::getInstance()->getEtablissements($sf_user->getCompte()->getSociete()); ?>
                 <select class="form-control">
                 <?php foreach($etablissements as $etablissement): ?>
                     <?php if(!VracSecurity::getInstance($sf_user->getCompte(), null)->isAuthorizedTiers($etablissement, VracSecurity::CREATION)): continue; endif; ?>
