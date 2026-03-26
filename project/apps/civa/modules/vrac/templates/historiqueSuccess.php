@@ -51,6 +51,20 @@
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
 
             <div style="margin-bottom: 15px">
+                <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
+                    <?php if ($hasDoubt): ?>
+                        <a type="button" class="btn btn-success" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
+                    <?php else: ?>
+                        <a type="button" class="btn btn-success" style="flex-grow: 1" href="<?php echo url_for('vrac_nouveau') ?>"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
+                    <?php endif ?>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
+                    </ul>
+                </div>
                 <div class="btn-group btn-block">
                     <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span>
@@ -60,22 +74,6 @@
                         <li><a href="<?php echo url_for('vracs_export_pdf', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">PDF</a></li>
                     </ul>
                 </div>
-
-                <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
-                    <?php if ($hasDoubt): ?>
-                        <a type="button" class="btn btn-default" style="flex-grow: 1" data-toggle="modal" data-target="#popup_choix_typeVrac"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
-                    <?php else: ?>
-                        <a type="button" class="btn btn-default" style="flex-grow: 1" href="<?php echo url_for('vrac_nouveau') ?>"><span class="glyphicon glyphicon-plus"></span> Créer un contrat</a>
-                    <?php endif ?>
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="<?php echo url_for('vrac_csv_accueil', ['identifiant' => $compte->identifiant]); ?>">Importer un fichier</a></li>
-                    </ul>
-                </div>
-
                 <a class="btn btn-default btn-block" href="<?php echo url_for('annuaire') ?>">
                   <span class="glyphicon glyphicon-book"></span> Gérer son annuaire
                 </a>
