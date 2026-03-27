@@ -249,6 +249,7 @@ Vrac:
       delais_retiraison: { required: false }
       papier: { required: false }
       interne: { required: false }
+      en_attente_envoi: { required: false }
       historique:
         type: array_collection
         required: false
