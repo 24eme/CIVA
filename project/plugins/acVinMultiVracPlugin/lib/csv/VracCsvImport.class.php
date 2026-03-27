@@ -639,7 +639,7 @@ class VracCsvImport extends CsvFile
      * Trouve le numero d'identifiant en fonction d'un autre
      *
      * @param string $numero Le numéro d'accise, de siret, ou de cvi
-     * @throw Exception Si identifiant inconnu
+     * @throws Exception Si identifiant inconnu
      * @return Etablissement L'établissement correspondant à l'identifiant
      */
     private function guessId($numero)
