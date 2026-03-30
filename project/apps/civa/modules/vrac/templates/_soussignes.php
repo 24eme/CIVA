@@ -40,7 +40,7 @@
 
 					<div class="cadre">
 			<?php else: ?>
-				<div class="bloc_soussigne<?php if ($user->_id == $vrac->mandataire_identifiant): ?> actif<?php endif; ?><?php if (!$vrac->hasCourtier()): ?> bloc_soussigne_large<?php endif; ?>">
+                <div class="bloc_soussigne<?php if ($user && $user->_id == $vrac->mandataire_identifiant): ?> actif<?php endif; ?><?php if (!$vrac->hasCourtier()): ?> bloc_soussigne_large<?php endif; ?>">
 					<h3 class="titre_section">Courtier</h3>
 					<div class="cadre">
 			<?php endif; ?>
