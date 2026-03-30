@@ -419,6 +419,10 @@ class VracCsvImport extends CsvFile
                 $v->add('suivi_qualitatif', $this->guessBool('Suivi qualitatif', $line[self::CSV_CLAUSE_SUIVI_QUALITATIF]));
             }
 
+            if($line[self::CSV_CLAUSE_AUTRES]) {
+                $v->add('conditions_particulieres', $line[self::CSV_CLAUSE_AUTRES]);
+            }
+
             if($importHistorique) {
                 try {
                     $v->valide->date_saisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
