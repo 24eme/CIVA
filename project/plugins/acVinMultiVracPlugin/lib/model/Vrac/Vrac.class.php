@@ -1175,7 +1175,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $last;
     }
 
-	public function generateNextPluriannuelApplication() {
+    public function generateNextPluriannuelApplication($campagne = null) {
         if(!$this->isValide()) {
             throw new Exception("Le contrat cadre n'a pas encore été validé");
         }
@@ -1192,6 +1192,9 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 			if (!$last->isValide()) throw new Exception('Un contrat d\'application du contrat '.$this->_id.' est en cours de validation');
             if (!$last->isCloture()) throw new Exception('Un contrat d\'application du contrat '.$this->_id.' est n\'est pas cloturé');
 		}
+        if($campagne) {
+            $numContratApplication = $this->numero_contrat.substr($campagne, 0, 4);
+        }
         $millesime = substr($numContratApplication, -4) * 1;
 		$vrac = clone $this;
         $vrac->remove('_attachments');

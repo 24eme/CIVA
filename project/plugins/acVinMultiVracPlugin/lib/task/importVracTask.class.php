@@ -29,27 +29,25 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        $this->vracimport = new VracCsvImport($arguments['file'], CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
+        $this->vracimport = new VracCsvImport($arguments['file'], null);
         $this->vracimport->preimportChecks();
         $this->vracimport->import(false, true);
 
         if ($this->vracimport->getErrors()) {
             foreach ($this->vracimport->getErrors() as $importError) {
-                $this->logSection("ERROR", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison.";".implode(",",$importError->ligne), null, 'ERROR');
+                $this->logSection("ERROR", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison.";".implode(",",$importError->ligne), -1, 'ERROR');
             }
         }
 
         if ($this->vracimport->getWarnings()) {
             foreach ($vracs->getWarnings() as $importWarning) {
-                $this->logSection("WARNING", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison, null, 'INFO');
+                $this->logSection("WARNING", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison, -1, 'INFO');
             }
         }
 
-        if (empty($this->vracimport->getErrors())) {
-            $imported = $this->vracimport->import(true, true);
-            foreach ($imported as $id) {
-                echo "Vrac importé : $id".PHP_EOL;
-            }
+        $imported = $this->vracimport->import(true, true);
+        foreach ($imported as $id) {
+            echo "Vrac importé : $id".PHP_EOL;
         }
     }
 }

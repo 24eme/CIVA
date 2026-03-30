@@ -129,7 +129,9 @@ class VracCsvImport extends CsvFile
         $e->num_ligne = $ligne;
         $e->erreur_csv = $code;
         $e->raison = $raison;
-        $e->ligne = $this->getCsv()[$ligne];
+        if(isset($this->getCsv()[$ligne])) {
+            $e->ligne = $this->getCsv()[$ligne];
+        }
         $this->errors[] = $e;
     }
 
@@ -220,7 +222,9 @@ class VracCsvImport extends CsvFile
     public function preimportChecks()
     {
         $this->getEtablissementAcheteur();
-        $this->hasMixedContratType($this->typeContrat);
+        if($this->typeContrat) {
+            $this->hasMixedContratType($this->typeContrat);
+        }
     }
 
     /**
@@ -269,7 +273,7 @@ class VracCsvImport extends CsvFile
                     $vCadre = VracClient::getInstance()->find($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]]);
 
                     try {
-                        $v = $vCadre->generateNextPluriannuelApplication();
+                        $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
                     } catch (Exception $e) {
                         $this->addError(self::$line, "contrat_cadre_non_valide", $e->getMessage());
                         continue;
@@ -417,6 +421,7 @@ class VracCsvImport extends CsvFile
                     $v->valide->setStatut(Vrac::STATUT_VALIDE_CADRE, "admin-24eme","Import de l'historique");
                 } catch (Exception $e) {
                     $this->addError(self::$line, "date_format", $e->getMessage());
+                    continue;
                 }
                 $v->remove('historique');
                 $v->add('historique');
@@ -424,6 +429,7 @@ class VracCsvImport extends CsvFile
                 $histo->date = date('Y-m-d H:i:s');
                 $histo->auteur = "admin-24eme";
                 $histo->description = "Import de l'historique";
+                $histo->commentaire = $v->numero_papier;
                 $histo->statut = Vrac::STATUT_VALIDE_CADRE;
             }
 
