@@ -64,7 +64,10 @@ td.echeance {display: inline;}
 		<?php echo $form->renderHiddenFields() ?>
 		<?php echo $form->renderGlobalErrors() ?>
 	<?php endif; ?>
-	<div class="fond">
+    <div class="fond" style="position:relative;">
+        <?php if($vrac->numero_papier): ?>
+        <small class="text-muted" style="position: absolute; right: 20px; top: 10px; opacity: 0.3;">N° Interne <?php echo $vrac->numero_papier ?></small>
+        <?php endif; ?>
 
 		<?php if($sf_user->hasFlash('notice')) : ?>
 			<p class="flash_message" style="margin-bottom: 20px;"><?php echo $sf_user->getFlash('notice'); ?></p>
@@ -176,7 +179,7 @@ td.echeance {display: inline;}
                     <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider<?php if(!$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?> vos enlèvements<?php endif; ?></button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
-					<p>Contrat vrac <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
+                    <p>Contrat <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 
                 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_VALIDATION)): ?>

@@ -29,28 +29,25 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        $this->vracimport = new VracCsvImport($arguments['file'], null);
+        $this->vracimport->preimportChecks();
+        $this->vracimport->import(false, true);
 
-        $file = new CsvFile($arguments['file']);
-        $vracs = VracCsvImport::createFromArray($file->getCsv(), false);
-        $vracs->import();
-
-        if ($vracs->getErrors()) {
-            foreach ($vracs->getErrors() as $importError) {
-                $this->logSection("IMPORT", $importError['message']." at line ".$importError['line'], null, 'ERROR');
+        if ($this->vracimport->getErrors()) {
+            foreach ($this->vracimport->getErrors() as $importError) {
+                $this->logSection("ERROR", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison.";".implode(",",$importError->ligne), -1, 'ERROR');
             }
         }
 
-        if ($vracs->getWarnings()) {
+        if ($this->vracimport->getWarnings()) {
             foreach ($vracs->getWarnings() as $importWarning) {
-                $this->logSection("IMPORT", $importWarning['message']." at line ".$importWarning['line'], null, 'ERROR');
+                $this->logSection("WARNING", $importError->erreur_csv." at line ".$importError->num_ligne.";".$importError->raison, -1, 'INFO');
             }
         }
 
-        if (empty($vracs->getErrors())) {
-            $imported = $vracs->import(true);
-            foreach ($imported as $id) {
-                echo "Vrac importé : $id".PHP_EOL;
-            }
+        $imported = $this->vracimport->import(true, true);
+        foreach ($imported as $id) {
+            echo "Vrac importé : $id".PHP_EOL;
         }
     }
 }
