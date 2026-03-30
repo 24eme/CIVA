@@ -97,32 +97,14 @@ class VracCsvImport extends CsvFile
 
     protected $numeroContratExistants = [];
 
-    protected $csvVrac = null;
+    protected $typeContrat = null;
 
     protected $etablissementAcheteur = null;
 
-    public function __construct(CSVVRAC $csvVrac) {
-        parent::__construct($csvVrac->getFile());
-        $this->csvVrac = $csvVrac;
-    }
+    public function __construct($file, $typeContrat)  {
+        parent::__construct($file);
 
-    /**
-     * Crée une instance depuis un tableau CSV
-     *
-     * @param array $lines Le CSV transformé en tableau
-     * @param bool $headers Le csv contient une ligne de header ?
-     * @return self
-     */
-    public static function createFromArray(array $lines, $headers = true) {
-        if ($headers) {
-            array_shift($lines);
-            self::$line++;
-        }
-
-        $class = new self();
-        $class->csvdata = $lines;
-
-        return $class;
+        $this->typeContrat = $typeContrat;
     }
 
     /**
@@ -147,6 +129,7 @@ class VracCsvImport extends CsvFile
         $e->num_ligne = $ligne;
         $e->erreur_csv = $code;
         $e->raison = $raison;
+        $e->ligne = $this->getCsv()[$ligne];
         $this->errors[] = $e;
     }
 
@@ -237,7 +220,7 @@ class VracCsvImport extends CsvFile
     public function preimportChecks()
     {
         $this->getEtablissementAcheteur();
-        $this->hasMixedContratType($this->csvVrac->type_contrat);
+        $this->hasMixedContratType($this->typeContrat);
     }
 
     /**
@@ -428,12 +411,20 @@ class VracCsvImport extends CsvFile
                     $v->valide->date_saisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
                     $v->valide->date_validation_vendeur = $this->guessDate($line[self::CSV_DATE_SIGNATURE_VENDEUR]);
                     $v->valide->date_validation_acheteur = $this->guessDate($line[self::CSV_DATE_SIGNATURE_ACHETEUR]);
-                    $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) ? $this->guessDate($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) : null;
+                    $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) && $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] ? $this->guessDate($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) : null;
                     $v->valide->date_validation = $this->guessDate($line[self::CSV_DATE_VALIDATION]);
                     $v->valide->date_cloture = $this->guessDate($line[self::CSV_DATE_CLOTURE]);
+                    $v->valide->setStatut(Vrac::STATUT_VALIDE_CADRE, "admin-24eme","Import de l'historique");
                 } catch (Exception $e) {
                     $this->addError(self::$line, "date_format", $e->getMessage());
                 }
+                $v->remove('historique');
+                $v->add('historique');
+                $histo = $v->historique->add();
+                $histo->date = date('Y-m-d H:i:s');
+                $histo->auteur = "admin-24eme";
+                $histo->description = "Import de l'historique";
+                $histo->statut = Vrac::STATUT_VALIDE_CADRE;
             }
 
             $v->etape = "validation";
@@ -472,13 +463,13 @@ class VracCsvImport extends CsvFile
      *
      * @param csvVrac le CSVVrac où inscrire les erreurs
      */
-    public function checkErreurs()
+    public function registerErreurs($csvVrac = null)
     {
-        if (count($this->getErrors())) {
-            $this->csvVrac->documents = [];
-            $this->csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
+        if (count($this->getErrors()) && isset($csvVrac)) {
+            $csvVrac->documents = [];
+            $csvVrac->statut = CSVVRACClient::LEVEL_ERROR;
             foreach ($this->getErrors() as $error) {
-                $this->csvVrac->addErreur($error);
+                $csvVrac->addErreur($error);
             }
         }
     }
