@@ -21,7 +21,14 @@
         <td>
             <ul style="margin-bottom: 0; list-style-type: circle; list-style-position: inside;">
             <?php foreach ($listeerreurs as $e): ?>
+            <?php if ($e->csv_erreur == "contrat_existant"): ?>
+                <a href=<?php echo url_for('vrac_fiche', array('numero_contrat' =>substr($e->diagnostic, -12, -1))); ?>
+                    <li><?php echo substr($e->diagnostic, 0, 65) . " " . "<span style='text-decoration: underline;'>" .  substr($e->diagnostic, -18) . "</span>"; ?></li>
+                </a>
+            <?php else: ?>
                 <li><?php echo $e->diagnostic; ?></li>
+            <?php endif; ?>
+
             <?php endforeach ?>
             </ul>
         </td>
