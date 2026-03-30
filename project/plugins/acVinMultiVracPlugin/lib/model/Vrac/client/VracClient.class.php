@@ -2,6 +2,7 @@
 
 class VracClient extends acCouchdbClient {
 
+    const TYPE_MODEL = 'Vrac';
 	const VRAC_PREFIXE_ID = 'VRAC-';
     const VRAC_PREFIX_ANNEXE = 'annexe_';
 	const APP_CONFIGURATION = 'app_configuration_vrac';

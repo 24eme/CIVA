@@ -42,35 +42,57 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
 
-        $drs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll();
-        foreach ($drs_to_send_mail as $dr_result) {
-            $dr = DRClient::getInstance()->find($dr_result->id);
-            $annee = $dr->campagne;
-            $this->mailerManager = new RecolteMailingManager($this->getMailer(),array($this, 'getPartial'),$dr,$dr->getEtablissement(),$annee);
+        $docs_to_send_mail = DRAttenteEnvoiMailView::getInstance()->findAll();
+        foreach ($docs_to_send_mail as $doc_result) {
+            $doc = $mailer = null;
 
-            $dr_new = DRClient::getInstance()->find($dr_result->id);
+            switch ($doc_result->key['type']) {
+                case DRClient::TYPE_MODEL:
+                    $doc = DRClient::getInstance()->find($doc_result->id);
+                    $mailer = new RecolteMailingManager(
+                        $this->getMailer(), [$this, 'getPartial'], $doc, $doc->getEtablissement(), $doc->campagne
+                    );
+                    break;
+                case VracClient::TYPE_MODEL:
+                    $doc = VracClient::getInstance()->find($doc_result->id);
+                    $mailer = new VracMailingManager(
+                        $this->getMailer(), [$this, 'getPartial'], $doc
+                    );
+                    break;
+            }
 
-            if($dr->_rev != $dr_new->_rev) {
+            if (! $doc || ! $mailer) {
+                echo $doc_result->id . " non trouvé.".PHP_EOL;
                 continue;
             }
 
-            if(!($dr->exist('en_attente_envoi') && $dr->en_attente_envoi)) {
+            if(! $doc->exist('en_attente_envoi') || ! $doc->en_attente_envoi) {
                 continue;
+            }
+
+            // on regarde si le delai d'attente est passé
+            try {
+                $date = new DateTimeImmutable($doc->en_attente_envoi);
+                if ($date < new DateTimeImmutable()) {
+                    continue;
+                }
+            } catch (\Exception $e) {
+                continue; // DR
             }
 
             try {
-                $this->mailerManager->sendMail(false);
-                if($dr->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
-                    $this->mailerManager->sendAcheteursMails();
+                $mailer->sendMail(false);
+                if(get_class($doc) === "DR" && $doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
+                    $mailer->sendAcheteursMails();
                 }
-                echo $dr->_id.":Email envoyé à ".$dr->getEtablissement()->getEmailTeledeclaration()."\n";
+                echo $doc->_id.":Email envoyé à ".$doc->getEtablissement()->getEmailTeledeclaration()."\n";
             } catch(Exception $e) {
-                echo $dr->_id.":".$e->getMessage()."\n";
+                echo $doc->_id.":".$e->getMessage()."\n";
                 continue;
             }
 
-            $dr->emailSended();
-            $dr->save();
+            $doc->emailSended();
+            $doc->save();
         }
     }
 
