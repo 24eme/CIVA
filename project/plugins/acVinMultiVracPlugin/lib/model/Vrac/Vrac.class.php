@@ -183,7 +183,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
   		return ($this->valide->statut)? $libelles[$this->valide->statut] : $libelles[self::STATUT_CREE];
   	}
 
-    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne)
+    public function initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne, $commentaire = null)
     {
         $this->_config = $config;
         $this->campagne = $campagne;
@@ -191,7 +191,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $this->type_archive = $this->getTypeForArchive();
         $this->numero_contrat = $numeroContrat;
         $this->valide->date_saisie = $date;
-        $this->setStatut(self::STATUT_CREE, $createurIdentifiant);
+        $this->setStatut(self::STATUT_CREE, $createurIdentifiant, $commentaire);
         $this->acheteur_type = AnnuaireClient::ANNUAIRE_NEGOCIANTS_KEY;
         $this->vendeur_type = AnnuaireClient::ANNUAIRE_RECOLTANTS_KEY;
         $this->createur_identifiant = $createurIdentifiant;

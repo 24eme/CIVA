@@ -40,7 +40,7 @@
                             <th>Type</th>
                             <th class="col-xs-1">N° Interne</th>
                             <th>Soussigné(s)</th>
-                            <th>Produit</th>
+                            <th style="width: 350px;">Produit</th>
                             <th class="text-center">Quantité</th>
                             <th class="text-center">Prix</th>
                         </tr>

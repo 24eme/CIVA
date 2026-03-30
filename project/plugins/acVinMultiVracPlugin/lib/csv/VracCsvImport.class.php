@@ -410,7 +410,9 @@ class VracCsvImport extends CsvFile
                 $v->add('conditions_particulieres', $line[self::CSV_CLAUSE_AUTRES]);
             }
 
-            if($importHistorique) {
+            if(!$importHistorique) {
+                $v->validate();
+            } else {
                 try {
                     $v->valide->date_saisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
                     $v->valide->date_validation_vendeur = $this->guessDate($line[self::CSV_DATE_SIGNATURE_VENDEUR]);
