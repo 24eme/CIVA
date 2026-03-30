@@ -55,8 +55,8 @@ EOF;
                     break;
                 case VracClient::TYPE_MODEL:
                     $doc = VracClient::getInstance()->find($doc_result->id);
-                    $mailer = new RecolteMailingManager(
-                        $this->getMailer(), [$this, 'getPartial'], $doc, $doc->getEtablissement(), $doc->campagne
+                    $mailer = new VracMailingManager(
+                        $this->getMailer(), [$this, 'getPartial'], $doc
                     );
                     break;
             }
@@ -70,9 +70,19 @@ EOF;
                 continue;
             }
 
+            // on regarde si le delai d'attente est passé
+            try {
+                $date = new DateTimeImmutable($doc->en_attente_envoi);
+                if ($date < new DateTimeImmutable()) {
+                    continue;
+                }
+            } catch (\Exception $e) {
+                continue; // DR
+            }
+
             try {
                 $mailer->sendMail(false);
-                if($doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
+                if(get_class($doc) === "DR" && $doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
                     $mailer->sendAcheteursMails();
                 }
                 echo $doc->_id.":Email envoyé à ".$doc->getEtablissement()->getEmailTeledeclaration()."\n";
