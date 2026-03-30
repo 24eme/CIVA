@@ -301,6 +301,8 @@ class VracCsvImport extends CsvFile
                     $v = VracClient::getInstance()->createVrac(
                         $createur->_id,
                         $dateSaisie,
+                        false,
+                        "Import depuis un fichier"
                     );
 
                     $v->campagne = $line[self::CSV_CAMPAGNE];
