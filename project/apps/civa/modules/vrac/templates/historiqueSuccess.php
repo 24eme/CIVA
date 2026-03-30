@@ -211,10 +211,6 @@
     </script>
 </div>
 
-<ul id="btn_etape" class="btn_prev_suiv">
-	<li><a href="<?php echo url_for('mon_espace_civa_vrac', array('identifiant' => $compte->getIdentifiant())) ?>"><img alt="Retourner à l'espace contrats" src="/images/boutons/btn_retour_espace_contrats.png"></a></li>
-</ul>
-
 <div id="popup_choix_typeVrac" class="popup_ajout modal" title="Création du contrat" tabindex="-1" role="dialog" aria-labelledby="">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
