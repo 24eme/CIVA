@@ -12,10 +12,9 @@
 
         <h3>Validation avant la génération</h3>
 
-    <div class="alert alert-info">
-        <p><strong>Vous êtes sur le point de générer <?php echo count($vracimport->getContratsImportables()) ?> contrats.</strong></p>
-    </div>
-
+        <div class="alert alert-info">
+            <p><strong>Vous êtes sur le point de générer <?php echo count($vracimport->getContratsImportables()) ?> contrats.</strong></p>
+        </div>
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
