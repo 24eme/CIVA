@@ -461,7 +461,6 @@ class VracCsvImport extends CsvFile
             if($v->isApplicationPluriannuel()) {
                 $v->createApplication($createur);
             }
-            $v->setAttenteEnvoiMail((new DateTime())->modify('+1 day'));
             $v->save();
             self::$imported[] = $v->_id;
         }
