@@ -29,6 +29,7 @@ EOF;
         // initialize the database connection
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+        sfContext::createInstance($this->configuration);
         $this->vracimport = new VracCsvImport($arguments['file'], null);
         $this->vracimport->preimportChecks();
         $this->vracimport->import(false, true);

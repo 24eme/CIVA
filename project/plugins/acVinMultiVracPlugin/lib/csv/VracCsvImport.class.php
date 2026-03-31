@@ -599,9 +599,9 @@ class VracCsvImport extends CsvFile
      */
     public function guessBool($key, $value)
     {
-        if (in_array($value, [1, "1", "OUI", true], true) === true) {
+        if (in_array($value, [1, "1", "OUI", "X", true], true) === true) {
             return 1;
-        } elseif (in_array($value, [0, "0", "NON", false], true) === true) {
+        } elseif (in_array($value, [0, "0", "NON", " ", false], true) === true) {
             return 0;
         } else {
             $this->addError(self::$line, "invalid_value", "La valeur saisie [$value] du champs $key n'est pas reconnue");
