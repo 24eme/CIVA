@@ -148,6 +148,9 @@ td.echeance {display: inline;}
                 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_CLOTURE) && !$vrac->isPluriannuelCadre()): ?>
                     <a class="noprint" style="bottom: 6px; color: #2A2A2A; text-decoration: none; margin-right: 10px; opacity: 0.4;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la clotûre de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>" title="Action disponible uniquement en mode admin">Forcer la clotûre <span class="glyphicon glyphicon-info-sign"></span> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#666" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg></a>
                 <?php endif; ?>
+                <?php if ($vrac->isBrouillon()): ?>
+                    <p>Projet validé il sera transmis automatiquement, vous pouvez encore <a href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => 'produits')) ?>">modifier ce projet</a></p>
+                <?php endif; ?>
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
                     <?php if ($vrac->isProjetAcheteur()): ?>
                     <a href="<?php echo url_for('vrac_refuser_projet', array('sf_subject' => $vrac)) ?>" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet de contrat ?')">
@@ -183,7 +186,7 @@ td.echeance {display: inline;}
 				<?php endif; ?>
 
                 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_VALIDATION)): ?>
-                    <p style="margin-top: 5px;"><a class="noprint" style="color: #2A2A2A; text-decoration: none; opacity: 0.4;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la validation de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_validation', $vrac) ?>" title="Action disponible uniquement en mode admin">Forcer la validation <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#666" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg></a></p>
+                    <a class="noprint" style="color: #2A2A2A; text-decoration: none; opacity: 0.4; position: absolute; bottom: 10px; right: 20px;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la validation de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_validation', $vrac) ?>" title="Action disponible uniquement en mode admin">Mode administrateur pour forcer la validation</a>
                 <?php endif; ?>
 			</td>
 		</tr>
