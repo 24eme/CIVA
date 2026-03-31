@@ -8,6 +8,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 {
 
 	const STATUT_CREE = 'CREE';
+    const STATUT_PROJET_ATTENTE_TRANSMISSION = 'PROJET_ATTENTE_TRANSMISSION';
     const STATUT_CREE_APPLICATION = 'CREE_APPLICATION';
 	const STATUT_PROJET_VENDEUR_TRANSMIS = 'PROJET_VENDEUR_TRANSMIS';
 	const STATUT_PROJET_VENDEUR = 'PROJET_VENDEUR';
@@ -46,6 +47,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Créé',
+        self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Projet',
 		self::STATUT_PROJET_VENDEUR => 'Projet',
 		self::STATUT_PROJET_ACHETEUR => 'Projet',
 		self::STATUT_PROPOSITION => 'Proposition',
@@ -59,6 +61,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles_actions = array(
 		self::STATUT_CREE => 'Continuer',
+		self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Visualiser',
 		self::STATUT_PROJET_VENDEUR => 'Visualiser',
 		self::STATUT_PROJET_ACHETEUR => 'Signer le projet',
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
@@ -72,6 +75,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles_actions_proprietaire = array(
 		self::STATUT_CREE => 'Continuer',
+		self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Visualiser',
 		self::STATUT_PROJET_VENDEUR => 'Valider le projet',
 		self::STATUT_PROJET_ACHETEUR => 'Visualiser',
 		self::STATUT_PROPOSITION => 'Visualiser pour signer',
@@ -83,7 +87,8 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     static $statuts_libelles_historique = array(
 		self::STATUT_CREE => "Projet de contrat initié",
-		self::STATUT_CREE_APPLICATION => " Proposition de contrat d'application initiée",
+		self::STATUT_CREE_APPLICATION => "Proposition de contrat d'application initiée",
+        self::STATUT_PROJET_ATTENTE_TRANSMISSION => "Projet de contrat en attente de transmission",
         self::STATUT_PROJET_VENDEUR_TRANSMIS => "Projet de contrat soumis à l'acheteur ou au courtier",
 		self::STATUT_PROJET_VENDEUR => "Projet de contrat en attente de validation par l'acheteur ou le courtier",
 		self::STATUT_PROJET_ACHETEUR => "Projet de contrat validé et soumis au vendeur pour signature",
@@ -101,6 +106,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     static $statuts_historique_a_venir = array(
         "Projet de contrat initié" => self::STATUT_CREE,
+        "Projet de contrat en attente de transmission" => self::STATUT_PROJET_ATTENTE_TRANSMISSION,
         "Projet soumis à l'acheteur ou au courtier (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR_TRANSMIS,
         "Projet soumis à l'acheteur ou au courtier pour validation (isVendeurProprietaire)" => self::STATUT_PROJET_VENDEUR,
         "Projet en attente de validation par l'acheteur ou le courtier" => self::STATUT_PROJET_ACHETEUR,
@@ -113,6 +119,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_supprimable = array(
 		self::STATUT_CREE,
+        self::STATUT_PROJET_ATTENTE_TRANSMISSION,
 		self::STATUT_PROJET_VENDEUR,
 		self::STATUT_PROJET_ACHETEUR,
 		self::STATUT_PROPOSITION,
@@ -483,8 +490,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function isBrouillon()
     {
-
-    	return (!$this->valide->statut || in_array($this->valide->statut, array(self::STATUT_CREE, self::STATUT_PROJET_VENDEUR)))? true : false;
+        return (!$this->valide->statut || in_array($this->valide->statut, array(self::STATUT_CREE, self::STATUT_PROJET_VENDEUR, self::STATUT_PROJET_ATTENTE_TRANSMISSION)))? true : false;
     }
 
 	public function isProjetVendeur()
@@ -591,6 +597,15 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     		throw new sfException('Le tiers "'.$userId.'" n\'est pas un acteur du contrat : '.$this->_id);
     	}
     	return ($this->valide->get('date_validation_'.$type))? $this->valide->get('date_validation_'.$type) : null;
+    }
+
+    public function prevalidate()
+    {
+        if(!$this->isBrouillon()) {
+            return;
+        }
+
+        $this->setStatut(self::STATUT_PROJET_ATTENTE_TRANSMISSION, $this->createur_identifiant);
     }
 
     public function validate()

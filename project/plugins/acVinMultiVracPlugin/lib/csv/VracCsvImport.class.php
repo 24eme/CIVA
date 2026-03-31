@@ -302,7 +302,7 @@ class VracCsvImport extends CsvFile
                         $createur->_id,
                         $dateSaisie,
                         false,
-                        "Import depuis un fichier"
+                        "Importer depuis un fichier csv"
                     );
 
                     $v->campagne = $line[self::CSV_CAMPAGNE];
@@ -413,7 +413,7 @@ class VracCsvImport extends CsvFile
             }
 
             if(!$importHistorique) {
-                $v->validate();
+                $v->prevalidate();
             } else {
                 try {
                     $v->valide->date_saisie = $this->guessDate($line[self::CSV_DATE_SAISIE]);
@@ -422,7 +422,7 @@ class VracCsvImport extends CsvFile
                     $v->valide->date_validation_mandataire = isset($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) && $line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE] ? $this->guessDate($line[self::CSV_DATE_SIGNATURE_COURTIER_MANDATAIRE]) : null;
                     $v->valide->date_validation = $this->guessDate($line[self::CSV_DATE_VALIDATION]);
                     $v->valide->date_cloture = $this->guessDate($line[self::CSV_DATE_CLOTURE]);
-                    $v->valide->setStatut(Vrac::STATUT_VALIDE_CADRE, "admin-24eme","Import de l'historique");
+                    $v->valide->setStatut(Vrac::STATUT_VALIDE_CADRE, null, "Import historique");
                 } catch (Exception $e) {
                     $this->addError(self::$line, "date_format", $e->getMessage());
                     continue;
