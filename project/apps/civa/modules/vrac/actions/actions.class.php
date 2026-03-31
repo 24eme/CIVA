@@ -39,7 +39,16 @@ class vracActions extends sfActions
 			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 		}
         $this->etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
+
+        if ($this->campagne === "*") { // Filtre "Toutes les campagnes"
+            $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+            $this->vracs = [];
+            foreach ($this->campagnes as $c) {
+                $this->vracs = array_merge($this->vracs, VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $c, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite));
+            }
+        } else {
+            $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
+        }
     }
 
 	public function executeHistorique(sfWebRequest $request)
@@ -51,7 +60,9 @@ class vracActions extends sfActions
         $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
         $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'key'), 3));
 
-        $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        if (! $this->campagnes) {
+            $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
+        }
 
         $this->statuts = $this->getStatuts();
         if (!$this->facettes['statut'][Vrac::STATUT_PROJET_VENDEUR]) {

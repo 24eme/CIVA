@@ -99,6 +99,9 @@
 
             <h4>Campagne</h4>
             <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $campagne === "*" ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => "*"])) ?>">
+                    Toutes les campagnes
+                </a>
                 <?php foreach ($campagnes as $k => $c): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
