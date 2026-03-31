@@ -57,7 +57,12 @@
                             <?php endif ?>
                         </td>
                         <td><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo $produit_info['libelle'] ?> <?php echo $produit_info['millesime'] ?><br /><?php endforeach ?></td>
-                        <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace(" ", "&nbsp;", $produit_info['volume']) ?><br /><?php endforeach ?></td>
+                        <td class="text-right">
+                            <?php foreach ($contrat['produits'] as $produit_info): ?>
+                                <?php echo str_replace(" ", "&nbsp;", $produit_info['volume']) ?><br />
+                            <?php endforeach ?>
+                           <strong>Total : <?php echo str_replace('.', ',', $contrat['totaux']['volume']) ?></strong>
+                        </td>
                         <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace([" ","/"], "&nbsp;", $produit_info['prix']) ?><br /><?php endforeach ?></td>
                     </tr>
                 <?php endforeach; ?>
