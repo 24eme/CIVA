@@ -375,11 +375,11 @@ class VracCsvImport extends CsvFile
             }
 
             if ($v->type_contrat === VracClient::TYPE_RAISIN) {
-                $produit->surface_propose = (float) $line[self::CSV_QUANTITE];
+                $produit->surface_propose = $this->guessFloat($line[self::CSV_QUANTITE]);
             }
 
             $produit->vtsgn = $line[self::CSV_VIN_VTSGN] ?? null;
-            $produit->prix_unitaire = (float) $line[self::CSV_PRIX_UNITAIRE];
+            $produit->prix_unitaire = $this->guessFloat($line[self::CSV_PRIX_UNITAIRE]);
             // Fin produit
 
             $v->prix_unite = $line[self::CSV_PRIX_UNITE];
@@ -599,9 +599,9 @@ class VracCsvImport extends CsvFile
     public function guessBool($key, $value)
     {
         if (in_array($value, [1, "1", "OUI", "X", true], true) === true) {
-            return 1;
+            return true;
         } elseif (in_array($value, [0, "0", "NON", " ", false], true) === true) {
-            return 0;
+            return false;
         } else {
             $this->addError(self::$line, "invalid_value", "La valeur saisie [$value] du champs $key n'est pas reconnue");
             return null;
@@ -699,5 +699,10 @@ class VracCsvImport extends CsvFile
         }
 
         throw new Exception("La date \"".$csvDate."\" n'est pas au bon format (YYYY-mm-dd)");
+    }
+
+    public function guessFloat($number)
+    {
+        return (float) str_replace(',', '.', $number);
     }
 }
