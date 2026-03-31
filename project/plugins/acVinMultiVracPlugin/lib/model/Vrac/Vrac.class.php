@@ -1388,4 +1388,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->getAllAnnexesFilename())? true : false;
     }
 
+    public function isTypeCreation() {
+		return $this->exist('type_creation') && $this->type_creation;
+	}
 }

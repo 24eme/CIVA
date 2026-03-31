@@ -36,6 +36,8 @@ class VracClient extends acCouchdbClient {
     const DELAIS_RETIRAISON_AUCUN = "Aucun";
     const DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE = "%NB_JOURS% jours après la récolte";
 
+    const TYPE_CREATION = "IMPORT_FICHIER";
+
     public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
 
 	protected static $_contrat_types = array(
