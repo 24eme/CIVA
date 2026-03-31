@@ -1,19 +1,11 @@
 function(doc)
 {
-  if (doc.type != "DR" || doc.type != "Vrac") {
+  if (doc.type != "DR") {
     return;
   }
 
-  if (doc.type == "DR") {
-    if (! doc.validee || ! doc.modifiee) {
-      return;
-    }
-  }
-
-  if (doc.type == "Vrac") {
-    if (! doc.valide.date_validation) {
-      return;
-    }
+  if (! doc.validee || ! doc.modifiee) {
+    return;
   }
 
   if (! doc.en_attente_envoi) {
