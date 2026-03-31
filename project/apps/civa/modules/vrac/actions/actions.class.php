@@ -351,6 +351,16 @@ class vracActions extends sfActions
         	}
         }
 
+        if ($this->vrac->isTypeCreation()) {
+            if ($this->vrac->getContratsApplication()) {
+                $this->formApplication = $this->vrac->getContratsApplication()[$this->vrac->numero_contrat];
+            }
+            else {
+                $this->formApplication = null;
+            }
+            return;
+        }
+
         try {
             $application = $this->vrac->getContratDeReference()->generateNextPluriannuelApplication();
             $this->formApplication = $this->getForm($application, VracEtapes::ETAPE_PRODUITS);
