@@ -1248,24 +1248,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return @file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME)) !== false;
     }
 
-    public function setAttenteEnvoiMail(DateTimeInterface $date)
-    {
-        $this->add('en_attente_envoi');
-        $this->en_attente_envoi = $date->format('c');
-    }
-
-    public function emailSended()
-    {
-        return $this->setMailEnvoye();
-    }
-
-    public function setMailEnvoye()
-    {
-        if ($this->exist('en_attente_envoi') && $this->en_attente_envoi) {
-            $this->remove('en_attente_envoi');
-        }
-    }
-
     public function getMother() {
         $mother = new Vrac();
         if ($projet = file_get_contents($this->getAttachmentUri(self::VENDEUR_PROJET_FILENAME))) {

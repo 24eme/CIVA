@@ -53,15 +53,15 @@ EOF;
                         $this->getMailer(), [$this, 'getPartial'], $doc, $doc->getEtablissement(), $doc->campagne
                     );
                     break;
-                case VracClient::TYPE_MODEL:
-                    $doc = VracClient::getInstance()->find($doc_result->id);
-                    $mailer = new VracMailingManager(
-                        $this->getMailer(), [$this, 'getPartial'], $doc
-                    );
-                    break;
+                /* case VracClient::TYPE_MODEL: */
+                /*     $doc = VracClient::getInstance()->find($doc_result->id); */
+                /*     $mailer = new VracMailingManager( */
+                /*         $this->getMailer(), [$this, 'getPartial'], $doc */
+                /*     ); */
+                /*     break; */
             }
 
-            if (! $doc || ! $mailer) {
+            if (! $doc) {
                 echo $doc_result->id . " non trouvé.".PHP_EOL;
                 continue;
             }
@@ -82,7 +82,7 @@ EOF;
 
             try {
                 $mailer->sendMail(false);
-                if(get_class($doc) === "DR" && $doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
+                if($doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
                     $mailer->sendAcheteursMails();
                 }
                 echo $doc->_id.":Email envoyé à ".$doc->getEtablissement()->getEmailTeledeclaration()."\n";
