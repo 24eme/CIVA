@@ -328,6 +328,8 @@ class VracCsvImport extends CsvFile
                     $v->vendeur_identifiant = $vendeur->_id;
                     $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
                     $v->storeVendeurInformations($vendeur);
+                    $v->type_creation = VracClient::TYPE_CREATION;
+
 
                     if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
                         try {

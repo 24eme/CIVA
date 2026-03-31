@@ -232,6 +232,7 @@ Vrac:
       etape: {  }
       type: {  }
       type_contrat: {  }
+      type_creation: { }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
       duree_annee: { required: false }
@@ -288,6 +289,7 @@ CSVVRAC:
       identifiant: {}
       statut: {}
       type_contrat: {}
+      type_creation: { required: false } #deprecated
       erreurs:
         type: array_collection
         definition:
