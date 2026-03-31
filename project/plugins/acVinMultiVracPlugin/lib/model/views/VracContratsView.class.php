@@ -34,27 +34,38 @@ class VracContratsView extends acCouchdbView
 	const VALUE_UTILISATEUR = 26;
 	const VALUE_DATE_MODIF = 27;
 	const VALUE_CREATION = 28;
-	
-    public static function getInstance() 
+
+    public static function getInstance()
     {
         return acCouchdbManager::getView('VRAC', 'contrats', 'Vrac');
     }
-    
+
     public function findAll()
     {
     	return $this->client->startkey(array(VracClient::TYPE_VRAC))->endkey(array(VracClient::TYPE_VRAC, array()))->getView($this->design, $this->view)->rows;
     }
 
-    public function findBy($statut, array $date) 
-    {    
+    public function findBy($statut, array $date)
+    {
 		$startkey = array(VracClient::TYPE_VRAC, $statut, $date[0]);
 		$endkey = array(VracClient::TYPE_VRAC, $statut, $date[1], array());
         return $this->client->startkey($startkey)
                             ->endkey($endkey)
                             ->getView($this->design, $this->view)->rows;
     }
-    
-    public function findForDb2Export(array $date, $type = "C") 
+
+    public function findByStatut($statut)
+    {
+        $startkey = array(VracClient::TYPE_VRAC, $statut);
+        $endkey = array(VracClient::TYPE_VRAC, $statut, []);
+
+        return $this->client->startkey($startkey)
+                            ->endkey($endkey)
+                            ->getView($this->design, $this->view)
+                            ->rows;
+    }
+
+    public function findForDb2Export(array $date, $type = "C")
     {
     	$contrats = array();
     	$statuts = ($type == "C")? array(Vrac::STATUT_VALIDE, Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE) : array(Vrac::STATUT_ENLEVEMENT, Vrac::STATUT_CLOTURE);
