@@ -9,10 +9,11 @@
 <form method="POST" enctype='multipart/form-data' action="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>">
     <div class="row" style="padding: 10px 0">
         <div class="form-group col-xs-8">
-            <label for="annexeInputFile">Fichiers d'annexes</label>
-            <?php echo $formAnnexe['annexeInputFile']->render(['name' => 'annexeInputFile[]', 'class' => 'form-control']); ?>
+            <label for="annexeInputFile">Ajouter des fichiers d'annexes</label>
+            <?php echo $formAnnexe['annexeInputFile']->render(['id' => 'annexeInputFileAdd', 'class' => 'form-control']); ?>
         </div>
     </div>
+
     <template id="annexeInputFileList">
       <div>
         <h5>Vous allez associer aux contrats les annexes suivantes :</h5>
@@ -22,6 +23,13 @@
         </table>
       </div>
     </template>
+
+    <div class="row hidden" style="padding: 10px 0">
+        <div class="form-group col-xs-8">
+            <?php echo $formAnnexe['annexeInputFile']->render(['name' => 'annexeInputFile[]', 'class' => 'form-control']); ?>
+        </div>
+    </div>
+
     <div class="text-right" style="margin-top: 30px;">
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn pull-left btn-default disabled"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
         <button class="btn btn-success">Continuer <span class="glyphicon glyphicon-chevron-right"></span</button>

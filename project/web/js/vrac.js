@@ -253,11 +253,23 @@ var initGenerationContratApplication = function()
 const initVracImport = function ()
 {
     const listingInputFileTemplate = document.getElementById('annexeInputFileList')
-    if (listingInputFileTemplate) {
-      const inputAnnexes = document.getElementById('annexeInputFile')
-      const parent = inputAnnexes.closest('div.row')
 
-      inputAnnexes.addEventListener('change', function () {
+    if (listingInputFileTemplate) {
+      const inputAnnexesHidden = document.getElementById('annexeInputFile')
+      const inputAnnexesAdd = document.getElementById('annexeInputFileAdd')
+      const parent = inputAnnexesAdd.closest('div.row')
+      const dt = new DataTransfer()
+
+      inputAnnexesAdd.addEventListener('change', function () {
+        const fileList = this.files;
+        for (const file of fileList) {
+          dt.items.add(file);
+        }
+        inputAnnexesHidden.files = dt.files
+        inputAnnexesHidden.dispatchEvent(new Event('change'))
+      })
+
+      inputAnnexesHidden.addEventListener('change', function () {
         parent.nextElementSibling.remove()
         const fileList = this.files;
         const table = document.importNode(listingInputFileTemplate.content, true)

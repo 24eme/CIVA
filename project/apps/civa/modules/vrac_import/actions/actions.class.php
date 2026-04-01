@@ -55,12 +55,13 @@ class vrac_importActions extends sfActions
         }
 
         $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
-            'required' => false, 'max_size' => '2097152',
+            'required' => false, 'max_size' => '20971520',
             'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
             'mime_types' => 'pdf'
         ]));
 
         $this->formAnnexe->bind(null, $request->getFiles());
+
         if ($this->formAnnexe->isValid()) {
             $annexes = $this->formAnnexe->getValue('annexeInputFile');
             if ($annexes) {
