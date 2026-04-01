@@ -77,3 +77,13 @@
         <span class="glyphicon glyphicon-repeat"></span> Reverser un fichier corrigé
     </button>
 </div>
+
+<script>
+    const btn = document.querySelector('button[type="submit"][form]')
+    const form = btn.form
+
+    form.addEventListener('submit', function (e) {
+        btn.setAttribute('disabled', '');
+        btn.innerHTML = "<span class='glyphicon glyphicon-refresh glyphicon-spinner'></span> Import en cours"
+    })
+</script>
