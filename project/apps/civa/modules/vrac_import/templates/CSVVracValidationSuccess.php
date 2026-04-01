@@ -18,9 +18,11 @@
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
-        <div class="alert alert-success">
-            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été générés.</strong></p>
+        <div class="alert alert-success" style="position: relative;">
+            <strong>Les <?php echo count($vracimport->getContratsImportables()) ?> projets de contrat ont été générés</strong> <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "PROJET_ATTENTE_TRANSMISSION", 'campagne' => "*"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Voir les projets qui viennent d'être importés</a>
         </div>
+
+        <h3>Informations des contrats provenant du CSV</h3>
     <?php endif ?>
 
     <div>
