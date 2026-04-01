@@ -110,7 +110,7 @@
         <button type="button" data-toggle="modal" data-target="#modal_confirmation" form="formimport" class="btn btn-success pull-right">Générer les contrats <span class="glyphicon glyphicon-ok"></span></button>
     </div>
     <?php else: ?>
-        <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default">Retour à mon espace</a>
+        <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a>
     <?php endif ?>
 </div>
 
