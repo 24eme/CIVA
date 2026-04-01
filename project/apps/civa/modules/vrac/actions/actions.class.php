@@ -730,7 +730,7 @@ class vracActions extends sfActions
 			return null;
 		}
 
-    	if (($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule())||$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+        if (($vrac->isValide() && !$vrac->isCloture() && !$vrac->isAnnule()) && ($this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) || $vrac->isProprietaire($user->_id))) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
     	return null;
