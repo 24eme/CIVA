@@ -63,7 +63,7 @@
                             <?php foreach ($contrat['produits'] as $produit_info): ?>
                                 <?php echo str_replace(" ", "&nbsp;", $produit_info['volume']) ?><br />
                             <?php endforeach ?>
-                           <strong style="border-top: 1px dotted black">= <?php echo str_replace('.', ',', $contrat['totaux']['volume']) ?> <?php echo $contrat['totaux']['quantite_type'] ?></strong>
+                           <strong style="border-top: 1px dotted black"><?php echo str_replace('.', ',', $contrat['totaux']['volume']) ?> <?php echo $contrat['totaux']['quantite_type'] ?></strong>
                         </td>
                         <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace([" ","/"], "&nbsp;", $produit_info['prix']) ?><br /><?php endforeach ?></td>
                     </tr>
