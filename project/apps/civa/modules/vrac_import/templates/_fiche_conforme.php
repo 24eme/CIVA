@@ -30,6 +30,19 @@
         </div>
     </div>
 
+    <?php if (count($csvVrac->_attachments) > 1): ?>
+        <h5>Annexes déjà téléversées :</h5>
+        <table class="table table-condensed">
+            <thead><tr><th>Nom du fichier</th></tr></thead>
+            <tbody>
+                <?php foreach ($csvVrac->getAnnexes() as $filename => $file): ?>
+                    <tr><td><?php echo $filename ?></td></tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+      </div>
+    <?php endif ?>
+
     <div class="text-right" style="margin-top: 30px;">
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn pull-left btn-default disabled"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
         <button class="btn btn-success">Continuer <span class="glyphicon glyphicon-chevron-right"></span</button>
