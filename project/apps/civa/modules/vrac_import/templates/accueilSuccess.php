@@ -34,6 +34,14 @@
     <div class="col-xs-4"><a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retour à mon espace</a></div>
     <div class="col-xs-4 text-center"><a class="btn btn-default" href="<?php echo url_for('vrac_csv_liste', ['identifiant' => $compte->identifiant]) ?>">Voir l'historique des fichiers téléversés</a></div>
     <div class="col-xs-4 text-right"><button type="submit" form="form_csv" class="btn btn-success">Continuer <span class="glyphicon glyphicon-chevron-right"></span></button></div>
-
-
 </div>
+
+<script>
+    const btn = document.querySelector('button[type="submit"][form]')
+    const form = btn.form
+
+    form.addEventListener('submit', function (e) {
+        btn.setAttribute('disabled', '');
+        btn.innerHTML = "<span class='glyphicon glyphicon-refresh glyphicon-spinner'></span> Import en cours"
+    })
+</script>
