@@ -624,7 +624,7 @@ class VracCsvImport extends CsvFile
         $produitConfig = null;
 
         if ($line[self::CSV_VIN_CODE_INAO]) {
-            $produitConfig = $this->configuration->identifyProductByCodeDouane($line[self::CSV_VIN_CODE_INAO]);
+            $produitConfig = $this->configuration->identifyProductByCodeDouane(CsvFileAcheteur::convertCodeDouane($line[self::CSV_VIN_CODE_INAO]));
             $produitConfig = current($produitConfig);
         }
 

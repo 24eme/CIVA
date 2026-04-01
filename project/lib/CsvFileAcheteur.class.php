@@ -102,7 +102,7 @@ class CsvFileAcheteur
 
   public static function identifyProductCSV($line) {
       if(preg_match('/^[0-9]+/', $line[CsvFileAcheteur::CSV_APPELLATION])) {
-          $codeDouane = str_replace(array("1B001M", "1B001D71", "1B001D74", "1S001S", "1R001S", "1S001M", "4B500 AA"), array("1B001M00", "1B001D21",  "1B001D24", "1S001S 1", "1R001S 1", "1S001M00", "4B999"), $line[CsvFileAcheteur::CSV_APPELLATION]);
+          $codeDouane = self::convertCodeDouane($line[CsvFileAcheteur::CSV_APPELLATION]);
           $produits = ConfigurationClient::getConfiguration()->identifyProductByCodeDouane($codeDouane);
           if(count($produits)) {
               return $produits[0];
@@ -139,6 +139,10 @@ class CsvFileAcheteur
       }
 
       return $produit;
+  }
+
+  public static function convertCodeDouane($codeDouane) {
+      return preg_replace(array("/^1B001M$/", "/^1B001D71$/", "/^1B001D74$/", "/^1S001S$/", "/^1R001S$/", "/^1S001M$/", "/^4B500 AA$/"), array("1B001M00", "1B001D21",  "1B001D24", "1S001S 1", "1R001S 1", "1S001M00", "4B999"), $codeDouane);
   }
 
   public static function normalizeProductLibelle($libelle) {
