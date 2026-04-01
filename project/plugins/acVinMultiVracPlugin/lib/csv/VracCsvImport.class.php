@@ -515,7 +515,8 @@ class VracCsvImport extends CsvFile
                     'vendeur' => null,
                     'courtier' => null
                 ],
-                'produits' => []
+                'produits' => [],
+                'totaux' => ['volume' => 0.0]
             ];
 
             $courtier = $vendeur = $acheteur = null;
@@ -550,6 +551,7 @@ class VracCsvImport extends CsvFile
                     'volume' => $entry[self::CSV_QUANTITE] . ' ' . strtolower($entry[self::CSV_QUANTITE_TYPE]),
                     'prix' => $entry[self::CSV_PRIX_UNITAIRE] . " " . ( isset(VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]]) ? VracClient::$prix_unites[$entry[self::CSV_PRIX_UNITE]] : $entry[self::CSV_PRIX_UNITE]),
                 ];
+                $ret[$numero_interne]['totaux']['volume'] += str_replace(',', '.', $entry[self::CSV_QUANTITE]);
 
                 unset($v);
             }
