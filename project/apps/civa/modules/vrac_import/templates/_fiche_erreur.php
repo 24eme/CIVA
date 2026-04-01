@@ -22,7 +22,7 @@
             <ul style="margin-bottom: 0; list-style-type: circle; list-style-position: inside;">
             <?php foreach ($listeerreurs as $e): ?>
             <?php if ($e->csv_erreur == "contrat_existant"): ?>
-                <a href=<?php echo url_for('vrac_fiche', array('numero_contrat' =>substr($e->diagnostic, -12, -1))); ?>
+                <a href=<?php echo url_for('vrac_fiche', array('numero_contrat' => substr($e->diagnostic, -12, -1))); ?>
                     <li style='text-decoration: underline;'><?php echo $e->diagnostic; ?></li>
                 </a>
             <?php else: ?>
