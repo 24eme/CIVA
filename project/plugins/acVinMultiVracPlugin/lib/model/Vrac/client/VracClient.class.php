@@ -36,7 +36,9 @@ class VracClient extends acCouchdbClient {
     const DELAIS_RETIRAISON_AUCUN = "Aucun";
     const DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE = "%NB_JOURS% jours après la récolte";
 
-    const TYPE_CREATION = "IMPORT_FICHIER";
+    const TYPE_CREATION_IMPORT = "IMPORT_FICHIER";
+    const TYPE_CREATION_PAPIER = "PAPIER";
+    const TYPE_CREATION_TELEDECLARATION = "TELEDECLARATION";
 
     public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
 
@@ -268,7 +270,7 @@ class VracClient extends acCouchdbClient {
 		return false;
 	}
 
-    public function createVrac($createurIdentifiant, $date = null, $papier = null, $commentaire = null)
+    public function createVrac($createurIdentifiant, $date = null, $type_creation = self::TYPE_CREATION_TELEDECLARATION, $commentaire = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
