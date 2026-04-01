@@ -47,7 +47,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Créé',
-        self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Projet',
+        self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Projet en attente',
 		self::STATUT_PROJET_VENDEUR => 'Projet',
 		self::STATUT_PROJET_ACHETEUR => 'Projet',
 		self::STATUT_PROPOSITION => 'Proposition',
