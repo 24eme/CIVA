@@ -95,9 +95,35 @@
     <div class="clearfix form-control-static" style="margin-top: 10px;">
         <form method="POST" id="formimport" action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>"></form>
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
-        <button type="submit" form="formimport" class="btn btn-success pull-right">Générer les <?php echo count($vracimport->getContratsImportables()) ?> contrats <span class="glyphicon glyphicon-ok"></span></button>
+        <button type="button" data-toggle="modal" data-target="#modal_confirmation" form="formimport" class="btn btn-success pull-right">Générer les contrats <span class="glyphicon glyphicon-ok"></span></button>
     </div>
     <?php else: ?>
         <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default">Retour à mon espace</a>
     <?php endif ?>
 </div>
+
+<div id="modal_confirmation" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <?php if ($csvVrac->type_contrat == VracClient::TEMPORALITE_PLURIANNUEL_CADRE): ?>
+        <p>
+        Pour chacun des <?php echo count($vracimport->getContratsImportables()) ?> contrats cadres, comment souhaitez-vous gérer le contrat d'application de l'année de départ ?
+        </p>
+        <div class="radio" style="margin-top: 15px;">
+            <label><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"><span class="glyphicon glyphicon-copy"></span> Signer le contrat d'application en même temps et dans les même conditions que le contrat cadre <small class="text-muted">(prix, surfaces, produits, ...)</small></label>
+        </div>
+        <div class="radio" style="margin-top: 5px;">
+            <label><input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"><span class="glyphicon glyphicon-time"></span> Importer le contrat d'application de l'année de départ plus tard</label>
+        </div>
+        <?php else: ?>
+            Confirmez-vous la génération de ces <?php echo count($vracimport->getContratsImportables()) ?> contrats d'applications ?
+        <?php endif; ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Annuler</button>
+        <button type="submit" form="formimport" class="btn btn-success">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
