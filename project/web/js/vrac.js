@@ -277,11 +277,25 @@ const initVracImport = function ()
         for (const file of fileList) {
           const tr = document.createElement('tr')
           const td = document.createElement('td')
-          td.textContent = file.name
+          td.innerHTML = file.name + '<span class="pull-right del-annexe text-danger" style="cursor: pointer">×</span>'
           table.querySelector('tbody').appendChild(tr).appendChild(td)
         }
 
         parent.after(table)
+      })
+
+      document.querySelector('form').addEventListener('click', function (e) {
+        if (e.target.closest('.del-annexe')) {
+          const el = e.target.closest('.del-annexe')
+          const line = el.closest('tr')
+          const tbody = line.closest('tbody')
+          const index = [].indexOf.call(tbody.children, line)
+
+          dt.items.remove(index)
+
+          inputAnnexesHidden.files = dt.files
+          inputAnnexesHidden.dispatchEvent(new Event('change'))
+        }
       })
     }
 }
