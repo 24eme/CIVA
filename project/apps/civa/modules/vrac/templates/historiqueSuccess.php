@@ -85,19 +85,15 @@
 
             <hr/>
 
-            <h3 style="margin-top:0">Filtrage</h3>
-
-            <?php if (empty($current_filters) === false): ?>
-                <a href="?"><span class="glyphicon glyphicon-trash"></span> Supprimer les filtres</a>
-            <?php endif ?>
+            <p style="margin-bottom: 15px;"><strong><?php echo count($vracs) ?></strong> contrat(s) trouvé(s)</p>
 
             <h4>Recherche</h4>
             <div class="input-group">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+                <span class="input-group-addon bg-primary"><span class="glyphicon glyphicon-filter"></span></span>
                 <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
             </div>
 
-            <h4>Campagne</h4>
+            <h4 style="margin-top: 15px;">Campagne</h4>
             <div class="list-group">
                 <a class="list-group-item list-group-item-xs <?php echo $campagne === "*" ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => "*"])) ?>">
                     Toutes les campagnes
@@ -163,8 +159,8 @@
             <div class="list-group">
                 <a class="list-group-item <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous</a>
                 <?php foreach ($statuts as $k => $s): ?>
-                    <a class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
-                        <span style="max-width: 150px"><?php echo $s ?></span>
+                    <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
+                        <span style="max-width: 165px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo $s ?></span>
                         <span class="badge pull-right" data-key="<?php echo $k; ?>">
                         <?php echo $facettes['statut'][$k] ?? 0 ?>
                         </span>

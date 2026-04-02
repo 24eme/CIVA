@@ -259,6 +259,15 @@ vrac_validation:
     type:     object
   requirements:
     sf_method: [get, post]
+vrac_reouvrir_projet:
+  url: /vrac/:numero_contrat/fiche/reouvrir-projet
+  param: { module: vrac, action: reouvrirProjet }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get, post]
 vrac_refuser_projet:
   url: /vrac/:numero_contrat/fiche/refuser-projet
   param: { module: vrac, action: refuserProjet }

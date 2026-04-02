@@ -16,15 +16,6 @@
 			$counter = 0;
 			foreach ($vracs as $vrac):
 				$item = $vrac->value;
-				if (!$archive && ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
-					continue;
-				}
-				if (in_array($item->statut, array(Vrac::STATUT_CREE)) && !$item->is_proprietaire) {
-					continue;
-				}
-				if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
-					continue;
-				}
 				$hasValidated = false;
 		?>
         <tr>
@@ -116,5 +107,8 @@
 				}
 			endforeach;
 			?>
+        <?php if(!count($vracs)): ?>
+            <tr><td colspan="6">Aucun contrat trouvé avec le filtrage actuel</td></tr>
+        <?php endif; ?>
 	</tbody>
 </table>
