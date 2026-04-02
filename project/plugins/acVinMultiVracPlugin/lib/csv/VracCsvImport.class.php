@@ -504,6 +504,7 @@ class VracCsvImport extends CsvFile
     {
         // numéros de contrats
         $contrats = $this->getContratsImportables();
+        $contrats_existants = $this->getNumeroContratExistants();
         $ret = [];
 
         foreach ($contrats as $numero_interne) {
@@ -514,7 +515,8 @@ class VracCsvImport extends CsvFile
                     'courtier' => null
                 ],
                 'produits' => [],
-                'totaux' => ['volume' => 0.0]
+                'totaux' => ['volume' => 0.0],
+                'id' => null
             ];
 
             $courtier = $vendeur = $acheteur = null;
@@ -535,8 +537,13 @@ class VracCsvImport extends CsvFile
                 $ret[$numero_interne]['type_contrat'] = $entry[self::CSV_TYPE_TRANSACTION];
                 $ret[$numero_interne]['temporalite_contrat'] = $entry[self::CSV_TYPE_CONTRAT];
                 if($entry[self::CSV_DUREE_CONTRAT_PLURI] && $entry[self::CSV_DUREE_CONTRAT_PLURI] > 1) {
-                $ret[$numero_interne]['duree_annee'] = $entry[self::CSV_DUREE_CONTRAT_PLURI];
+                    $ret[$numero_interne]['duree_annee'] = $entry[self::CSV_DUREE_CONTRAT_PLURI];
                 }
+
+                if (array_key_exists($numero_interne, $contrats_existants) === true) {
+                    $ret[$numero_interne]['id'] = $contrats_existants[$numero_interne];
+                }
+
                 $produit = $this->guessProduit($entry, $v);
 
                 $ret[$numero_interne]['soussignes']['acheteur'] = $acheteur;
