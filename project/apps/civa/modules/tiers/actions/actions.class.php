@@ -53,9 +53,22 @@ class tiersActions extends sfActions {
         );
         $tiers = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
-        foreach($vracs as $vrac) {
+        foreach($vracs as $key => $vrac) {
             $item = $vrac->value;
             if($item->papier) {
+                unset($vracs[$key]);
+                continue;
+            }
+            if (($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
+                unset($vracs[$key]);
+                continue;
+            }
+            if (in_array($item->statut, array(Vrac::STATUT_CREE)) && !$item->is_proprietaire) {
+                unset($this->vracs[$key]);
+                continue;
+            }
+            if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+                unset($this->vracs[$key]);
                 continue;
             }
 

@@ -47,7 +47,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	static $statuts_libelles = array(
 		self::STATUT_CREE => 'Créé',
-        self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Projet',
+        self::STATUT_PROJET_ATTENTE_TRANSMISSION => 'Projet en attente',
 		self::STATUT_PROJET_VENDEUR => 'Projet',
 		self::STATUT_PROJET_ACHETEUR => 'Projet',
 		self::STATUT_PROPOSITION => 'Proposition',
@@ -1046,7 +1046,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	public function isPapier() {
 
-		return $this->exist('papier') && $this->papier;
+        return ($this->exist('papier') && $this->papier) || $this->type_creation == VracClient::TYPE_CREATION_PAPIER;
 	}
 
 	public function isInterne() {

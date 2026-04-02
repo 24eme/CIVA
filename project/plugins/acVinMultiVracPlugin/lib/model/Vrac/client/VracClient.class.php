@@ -36,7 +36,9 @@ class VracClient extends acCouchdbClient {
     const DELAIS_RETIRAISON_AUCUN = "Aucun";
     const DELAIS_RETIRAISON_NB_JOUR_APRES_RECOLTE = "%NB_JOURS% jours après la récolte";
 
-    const TYPE_CREATION = "IMPORT_FICHIER";
+    const TYPE_CREATION_IMPORT = "IMPORT_FICHIER";
+    const TYPE_CREATION_PAPIER = "PAPIER";
+    const TYPE_CREATION_TELEDECLARATION = "TELEDECLARATION";
 
     public static $_contrat_temporalites = [self::TEMPORALITE_ANNUEL => 'Annuel', self::TEMPORALITE_PLURIANNUEL_CADRE => 'Pluriannuel cadre', self::TEMPORALITE_PLURIANNUEL_APPLICATION => 'Pluriannuel application'];
 
@@ -145,35 +147,35 @@ class VracClient extends acCouchdbClient {
         return sprintf(self::VRAC_PREFIXE_ID.'%s', $numero_contrat);
     }
 
-	public static function getDelaisPaiement($vrac) {
+    public static function getDelaisPaiement($vrac) {
         $delais = array();
 
-		if($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPluriannuelCadre()) {
-			$delais[] = "Dans un délai maximum de 150 jours après l’enlèvement et au plus tard le 15 septembre de l’année suivant la récolte";
-			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
-			$delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
-			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
-	        $delais[] = "Paiement sous 7 jours";
+        if($vrac->type_contrat == VracClient::TYPE_VRAC && $vrac->isPluriannuelCadre()) {
+            $delais["150_JOURS"] = "Dans un délai maximum de 150 jours après l’enlèvement et au plus tard le 15 septembre de l’année suivant la récolte";
+            $delais["MENSUEL"] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+            $delais["4_TRANCHES"] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+            $delais["60_JOURS"] = "Délai légal : 60 jours après la date d’émission de la facture";
+            $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
 
-		if($vrac->type_contrat == VracClient::TYPE_VRAC && !$vrac->isPluriannuelCadre()) {
-			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
-	        $delais[] = "Paiement sous 7 jours";
+        if($vrac->type_contrat == VracClient::TYPE_VRAC && !$vrac->isPluriannuelCadre()) {
+            $delais["60_JOURS"] = "Délai légal : 60 jours après la date d’émission de la facture";
+            $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
 
-		if($vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
-			$delais[] = "Délai légal : 60 jours après la date d’émission de la facture";
-	        $delais[] = "Paiement sous 7 jours";
+        if($vrac->type_contrat == VracClient::TYPE_BOUTEILLE) {
+            $delais["60_JOURS"] = "Délai légal : 60 jours après la date d’émission de la facture";
+	        $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
 
-		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuelCadre()) {
-			$delais[] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
-            $delais[] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
+        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuelCadre()) {
+            $delais["MENSUEL"] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
+            $delais["4_TRANCHES"] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
 		}
 
-		if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
-			$delais[] = "Délai légal : 30 jours après la date de livraison";
-	        $delais[] = "Paiement sous 7 jours";
+        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
+            $delais["30_JOURS"] = "Délai légal : 30 jours après la date de livraison";
+            $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
 
         return $delais;
@@ -268,7 +270,7 @@ class VracClient extends acCouchdbClient {
 		return false;
 	}
 
-    public function createVrac($createurIdentifiant, $date = null, $papier = null, $commentaire = null)
+    public function createVrac($createurIdentifiant, $date = null, $type_creation = self::TYPE_CREATION_TELEDECLARATION, $commentaire = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();

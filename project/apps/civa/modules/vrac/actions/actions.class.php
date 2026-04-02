@@ -28,7 +28,7 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
 
-		$this->campagne = $request->getParameter('campagne');
+        $this->campagne = $request->getParameter('campagne') ? $request->getParameter('campagne') : '*';
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
         $this->temporalite = $request->getParameter('temporalite');
@@ -48,6 +48,18 @@ class vracActions extends sfActions
             }
         } else {
             $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
+        }
+
+        foreach ($this->vracs as $key => $vrac) {
+            $item = $vrac->value;
+            if (in_array($item->statut, array(Vrac::STATUT_CREE)) && !$item->is_proprietaire) {
+                unset($this->vracs[$key]);
+                continue;
+            }
+            if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+                unset($this->vracs[$key]);
+                continue;
+            }
         }
     }
 
@@ -821,6 +833,19 @@ class vracActions extends sfActions
 		}
 
 		return $vrac;
+    }
+
+    public function executeReouvrirProjet(sfWebRequest $request)
+	{
+		$this->cleanSessions();
+		$vrac = $this->getRoute()->getVrac();
+        if($vrac->valide->statut != Vrac::STATUT_PROJET_ATTENTE_TRANSMISSION) {
+            throw new sfError403Exception();
+        }
+        $vrac->setStatut(Vrac::STATUT_CREE);
+        $vrac->save();
+
+		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
     }
 
 	public function executeRefuserProjet(sfWebRequest $request)

@@ -301,7 +301,7 @@ class VracCsvImport extends CsvFile
                     $v = VracClient::getInstance()->createVrac(
                         $createur->_id,
                         $dateSaisie,
-                        false,
+                        $importHistorique ? VracClient::TYPE_CREATION_PAPIER : VracClient::TYPE_CREATION_TELEDECLARATION,
                         "Importé depuis un fichier csv"
                     );
 
@@ -328,8 +328,6 @@ class VracCsvImport extends CsvFile
                     $v->vendeur_identifiant = $vendeur->_id;
                     $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
                     $v->storeVendeurInformations($vendeur);
-                    $v->type_creation = VracClient::TYPE_CREATION;
-
 
                     if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
                         try {
@@ -395,7 +393,7 @@ class VracCsvImport extends CsvFile
 
             $v->add('clause_reserve_propriete', $this->guessBool('Clause réserve propriété', $line[self::CSV_CLAUSE_RESERVE_PROPRIETE]));
             $v->add('clause_mandat_facturation', $this->guessBool('Clause mandat facturation', $line[self::CSV_CLAUSE_MANDAT_FACTURATION]));
-            $v->add('conditions_paiement', $line[self::CSV_CLAUSE_DELAI_PAIEMENT]);
+            $v->add('conditions_paiement', $this->guessConditionsPaiement($line[self::CSV_CLAUSE_DELAI_PAIEMENT], $v));
             $v->add('clause_resiliation', $line[self::CSV_CLAUSE_RESILIATION]);
             $v->add('vendeur_frais_annexes', $line[self::CSV_CLAUSE_VENDEUR_FRAIS_ANNEXES]);
             $v->add('acheteur_primes_diverses', $line[self::CSV_CLAUSE_ACHETEUR_PRIMES_DIVERSES]);
@@ -609,6 +607,23 @@ class VracCsvImport extends CsvFile
             return false;
         } else {
             $this->addError(self::$line, "invalid_value", "La valeur saisie [$value] du champs $key n'est pas reconnue");
+            return null;
+        }
+    }
+
+    /**
+     * Retourne et vérifie les conditions de paiement
+     *
+     * @param $key string
+     * @param $value string
+     * @return string
+     */
+    public function guessConditionsPaiement($value, $vrac)
+    {
+        if (array_key_exists($value, VracClient::getDelaisPaiement($vrac))) {
+            return VracClient::getDelaisPaiement($vrac)[$value];
+        } else {
+            $this->addError(self::$line, "invalid_delais_paiement", "Les conditions de paiement n'existe pas");
             return null;
         }
     }

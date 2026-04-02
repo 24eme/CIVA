@@ -1,3 +1,5 @@
+<?php include_component('tiers', 'ongletsBootstrap', array('active' => 'vrac', 'compte' => $compte)); ?>
+
 <style>
     table#table_contrat tr td {
         border-right-style: dashed;
@@ -18,13 +20,15 @@
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
-        <div class="alert alert-success">
-            <p><strong>Ces <?php echo count($vracimport->getContratsImportables()) ?> contrats ont déjà été générés.</strong></p>
+        <div class="alert alert-success" style="position: relative;">
+            <strong>Les <?php echo count($vracimport->getContratsImportables()) ?> projets de contrat ont été générés</strong> <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "PROJET_ATTENTE_TRANSMISSION", 'campagne' => "*"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Voir les projets qui viennent d'être importés</a>
         </div>
+
+        <h3>Informations des contrats provenant du CSV</h3>
     <?php endif ?>
 
     <div>
-        <a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_fiche', ['numero_contrat' => substr($csvVrac->documents[0], 5)]) ?>">Visualiser le projet de contrat</a>
+
         <a class="pull-right btn btn-link btn-sm" href="<?php echo url_for('vrac_csv_download', ['csvvrac' => $csvVrac->_id]) ?>">Télécharger le fichier csv importé</a>
 
         <ul class="nav nav-tabs" role="tablist">
@@ -41,17 +45,25 @@
                             <th>Type</th>
                             <th class="col-xs-1">N° Interne</th>
                             <th>Soussigné(s)</th>
-                            <th style="width: 400px;">Produit</th>
+                            <th style="width: 350px;">Produit</th>
                             <th class="text-center">Quantité</th>
                             <th class="text-center">Prix</th>
                         </tr>
                     </thead>
                     <tbody>
+                    <?php $current = []; ?>
+                    <?php foreach ($csvVrac->documents as $num_contrat): ?>
+                        <?php array_push($current, $num_contrat); ?>
+                    <?php endforeach; ?>
+                    <?php while(count($current) !== 0 ): ?>
                 <?php foreach ($vracimport->display() as $numero_contrat => $contrat): ?>
                     <tr>
                         <td><span title="<?php echo ucfirst(strtolower($contrat['type_contrat'])) ?>" class="icon-<?php echo strtolower($contrat['type_contrat']) ?>"></span><span title="<?php echo $contrat['temporalite_contrat'] ?>"><?php if($contrat['temporalite_contrat'] == VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION): ?><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" ><path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/></svg><?php else: ?><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16"><path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/><path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/></svg><?php endif; ?></span>
                         <?php if(isset($contrat['duree_annee'])): ?><br /><span class="badge"><small><?php echo $contrat['duree_annee'] ?> ans</small></span><?php endif; ?></td>
-                        <td><?php echo $numero_contrat ?></td>
+                        <td>
+                            <?php echo $numero_contrat ?>
+                            <a class="pull-left btn btn-link btn-sm" style="padding:0;" href="<?php echo url_for('vrac_fiche', ['numero_contrat' => substr($current[0], 5)]) ?>">Visualiser le projet de contrat</a>
+                        </td>
                         <td>
                             <?php echo $contrat['soussignes']['vendeur']->raison_sociale ?>
                             <?php if ($contrat['soussignes']['courtier']): ?>
@@ -69,7 +81,9 @@
                         </td>
                         <td class="text-right"><?php foreach ($contrat['produits'] as $produit_info): ?><?php echo str_replace([" ","/"], "&nbsp;", $produit_info['prix']) ?><br /><?php endforeach ?></td>
                     </tr>
+                    <?php array_shift($current); ?>
                 <?php endforeach; ?>
+                    <?php endwhile ?>
                     </tbody>
                 </table>
             </div>
@@ -97,9 +111,35 @@
     <div class="clearfix form-control-static" style="margin-top: 10px;">
         <form method="POST" id="formimport" action="<?php echo url_for('vrac_csv_import', ['csvvrac' => $csvVrac->_id]) ?>"></form>
         <a href="<?php echo url_for('vrac_csv_fiche', ['csvvrac' => $csvVrac->_id]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Précédent</a>
-        <button type="submit" form="formimport" class="btn btn-success pull-right">Générer les <?php echo count($vracimport->getContratsImportables()) ?> contrats <span class="glyphicon glyphicon-ok"></span></button>
+        <button type="button" data-toggle="modal" data-target="#modal_confirmation" form="formimport" class="btn btn-success pull-right">Générer les contrats <span class="glyphicon glyphicon-ok"></span></button>
     </div>
     <?php else: ?>
-        <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default">Retour à mon espace</a>
+        <a href="<?php echo url_for('mon_espace_civa_vrac', ['identifiant' => $compte->identifiant]) ?>" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> Retourner à mon espace</a>
     <?php endif ?>
 </div>
+
+<div id="modal_confirmation" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <?php if ($csvVrac->type_contrat == VracClient::TEMPORALITE_PLURIANNUEL_CADRE): ?>
+        <p>
+        Pour chacun des <?php echo count($vracimport->getContratsImportables()) ?> contrats cadres, comment souhaitez-vous gérer le contrat d'application de l'année de départ ?
+        </p>
+        <div class="radio" style="margin-top: 15px;">
+            <label><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"><span class="glyphicon glyphicon-copy"></span> Signer le contrat d'application en même temps et dans les même conditions que le contrat cadre <small class="text-muted">(prix, surfaces, produits, ...)</small></label>
+        </div>
+        <div class="radio" style="margin-top: 5px;">
+            <label><input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"><span class="glyphicon glyphicon-time"></span> Importer le contrat d'application de l'année de départ plus tard</label>
+        </div>
+        <?php else: ?>
+            Confirmez-vous la génération de ces <?php echo count($vracimport->getContratsImportables()) ?> contrats d'applications ?
+        <?php endif; ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Annuler</button>
+        <button type="submit" form="formimport" class="btn btn-success">Confirmer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
