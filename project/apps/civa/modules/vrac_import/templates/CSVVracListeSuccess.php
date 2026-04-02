@@ -1,3 +1,5 @@
+<?php include_component('tiers', 'ongletsBootstrap', array('active' => 'vrac', 'compte' => $compte)); ?>
+
 <div>
     <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
 

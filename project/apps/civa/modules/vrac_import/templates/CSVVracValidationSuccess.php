@@ -1,3 +1,5 @@
+<?php include_component('tiers', 'ongletsBootstrap', array('active' => 'vrac', 'compte' => $compte)); ?>
+
 <style>
     table#table_contrat tr td {
         border-right-style: dashed;
