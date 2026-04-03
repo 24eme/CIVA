@@ -42,6 +42,7 @@ EOF;
 
             try {
                 $vrac->validate();
+                $vrac->save();
                 VracMailer::getInstance()->sendMailsByStatutsChanged($vrac);
             } catch (\Exception $e) {
                 echo $doc_result->_id.":".$e->getMessage().PHP_EOL;
