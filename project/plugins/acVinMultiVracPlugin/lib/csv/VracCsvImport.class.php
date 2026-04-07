@@ -371,6 +371,7 @@ class VracCsvImport extends CsvFile
             }
 
             $produit->getOrAdd('label');
+            $produit->label = "Aucune";
             if ($line[self::CSV_VIN_LABEL]) {
                 $label = str_replace("HVE3", "HVE", $line[self::CSV_VIN_LABEL]);
                 if (in_array($label, self::LABELS_VALIDES)) {
@@ -382,8 +383,6 @@ class VracCsvImport extends CsvFile
                         "Label non reconnu [".$line[self::CSV_VIN_LABEL]."]. Valeurs possibles : ".implode(", ", self::LABELS_VALIDES)
                     );
                 }
-            } else {
-                $produit->label = "Aucune";
             }
 
             if ($line[self::CSV_VIN_DENOMINATION]) {
