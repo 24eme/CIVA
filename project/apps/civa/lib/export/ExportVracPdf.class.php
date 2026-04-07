@@ -139,22 +139,36 @@ class ExportVracPdf extends ExportDocument {
       return $this->document->getPdfFilePath();
     }
 
-    public function output() {
-      if($this->type == 'pdf'){
+    public function output()
+    {
+        if ($this->type == 'pdf') {
+            $content = $this->document->output();
+            $cachePath = sfConfig::get('sf_root_dir').'/cache/pdf/';
 
-        $content = $this->document->output();
-        $tmpPdfPath = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
-        file_put_contents($tmpPdfPath,$content);
+            $tmpPdfPath = $cachePath.uniqid().'.pdf';
+            $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_'.strtolower($this->vrac->getTypeDureeLibelle()).'_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
+            $ouputPdf = $cachePath.uniqid().'.pdf';
 
-        $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_'.strtolower($this->vrac->getTypeDureeLibelle()).'_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
+            $listeAnnexes = [];
+            foreach ($this->vrac->getAllAnnexesFilename() as $annexe) {
+                $tmpAnnexePath = $cachePath.uniqid('annexe_', true).'.pdf';
+                stream_copy_to_stream(
+                    fopen($this->vrac->getAttachmentUri($this->vrac->getAnnexeFilename($annexe)), 'r'),
+                    fopen($tmpAnnexePath, 'w'),
+                );
 
-        $ouputPdf = sfConfig::get('sf_root_dir').'/cache/pdf/'.uniqid().'.pdf';
-        shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." cat output ".$ouputPdf);
-        unlink($tmpPdfPath);
+                $listeAnnexes[] = $tmpAnnexePath;
+            }
 
-        return file_get_contents($ouputPdf);
-      }
-      return $this->document->output();
+            file_put_contents($tmpPdfPath, $content);
+            shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." ". implode(' ', $listeAnnexes) ." cat output ".$ouputPdf);
+
+            unlink($tmpPdfPath);
+
+            return file_get_contents($ouputPdf);
+        }
+
+        return $this->document->output();
     }
 
 
