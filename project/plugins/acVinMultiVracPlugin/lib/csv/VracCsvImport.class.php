@@ -68,6 +68,9 @@ class VracCsvImport extends CsvFile
         "Aucune",
     ];
 
+    const DUREE_CONTRAT_MIN = 3;
+    const DUREE_CONTRAT_MAX = 10;
+
     public static $labels_array = [self::LABEL_BIO => "Agriculture Biologique"];
 
     public static $headers = [
@@ -415,6 +418,15 @@ class VracCsvImport extends CsvFile
             $v->add('clause_renegociation_prix', $this->guessBool('Clause renégociation du prix', $line[self::CSV_CLAUSE_CRITERE_RENEGOCIATION_PRIX]));
 
             if ($line[self::CSV_TYPE_CONTRAT] === VracClient::TEMPORALITE_PLURIANNUEL_CADRE) {
+                if (
+                    $line[self::CSV_DUREE_CONTRAT_PLURI] < self::DUREE_CONTRAT_MIN
+                    || $line[self::CSV_DUREE_CONTRAT_PLURI] > self::DUREE_CONTRAT_MAX
+                ) {
+                    $this->addError(self::$line, "duree_contrat_invalide",
+                        sprintf("La durée du contrat doit être comprise entre %d et %d ans. %d spécifié.", self::DUREE_CONTRAT_MIN, self::DUREE_CONTRAT_MAX, $line[self::CSV_DUREE_CONTRAT_PLURI])
+                    );
+                }
+
                 $v->add('duree_annee', $line[self::CSV_DUREE_CONTRAT_PLURI]);
                 $v->add('clause_evolution_prix', $line[self::CSV_CLAUSE_CRITERE_EVOLUTION_PRIX]);
             }
