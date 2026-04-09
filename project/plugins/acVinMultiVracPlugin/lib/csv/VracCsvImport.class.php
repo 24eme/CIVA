@@ -227,12 +227,35 @@ class VracCsvImport extends CsvFile
         return $this->numeroContratExistants;
     }
 
-    public function preimportChecks()
+    /**
+     * Vérifie que le créateur de l'import (identifiant de CSVVRAC) est le même que l'acheteur du fichier
+     *
+     * @param Etablissement $creator Compte créateur du fichier
+     */
+    public function checkOwnership(Societe $creator)
+    {
+        $ids = array_unique(array_column($this->getCsv(), self::CSV_ACHETEUR_CVI));
+
+        foreach ($ids as $acheteur) {
+            $etab = $this->guessId($acheteur);
+            if (! $etab || $etab->getSociete()->getIdentifiant() !== $creator->getIdentifiant()) {
+                $this->addError(0, "wrong_creator", "Vous ne pouvez pas créer de contrat pour l'identifiant {$acheteur}");
+            }
+        }
+    }
+
+    /**
+     * @param $identifiant Identifiant du *COMPTE*
+     */
+    public function preimportChecks($identifiant)
     {
         $this->getEtablissementAcheteur();
         if($this->typeContrat) {
             $this->hasMixedContratType($this->typeContrat);
         }
+
+        $creator = CompteClient::getInstance()->find($identifiant)->getSociete();
+        $this->checkOwnership($creator);
     }
 
     /**
