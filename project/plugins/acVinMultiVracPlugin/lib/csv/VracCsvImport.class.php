@@ -303,6 +303,11 @@ class VracCsvImport extends CsvFile
                     }
                     $vCadre = VracClient::getInstance()->find($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]]);
 
+                    if (($line[self::CSV_NUMERO_INTERNE] == $vCadre->numero_papier) && ($line[self::CSV_NUMERO_CONTRAT_CADRE] == $vCadre->numero_papier) && ($line[self::CSV_CAMPAGNE] == $vCadre->campagne)) {
+                        $this->addError(self::$line, "contrat_application_existant", "Un contrat d'application pour le contrat cadre n° interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà pour la campagne " . $line[self::CSV_CAMPAGNE]);
+                        continue;
+                    }
+
                     try {
                         $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
                     } catch (Exception $e) {
