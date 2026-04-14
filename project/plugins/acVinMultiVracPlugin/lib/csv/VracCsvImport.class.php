@@ -277,7 +277,7 @@ class VracCsvImport extends CsvFile
             self::$line++;
 
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
-                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants)) {
+                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants) && $line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_CADRE) {
                     $this->addError(self::$line, "contrat_existant", "Le contrat avec le numéro interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà (".$numerosExistants[$line[self::CSV_NUMERO_INTERNE]]   .")");
                     continue;
                 }
