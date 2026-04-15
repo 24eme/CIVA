@@ -279,9 +279,7 @@ class VracClient extends acCouchdbClient {
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne, $commentaire);
-		if($papier) {
-			$vrac->add('papier', true);
-		}
+        $vrac->type_creation = self::TYPE_CREATION_IMPORT;
         return $vrac;
     }
 
