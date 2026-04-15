@@ -15,13 +15,23 @@
         <h3>Validation avant la génération</h3>
 
         <div class="alert alert-info">
-            <p><strong>Vous êtes sur le point de générer <?php echo count($vracimport->getContratsImportables()) ?> contrat<?php echo count($vracimport->getContratsImportables()) == 1 ? null : "s" ?></strong></p>
+            <p><strong>Vous êtes sur le point de générer <?php echo count($vracimport->getContratsImportables()); ?> contrat<?php echo count($vracimport->getContratsImportables()) > 1 ? "s" : ""; ?></strong></p>
         </div>
     <?php else: ?>
         <h3>Visualisation de l'import</h3>
 
         <div class="alert alert-success" style="position: relative;">
-            <strong>Les <?php echo count($vracimport->getContratsImportables()) ?> projets de contrat ont été générés</strong> <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "PROJET_ATTENTE_TRANSMISSION", 'campagne' => "*"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Voir les projets qui viennent d'être importés</a>
+            <?php if (count($vracimport->getContratsImportables()) > 1): ?>
+                <strong>Les <?php echo count($vracimport->getContratsImportables()); ?> projets de contrat ont été générés</strong>
+            <?php else: ?>
+                <strong>Le projet de contrat a été généré</strong>
+        <?php endif; ?>
+        <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "PROJET_ATTENTE_TRANSMISSION", 'campagne' => "*"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span>
+        <?php if (count($vracimport->getContratsImportables()) > 1): ?>
+            Voir les projets qui viennent d'être importés
+        <?php else: ?>
+            Voir le projet qui vient d'être importé
+        <?php endif; ?> </a>
         </div>
 
         <h3>Informations des contrats provenant du CSV</h3>
@@ -119,7 +129,7 @@
       <div class="modal-body">
         <?php if ($csvVrac->type_contrat == VracClient::TEMPORALITE_PLURIANNUEL_CADRE): ?>
         <p>
-            <?php if (count($vracimport->getContratsImportables()) == 1): ?>Pour ce contrat cadre<?php else: ?>Pour chacun des <?php echo count($vracimport->getContratsImportables()) ?> contrats cadres<?php endif; ?>, comment souhaitez-vous gérer le contrat d'application de l'année de départ ?
+            <?php if (count($vracimport->getContratsImportables()) > 1): ?>Pour chacun des <?php echo count($vracimport->getContratsImportables()); ?> contrats cadres<?php else: ?>Pour ce contrat cadre<?php endif; ?>, comment souhaitez-vous gérer le contrat d'application de l'année de départ ?
         </p>
         <div class="radio" style="margin-top: 15px;">
             <label><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"><span class="glyphicon glyphicon-copy"></span> Signer le contrat d'application en même temps et dans les même conditions que le contrat cadre <small class="text-muted">(prix, surfaces, produits, ...)</small></label>
