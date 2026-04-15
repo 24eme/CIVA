@@ -128,9 +128,7 @@
     <div class="modal-content">
       <div class="modal-body">
         <?php if ($csvVrac->type_contrat == VracClient::TEMPORALITE_PLURIANNUEL_CADRE): ?>
-        <p>
-            <?php if (count($vracimport->getContratsImportables()) > 1): ?>Pour chacun des <?php echo count($vracimport->getContratsImportables()); ?> contrats cadres<?php else: ?>Pour ce contrat cadre<?php endif; ?>, comment souhaitez-vous gérer le contrat d'application de l'année de départ ?
-        </p>
+        <p style="font-weight:bold;">Comment souhaitez-vous gérer le<?php echo count($vracimport->getContratsImportables()) > 1 ? "s" : ""; ?> contrat<?php echo count($vracimport->getContratsImportables()) > 1 ? "s" : ""; ?> d'application de l'année de départ ?</p>
         <div class="radio" style="margin-top: 15px;">
             <label><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"><span class="glyphicon glyphicon-copy"></span> Signer le contrat d'application en même temps et dans les même conditions que le contrat cadre <small class="text-muted">(prix, surfaces, produits, ...)</small></label>
         </div>
