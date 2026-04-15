@@ -174,6 +174,7 @@ class VracClient extends acCouchdbClient {
 		}
 
         if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
+            $delais["MENSUEL"] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
             $delais["30_JOURS"] = "Délai légal : 30 jours après la date de livraison";
             $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
@@ -278,9 +279,7 @@ class VracClient extends acCouchdbClient {
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne, $commentaire);
-		if($papier) {
-			$vrac->add('papier', true);
-		}
+        $vrac->type_creation = self::TYPE_CREATION_IMPORT;
         return $vrac;
     }
 

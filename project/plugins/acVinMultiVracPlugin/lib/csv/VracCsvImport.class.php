@@ -277,7 +277,7 @@ class VracCsvImport extends CsvFile
             self::$line++;
 
             if ($current !== $line[self::CSV_NUMERO_INTERNE]) {
-                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants)) {
+                if (array_key_exists($line[self::CSV_NUMERO_INTERNE], $numerosExistants) && $line[self::CSV_TYPE_CONTRAT] == VracClient::TEMPORALITE_PLURIANNUEL_CADRE) {
                     $this->addError(self::$line, "contrat_existant", "Le contrat avec le numéro interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà (".$numerosExistants[$line[self::CSV_NUMERO_INTERNE]]   .")");
                     continue;
                 }
@@ -302,6 +302,11 @@ class VracCsvImport extends CsvFile
                         continue;
                     }
                     $vCadre = VracClient::getInstance()->find($numerosExistants[$line[self::CSV_NUMERO_CONTRAT_CADRE]]);
+
+                    if (($line[self::CSV_NUMERO_INTERNE] == $vCadre->numero_papier) && ($line[self::CSV_NUMERO_CONTRAT_CADRE] == $vCadre->numero_papier) && ($line[self::CSV_CAMPAGNE] == $vCadre->campagne)) {
+                        $this->addError(self::$line, "contrat_application_existant", "Un contrat d'application pour le contrat cadre n° interne ".$line[self::CSV_NUMERO_INTERNE]." existe déjà pour la campagne " . $line[self::CSV_CAMPAGNE]);
+                        continue;
+                    }
 
                     try {
                         $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
