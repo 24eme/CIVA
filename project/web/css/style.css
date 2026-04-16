@@ -277,7 +277,7 @@ table#soussignes_listing li.soussigne_attente_grey { background-image: url('../i
             font-size: 24px;
             text-align: center;
             align-self: center;
-            flex-grow: 1;
+            width: 20%;
             svg {
                 width: 24px;
                 height: 24px;
