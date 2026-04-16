@@ -5,7 +5,7 @@ class VracCsvExport
 
     public static function header() {
         $f = fopen('php://memory', 'r+');
-        fputcsv($f, VracCsvImport::$headers, ';');
+        fputcsv($f, VracCsvImport::$headers + VracCsvImport::$extra_headers, ';');
         rewind($f);
         return "\xef\xbb\xbf".stream_get_contents($f);
     }

@@ -80,9 +80,14 @@ class VracCsvImport extends CsvFile
         "Libelle produit", "Label", "VT/SGN", "Dénomination", "Millesime", "Quantité", "Quantité type", "Prix unitaire",
         "Prix unite", "Frais annexes vendeur", "Primes diverses acheteur", "Clause réserve propriété", "Clause délai paiement",
         "Clause résiliation", "Mandat facturation", "Critères et modalités d’évolution des prix", "Critères de renégociation du prix",
-        "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières", "Créateur", "Date de saisie",
-        "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier", "Date de validation", "Date de cloture",
-        "Numero de visa", "Statut", "Centilisation", "Quantité enlevé", "Date retiraison", "URL du Contrat", "Id du document"
+        "Suivi qualitatif", "Délai maximum de retiraison", "Autres clauses particulières",
+    ];
+
+    // Import historique / export
+    public static $extra_headers = [
+        "Créateur", "Date de saisie", "Date de signature vendeur", "Date de signature acheteur", "Date de signature courtier",
+        "Date de validation", "Date de cloture", "Numero de visa", "Statut", "Centilisation", "Quantité enlevé",
+        "Date retiraison", "URL du Contrat", "Id du document"
     ];
 
     /** @var array<string> $imported ID des vracs importés */
@@ -152,8 +157,12 @@ class VracCsvImport extends CsvFile
         return $this->warnings;
     }
 
-    public static function getHeaders()
+    public static function getHeaders($with_extra = false)
     {
+        if ($with_extra) {
+            return self::$headers + self::$extra_headers;
+        }
+
         return self::$headers;
     }
 
