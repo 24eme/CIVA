@@ -270,8 +270,10 @@ class VracCsvImport extends CsvFile
      * @param bool $verified Le csv a été vérifié
      * @return array<string> Tableau d'ID des vracs importés
      */
-    public function import($verified = false, $importHistorique = false) {
+    public function import($verified = false, $typeCreation = VracClient::TYPE_CREATION_IMPORT) {
         $numerosExistants = $this->getNumeroContratExistants();
+
+        $importHistorique = ($typeCreation == VracClient::TYPE_CREATION_PAPIER);
 
         $current = null;
         $v = null;
@@ -341,7 +343,7 @@ class VracCsvImport extends CsvFile
                     $v = VracClient::getInstance()->createVrac(
                         $createur->_id,
                         $dateSaisie,
-                        $importHistorique ? VracClient::TYPE_CREATION_PAPIER : VracClient::TYPE_CREATION_TELEDECLARATION,
+                        $typeCreation,
                         "Importé depuis un fichier csv"
                     );
 

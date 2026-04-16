@@ -160,7 +160,7 @@ class vrac_importActions extends sfActions
         }
 
         $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
-        $imported = $this->vracimport->import(true);
+        $imported = $this->vracimport->import(true, $_POST['type_creation']);
 
         if (count($this->csvVrac->getAnnexes())) {
             foreach ($this->csvVrac->getAnnexes() as $name => $annexe) {

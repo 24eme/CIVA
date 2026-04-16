@@ -32,7 +32,7 @@ EOF;
         sfContext::createInstance($this->configuration);
         $this->vracimport = new VracCsvImport($arguments['file'], null);
         $this->vracimport->preimportChecks();
-        $this->vracimport->import(false, true);
+        $this->vracimport->import(false, VracClient::TYPE_CREATION_PAPIER);
 
         if ($this->vracimport->getErrors()) {
             foreach ($this->vracimport->getErrors() as $importError) {
