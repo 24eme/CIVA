@@ -371,14 +371,12 @@ class vracActions extends sfActions
         	}
         }
 
-        if ($this->vrac->isTypeCreation()) {
-            if ($this->vrac->getContratsApplication()) {
-                $this->formApplication = $this->vrac->getContratsApplication()[$this->vrac->numero_contrat];
-            }
-            else {
-                $this->formApplication = null;
-            }
-            return;
+        $this->formApplication = null;
+        $this->validationApplication = null;
+
+        if ($this->vrac->isImporte()) {
+
+            return sfView::SUCCESS;
         }
 
         try {

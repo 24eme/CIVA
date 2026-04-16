@@ -175,7 +175,7 @@ td.echeance {display: inline;}
                 <?php elseif(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjetAcheteur()): ?>
                     <p>En attente de signature par le vendeur</p>
                 <?php endif; ?>
-				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
+                <?php if(!$vrac->isValide() && $user && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
