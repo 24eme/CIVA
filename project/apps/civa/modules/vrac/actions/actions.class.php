@@ -352,6 +352,10 @@ class vracActions extends sfActions
         $this->vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
+        if($this->vrac->valide->statut == Vrac::STATUT_CREE) {
+            throw new Exception("en brouillon");
+        }
+
         $this->user = $this->getTiersOfVrac($this->vrac);
 
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
@@ -851,7 +855,7 @@ class vracActions extends sfActions
         $vrac->setStatut(Vrac::STATUT_CREE);
         $vrac->save();
 
-		return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
+        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => 'validation'));
     }
 
 	public function executeRefuserProjet(sfWebRequest $request)
