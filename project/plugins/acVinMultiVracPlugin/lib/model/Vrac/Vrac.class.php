@@ -1388,6 +1388,32 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return ($this->getAllAnnexesFilename())? true : false;
     }
 
+    public function mergeAnnexesPDF()
+    {
+        if ($this->hasAnnexes() === false) {
+            return "";
+        }
+
+        $cachePath = sfConfig::get('sf_root_dir').'/cache/pdf/';
+        $ouputPdf = $cachePath.'annexes_merged_'.uniqid().'.pdf';
+
+        $listeAnnexes = [];
+        foreach ($this->getAllAnnexesFilename() as $annexe) {
+            $tmpAnnexePath = $cachePath.uniqid('annexe_', true).'.pdf';
+            stream_copy_to_stream(
+                fopen($this->getAttachmentUri($this->getAnnexeFilename($annexe)), 'r'),
+                fopen($tmpAnnexePath, 'w'),
+            );
+
+            $listeAnnexes[] = $tmpAnnexePath;
+        }
+
+        shell_exec("pdftk ". implode(' ', $listeAnnexes) ." cat output ".$ouputPdf);
+        array_map("unlink", $listeAnnexes);
+
+        return $ouputPdf;
+    }
+
     public function isTypeCreation() {
 		return $this->exist('type_creation') && $this->type_creation;
 	}

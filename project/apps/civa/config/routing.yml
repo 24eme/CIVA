@@ -300,6 +300,16 @@ vrac_pdf_annexe:
   url: /vrac-pdf-annexe
   param: { module: vrac_export, action: annexe}
 
+vrac_all_annexes:
+  url: /vrac/:numero_contrat/all-annexes
+  param: { module: vrac, action: mergeAllAnnexes }
+  class: VracRoute
+  options:
+    model:    Vrac
+    type:     object
+  requirements:
+    sf_method: [get]
+
 vrac_export_odg:
   url: /vrac/:numero_contrat/odg
   param: { module: vrac_export, action: PDF, odg: 1}

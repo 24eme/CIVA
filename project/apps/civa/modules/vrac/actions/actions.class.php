@@ -893,4 +893,10 @@ class vracActions extends sfActions
         return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
 
+    public function executeMergeAllAnnexes(sfWebRequest $request)
+    {
+        $vrac = $this->getRoute()->getVrac();
+        $this->secureVrac(VracSecurity::CONSULTATION, $vrac);
+        return $this->renderPdf($vrac->mergeAnnexesPdf(), "annexes_vrac_".$vrac->numero_contrat.".pdf");
+    }
 }

@@ -9,6 +9,9 @@ $annexes = $vrac->getAllAnnexesFilename();
             <th style="width: 280px;">
                 Annexes
                 <?php if (!$fiche&&!$edit): ?><a href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES)) ?>" style="float:right;text-decoration: none;font-size:13px;padding-top:1px;">Modifier</a><?php endif; ?>
+                <?php if (! $edit): ?>
+                    <a href="<?php echo url_for('vrac_all_annexes', ['sf_subject' => $vrac]) ?>" style="float: right; text-decoration: none; font-size: 13px;">Télécharger les annexes</a>
+                <?php endif ?>
             </th>
             <td></td>
             <td></td>
