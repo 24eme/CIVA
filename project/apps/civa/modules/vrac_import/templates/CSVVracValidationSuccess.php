@@ -108,7 +108,7 @@
         <?php endif ?>
         <?php foreach ($csvVrac->getAnnexes() as $annexe => $uri): ?>
             <p class="titre_principal">Annexe : <?php echo $annexe ?></p>
-            <object type="application/pdf" style="height: 30vh; width: 100%" data="<?php echo url_for('vrac_csv_attachment', ['csvvrac' => $csvVrac->_id, 'attachment' => $annexe]) ?>#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0"></object>
+            <object type="application/pdf" style="height: 30vh; width: 100%; margin-bottom: 3%; border:solid black 1px;" data="<?php echo url_for('vrac_csv_attachment', ['csvvrac' => $csvVrac->_id, 'attachment' => $annexe]) ?>#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0"></object>
         <?php endforeach; ?>
     </div>
     <?php endif ?>
