@@ -294,3 +294,44 @@ table#soussignes_listing li.soussigne_attente_grey { background-image: url('../i
         }
     }
 }
+
+.active-filters-list {
+    border: 1px;
+}
+
+.active-filter {
+    align-items: center;
+    background: #eeeedc;
+    border-radius: 5rem;
+    display: inline-flex;
+    font-size: 90%;
+    margin: .2rem 0;
+    overflow: hidden;
+    padding: .1rem 1rem;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    .btn {
+        background: 0 0;
+        border: 0;
+        color: currentColor;
+        margin-left: .5rem;
+        margin-right: -.5rem;
+        opacity: 1;
+        padding: .1rem;
+        text-decoration: none;
+        width: 1rem;
+
+        &::before {
+            font-weight: bold;
+            content: "×";
+        }
+    }
+
+    .btn-clear {
+        border-radius: 50%;
+        transform: scale(.75);
+    }
+}
