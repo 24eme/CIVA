@@ -237,7 +237,11 @@ class VracCsvImport extends CsvFile
         $ids = array_unique(array_column($this->getCsv(), self::CSV_ACHETEUR_CVI));
 
         foreach ($ids as $acheteur) {
-            $etab = $this->guessId($acheteur);
+            try {
+                $etab = $this->guessId($acheteur);
+            } catch(Exception $e) {
+                $etab = null;
+            }
             if (! $etab || $etab->getSociete()->getIdentifiant() !== $creator->getIdentifiant()) {
                 $this->addError(0, "wrong_creator", "Vous ne pouvez pas créer de contrat pour l'identifiant {$acheteur}");
             }

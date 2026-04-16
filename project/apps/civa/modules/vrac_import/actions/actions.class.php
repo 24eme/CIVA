@@ -101,8 +101,8 @@ class vrac_importActions extends sfActions
 
     public function executeCSVVracUpload(sfWebRequest $request)
     {
-        $this->compte = $this->getRoute()->getCompte();
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
             return $this->forwardSecure();
@@ -211,8 +211,8 @@ class vrac_importActions extends sfActions
 
     public function executeCSVVracVisualisation(sfWebRequest $request)
     {
-        $this->compte = $this->getRoute()->getCompte();
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
         $this->secureRoute($this->csvVrac->identifiant);
 
         if ($this->csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE) {
