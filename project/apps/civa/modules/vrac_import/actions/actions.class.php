@@ -101,6 +101,10 @@ class vrac_importActions extends sfActions
 
     public function executeCSVVracUpload(sfWebRequest $request)
     {
+<<<<<<< Updated upstream
+=======
+        // $this->compte = $this->getRoute()->getCompte();
+>>>>>>> Stashed changes
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
@@ -211,6 +215,10 @@ class vrac_importActions extends sfActions
 
     public function executeCSVVracVisualisation(sfWebRequest $request)
     {
+<<<<<<< Updated upstream
+=======
+        // $this->compte = $this->getRoute()->getCompte();
+>>>>>>> Stashed changes
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
         $this->secureRoute($this->csvVrac->identifiant);
