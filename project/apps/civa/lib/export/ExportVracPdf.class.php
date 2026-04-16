@@ -149,19 +149,10 @@ class ExportVracPdf extends ExportDocument {
             $path_verso = Document::getByDatedFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_'.strtolower($this->vrac->getTypeDureeLibelle()).'_'.strtolower($this->vrac->type_contrat).'_verso.pdf', $this->vrac->valide->date_validation);
             $ouputPdf = $cachePath.uniqid().'.pdf';
 
-            $listeAnnexes = [];
-            foreach ($this->vrac->getAllAnnexesFilename() as $annexe) {
-                $tmpAnnexePath = $cachePath.uniqid('annexe_', true).'.pdf';
-                stream_copy_to_stream(
-                    fopen($this->vrac->getAttachmentUri($this->vrac->getAnnexeFilename($annexe)), 'r'),
-                    fopen($tmpAnnexePath, 'w'),
-                );
-
-                $listeAnnexes[] = $tmpAnnexePath;
-            }
+            $annexes = $this->vrac->mergeAnnexesPDF();
 
             file_put_contents($tmpPdfPath, $content);
-            shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." ". implode(' ', $listeAnnexes) ." cat output ".$ouputPdf);
+            shell_exec("pdftk ". $tmpPdfPath ." ".$path_verso." ". $annexes ." cat output ".$ouputPdf);
 
             unlink($tmpPdfPath);
 

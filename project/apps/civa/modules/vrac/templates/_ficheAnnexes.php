@@ -9,6 +9,9 @@ $annexes = $vrac->getAllAnnexesFilename();
             <th style="width: 280px;">
                 Annexes
                 <?php if (!$fiche&&!$edit): ?><a href="<?php echo url_for('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES)) ?>" style="float:right;text-decoration: none;font-size:13px;padding-top:1px;">Modifier</a><?php endif; ?>
+                <?php if (! $edit): ?>
+                    <a href="<?php echo url_for('vrac_all_annexes', ['sf_subject' => $vrac]) ?>" style="float: right; text-decoration: none; font-size: 13px;">Télécharger les annexes</a>
+                <?php endif ?>
             </th>
             <td></td>
             <td></td>
@@ -18,8 +21,10 @@ $annexes = $vrac->getAllAnnexesFilename();
         <?php foreach($annexes as $annexeFilename => $annexe): ?>
 		<tr class="<?php echo isVersionnerCssClass($vrac, "_attachments/$annexeFilename/content_type") ?>">
 			<td colspan="2">
-                <a class=" " style="padding:0 5px;" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>"><svg style="position:relative;top:2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></a>
-				<?php echo str_replace(VracClient::VRAC_PREFIX_ANNEXE,'',$annexeFilename) ?>
+                <a style="padding:0 5px; text-decoration:none" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>">
+                    <svg style="position:relative;top:2px;margin-right:1ch;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>
+                    <?php echo str_replace(VracClient::VRAC_PREFIX_ANNEXE,'',$annexeFilename) ?>
+                </a>
 			</td>
             <td style="text-align: right">
                 <?php if($edit): ?>
