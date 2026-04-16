@@ -271,7 +271,7 @@ class VracClient extends acCouchdbClient {
 		return false;
 	}
 
-    public function createVrac($createurIdentifiant, $date = null, $type_creation = self::TYPE_CREATION_TELEDECLARATION, $commentaire = null)
+    public function createVrac($createurIdentifiant, $date = null, $typeCreation = self::TYPE_CREATION_TELEDECLARATION, $commentaire = null)
     {
     	$date = $this->getDate($date);
     	$config = self::getConfig();
@@ -279,7 +279,7 @@ class VracClient extends acCouchdbClient {
         $numeroContrat = $this->getNumeroContratSuivant($date);
         $vrac = new Vrac();
         $vrac->initVrac($config, $createurIdentifiant, $numeroContrat, $date, $campagne, $commentaire);
-        $vrac->type_creation = self::TYPE_CREATION_IMPORT;
+        $vrac->type_creation = $typeCreation;
         return $vrac;
     }
 
