@@ -1017,6 +1017,20 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return false;
     }
 
+    public function save() {
+        $ret = parent::save();
+
+        if ($this->isValide() && $this->isPluriannuelCadre() && $this->exist('type_creation') && $this->type_creation == VracClient::TYPE_CREATION_IMPORT_APPLICATION_AUTO) {
+            $application = $this->generateNextPluriannuelApplication();
+            $application->createApplication($nextContratApplication->createur_identifiant);
+            $application->save();
+            $this->type_creation = VracClient::TYPE_CREATION_IMPORT;
+            $ret = $this->save();
+        }
+
+        return $ret;
+    }
+
     public function isArchivageCanBeSet()
     {
         return ($this->valide->statut == self::STATUT_VALIDE || $this->valide->statut == self::STATUT_VALIDE_CADRE || $this->valide->statut == self::STATUT_CLOTURE);
@@ -1414,7 +1428,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $ouputPdf;
     }
 
-    public function isTypeCreation() {
-		return $this->exist('type_creation') && $this->type_creation;
+    public function isImporte() {
+        return $this->exist('type_creation') && in_array($this->type_creation, [VracClient::TYPE_CREATION_IMPORT, VracClient::TYPE_CREATION_IMPORT_APPLICATION_AUTO]);
 	}
 }
