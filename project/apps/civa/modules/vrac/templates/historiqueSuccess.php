@@ -83,6 +83,15 @@
 
             <p style="margin-bottom: 15px;"><strong><?php echo count($vracs) ?></strong> contrat(s) trouvé(s)</p>
 
+            <div class="active-filters-list">
+                <?php foreach ($current_filters as $filter => $filter_value): ?>
+                    <div class="active-filter">
+                        <?php echo ucfirst($filter) . ": ".$filter_value ?>
+                        <a href="<?php echo '?'.http_build_query(array_merge($current_filters, [$filter => null])) ?>" class="btn btn-clear"></a>
+                    </div>
+                <?php endforeach ?>
+            </div>
+
             <h4>Recherche</h4>
             <div class="input-group">
                 <span class="input-group-addon bg-primary"><span class="glyphicon glyphicon-filter"></span></span>
