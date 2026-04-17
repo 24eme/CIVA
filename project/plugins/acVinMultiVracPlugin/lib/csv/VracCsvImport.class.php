@@ -323,6 +323,11 @@ class VracCsvImport extends CsvFile
                         continue;
                     }
 
+                    if(! $importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                        continue;
+                    }
+
                     try {
                         $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
                     } catch (Exception $e) {
