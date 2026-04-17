@@ -260,15 +260,17 @@ class VracCsvImport extends CsvFile
     /**
      * @param $identifiant Identifiant du *COMPTE*
      */
-    public function preimportChecks($identifiant)
+    public function preimportChecks($identifiant, $typeCreation = VracClient::TYPE_CREATION_IMPORT)
     {
         $this->getEtablissementAcheteur();
         if($this->typeContrat) {
             $this->hasMixedContratType($this->typeContrat);
         }
 
-        $creator = CompteClient::getInstance()->find($identifiant)->getSociete();
-        $this->checkOwnership($creator);
+        if($typeCreation != VracClient::TYPE_CREATION_PAPIER) {
+            $creator = CompteClient::getInstance()->find($identifiant)->getSociete();
+            $this->checkOwnership($creator);
+        }
     }
 
     /**
