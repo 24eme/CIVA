@@ -112,9 +112,11 @@
                 <?php foreach ($campagnes as $k => $c): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
-                        <span class="badge pull-right">
-                        <?php echo $facettes['campagne'][$c] ?? "?" ?>
-                        </span>
+                        <?php if ($campagne === "*" || $c === $campagne): ?>
+                            <span class="badge pull-right">
+                                <?php echo $facettes['campagne'][$c] ?? "?" ?>
+                            </span>
+                        <?php endif ?>
                     </a>
                 <?php endforeach; ?>
                 <?php if (count($campagnes) > 4): ?>
@@ -134,9 +136,11 @@
                     <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
                         <span style="width: 25px; height: 18px; text-align: center;display: inline-block"><img src="/images/pictos/pi_<?php echo strtolower($k) ?>.png"/></span>
                         <?php echo $s ?>
-                        <span class="badge pull-right">
-                        <?php echo $facettes['type'][$k] ?? 0 ?>
-                        </span>
+                        <?php if ($type === null || $k === $type): ?>
+                            <span class="badge pull-right">
+                                <?php echo $facettes['type'][$k] ?? 0 ?>
+                            </span>
+                        <?php endif ?>
                     </a>
                 <?php endforeach; ?>
             </div>
@@ -172,9 +176,11 @@
                 <?php foreach ($statuts as $k => $s): ?>
                     <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
                         <span style="max-width: 165px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo $s ?></span>
-                        <span class="badge pull-right" data-key="<?php echo $k; ?>">
-                        <?php echo $facettes['statut'][$k] ?? 0 ?>
-                        </span>
+                        <?php if ($statut === null || $k === $statut): ?>
+                            <span class="badge pull-right" data-key="<?php echo $k; ?>">
+                                <?php echo $facettes['statut'][$k] ?? 0 ?>
+                            </span>
+                        <?php endif ?>
                     </a>
                 <?php endforeach; ?>
             </div>
