@@ -86,7 +86,13 @@
             <div class="active-filters-list">
                 <?php foreach ($current_filters as $filter => $filter_value): ?>
                     <div class="active-filter">
-                        <?php echo ucfirst($filter) . ": " . (isset($statuts[$filter_value]) ? $statuts[$filter_value] : $filter_value) ?>
+                        <?php echo ucfirst($filter) ?> :
+                        <?php switch ($filter) {
+                            case "type": echo $types[$filter_value]; break;
+                            case "statut": echo $statuts[$filter_value]; break;
+                            case "temporalite": echo $temporalites[$filter_value]; break;
+                            default: echo $filter_value; break;
+                        } ?>
                         <a href="<?php echo '?'.http_build_query(array_merge($current_filters, [$filter => null])) ?>" class="btn btn-clear"></a>
                     </div>
                 <?php endforeach ?>
