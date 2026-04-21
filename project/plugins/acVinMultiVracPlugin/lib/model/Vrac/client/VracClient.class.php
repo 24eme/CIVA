@@ -328,7 +328,6 @@ class VracClient extends acCouchdbClient {
             'CONTRAT_PLURIANNUEL' => 0,
         ];
 
-        $tiers = VracClient::getInstance()->getEtablissements($societe);
         $tiers = $societe->getEtablissementsObject(false, true);
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
 
@@ -367,7 +366,7 @@ class VracClient extends acCouchdbClient {
                 $stats['CONTRAT_A_ENLEVER'] += 1;
             }
 
-            if ($item->pluriannuel) {
+            if ($item->pluriannuel && ! $item->reference_pluriannuel) {
                 $stats['CONTRAT_PLURIANNUEL'] += 1;
             }
         }
