@@ -428,7 +428,11 @@ class VracCsvImport extends CsvFile
             if ($line[self::CSV_VIN_LABEL]) {
                 $label = str_replace("HVE3", "HVE", $line[self::CSV_VIN_LABEL]);
                 if (in_array($label, self::LABELS_VALIDES)) {
-                    $produit->label = $label;
+                    if ($label !== "Aucune") {
+                        $produit->label = $label;
+                    } else {
+                        $produit->label = false;
+                    }
                 } else {
                     $this->addError(
                         self::$line,
