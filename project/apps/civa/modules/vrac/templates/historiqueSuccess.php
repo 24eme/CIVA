@@ -5,14 +5,14 @@
         <div class="stats-compteur">
             <div class="icone glyphicon glyphicon-edit"></div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux[Vrac::STATUT_VALIDE_PARTIELLEMENT] ?? 0; ?></span>
+                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_A_SIGNER'] ?? 0; ?></span>
                 <a href="?statut=VALIDE_PARTIELLEMENT" class="link">contrat(s) à signer</a>
             </div>
         </div>
         <div class="stats-compteur">
             <div class="icone glyphicon glyphicon-hourglass"></div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux[Vrac::STATUT_PROPOSITION] ?? 0; ?></span>
+                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_EN_ATTENTE_SIGNATURE'] ?? 0; ?></span>
                 <a href="?statut=PROPOSITION" class="link">contrat(s) en attente</a>
             </div>
         </div>
@@ -24,8 +24,8 @@
                 </svg>
             </div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux['PROJETS_EN_COURS'] ?? 0; ?></span>
-                <a href="?statut=PROJET_EN_COURS" class="link">contrat(s) pluriannuel en cours</a>
+                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_PLURIANNUEL'] ?? 0; ?></span>
+                <a href="?temporalite=PLURIANNUEL_CADRE" class="link">contrat(s) pluriannuel en cours</a>
             </div>
         </div>
     </div>

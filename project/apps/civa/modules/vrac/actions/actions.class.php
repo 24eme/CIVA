@@ -28,7 +28,7 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
 
-        $this->campagne = $request->getParameter('campagne') ? $request->getParameter('campagne') : '*';
+        $this->campagne = $request->getParameter('campagne');
 		$this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
         $this->temporalite = $request->getParameter('temporalite');
@@ -87,18 +87,7 @@ class vracActions extends sfActions
         }
         $this->statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = 'En attente de validation/sign.';
 
-        $this->vracsCampagne = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne);
-        $this->statuts_globaux = [
-            Vrac::STATUT_VALIDE_PARTIELLEMENT => count(array_filter($this->vracsCampagne, function ($v) {
-                return $v->key[3] === Vrac::STATUT_VALIDE_PARTIELLEMENT;
-            })),
-            Vrac::STATUT_PROPOSITION => count(array_filter($this->vracsCampagne, function ($v) {
-                return $v->key[3] === Vrac::STATUT_PROPOSITION;
-            })),
-            'PROJETS_EN_COURS' => count(array_filter($this->vracsCampagne, function ($v) {
-                return $v->key[3] === Vrac::STATUT_PROJET_VENDEUR || $v->key[3] === Vrac::STATUT_PROJET_ACHETEUR;
-            })),
-        ];
+        $this->statuts_globaux = VracClient::getInstance()->getGlobalStats($this->compte->getSociete());
 
         $this->types = VracClient::getContratTypes();
         $this->temporalites = VracClient::$_contrat_temporalites;
