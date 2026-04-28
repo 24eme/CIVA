@@ -71,6 +71,7 @@ class vracActions extends sfActions
         $this->facettes['type'] = array_count_values(array_column(array_column($this->vracs, 'key'), 1));
         $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
         $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'key'), 3));
+        $this->facettes['temporalite'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'temporalite'));
 
         if (! $this->campagnes) {
             $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
