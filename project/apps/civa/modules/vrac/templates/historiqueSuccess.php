@@ -5,15 +5,36 @@
         <div class="stats-compteur">
             <div class="icone glyphicon glyphicon-edit"></div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_A_SIGNER'] ?? 0; ?></span>
-                <a href="?statut=VALIDE_PARTIELLEMENT" class="link">contrat(s) à signer</a>
+                <span class="chiffre"><?php echo $statuts_globaux['A_TERMINER'] ?? 0; ?></span>
+                <a href="?statut=BROUILLON" class="link">Brouillon(s)</a>
+            </div>
+        </div>
+        <div class="stats-compteur">
+            <div class="icone glyphicon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-vector-pen" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.828zm-1.8 2.908-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z"/>
+  <path fill-rule="evenodd" d="M2.832 13.228 8 9a1 1 0 1 0-1-1l-4.228 5.168-.026.086z"/>
+</svg></div>
+            <div class="texte">
+                <span class="chiffre"><?php echo $statuts_globaux['A_SIGNER'] ?? 0; ?></span>
+                <a href="?statut=A_SIGNER" class="link">À signer</a>
             </div>
         </div>
         <div class="stats-compteur">
             <div class="icone glyphicon glyphicon-hourglass"></div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_EN_ATTENTE_SIGNATURE'] ?? 0; ?></span>
-                <a href="?statut=PROPOSITION" class="link">contrat(s) en attente</a>
+                <span class="chiffre"><?php echo $statuts_globaux['EN_ATTENTE'] ?? 0; ?></span>
+                <a href="?statut=EN_ATTENTE" class="link">En attente</a>
+            </div>
+        </div>
+        <div class="stats-compteur">
+            <div class="icone glyphicon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
+                    <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                </svg>
+            </div>
+            <div class="texte">
+                <span class="chiffre"><?php echo $statuts_globaux['A_ENLEVER'] ?? 0; ?></span>
+                <a href="?statut=EN_COURS&type=<?php echo VracClient::TYPE_VRAC ?>" class="link">À enlever</a>
             </div>
         </div>
         <div class="stats-compteur">
@@ -24,8 +45,8 @@
                 </svg>
             </div>
             <div class="texte">
-                <span class="chiffre"><?php echo $statuts_globaux['CONTRAT_PLURIANNUEL'] ?? 0; ?></span>
-                <a href="?temporalite=PLURIANNUEL_CADRE" class="link">contrat(s) pluriannuel en cours</a>
+                <span class="chiffre"><?php echo $statuts_globaux['PLURIANNUEL_EN_COURS'] ?? 0; ?></span>
+                <a href="?temporalite=<?php echo VracClient::TEMPORALITE_PLURIANNUEL_CADRE ?>&statut=EN_COURS" class="link">Pluriannuel en cours</a>
             </div>
         </div>
     </div>
@@ -106,14 +127,14 @@
 
             <h4 style="margin-top: 15px;">Campagne</h4>
             <div class="list-group">
-                <a class="list-group-item list-group-item-xs <?php echo $campagne === "*" ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => "*"])) ?>">
-                    Toutes les campagnes <span class="badge pull-right"><?php echo $campagne == '*' ? array_sum($facettes['campagne']->getRawValue()) : "?" ?></span>
+                <a class="list-group-item list-group-item-xs <?php echo $campagne === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => null])) ?>">
+                    Toutes les campagnes <span class="badge pull-right"><?php echo $campagne === null ? array_sum($facettes['campagne']->getRawValue()) : "?" ?></span>
                 </a>
                 <?php foreach ($campagnes as $k => $c): ?>
                     <a class="list-group-item list-group-item-xs <?php echo $c === $campagne ? 'active' : null ?> <?php echo ($k > 4 && $c !== $campagne) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => $c])) ?>">
                         <?php echo $c ?>
                         <span class="badge pull-right">
-                            <?php echo (isset($facettes['campagne']->getRawValue()[$c])) ? $facettes['campagne'][$c] : (($campagne == '*' || $campagne == $c) ? 0 : "?") ?>
+                            <?php echo (isset($facettes['campagne']->getRawValue()[$c])) ? $facettes['campagne'][$c] : ((!$campagne || $campagne == $k) ? 0 : "?") ?>
                         </span>
                     </a>
                 <?php endforeach; ?>

@@ -259,7 +259,7 @@ table#soussignes_listing li.soussigne_attente_grey { background-image: url('../i
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    column-gap: 30px;
+    column-gap: 10px;
     margin-bottom: 10px;
 
     .stats-compteur {

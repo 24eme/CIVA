@@ -318,59 +318,17 @@ class VracClient extends acCouchdbClient {
   		return ($statut)? $libelles[$statut] : $libelles[VRAC::STATUT_CREE];
   	}
 
-    public function getGlobalStats(Societe $societe)
+    public function getStatutsActions()
     {
-        $stats = [
-            'CONTRAT_A_TERMINER' => 0,
-            'CONTRAT_A_SIGNER' => 0,
-            'CONTRAT_EN_ATTENTE_SIGNATURE' => 0,
-            'CONTRAT_A_ENLEVER' => 0,
-            'CONTRAT_PLURIANNUEL' => 0,
+        $statutsActions = [
+            "BROUILLON" => "Brouillon",
+            "A_SIGNER" => "À signer",
+            "EN_ATTENTE" => "En attente",
+            "EN_COURS" => "En cours",
+            "CLOTURE" => "Cloturé",
+            "ANNULE" => "Annulé"
         ];
 
-        $tiers = $societe->getEtablissementsObject(false, true);
-        $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
-
-        foreach($vracs as $key => $vrac) {
-            $item = $vrac->value;
-            if($item->papier) {
-                continue;
-            }
-            if ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE) {
-                continue;
-            }
-            if (in_array($item->statut, array(Vrac::STATUT_CREE)) && ! $item->is_proprietaire) {
-                continue;
-            }
-
-            if (in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR, Vrac::STATUT_PROJET_ACHETEUR)) && $item->is_proprietaire) {
-                $stats['CONTRAT_A_TERMINER'] += 1;
-            }
-
-            if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
-                if(array_key_exists($item->soussignes->vendeur->identifiant, $tiers) && ! $item->soussignes->vendeur->date_validation) {
-                    $stats['CONTRAT_A_SIGNER'] += 1;
-                }
-                if(array_key_exists($item->soussignes->acheteur->identifiant, $tiers) && ! $item->soussignes->acheteur->date_validation) {
-                    $stats['CONTRAT_A_SIGNER'] += 1;
-                }
-                if(array_key_exists($item->soussignes->mandataire->identifiant, $tiers) && ! $item->soussignes->mandataire->date_validation) {
-                    $stats['CONTRAT_A_SIGNER'] += 1;
-                }
-                if($item->is_proprietaire) {
-                    $stats['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1;
-                }
-            }
-
-            if($item->is_proprietaire && ($item->statut == Vrac::STATUT_VALIDE || $item->statut == Vrac::STATUT_ENLEVEMENT)) {
-                $stats['CONTRAT_A_ENLEVER'] += 1;
-            }
-
-            if ($item->pluriannuel && ! $item->reference_pluriannuel) {
-                $stats['CONTRAT_PLURIANNUEL'] += 1;
-            }
-        }
-
-        return $stats;
+        return $statutsActions;
     }
 }
