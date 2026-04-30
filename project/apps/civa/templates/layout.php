@@ -30,7 +30,7 @@
                                                        'isAuthenticated' => $sf_user->isAuthenticated())); ?>
        <div id="contenu">
            <?php if(sfConfig::get('app_instance') == 'preprod' ): ?>
-             <div style="margin-top: -15px; margin-bottom: 5px;"><p style="color:red; text-align:center; font-weight: bold;">Preproduction (la base est succeptible d'être supprimée à tout moment)</p></div>
+             <!-- <div style="margin-top: -5px; margin-bottom: -5px; font-size: 12px;"><p style="color:red; text-align:center; font-weight: bold;">Preproduction (la base est succeptible d'être supprimée à tout moment)</p></div> -->
            <?php endif; ?>
            <?php include_partial('global/errorFlash') ?>
            <?php echo $sf_content ?>

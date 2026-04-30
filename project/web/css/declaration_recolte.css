@@ -562,14 +562,13 @@ input.btn_inactif {
 #main_nav #onglets_majeurs li a { background: #bcbdbc; }
 
 #main_nav #onglets_majeurs li a {
-	padding-left: 5px;
-	padding-right: 5px;
+    padding: 6px 5px;
 }
 
 #main_nav #onglets_majeurs .ui-tabs-selected a { background: #ffa913; }
 
 #main_nav #onglets_majeurs .ui-tabs-disabled a {
-	background: #fff;
+    background: #f1f1f1;
 	color: #ddd;
 }
 
