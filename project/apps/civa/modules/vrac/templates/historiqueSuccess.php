@@ -100,10 +100,14 @@
                 </a>
             </div>
 
+            <div class="input-group">
+                <span class="input-group-addon" style="background: white;"><span class="glyphicon glyphicon-search"></span></span>
+                <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
+            </div>
+
             <hr/>
 
-            <p style="margin-bottom: 15px;"><strong><?php echo count($vracs) ?></strong> contrat(s) trouvé(s)</p>
-
+            <p style="margin-bottom: 5px;"><strong><?php echo count($vracs) ?></strong> contrat(s) trouvé(s)</p>
             <div class="active-filters-list">
                 <?php foreach ($current_filters as $filter => $filter_value): ?>
                     <div class="active-filter">
@@ -119,13 +123,37 @@
                 <?php endforeach ?>
             </div>
 
-            <h4>Recherche</h4>
-            <div class="input-group">
-                <span class="input-group-addon bg-primary"><span class="glyphicon glyphicon-filter"></span></span>
-                <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
+            <h4>Statuts</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$statut ? array_sum($facettes['statut']->getRawValue()) : "?" ?></span></a>
+                <?php foreach ($statuts as $k => $s): ?>
+                    <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
+                        <span style="max-width: 165px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo $s ?></span>
+                            <span class="badge pull-right" data-key="<?php echo $k; ?>">
+                                <?php echo (isset($facettes['statut']->getRawValue()[$k])) ? $facettes['statut'][$k] : ((!$statut || $statut == $k) ? 0 : "?") ?>
+                            </span>
+                    </a>
+                <?php endforeach; ?>
             </div>
 
-            <h4 style="margin-top: 15px;">Campagne</h4>
+            <h4>Types de contrat</h4>
+            <div class="list-group">
+                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">
+                    <span style="width:25px; height:18px; text-align: center;display: inline-block"> &nbsp; </span>
+                    Tous <span class="badge pull-right"><?php echo !$type ? array_sum($facettes['type']->getRawValue()) : "?" ?></span>
+                </a>
+                <?php foreach ($types as $k => $s): ?>
+                    <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
+                        <span style="width: 25px; height: 18px; text-align: center;display: inline-block"><img src="/images/pictos/pi_<?php echo strtolower($k) ?>.png"/></span>
+                        <?php echo $s ?>
+                            <span class="badge pull-right">
+                                <?php echo (isset($facettes['type']->getRawValue()[$k])) ? $facettes['type'][$k] : ((!$type || $type == $k) ? 0 : "?") ?>
+                            </span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
+            <h4 style="margin-top: 15px;">Campagnes</h4>
             <div class="list-group">
                 <a class="list-group-item list-group-item-xs <?php echo $campagne === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => null])) ?>">
                     Toutes les campagnes <span class="badge pull-right"><?php echo $campagne === null ? array_sum($facettes['campagne']->getRawValue()) : "?" ?></span>
@@ -145,24 +173,7 @@
                 <?php endif ?>
             </div>
 
-            <h4>Type de contrat</h4>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-xs <?php echo $type === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => null])) ?>">
-                    <span style="width:25px; height:18px; text-align: center;display: inline-block"> &nbsp; </span>
-                    Tous <span class="badge pull-right"><?php echo !$type ? array_sum($facettes['type']->getRawValue()) : "?" ?></span>
-                </a>
-                <?php foreach ($types as $k => $s): ?>
-                    <a class="list-group-item list-group-item-xs <?php echo $k === $type ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['type' => $k])) ?>">
-                        <span style="width: 25px; height: 18px; text-align: center;display: inline-block"><img src="/images/pictos/pi_<?php echo strtolower($k) ?>.png"/></span>
-                        <?php echo $s ?>
-                            <span class="badge pull-right">
-                                <?php echo (isset($facettes['type']->getRawValue()[$k])) ? $facettes['type'][$k] : ((!$type || $type == $k) ? 0 : "?") ?>
-                            </span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <h4>Temporalité</h4>
+            <h4>Temporalités</h4>
             <div class="list-group">
                 <a class="list-group-item list-group-item-xs <?php echo $temporalite === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['temporalite' => null])) ?>">
                     <span style="width:25px; height:18px; text-align: center;display: inline-block"> &nbsp; </span>
@@ -189,19 +200,6 @@
                         <?php echo (isset($facettes['temporalite']->getRawValue()[$k])) ? $facettes['temporalite'][$k] : ((!$temporalite || $temporalite == $k) ? 0 : "?") ?>
                     </span>
                 </a>
-                <?php endforeach; ?>
-            </div>
-
-            <h4>Statuts</h4>
-            <div class="list-group">
-                <a class="list-group-item list-group-item-xs <?php echo $statut === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$statut ? array_sum($facettes['statut']->getRawValue()) : "?" ?></span></a>
-                <?php foreach ($statuts as $k => $s): ?>
-                    <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $statut ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['statut' => $k])) ?>">
-                        <span style="max-width: 165px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo $s ?></span>
-                            <span class="badge pull-right" data-key="<?php echo $k; ?>">
-                                <?php echo (isset($facettes['statut']->getRawValue()[$k])) ? $facettes['statut'][$k] : ((!$statut || $statut == $k) ? 0 : "?") ?>
-                            </span>
-                    </a>
                 <?php endforeach; ?>
             </div>
         </div>
