@@ -29,9 +29,11 @@
 }
 
 #nav #onglets_majeurs li {
-    display: inline-block;
+    display: block;
     background: #bcbdbc;
-    padding: 4px 15px;
+    padding: 5px 15px;
+    float: left;
+    margin-right: 3px;
 }
 
 #nav #onglets_majeurs li.ui-tabs-selected {

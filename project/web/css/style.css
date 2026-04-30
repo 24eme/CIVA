@@ -158,7 +158,7 @@ body > .navbar {
 a.admin { color: #ff0000; }
 
 #global #contenu {
-    padding: 20px;
+    padding: 30px 20px 20px 20px;
 }
 
 /* Étapes */
@@ -245,3 +245,93 @@ table#soussignes_listing li.soussigne_attente { background-image: url('../images
 
 table#soussignes_listing li.soussigne_valide_grey { background-image: url('../images/pictos/pi_check_2_grey.png'); }
 table#soussignes_listing li.soussigne_attente_grey { background-image: url('../images/pictos/pi_sablier_grey.png'); }
+
+.glyphicon-spinner {
+    -webkit-animation: spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.vrac-stats-compteurs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    column-gap: 10px;
+    margin-bottom: 10px;
+
+    .stats-compteur {
+        width: 100%;
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #e0e1bd;
+        border-radius: 3px;
+        background-color: #eeeedc;
+        font-size: 14px;
+
+        display: flex;
+
+        .icone {
+            font-size: 24px;
+            text-align: center;
+            align-self: center;
+            width: 20%;
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        .texte {
+            flex-grow: 1;
+            text-align: center;
+            .chiffre {
+                display: block;
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.active-filters-list {
+    border: 1px;
+}
+
+.active-filter {
+    align-items: center;
+    background: #eeeedc;
+    border-radius: 5rem;
+    display: inline-flex;
+    font-size: 90%;
+    margin: .2rem 0;
+    overflow: hidden;
+    padding: .1rem 1rem;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    .btn {
+        background: 0 0;
+        border: 0;
+        color: currentColor;
+        margin-left: .5rem;
+        margin-right: -.5rem;
+        opacity: 1;
+        padding: .1rem;
+        text-decoration: none;
+        width: 1rem;
+
+        &::before {
+            font-weight: bold;
+            content: "×";
+        }
+    }
+
+    .btn-clear {
+        border-radius: 50%;
+        transform: scale(.75);
+    }
+}

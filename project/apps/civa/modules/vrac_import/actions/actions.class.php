@@ -34,7 +34,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracFiche(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
-        $this->vracimport = new VracCsvImport($this->csvVrac);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
         $this->secureRoute($this->compte->identifiant);
@@ -55,12 +55,13 @@ class vrac_importActions extends sfActions
         }
 
         $this->formAnnexe->setValidator('annexeInputFile', new sfValidatorFileMulti([
-            'required' => false, 'max_size' => '2097152',
+            'required' => false, 'max_size' => '20971520',
             'mime_categories' => ['pdf' => ['application/pdf', 'application/x-pdf']],
             'mime_types' => 'pdf'
         ]));
 
         $this->formAnnexe->bind(null, $request->getFiles());
+
         if ($this->formAnnexe->isValid()) {
             $annexes = $this->formAnnexe->getValue('annexeInputFile');
             if ($annexes) {
@@ -88,10 +89,10 @@ class vrac_importActions extends sfActions
         $this->csvVrac = CSVVRACClient::getInstance()->createNouveau($csv['tmp_name'], $this->compte);
         $this->csvVrac->type_contrat = $request->getParameter('type_vrac', CSVVRACClient::TYPE_CONTRAT_PLURIANNUEL_CADRE);
 
-        $this->vracimport = new VracCsvImport($this->csvVrac);
-        $this->vracimport->preimportChecks();
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
+        $this->vracimport->preimportChecks($this->csvVrac->identifiant);
         $this->vracimport->import();
-        $this->vracimport->checkErreurs();
+        $this->vracimport->registerErreurs($this->csvVrac);
 
         $this->csvVrac->save();
 
@@ -101,6 +102,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracUpload(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
 
         if (! $this->getUser()->isAdmin() && $this->getUser()->getCompte()->getIdentifiant() !== $this->csvVrac->identifiant) {
             return $this->forwardSecure();
@@ -115,10 +117,10 @@ class vrac_importActions extends sfActions
         $this->csvVrac->clearErreurs();
         $this->csvVrac->storeAttachment($csv['tmp_name'], 'text/csv', $this->csvVrac->getFileName());
         $this->csvVrac->save();
-        $this->vracimport = new VracCsvImport($this->csvVrac);
-        $this->vracimport->preimportChecks();
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
+        $this->vracimport->preimportChecks($this->csvVrac->identifiant);
         $this->vracimport->import();
-        $this->vracimport->checkErreurs();
+        $this->vracimport->registerErreurs($this->csvVrac);
 
         $this->csvVrac->save();
 
@@ -139,7 +141,7 @@ class vrac_importActions extends sfActions
             $this->redirect('vrac_csv_fiche', ['csvvrac' => $this->csvVrac->_id]);
         }
 
-        $this->vracimport = new VracCsvImport($this->csvVrac);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
     }
 
     public function executeCSVVracImport(sfWebRequest $request)
@@ -157,8 +159,8 @@ class vrac_importActions extends sfActions
             throw new sfException("Impossible de réimporter un fichier");
         }
 
-        $this->vracimport = new VracCsvImport($this->csvVrac);
-        $imported = $this->vracimport->import(true);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
+        $imported = $this->vracimport->import(true, $_POST['type_creation']);
 
         if (count($this->csvVrac->getAnnexes())) {
             foreach ($this->csvVrac->getAnnexes() as $name => $annexe) {
@@ -171,7 +173,7 @@ class vrac_importActions extends sfActions
         $this->csvVrac->add('documents', $imported);
         $this->csvVrac->save();
 
-        return $this->redirect('vrac_historique', ['identifiant' => $this->csvVrac->identifiant, 'campagne' => ConfigurationClient::getInstance()->getCurrentCampagne()]);
+        return $this->redirect('vrac_csv_visualisation', ['csvvrac' => $this->csvVrac->_id]);
     }
 
     public function executeCSVVracDownload(sfWebRequest $request)
@@ -210,6 +212,7 @@ class vrac_importActions extends sfActions
     public function executeCSVVracVisualisation(sfWebRequest $request)
     {
         $this->csvVrac = CSVVRACClient::getInstance()->find($request->getParameter('csvvrac'));
+        $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
         $this->secureRoute($this->csvVrac->identifiant);
 
         if ($this->csvVrac->statut !== CSVVRACClient::LEVEL_IMPORTE) {
@@ -217,7 +220,7 @@ class vrac_importActions extends sfActions
         }
 
         $this->compte = CompteClient::getInstance()->find($this->csvVrac->identifiant);
-        $this->vracimport = new VracCsvImport($this->csvVrac);
+        $this->vracimport = new VracCsvImport($this->csvVrac->getFile(), $this->csvVrac->type_contrat);
 
         $this->setTemplate('CSVVracValidation');
     }

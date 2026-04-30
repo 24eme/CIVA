@@ -53,33 +53,18 @@ class tiersActions extends sfActions {
         );
         $tiers = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
         $vracs = VracTousView::getInstance()->findSortedByDeclarants($tiers);
-        foreach($vracs as $vrac) {
-            $item = $vrac->value;
-            if($item->papier) {
-                continue;
+        foreach($vracs as $key => $vrac) {
+            if($vrac->value->statutAction == "EN_ATTENTE") {
+                $this->vracs["CONTRAT_EN_ATTENTE_SIGNATURE"]++;
             }
-
-            if(in_array($item->statut, array(Vrac::STATUT_CREE, Vrac::STATUT_PROJET_VENDEUR, Vrac::STATUT_PROJET_ACHETEUR)) && $item->is_proprietaire) {
-               $this->vracs['CONTRAT_A_TERMINER'] += 1;
+            if($vrac->value->statutAction == "A_SIGNER") {
+                $this->vracs["CONTRAT_A_SIGNER"]++;
             }
-
-            if($item->statut == Vrac::STATUT_VALIDE_PARTIELLEMENT) {
-                if(array_key_exists($item->soussignes->vendeur->identifiant, $tiers) && !$item->soussignes->vendeur->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
-                }
-                if(array_key_exists($item->soussignes->acheteur->identifiant, $tiers) && !$item->soussignes->acheteur->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
-                }
-                if(array_key_exists($item->soussignes->mandataire->identifiant, $tiers) && !$item->soussignes->mandataire->date_validation) {
-                    $this->vracs['CONTRAT_A_SIGNER'] += 1;
-                }
-                if($item->is_proprietaire) {
-                    $this->vracs['CONTRAT_EN_ATTENTE_SIGNATURE'] += 1;
-                }
+            if($vrac->value->statutAction == "BROUILLON") {
+                $this->vracs["CONTRAT_A_TERMINER"]++;
             }
-
-            if($item->is_proprietaire && ($item->statut == Vrac::STATUT_VALIDE || $item->statut == Vrac::STATUT_ENLEVEMENT)) {
-                $this->vracs['CONTRAT_A_ENLEVER'] += 1;
+            if($vrac->key[1] == VracClient::TYPE_VRAC && $vrac->value->statutAction == "EN_COURS" && in_array($vrac->value->temporalite, [VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION, VracClient::TEMPORALITE_ANNUEL])) {
+                $this->vracs["CONTRAT_A_ENLEVER"]++;
             }
         }
 
@@ -237,13 +222,8 @@ class tiersActions extends sfActions {
     }
 
     public function executeMonEspaceVrac(sfWebRequest $request) {
-        return $this->redirect('vrac_historique', $this->getRoute()->getCompte());
         $this->secure(Roles::TELEDECLARATION_VRAC);
-        $this->compte = $this->getRoute()->getCompte();
-        $this->etablissements = VracClient::getInstance()->getEtablissements($this->compte->getSociete());
-
-        $this->help_popup_action = "help_popup_mon_espace_civa";
-
+        return $this->redirect('vrac_historique', $this->getRoute()->getCompte());
     }
 
     public function executeMonEspaceCompteGamma(sfWebRequest $request) {

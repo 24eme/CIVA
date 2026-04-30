@@ -28,52 +28,84 @@ class vracActions extends sfActions
         $this->secureVrac(VracSecurity::DECLARANT, null);
 		$this->cleanSessions();
 
-		$this->campagne = $request->getParameter('campagne');
-		$this->statut = $request->getParameter('statut');
+        $this->campagne = $request->getParameter('campagne');
+        $this->statut = $request->getParameter('statut');
         $this->type = $request->getParameter('type');
         $this->temporalite = $request->getParameter('temporalite');
 		$this->role = $request->getParameter('role');
         $this->commercial = $request->getParameter('commercial');
 
-		if (!$this->campagne) {
-			$this->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
-		}
         $this->etablissements = $this->compte->getSociete()->getEtablissementsObject(false, true);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements, $this->campagne, $this->statut, $this->type, $this->role, $this->commercial, $this->temporalite);
+        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants($this->etablissements);
+        $this->statuts_globaux = [
+            'A_TERMINER' => 0,
+            'A_SIGNER' => 0,
+            'EN_ATTENTE' => 0,
+            'A_ENLEVER' => 0,
+            'PLURIANNUEL_EN_COURS' => 0,
+        ];
+
+        foreach($this->vracs as $key => $vrac) {
+            if($vrac->value->temporalite == VracClient::TEMPORALITE_PLURIANNUEL_CADRE && $vrac->value->statutAction == "EN_COURS") {
+                $this->statuts_globaux["PLURIANNUEL_EN_COURS"]++;
+            }
+            if($vrac->value->statutAction == "EN_ATTENTE") {
+                $this->statuts_globaux["EN_ATTENTE"]++;
+            }
+            if($vrac->value->statutAction == "A_SIGNER") {
+                $this->statuts_globaux["A_SIGNER"]++;
+            }
+            if($vrac->value->statutAction == "BROUILLON") {
+                $this->statuts_globaux["A_TERMINER"]++;
+            }
+            if($vrac->key[1] == VracClient::TYPE_VRAC && $vrac->value->statutAction == "EN_COURS" && in_array($vrac->value->temporalite, [VracClient::TEMPORALITE_PLURIANNUEL_APPLICATION, VracClient::TEMPORALITE_ANNUEL])) {
+                $this->statuts_globaux["A_ENLEVER"]++;
+            }
+
+            if($this->campagne && $vrac->value->campagne != $this->campagne) {
+                unset($this->vracs[$key]);
+            }
+
+            if($this->type && $vrac->key[1] != $this->type) {
+                unset($this->vracs[$key]);
+            }
+
+            if($this->statut && $vrac->value->statutAction != $this->statut) {
+                unset($this->vracs[$key]);
+            }
+
+            if($this->temporalite && $vrac->value->temporalite != $this->temporalite) {
+                unset($this->vracs[$key]);
+            }
+        }
     }
 
-	public function executeHistorique(sfWebRequest $request)
-	{
+    protected function getCampagnes($vracs, $courante)
+    {
+        $campagnes = array($courante);
+        foreach ($vracs as $vrac) {
+            if (!in_array($vrac->key[2], $campagnes)) {
+                $campagnes[] = $vrac->key[2];
+            }
+        }
+        rsort($campagnes);
+        return $campagnes;
+    }
+
+    public function executeHistorique(sfWebRequest $request)
+    {
         $this->getVracsFromRequest($request);
 
         $this->facettes = [];
         $this->facettes['type'] = array_count_values(array_column(array_column($this->vracs, 'key'), 1));
         $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
-        $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'key'), 3));
+        $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'statutAction'));
+        $this->facettes['temporalite'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'temporalite'));
 
         $this->campagnes = $this->getCampagnes(VracTousView::getInstance()->findSortedByDeclarants($this->etablissements), VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
-
-        $this->statuts = $this->getStatuts();
-        if (!$this->facettes['statut'][Vrac::STATUT_PROJET_VENDEUR]) {
-            unset($this->statuts[Vrac::STATUT_PROJET_VENDEUR]);
-        } elseif (!$this->facettes['statut'][Vrac::STATUT_PROJET_ACHETEUR]) {
-            unset($this->statuts[Vrac::STATUT_PROJET_ACHETEUR]);
-        } else {
-            $this->statuts[Vrac::STATUT_PROJET_ACHETEUR] = 'Projet (Acheteur)';
-            $this->statuts[Vrac::STATUT_PROJET_VENDEUR] = 'Projet (Vendeur)';
-        }
-        $this->statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = 'En attente de validation/sign.';
-
-        $this->statuts_globaux = array(
-            Vrac::STATUT_VALIDE_PARTIELLEMENT => $this->statut_vracs[Vrac::STATUT_VALIDE_PARTIELLEMENT],
-            Vrac::STATUT_PROPOSITION => $this->statut_vracs[Vrac::STATUT_PROPOSITION],
-            'PROJETS_EN_COURS' => $this->statut_vracs[Vrac::STATUT_PROJET_VENDEUR] + $this->statut_vracs[Vrac::STATUT_PROJET_ACHETEUR]
-        );
+        $this->statuts = VracClient::getInstance()->getStatutsActions();
         $this->types = VracClient::getContratTypes();
         $this->temporalites = VracClient::$_contrat_temporalites;
-        $this->roles = $this->findRoles();
-        $annuaire = $this->getAnnuaire();
-        $this->commerciaux = (count($annuaire->commerciaux) > 0)? $annuaire->getAnnuaireSorted('commerciaux') : array();
 
         $this->hasDoubt = true;
         $etablissements = VracClient::getInstance()->getEtablissements($this->getUser()->getCompte()->getSociete());
@@ -121,20 +153,6 @@ class vracActions extends sfActions
         $ret = $this->renderText(file_get_contents($filename));
         unlink("/tmp/vrac/".$subdir.".zip");
         return $ret;
-    }
-
-    protected function findRoles() {
-        $vracs = VracTousView::getInstance()->findSortedByDeclarants($this->getUser()->getDeclarantsVrac());
-        $roles = VracClient::getRoles();
-        $roles_vrac = array();
-        foreach($vracs as $vrac) {
-            if(array_key_exists($vrac->value->role, $roles_vrac)) {
-                continue;
-            }
-            $roles_vrac[$vrac->value->role] = $roles[$vrac->value->role];
-        }
-
-        return $roles_vrac;
     }
 
     public function executeExportCSV(sfWebRequest $request)
@@ -321,6 +339,10 @@ class vracActions extends sfActions
         $this->vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::CONSULTATION, $this->vrac);
 
+        if($this->vrac->valide->statut == Vrac::STATUT_CREE) {
+            throw new Exception("en brouillon");
+        }
+
         $this->user = $this->getTiersOfVrac($this->vrac);
 
 		$this->form = $this->getFormRetiraisons($this->vrac, $this->user);
@@ -338,6 +360,14 @@ class vracActions extends sfActions
 				$this->getUser()->setFlash('notice', 'Le contrat a été mis à jour avec succès.');
        			return $this->redirect('vrac_fiche', array('sf_subject' => $vrac));
         	}
+        }
+
+        $this->formApplication = null;
+        $this->validationApplication = null;
+
+        if ($this->vrac->isImporte()) {
+
+            return sfView::SUCCESS;
         }
 
         try {
@@ -709,30 +739,10 @@ class vracActions extends sfActions
 			return null;
 		}
 
-    	if (($vrac->isValide() && !$vrac->isCloture() && $vrac->isProprietaire($user->_id) && !$vrac->isAnnule())||$this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN)) {
+        if (($vrac->isValide() && !$vrac->isCloture() && !$vrac->isAnnule()) && ($this->getUser()->hasCredential(myUser::CREDENTIAL_ADMIN) || $vrac->isProprietaire($user->_id))) {
     		return new VracProduitsEnlevementsForm($vrac);
     	}
     	return null;
-    }
-
-    protected function getCampagnes($vracs, $courante)
-    {
-        $campagnes = array($courante);
-        foreach ($vracs as $vrac) {
-            if (!in_array($vrac->key[2], $campagnes)) {
-                $campagnes[] = $vrac->key[2];
-            }
-        }
-        rsort($campagnes);
-        return $campagnes;
-    }
-
-    protected function getStatuts()
-    {
-        $statuts = Vrac::getStatutsLibelles();
-        $statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT] = $statuts[Vrac::STATUT_VALIDE_PARTIELLEMENT].'/signature';
-        $statuts[Vrac::STATUT_VALIDE] = $statuts[Vrac::STATUT_VALIDE].' / À enlever';
-        return $statuts;
     }
 
     protected function secureVrac($droits, $vrac) {
@@ -802,6 +812,19 @@ class vracActions extends sfActions
 		return $vrac;
     }
 
+    public function executeReouvrirProjet(sfWebRequest $request)
+	{
+		$this->cleanSessions();
+		$vrac = $this->getRoute()->getVrac();
+        if($vrac->valide->statut != Vrac::STATUT_PROJET_ATTENTE_TRANSMISSION) {
+            throw new sfError403Exception();
+        }
+        $vrac->setStatut(Vrac::STATUT_CREE);
+        $vrac->save();
+
+        return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => 'validation'));
+    }
+
 	public function executeRefuserProjet(sfWebRequest $request)
 	{
 		$this->cleanSessions();
@@ -839,4 +862,10 @@ class vracActions extends sfActions
         return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
 
+    public function executeMergeAllAnnexes(sfWebRequest $request)
+    {
+        $vrac = $this->getRoute()->getVrac();
+        $this->secureVrac(VracSecurity::CONSULTATION, $vrac);
+        return $this->renderPdf($vrac->mergeAnnexesPdf(), "annexes_vrac_".$vrac->numero_contrat.".pdf");
+    }
 }
