@@ -46,7 +46,7 @@ EOF;
             }
         }
 
-        $imported = $this->vracimport->import(true, true);
+        $imported = $this->vracimport->import(true, VracClient::TYPE_CREATION_PAPIER);
         foreach ($imported as $id) {
             echo "Vrac importé : $id".PHP_EOL;
         }
