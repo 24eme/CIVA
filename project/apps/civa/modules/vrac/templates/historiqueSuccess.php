@@ -59,13 +59,14 @@
         <div class="clearfix"></div>
 
         <div class="px-1">
-            <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => false, 'archive' => true)) ?>
+            <?php include_partial('vrac/liste', array('vracs' => $vracs, 'tiers' => $sf_user->getDeclarantsVrac(), 'limite' => 50, 'page' => $page)) ?>
         </div>
     </div>
 
     <div id="col-filters" class="col-xs-3" style="border-left: 1px dashed #aeaeae;">
             <?php $current_filters = []; ?>
             <?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
+            <?php unset($current_filters['page']); ?>
 
             <div style="margin-bottom: 15px">
                 <div class="btn-group btn-block" style="display: flex; align-items: stretch; align-content: stretch;">
@@ -100,14 +101,10 @@
                 </a>
             </div>
 
-            <div class="input-group">
-                <span class="input-group-addon" style="background: white;"><span class="glyphicon glyphicon-search"></span></span>
-                <input type="text" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search">
-            </div>
-
-            <hr/>
+            <hr style="margin-top: 10px; margin-bottom: 10px;"/>
 
             <p style="margin-bottom: 5px;"><strong><?php echo count($vracs) ?></strong> contrat(s) trouvé(s)</p>
+
             <div class="active-filters-list">
                 <?php foreach ($current_filters as $filter => $filter_value): ?>
                     <div class="active-filter">
@@ -122,6 +119,15 @@
                     </div>
                 <?php endforeach ?>
             </div>
+
+            <form style="margin-top: 10px;" action="" method="GET">
+            <div class="input-group">
+                <input type="text" name="recherche" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search" value="<?php echo $query ?>">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default" style="background: white;"><span class="glyphicon glyphicon-search"></span></button>
+                 </span>
+            </div>
+            </form>
 
             <h4>Statuts</h4>
             <div class="list-group">
@@ -226,19 +232,6 @@
                             listgroup.querySelector('[data-sens] span').classList.add('glyphicon-chevron-down')
                             listgroup.querySelector('[data-sens]').dataset.sens = "more"
                         }
-                    }
-                })
-            }
-        })
-
-        col_filters.addEventListener('input', function (e) {
-            if (e.target.id === "soussignes_search") {
-                const terms = document.getElementById(e.target.id).value
-                table_soussignes.querySelectorAll('tbody tr').forEach(function (tr) {
-                    if (tr.textContent.toLowerCase().includes(terms.toLowerCase())) {
-                        tr.classList.remove('hidden')
-                    } else {
-                        tr.classList.add('hidden')
                     }
                 })
             }
