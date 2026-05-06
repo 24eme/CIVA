@@ -1425,6 +1425,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     }
 
     public function isImporte() {
-        return $this->exist('type_creation') && in_array($this->type_creation, [VracClient::TYPE_CREATION_IMPORT, VracClient::TYPE_CREATION_IMPORT_APPLICATION_AUTO]);
+        return $this->exist('type_creation') && in_array($this->type_creation, [VracClient::TYPE_CREATION_IMPORT, VracClient::TYPE_CREATION_IMPORT_APPLICATION_AUTO, VracClient::TYPE_CREATION_PAPIER]);
 	}
 }

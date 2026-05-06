@@ -31,7 +31,7 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
         $this->vracimport = new VracCsvImport($arguments['file'], null);
-        $this->vracimport->preimportChecks(VracClient::TYPE_CREATION_PAPIER);
+        $this->vracimport->preimportChecks(null, VracClient::TYPE_CREATION_PAPIER);
         $this->vracimport->import(false, VracClient::TYPE_CREATION_PAPIER);
 
         if ($this->vracimport->getErrors()) {
@@ -46,7 +46,7 @@ EOF;
             }
         }
 
-        $imported = $this->vracimport->import(true, true);
+        $imported = $this->vracimport->import(true, VracClient::TYPE_CREATION_PAPIER);
         foreach ($imported as $id) {
             echo "Vrac importé : $id".PHP_EOL;
         }

@@ -18,6 +18,15 @@
 				$item = $vrac->value;
 				$hasValidated = false;
 		?>
+        <?php
+            $counter++;
+            if ($counter <= $limite * ($page - 1)) {
+                continue;
+            }
+            if ($limite && $counter > $limite * $page) {
+                break;
+            }
+        ?>
         <tr>
             <td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
@@ -99,15 +108,30 @@
 				</ul>
 			</td>
 		</tr>
-			<?php
-				$counter++;
-				if ($limite && $counter == $limite) {
-					break;
-				}
-			endforeach;
-			?>
+        <?php endforeach; ?>
         <?php if(!count($vracs)): ?>
-            <tr><td colspan="6">Aucun contrat trouvé avec le filtrage actuel</td></tr>
+            <tr><td colspan="6" class="text-center" style="padding: 10px 0;">Aucun contrat trouvé avec le filtrage actuel</td></tr>
         <?php endif; ?>
 	</tbody>
 </table>
+
+<?php if(count($vracs)): ?>
+<?php $current_filters = []; ?>
+<?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
+<?php $lastpage = ceil(count($vracs) / $limite); ?>
+<div class="text-center">
+    <nav>
+        <ul class="pagination">
+            <?php if($page > 1): ?>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => 1])) ?>"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $page - 1])) ?>"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <?php endif; ?>
+            <li><a href="">page <?php echo $page ?> sur <?php echo $lastpage ?></a></li>
+            <?php if($page < $lastpage): ?>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $page + 1])) ?>"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $lastpage])) ?>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+</div>
+<?php endif; ?>
