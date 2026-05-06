@@ -79,6 +79,10 @@ class vracActions extends sfActions
                 unset($this->vracs[$key]);
             }
 
+            if($this->commercial && $vrac->value->commercial != $this->commercial) {
+                unset($this->vracs[$key]);
+            }
+
             if($this->query) {
                 $searchString = $vrac->value->numero.' '.$vrac->value->numero_papier.' '.$vrac->value->numero_visa.' '.$vrac->value->soussignes->vendeur->intitule . ' ' . $vrac->value->soussignes->vendeur->raison_sociale . ' ' . str_replace("ETABLISSEMENT-", "", $vrac->value->soussignes->vendeur->identifiant).' '.$vrac->value->soussignes->acheteur->intitule . ' ' . $vrac->value->soussignes->acheteur->raison_sociale . ' ' . str_replace("ETABLISSEMENT-", "", $vrac->value->soussignes->acheteur->identifiant).' '.$vrac->value->soussignes->mandataire->intitule . ' ' . $vrac->value->soussignes->mandataire->raison_sociale . ' ' . str_replace("ETABLISSEMENT-", "", $vrac->value->soussignes->mandataire->identifiant);
 
@@ -110,6 +114,7 @@ class vracActions extends sfActions
         $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
         $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'statutAction'));
         $this->facettes['temporalite'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'temporalite'));
+        $this->facettes['commercial'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'commercial'));
 
         $this->page = $request->getParameter('page', 1);
 

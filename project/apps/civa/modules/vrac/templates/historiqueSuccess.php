@@ -120,7 +120,7 @@
                 <?php endforeach ?>
             </div>
 
-            <form style="margin-top: 10px;" action="" method="GET">
+            <form style="margin-top: 15px; margin-bottom: 15px;" action="" method="GET">
             <div class="input-group">
                 <input type="text" name="recherche" id="soussignes_search" class="form-control" placeholder="Soussignés, n° de contrat, ..." aria-describedby="soussignes_search" value="<?php echo $query ?>">
                 <span class="input-group-btn">
@@ -128,6 +128,26 @@
                  </span>
             </div>
             </form>
+
+            <?php if(count($facettes['commercial']->getRawValue())): ?>
+            <h4>Commercial</h4>
+            <div class="list-group" data-max="0">
+                <a class="list-group-item list-group-item-xs <?php echo $commercial === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$commercial ? array_sum($facettes['commercial']->getRawValue()) : "?" ?></span></a>
+                <?php foreach ($facettes['commercial'] as $k => $s): ?>
+                    <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $commercial ? 'active' : null ?> <?php echo ($k !== $commercial) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => $k])) ?>">
+                        <span style="max-width: 150px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo ($k) ? $k : "Aucun" ?></span>
+                            <span class="badge pull-right" data-key="<?php echo $k; ?>">
+                                <?php echo $s ?>
+                            </span>
+                    </a>
+                <?php endforeach; ?>
+                <?php if(is_null($commercial)): ?>
+                <div class="list-group-item list-group-item-xs text-center" data-sens="more">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
 
             <h4>Statuts</h4>
             <div class="list-group">
@@ -160,7 +180,7 @@
             </div>
 
             <h4 style="margin-top: 15px;">Campagnes</h4>
-            <div class="list-group">
+            <div class="list-group" data-max="4">
                 <a class="list-group-item list-group-item-xs <?php echo $campagne === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['campagne' => null])) ?>">
                     Toutes les campagnes <span class="badge pull-right"><?php echo $campagne === null ? array_sum($facettes['campagne']->getRawValue()) : "?" ?></span>
                 </a>
@@ -213,7 +233,6 @@
 
     <script>
         const col_filters = document.getElementById('col-filters')
-        const table_soussignes = document.getElementById('soussignes_listing')
         const stats = document.querySelector('.vrac-stats-compteurs')
 
         col_filters.addEventListener('click', function (e) {
@@ -221,7 +240,7 @@
                 const sens = e.target.closest('[data-sens]').dataset.sens
                 const listgroup = e.target.closest('.list-group')
                 listgroup.querySelectorAll('.list-group-item').forEach(function (el, i) {
-                    if (i > 4 && el.dataset.sens == undefined) {
+                    if (i > listgroup.dataset.max && el.dataset.sens == undefined) {
                         el.classList.toggle('hidden')
                         if (sens === "more") {
                             listgroup.querySelector('[data-sens] span').classList.remove('glyphicon-chevron-down')
