@@ -173,10 +173,7 @@ class vracActions extends sfActions
 
     public function executeExportCSV(sfWebRequest $request)
     {
-		$this->compte = $this->getRoute()->getCompte();
-        $campagne = $request->getParameter('campagne', VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
-        $this->secureVrac(VracSecurity::DECLARANT, null);
-        $this->vracs = VracTousView::getInstance()->findSortedByDeclarants(VracClient::getInstance()->getEtablissements($this->compte->getSociete()), $campagne);
+		$this->getVracsFromRequest($request);
         $this->setLayout(false);
         $this->setResponseCsv(sprintf('%s_export-contrats-%s.csv', date('Ymd'), $campagne));
     }
