@@ -88,8 +88,8 @@
                       <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="<?php echo url_for('vracs_export_csv', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">CSV</a></li>
-                        <li><a href="<?php echo url_for('vracs_export_pdf', array('identifiant' => $compte->getIdentifiant(), 'campagne' => $campagne)) ?>">PDF</a></li>
+                        <li><a href="<?php echo url_for('vracs_export_csv', array('identifiant' => $compte->getIdentifiant())).'?'.http_build_query(array_merge($current_filters)) ?>">CSV</a></li>
+                        <li><a href="<?php echo url_for('vracs_export_pdf', array('identifiant' => $compte->getIdentifiant())).'?'.http_build_query(array_merge($current_filters)) ?>">PDF</a></li>
                     </ul>
                 </div>
                 <a class="btn btn-default btn-block" href="<?php echo url_for('annuaire') ?>">
