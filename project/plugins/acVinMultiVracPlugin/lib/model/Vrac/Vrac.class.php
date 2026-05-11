@@ -254,6 +254,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         return $this->_get('duree_annee');
     }
 
+    public function setDureeAnnee($dureeAnnee) {
+        $this->_set('duree_annee', intval($dureeAnnee));
+        return $this;
+    }
+
     public function initProduits()
     {
         if($this->type_contrat == VracClient::TYPE_RAISIN && $dr = DRClient::getInstance()->findLastByCvi($this->vendeur->cvi)) {
@@ -1427,4 +1432,21 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     public function isImporte() {
         return $this->exist('type_creation') && in_array($this->type_creation, [VracClient::TYPE_CREATION_IMPORT, VracClient::TYPE_CREATION_IMPORT_APPLICATION_AUTO, VracClient::TYPE_CREATION_PAPIER]);
 	}
+
+    public function getCampagnesApplications() {
+        if(!$this->isPluriannuelCadre()) {
+            return null;
+        }
+        $campagnes = [];
+        $annee = 1;
+        $campagne = $this->campagne;
+
+        while($annee <= $this->getDureeAnnee()) {
+            $campagnes[$campagne] = $campagne;
+            $annee ++;
+            $campagne = ConfigurationClient::getInstance()->getCampagneVinicole()->getNext($campagne);
+        }
+
+        return $campagnes;
+    }
 }

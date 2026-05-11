@@ -235,7 +235,7 @@ Vrac:
       type_creation: { }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
-      duree_annee: { required: false }
+      duree_annee: { required: false, type: integer }
       contrat_pluriannuel_mode_surface: { }
       prix_unite: { }
       date_modification: {  }
