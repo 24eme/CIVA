@@ -29,7 +29,12 @@ td.echeance {display: inline;}
 	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
 		<a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
             <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
-			<?php echo $vrac->getTypeDocumentLibelle(); ?> <?php echo strtolower($vrac->type_contrat) ?><?php if($vrac->isPluriannuelCadre()): ?> pluriannuel<?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
+            <?php echo $vrac->getTypeDocumentLibelle(); ?>
+            <?php echo strtolower($vrac->type_contrat) ?>
+            <?php if($vrac->isPluriannuelCadre()): ?>
+                <span title="Contrat sur <?php echo $vrac->getDureeAnnee() ?> ans" style="cursor: help; text-decoration: underline 2px dotted">pluriannuel</span>
+            <?php endif; ?>
+            <?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
 		</a>
 	</li>
 
@@ -101,7 +106,9 @@ td.echeance {display: inline;}
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
-                <th style="width: 280px;">Campagnes pluriannuelles</th>
+                <th style="width: 280px;">
+                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?></td>
+                </th>
     		</tr>
     	</thead>
     	<tbody>
