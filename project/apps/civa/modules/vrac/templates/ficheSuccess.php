@@ -25,18 +25,25 @@ td.echeance {display: inline;}
 #onglets_majeurs a {text-decoration: none; color: black;}
 </style>
 <div id="contrat_onglet">
-<ul id="onglets_majeurs" class="clearfix">
-	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
-		<a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
-            <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
-			<?php echo $vrac->getTypeDocumentLibelle(); ?> <?php echo strtolower($vrac->type_contrat) ?><?php if($vrac->isPluriannuelCadre()): ?> pluriannuel<?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
-		</a>
-	</li>
-
+<ul id="onglets_majeurs" class="clearfix text-nowrap" style="display: flex">
+    <div class="clearfix" style="flex-shrink: 0">
+        <li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
+            <a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
+                <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
+                <?php echo $vrac->getTypeDocumentLibelle(); ?>
+                <?php echo strtolower($vrac->type_contrat) ?>
+                <?php if($vrac->isPluriannuelCadre()): ?>
+                    <span title="Contrat sur <?php echo $vrac->getDureeAnnee() ?> ans" style="cursor: help; text-decoration: underline 2px dotted">pluriannuel</span>
+                <?php endif; ?>
+                <?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
+            </a>
+        </li>
+    </div>
     <?php if (count($contratsApplication)>0): ?>
+    <div class="clearfix" style="overflow: auto; display: inline-flex; min-width: 0; margin-right: 10px;">
 		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
 			<?php if($contratApplication): ?>
-                <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
+                <li class="<?php if ($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
                 <a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>" style="position: relative;"><?php echo $contratApplication->campagne ?></a></li>
             <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant) && $canGenerateNextApplication): ?>
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
@@ -44,18 +51,21 @@ td.echeance {display: inline;}
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="javascript:void(0)"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
 			<?php endif; ?>
 		<?php endforeach; ?>
+    </div>
     <?php endif; ?>
-	<li style="float: right; opacity: 0.2;">
-			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
-	</li>
-    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
-	<li style="float: right; opacity: 0.8;">
-			<span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
-	</li>
-    <?php endif; ?>
-    <li style="float: right">
-		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
-    </li>
+    <div class="clearfix" style="margin-left: auto; flex: 1 0 auto">
+        <li style="float: right; opacity: 0.2;">
+                <span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
+        </li>
+        <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
+        <li style="float: right; opacity: 0.8;">
+                <span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
+        </li>
+        <?php endif; ?>
+        <li style="float: right">
+            <span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
+        </li>
+    </div>
 </ul>
 </div>
 <div id="contrats_vrac" class="fiche_contrat">
@@ -101,7 +111,9 @@ td.echeance {display: inline;}
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
-                <th style="width: 280px;">Campagnes pluriannuelles</th>
+                <th style="width: 280px;">
+                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?></td>
+                </th>
     		</tr>
     	</thead>
     	<tbody>
