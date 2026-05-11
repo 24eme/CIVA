@@ -1161,7 +1161,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 	public function getContratsApplication() {
 		$contrats = array();
 		if ($this->isPluriannuelCadre() && $this->isValide()) {
-            $nbCampagnes = VracClient::getConfigVar('nb_campagnes_pluriannuel');
+            $nbCampagnes = count($this->getCampagnesApplications());
 			$millesime = substr($this->campagne, 0, 4) * 1;
             $maxMillesime = $millesime+$nbCampagnes;
             while($millesime < $maxMillesime) {
