@@ -123,8 +123,14 @@
             <?php elseif($vrac->isPluriannuelCadre()): ?>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
                 <div class="ligne_form_sm">
-					<label for="" class="bold">Campagnes d'application :</label>
-                    <span style="margin-left: 5px;"><?php $millesime = substr($vrac->campagne, 0, 4)*1; echo $millesime; ?> à <?php echo substr($vrac->campagne, 5) ?></span>
+                    <label for="" class="bold">Campagne de début :</label>
+                    <span style="margin-left: 5px;"><?php echo $vrac->campagne ?></span>
+                </div>
+            </div>
+            <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
+                <div class="ligne_form_sm">
+                    <label for="" class="bold">Durée du contrat :</label>
+                    <span style="margin-left: 5px;"><?php echo $vrac->getDureeAnnee() ?> ans</span>
                 </div>
             </div>
             <div class="form_col form_col_extended selecteur" style="padding-top: 0;">
@@ -413,9 +419,7 @@
 			$(this).parents(".selecteur").siblings(".cible").empty();
 		});
 
-
-
-        $("#vrac_soussignes_contrat_pluriannuel_1").click(function() {
+        /*$("#vrac_soussignes_contrat_pluriannuel_1").click(function() {
             $.fn.changeContratDuree();
         });
 
@@ -451,7 +455,7 @@
                     return text;
                 });
             });
-        }
+        }*/
 	});
 	</script>
 </div>
