@@ -30,7 +30,7 @@
         <tr>
             <td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
-					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
+					<img style="vertical-align: baseline" src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
 				<?php endif ?>
                 <?php
                     if(isset($item->reference_pluriannuel) && $item->reference_pluriannuel):
@@ -49,6 +49,7 @@
                     </svg>
                     </span>
                 <?php endif; ?>
+                <?php if($item->duree_annee): ?><br /><span class="badge mt-1"><small><?php echo $item->duree_annee ?> ans</small></span><?php endif; ?></td>
 			</td>
             <td class="col_numero"><?php if ($item->numero_visa) echo $item->numero_visa; elseif(isset($contratCadre)) echo $contratCadre->numero_visa."-".substr($item->campagne, 0, 4); else echo ""; ?></td>
             <td><?php echo str_replace(" ", "&nbsp;", format_date($item->date, 'p', 'fr')); ?></td>
