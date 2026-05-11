@@ -114,7 +114,9 @@ class vracActions extends sfActions
         $this->facettes['campagne'] = array_count_values(array_column(array_column($this->vracs, 'key'), 2));
         $this->facettes['statut'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'statutAction'));
         $this->facettes['temporalite'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'temporalite'));
-        $this->facettes['commercial'] = array_count_values(array_column(array_column($this->vracs, 'value'), 'commercial'));
+        $this->facettes['commercial'] = array_count_values(array_filter(array_column(array_column($this->vracs, 'value'), 'commercial'), function($value) {
+            return ! is_null($value);
+        }));
 
         $this->page = $request->getParameter('page', 1);
 
