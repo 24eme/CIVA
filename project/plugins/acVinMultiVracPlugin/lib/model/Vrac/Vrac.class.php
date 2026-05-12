@@ -1061,7 +1061,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 	public function isPapier() {
 
-        return ($this->exist('papier') && $this->papier) || $this->type_creation == VracClient::TYPE_CREATION_PAPIER;
+        return $this->type_creation == VracClient::TYPE_CREATION_PAPIER;
 	}
 
 	public function isInterne() {

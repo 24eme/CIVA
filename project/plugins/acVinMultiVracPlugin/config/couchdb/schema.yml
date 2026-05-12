@@ -248,8 +248,8 @@ Vrac:
       clause_renegociation_prix: { required: false }
       suivi_qualitatif: { required: false }
       delais_retiraison: { required: false }
-      papier: { required: false }
-      interne: { required: false }
+      papier: { required: false } # Déprécié
+      interne: { required: false } # Déprécié
       historique:
         type: array_collection
         required: false

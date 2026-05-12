@@ -418,44 +418,6 @@
 		$(".remove_autocomplete").click(function() {
 			$(this).parents(".selecteur").siblings(".cible").empty();
 		});
-
-        /*$("#vrac_soussignes_contrat_pluriannuel_1").click(function() {
-            $.fn.changeContratDuree();
-        });
-
-        $("#vrac_soussignes_campagne").click(function() {
-            $.fn.changeContratDuree();
-        });
-
-        $("#vrac_soussignes_duree_annee").click(function() {
-            $.fn.changeContratDuree();
-        });
-
-        $.fn.changeContratDuree = function() {
-            const campagneChoice = $("#vrac_soussignes_campagne option:selected").val().substring(0, 4);
-
-            const contratDureeObj = $("#vrac_soussignes_duree_annee");
-            let contratDureeOptions = contratDureeObj.find("option");
-            let contratFinUpdated = parseInt(campagneChoice)+2;
-            contratDureeOptions.each(function(index, contratDuree) {
-                const contratDebut = contratDuree.value.substring(0,4);
-                const contratFin = contratDuree.value.slice(-4);
-
-                contratFinUpdated++;
-
-                $(contratDuree).val(function(index, value) {
-                    value = value.replace(contratFin, contratFinUpdated.toString());
-                    value = value.replace(contratDebut, campagneChoice);
-                    return value;
-                });
-
-                $(contratDuree).text(function(index, text) {
-                    text = text.replace(contratFin, contratFinUpdated.toString());
-                    text = text.replace(contratDebut, campagneChoice);
-                    return text;
-                });
-            });
-        }*/
 	});
 	</script>
 </div>
