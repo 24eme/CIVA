@@ -26,7 +26,7 @@
             <?php else: ?>
                 <strong>Le projet de contrat a été généré</strong>
         <?php endif; ?>
-        <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "PROJET_ATTENTE_TRANSMISSION", 'campagne' => "*"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span>
+        <a style="position:absolute; right: 10px; top: 10px;" href="<?php echo url_for("vrac_historique", ['identifiant' => $csvVrac->identifiant, 'statut' => "EN_ATTENTE"]) ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-share-alt"></span>
         <?php if (count($vracimport->getContratsImportables()) > 1): ?>
             Voir les projets qui viennent d'être importés
         <?php else: ?>
