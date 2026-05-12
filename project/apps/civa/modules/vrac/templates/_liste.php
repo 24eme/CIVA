@@ -30,7 +30,7 @@
         <tr>
             <td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
-                    <img style="vertical-align: baseline" src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->type_creation == VracClient::TYPE_CREATION_PAPIER) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
+                    <img style="vertical-align: baseline" src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
 				<?php endif ?>
                 <?php
                     if(isset($item->reference_pluriannuel) && $item->reference_pluriannuel):
