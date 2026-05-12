@@ -219,7 +219,7 @@ class VracCsvImport extends CsvFile
             return $this->numeroContratExistants;
         }
         if(!$this->getEtablissementAcheteur()) {
-            return;
+            return [];
         }
         $this->numeroContratExistants = [];
         foreach (VracTousView::getInstance()->findBy($this->getEtablissementAcheteur()->_id, null, VracClient::TYPE_RAISIN) as $existingVrac) {
@@ -387,11 +387,15 @@ class VracCsvImport extends CsvFile
                     $v->vendeur_assujetti_tva = $this->guessBool('Vendeur assujetti tva', $line[self::CSV_VENDEUR_TVA]);
                     $v->storeVendeurInformations($vendeur);
 
-                    if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET]) {
+                    if ($line[self::CSV_COURTIER_MANDATAIRE_SIRET] || $line[self::CSV_COURTIER_MANDATAIRE_NOM]) {
+                        $siret = $line[self::CSV_COURTIER_MANDATAIRE_SIRET];
+                        if(strlen($siret) == 14) {
+                            $siret = substr($siret, 0, 9);
+                        }
                         try {
-                            $mandataire = $this->guessId($line[self::CSV_COURTIER_MANDATAIRE_SIRET]);
+                            $mandataire = $this->guessId($siret);
                         } catch (Exception $e) {
-                            $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$line[self::CSV_COURTIER_MANDATAIRE_SIRET]."] (".$e->getMessage().")");
+                            $this->addError(self::$line, "operateur_inexistant", "L'identifiant du mandataire n'a pas été reconnu [".$siret."] (".$e->getMessage().")");
                             continue;
                         }
                         $v->mandataire_identifiant = $mandataire->_id;
