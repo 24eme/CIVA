@@ -169,12 +169,12 @@ class VracClient extends acCouchdbClient {
 	        $delais["7_JOURS"] = "Paiement sous 7 jours";
 		}
 
-        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuelCadre()) {
+        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && $vrac->isPluriannuel()) {
             $delais["MENSUEL"] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
             $delais["4_TRANCHES"] = "En 4 tranches égales comprises entre le 15 janvier et le 15 septembre de l'année suivant la récolte";
 		}
 
-        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuelCadre()) {
+        if(in_array($vrac->type_contrat, array(VracClient::TYPE_RAISIN, VracClient::TYPE_MOUT)) && !$vrac->isPluriannuel()) {
             $delais["MENSUEL"] = "Selon une fréquence mensuelle ne pouvant excéder le 15 septembre de l'année suivant la récolte";
             $delais["30_JOURS"] = "Délai légal : 30 jours après la date de livraison";
             $delais["7_JOURS"] = "Paiement sous 7 jours";
