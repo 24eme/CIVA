@@ -977,10 +977,6 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     protected function doSave()
     {
-    	if ($this->valide->statut == self::STATUT_ENLEVEMENT || $this->valide->statut == self::STATUT_CLOTURE) {
-        	$this->date_modification = date('Y-m-d');
-    	}
-
 		if($this->isNew()) {
 			$this->add('clause_reserve_propriete', null);
 			$this->add('clause_mandat_facturation', null);
@@ -1001,8 +997,11 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
 		if(count($this->getStatutsChanged())) {
             $this->removePDFHistorise();
+            $this->date_modification = date('Y-m-d');
 		}
-
+        if(!$this->_get('prix_unite')) {
+            $this->prix_unite = $this->getPrixUnite();
+        }
         $this->updateTotaux();
     }
 
