@@ -25,16 +25,21 @@ function(doc) {
     temporalite = "PLURIANNUEL_APPLICATION";
   }
 
+  var duree_annee = null;
+  if (doc.contrat_pluriannuel && doc.duree_annee) {
+    duree_annee = doc.duree_annee;
+  }
+
 	if (doc.vendeur_identifiant) {
 		var is_proprietaire = (doc.vendeur_identifiant == doc.createur_identifiant)? 1 : 0;
-    emit([doc.vendeur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "vendeur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite});
+    emit([doc.vendeur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "vendeur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite, duree_annee: duree_annee});
 	}
 	if (doc.acheteur_identifiant) {
 		var is_proprietaire = (doc.acheteur_identifiant == doc.createur_identifiant)? 1 : 0;
-    emit([doc.acheteur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "acheteur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite});
+    emit([doc.acheteur_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "acheteur", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite, duree_annee: duree_annee});
 	}
 	if (doc.mandataire_identifiant) {
 		var is_proprietaire = (doc.mandataire_identifiant == doc.createur_identifiant)? 1 : 0;
-		emit([doc.mandataire_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "mandataire", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite});
+		emit([doc.mandataire_identifiant, type_contrat, doc.campagne, doc.valide.statut], {role: "mandataire", soussignes: {vendeur: vendeur, acheteur: acheteur, mandataire: mandataire}, is_proprietaire: is_proprietaire, date: date, statut: statut, numero: numero, numero_visa: numero_visa, numero_papier: numero_papier, etape: etape, type_contrat: type_contrat, papier: papier, commercial: (commercial && is_proprietaire ? commercial : null), pluriannuel: pluriannuel, reference_pluriannuel: reference_pluriannuel, campagne: doc.campagne, temporalite: temporalite, duree_annee: duree_annee});
 	}
 }

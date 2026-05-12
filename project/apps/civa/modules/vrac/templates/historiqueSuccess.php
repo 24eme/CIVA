@@ -130,9 +130,9 @@
             </form>
 
             <?php if(count($facettes['commercial']->getRawValue())): ?>
-            <h4>Commercial</h4>
+            <h4>Commerciaux</h4>
             <div class="list-group" data-max="0">
-                <a class="list-group-item list-group-item-xs <?php echo $commercial === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$commercial ? array_sum($facettes['commercial']->getRawValue()) : "?" ?></span></a>
+                <a class="list-group-item list-group-item-xs <?php echo $commercial === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$commercial ? array_sum($facettes['statut']->getRawValue()) : "?" ?></span></a>
                 <?php foreach ($facettes['commercial'] as $k => $s): ?>
                     <a title="<?php echo $s ?>" class="list-group-item list-group-item-xs <?php echo $k === $commercial ? 'active' : null ?> <?php echo ($k !== $commercial) ? "hidden" : "" ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => $k])) ?>">
                         <span style="max-width: 150px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;"><?php echo ($k) ? $k : "Aucun" ?></span>

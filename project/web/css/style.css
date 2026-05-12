@@ -223,6 +223,9 @@ table#soussignes_listing tbody td {
     padding: 3px;
     vertical-align: middle;
 }
+table#soussignes_listing tbody td .badge {
+    background: transparent; border: 1px solid #7e8601; color: #7e8601;
+}
 table#soussignes_listing .liste_actions li
 {
 	background: transparent 0 50% no-repeat;
