@@ -40,7 +40,7 @@ td.echeance {display: inline;}
         </li>
     </div>
     <?php if (count($contratsApplication)>0): ?>
-    <div class="clearfix" style="overflow: auto; display: inline-flex; min-width: 0; margin-right: 10px;">
+    <div class="clearfix" style="overflow: auto; display: inline-flex; min-width: 0; margin-right: 10px; padding-bottom: 10px; margin-bottom: -14px; z-index: 100;">
 		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
 			<?php if($contratApplication): ?>
                 <li class="<?php if ($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
