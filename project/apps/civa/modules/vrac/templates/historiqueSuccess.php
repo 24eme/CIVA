@@ -219,7 +219,7 @@
                         echo " &nbsp; ";
                         break;
                 } ?></span>
-                    <span style="max-width: 135px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                    <span style="max-width: 130px; display: inline-block; text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden;">
                         <?php echo $s ?>
                     </span>
                     <span class="badge pull-right">
