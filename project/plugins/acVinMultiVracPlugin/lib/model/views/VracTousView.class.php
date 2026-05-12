@@ -88,7 +88,7 @@ class VracTousView extends acCouchdbView
                 unset($result[$key]);
                 continue;
             }
-            if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
+            if($item->type_creation == VracClient::TYPE_CREATION_PAPIER && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
                 unset($result[$key]);
                 continue;
             }
