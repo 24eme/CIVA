@@ -7,13 +7,20 @@ if ($lastApplication && !$lastApplication->isCloture()) {
 }
 ?>
 
-<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
+<div class="d-flex d-flex-pull-end d-flex-vertical-center" style="margin-bottom: 10px;">
+    <div class="btn_header">
+        <div class="statut"><?php if($vrac->ispapier()): ?>saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?></div>
+    </div>
+
+    <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
 	<div class="btn_header">
-		<a style="padding-left: 30px; margin-bottom: 10px;" class="btn_majeur btn_noir" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
+		<a style="padding-left: 30px;" class="btn_majeur btn_noir" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
 			<svg style="position: absolute; left: 10px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg> <?php if($vrac->isValide()): ?>Annuler<?php else: ?>Supprimer<?php endif; ?>
 		</a>
 	</div>
-<?php endif; ?>
+    <?php endif; ?>
+</div>
+
 <style media="screen">.printonly {display: none;}</style>
 <style  media="print">
 .noprint, strong.responsable, #actions_fiche, #titre_rubrique .utilisateur, #logo, #acces_directs, .btn_header, .modal, #footer, #ajax_notifications,  .popup_ajout, .popup_loader, .produits thead {display: none; }
@@ -62,9 +69,6 @@ td.echeance {display: inline;}
                 <span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
         </li>
         <?php endif; ?>
-        <li style="float: right">
-            <span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
-        </li>
     </div>
 </ul>
 </div>
@@ -112,7 +116,7 @@ td.echeance {display: inline;}
     	<thead>
     		<tr>
                 <th style="width: 280px;">
-                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?></td>
+                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?>
                 </th>
     		</tr>
     	</thead>

@@ -65,11 +65,16 @@ class ExportVracPdf extends ExportDocument {
         $header = str_pad($header, $nbCharHeader - strlen($header), " ", STR_PAD_RIGHT);
         $header .= "du ".strftime('%d/%m/%Y', strtotime($this->vrac->valide->date_validation));
 
+        $header .= "\n";
+
         if($this->vrac->isPluriannuelCadre()) {
-            $header .= "\n\nCAMPAGNES D'APPLICATION DE ".VracSoussignesForm::getCampagnesChoices()[$this->vrac->campagne];
+            $header .= "\nCONTRAT CADRE SUR ".$this->vrac->duree_annee." ANS DE ".array_key_first($this->vrac->getCampagnesApplications())." À ".array_key_last($this->vrac->getCampagnesApplications());
         }
+
         if($this->vrac->isApplicationPluriannuel()) {
-            $header .= "\n\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
+            $vracCadre = $this->vrac->getContratPluriannuelCadre();
+            $header .= "\nCONTRAT D'APPLICATION ".$this->vrac->campagne;
+            $header .= "\nDU CONTRAT CADRE N°".$vracCadre->numero_visa." SUR ".$vracCadre->duree_annee." ANS DE ".array_key_first($vracCadre->getCampagnesApplications())." À ".array_key_last($vracCadre->getCampagnesApplications());
         }
 
         if ($this->vrac->isAnnule()) {

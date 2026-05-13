@@ -125,9 +125,11 @@ class vracActions extends sfActions
 
         $this->hasDoubt = true;
         $etablissements = VracClient::getInstance()->getEtablissements($this->getUser()->getCompte()->getSociete());
+        $this->isCourtier = false;
         foreach($etablissements as $etablissement) {
             if($etablissement->getFamille() == EtablissementFamilles::FAMILLE_COURTIER) {
                 $this->hasDoubt = false;
+                $this->isCourtier = true;
             }
             if(count($etablissements) == 1 && in_array($etablissement->getFamille(), array(EtablissementFamilles::FAMILLE_PRODUCTEUR, EtablissementFamilles::FAMILLE_PRODUCTEUR_VINIFICATEUR))) {
                 $this->hasDoubt = false;
