@@ -108,6 +108,12 @@ input[type=radio]
 .f_left { display: inline; float: left; }
 .f_right { display: inline; float: right; }
 
+.d-flex { display: flex !important }
+.d-block { display: block !important; }
+.d-inline-block { display: inline-block !important; }
+
+.d-flex-pull-end { justify-content: end; }
+.d-flex-vertical-center { align-items: center; }
 
 .clearfix
 {
