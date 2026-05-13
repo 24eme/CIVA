@@ -44,6 +44,13 @@
 {
 	padding: 0 20px 0 0;
 	text-align: right;
+
+    .statut {
+        font-weight: bold;
+        &:first-letter {
+            text-transform: uppercase;
+        }
+    }
 }
 
 #contrats_vrac input.input_long { width: 450px !important; }
