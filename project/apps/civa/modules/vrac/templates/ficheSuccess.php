@@ -116,7 +116,7 @@ td.echeance {display: inline;}
     	<thead>
     		<tr>
                 <th style="width: 280px;">
-                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?></td>
+                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?>
                 </th>
     		</tr>
     	</thead>

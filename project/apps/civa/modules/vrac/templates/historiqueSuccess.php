@@ -129,7 +129,7 @@
             </div>
             </form>
 
-            <?php if(count($facettes['commercial']->getRawValue())): ?>
+            <?php if(count($facettes['commercial']->getRawValue()) && $isCourtier): ?>
             <h4>Commerciaux</h4>
             <div class="list-group" data-max="0">
                 <a class="list-group-item list-group-item-xs <?php echo $commercial === null ? 'active' : null ?>" href="<?php echo '?'.http_build_query(array_merge($current_filters, ['commercial' => null])) ?>">Tous <span class="badge pull-right"><?php echo !$commercial ? array_sum($facettes['statut']->getRawValue()) : "?" ?></span></a>

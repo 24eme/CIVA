@@ -17,6 +17,7 @@
 				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
+        <?php if($vrac->type_contrat != VracClient::TYPE_RAISIN): ?>
         <tr>
 			<td>
 				CVO AOC à la charge du vendeur
@@ -25,6 +26,7 @@
 				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2024_2025.pdf">Organisation du marché 2024/2025</a>)</small>
 			</td>
 		</tr>
+		<?php endif; ?>
 		<?php endif; ?>
         <?php if($vrac->exist('acheteur_primes_diverses')): ?>
         <tr>
