@@ -221,7 +221,7 @@ class ExportDRJson
             $produits[$produit["codeProduit"]] = $produit;
         }
 
-        if(array_key_exists("1S001M", $produits)) {
+        if(array_key_exists("1S001M", $produits) && array_key_exists("produitsAssocies", $produits["1B001MST"])) {
             $ratio = $produits["1S001M"]["conserveCaveParticuliereExploitant"] / $produits["1B001MST"]["conserveCaveParticuliereExploitant"];
             $produits["1S001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
             $produits["1S001M"]["produitsAssocies"][0]["codeProduitAssocie"] = "4S999B";
@@ -231,11 +231,11 @@ class ExportDRJson
                 }
                 $produits["1S001M"]["produitsAssocies"][0][$key] = round($produits["1S001M"]["produitsAssocies"][0][$key] * $ratio, 2);
                 $produits["1B001MST"]["produitsAssocies"][0][$key] -= $produits["1S001M"]["produitsAssocies"][0][$key];
-                $produits["1S001M"]["produitsAssocies"][0][$key] = strval($produits["1S001M"]["produitsAssocies"][0][$key]);
-                $produits["1B001MST"]["produitsAssocies"][0][$key] = strval($produits["1B001MST"]["produitsAssocies"][0][$key]);
+                $produits["1S001M"]["produitsAssocies"][0][$key] = number_format($produits["1S001M"]["produitsAssocies"][0][$key], 2, ".", "");
+                $produits["1B001MST"]["produitsAssocies"][0][$key] = number_format($produits["1B001MST"]["produitsAssocies"][0][$key], 2, ".", "");
             }
         }
-        if(array_key_exists("1B001M", $produits)) {
+        if(array_key_exists("1B001M", $produits) && array_key_exists("produitsAssocies", $produits["1B001MST"])) {
             $produits["1B001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
         }
 
