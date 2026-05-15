@@ -218,10 +218,27 @@ class ExportDRJson
                 $produit["produitsAssocies"][] = $produitAssocie;
             }
 
-            $produits[] = $produit;
+            $produits[$produit["codeProduit"]] = $produit;
         }
 
-        return $produits;
+        if(array_key_exists("1S001M", $produits)) {
+            $ratio = $produits["1S001M"]["conserveCaveParticuliereExploitant"] / $produits["1B001MST"]["conserveCaveParticuliereExploitant"];
+            $produits["1S001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
+            foreach($produits["1S001M"]["produitsAssocies"][0] as $key => $value) {
+                if(!is_numeric($value)) {
+                    continue;
+                }
+                $produits["1S001M"]["produitsAssocies"][0][$key] = round($produits["1S001M"]["produitsAssocies"][0][$key] * $ratio, 2);
+                $produits["1B001MST"]["produitsAssocies"][0][$key] -= $produits["1S001M"]["produitsAssocies"][0][$key];
+                $produits["1S001M"]["produitsAssocies"][0][$key] = strval($produits["1S001M"]["produitsAssocies"][0][$key]);
+                $produits["1B001MST"]["produitsAssocies"][0][$key] = strval($produits["1B001MST"]["produitsAssocies"][0][$key]);
+            }
+        }
+        if(array_key_exists("1B001M", $produits)) {
+            $produits["1B001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
+        }
+
+        return array_values($produits);
     }
 
     protected function getSites($produits)
