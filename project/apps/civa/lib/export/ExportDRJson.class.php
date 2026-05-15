@@ -224,6 +224,7 @@ class ExportDRJson
         if(array_key_exists("1S001M", $produits)) {
             $ratio = $produits["1S001M"]["conserveCaveParticuliereExploitant"] / $produits["1B001MST"]["conserveCaveParticuliereExploitant"];
             $produits["1S001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
+            $produits["1S001M"]["produitsAssocies"][0]["codeProduitAssocie"] = "4S999B";
             foreach($produits["1S001M"]["produitsAssocies"][0] as $key => $value) {
                 if(!is_numeric($value)) {
                     continue;
@@ -237,6 +238,8 @@ class ExportDRJson
         if(array_key_exists("1B001M", $produits)) {
             $produits["1B001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
         }
+
+        unset($produits["1B001MST"]);
 
         return array_values($produits);
     }
