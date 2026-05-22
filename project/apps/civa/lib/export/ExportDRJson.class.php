@@ -80,54 +80,6 @@ class ExportDRJson
     {
         $produits = [];
 
-        // foreach($this->dr->getProduitsDetails() as $detail) {
-        //     $produit = [];
-        //     $produit["typeRecoltant"] = "EX";
-        //     $produit["zoneRecolte"] = "B";
-        //     $produit["codeProduit"] = $detail->getConfig()->code_douane;
-        //     $produit['mentionValorisante'] = $detail->getMentionValorisante();
-        //     $produit["superficieRecolte"] = $detail->getTotalSuperficie();
-        //     $produit["recolteTotale"] = $detail->getTotalVolume();
-        //     if($detail->getTotalCaveParticuliere()) {
-        //         $produit["conserveCaveParticuliereExploitant"] = $detail->getTotalCaveParticuliere();
-        //     }
-        //     $produit["volVinifie"] = $detail->getTotalCaveParticuliere();
-        //     $produit["volVinRevendicableOuCommercialisable"] = $detail->getVolumeRevendiqueCaveParticuliere();
-        //     if($detail->getUsagesIndustriels()) {
-        //         $produit["volDRAOuLiesSoutirees"] = $detail->getUsagesIndustriels();
-        //     }
-        //     if($detail->getTotalVci()) {
-        //         $produit["VCI"] = $detail->getTotalVci();
-        //     }
-        //     foreach($detail->getVolumeAcheteurs("negoces") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvDestinataire" => $cvi."",
-        //             "volObtenuIssuRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("negoces", $cvi) - $detail->getTotalDontVciVendusByCviRatio("negoces", $cvi), 2),
-        //         ];
-        //         $produit["destinationVentesRaisins"][] = $vente;
-        //     }
-        //
-        //     foreach($detail->getVolumeAcheteurs("mouts") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvDestinataire" => $cvi."",
-        //             "volObtenuIssuMouts" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("mouts", $cvi) - $detail->getTotalDontVciVendusByCviRatio("mouts", $cvi), 2),
-        //         ];
-        //         $produit["destinationVentesMouts"][] = $vente;
-        //     }
-        //
-        //     foreach($detail->getVolumeAcheteurs("cooperatives") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvCaveCoop" => $cvi."",
-        //             "volObtenuApportRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("cooperatives", $cvi) - $detail->getTotalDontVciVendusByCviRatio("cooperatives", $cvi), 2),
-        //         ];
-        //         $produit["destinationApportsCaveCoop"][] = $vente;
-        //     }
-        //
-        //     $produits[] = $produit;
-        // }
-        //
-        // return $produits;
-
         $correspondanceNumLigneJson = [
             "L5" => "recolteTotale",
             "L9" => "conserveCaveParticuliereExploitant",

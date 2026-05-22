@@ -191,7 +191,8 @@ class ExportDRXml {
         }
 
         if (preg_match("|cepage_RB|", $object->getHash())) {
-            $col['exploitant']['L14'] = $object->getTotalVolume();
+            $col['exploitant']['L5'] = $col['exploitant']['L9'];
+            $col['exploitant']['L14'] = $col['exploitant']['L9'];
             $col['exploitant']['L15'] = 0;
             $col['exploitant']['L16'] = 0;
             $col['exploitant']['L19'] = 0;
