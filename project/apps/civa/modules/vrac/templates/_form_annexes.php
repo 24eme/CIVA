@@ -7,6 +7,12 @@
     </ul>
 </fieldset>
 
+<?php if(!$vrac->isPapier() && $vrac->hasAnnexes()): ?>
+<p class="intro_contrat_vrac">Liste des annexes applicables au contrat :</p>
+<?php include_partial('vrac/ficheAnnexes', array('vrac' => $vrac, 'fiche' => false, 'edit' => true)); ?>
+<?php endif; ?>
+
+
 <?php if(!$vrac->isPapier()): ?>
 <table class="validation table_donnees">
 	<thead>
@@ -34,11 +40,6 @@
 		</tr>
 	</tbody>
 </table>
-<?php endif; ?>
-
-<?php if(!$vrac->isPapier()): ?>
-<p class="intro_contrat_vrac">Liste des annexes applicables au contrat.</p>
-<?php include_partial('vrac/ficheAnnexes', array('vrac' => $vrac, 'fiche' => false, 'edit' => true)); ?>
 <?php endif; ?>
 
 <script type="text/javascript">

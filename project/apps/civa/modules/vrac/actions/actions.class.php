@@ -387,7 +387,7 @@ class vracActions extends sfActions
 
         try {
             $application = $this->vrac->getContratDeReference()->generateNextPluriannuelApplication();
-            $this->formApplication = $this->getForm($application, VracEtapes::ETAPE_PRODUITS);
+            $this->formApplication = new VracProduitsForm($application, ['formGeneration' => true]);
 			$this->validationApplication = new VracContratValidation($application);
         } catch (Exception $e) {
 		    $this->formApplication = null;
@@ -428,7 +428,7 @@ class vracActions extends sfActions
         $this->forward404Unless($nextContratApplication);
         $this->forward404Unless($nextContratApplication->numero_contrat == $contratPluriannuel->numero_contrat.$campagne);
 
-        $this->form = $this->getForm($nextContratApplication, VracEtapes::ETAPE_PRODUITS);
+        $this->form = new VracProduitsForm($nextContratApplication, ['formGeneration' => true]);
         $this->validation = new VracContratValidation($nextContratApplication);
         $this->forward404Unless(!$this->validation->hasPoints());
 
