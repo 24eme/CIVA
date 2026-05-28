@@ -68,6 +68,9 @@ class VracCepage extends BaseVracCepage
         	$detail->position = isset($config['position'])? (int)$config['position'] : null;
         	$detail->supprimable = isset($config['supprimable'])? (int)$config['supprimable'] : null;;
         }
+        if($this->getDocument()->isApplicationPluriannuel()) {
+            $detail->millesime = substr($this->getDocument()->campagne, 0, 4);
+        }
         return $detail;
     }
     
