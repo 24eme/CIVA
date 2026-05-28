@@ -1,8 +1,5 @@
 <?php use_helper('vrac') ?>
-<?php
-if ($vrac->hasAnnexes()):
-$annexes = $vrac->getAllAnnexesFilename();
-?>
+
 <table class="validation table_donnees">
     <thead>
         <tr>
@@ -18,7 +15,7 @@ $annexes = $vrac->getAllAnnexesFilename();
         </tr>
     </thead>
 	<tbody>
-        <?php foreach($annexes as $annexeFilename => $annexe): ?>
+        <?php foreach($vrac->getAllAnnexesFilename() as $annexeFilename => $annexe): ?>
 		<tr class="<?php echo isVersionnerCssClass($vrac, "_attachments/$annexeFilename/content_type") ?>">
 			<td colspan="2">
                 <a style="padding:0 5px; text-decoration:none" href="<?php echo url_for('vrac_annexe', ['sf_subject' => $vrac, 'operation' => 'visualiser', 'annexe' => $annexe]) ?>">
@@ -37,6 +34,3 @@ $annexes = $vrac->getAllAnnexesFilename();
         <?php endforeach; ?>
 	</tbody>
 </table>
-<?php elseif($edit): ?>
-<p style="font-style: italic; color: #666;">Aucune annexe téléversée.</p>
-<?php endif; ?>
