@@ -13,7 +13,7 @@ class VracProduitCollectionForm extends sfForm
     {
     	foreach ($this->details as $details) {
 			foreach ($details as $hash => $detail) {
-				$this->embedForm($hash, new VracProduitForm($detail));
+                $this->embedForm($hash, new VracProduitForm($detail, $this->getOptions()));
 			}
     	}
     }
