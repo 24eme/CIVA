@@ -62,7 +62,7 @@
 				Clause de réserve de propriété
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'clause_reserve_propriete') ?>">
-				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
+				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true, 'temporalite' => $vrac->isPluriannuel() ? 'pluriannuel' : 'annuel')) ?>">verso du contrat</a>)</small>
 
 			</td>
 		</tr>
