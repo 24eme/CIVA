@@ -29,9 +29,13 @@ EOF;
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
         sfContext::createInstance($this->configuration);
 
-        $queue = VracContratsView::getInstance()->findByStatut(Vrac::STATUT_PROJET_ATTENTE_TRANSMISSION);
+        $queue = VracTousView::getInstance()->findAll();
 
         foreach ($queue as $doc_result) {
+            if ($doc_result->key[3] !== Vrac::STATUT_PROJET_ATTENTE_TRANSMISSION) {
+                continue;
+            }
+
             $vrac = null;
             $vrac = VracClient::getInstance()->find($doc_result->id);
 
