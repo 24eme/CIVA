@@ -10,6 +10,7 @@ class VracSendMailsTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('debug', null, sfCommandOption::PARAMETER_OPTIONAL, 'Info in STDOUT', false),
         ]);
 
         $this->namespace = 'vrac';
@@ -27,7 +28,16 @@ EOF;
     {
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        sfContext::createInstance($this->configuration);
+
+        $context = sfContext::createInstance($this->configuration);
+
+        $routing = $context->getRouting();
+        $_options = $routing->getOptions();
+        $_options['context']['prefix'] = ""; // "/frontend_dev.php" for dev; or "" for prod
+        $_options['context']['host'] = str_replace(['https://', 'http://'], '', sfConfig::get('app_base_url'));
+        $routing->initialize($this->dispatcher, $routing->getCache(), $_options);
+        $context->getConfiguration()->loadHelpers('Partial');
+        $context->set('routing', $routing);
 
         $queue = VracTousView::getInstance()->findAll();
 
@@ -48,8 +58,11 @@ EOF;
                 $vrac->validate();
                 $vrac->save();
                 VracMailer::getInstance()->sendMailsByStatutsChanged($vrac);
+                if ($options['debug']) {
+                    echo $doc_result->id . ": Mail envoyé à ".implode(', ', $vrac->getStatutsChanged()).PHP_EOL;
+                }
             } catch (\Exception $e) {
-                echo $doc_result->_id.":".$e->getMessage().PHP_EOL;
+                echo $doc_result->id.":".$e->getMessage().PHP_EOL;
                 continue;
             }
         }

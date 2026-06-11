@@ -706,16 +706,22 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
 
     public function updateValideStatut()
     {
-    	$valide = true;
-    	if ($this->vendeur_identifiant && !$this->valide->date_validation_vendeur) {
-    		$valide = false;
-    	}
-    	if ($this->acheteur_identifiant && !$this->valide->date_validation_acheteur) {
-    		$valide = false;
-    	}
-    	if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire && !$this->isAcheteurProprietaire()) {
-    		$valide = false;
-    	}
+        $valide = true;
+        if ($this->vendeur_identifiant && !$this->valide->date_validation_vendeur) {
+            $valide = false;
+        }
+        if ($this->acheteur_identifiant && !$this->valide->date_validation_acheteur) {
+            $valide = false;
+        }
+        if ($this->mandataire_identifiant && !$this->valide->date_validation_mandataire) {
+            if ($this->isImporte()) {
+                $valide = false;
+            }
+            if (!$this->isAcheteurProprietaire()) {
+                $valide = false;
+            }
+        }
+    }
         if ($valide && $this->isPluriannuelCadre()) {
             $this->setStatut(self::STATUT_VALIDE_CADRE);
             $this->valide->email_cloture = date('Y-m-d');
