@@ -10,6 +10,7 @@ class VracSendMailsTask extends sfBaseTask
             new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'civa'),
             new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
             new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'default'),
+            new sfCommandOption('debug', null, sfCommandOption::PARAMETER_OPTIONAL, 'Info in STDOUT', false),
         ]);
 
         $this->namespace = 'vrac';
@@ -57,8 +58,11 @@ EOF;
                 $vrac->validate();
                 $vrac->save();
                 VracMailer::getInstance()->sendMailsByStatutsChanged($vrac);
+                if ($options['debug']) {
+                    echo $doc_result->id . ": Mail envoyé à ".implode(', ', $vrac->getStatutsChanged()).PHP_EOL;
+                }
             } catch (\Exception $e) {
-                echo $doc_result->_id.":".$e->getMessage().PHP_EOL;
+                echo $doc_result->id.":".$e->getMessage().PHP_EOL;
                 continue;
             }
         }
