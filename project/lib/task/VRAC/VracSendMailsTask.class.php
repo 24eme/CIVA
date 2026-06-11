@@ -27,7 +27,16 @@ EOF;
     {
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
-        sfContext::createInstance($this->configuration);
+
+        $context = sfContext::createInstance($this->configuration);
+
+        $routing = $context->getRouting();
+        $_options = $routing->getOptions();
+        $_options['context']['prefix'] = ""; // "/frontend_dev.php" for dev; or "" for prod
+        $_options['context']['host'] = str_replace(['https://', 'http://'], '', sfConfig::get('app_base_url'));
+        $routing->initialize($this->dispatcher, $routing->getCache(), $_options);
+        $context->getConfiguration()->loadHelpers('Partial');
+        $context->set('routing', $routing);
 
         $queue = VracTousView::getInstance()->findAll();
 
