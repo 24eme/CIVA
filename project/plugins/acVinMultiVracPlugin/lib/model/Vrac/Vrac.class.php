@@ -396,7 +396,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->acheteur->adresse = $tiers->siege->adresse;
     	$this->acheteur->code_postal = $tiers->siege->code_postal;
     	$this->acheteur->commune = $tiers->siege->commune;
-    	$this->acheteur->telephone = $tiers->telephone;
+        $this->acheteur->telephone = $tiers->telephone_bureau;
     	$this->acheteur->famille = $tiers->getFamille();
     	$this->acheteur->identifiant = $tiers->_id;
 
@@ -418,7 +418,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->vendeur->adresse = $tiers->siege->adresse;
     	$this->vendeur->code_postal = $tiers->siege->code_postal;
     	$this->vendeur->commune = $tiers->siege->commune;
-    	$this->vendeur->telephone = $tiers->telephone;
+        $this->vendeur->telephone = $tiers->telephone_bureau;
     	$this->vendeur->famille = $tiers->getFamille();
     	$this->vendeur->identifiant = $tiers->_id;
 
@@ -437,7 +437,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
     	$this->mandataire->adresse = $tiers->siege->adresse;
     	$this->mandataire->code_postal = $tiers->siege->code_postal;
     	$this->mandataire->commune = $tiers->siege->commune;
-    	$this->mandataire->telephone = $tiers->telephone;
+        $this->mandataire->telephone = $tiers->telephone_bureau;
     	$this->mandataire->famille = $tiers->getFamille();
     	$this->mandataire->identifiant = $tiers->_id;
     	$this->mandataire->num_db2 = $tiers->num_interne;
