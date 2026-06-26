@@ -102,7 +102,7 @@ class compteActions extends sfActions {
      * @param sfWebRequest $request
      */
     public function executeLogout(sfWebRequest $request) {
-        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.class.php');
+        require_once(sfConfig::get('sf_lib_dir').'/vendor/phpCAS/CAS.php');
         $this->getUser()->signOut();
 
         $url = 'http'.($request->isSecure() ? 's': null).'://'.$request->getHost();
