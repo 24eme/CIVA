@@ -28,7 +28,7 @@ class compteActions extends sfActions {
         if ($request->getParameter('ticket')) {
             /** CAS * */
             error_reporting(E_ALL);
-            require_once(sfConfig::get('sf_lib_dir') . '/vendor/phpCAS/CAS.class.php');
+            require_once(sfConfig::get('sf_lib_dir') . '/vendor/phpCAS/CAS.php');
             phpCAS::client(CAS_VERSION_2_0, sfConfig::get('app_cas_domain'), sfConfig::get('app_cas_port'), sfConfig::get('app_cas_path'), false);
             phpCAS::setNoCasServerValidation();
             $this->getContext()->getLogger()->debug('{sfCASRequiredFilter} about to force auth');
