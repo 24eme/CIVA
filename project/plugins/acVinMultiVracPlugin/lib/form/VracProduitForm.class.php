@@ -38,17 +38,18 @@ class VracProduitForm extends acCouchdbObjectForm
             unset($this->validatorSchema['label']);
         }
         if ($this->getObject()->getDocument()->isApplicationPluriannuel()) {
-            $this->setWidget('millesime', new sfWidgetFormInputHidden());
-            $this->setWidget('denomination', new sfWidgetFormInputHidden());
-            $this->setWidget('label', new sfWidgetFormInputHidden());
-            if ($this->getObject()->getDocument()->isPremiereApplication()) {
-                $this->setWidget('prix_unitaire', new sfWidgetFormInputHidden());
-                if ($this->getObject()->getDocument()->getContratPluriannuelCadre() && !$this->getObject()->getDocument()->getContratPluriannuelCadre()->isInModeSurface()) {
-                    $this->setWidget('volume_propose', new sfWidgetFormInputHidden());
-                }
-                if ($this->getObject()->getDocument()->type_contrat == VracClient::TYPE_RAISIN) {
-                    $this->setWidget('surface_propose', new sfWidgetFormInputHidden());
-                }
+            unset($this->widgetSchema['millesime']);
+            unset($this->validatorSchema['millesime']);
+
+            if($this->getOption('formGeneration')) {
+                unset($this['label']);
+                unset($this['denomination']);
+            }
+
+            if ($this->getObject()->getDocument()->isPremiereApplication() && $this->getOption('formGeneration')) {
+                unset($this['prix_unitaire']);
+                unset($this['volume_propose']);
+                unset($this['surface_propose']);
             }
         }
 
@@ -73,16 +74,16 @@ class VracProduitForm extends acCouchdbObjectForm
     protected function updateDefaultsFromObject() {
         parent::updateDefaultsFromObject();
 
-        if($this->getObject()->exist('label') && ($this->getObject()->label === false || $this->getObject()->label === "0")) {
+        if($this->getObject()->exist('label') && ($this->getObject()->label === false || $this->getObject()->label === "0") && isset($this->widgetSchema['label'])) {
             $this->setDefault('label', 'AUCUNE');
         }
 
 
-        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['volume_propose'])) {
+        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['volume_propose']) && !$this->getObject()->getDocument()->isValide()) {
             $this->setDefault('volume_propose', null);
         }
 
-        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['prix_unitaire'])) {
+        if ($this->getObject()->getDocument()->isApplicationPluriannuel() && !$this->getObject()->getDocument()->isPremiereApplication() && isset($this->widgetSchema['prix_unitaire']) && !$this->getObject()->getDocument()->isValide()) {
             $this->setDefault('prix_unitaire', null);
         }
     }

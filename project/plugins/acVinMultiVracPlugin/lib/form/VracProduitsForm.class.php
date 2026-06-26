@@ -3,7 +3,7 @@ class VracProduitsForm extends acCouchdbObjectForm
 {    
 	public function configure()
     {
-        $this->embedForm('produits', new VracProduitCollectionForm($this->getObject()->declaration->getProduitsDetailsSorted()));
+        $this->embedForm('produits', new VracProduitCollectionForm($this->getObject()->declaration->getProduitsDetailsSorted(), [], $this->getOptions()));
         $this->widgetSchema->setNameFormat('vrac_produits[%s]');
     }
     

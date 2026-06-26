@@ -7,13 +7,20 @@ if ($lastApplication && !$lastApplication->isCloture()) {
 }
 ?>
 
-<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
+<div class="d-flex d-flex-pull-end d-flex-vertical-center" style="margin-bottom: 10px;">
+    <div class="btn_header">
+        <div class="statut"><?php if($vrac->ispapier()): ?>saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?></div>
+    </div>
+
+    <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SUPPRESSION)): ?>
 	<div class="btn_header">
-		<a style="padding-left: 30px; margin-bottom: 10px;" class="btn_majeur btn_noir" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
+		<a style="padding-left: 30px;" class="btn_majeur btn_noir" href="<?php echo url_for('vrac_supprimer', $vrac) ?>">
 			<svg style="position: absolute; left: 10px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg> <?php if($vrac->isValide()): ?>Annuler<?php else: ?>Supprimer<?php endif; ?>
 		</a>
 	</div>
-<?php endif; ?>
+    <?php endif; ?>
+</div>
+
 <style media="screen">.printonly {display: none;}</style>
 <style  media="print">
 .noprint, strong.responsable, #actions_fiche, #titre_rubrique .utilisateur, #logo, #acces_directs, .btn_header, .modal, #footer, #ajax_notifications,  .popup_ajout, .popup_loader, .produits thead {display: none; }
@@ -25,18 +32,25 @@ td.echeance {display: inline;}
 #onglets_majeurs a {text-decoration: none; color: black;}
 </style>
 <div id="contrat_onglet">
-<ul id="onglets_majeurs" class="clearfix">
-	<li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
-		<a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
-            <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
-			<?php echo $vrac->getTypeDocumentLibelle(); ?> <?php echo strtolower($vrac->type_contrat) ?><?php if($vrac->isPluriannuelCadre()): ?> pluriannuel<?php endif; ?><?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
-		</a>
-	</li>
-
+<ul id="onglets_majeurs" class="clearfix text-nowrap" style="display: flex">
+    <div class="clearfix" style="flex-shrink: 0">
+        <li class="<?php if($vrac->isApplicationPluriannuel()): ?>ui-tabs<?php else: ?>ui-tabs-selected<?php endif; ?>" style="position: relative;">
+            <a style="height: 18px; padding-left: 25px;" href="<?php echo url_for('vrac_fiche', $vrac->getContratDeReference()) ?>">
+                <span style="position: absolute; left: 7px; top: 4px; font-size: 17px;" class="icon-<?php echo strtolower($vrac->type_contrat) ?>"></span>
+                <?php echo $vrac->getTypeDocumentLibelle(); ?>
+                <?php echo strtolower($vrac->type_contrat) ?>
+                <?php if($vrac->isPluriannuelCadre()): ?>
+                    <span title="Contrat sur <?php echo $vrac->getDureeAnnee() ?> ans" style="cursor: help; text-decoration: underline 2px dotted">pluriannuel</span>
+                <?php endif; ?>
+                <?php if ($vrac->getContratDeReference()->numero_archive): ?> (visa n° <?php echo $vrac->getContratDeReference()->numero_archive ?>)<?php endif; ?>
+            </a>
+        </li>
+    </div>
     <?php if (count($contratsApplication)>0): ?>
+    <div class="clearfix" style="overflow: auto; display: inline-flex; min-width: 0; margin-right: 10px; padding-bottom: 10px; margin-bottom: -14px; z-index: 100;">
 		<?php foreach($contratsApplication as $numContratApplication => $contratApplication): ?>
 			<?php if($contratApplication): ?>
-                <li class="<?php if($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
+                <li class="<?php if ($contratApplication->_id == $vrac->_id): ?>ui-tabs-selected<?php else: ?>ui-tabs<?php endif; ?>">
                 <a href="<?php echo url_for('vrac_fiche', $contratApplication) ?>" style="position: relative;"><?php echo $contratApplication->campagne ?></a></li>
             <?php elseif($formApplication && $numContratApplication == $formApplication->getObject()->numero_contrat && ($user && $user->_id == $vrac->createur_identifiant) && $canGenerateNextApplication): ?>
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="" class="generationContratApplication" data-target="#popup_generation_contratApplication"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
@@ -44,18 +58,18 @@ td.echeance {display: inline;}
                 <li class="ui-tabs" style="opacity: 0.5;"><a href="javascript:void(0)"><?php echo substr($numContratApplication, -4).'-'.(substr($numContratApplication, -4)+1) ?></a></li>
 			<?php endif; ?>
 		<?php endforeach; ?>
+    </div>
     <?php endif; ?>
-	<li style="float: right; opacity: 0.2;">
-			<span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
-	</li>
-    <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
-	<li style="float: right; opacity: 0.8;">
-			<span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
-	</li>
-    <?php endif; ?>
-    <li style="float: right">
-		<span class="statut"><?php if($vrac->isPapier()): ?>Saisie papier<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($vrac->valide->statut) ?><?php endif; ?>
-    </li>
+    <div class="clearfix" style="margin-left: auto; flex: 1 0 auto">
+        <li style="float: right; opacity: 0.2;">
+                <span><a href="<?php echo ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN))? url_for('vrac_mercuriale', $vrac) : "javascript:void(0)"; ?>">Merc. <?php echo $vrac->getMercurialeValue(); ?></a></span>
+        </li>
+        <?php if ($sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN) && $vrac->isValide()): ?>
+        <li style="float: right; opacity: 0.8;">
+                <span><a href="<?php echo url_for('vrac_etape', ['sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_PRODUITS]);  ?>" style="background: #f90;">Modifier</a></span>
+        </li>
+        <?php endif; ?>
+    </div>
 </ul>
 </div>
 <div id="contrats_vrac" class="fiche_contrat">
@@ -64,7 +78,10 @@ td.echeance {display: inline;}
 		<?php echo $form->renderHiddenFields() ?>
 		<?php echo $form->renderGlobalErrors() ?>
 	<?php endif; ?>
-	<div class="fond">
+    <div class="fond" style="position:relative;">
+        <?php if($vrac->numero_papier): ?>
+        <small class="text-muted" style="position: absolute; right: 20px; top: 10px; opacity: 0.3;">N° Interne <?php echo $vrac->numero_papier ?></small>
+        <?php endif; ?>
 
 		<?php if($sf_user->hasFlash('notice')) : ?>
 			<p class="flash_message" style="margin-bottom: 20px;"><?php echo $sf_user->getFlash('notice'); ?></p>
@@ -98,7 +115,9 @@ td.echeance {display: inline;}
     <table class="validation table_donnees" style="width: 400px;">
     	<thead>
     		<tr>
-                <th style="width: 280px;">Campagnes pluriannuelles</th>
+                <th style="width: 280px;">
+                    Campagnes pluriannuelles <?php if ($vrac->duree_annee): ?><small style="font-size:80%; vertical-align: center;">(<?php echo $vrac->duree_annee ?> ans)</small><?php endif; ?>
+                </th>
     		</tr>
     	</thead>
     	<tbody>
@@ -145,6 +164,9 @@ td.echeance {display: inline;}
                 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_CLOTURE) && !$vrac->isPluriannuelCadre()): ?>
                     <a class="noprint" style="bottom: 6px; color: #2A2A2A; text-decoration: none; margin-right: 10px; opacity: 0.4;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la clotûre de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_cloture', $vrac) ?>" title="Action disponible uniquement en mode admin">Forcer la clotûre <span class="glyphicon glyphicon-info-sign"></span> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#666" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg></a>
                 <?php endif; ?>
+                <?php if ($vrac->valide->statut == Vrac::STATUT_PROJET_ATTENTE_TRANSMISSION): ?>
+                    <p>Le projet a été validé il sera transmis automatiquement dans moins de 24 heures. Si besoin vous pouvez encore <a href="<?php echo url_for('vrac_reouvrir_projet', $vrac) ?>">réouvrir ce projet</a></p>
+                <?php endif; ?>
 				<?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE)): ?>
                     <?php if ($vrac->isProjetAcheteur()): ?>
                     <a href="<?php echo url_for('vrac_refuser_projet', array('sf_subject' => $vrac)) ?>" style="margin-right: 50px;" onclick="return confirm('Etes-vous sûr de vouloir refuser ce projet de contrat ?')">
@@ -169,18 +191,18 @@ td.echeance {display: inline;}
                 <?php elseif(!VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::SIGNATURE) && $vrac->isProjetAcheteur()): ?>
                     <p>En attente de signature par le vendeur</p>
                 <?php endif; ?>
-				<?php if(!$vrac->isValide() && $user->_id && $vrac->hasValide($user->_id)): ?>
+                <?php if(!$vrac->isValide() && $user && $user->_id && $vrac->hasValide($user->_id)): ?>
 					<p>Vous avez signé le contrat le <strong><?php echo format_date($vrac->getUserDateValidation($user->_id), 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 				<?php if ($form): ?>
                     <button type="submit" class="btn_majeur btn_vert btn_grand btn_upper_case">Valider<?php if(!$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)): ?> vos enlèvements<?php endif; ?></button>
 				<?php endif; ?>
 				<?php if(!$form && $vrac->isCloture() && ! $vrac->isPapier()): ?>
-					<p>Contrat vrac <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
+                    <p>Contrat <?php if($vrac->isPapier()): ?>papier<?php else: ?>télédéclaré<?php endif; ?> numéro de visa <?php echo $vrac->numero_archive ?>, cloturé le <strong><?php echo format_date($vrac->valide->date_cloture, 'p', 'fr') ?></strong></p>
 				<?php endif; ?>
 
                 <?php if(VracSecurity::getInstance($compte, $vrac)->isAuthorized(VracSecurity::FORCE_VALIDATION)): ?>
-                    <p style="margin-top: 5px;"><a class="noprint" style="color: #2A2A2A; text-decoration: none; opacity: 0.4;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la validation de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_validation', $vrac) ?>" title="Action disponible uniquement en mode admin">Forcer la validation <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#666" class="bi bi-info-circle-fill" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg></a></p>
+                    <a class="noprint" style="color: #2A2A2A; text-decoration: none; opacity: 0.4; position: absolute; bottom: 10px; right: 20px;" onclick="return confirm('Êtes-vous sûr de vouloir forcer la validation de ce contrat ?');" class="btn_majeur btn_petit btn_jaune" href="<?php echo url_for('vrac_forcer_validation', $vrac) ?>" title="Action disponible uniquement en mode admin">Mode administrateur pour forcer la validation</a>
                 <?php endif; ?>
 			</td>
 		</tr>

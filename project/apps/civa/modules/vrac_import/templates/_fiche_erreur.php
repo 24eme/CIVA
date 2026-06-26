@@ -21,7 +21,14 @@
         <td>
             <ul style="margin-bottom: 0; list-style-type: circle; list-style-position: inside;">
             <?php foreach ($listeerreurs as $e): ?>
+            <?php if ($e->csv_erreur == "contrat_existant"): ?>
+                <a href=<?php echo url_for('vrac_fiche', array('numero_contrat' => substr($e->diagnostic, -12, -1))); ?>
+                    <li style='text-decoration: underline;'><?php echo $e->diagnostic; ?></li>
+                </a>
+            <?php else: ?>
                 <li><?php echo $e->diagnostic; ?></li>
+            <?php endif; ?>
+
             <?php endforeach ?>
             </ul>
         </td>
@@ -70,3 +77,13 @@
         <span class="glyphicon glyphicon-repeat"></span> Reverser un fichier corrigé
     </button>
 </div>
+
+<script>
+    const btn = document.querySelector('button[type="submit"][form]')
+    const form = btn.form
+
+    form.addEventListener('submit', function (e) {
+        btn.setAttribute('disabled', '');
+        btn.innerHTML = "<span class='glyphicon glyphicon-refresh glyphicon-spinner'></span> Import en cours"
+    })
+</script>

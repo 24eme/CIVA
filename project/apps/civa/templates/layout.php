@@ -12,14 +12,14 @@
         printf(html_entity_decode($title) , $sf_request->getParameter('annee', date("Y"))); ?>
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link href="/css/global.css?202212120029" rel="stylesheet">
+    <link href="/css/global.css?202605010137" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/components/vins/vins.css" rel="stylesheet">
     <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <link href="/components/select2/select2.css" rel="stylesheet">
     <link href="/components/select2/select2-bootstrap.min.css" rel="stylesheet">
-    <link href="/css/style.css?202212120029" rel="stylesheet">
+    <link href="/css/style.css?202605010137" rel="stylesheet">
   </head>
   <body id="declaration_recolte" class="<?php if(acCouchdbManager::getClient("Current")->hasCurrentFromTheFuture()): ?>bttf<?php endif; ?>">
     <!-- #global -->
@@ -30,7 +30,7 @@
                                                        'isAuthenticated' => $sf_user->isAuthenticated())); ?>
        <div id="contenu">
            <?php if(sfConfig::get('app_instance') == 'preprod' ): ?>
-             <div style="margin-top: -15px; margin-bottom: 5px;"><p style="color:red; text-align:center; font-weight: bold;">Preproduction (la base est succeptible d'être supprimée à tout moment)</p></div>
+             <div style="margin-top: -5px; margin-bottom: -5px; font-size: 12px;"><p style="color:red; text-align:center; font-weight: bold;">Preproduction (la base est succeptible d'être supprimée à tout moment)</p></div>
            <?php endif; ?>
            <?php include_partial('global/errorFlash') ?>
            <?php echo $sf_content ?>

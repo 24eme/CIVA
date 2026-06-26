@@ -90,13 +90,10 @@ class VracSoussignesForm extends acCouchdbObjectForm
         $this->setValidator('prix_unite', new sfValidatorChoice(array('choices' => array_keys($unites), 'required' => false)));
         $this->getWidgetSchema()->setLabel('prix_unite', "Unité de prix :");
 
-        $this->setWidget('duree_annee', new sfWidgetFormChoice(array('choices' => $this->getDureeContratCurrentMillesime())));
-        $this->setWidget('duree_annee_select', new sfWidgetFormInputHidden());
-
+        $this->setWidget('duree_annee', new sfWidgetFormChoice(array('choices' => $this->getDureesContrat())));
         $this->getWidget('duree_annee')->setLabel('Pour une durée de');
 
-        $this->setValidator('duree_annee', new ValidatorVracChoices(array('required' => false, 'choices' => array_keys($this->getDureeContratCurrentMillesime()))));
-        $this->setValidator('duree_annee_select', new sfValidatorString(array('required' => false)));
+        $this->setValidator('duree_annee', new sfValidatorChoice(array('required' => false, 'choices' => array_keys($this->getDureesContrat()))));
 
         $this->validatorSchema->setPostValidator(new VracSoussignesValidator($this->getObject()));
         $this->widgetSchema->setNameFormat('vrac_soussignes[%s]');
@@ -105,6 +102,14 @@ class VracSoussignesForm extends acCouchdbObjectForm
     public static function getCurrentCampagne() {
         $campagne_manager = new CampagneManager('12-01');
         return $campagne_manager->getCampagneByDate(date('Y-m-d'));
+    }
+
+    public static function getDureesContrat() {
+        $annees = [];
+        for($i = VracClient::getConfigVar('nb_campagnes_pluriannuel'); $i<=10; $i++) {
+            $annees[$i] =  $i . ' ans';
+        }
+        return $annees;
     }
 
     public static function getDureeContratCurrentMillesime() {
@@ -203,6 +208,9 @@ class VracSoussignesForm extends acCouchdbObjectForm
         } else {
             if ($values['campagne']) {
                 $this->getObject()->campagne = $values['campagne'];
+            }
+            if ($values['duree_annee']) {
+                $this->getObject()->add('duree_annee', intval($values['duree_annee']));
             }
         }
 		if ($values['prix_unite']) {

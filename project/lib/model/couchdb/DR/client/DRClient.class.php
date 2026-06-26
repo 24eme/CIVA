@@ -2,6 +2,7 @@
 
 class DRClient extends acCouchdbClient {
 
+  const TYPE_MODEL = "DR";
   const AUTORISATION_ACHETEURS = 'ACHETEURS';
   const AUTORISATION_AVA = 'AVA';
   const VALIDEE_PAR_RECOLTANT = "RECOLTANT";

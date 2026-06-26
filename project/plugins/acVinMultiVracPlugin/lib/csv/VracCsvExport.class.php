@@ -5,7 +5,7 @@ class VracCsvExport
 
     public static function header() {
         $f = fopen('php://memory', 'r+');
-        fputcsv($f, VracCsvImport::$headers, ';');
+        fputcsv($f, array_merge(VracCsvImport::$headers, VracCsvImport::$extra_headers), ';');
         rewind($f);
         return "\xef\xbb\xbf".stream_get_contents($f);
     }
@@ -28,7 +28,7 @@ class VracCsvExport
              ($contrat->vendeur->intitule) ? $contrat->vendeur->intitule . ' ' .$contrat->vendeur->raison_sociale : $contrat->vendeur->raison_sociale,
              $contrat->vendeur_assujetti_tva,
              $contrat->mandataire->siret,
-             ($contrat->mandataire->intitule) ? $contrat->mandataire->intitule . ' ' .$contrat->mandataire->raison_sociale : $contrat->mandataire->raison_sociale,
+             ($contrat->mandataire->intitule ? $contrat->mandataire->intitule . ' ' : null) . $contrat->mandataire->raison_sociale . ($contrat->interlocuteur_commercial->nom ? " (".$contrat->interlocuteur_commercial->nom.')' : null),
              $produit->getConfig()->getCertification()->getLibelle(),
              $produit->getConfig()->getGenre()->getLibelle(),
              str_replace($produit->getConfig()->getCertification()->getLibelle().' ', '', $produit->getConfig()->getAppellation()->getLibelle()),

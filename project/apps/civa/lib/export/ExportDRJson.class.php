@@ -80,54 +80,6 @@ class ExportDRJson
     {
         $produits = [];
 
-        // foreach($this->dr->getProduitsDetails() as $detail) {
-        //     $produit = [];
-        //     $produit["typeRecoltant"] = "EX";
-        //     $produit["zoneRecolte"] = "B";
-        //     $produit["codeProduit"] = $detail->getConfig()->code_douane;
-        //     $produit['mentionValorisante'] = $detail->getMentionValorisante();
-        //     $produit["superficieRecolte"] = $detail->getTotalSuperficie();
-        //     $produit["recolteTotale"] = $detail->getTotalVolume();
-        //     if($detail->getTotalCaveParticuliere()) {
-        //         $produit["conserveCaveParticuliereExploitant"] = $detail->getTotalCaveParticuliere();
-        //     }
-        //     $produit["volVinifie"] = $detail->getTotalCaveParticuliere();
-        //     $produit["volVinRevendicableOuCommercialisable"] = $detail->getVolumeRevendiqueCaveParticuliere();
-        //     if($detail->getUsagesIndustriels()) {
-        //         $produit["volDRAOuLiesSoutirees"] = $detail->getUsagesIndustriels();
-        //     }
-        //     if($detail->getTotalVci()) {
-        //         $produit["VCI"] = $detail->getTotalVci();
-        //     }
-        //     foreach($detail->getVolumeAcheteurs("negoces") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvDestinataire" => $cvi."",
-        //             "volObtenuIssuRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("negoces", $cvi) - $detail->getTotalDontVciVendusByCviRatio("negoces", $cvi), 2),
-        //         ];
-        //         $produit["destinationVentesRaisins"][] = $vente;
-        //     }
-        //
-        //     foreach($detail->getVolumeAcheteurs("mouts") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvDestinataire" => $cvi."",
-        //             "volObtenuIssuMouts" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("mouts", $cvi) - $detail->getTotalDontVciVendusByCviRatio("mouts", $cvi), 2),
-        //         ];
-        //         $produit["destinationVentesMouts"][] = $vente;
-        //     }
-        //
-        //     foreach($detail->getVolumeAcheteurs("cooperatives") as $cvi => $volume) {
-        //         $vente = [
-        //             "numeroEvvCaveCoop" => $cvi."",
-        //             "volObtenuApportRaisins" => round($volume - $detail->getTotalDontDplcVendusByCviRatio("cooperatives", $cvi) - $detail->getTotalDontVciVendusByCviRatio("cooperatives", $cvi), 2),
-        //         ];
-        //         $produit["destinationApportsCaveCoop"][] = $vente;
-        //     }
-        //
-        //     $produits[] = $produit;
-        // }
-        //
-        // return $produits;
-
         $correspondanceNumLigneJson = [
             "L5" => "recolteTotale",
             "L9" => "conserveCaveParticuliereExploitant",
@@ -218,10 +170,30 @@ class ExportDRJson
                 $produit["produitsAssocies"][] = $produitAssocie;
             }
 
-            $produits[] = $produit;
+            $produits[$produit["codeProduit"]] = $produit;
         }
 
-        return $produits;
+        if(array_key_exists("1S001M", $produits) && array_key_exists("produitsAssocies", $produits["1B001MST"])) {
+            $ratio = $produits["1S001M"]["conserveCaveParticuliereExploitant"] / $produits["1B001MST"]["conserveCaveParticuliereExploitant"];
+            $produits["1S001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
+            $produits["1S001M"]["produitsAssocies"][0]["codeProduitAssocie"] = "4S999B";
+            foreach($produits["1S001M"]["produitsAssocies"][0] as $key => $value) {
+                if(!is_numeric($value)) {
+                    continue;
+                }
+                $produits["1S001M"]["produitsAssocies"][0][$key] = round($produits["1S001M"]["produitsAssocies"][0][$key] * $ratio, 2);
+                $produits["1B001MST"]["produitsAssocies"][0][$key] -= $produits["1S001M"]["produitsAssocies"][0][$key];
+                $produits["1S001M"]["produitsAssocies"][0][$key] = number_format($produits["1S001M"]["produitsAssocies"][0][$key], 2, ".", "");
+                $produits["1B001MST"]["produitsAssocies"][0][$key] = number_format($produits["1B001MST"]["produitsAssocies"][0][$key], 2, ".", "");
+            }
+        }
+        if(array_key_exists("1B001M", $produits) && array_key_exists("produitsAssocies", $produits["1B001MST"])) {
+            $produits["1B001M"]["produitsAssocies"] = $produits["1B001MST"]["produitsAssocies"];
+        }
+
+        unset($produits["1B001MST"]);
+
+        return array_values($produits);
     }
 
     protected function getSites($produits)

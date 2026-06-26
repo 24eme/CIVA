@@ -48,8 +48,13 @@ class vrac_exportActions extends sfActions
     public function executeAnnexe(sfWebRequest $request)
     {
         $type_contrat = $request->getParameter('type_contrat', VracClient::TYPE_VRAC);
-        $path_verso = Document::getLastByFilename(sfConfig::get('sf_web_dir').'/helpPdf/', 'contrat_de_vente_annuel_'.strtolower($type_contrat).'_verso.pdf');
-        $filename = 'contrat_de_vente_annuel_'.strtolower($type_contrat).'_verso.pdf';
+        $temporalite = $request->getParameter('temporalite', VracClient::TEMPORALITE_ANNUEL);
+        $temporalite = strtolower($temporalite);
+        if (in_array($temporalite, ['annuel', 'pluriannuel']) === false) {
+            $temporalite = 'annuel';
+        }
+        $filename = sprintf('contrat_de_vente_%s_%s_verso.pdf', $temporalite, strtolower($type_contrat));
+        $path_verso = Document::getLastByFilename(sfConfig::get('sf_web_dir').'/helpPdf/', $filename);
         $this->getResponse()->setHttpHeader('Content-Type', 'application/pdf');
         $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . basename($filename) . '"');
         $this->getResponse()->setHttpHeader('Content-Transfer-Encoding', 'binary');

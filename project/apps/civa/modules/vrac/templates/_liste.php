@@ -16,42 +16,42 @@
 			$counter = 0;
 			foreach ($vracs as $vrac):
 				$item = $vrac->value;
-				if (!$archive && ($item->statut == Vrac::STATUT_CLOTURE || $item->statut == Vrac::STATUT_ANNULE)) {
-					continue;
-				}
-				if (in_array($item->statut, array(Vrac::STATUT_CREE)) && !$item->is_proprietaire) {
-					continue;
-				}
-				if($item->papier && in_array($item->statut, array(Vrac::STATUT_CREE)) && !$sf_user->hasCredential(CompteSecurityUser::CREDENTIAL_ADMIN)) {
-					continue;
-				}
 				$hasValidated = false;
 		?>
+        <?php
+            $counter++;
+            if ($counter <= $limite * ($page - 1)) {
+                continue;
+            }
+            if ($limite && $counter > $limite * $page) {
+                break;
+            }
+        ?>
         <tr>
             <td class="col_type" style="text-align: left;">
 				<?php if($item->type_contrat): ?>
-					<img src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?><?php echo ($item->papier) ? '_orange' : null ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
+                    <img style="vertical-align: baseline" src="/images/pictos/pi_<?php echo strtolower($item->type_contrat); ?>.png" title="Contrat de <?php echo strtolower($item->type_contrat); ?>" alt="<?php echo strtolower($item->type_contrat); ?>" />
 				<?php endif ?>
-                <?php $object = VracClient::getInstance()->find($vrac->id, acCouchdbClient::HYDRATE_JSON); ?>
                 <?php
-                    if(isset($object->reference_contrat_pluriannuel) && $object->reference_contrat_pluriannuel):
-                        $contratCadre = VracClient::getInstance()->find($object->reference_contrat_pluriannuel, acCouchdbClient::HYDRATE_JSON);
+                    if(isset($item->reference_pluriannuel) && $item->reference_pluriannuel):
+                        $contratCadre = VracClient::getInstance()->find($item->reference_pluriannuel, acCouchdbClient::HYDRATE_JSON);
                 ?>
-                    <span title="Contrat d'application <?php echo substr($object->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo $contratCadre->numero_visa ?>">
+                    <span title="Contrat d'application <?php echo substr($item->campagne, 0, 4) ?> du contrat pluriannuel n°<?php echo $contratCadre->numero_visa ?>">
                         <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file" viewBox="0 0 16 16" >
                             <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
                         </svg>
                     </span>
-                <?php elseif(isset($object->contrat_pluriannuel) && $object->contrat_pluriannuel): ?>
-                    <span title="Contrat pluriannuel<?php echo ($object->numero_visa)? ' n°'.$object->numero_visa : ''; ?>">
+                <?php elseif(isset($item->pluriannuel) && $item->pluriannuel): ?>
+                    <span title="Contrat pluriannuel<?php echo ($item->numero_visa)? ' n°'.$item->numero_visa : ''; ?>">
                     <svg style="color: #7e8601; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
                       <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
                       <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
                     </svg>
                     </span>
+                    <br /><span class="badge mt-1"><small><?php echo $item->duree_annee ? $item->duree_annee : "3" ?> ans</small></span>
                 <?php endif; ?>
 			</td>
-			<td class="col_numero"><?php if ($item->numero_visa) echo $item->numero_visa; elseif(isset($contratCadre)) echo $contratCadre->numero_visa."-".substr($object->campagne, 0, 4); else echo ""; ?></td>
+            <td class="col_numero"><?php if ($item->numero_visa) echo $item->numero_visa; elseif(isset($contratCadre)) echo $contratCadre->numero_visa."-".substr($item->campagne, 0, 4); else echo ""; ?></td>
             <td><?php echo str_replace(" ", "&nbsp;", format_date($item->date, 'p', 'fr')); ?></td>
 			<td>
 				<ul class="liste_soussignes">
@@ -64,7 +64,7 @@
                                 }
                             }
 					?>
-					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier && $item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Vendeur : <strong>
+                    <li class="<?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && $item->soussignes->vendeur->date_validation): ?>soussigne_valide<?php elseif($item->type_creation != VracClient::TYPE_CREATION_PAPIER): ?>soussigne_attente<?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && !array_key_exists($item->soussignes->vendeur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Vendeur : <strong>
 					<?php $rs = ($item->soussignes->vendeur->intitule)? $item->soussignes->vendeur->intitule.' '.$item->soussignes->vendeur->raison_sociale : $item->soussignes->vendeur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong><?php if ($item->soussignes->vendeur->date_validation): ?> <img src="" alt="" /><?php endif; ?></li>
 					<?php endif; ?>
@@ -77,7 +77,7 @@
                             }
                         }
 					?>
-					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier && $item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Acheteur : <strong>
+					<li class="<?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && $item->soussignes->acheteur->date_validation): ?>soussigne_valide<?php elseif($item->type_creation != VracClient::TYPE_CREATION_PAPIER): ?>soussigne_attente<?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && !array_key_exists($item->soussignes->acheteur->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Acheteur : <strong>
 						<?php $rs = ($item->soussignes->acheteur->intitule)? $item->soussignes->acheteur->intitule.' '.$item->soussignes->acheteur->raison_sociale : $item->soussignes->acheteur->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong></li>
 					<?php endif; ?>
@@ -90,13 +90,13 @@
                             }
                         }
 					?>
-					<li class="<?php if (!$item->papier && array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if (!$item->papier  && $item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php elseif(!$item->papier): ?>soussigne_attente<?php endif; ?><?php if (!$item->papier && !array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Courtier :  <strong>
+					<li class="<?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>soussigne_moi <?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER  && $item->soussignes->mandataire->date_validation): ?>soussigne_valide<?php elseif($item->type_creation != VracClient::TYPE_CREATION_PAPIER): ?>soussigne_attente<?php endif; ?><?php if ($item->type_creation != VracClient::TYPE_CREATION_PAPIER && !array_key_exists($item->soussignes->mandataire->identifiant, $tiers->getRawValue())): ?>_grey<?php endif; ?>">Courtier :  <strong>
 							<?php $rs = ($item->soussignes->mandataire->intitule)? $item->soussignes->mandataire->intitule.' '.$item->soussignes->mandataire->raison_sociale : $item->soussignes->mandataire->raison_sociale; echo truncate_text($rs, 35, '...', true); ?>
 					</strong></li>
 					<?php endif; ?>
 				</ul>
 			</td>
-            <td class="text-center"><?php if ($item->papier): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
+            <td class="text-center"><?php if ($item->type_creation == VracClient::TYPE_CREATION_PAPIER): ?>Papier<?php elseif (!$hasValidated && in_array($item->statut, array(Vrac::STATUT_VALIDE_PARTIELLEMENT, Vrac::STATUT_PROPOSITION))): ?>En attente de signature<?php else: ?><?php echo VracClient::getInstance()->getStatutLibelle($item->statut) ?><?php endif; ?></td>
 			<td>
 				<ul class="liste_actions">
 					<?php if ($item->statut == Vrac::STATUT_CREE||($item->statut == Vrac::STATUT_PROJET_VENDEUR && $item->is_proprietaire)): ?>
@@ -109,12 +109,30 @@
 				</ul>
 			</td>
 		</tr>
-			<?php
-				$counter++;
-				if ($limite && $counter == $limite) {
-					break;
-				}
-			endforeach;
-			?>
+        <?php endforeach; ?>
+        <?php if(!count($vracs)): ?>
+            <tr><td colspan="6" class="text-center" style="padding: 10px 0;">Aucun contrat trouvé avec le filtrage actuel</td></tr>
+        <?php endif; ?>
 	</tbody>
 </table>
+
+<?php if(count($vracs)): ?>
+<?php $current_filters = []; ?>
+<?php parse_str($_SERVER['QUERY_STRING'] ?? '', $current_filters); ?>
+<?php $lastpage = ceil(count($vracs) / $limite); ?>
+<div class="text-center">
+    <nav>
+        <ul class="pagination">
+            <?php if($page > 1): ?>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => 1])) ?>"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $page - 1])) ?>"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <?php endif; ?>
+            <li><a href="">page <?php echo $page ?> sur <?php echo $lastpage ?></a></li>
+            <?php if($page < $lastpage): ?>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $page + 1])) ?>"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li><a href="<?php echo '?'.http_build_query(array_merge($current_filters, ['page' => $lastpage])) ?>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+</div>
+<?php endif; ?>

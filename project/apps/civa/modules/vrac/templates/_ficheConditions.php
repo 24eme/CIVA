@@ -17,6 +17,7 @@
 				<?php echo ($vrac->vendeur_frais_annexes)? nl2br($vrac->vendeur_frais_annexes) : 'Aucun'; ?>
 			</td>
 		</tr>
+        <?php if($vrac->type_contrat != VracClient::TYPE_RAISIN): ?>
         <tr>
 			<td>
 				CVO AOC à la charge du vendeur
@@ -25,6 +26,7 @@
 				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2024_2025.pdf">Organisation du marché 2024/2025</a>)</small>
 			</td>
 		</tr>
+		<?php endif; ?>
 		<?php endif; ?>
         <?php if($vrac->exist('acheteur_primes_diverses')): ?>
         <tr>
@@ -60,7 +62,7 @@
 				Clause de réserve de propriété
 			</td>
 			<td class="<?php echo isVersionnerCssClass($vrac, 'clause_reserve_propriete') ?>">
-				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true)) ?>">verso du contrat</a>)</small>
+				<?php if($vrac->clause_reserve_propriete): ?><strong>Oui</strong><?php else: ?>Non<?php endif; ?> <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(Les modalités de cette clause sont indiquées au <a href="<?php echo url_for('vrac_pdf_annexe', array("type_contrat" => $vrac->type_contrat, "clause_reserve_propriete" => true, 'temporalite' => $vrac->isPluriannuel() ? 'pluriannuel' : 'annuel')) ?>">verso du contrat</a>)</small>
 
 			</td>
 		</tr>

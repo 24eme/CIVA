@@ -232,9 +232,10 @@ Vrac:
       etape: {  }
       type: {  }
       type_contrat: {  }
+      type_creation: { }
       contrat_pluriannuel: {  }
       reference_contrat_pluriannuel: { required: false }
-      duree_annee: { required: false }
+      duree_annee: { required: false, type: integer }
       contrat_pluriannuel_mode_surface: { }
       prix_unite: { }
       date_modification: {  }
@@ -247,8 +248,8 @@ Vrac:
       clause_renegociation_prix: { required: false }
       suivi_qualitatif: { required: false }
       delais_retiraison: { required: false }
-      papier: { required: false }
-      interne: { required: false }
+      papier: { required: false } # Déprécié
+      interne: { required: false } # Déprécié
       historique:
         type: array_collection
         required: false

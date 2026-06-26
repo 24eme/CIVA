@@ -1,3 +1,5 @@
+<?php include_component('tiers', 'ongletsBootstrap', array('active' => 'vrac', 'compte' => $compte)); ?>
+
 <div>
     <?php include_partial('vrac_import/breadcrumb', ['compte' => $compte]); ?>
     <?php include_partial('vrac_import/step', ['step' => (($csvVrac->statut === CSVVRACClient::LEVEL_ERROR) ? 'import' : 'annexes'), 'csvVrac' => $csvVrac]); ?>

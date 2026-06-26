@@ -107,10 +107,7 @@ class myUser extends DeclarationSecurityUser {
                 $tiersVrac = $tiersVrac->getRawValue();
             }
 
-            if(count(VracTousView::getInstance()->findSortedByDeclarants($tiersVrac))) {
-                $blocs[Roles::TELEDECLARATION_VRAC] = $sfaction->generateUrl('mon_espace_civa_vrac_compte', $compte);
-            }
-
+            $blocs[Roles::TELEDECLARATION_VRAC] = $sfaction->generateUrl('mon_espace_civa_vrac_compte', $compte);
         }
 
         if($compte->hasDroit(Roles::TELEDECLARATION_DS_PROPRIETE)) {
