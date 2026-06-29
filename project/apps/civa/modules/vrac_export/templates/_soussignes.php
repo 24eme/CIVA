@@ -44,7 +44,7 @@ $hasCourtier = $vrac->hasCourtier();
                 </tr>
                 <?php if($vrac->exist('vendeur_assujetti_tva')): ?>
 				<tr>
-					<td>&nbsp;Assujeti à la TVA : <?php if($vrac->vendeur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->vendeur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
+					<td>&nbsp;Assujetti à la TVA : <?php if($vrac->vendeur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->vendeur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->vendeur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
 				</tr>
                 <?php endif; ?>
 			</table>
@@ -86,7 +86,7 @@ $hasCourtier = $vrac->hasCourtier();
                                 </tr>
                                 <?php if($vrac->exist('acheteur_assujetti_tva')): ?>
                 				<tr>
-                					<td>&nbsp;Assujeti à la TVA : <?php if($vrac->acheteur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->acheteur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
+                                    <td>&nbsp;Assujetti à la TVA : <?php if($vrac->acheteur_assujetti_tva): ?><strong>Oui</strong><?php else: ?>Oui<?php endif; ?> <span style="font-family: Dejavusans"><?php if($vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span>&nbsp;&nbsp;&nbsp;<?php if(!$vrac->acheteur_assujetti_tva): ?><strong>Non</strong><?php else: ?>Non<?php endif; ?> <span style="font-family: Dejavusans"><?php if(!$vrac->acheteur_assujetti_tva): ?>☑<?php else: ?>☐<?php endif; ?></span></td>
                 				</tr>
                                 <?php endif; ?>
 			</table>
