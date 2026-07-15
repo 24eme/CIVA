@@ -821,23 +821,7 @@ class VracCsvImport extends CsvFile
     private function isCurrentCampagne($campagne_contrat)
     {
         $campagne_contrat = trim($campagne_contrat);
-        $date = new DateTimeImmutable();
-
-        $campagne = ConfigurationClient::getInstance()->getCurrentCampagne();
-        $current_campagne = null;
-
-        // si on est en mai / juin / juillet, on peut importer des contrats
-        // de la campagne suivante
-        switch ($date->format('m')) {
-            case "05":
-            case "06":
-            case "07":
-                $current_campagne = ConfigurationClient::getInstance()->getNextCampagne($campagne);
-                break;
-            default:
-                $current_campagne = $campagne;
-                break;
-        }
+        $current_campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
 
         return $campagne_contrat == $current_campagne;
     }
