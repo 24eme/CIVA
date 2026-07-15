@@ -325,8 +325,8 @@ class VracCsvImport extends CsvFile
                         continue;
                     }
 
-                    if(! $importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE])) {
-                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                    if(! $importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE], $line[self::CSV_TYPE_TRANSACTION])) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
                         continue;
                     }
 
@@ -351,8 +351,8 @@ class VracCsvImport extends CsvFile
                         }
                     }
 
-                    if(!$importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE])) {
-                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                    if(!$importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE], $line[self::CSV_TYPE_TRANSACTION])) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
                         continue;
                     }
 
@@ -818,10 +818,10 @@ class VracCsvImport extends CsvFile
         return (float) str_replace(',', '.', $number);
     }
 
-    private function isCurrentCampagne($campagne_contrat)
+    private function isCurrentCampagne($campagne_contrat, $type)
     {
         $campagne_contrat = trim($campagne_contrat);
-        $current_campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'));
+        $current_campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'), $type);
 
         return $campagne_contrat == $current_campagne;
     }

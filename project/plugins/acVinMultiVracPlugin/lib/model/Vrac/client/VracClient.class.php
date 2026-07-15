@@ -254,10 +254,15 @@ class VracClient extends acCouchdbClient {
 		return $items;
     }
 
-	public function buildCampagneVrac($date) {
-      $campagne_manager = new CampagneManager('12-01');
+    public function buildCampagneVrac($date, $type = null) {
+        $campagne_manager = new CampagneManager('12-01');
+        $campagne = $campagne_manager->getCampagneByDate($date);
 
-      return $campagne_manager->getCampagneByDate($date);
+        if (in_array($type, [VracClient::TYPE_MOUT, VracClient::TYPE_RAISIN])) {
+            return $campagne_manager->getNext($campagne);
+        }
+
+        return $campagne;
     }
 
 	public function isSoussigneInscrit($tiers) {
