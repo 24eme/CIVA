@@ -325,7 +325,7 @@ class VracCsvImport extends CsvFile
                         continue;
                     }
 
-                    if(! $importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
+                    if(! $importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE])) {
                         $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
                         continue;
                     }
@@ -351,7 +351,7 @@ class VracCsvImport extends CsvFile
                         }
                     }
 
-                    if(!$importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
+                    if(!$importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE])) {
                         $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
                         continue;
                     }
@@ -816,5 +816,29 @@ class VracCsvImport extends CsvFile
     public function guessFloat($number)
     {
         return (float) str_replace(',', '.', $number);
+    }
+
+    private function isCurrentCampagne($campagne_contrat)
+    {
+        $campagne_contrat = trim($campagne_contrat);
+        $date = new DateTimeImmutable();
+
+        $campagne = ConfigurationClient::getInstance()->getCurrentCampagne();
+        $current_campagne = null;
+
+        // si on est en mai / juin / juillet, on peut importer des contrats
+        // de la campagne suivante
+        switch ($date->format('m')) {
+            case "05":
+            case "06":
+            case "07":
+                $current_campagne = ConfigurationClient::getInstance()->getNextCampagne($campagne);
+                break;
+            default:
+                $current_campagne = $campagne;
+                break;
+        }
+
+        return $campagne_contrat == $current_campagne;
     }
 }
