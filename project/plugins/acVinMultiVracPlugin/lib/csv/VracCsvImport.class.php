@@ -168,7 +168,7 @@ class VracCsvImport extends CsvFile
 
     public function getCsv() {
         $csv = parent::getCsv();
-        if(isset($csv[0][0]) && $csv[0][0] != "CONTRAT") {
+        if(isset($csv[0][0]) && preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv[0][0]) != "CONTRAT") {
             unset($csv[0]);
         }
 
@@ -325,13 +325,14 @@ class VracCsvImport extends CsvFile
                         continue;
                     }
 
-                    if(! $importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
-                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                    if(! $importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE], $line[self::CSV_TYPE_TRANSACTION])) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
                         continue;
                     }
 
                     try {
                         $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
+                        $v->duree_annee = $v->duree_annee; // fix duree_annee enregistrée en string dans le cadre
                     } catch (Exception $e) {
                         $this->addError(self::$line, "contrat_cadre_non_valide", $e->getMessage());
                         continue;
@@ -351,8 +352,8 @@ class VracCsvImport extends CsvFile
                         }
                     }
 
-                    if(!$importHistorique && $line[self::CSV_CAMPAGNE] != ConfigurationClient::getInstance()->getCurrentCampagne()) {
-                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".ConfigurationClient::getInstance()->getCurrentCampagne());
+                    if(!$importHistorique && ! $this->isCurrentCampagne($line[self::CSV_CAMPAGNE], $line[self::CSV_TYPE_TRANSACTION])) {
+                        $this->addError(self::$line, "campagne_courante", "La campagne ".$line[self::CSV_CAMPAGNE]." est antérieur ou postérieur à la campagne courante ".VracClient::getInstance()->buildCampagneVrac(date('Y-m-d')));
                         continue;
                     }
 
@@ -360,7 +361,8 @@ class VracCsvImport extends CsvFile
                         $createur->_id,
                         $dateSaisie,
                         $typeCreation,
-                        "Importé depuis un fichier csv"
+                        "Importé depuis un fichier csv",
+                        $line[self::CSV_TYPE_TRANSACTION]
                     );
 
                     $v->campagne = $line[self::CSV_CAMPAGNE];
@@ -816,5 +818,13 @@ class VracCsvImport extends CsvFile
     public function guessFloat($number)
     {
         return (float) str_replace(',', '.', $number);
+    }
+
+    private function isCurrentCampagne($campagne_contrat, $type)
+    {
+        $campagne_contrat = trim($campagne_contrat);
+        $current_campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'), $type);
+
+        return $campagne_contrat == $current_campagne;
     }
 }
