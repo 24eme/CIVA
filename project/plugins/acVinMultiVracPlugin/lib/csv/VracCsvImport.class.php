@@ -332,6 +332,7 @@ class VracCsvImport extends CsvFile
 
                     try {
                         $v = $vCadre->generateNextPluriannuelApplication($line[self::CSV_CAMPAGNE]);
+                        $v->duree_annee = $v->duree_annee; // fix duree_annee enregistrée en string dans le cadre
                     } catch (Exception $e) {
                         $this->addError(self::$line, "contrat_cadre_non_valide", $e->getMessage());
                         continue;
