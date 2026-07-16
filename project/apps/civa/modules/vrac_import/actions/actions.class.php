@@ -61,6 +61,12 @@ class vrac_importActions extends sfActions
             'mime_types' => 'pdf'
         ]));
 
+        $annexeFile = $request->getFiles('annexeInputFile');
+        if (count($annexeFile) === 1 && $annexeFile[0]["error"] !== 0) {
+            // "fix" immonde pas de fichier uploadé
+            return $this->redirect('vrac_csv_validation', ['csvvrac' => $this->csvVrac->_id]);
+        }
+
         $this->formAnnexe->bind(null, $request->getFiles());
 
         if ($this->formAnnexe->isValid()) {
