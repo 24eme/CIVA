@@ -360,7 +360,8 @@ class VracCsvImport extends CsvFile
                         $createur->_id,
                         $dateSaisie,
                         $typeCreation,
-                        "Importé depuis un fichier csv"
+                        "Importé depuis un fichier csv",
+                        $line[self::CSV_TYPE_TRANSACTION]
                     );
 
                     $v->campagne = $line[self::CSV_CAMPAGNE];
