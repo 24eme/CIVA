@@ -168,7 +168,7 @@ class VracCsvImport extends CsvFile
 
     public function getCsv() {
         $csv = parent::getCsv();
-        if(isset($csv[0][0]) && $csv[0][0] != "CONTRAT") {
+        if(isset($csv[0][0]) && preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $csv[0][0]) != "CONTRAT") {
             unset($csv[0]);
         }
 
