@@ -205,6 +205,7 @@ class VracSoussignesForm extends acCouchdbObjectForm
 
         if (!$this->getObject()->contrat_pluriannuel) {
             $this->getObject()->contrat_pluriannuel_mode_surface = 0;
+            $this->getObject()->campagne = VracClient::getInstance()->buildCampagneVrac(date('Y-m-d'), $this->getObject()->type_contrat);
         } else {
             if ($values['campagne']) {
                 $this->getObject()->campagne = $values['campagne'];
