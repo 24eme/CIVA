@@ -328,7 +328,7 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
         $detail->lieu_dit = $lieuDit;
         $detail->vtsgn = $vtsgn;
         $detail->supprimable = 1;
-        $detail->position = ($this->declaration->getPositionNouveauProduitDetail() - 1);
+        $detail->position = $this->declaration->getPositionNouveauProduitDetail();
     }
 
     public function addActeur($type, $tiers)
