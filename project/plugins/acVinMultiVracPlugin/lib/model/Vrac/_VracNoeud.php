@@ -86,7 +86,14 @@ abstract class _VracNoeud extends acCouchdbDocumentTree {
     }
 
     public function getPositionNouveauProduitDetail() {
-        return $this->getNbProduitsDetails() + 1;
+        $highestPosition = 0;
+        foreach ($this->getProduitsDetails() as $detail) {
+            if ($detail->position > $highestPosition) {
+                $highestPosition = $detail->position;
+            }
+        }
+
+        return $highestPosition + 1;
     }
 
     public function getProduitsDetailsSorted() {
