@@ -33,7 +33,7 @@ class VracDeclaration extends BaseVracDeclaration {
     	$produits = $this->getProduitsDetails();
     	$result = array();
     	foreach ($produits as $hash => $values) {
-    		$result[$values->position] = array($hash => $values);
+            $result[sprintf("%03d%s", $values->position, $values->getHash())] = array($hash => $values);
     	}
     	ksort($result);
     	return $result;
@@ -45,7 +45,7 @@ class VracDeclaration extends BaseVracDeclaration {
     	$result = array();
     	foreach ($produits as $hash => $values) {
     		if ($values->actif) {
-    			$result[$values->position] = array($hash => $values);
+                $result[sprintf("%03d%s", $values->position, $values->getHash())] = array($hash => $values);
     		}
     	}
     	ksort($result);
