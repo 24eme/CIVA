@@ -39,7 +39,7 @@
 				CVO AOC à la charge du vendeur
 			</td>
 			<td colspan="2">
-				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_2024_2025.pdf">Organisation du marché 2024/2025</a>)</small>
+				<?php echo $vrac->getTauxCvo(); ?> € HT/hl <?php if(is_file(sfConfig::get('sf_root_dir').'/lib/vendor/giilda/web/doc/docs/Organisation_du_marche_'.str_replace("-", "_", $vrac->campagne).'.pdf')): ?><small class="noprint" style="font-size: 12px; color: #666; margin-left: 10px;">(<a target="_blank" href="/drm/doc/docs/Organisation_du_marche_<?php echo str_replace("-", "_", $vrac->campagne) ?>.pdf">Organisation du marché <?php echo str_replace("-", "/", $vrac->campagne) ?></a>)</small><?php endif; ?>
 			</td>
 		</tr>
         <?php endif; ?>

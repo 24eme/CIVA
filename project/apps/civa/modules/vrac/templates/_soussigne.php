@@ -65,7 +65,7 @@
 	<li class="noprint">E-mail : <strong><span style="cursor: help" title="<?php echo implode(", ", $tiers->getRawValue()->emails->toArray(true, false)); ?>"><?php echo truncate_text(implode(", ", $tiers->getRawValue()->emails->toArray(true, false)), 35) ?></span></strong></li>
     <?php if($vrac->exist($tiers->getKey().'_assujetti_tva')&&$fiche): ?>
     <li class="noprint">
-        Assujeti à la TVA : <strong><?php if($vrac->get($tiers->getKey().'_assujetti_tva')): ?>Oui<?php else: ?>Non<?php endif; ?></strong>
+        Assujetti à la TVA : <strong><?php if($vrac->get($tiers->getKey().'_assujetti_tva')): ?>Oui<?php else: ?>Non<?php endif; ?></strong>
     </li>
     <?php else: ?>
     <li class="noprint">&nbsp;</li>
