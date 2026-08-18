@@ -273,6 +273,10 @@ class VracCsvImport extends CsvFile
         }
     }
 
+    private function cleanStringBeforeError($str) {
+        return mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+    }
+
     /**
      * Importe des vracs dans la base
      * Si `$verified` est égal à `false`, alors rien n'est importé, mais
@@ -417,7 +421,7 @@ class VracCsvImport extends CsvFile
             $produit = $this->guessProduit($line, $v);
 
             if (! $produit) {
-                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$line[self::CSV_VIN_LIBELLE]."] pour la campagne ".$line[self::CSV_CAMPAGNE]);
+                $this->addError(self::$line, "produit_non_reconnu", "Produit non reconnu [".$this->cleanStringBeforeError($line[self::CSV_VIN_LIBELLE])."] pour la campagne ".$line[self::CSV_CAMPAGNE]);
                 continue;
             }
 
@@ -444,7 +448,7 @@ class VracCsvImport extends CsvFile
                     $this->addError(
                         self::$line,
                         "label_non_reconnu",
-                        "Label non reconnu [".$line[self::CSV_VIN_LABEL]."]. Valeurs possibles : ".implode(", ", self::LABELS_VALIDES)
+                        "Label non reconnu [".this->cleanStringBeforeError($line[self::CSV_VIN_LABEL])."]. Valeurs possibles : ".implode(", ", self::LABELS_VALIDES)
                     );
                 }
             }
