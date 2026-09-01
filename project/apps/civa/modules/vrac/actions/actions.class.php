@@ -888,6 +888,13 @@ class vracActions extends sfActions
     {
         $vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::CONSULTATION, $vrac);
-        return $this->renderPdf($vrac->mergeAnnexesPdf(), "annexes_vrac_".$vrac->numero_contrat.".pdf");
+
+        $path = $vrac->mergeAnnexesPdf();
+
+        if ($path === "") { // si pas de pdf
+            return $this->redirect('vrac_fiche', $vrac);
+        }
+
+        return $this->renderPdf($path, "annexes_vrac_".$vrac->numero_contrat.".pdf");
     }
 }
