@@ -871,8 +871,15 @@ class vracActions extends sfActions
             }
 		}
 		if (($filename = $vrac->getAnnexeFilename($annexe)) && $operation == 'visualiser') {
+            $fileinfos = $vrac->_attachments->get($filename);
+            $file =      $vrac->getAttachmentUri($filename);
+
+            $this->getResponse()->setContentType($fileinfos->content_type);
+            $this->getResponse()->setHttpHeader('Content-Length', $fileinfos->length);
             $this->getResponse()->setHttpHeader('Content-disposition', 'attachment; filename="' . $filename . '"');
-            return $this->renderText(file_get_contents($vrac->getAttachmentUri($filename)));exit;
+
+            return $this->renderText(file_get_contents($file));
+            exit;
 		}
         return $this->redirect('vrac_etape', array('sf_subject' => $vrac, 'etape' => VracEtapes::ETAPE_ANNEXES));
     }
@@ -881,6 +888,13 @@ class vracActions extends sfActions
     {
         $vrac = $this->getRoute()->getVrac();
         $this->secureVrac(VracSecurity::CONSULTATION, $vrac);
-        return $this->renderPdf($vrac->mergeAnnexesPdf(), "annexes_vrac_".$vrac->numero_contrat.".pdf");
+
+        $path = $vrac->mergeAnnexesPdf();
+
+        if ($path === "") { // si pas de pdf
+            return $this->redirect('vrac_fiche', $vrac);
+        }
+
+        return $this->renderPdf($path, "annexes_vrac_".$vrac->numero_contrat.".pdf");
     }
 }

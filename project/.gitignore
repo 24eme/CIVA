@@ -28,3 +28,7 @@ web/helpPdf
 web/documents
 web/doc-edi
 data/mercuriales
+lib/vendor/symfony/lib/vendor/swiftmailer/.git
+lib/vendor/symfony/lib/plugins/sfDoctrinePlugin/lib/vendor/doctrine/.git
+lib/vendor/symfony/.git
+

@@ -300,7 +300,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     }
 
     public function isHumanlyModifiee() {
-        return ($this->exist('modifiee') && $this->get('modifiee') && count($this->utilisateurs_document->getLastEdition()) && $this->get('modifiee') != $this->get('validee'));
+        return ($this->exist('modifiee') && $this->get('modifiee') && is_array($this->utilisateurs_document->getLastEdition()) && count($this->utilisateurs_document->getLastEdition()) && $this->get('modifiee') != $this->get('validee'));
     }
 
     /**
