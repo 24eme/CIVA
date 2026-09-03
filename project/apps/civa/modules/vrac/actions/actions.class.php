@@ -380,7 +380,7 @@ class vracActions extends sfActions
         $this->formApplication = null;
         $this->validationApplication = null;
 
-        if ($this->vrac->isImporte()) {
+        if ($this->vrac->isImporte() && !$this->getUser()->isAdmin()) {
 
             return sfView::SUCCESS;
         }
