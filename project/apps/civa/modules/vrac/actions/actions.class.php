@@ -380,11 +380,6 @@ class vracActions extends sfActions
         $this->formApplication = null;
         $this->validationApplication = null;
 
-        if ($this->vrac->isImporte() && !$this->getUser()->isAdmin()) {
-
-            return sfView::SUCCESS;
-        }
-
         try {
             $application = $this->vrac->getContratDeReference()->generateNextPluriannuelApplication();
             $this->formApplication = new VracProduitsForm($application, ['formGeneration' => true]);
