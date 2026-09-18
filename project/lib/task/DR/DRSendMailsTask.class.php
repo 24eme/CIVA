@@ -46,7 +46,7 @@ EOF;
         foreach ($docs_to_send_mail as $doc_result) {
             $doc = $mailer = null;
 
-            switch ($doc_result->key['type']) {
+            switch ($doc_result->key[DRAttenteEnvoiMailView::KEY_TYPE_DOCUMENT]) {
                 case DRClient::TYPE_MODEL:
                     $doc = DRClient::getInstance()->find($doc_result->id);
                     $mailer = new RecolteMailingManager(
