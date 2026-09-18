@@ -70,16 +70,6 @@ EOF;
                 continue;
             }
 
-            // on regarde si le delai d'attente est passé
-            try {
-                $date = new DateTimeImmutable($doc->en_attente_envoi);
-                if ($date < new DateTimeImmutable()) {
-                    continue;
-                }
-            } catch (\Exception $e) {
-                continue; // DR
-            }
-
             try {
                 $mailer->sendMail(false);
                 if($doc->hasAutorisation(DRClient::AUTORISATION_ACHETEURS)) {
