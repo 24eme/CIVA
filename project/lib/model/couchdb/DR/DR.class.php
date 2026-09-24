@@ -47,33 +47,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if (!in_array($etape, self::$_etapes)) {
             throw new sfException("etape does not exist");
         }
-        if ($this->checkEtape($etape)) {
-            $this->add('etape');
-            $this->etape = $etape;
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    /**
-     *
-     * @param string $etape
-     * @return boolean
-     */
-    protected function checkEtape($etape) {
-        if ($this->exist('etape') && $this->etape && !in_array($this->etape, self::$_etapes_inclusion[$etape])) {
+        $indexEtape = array_search($etape, self::$_etapes);
+        if($this->exist('etape') && $this->etape && $indexEtape < array_search($this->etape, self::$_etapes)) {
             return false;
         }
-        if ($etape == self::ETAPE_EXPLOITATION) {
-            return true;
-        } elseif ($etape == self::ETAPE_REPARTITION) {
-            return true;
-        } elseif ($etape == self::ETAPE_RECOLTE) {
-            return true;
-        } elseif ($etape == self::ETAPE_VALIDATION) {
-            return true;
-        }
+
+        $this->add('etape', $etape);
+
         return true;
     }
 

@@ -67,7 +67,9 @@ class _DRActions extends sfActions
 
     protected function redirectToNextEtapes($dr) {
         if ($new_etape = $this->_etapes_config->needToChangeEtape()) {
-            $this->getUser()->addEtapeDeclaration($new_etape);
+            if ($dr->addEtape($new_etape)) {
+                $dr->save();
+            }
         }
 
         return $this->redirect($this->_etapes_config->nextUrl(), $dr);
