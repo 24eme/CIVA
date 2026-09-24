@@ -6,7 +6,6 @@ class drActions extends _DRActions {
 
         // throw new sfException("En maintenance");
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
-        $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
         $campagne = $request->getParameter('campagne');
         $etablissement = $this->getRoute()->getEtablissement();
@@ -413,7 +412,6 @@ class drActions extends _DRActions {
             }
 
             $this->dr->save();
-            $this->getUser()->initCredentialsDeclaration();
 
             return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
@@ -534,7 +532,6 @@ class drActions extends _DRActions {
             $dr->save();
         }
 
-        $this->getUser()->initCredentialsDeclaration();
         $this->redirect('mon_espace_civa_dr', $dr->getEtablissement());
     }
 
