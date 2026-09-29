@@ -124,6 +124,16 @@ ul#etape_declaration li.passe em {
 	background-position: 0 -52px;
 }
 
+ul#etape_declaration li.disabled {
+    opacity: 0.6;
+}
+
+ul#etape_declaration li.disabled em {
+    opacity: 0.6;
+    color: #a8a8a8;
+    background-position: 0 0;
+}
+
 /* Actions sur la déclaration */
 ul#actions_declaration {
 	position: absolute;

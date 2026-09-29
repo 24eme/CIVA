@@ -1,4 +1,5 @@
 <?php $etapesConfig = new EtapesConfig(); ?>
+<?php if(!$dr->needStockageRepartition()): $etapesConfig->setDisabled('stockage'); endif; ?>
 
 <ul id="etape_declaration" class="clearfix">
     <li class="<?php if ($etape > 1): ?>passe<?php elseif($etape == 1): ?>actif<?php endif; ?>">
@@ -25,7 +26,7 @@
              <a href="#" onclick="return false;">Autres <em>Etape 4</em></a>
         <?php endif; ?>
     </li>
-    <li class="<?php if ($etape > 5): ?>passe<?php elseif($etape == 5): ?>actif<?php endif; ?>">
+    <li class="<?php if ($etape > 5): ?>passe<?php elseif($etape == 5): ?>actif<?php endif; ?> <?php if($etapesConfig->isDisabled('stockage')): ?>disabled<?php endif; ?>">
         <?php if ($dr->exist('etape') && $etapesConfig->isAutorized($dr->etape, "stockage")): ?>
             <a href="<?php echo url_for('dr_stockage', $dr); ?>">Stockage <em>Etape 5</em></a>
         <?php else: ?>

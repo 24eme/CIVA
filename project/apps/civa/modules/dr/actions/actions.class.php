@@ -322,6 +322,10 @@ class drActions extends _DRActions {
         $this->help_popup_action = "help_popup_stockage";
         $this->dr = $this->getRoute()->getDR();
 
+        if($this->_etapes_config->isDisabled('stockage')) {
+            return $this->redirect('dr_validation', $this->dr);
+        }
+
         $this->recapProduits = $this->dr->getRecapProduitsStockage();
         $this->form = new RecolteStockageForm($this->dr);
 

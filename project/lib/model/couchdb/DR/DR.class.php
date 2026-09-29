@@ -1141,4 +1141,9 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
 
         return $recapSorted;
     }
+
+    public function needStockageRepartition() {
+
+        return count($this->stockage) || $this->hasVolumeSurPlace();
+    }
 }
