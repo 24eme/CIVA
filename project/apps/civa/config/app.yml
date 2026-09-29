@@ -133,12 +133,16 @@ all:
         next_is_new_etape: recolte
       recolte:
         url: "dr_recolte"
-      exploitation_autres:
+        next_is_new_etape: autres
+      autres:
         url: "dr_autres"
+        next_is_new_etape: stockage
+      stockage:
+        url: "dr_stockage"
         next_is_new_etape: validation
       validation:
         url: "dr_validation"
       confirmation:
         url: "dr_confirmation"
-    orders: [mon_espace_civa, exploitation_message, notice_evolutions, exploitation, repartition, exploitation_lieu, recolte, exploitation_autres, validation, confirmation]
+    orders: [mon_espace_civa, exploitation_message, notice_evolutions, exploitation, repartition, exploitation_lieu, recolte, autres, stockage, validation, confirmation]
   css_class_field_error: "erreur"

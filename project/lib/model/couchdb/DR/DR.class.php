@@ -4,15 +4,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_REPARTITION = 'repartition';
     const ETAPE_RECOLTE = 'recolte';
+    const ETAPE_AUTRES = 'autres';
+    const ETAPE_STOCKAGE = 'stockage';
     const ETAPE_VALIDATION = 'validation';
 
-    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(),
-                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION),
-                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION),
-                                             self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION, self::ETAPE_RECOLTE));
-
-
+    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_AUTRES, DR::ETAPE_STOCKAGE, DR::ETAPE_VALIDATION);
     protected $utilisateurs_document = null;
     protected $declarant_document = null;
 
@@ -34,6 +30,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declarant_document = new DeclarantDocument($this);
     }
 
+    public function storeStorage() {
+        $etablissement = $this->getEtablissementObject();
+        $lieux = $etablissement->getLieuxStockage(false, $this->identifiant);
+        foreach($lieux as $lieu) {
+            $this->stockage->add($lieu->numero, $lieu);
+        }
+    }
+
     public function constructId() {
         $this->set('_id', 'DR-' . $this->cvi . '-' . $this->campagne);
     }
@@ -47,33 +51,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if (!in_array($etape, self::$_etapes)) {
             throw new sfException("etape does not exist");
         }
-        if ($this->checkEtape($etape)) {
-            $this->add('etape');
-            $this->etape = $etape;
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    /**
-     *
-     * @param string $etape
-     * @return boolean
-     */
-    protected function checkEtape($etape) {
-        if ($this->exist('etape') && $this->etape && !in_array($this->etape, self::$_etapes_inclusion[$etape])) {
+        $indexEtape = array_search($etape, self::$_etapes);
+        if($this->exist('etape') && $this->etape && $indexEtape < array_search($this->etape, self::$_etapes)) {
             return false;
         }
-        if ($etape == self::ETAPE_EXPLOITATION) {
-            return true;
-        } elseif ($etape == self::ETAPE_REPARTITION) {
-            return true;
-        } elseif ($etape == self::ETAPE_RECOLTE) {
-            return true;
-        } elseif ($etape == self::ETAPE_VALIDATION) {
-            return true;
-        }
+
+        $this->add('etape', $etape);
+
         return true;
     }
 
@@ -1109,5 +1094,51 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         return 'SANS_VOLUME';
+    }
+
+    public function getRecapProduitsStockage() {
+        $recap = array();
+        foreach($this->getProduits() as $produit) {
+            if(!$produit->canCalculVolumeRevendiqueSurPlace()) {
+                //echo $produit->getHash()."\n";
+                //continue;
+            }
+            if(!$produit->getConfig()->hasTotalCepage()) {
+                $produit = $produit->getParent()->getParent()->getParent();
+            }
+            if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
+                //continue;
+            }
+            $key = $produit->getHash();
+            //echo $key."\n";
+            if(isset($recap[$key])) {
+                continue;
+            }
+            $recapProduit = new stdClass();
+            $recapProduit->produit_hash = $produit->getHash();
+            $recapProduit->libelle = $produit->getLibelleComplet();
+            $recapProduit->denominationComplementaire = null;
+            $recapProduit->libelle_html = $produit->getLibelleComplet();
+            $recapProduit->volume_revendique = $produit->getVolumeRevendiqueCaveParticuliere();
+            $recap[$key] = $recapProduit;
+        }
+
+        $recapSorted = array();
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            if(!$child->hasTotalCepage()) {
+                $hashProduit = $child->getAppellation()->getHash();
+            }
+            $hashProduit = HashMapper::inverse($hashProduit);
+            foreach(array_keys($recap) as $hash) {
+                if(strpos($hash, $hashProduit) === false) {
+                    continue;
+                }
+                $recapSorted[$hash] = $recap[$hash];
+                unset($recap[$hash]);
+            }
+        }
+
+        return $recapSorted;
     }
 }

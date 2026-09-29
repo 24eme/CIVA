@@ -447,4 +447,27 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
 
         return $nbDestinataire < 2;
     }
+
+    public function getProduitHash() {
+
+        return $this->getCepage()->getHash();
+    }
+
+    public function getLibelle() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+        if($this->denomination) {
+            $libelle .= ' '.$this->denomination;
+        }
+
+        return $libelle;
+    }
+
+    public function getLibelleHtml() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+        if($this->denomination) {
+            $libelle .= ' <span class="text-muted">'.$this->denomination.'</span>';
+        }
+
+        return $libelle;
+    }
 }

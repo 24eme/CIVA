@@ -1,5 +1,5 @@
-<?php include_partial('dr/etapes', array('etape' => 3, 'dr' => $dr)) ?>
-<?php include_partial('dr/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
+<?php include_partial('dr/etapes', array('etape' => 4, 'dr' => $dr)) ?>
+<?php include_partial('dr/actions', array('etape' => 4, 'help_popup_action'=>$help_popup_action)) ?>
 
 <!-- #principal -->
 <form id="principal" action="" method="post">

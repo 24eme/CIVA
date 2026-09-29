@@ -19,10 +19,24 @@
         <?php endif; ?>
     </li>
     <li class="<?php if ($etape > 4): ?>passe<?php elseif($etape == 4): ?>actif<?php endif; ?>">
-        <?php if ($dr->exist('etape') && $etapesConfig->isAutorized($dr->etape, "validation")): ?>
-            <a href="<?php echo url_for('dr_validation', $dr); ?>">Validation <em>Etape 4</em></a>
+        <?php if ($dr->exist('etape') && $etapesConfig->isAutorized($dr->etape, "exploitation_autres")): ?>
+            <a href="<?php echo url_for('dr_autres', $dr); ?>">Autres <em>Etape 4</em></a>
         <?php else: ?>
-            <a href="#" onclick="return false;">Validation <em>Etape 4</em></a>
+             <a href="#" onclick="return false;">Autres <em>Etape 4</em></a>
+        <?php endif; ?>
+    </li>
+    <li class="<?php if ($etape > 5): ?>passe<?php elseif($etape == 5): ?>actif<?php endif; ?>">
+        <?php if ($dr->exist('etape') && $etapesConfig->isAutorized($dr->etape, "stockage")): ?>
+            <a href="<?php echo url_for('dr_stockage', $dr); ?>">Stockage <em>Etape 5</em></a>
+        <?php else: ?>
+             <a href="#" onclick="return false;">Stockage <em>Etape 5</em></a>
+        <?php endif; ?>
+    </li>
+    <li class="<?php if ($etape > 6): ?>passe<?php elseif($etape == 6): ?>actif<?php endif; ?>">
+        <?php if ($dr->exist('etape') && $etapesConfig->isAutorized($dr->etape, "validation")): ?>
+            <a href="<?php echo url_for('dr_validation', $dr); ?>">Validation <em>Etape 6</em></a>
+        <?php else: ?>
+            <a href="#" onclick="return false;">Validation <em>Etape 6</em></a>
         <?php endif; ?>
     </li>
 </ul>

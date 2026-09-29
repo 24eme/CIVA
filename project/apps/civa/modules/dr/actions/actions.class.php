@@ -315,9 +315,35 @@ class drActions extends _DRActions {
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/guide_vci.pdf", "guide_vci.pdf");
     }
 
+    public function executeStockage(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
+        $this->setCurrentEtape('stockage');
+        $this->setLayout('layout');
+        $this->help_popup_action = "help_popup_stockage";
+        $this->dr = $this->getRoute()->getDR();
+
+        $this->recapProduits = $this->dr->getRecapProduitsStockage();
+        $this->form = new RecolteStockageForm($this->dr);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        return $this->redirectByBoutonsEtapes(null, $this->dr);
+    }
+
     public function executeAutres(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
-        $this->setCurrentEtape('exploitation_autres');
+        $this->setCurrentEtape('autres');
         $this->help_popup_action = "help_popup_autres";
 
         $this->dr = $this->getRoute()->getDR();
