@@ -882,7 +882,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        if($produit->getKey() == 'cepage_RB') {
+        if(preg_match('/cepage_RB/', $produit->getKey())) {
             continue;
         }
         if(!$produit->getTotalCaveParticuliere()) {
@@ -939,7 +939,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      $volumeRevendiqueAlsaceBlancMout = 0;
      foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
-           if($produit->getCepage()->getKey() == 'cepage_RB') {
+
+           if(preg_match('/cepage_RB/', $produit->getCepage()->getKey())) {
                continue;
            }
            if(is_null($volumeRevendiqueAlsaceBlanc) && $produit->getAppellation()->getKey() == "appellation_CREMANT") {

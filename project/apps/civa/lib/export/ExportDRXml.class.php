@@ -417,13 +417,13 @@ class ExportDRXml {
                                           continue;
                                         }
 
-                                        if ($cepage->getKey() != 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT' && $this->destinataire == self::DEST_DOUANE) {
+                                        if (!preg_match('/cepage_RB/', $cepage->getKey()) && $appellation->getKey() == 'appellation_CREMANT' && $this->destinataire == self::DEST_DOUANE) {
                                             continue;
                                         }
 
                                         $col = $this->getCol($detail);
 
-                                        if ($cepage->getKey() == 'cepage_RB' && $appellation->getKey() == 'appellation_CREMANT') {
+                                        if (preg_match('/cepage_RB/', $cepage->getKey()) && $appellation->getKey() == 'appellation_CREMANT') {
                                             unset($col['L3'], $col['L4'], $col['mentionVal']);
                                             $colass = $col;
                                             continue;
