@@ -326,6 +326,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         if ($this->volume)
             return '';
 
+        if($this->getConfig()->hasMinQuantite()) {
+            return '';
+        }
+
         $motifs_non_recolte = sfConfig::get('app_configuration_dr_motifs_non_recolte');
 
         if ($this->exist('motif_non_recolte') && isset($motifs_non_recolte[$this->motif_non_recolte])) {

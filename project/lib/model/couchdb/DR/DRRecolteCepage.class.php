@@ -293,4 +293,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       }
     }
 
+    public function isNonSaisie() {
+        if($this->getConfig()->hasMinQuantite()) {
+            return false;
+        }
+
+        return parent::isNonSaisie();
+    }
 }
