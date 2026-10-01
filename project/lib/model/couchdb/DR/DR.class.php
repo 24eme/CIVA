@@ -449,12 +449,13 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 foreach ($lieu->getCouleurs() as $couleur) {
                     $this->checkNoeudRecapitulatif($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatifVentes($couleur, $validLogErreur, $validLogVigilance);
-
+                    $error_rebeche_saisie = false;
                     foreach ($couleur->getConfig()->getCepages() as $cepage_config) {
                         $hashCepage = HashMapper::inverse($cepage_config->getHash());
-                        if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
+                        if (!$error_rebeche_saisie && $cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
                             if(!$this->exist($hashCepage)) {
                                 array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                                $error_rebeche_saisie = true;
                             }
                         }
 
