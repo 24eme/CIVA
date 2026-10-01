@@ -1129,18 +1129,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getRecapProduitsStockage() {
         $recap = array();
         foreach($this->getProduits() as $produit) {
-            if(!$produit->canCalculVolumeRevendiqueSurPlace()) {
-                //echo $produit->getHash()."\n";
-                //continue;
-            }
             if(!$produit->getConfig()->hasTotalCepage()) {
                 $produit = $produit->getParent()->getParent()->getParent();
             }
             if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
-                //continue;
+                continue;
             }
             $key = $produit->getHash();
-            //echo $key."\n";
+
             if(isset($recap[$key])) {
                 continue;
             }
