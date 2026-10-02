@@ -222,6 +222,7 @@ class SV extends BaseSV
 
     public function getRecapProduits() {
         $recap = array();
+        $rendements = [];
         foreach($this->getProduits() as $produit) {
             $key = $produit->getProduitHash().'/'.$produit->getKey();
             if(!isset($recap[$key])) {
@@ -272,6 +273,31 @@ class SV extends BaseSV
             $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
 
             $recapProduit->superficie_totale += $produit->getSuperficieTotale();
+
+            if(!isset($rendements[$produit->getProduitHash()])) {
+                $rendements[$produit->getProduitHash()] = new stdClass();
+                $rendements[$produit->getProduitHash()]->volume_revendique = 0;
+                $rendements[$produit->getProduitHash()]->superficie_recolte = 0;
+            }
+            $rendements[$produit->getProduitHash()]->volume_revendique += $produit->volume_revendique;
+            $rendements[$produit->getProduitHash()]->superficie_recolte += $produit->superficie_recolte;
+        }
+
+        foreach($rendements as $produitHash => $rendement) {
+            if(!$rendement->superficie_recolte) {
+                continue;
+            }
+            $rendement->rendement = round($rendement->volume_revendique / $rendement->superficie_recolte * 100, 2);
+            $config = $this->getDocument()->getConfiguration()->get($produitHash);
+            if($config) {
+                $rendement->rendement_max = $config->getRendementNoeud();
+            }
+        }
+
+        foreach($recap as $produit) {
+            if(isset($rendements[$produit->produit_hash])) {
+                $produit->rendement = $rendements[$produit->produit_hash];
+            }
         }
 
         $recapSorted = array();
