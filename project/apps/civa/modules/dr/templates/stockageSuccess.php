@@ -9,7 +9,7 @@
 
 <div id="application_dr" class="clearfix">
 
-<p style="margin-bottom: 15px">D'après la nouvelle réglementation entrée en vigueur à compter de 2022, vous devez ici répartir les volumes produits entre vos différents lieux de stockage, à la date de dépôt de votre déclaration.</p>
+<p style="margin-bottom: 15px">D'après la nouvelle réglementation entrée en vigueur, vous devez ici répartir les volumes produits entre vos différents lieux de stockage, à la date de dépôt de votre déclaration.</p>
 
 <form action="" method="POST">
   <?php echo $form->renderHiddenFields(); ?>
