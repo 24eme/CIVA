@@ -280,7 +280,9 @@ class SV extends BaseSV
                 $rendements[$produit->getProduitHash()]->superficie_recolte = 0;
             }
             $rendements[$produit->getProduitHash()]->volume_revendique += $produit->volume_revendique;
+            $rendements[$produit->getProduitHash()]->volume_revendique += ($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0;;
             $rendements[$produit->getProduitHash()]->superficie_recolte += $produit->superficie_recolte;
+            $rendements[$produit->getProduitHash()]->superficie_recolte += ($produit->exist('superficie_mouts')) ? $produit->superficie_mouts : 0;
         }
 
         foreach($rendements as $produitHash => $rendement) {
@@ -289,8 +291,10 @@ class SV extends BaseSV
             }
             $rendement->rendement = round($rendement->volume_revendique / $rendement->superficie_recolte * 100, 2);
             $config = $this->getDocument()->getConfiguration()->get($produitHash);
-            if($config) {
+            if($config && $config->getRendementNoeud() > 0) {
                 $rendement->rendement_max = $config->getRendementNoeud();
+            } elseif($config && $config->getRendementAppellation() > 0) {
+                $rendement->rendement_max = $config->getRendementAppellation();
             }
         }
 

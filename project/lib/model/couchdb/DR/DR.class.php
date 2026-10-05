@@ -597,7 +597,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                             }
                         }
 
-                        if(!$bloquant_rebeche && count($volumeAcheteursLimiteQuantite) != count($lieu->getVolumeAcheteursForMinQuantite())) {
+                        if(!$bloquant_rebeche && $volumeAcheteursLimiteQuantite > 0 && count($volumeAcheteursLimiteQuantite) != count($lieu->getVolumeAcheteursForMinQuantite())) {
                             array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
                                 $bloquant_rebeche = true;
                                 break;
