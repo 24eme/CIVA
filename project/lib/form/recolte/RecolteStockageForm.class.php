@@ -1,6 +1,6 @@
 <?php
 
-class SVStockageForm extends acCouchdbForm
+class RecolteStockageForm extends acCouchdbForm
 {
     public function __construct(acCouchdbDocument $doc, $defaults = array(), $options = array(), $CSRFSecret = null) {
         parent::__construct($doc, $defaults, $options, $CSRFSecret);
@@ -11,7 +11,7 @@ class SVStockageForm extends acCouchdbForm
         $formProduits = new BaseForm();
 
         $defaults = [];
-        foreach($this->getDocument()->getRecapProduits() as $hash => $produit) {
+        foreach($this->getDocument()->getRecapProduitsStockage() as $hash => $produit) {
             $formStockage = new BaseForm();
             foreach($this->getDocument()->stockage as $stockage) {
                 $produits = $stockage->getProduits();

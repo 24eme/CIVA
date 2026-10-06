@@ -7,6 +7,9 @@ class _DRActions extends sfActions
     public function __construct($context, $moduleName, $actionName) {
         parent::__construct($context, $moduleName, $actionName);
         $this->_etapes_config = new EtapesConfig();
+        if($this->getRoute() instanceof DRRoute && !$this->getRoute()->getDR()->needStockageRepartition()) {
+            $this->_etapes_config->setDisabled('stockage');
+        }
     }
 
     protected function redirectByBoutonsEtapes($boutons_suppl = null, $dr) {
@@ -67,7 +70,9 @@ class _DRActions extends sfActions
 
     protected function redirectToNextEtapes($dr) {
         if ($new_etape = $this->_etapes_config->needToChangeEtape()) {
-            $this->getUser()->addEtapeDeclaration($new_etape);
+            if ($dr->addEtape($new_etape)) {
+                $dr->save();
+            }
         }
 
         return $this->redirect($this->_etapes_config->nextUrl(), $dr);
