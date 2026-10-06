@@ -6,7 +6,6 @@ class drActions extends _DRActions {
 
         // throw new sfException("En maintenance");
         $this->forward404Unless($request->isMethod(sfWebRequest::POST));
-        $this->getUser()->initCredentialsDeclaration();
         $this->setCurrentEtape('mon_espace_civa');
         $campagne = $request->getParameter('campagne');
         $etablissement = $this->getRoute()->getEtablissement();
@@ -316,9 +315,39 @@ class drActions extends _DRActions {
         return $this->renderPdf(sfConfig::get('sf_web_dir') . DIRECTORY_SEPARATOR . "helpPdf/guide_vci.pdf", "guide_vci.pdf");
     }
 
+    public function executeStockage(sfWebRequest $request) {
+        $this->secureDR(DRSecurity::EDITION);
+        $this->setCurrentEtape('stockage');
+        $this->setLayout('layout');
+        $this->help_popup_action = "help_popup_stockage";
+        $this->dr = $this->getRoute()->getDR();
+
+        if($this->_etapes_config->isDisabled('stockage')) {
+            return $this->redirect('dr_validation', $this->dr);
+        }
+
+        $this->recapProduits = $this->dr->getRecapProduitsStockage();
+        $this->form = new RecolteStockageForm($this->dr);
+
+        if (!$request->isMethod(sfWebRequest::POST)) {
+            return sfView::SUCCESS;
+        }
+
+        $this->form->bind($request->getParameter($this->form->getName()));
+
+        if (!$this->form->isValid()) {
+
+            return sfView::SUCCESS;
+        }
+
+        $this->form->save();
+
+        return $this->redirectByBoutonsEtapes(null, $this->dr);
+    }
+
     public function executeAutres(sfWebRequest $request) {
         $this->secureDR(DRSecurity::EDITION);
-        $this->setCurrentEtape('exploitation_autres');
+        $this->setCurrentEtape('autres');
         $this->help_popup_action = "help_popup_autres";
 
         $this->dr = $this->getRoute()->getDR();
@@ -413,7 +442,6 @@ class drActions extends _DRActions {
             }
 
             $this->dr->save();
-            $this->getUser()->initCredentialsDeclaration();
 
             return $this->redirectByBoutonsEtapes(null, $this->dr);
         }
@@ -534,7 +562,6 @@ class drActions extends _DRActions {
             $dr->save();
         }
 
-        $this->getUser()->initCredentialsDeclaration();
         $this->redirect('mon_espace_civa_dr', $dr->getEtablissement());
     }
 

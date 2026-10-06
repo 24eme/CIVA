@@ -49,13 +49,16 @@ class DRSecurity implements SecurityInterface {
             }
         }
 
+        if ($this->getUser()->hasCredential(CompteSecurityUser::ADMIN_CONSULTATION_PRODUCTION)) {
+            return true;
+        }
+
         if(!EtablissementSecurity::getInstance($this->etablissement)->isAuthorized(Roles::TELEDECLARATION_DR)) {
 
             return false;
         }
 
         if(in_array(self::CONSULTATION, $droits)) {
-
             return true;
         }
 

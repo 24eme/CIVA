@@ -4,15 +4,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     const ETAPE_EXPLOITATION = 'exploitation';
     const ETAPE_REPARTITION = 'repartition';
     const ETAPE_RECOLTE = 'recolte';
+    const ETAPE_AUTRES = 'autres';
+    const ETAPE_STOCKAGE = 'stockage';
     const ETAPE_VALIDATION = 'validation';
 
-    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_VALIDATION);
-    public static $_etapes_inclusion = array(self::ETAPE_EXPLOITATION => array(),
-                                             self::ETAPE_REPARTITION => array(self::ETAPE_EXPLOITATION),
-                                             self::ETAPE_RECOLTE => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION),
-                                             self::ETAPE_VALIDATION => array(self::ETAPE_EXPLOITATION, self::ETAPE_REPARTITION, self::ETAPE_RECOLTE));
-
-
+    public static $_etapes = array(DR::ETAPE_EXPLOITATION, DR::ETAPE_REPARTITION, DR::ETAPE_RECOLTE, DR::ETAPE_AUTRES, DR::ETAPE_STOCKAGE, DR::ETAPE_VALIDATION);
     protected $utilisateurs_document = null;
     protected $declarant_document = null;
 
@@ -34,6 +30,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         $this->declarant_document = new DeclarantDocument($this);
     }
 
+    public function storeStorage() {
+        $etablissement = $this->getEtablissementObject();
+        $lieux = $etablissement->getLieuxStockage(false, $this->identifiant);
+        foreach($lieux as $lieu) {
+            $this->stockage->add($lieu->numero, $lieu);
+        }
+    }
+
     public function constructId() {
         $this->set('_id', 'DR-' . $this->cvi . '-' . $this->campagne);
     }
@@ -47,33 +51,14 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         if (!in_array($etape, self::$_etapes)) {
             throw new sfException("etape does not exist");
         }
-        if ($this->checkEtape($etape)) {
-            $this->add('etape');
-            $this->etape = $etape;
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    /**
-     *
-     * @param string $etape
-     * @return boolean
-     */
-    protected function checkEtape($etape) {
-        if ($this->exist('etape') && $this->etape && !in_array($this->etape, self::$_etapes_inclusion[$etape])) {
+        $indexEtape = array_search($etape, self::$_etapes);
+        if($this->exist('etape') && $this->etape && $indexEtape < array_search($this->etape, self::$_etapes)) {
             return false;
         }
-        if ($etape == self::ETAPE_EXPLOITATION) {
-            return true;
-        } elseif ($etape == self::ETAPE_REPARTITION) {
-            return true;
-        } elseif ($etape == self::ETAPE_RECOLTE) {
-            return true;
-        } elseif ($etape == self::ETAPE_VALIDATION) {
-            return true;
-        }
+
+        $this->add('etape', $etape);
+
         return true;
     }
 
@@ -464,10 +449,11 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 foreach ($lieu->getCouleurs() as $couleur) {
                     $this->checkNoeudRecapitulatif($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatifVentes($couleur, $validLogErreur, $validLogVigilance);
-
+                    $can_have_error_rebeche_saisie = true;
                     foreach ($couleur->getConfig()->getCepages() as $cepage_config) {
                         $hashCepage = HashMapper::inverse($cepage_config->getHash());
-                        if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
+                        if ($can_have_error_rebeche_saisie && $cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
+                            $can_have_error_rebeche_saisie = false;
                             if(!$this->exist($hashCepage)) {
                                 array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                             }
@@ -486,64 +472,6 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                         if($totalVolRevendique == 0 && $cepage->getConfig()->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() == 0) {
                             $couleur->remove($key);
                             continue;
-                        }
-
-                        $bloquant_rebeche = false;
-
-                        //Vérifie le min rebeche autorisé
-                        if ($cepage->getConfig()->hasMinQuantite()) {
-                            $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->get('attributs/min_quantite'), 2);
-                            if ($totalVolRatioMin > $totalVolRevendique) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
-                                $bloquant_rebeche = true;
-                            }
-                        }
-
-                        //Vérifie le max rebeche autorisé
-                        if ($cepage->getConfig()->hasMaxQuantite()) {
-                            $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $cepage->getConfig()->get('attributs/max_quantite'), 2);
-                            if ($totalVolRatioMax < $totalVolRevendique) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
-                                $bloquant_rebeche = true;
-                            }
-                        }
-
-                        if ($cepage->getConfig()->hasMinQuantite() || $cepage->getConfig()->hasMaxQuantite()) {
-                            $volume_acheteurs = $cepage->getVolumeAcheteurs('cooperatives', false);
-                            foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
-                                $volume_min = round($volume * $cepage->getConfig()->get('attributs/min_quantite'), 2);
-                                $volume_max = round($volume * $cepage->getConfig()->get('attributs/max_quantite'), 2);
-                                $volume_acheteur = (isset($volume_acheteurs[$cvi])) ? $volume_acheteurs[$cvi] : 0;
-                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $volume_acheteur < $volume_min) {
-                                    array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
-                                    $bloquant_rebeche = true;
-                                    break;
-                                }
-                                if (!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $volume_acheteur > $volume_max) {
-                                    array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
-                                    $bloquant_rebeche = true;
-                                    break;
-                                }
-                            }
-
-                            if(!$bloquant_rebeche && count($volume_acheteurs) != count($lieu->getVolumeAcheteursForMinQuantite())) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
-                                    $bloquant_rebeche = true;
-                                    break;
-                            }
-
-                            $volume_cave_particuliere_min = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->get('attributs/min_quantite'), 2);
-                            $volume_cave_particuliere_max = round($lieu->getTotalCaveParticuliereForMinQuantite() * $cepage->getConfig()->get('attributs/max_quantite'), 2);
-
-                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMinQuantite() && $cepage->getTotalCaveParticuliere() < $volume_cave_particuliere_min) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
-                                $bloquant_rebeche = true;
-                            }
-
-                            if(!$bloquant_rebeche && $cepage->getConfig()->hasMaxQuantite() && $cepage->getTotalCaveParticuliere() > $volume_cave_particuliere_max) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepage->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
-                                $bloquant_rebeche = true;
-                            }
                         }
 
                         //Vérifie si aucune des colonnes d'un cépage est saisi
@@ -603,6 +531,92 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                             }
                         }
                     }
+
+                    /* Contrôle des rebeches */
+                    $configMinQuantite = null;
+                    $configMaxQuantite = null;
+                    $volumeRevendiqueLimiteQuantite = 0;
+                    $volumeCaveParticuliereLimiteQuantite = 0;
+                    $volumeAcheteursLimiteQuantite = [];
+                    $cepageRebeche = null;
+                    $bloquant_rebeche = false;
+
+                    foreach ($couleur->getCepages() as $cepage) {
+                        if (!$cepage->getConfig()->hasMinQuantite() && !$cepage->getConfig()->hasMaxQuantite()) {
+                            continue;
+                        }
+                        if ($cepage->getConfig()->hasMinQuantite()) {
+                            $configMinQuantite = round($cepage->getConfig()->get('attributs/min_quantite'), 2);
+                        }
+                        if ($cepage->getConfig()->hasMaxQuantite()) {
+                            $configMaxQuantite = round($cepage->getConfig()->get('attributs/max_quantite'), 2);
+                        }
+                        $volumeRevendiqueLimiteQuantite += $cepage->getTotalVolume(true);
+                        $volumeCaveParticuliereLimiteQuantite += $cepage->getTotalCaveParticuliere();
+                        foreach($cepage->getVolumeAcheteurs('cooperatives', false) as $cvi => $volume) {
+                            if(!isset($volumeAcheteursLimiteQuantite[$cvi])) {
+                                $volumeAcheteursLimiteQuantite[$cvi] = 0;
+                            }
+                            $volumeAcheteursLimiteQuantite[$cvi] += $volume;
+                        }
+                        $cepageRebeche = $cepage;
+                    }
+
+                    //Vérifie le min rebeche autorisé
+                    if ($configMinQuantite) {
+                        $totalVolRatioMin = round($lieu->getTotalVolumeForMinQuantite() * $configMinQuantite, 2);
+                        if ($totalVolRatioMin > $volumeRevendiqueLimiteQuantite) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_min_quantite')));
+                            $bloquant_rebeche = true;
+                        }
+                    }
+
+                    //Vérifie le max rebeche autorisé
+                    if ($configMaxQuantite) {
+                        $totalVolRatioMax = round($lieu->getTotalVolumeForMinQuantite() * $configMaxQuantite, 2);
+                        if ($totalVolRatioMax < $volumeRevendiqueLimiteQuantite) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_max_quantite')));
+                            $bloquant_rebeche = true;
+                        }
+                    }
+
+                    if ($configMinQuantite || $configMaxQuantite) {
+                        foreach($lieu->getVolumeAcheteursForMinQuantite() as $cvi => $volume) {
+                            $volume_min = round($volume * $configMinQuantite, 2);
+                            $volume_max = round($volume * $configMaxQuantite, 2);
+                            $volume_acheteur = (isset($volumeAcheteursLimiteQuantite[$cvi])) ? $volumeAcheteursLimiteQuantite[$cvi] : 0;
+                            if (!$bloquant_rebeche && $configMinQuantite && $volume_acheteur < $volume_min) {
+                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                                break;
+                            }
+                            if (!$bloquant_rebeche && $configMaxQuantite && $volume_acheteur > $volume_max) {
+                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                                break;
+                            }
+                        }
+
+                        if(!$bloquant_rebeche && $volumeAcheteursLimiteQuantite > 0 && count($volumeAcheteursLimiteQuantite) != count($lieu->getVolumeAcheteursForMinQuantite())) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                                $bloquant_rebeche = true;
+                                break;
+                        }
+
+                        $volume_cave_particuliere_min = round($lieu->getTotalCaveParticuliereForMinQuantite() * $configMinQuantite, 2);
+                        $volume_cave_particuliere_max = round($lieu->getTotalCaveParticuliereForMinQuantite() * $configMaxQuantite, 2);
+
+                        if(!$bloquant_rebeche && $configMinQuantite && $volumeCaveParticuliereLimiteQuantite < $volume_cave_particuliere_min) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                            $bloquant_rebeche = true;
+                        }
+
+                        if(!$bloquant_rebeche && $configMaxQuantite && $volumeCaveParticuliereLimiteQuantite > $volume_cave_particuliere_max) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => $cepageRebeche->getHash())), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepageRebeche->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_rebeches_repartition')));
+                            $bloquant_rebeche = true;
+                        }
+                    }
+                    /* Fin de contrôle des rebeches */
                 }
               }
             }
@@ -897,7 +911,7 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
     public function getDRMEdiProduitRows(DRMGenerateCSV $drmGenerateCSV){
       $lignesEdi = "";
       foreach ($this->getProduits() as $hashProduit => $produit) {
-        if($produit->getKey() == 'cepage_RB') {
+        if(preg_match('/cepage_RB/', $produit->getKey())) {
             continue;
         }
         if(!$produit->getTotalCaveParticuliere()) {
@@ -954,7 +968,8 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
      $volumeRevendiqueAlsaceBlancMout = 0;
      foreach ($this->getProduits()as $hashProduit => $produit) {
            $noeud = $produit;
-           if($produit->getCepage()->getKey() == 'cepage_RB') {
+
+           if(preg_match('/cepage_RB/', $produit->getCepage()->getKey())) {
                continue;
            }
            if(is_null($volumeRevendiqueAlsaceBlanc) && $produit->getAppellation()->getKey() == "appellation_CREMANT") {
@@ -1109,5 +1124,52 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
         }
 
         return 'SANS_VOLUME';
+    }
+
+    public function getRecapProduitsStockage() {
+        $recap = array();
+        foreach($this->getProduits() as $produit) {
+            if(!$produit->getConfig()->hasTotalCepage()) {
+                $produit = $produit->getParent()->getParent()->getParent();
+            }
+            if(!$produit->getVolumeRevendiqueCaveParticuliere()) {
+                continue;
+            }
+            $key = $produit->getHash();
+
+            if(isset($recap[$key])) {
+                continue;
+            }
+            $recapProduit = new stdClass();
+            $recapProduit->produit_hash = $produit->getHash();
+            $recapProduit->libelle = $produit->getLibelleComplet();
+            $recapProduit->denominationComplementaire = null;
+            $recapProduit->libelle_html = $produit->getLibelleComplet();
+            $recapProduit->volume_revendique = $produit->getVolumeRevendiqueCaveParticuliere();
+            $recap[$key] = $recapProduit;
+        }
+
+        $recapSorted = array();
+
+        foreach($this->getDocument()->getConfiguration()->getProduits() as $hashProduit => $child) {
+            if(!$child->hasTotalCepage()) {
+                $hashProduit = $child->getAppellation()->getHash();
+            }
+            $hashProduit = HashMapper::inverse($hashProduit);
+            foreach(array_keys($recap) as $hash) {
+                if(strpos($hash, $hashProduit) === false) {
+                    continue;
+                }
+                $recapSorted[$hash] = $recap[$hash];
+                unset($recap[$hash]);
+            }
+        }
+
+        return $recapSorted;
+    }
+
+    public function needStockageRepartition() {
+
+        return count($this->stockage) || $this->hasVolumeSurPlace();
     }
 }

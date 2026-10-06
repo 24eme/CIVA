@@ -43,6 +43,7 @@ class DRClient extends acCouchdbClient {
   protected function initDeclaration($doc, $depot_mairie = false) {
     $doc->constructId();
     $doc->storeDeclarant();
+    $doc->storeStorage();
     $doc->remove('date_depot_mairie');
     if($depot_mairie){
       $doc->add('date_depot_mairie', null);

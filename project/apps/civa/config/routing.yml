@@ -753,6 +753,13 @@ dr_recolte_erreur_log:
   options: { model: DR, type: object }
   requirements: { sf_method: [get, post] }
 
+dr_stockage:
+  url: /dr/:id/stockage
+  param: {module: dr, action: stockage }
+  class: DRRoute
+  options: { model: DR, type: object }
+  requirements: { sf_method: [get, post] }
+
 dr_validation:
   url:   /dr/:id/validation
   param: { module: dr, action: validation }

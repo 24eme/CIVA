@@ -109,6 +109,26 @@ DR:
       famille_calculee: {}
       lies_saisis_cepage: {type: float, required: false}
       etape: {type: string, required: false}
+      stockage:
+        type: collection
+        definition:
+          fields:
+            '*':
+              class: DRStockage
+              type: collection
+              definition:
+                fields:
+                  numero: {  }
+                  nom: {  }
+                  adresse: {  }
+                  commune: {  }
+                  code_postal: {  }
+                  produits:
+                    type: collection
+                    required: false
+                    definition:
+                      fields:
+                        '*': { type: float }
       recolte:
         type: collection
         class: DRRecolte

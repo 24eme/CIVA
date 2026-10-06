@@ -3,6 +3,7 @@
         protected $_items = array();
         protected $_orders = array();
         protected $_current_etape_order = null;
+        protected $_disabled = array();
 
         public function  __construct() {
             if (sfConfig::has('app_etapes_items') && sfConfig::has('app_etapes_orders')) {
@@ -16,6 +17,14 @@
         public function isAutorized($etapeCourante, $etapeCheck) {
 
             return array_search($etapeCourante, $this->_orders) >= array_search($etapeCheck, $this->_orders);
+        }
+
+        public function setDisabled($etape) {
+            $this->_disabled[] = $etape;
+        }
+
+        public function isDisabled($etape) {
+            return in_array($etape, $this->_disabled);
         }
 
         public function setCurrentEtape($current_etape) {
@@ -44,26 +53,58 @@
 
         public function needToChangeEtape() {
             if (array_key_exists('next_is_new_etape', $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]])) {
-                return $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'];
+                $etape = $this->_items[$this->_orders[$this->getCurrentEtapeRequired()]]['next_is_new_etape'];
+                // if($this->isDisabled($etape)) {
+                //     $this->setCurrentEtape($etape);
+                //     return $this->needToChangeEtape();
+                // }
+
+                return $etape;
             } else {
                 return false;
             }
         }
 
-        protected function next() {
-            if(isset($this->_orders[$this->getCurrentEtapeRequired() + 1])) {
-                return $this->_items[$this->_orders[$this->getCurrentEtapeRequired() + 1]];
-            } else {
+        protected function next($etapeOrder = null) {
+            if($etapeOrder === null) {
+                $etapeOrder = $this->getCurrentEtapeRequired();
+            }
+
+            $etape = null;
+            if(isset($this->_orders[$etapeOrder + 1])) {
+                $etape = $this->_items[$this->_orders[$etapeOrder + 1]];
+            }
+
+            if(!$etape) {
                 throw new sfException('Next etape does not exist');
             }
+
+            if($this->isDisabled($this->_orders[$etapeOrder + 1])) {
+                return $this->next($etapeOrder + 1);
+            }
+
+            return $etape;
         }
 
-        protected function previous() {
-            if(isset($this->_orders[$this->getCurrentEtapeRequired() - 1])) {
-                return $this->_items[$this->_orders[$this->getCurrentEtapeRequired() - 1]];
-            } else {
-                throw new sfException('Previous etape does not exist');
+        protected function previous($etapeOrder = null) {
+            if($etapeOrder === null) {
+                $etapeOrder = $this->getCurrentEtapeRequired();
             }
+
+            $etape = null;
+            if(isset($this->_orders[$etapeOrder - 1])) {
+                $etape = $this->_items[$this->_orders[$etapeOrder - 1]];
+            }
+
+            if(!$etape) {
+                throw new sfException("Previous etape does not exist");
+            }
+
+            if($this->isDisabled($this->_orders[$etapeOrder - 1])) {
+                return $this->previous($etapeOrder - 1);
+            }
+
+            return $etape;
         }
 
         public function nextUrl() {

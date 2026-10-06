@@ -13,6 +13,7 @@
       </title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/css/global.css?202605010137" rel="stylesheet">
+    <link href="/css/declaration_recolte.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/components/vins/vins.css" rel="stylesheet">
     <link href="/components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">

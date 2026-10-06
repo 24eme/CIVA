@@ -429,6 +429,11 @@ abstract class _DRRecolteNoeud extends acCouchdbDocumentTree {
         return $this->store('libelle', array($this, 'findLibelle'));
     }
 
+    public function getLibelleComplet() {
+
+        return $this->getConfig()->getLibelleFormat();
+    }
+
     public function removeVolumes() {
         $this->total_volume = null;
         $this->volume_revendique = null;

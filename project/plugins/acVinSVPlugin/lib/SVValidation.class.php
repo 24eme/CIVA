@@ -12,10 +12,12 @@ class SVValidation extends DocumentValidation
         $this->addControle('erreur', 'cremant_rebeches_manquant', "Vous n'avez pas déclaré de rebêches alors que vous produisez du Crémant");
         $this->addControle('erreur', 'superficie_mouts_incoherent', "La superficie des mouts doit être supérieure à zéro");
         $this->addControle('vigilance', 'lies_vides', "Vous n'avez pas déclaré de lies et bourbes");
+        $this->addControle('vigilance', 'rendement_depasse', "Le rendement maximum est dépassé");
     }
 
     public function controle()
     {
+        $recapProduits = $this->document->getRecapProduits();
         foreach($this->document->apporteurs as $apporteur) {
             if(!$apporteur->isComplete()) {
                 $this->addPoint('erreur', 'apporteurs_complet', "Terminer la saisie", $this->generateUrl('sv_apporteurs', $this->document));
@@ -23,7 +25,7 @@ class SVValidation extends DocumentValidation
             }
 
             if($this->document->type == SVClient::TYPE_SV12) {
-                foreach($this->document->getRecapProduits() as $hash => $recapProduit) {
+                foreach($recapProduits as $hash => $recapProduit) {
                     if(!$this->document->extraction->exist(str_replace('/declaration/', '', $hash))) {
                         continue;
                     }
@@ -89,5 +91,12 @@ class SVValidation extends DocumentValidation
         if ($this->document->hasVolumeCremantInProduits() && !$this->document->rebeches) {
            $this->addPoint('erreur', 'cremant_rebeches_manquant', 'Saisir les rebêches', $this->generateUrl('sv_autres', $this->document));
         }
+
+        foreach($recapProduits as $recapProduit) {
+            if(isset($recapProduit->rendement) && $recapProduit->rendement->rendement_max && $recapProduit->rendement->rendement > $recapProduit->rendement->rendement_max) {
+                $this->addPoint('vigilance', 'rendement_depasse', $recapProduit->libelle_html . ', ' . $recapProduit->rendement->rendement . ' hl/ha pour '.$recapProduit->rendement->rendement_max.' hl/ha maximum autorisé');
+            }
+        }
+
     }
 }
