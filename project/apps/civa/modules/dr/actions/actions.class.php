@@ -319,6 +319,7 @@ class drActions extends _DRActions {
         $this->secureDR(DRSecurity::EDITION);
         $this->setCurrentEtape('stockage');
         $this->setLayout('layout');
+        $request->setParameter('css_dr', 'true');
         $this->help_popup_action = "help_popup_stockage";
         $this->dr = $this->getRoute()->getDR();
 

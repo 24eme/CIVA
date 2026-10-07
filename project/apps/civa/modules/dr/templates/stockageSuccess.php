@@ -1,5 +1,4 @@
 <?php use_helper('Float'); ?>
-<?php use_stylesheet('/css/declaration_recolte.css', 'first') ?>
 <?php include_partial('dr/etapes', array('etape' => 5, 'dr' => $dr)) ?>
 <?php include_partial('dr/actions', array('etape' => 0, 'help_popup_action'=>$help_popup_action)) ?>
 
