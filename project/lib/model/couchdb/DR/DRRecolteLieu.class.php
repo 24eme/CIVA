@@ -73,6 +73,26 @@ class DRRecolteLieu extends BaseDRRecolteLieu {
         return false;
     }
 
+    public function getTotalVolumeForMinQuantiteByCouleurCepage($couleurCepage) {
+        $total = 0;
+        foreach($this->getCouleurs() as $couleur) {
+            foreach($couleur->getCepages() as $cepage) {
+                if(preg_match('/cepage_RB/', $cepage->getKey())) {
+                    continue;
+                }
+                if($couleurCepage == "rose" && $cepage->getKey() == 'cepage_PN') {
+                    $total += $cepage->getTotalVolumeForMinQuantite();
+                } elseif($couleurCepage == "rouge" && $cepage->getKey() == 'cepage_PR') {
+                    $total += $cepage->getTotalVolumeForMinQuantite();
+                } elseif($couleurCepage == "blanc" && !in_array($cepage->getKey(), ['cepage_PN', 'cepage_PR'])) {
+                    $total += $cepage->getTotalVolumeForMinQuantite();
+                }
+            }
+        }
+
+        return $total;
+    }
+
     public function getNbCouleurs() {
 
         return count($this->filter('^couleur'));

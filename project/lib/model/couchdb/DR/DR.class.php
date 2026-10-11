@@ -449,13 +449,18 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                 foreach ($lieu->getCouleurs() as $couleur) {
                     $this->checkNoeudRecapitulatif($couleur, $validLogErreur, $validLogVigilance);
                     $this->checkNoeudRecapitulatifVentes($couleur, $validLogErreur, $validLogVigilance);
-                    $can_have_error_rebeche_saisie = true;
                     foreach ($couleur->getConfig()->getCepages() as $cepage_config) {
                         $hashCepage = HashMapper::inverse($cepage_config->getHash());
-                        if ($can_have_error_rebeche_saisie && $cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
-                            $can_have_error_rebeche_saisie = false;
-                            if(!$this->exist($hashCepage)) {
+
+                        if ($cepage_config->hasMinQuantite() && $lieu->getTotalVolumeForMinQuantite() > 0) {
+                            if(!$this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("rose") > 0 && $cepage_config->getKey() == 'RBRS') {
                                 array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                            } elseif(!$this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("blanc") > 0 && $cepage_config->getKey() == 'RBBL') {
+                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
+                            } elseif($cepage_config->getKey() == 'RBRS' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("rose") == 0) {
+                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
+                            } elseif($cepage_config->getKey() == 'RBBL' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("blanc") == 0) {
+                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
                             }
                         }
 
