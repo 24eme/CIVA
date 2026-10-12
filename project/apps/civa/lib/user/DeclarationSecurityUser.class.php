@@ -34,7 +34,6 @@ abstract class DeclarationSecurityUser extends TiersSecurityUser
      */
     public function getDeclaration()
     {
-        $this->requireDeclaration();
         $this->requireTiers();
         if (is_null($this->_declaration)) {
             if(!$this->getDeclarant()) {
