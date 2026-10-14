@@ -68,6 +68,7 @@
         }
         inputPrincipal.dispatchEvent(new Event('change'));
       });
+      item.dispatchEvent(new Event('change'));
     })
   </script>
   </div>
