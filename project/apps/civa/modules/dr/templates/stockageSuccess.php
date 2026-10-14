@@ -61,7 +61,7 @@
           }
           totalSecondaire += parseFloat(inputSecondaire.value);
         });
-        inputPrincipal.value = total - totalSecondaire;
+        inputPrincipal.value = parseFloat(total - totalSecondaire).toFixed(2);
         if(parseFloat(inputPrincipal.value) < 0) {
           inputPrincipal.value = 0;
           this.value = total - totalSecondaire + parseFloat(this.value);
