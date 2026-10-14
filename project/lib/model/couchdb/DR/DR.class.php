@@ -457,11 +457,15 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
                                 array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
                             } elseif(!$this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("blanc") > 0 && $cepage_config->getKey() == 'RBBL') {
                                 array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => acCouchdbManager::getClient('Messages')->getMessage('err_log_cremant_pas_rebeches')));
-                            } elseif($cepage_config->getKey() == 'RBRS' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("rose") == 0) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
-                            } elseif($cepage_config->getKey() == 'RBBL' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("blanc") == 0) {
-                                array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
                             }
+                        }
+
+                        if ($cepage_config->hasMinQuantite() && $cepage_config->getKey() == 'RBRS' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("rose") == 0) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
+                            $this->remove($hashCepage);
+                        } elseif($cepage_config->hasMinQuantite() && $cepage_config->getKey() == 'RBBL' && $this->exist($hashCepage) && $lieu->getTotalVolumeForMinQuantiteByCouleurCepage("blanc") == 0) {
+                            array_push($validLogErreur, array("url" => $this->generateUrl('dr_recolte_noeud', array('id' => $this->_id, 'hash' => HashMapper::inverse($cepage_config->getHash()))), 'log' => $lieu->getLibelleWithAppellation() . ' - ' . $cepage_config->getLibelle(), 'info' => "Vous ne pouvez pas déclarer des rebèches de cette couleur"));
+                            $this->remove($hashCepage);
                         }
 
                         if(!$this->exist($hashCepage)) {

@@ -94,7 +94,7 @@ class SVValidation extends DocumentValidation
 
         foreach($recapProduits as $recapProduit) {
             if(isset($recapProduit->rendement) && $recapProduit->rendement->rendement_max && $recapProduit->rendement->rendement > $recapProduit->rendement->rendement_max) {
-                $this->addPoint('vigilance', 'rendement_depasse', $recapProduit->libelle_html . ', ' . $recapProduit->rendement->rendement . ' hl/ha pour '.$recapProduit->rendement->rendement_max.' hl/ha maximum autorisé');
+                $this->addPoint('vigilance', 'rendement_depasse', $recapProduit->libelle_html . ' ' . $recapProduit->rendement->rendement . ' hl/ha pour '.$recapProduit->rendement->rendement_max.' hl/ha maximum autorisé');
             }
         }
 
