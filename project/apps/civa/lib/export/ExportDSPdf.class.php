@@ -2,7 +2,7 @@
 
 class ExportDSPdf extends ExportDocument {
 
-    const NB_LIGNES_PAR_PAGES = 46;
+    const NB_LIGNES_PAR_PAGES = 45;
 
     protected $type;
     protected $document;

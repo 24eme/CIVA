@@ -514,7 +514,7 @@ class dr_recolteActions extends _DRActions {
     }
 
     protected function initPrecDR(){
-        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->getUser()->getTiers('Recoltant')->cvi, ($this->getUser()->getCampagne()-1), 4);
+        $this->campagnes = acCouchdbManager::getClient('DR')->getArchivesSince($this->declaration->cvi, $this->declaration->campagne-1, 4);
     }
 
     protected function getFormDetailsOptions() {

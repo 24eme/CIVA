@@ -936,7 +936,7 @@ abstract class _ConfigurationDeclaration extends acCouchdbDocumentTree {
 
     public function hasCepageRB() {
         foreach($this->getProduits() as $produit) {
-            if($produit->getKey() == "RB") {
+            if(strpos($produit->getKey(), "RB") === 0) {
                 return true;
             }
         }

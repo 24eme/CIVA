@@ -97,6 +97,7 @@ body > .navbar {
     float: left;
     text-align: center;
     width: 135px;
+    margin-top: 0;
 }
 
 /* Titre rubrique */
@@ -107,7 +108,7 @@ body > .navbar {
     float: left;
     margin: 0 12px;
     padding: 0 12px;
-    width: 650px;
+    width: 684px;
     height: 95px;
 }
 
@@ -150,7 +151,7 @@ body > .navbar {
 
 #header #acces_directs ul { margin: 0;  padding: 0; line-height: 1; list-style-type: none }
 
-#header #acces_directs ul li { margin: 0;  padding: 0; }
+#header #acces_directs ul li { margin: 0;  padding: 0; font-size: 12px; line-height: 14px; }
 
 #header #acces_directs ul li a { color: #c4d00a; }
 
@@ -159,6 +160,38 @@ a.admin { color: #ff0000; }
 
 #global #contenu {
     padding: 30px 20px 20px 20px;
+}
+
+ul#onglets_majeurs {
+    margin-bottom: 0;
+    margin-right: -20px;
+    margin-left: -20px;
+}
+
+ul#etape_declaration {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: -18px;
+}
+
+ul#etape_declaration li a {
+    line-height: 19px;
+}
+
+ul#etape_declaration li a em {
+    line-height: 14px;
+}
+
+#application_dr {
+    margin-right: -20px;
+    margin-left: -20px;
+    padding-top: 20px;
+    padding-bottom: 15px;
+}
+
+#btn_etape {
+    margin-right: -20px;
+    margin-left: -20px;
 }
 
 /* Étapes */

@@ -1414,11 +1414,25 @@ class Vrac extends BaseVrac implements InterfaceArchivageDocument
             return "";
         }
 
+        $toMerge = [];
+
+        foreach ($this->getAllAnnexesFilename() as $filename => $annexe) {
+            if (pathinfo($filename, PATHINFO_EXTENSION) !== "pdf") {
+                continue;
+            }
+
+            $toMerge[$filename] = $annexe;
+        }
+
+        if (count($toMerge) === 0) {
+            return "";
+        }
+
         $cachePath = sfConfig::get('sf_root_dir').'/cache/pdf/';
         $ouputPdf = $cachePath.'annexes_merged_'.uniqid().'.pdf';
 
         $listeAnnexes = [];
-        foreach ($this->getAllAnnexesFilename() as $annexe) {
+        foreach ($toMerge as $annexe) {
             $tmpAnnexePath = $cachePath.uniqid('annexe_', true).'.pdf';
             stream_copy_to_stream(
                 fopen($this->getAttachmentUri($this->getAnnexeFilename($annexe)), 'r'),

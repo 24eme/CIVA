@@ -43,6 +43,7 @@ class DRClient extends acCouchdbClient {
   protected function initDeclaration($doc, $depot_mairie = false) {
     $doc->constructId();
     $doc->storeDeclarant();
+    $doc->storeStorage();
     $doc->remove('date_depot_mairie');
     if($depot_mairie){
       $doc->add('date_depot_mairie', null);
@@ -117,6 +118,10 @@ class DRClient extends acCouchdbClient {
 
         if (!isset($prod['hash']))
           throw new sfException("Error on ".$prod['error']." (line $linenum / acheteur = $acheteur_cvi / recoltant = ".$tiers->cvi.')');
+
+        if(preg_match('|/cepages/RB$|', $prod['hash'])) {
+            $prod['hash'] = str_replace('/cepages/RB', '/cepages/RBBL', $prod['hash']);
+        }
 
         $cepage = $doc->getOrAdd(HashMapper::inverse($prod['hash']));
 

@@ -10,7 +10,7 @@ abstract class ExportMiseADispo
     protected $_export_queue = array();
     protected $_hash_md5 = array();
     protected $_hash_md5_from_file = array();
-    protected $_campagnes = null;
+    protected $_campagnes = array();
     protected $_file_export_document_pdf = null;
 
 	public function __construct(Export $export, $function_get_partial, $debug = false) {

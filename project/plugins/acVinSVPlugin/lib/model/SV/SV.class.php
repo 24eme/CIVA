@@ -222,6 +222,7 @@ class SV extends BaseSV
 
     public function getRecapProduits() {
         $recap = array();
+        $rendements = [];
         foreach($this->getProduits() as $produit) {
             $key = $produit->getProduitHash().'/'.$produit->getKey();
             if(!isset($recap[$key])) {
@@ -272,6 +273,35 @@ class SV extends BaseSV
             $recapProduit->taux_extraction = $produit->getTauxExtractionDefault();
 
             $recapProduit->superficie_totale += $produit->getSuperficieTotale();
+
+            if(!isset($rendements[$produit->getProduitHash()])) {
+                $rendements[$produit->getProduitHash()] = new stdClass();
+                $rendements[$produit->getProduitHash()]->volume_revendique = 0;
+                $rendements[$produit->getProduitHash()]->superficie_recolte = 0;
+            }
+            $rendements[$produit->getProduitHash()]->volume_revendique += $produit->volume_revendique;
+            $rendements[$produit->getProduitHash()]->volume_revendique += ($produit->exist('volume_mouts_revendique')) ? $produit->volume_mouts_revendique : 0;;
+            $rendements[$produit->getProduitHash()]->superficie_recolte += $produit->superficie_recolte;
+            $rendements[$produit->getProduitHash()]->superficie_recolte += ($produit->exist('superficie_mouts')) ? $produit->superficie_mouts : 0;
+        }
+
+        foreach($rendements as $produitHash => $rendement) {
+            if(!$rendement->superficie_recolte) {
+                continue;
+            }
+            $rendement->rendement = round($rendement->volume_revendique / $rendement->superficie_recolte * 100, 2);
+            $config = $this->getDocument()->getConfiguration()->get($produitHash);
+            if($config && $config->getRendementNoeud() > 0) {
+                $rendement->rendement_max = $config->getRendementNoeud();
+            } elseif($config && $config->getRendementAppellation() > 0) {
+                $rendement->rendement_max = $config->getRendementAppellation();
+            }
+        }
+
+        foreach($recap as $produit) {
+            if(isset($rendements[$produit->produit_hash])) {
+                $produit->rendement = $rendements[$produit->produit_hash];
+            }
         }
 
         $recapSorted = array();

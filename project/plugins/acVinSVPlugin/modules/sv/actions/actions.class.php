@@ -469,6 +469,7 @@ L'application de télédéclaration de production du CIVA
 
     public function executeVisualisation(sfWebRequest $request)
     {
+        set_time_limit(60);
         $this->sv = $this->getRoute()->getSV();
 
         if ($this->sv->isValide() === false) {

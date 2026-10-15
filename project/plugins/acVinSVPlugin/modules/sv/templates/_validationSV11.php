@@ -13,7 +13,7 @@
   <tbody>
   <?php foreach($sv->getRecapProduits() as $hash => $produit): ?>
   <tr>
-    <td><?php echo $produit->getRawValue()->libelle_html ?></td>
+    <td><?php echo $produit->getRawValue()->libelle_html ?> <?php if(isset($produit->rendement) && $produit->rendement->rendement): ?> <small class="text-muted pull-right <?php if($produit->rendement->rendement_max && $produit->rendement->rendement > $produit->rendement->rendement_max): ?>text-danger<?php endif; ?>" style="<?php if(!$produit->rendement->rendement_max): ?>opacity: 0.65;<?php endif; ?>"><?php echoFloat($produit->rendement->rendement)  ?> hl/ha</small><?php endif; ?></td>
     <td class="text-right"><?php echoFloat($produit->superficie_recolte) ?> <small class="text-muted">ares</small></td>
     <td class="text-right"><?php echo $produit->volume_recolte ?> <small class="text-muted">hl</small></td>
     <td class="text-right"><?php echoFloat($produit->volume_revendique) ?> <small class="text-muted">hl</small></td>

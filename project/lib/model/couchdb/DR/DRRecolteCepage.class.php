@@ -111,7 +111,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getTotalRebeches() {
-      if($this->getKey() != 'cepage_RB') {
+      if(!preg_match('/cepage_RB/', $this->getKey())) {
 
         return null;
       }
@@ -126,7 +126,7 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
     }
 
     public function getSurPlaceRebeches() {
-      if($this->getKey() != 'cepage_RB') {
+      if(!preg_match('/cepage_RB/', $this->getKey())) {
 
         return null;
       }
@@ -293,4 +293,11 @@ class DRRecolteCepage extends BaseDRRecolteCepage {
       }
     }
 
+    public function isNonSaisie() {
+        if($this->getConfig()->hasMinQuantite()) {
+            return false;
+        }
+
+        return parent::isNonSaisie();
+    }
 }

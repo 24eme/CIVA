@@ -61,7 +61,7 @@ function(doc) {
                 }
 
                 for(cepage_key in lieu[couleur_key]) {
-                    if(!(cepage_key.match('^cepage') && cepage_key != 'cepage_RB')) {
+                    if(!(cepage_key.match('^cepage') && !cepage_key.match('cepage_RB'))) {
 
                         continue;
                     }

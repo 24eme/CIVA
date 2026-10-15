@@ -326,6 +326,10 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         if ($this->volume)
             return '';
 
+        if($this->getConfig()->hasMinQuantite()) {
+            return '';
+        }
+
         $motifs_non_recolte = sfConfig::get('app_configuration_dr_motifs_non_recolte');
 
         if ($this->exist('motif_non_recolte') && isset($motifs_non_recolte[$this->motif_non_recolte])) {
@@ -446,5 +450,28 @@ class DRRecolteCepageDetail extends BaseDRRecolteCepageDetail {
         }
 
         return $nbDestinataire < 2;
+    }
+
+    public function getProduitHash() {
+
+        return $this->getCepage()->getHash();
+    }
+
+    public function getLibelle() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+        if($this->denomination) {
+            $libelle .= ' '.$this->denomination;
+        }
+
+        return $libelle;
+    }
+
+    public function getLibelleHtml() {
+        $libelle = $this->getConfig()->getLibelleFormat();
+        if($this->denomination) {
+            $libelle .= ' <span class="text-muted">'.$this->denomination.'</span>';
+        }
+
+        return $libelle;
     }
 }

@@ -114,7 +114,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
         if ($this->exist('attributs') && $this->attributs->exist('no_denomination')) {
 
             return !($this->attributs->no_denomination == 1);
-        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
+        } elseif ($this->exist('attributs') && $this->attributs->exist('max_quantite') && $this->attributs->get('max_quantite')) {
 
             return false;
         }
@@ -126,7 +126,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
         if ($this->exist('attributs') && $this->attributs->exist('no_superficie')) {
 
             return !($this->attributs->no_superficie == 1);
-        } elseif ($this->exist('attributs') && $this->attributs->exist('min_quantite') && $this->attributs->get('min_quantite')) {
+        } elseif ($this->exist('attributs') && $this->attributs->exist('max_quantite') && $this->attributs->get('max_quantite')) {
 
             return false;
         }
@@ -147,22 +147,22 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     public function hasOnlyOneDetail() {
-        if ($this->exist('only_one_detail') && $this->get('only_one_detail'))
+        if ($this->exist('attributs/only_one_detail') && $this->get('attributs/only_one_detail'))
           return true;
-        if ($this->exist('min_quantite') && $this->get('min_quantite'))
+        if ($this->exist('attributs/max_quantite') && $this->get('attributs/max_quantite'))
           return true;
         return false;
     }
     public function hasMinQuantite()
     {
 
-        return $this->getAttribut('min_quantite');
+        return $this->getAttribut('min_quantite') !== null;
     }
 
     public function hasMaxQuantite()
     {
 
-        return $this->getAttribut('max_quantite');
+        return $this->getAttribut('max_quantite') !== null;
     }
 
     public function hasNoNegociant()
@@ -203,7 +203,7 @@ class ConfigurationCepage extends BaseConfigurationCepage {
     }
 
     public function existRendement() {
-        if($this->getKey() == 'RB') {
+        if(strpos($this->getKey(), 'RB') === 0) {
 
             return false;
         }
