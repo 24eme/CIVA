@@ -673,6 +673,7 @@ input.btn_inactif {
 	font-weight: bold;
 	text-transform: uppercase;
 	text-align: center;
+	min-width: 175px;
 }
 
 #application_dr.mon_espace_civa .bloc_acceuil .bloc_acceuil_header.bloc_acceuil_header_deux_lignes
