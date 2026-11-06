@@ -631,6 +631,18 @@ class DR extends BaseDR implements InterfaceProduitsDocument, IUtilisateursDocum
             }
         }
 
+        if($this->exist('stockage')) {
+            foreach($this->document->stockage as $stockage) {
+                $produits = is_array($stockage->getProduits()) ? $stockage->getProduits() : $stockage->getProduits()->toArray();
+                $stocks_negatifs = array_filter($produits, function ($produit) {
+                    return $produit < 0;
+                });
+
+                if (empty($stocks_negatifs) === false) {
+                    array_push($validLogErreur, array('url' => $this->generateUrl("dr_stockage", array("id" => $this->_id)), 'log' => "Répartition du stockage", 'info' => "Trop de volume déclaré dans le lieu de stockage"));                }
+            }
+        }
+
         if($this->exist('jus_raisin_superficie') && $this->exist('jus_raisin_volume') && $this->jus_raisin_superficie > 0 && !$this->jus_raisin_volume) {
             array_push($validLogErreur, array('url' => $this->generateUrl("dr_autres", array("id" => $this->_id)), 'log' => "Jus de raisin", 'info' => "Vous n'avez pas saisi le volume"));
         }
