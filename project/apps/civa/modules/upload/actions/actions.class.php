@@ -141,7 +141,7 @@ class uploadActions extends sfActions {
             else if (!$this->hasVolume($line))
                 $this->nb_noVolumes++;
 
-            if (!$this->no_volume && $line[CsvFileAcheteur::CSV_SUPERFICIE]*1 && !$this->csv->getLineVolume($line)*1 ) {
+            if (!$this->no_volume && floatval($line[CsvFileAcheteur::CSV_SUPERFICIE]) && floatval($this->csv->getLineVolume($line))) {
                 $this->warnings[$cpt][] = 'Aucun volume déclaré la ligne sera importée et indiqué comme "Problème Climatique"';
             }
 	    if ($this->hasForbidenDenomination($line)) {
