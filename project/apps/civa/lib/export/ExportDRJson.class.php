@@ -21,7 +21,7 @@ class ExportDRJson
 
     public function isValide()
     {
-        return $this->dr->valide->statut === "VALIDE";
+        return $this->dr->isValideeTiers();
     }
 
     public function export()
