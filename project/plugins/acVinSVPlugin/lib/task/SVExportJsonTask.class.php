@@ -57,6 +57,14 @@ EOF;
                     continue;
                 }
 
+                if (method_exists($sv, 'isValide') && ! $sv->isValide()) {
+                    continue;
+                }
+
+                if (method_exists($sv, 'isValideeTiers') && ! $sv->isValideeTiers()) {
+                    continue;
+                }
+
                 $svs[] = $sv;
             }
         } else {
