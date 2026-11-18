@@ -21,7 +21,7 @@ class ExportDRJson
 
     public function isValide()
     {
-        return $this->dr->valide->statut === "VALIDE";
+        return $this->dr->isValideeTiers();
     }
 
     public function export()
@@ -147,7 +147,11 @@ class ExportDRJson
                 }
             }
 
-            if(isset($xmlCol['colonneAss']) && isset($produit["conserveCaveParticuliereExploitant"])) {
+            if (
+                isset($xmlCol['colonneAss'])
+                && isset($produit["conserveCaveParticuliereExploitant"])
+                && $xmlCol['colonneAss']['exploitant']['L5'] > 0
+            ) {
                 $produitAssocie = [
                     "typeAssociation" => "REB",
                     "codeProduitAssocie" => $xmlCol['colonneAss']['L1'],
