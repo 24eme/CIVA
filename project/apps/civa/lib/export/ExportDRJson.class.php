@@ -202,6 +202,52 @@ class ExportDRJson
 
     protected function getSites($produits)
     {
+        if (count($this->dr->stockage->toArray()) < 2) {
+            return $this->getSitesPre2026($produits);
+        }
+
+        $sites = [];
+        foreach ($this->dr->stockage as $stockage) {
+            $site = [];
+            $site['codeSite'] = $stockage->numero;
+            $sites[$stockage->numero] = $site;
+        }
+
+        foreach ($this->dr->getRecapProduitsStockage() as $hash => $produit) {
+            if (strpos($hash, '/cepage_RB') !== false) {
+                continue; // pas les rebêches dans les sites
+            }
+
+            $has_volume = $produit->volume_revendique;
+
+            if (! $has_volume) {
+                continue;
+            }
+
+            $code_produit = $this->dr->get($produit->produit_hash)->getConfig()->code_douane;
+            $mention = $produit->denominationComplementaire;
+
+            foreach ($this->dr->stockage as $id => $lieu) {
+                $produitsLieu = $lieu->produits;
+                $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
+
+                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : "0";
+
+                $add = [
+                    'codeProduit' => $code_produit,
+                    'mentionValorisante' => $mention ?: "",
+                    'volumeObtenu' => $volume
+                ];
+
+                $sites[$lieu->numero]['produits'][] = $add;
+            }
+        }
+
+        return $sites;
+    }
+
+    protected function getSitesPre2026($produits)
+    {
         $etablissement = $this->dr->getEtablissementObject();
         if(count($etablissement->getLieuxStockage()) < 2) {
 
