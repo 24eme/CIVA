@@ -38,11 +38,21 @@ class dr_recolteActions extends _DRActions {
 
 
     public function executeProduit(sfWebRequest $request) {
+        if($this->declaration->getConfig()->exist(HashMapper::convert($request->getParameter('hash')).'/attributs/no_dr') && $request->getParameter('direction') == 'next' && $this->declaration->getConfig()->get(HashMapper::convert($request->getParameter('hash')))->getNextSister()) {
+
+            return $this->redirect('dr_recolte_produit', ['sf_subject' => $this->declaration, 'hash' => HashMapper::inverse($this->declaration->getConfig()->get(HashMapper::convert($request->getParameter('hash')))->getNextSister()->getHash()), 'direction' => 'next']);
+        }
+        if($this->declaration->getConfig()->exist(HashMapper::convert($request->getParameter('hash')).'/attributs/no_dr') && $request->getParameter('direction') == 'next' && !$this->declaration->getConfig()->get(HashMapper::convert($request->getParameter('hash')))->getNextSister()) {
+            return $this->redirect('dr_recolte_recapitulatif', ['sf_subject' => $this->declaration, 'hash' => HashMapper::inverse($this->declaration->getConfig()->get(HashMapper::convert($request->getParameter('hash')))->getLieu()->getHash())]);
+        }
+        if($this->declaration->getConfig()->exist(HashMapper::convert($request->getParameter('hash')).'/attributs/no_dr') && $request->getParameter('direction') == 'previous') {
+
+            return $this->redirect('dr_recolte_produit', ['sf_subject' => $this->declaration, 'hash' => HashMapper::inverse($this->declaration->getConfig()->get(HashMapper::convert($request->getParameter('hash')))->getPreviousSister()->getHash()), 'direction' => 'previous']);
+        }
         if(!$this->declaration->exist($request->getParameter('hash'))) {
 
             return $this->executeProduitAjout($request);
         }
-
         $this->produit = $this->declaration->get($request->getParameter('hash'));
 
         $allColonneHasDenom = true;

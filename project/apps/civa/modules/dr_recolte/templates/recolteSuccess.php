@@ -52,10 +52,10 @@
             ?>
             <ul id="btn_cepage" class="btn_prev_suiv clearfix">
                 <?php if ($produit->getConfig()->getPreviousSister()): ?>
-                    <li class="prec"><a href="<?php echo url_for('dr_recolte_produit', array('sf_subject' => $produit, 'hash' => HashMapper::inverse($produit->getConfig()->getPreviousSister()->getHash()))) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
+                    <li class="prec"><a href="<?php echo url_for('dr_recolte_produit', array('sf_subject' => $produit, 'hash' => HashMapper::inverse($produit->getConfig()->getPreviousSister()->getHash()), 'direction' => 'previous')) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_prec.png" alt="Passer au cépage précédent" /></a></li>
                 <?php endif; ?>
-                <?php if ($produit->getConfig()->getNextSister() && !$produit->getConfig()->getNextSister()->exist('attributs/no_dr')): ?>
-                    <li class="suiv"><a href="<?php echo url_for('dr_recolte_produit', array('sf_subject' => $produit, 'hash' => HashMapper::inverse( $produit->getConfig()->getNextSister()->getHash()))) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
+                <?php if ($produit->getConfig()->getNextSister()): ?>
+                    <li class="suiv"><a href="<?php echo url_for('dr_recolte_produit', array('sf_subject' => $produit, 'hash' => HashMapper::inverse($produit->getConfig()->getNextSister()->getHash()), 'direction' => 'next')) ?>" class="btn_recolte_can_be_inactif"><img src="/images/boutons/btn_passer_cepage_suiv.png" alt="Passer au cépage suivant" /></a></li>
                 <?php endif; ?>
             </ul>
         </div>
