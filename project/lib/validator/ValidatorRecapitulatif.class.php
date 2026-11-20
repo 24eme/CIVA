@@ -23,14 +23,14 @@ class ValidatorRecapitulatif extends sfValidatorSchema
 
       return $values;
     }
-    
+
     foreach($values["acheteurs"] as $type => $type_value) {
         foreach($type_value as $cvi => $value) {
             if (is_array($value) && array_key_exists('superficie', $value)) {
-                $sum_superficie += $value['superficie'];
+                $sum_superficie += (float) $value['superficie'];
             }
             if (is_array($value) && array_key_exists('dontdplc', $value)) {
-                $sum_dontdplc += $value['dontdplc'];
+                $sum_dontdplc += (float) $value['dontdplc'];
             }
         }
     }
