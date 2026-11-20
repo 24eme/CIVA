@@ -210,6 +210,7 @@ class ExportDRJson
         foreach ($this->dr->stockage as $stockage) {
             $site = [];
             $site['codeSite'] = $stockage->numero;
+            $site['produits'] = [];
             $sites[$stockage->numero] = $site;
         }
 
@@ -225,13 +226,18 @@ class ExportDRJson
             }
 
             $code_produit = $this->dr->get($produit->produit_hash)->getConfig()->code_douane;
+
+            if (! $code_produit) {
+                $code_produit = $this->dr->get($produit->produit_hash)->getLieu()->code_douane;
+            }
+
             $mention = $produit->denominationComplementaire;
 
             foreach ($this->dr->stockage as $id => $lieu) {
                 $produitsLieu = $lieu->produits;
                 $produitsLieu = (is_array($produitsLieu) === false) ? $produitsLieu->toArray() : $produitsLieu;
 
-                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : "0";
+                $volume = (array_key_exists($hash, $produitsLieu)) ? number_format($produitsLieu[$hash], 2, ".", "") : "0.00";
 
                 $add = [
                     'codeProduit' => $code_produit,
@@ -243,7 +249,7 @@ class ExportDRJson
             }
         }
 
-        return $sites;
+        return array_values($sites);
     }
 
     protected function getSitesPre2026($produits)
