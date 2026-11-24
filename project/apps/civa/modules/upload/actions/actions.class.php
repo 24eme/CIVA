@@ -287,7 +287,7 @@ class uploadActions extends sfActions {
                 $this->has_edel = 1;
             }
 
-            if (preg_match('/_RB$/', $hashDR)) {
+            if (preg_match('/_RB/', $hashDR)) {
                 $this->no_surface = true;
                 $this->is_rebeche = true;
                 $this->nb_rebeche++;
