@@ -15,7 +15,7 @@ class updateDateMercurialeVracTask extends sfBaseTask
     {
         $this->addArguments(array(
             new sfCommandArgument('vracid', sfCommandArgument::REQUIRED, 'vrac id'),
-            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'date validation'),
+            new sfCommandArgument('date', sfCommandArgument::REQUIRED, 'Date de validation au format YYYY-MM-DD'),
         ));
 
         $this->addOptions(array(
@@ -28,10 +28,10 @@ class updateDateMercurialeVracTask extends sfBaseTask
         $this->name = 'update-date';
         $this->briefDescription = '';
         $this->detailedDescription = <<<EOF
-The [mercurialeVrac|INFO] task does things.
+La tâche [mercurialeVrac|INFO] change la date de validation et la campagne d'un vrac
 Call it with:
 
-  [php symfony mercuriale:update-date|INFO]
+  [php symfony mercuriale:update-date VRACID DATE_VALIDATION|INFO]
 EOF;
     }
 
@@ -40,19 +40,23 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
         $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
 
-        if ($vrac = VracClient::getInstance()->find($arguments['vracid'])) {
-            if (preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $arguments['date'])) {
-                $vrac->campagne = VracClient::getInstance()->buildCampagneVrac($arguments['date']);
-                $vrac->date_modification = $arguments['date'];
-                $vrac->valide->date_validation = $arguments['date'];
-                $vrac->forceSave();
-                echo sprintf("%s updated\n", $arguments['vracid']);
-            } else {
-                echo sprintf("Erreur : date format invalide %s\n", $arguments['date']);
-            }
-        } else {
+        $vrac = VracClient::getInstance()->find($arguments['vracid']);
+
+        if (! $vrac) {
             echo sprintf("Erreur : vracid inexistant %s\n", $arguments['vracid']);
+            return 1;
         }
+
+        if (preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $arguments['date']) === false) {
+            echo sprintf("Erreur : date format invalide %s\n", $arguments['date']);
+            return 1;
+        }
+
+        $vrac->campagne = VracClient::getInstance()->buildCampagneVrac($arguments['date']);
+        $vrac->date_modification = $arguments['date'];
+        $vrac->valide->date_validation = $arguments['date'];
+        $vrac->forceSave();
+        echo sprintf("%s updated\n", $arguments['vracid']);
     }
 
 }
